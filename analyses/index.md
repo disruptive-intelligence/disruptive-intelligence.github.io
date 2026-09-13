@@ -2,7 +2,9 @@
 
 Analyses ponctuelles de rapports, articles, publications et documents.
 
-Les nouvelles analyses seront ajoutées ici au fil de leur publication.
+## Analyses publiées
+
+- [Titre de l’analyse](./NOM_DE_L_ANALYSE.html)
 
 ---
 
