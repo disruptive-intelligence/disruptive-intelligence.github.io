@@ -13,20 +13,28 @@ Veille quotidienne consacrée à la technologie, aux technologies émergentes,
 
 ---
 
-## 🗂️ Archives de veille
+## 🗂️ Veille quotidienne
 
-### Septembre 2026
+Dernières éditions :
 
 - [12 septembre 2026](./veille/2026/09/20260912_morning-intelligence-brief.html)
+- [11 septembre 2026](./veille/2026/09/20260911_morning-intelligence-brief.html)
+- [10 septembre 2026](./veille/2026/09/20260910_morning-intelligence-brief.html)
+
+[Consulter toutes les archives →](./veille/)
 
 ---
 
 ## 📰 Analyses
 
-Les analyses ponctuelles seront publiées ici.
+Analyses approfondies d’articles, rapports et publications.
+
+[Consulter les analyses →](./analyses/)
 
 ---
 
 ## 📚 Dossiers / synthèses
 
-Les briefs transversaux seront publiés ici.
+Synthèses transversales produites à partir de plusieurs analyses.
+
+[Consulter les dossiers →](./dossiers/)
