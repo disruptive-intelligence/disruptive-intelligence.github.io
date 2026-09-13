@@ -1,4 +1,4 @@
-# ☕ Disruptive Intelligence
+# ⚛️ Disruptive Intelligence
 
 Veille quotidienne consacrée à la technologie, aux technologies émergentes,
 à la cybersécurité et aux enjeux géopolitiques et économiques.
