@@ -1,0 +1,10 @@
+<ul class="editorial-list">
+  {% for item in include.items limit:include.limit %}
+  <li>
+    <div class="content-meta"><span>{{ include.label }}</span> <time datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: '%d/%m/%Y' }}</time></div>
+    <h3><a href="{{ item.url | relative_url }}">{{ item.title | escape }} <span class="read-arrow" aria-hidden="true">↗</span></a></h3>
+  </li>
+  {% else %}
+  <li class="empty-state">Aucune publication pour le moment.</li>
+  {% endfor %}
+</ul>

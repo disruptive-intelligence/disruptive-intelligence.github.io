@@ -1,13 +1,18 @@
-# ☕ Archives de veille
+---
+title: Archives de veille
+---
+# Archives de veille
 
 Retrouvez ici les éditions quotidiennes du **Morning Intelligence Brief**.
 
-## Septembre 2026
+{% assign veilles = site.pages | where: "kind", "veille" | sort: "date" | reverse %}
 
-- [12 septembre 2026](./2026/09/20260912_morning-intelligence-brief.html)
-- [11 septembre 2026](./2026/09/20260911_morning-intelligence-brief.html)
-- [10 septembre 2026](./2026/09/20260910_morning-intelligence-brief.html)
+## Éditions publiées
+
+{% for item in veilles %}
+- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
+{% endfor %}
 
 ---
 
-[← Retour à l’accueil](../)
+[← Retour à l’accueil]({{ '/' | relative_url }})

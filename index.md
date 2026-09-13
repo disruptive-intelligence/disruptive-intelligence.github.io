@@ -1,52 +1,40 @@
-# ⚛️ Disruptive Intelligence
-
-Veille quotidienne consacrée à la technologie, aux technologies émergentes,
-à la cybersécurité et aux enjeux géopolitiques et économiques.
-
 ---
-
-## ☕ Dernière édition
-
-### 12 septembre 2026
-
-[Lire le Morning Intelligence Brief du 12 septembre 2026](./veille/2026/09/20260912_morning-intelligence-brief.html)
-
+title: Intelligence Desk
+home: true
 ---
-
-## 🗂️ Veille quotidienne
-
-Dernières éditions :
-
-- [12 septembre 2026](./veille/2026/09/20260912_morning-intelligence-brief.html)
-- [11 septembre 2026](./veille/2026/09/20260911_morning-intelligence-brief.html)
-- [10 septembre 2026](./veille/2026/09/20260910_morning-intelligence-brief.html)
-
-[Consulter toutes les archives →](./veille/)
-
----
-
-## 📰 Analyses
-
-Analyses approfondies d’articles, rapports et publications.
-
+{% assign veilles = site.pages | where: "kind", "veille" | sort: "date" | reverse %}
 {% assign analyses = site.pages | where: "kind", "analysis" | sort: "date" | reverse %}
-
-{% for item in analyses limit:3 %}
-- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
-{% endfor %}
-
-[Consulter toutes les analyses →](./analyses/)
-
----
-
-## 📚 Dossiers / synthèses
-
-Synthèses transversales produites à partir de plusieurs analyses.
-
 {% assign dossiers = site.pages | where: "kind", "dossier" | sort: "date" | reverse %}
+{% assign latest = veilles | first %}
 
-{% for item in dossiers limit:3 %}
-- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
-{% endfor %}
+<div class="desk-intro">
+  <p class="eyebrow">Intelligence Desk</p>
+  <h1>Veille & analyse stratégique</h1>
+  <p>Veille quotidienne, analyses approfondies et synthèses transversales sur les technologies et leurs implications stratégiques.</p>
+</div>
 
-[Consulter tous les dossiers →](./dossiers/)
+{% if latest %}
+<section class="featured" aria-labelledby="latest-title">
+  <div class="content-meta"><span>Dernière veille</span><time datetime="{{ latest.date | date: '%Y-%m-%d' }}">{{ latest.date | date: '%d/%m/%Y' }}</time></div>
+  <h2 id="latest-title"><a href="{{ latest.url | relative_url }}">{{ latest.title | escape }}</a></h2>
+  <p>Les événements retenus, leur contexte et les sources pour approfondir.</p>
+  <a class="read-link" href="{{ latest.url | relative_url }}">Lire cette édition <span aria-hidden="true">→</span></a>
+</section>
+{% endif %}
+
+<section class="desk-section" aria-labelledby="veille-title">
+  <div class="section-heading"><h2 id="veille-title">Veille quotidienne</h2><a href="{{ '/veille/' | relative_url }}">Toutes les veilles <span aria-hidden="true">→</span></a></div>
+  {% include editorial-list.html items=veilles limit=3 label="Veille" %}
+</section>
+
+<section class="desk-section" aria-labelledby="analyses-title">
+  <div class="section-heading"><h2 id="analyses-title">Analyses</h2><a href="{{ '/analyses/' | relative_url }}">Toutes les analyses <span aria-hidden="true">→</span></a></div>
+  <p class="section-description">Une lecture approfondie des rapports, articles et publications.</p>
+  {% include editorial-list.html items=analyses limit=3 label="Analyse" %}
+</section>
+
+<section class="desk-section" aria-labelledby="dossiers-title">
+  <div class="section-heading"><h2 id="dossiers-title">Dossiers & synthèses</h2><a href="{{ '/dossiers/' | relative_url }}">Tous les dossiers <span aria-hidden="true">→</span></a></div>
+  <p class="section-description">Croiser les analyses pour mettre les enjeux en perspective.</p>
+  {% include editorial-list.html items=dossiers limit=3 label="Dossier" %}
+</section>

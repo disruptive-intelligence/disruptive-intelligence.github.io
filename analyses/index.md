@@ -2,7 +2,7 @@
 title: Analyses
 ---
 
-# 📰 Analyses
+# Analyses
 
 Analyses ponctuelles de rapports, articles, publications et documents.
 

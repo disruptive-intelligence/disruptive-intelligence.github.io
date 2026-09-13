@@ -2,7 +2,7 @@
 title: Dossiers
 ---
 
-# 📚 Dossiers / synthèses
+# Dossiers / synthèses
 
 Synthèses transversales produites à partir de plusieurs analyses ou documents.
 

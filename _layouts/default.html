@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'fr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}</title>
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <a class="brand" href="{{ '/' | relative_url }}">Disruptive Intelligence</a>
+        <p class="baseline">{{ site.description | escape }}</p>
+      </div>
+      <nav aria-label="Navigation principale">
+        <a href="{{ '/' | relative_url }}"{% if page.url == '/' or page.url == '/index.html' %} aria-current="page"{% endif %}>Accueil</a>
+        <a href="{{ '/veille/' | relative_url }}"{% if page.url contains '/veille/' %} aria-current="location"{% endif %}>Veille</a>
+        <a href="{{ '/analyses/' | relative_url }}"{% if page.url contains '/analyses/' %} aria-current="location"{% endif %}>Analyses</a>
+        <a href="{{ '/dossiers/' | relative_url }}"{% if page.url contains '/dossiers/' %} aria-current="location"{% endif %}>Dossiers</a>
+      </nav>
+    </div>
+  </header>
+  <main id="contenu" class="{% if page.home %}desk{% else %}reading{% endif %}" tabindex="-1">
+    {% if page.kind %}
+    <div class="content-meta">
+      <span>{% case page.kind %}{% when 'veille' %}Veille quotidienne{% when 'analysis' %}Analyse{% when 'dossier' %}Dossier{% endcase %}</span>
+      {% if page.date %}<time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: '%d/%m/%Y' }}</time>{% endif %}
+    </div>
+    {% endif %}
+    <div class="{% if page.home %}home-content{% else %}prose{% endif %}">{{ content }}</div>
+  </main>
+  <footer class="site-footer">
+    <span>Disruptive Intelligence</span>
+    <span>Veille · Analyses · Dossiers</span>
+    <a href="#contenu">Retour en haut ↑</a>
+  </footer>
+</body>
+</html>
