@@ -29,7 +29,13 @@ Dernières éditions :
 
 Analyses approfondies d’articles, rapports et publications.
 
-[Consulter les analyses →](./analyses/)
+{% assign analyses = site.pages | where: "kind", "analysis" | sort: "date" | reverse %}
+
+{% for item in analyses limit:3 %}
+- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
+{% endfor %}
+
+[Consulter toutes les analyses →](./analyses/)
 
 ---
 
@@ -37,4 +43,10 @@ Analyses approfondies d’articles, rapports et publications.
 
 Synthèses transversales produites à partir de plusieurs analyses.
 
-[Consulter les dossiers →](./dossiers/)
+{% assign dossiers = site.pages | where: "kind", "dossier" | sort: "date" | reverse %}
+
+{% for item in dossiers limit:3 %}
+- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
+{% endfor %}
+
+[Consulter tous les dossiers →](./dossiers/)
