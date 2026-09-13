@@ -2,7 +2,9 @@
 
 Synthèses transversales produites à partir de plusieurs analyses ou documents.
 
-Les nouveaux dossiers seront ajoutés ici au fil de leur publication.
+## Dossiers publiés
+
+- [Autonomie des systèmes IA : risques et contrôle](./autonomie-systemes-ia-risques-controle-brief-transversal.html)
 
 ---
 
