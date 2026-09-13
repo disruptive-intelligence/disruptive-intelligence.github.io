@@ -6,3 +6,4 @@ Veille quotidienne consacrée à la technologie, aux technologies émergentes,
 ## Dernière édition
 
 Le site est en cours de mise en place.
+Problème avec *build and deployment*, test en cours.
