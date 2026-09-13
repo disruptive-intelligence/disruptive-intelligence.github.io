@@ -1,9 +1,8 @@
 ---
-title: "Autonomie des systèmes IA : risques et contrôle"
-date: 2026-09-06
+title: "Autonomie des systèmes d’IA, risques et mécanismes de contrôle"
+date: 2026-09-07
 kind: dossier
 ---
-
 # Autonomie des systèmes d’IA, risques et mécanismes de contrôle
 
 Brief transversal — 6 septembre 2026

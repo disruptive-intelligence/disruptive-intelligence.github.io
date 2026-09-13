@@ -1,13 +1,8 @@
 ---
-title: "Google DeepMind - From AGI to ASI"
-date: 2026
+title: "Analyse — From AGI to ASI"
+date: 2026-09-04
 kind: analysis
 ---
-
-# From AGI to ASI
-
-...
-
 # Analyse — *From AGI to ASI*
 
 > **Convention :** **[Rapport]** = contenu du document ; **[Externe]** = information issue d'une source externe datée ; **[Analyse]** = interprétation de la présente analyse.

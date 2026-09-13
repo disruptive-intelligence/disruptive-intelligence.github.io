@@ -1,3 +1,8 @@
+---
+title: "Morning Intelligence Brief — 11 septembre 2026"
+date: 2026-09-11
+kind: veille
+---
 # ☕ Morning Intelligence Brief — 11 septembre 2026
 
 451 articles analysés · 342 événements identifiés · 18 événements retenus · 20 sujets principaux

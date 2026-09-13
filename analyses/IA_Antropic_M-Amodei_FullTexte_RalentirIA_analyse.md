@@ -1,13 +1,8 @@
 ---
-title: "Anthropic - Dario Amodei : We Must Pace the Frontier"
+title: "Analyse — We Must Pace the Frontier"
 date: 2026-09-12
 kind: analysis
 ---
-
-# Anthropic - Dario Amodei : We Must Pace the Frontier
-
-...
-
 # Analyse — We Must Pace the Frontier
 
 ## Métadonnées

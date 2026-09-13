@@ -1,13 +1,8 @@
 ---
-title: "The Rise and Fall of Agent Civilizations"
-date: 2026-09-13
+title: "Analyse — The Rise and Fall of Agent Civilizations"
+date: 2026-09-04
 kind: analysis
 ---
-
-# The Rise and Fall of Agent Civilizations
-
-...
-
 # Analyse — *The Rise and Fall of Agent Civilizations*
 
 ## Titre et source
