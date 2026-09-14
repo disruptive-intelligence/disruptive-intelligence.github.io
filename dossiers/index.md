@@ -10,9 +10,9 @@ Synthèses transversales produites à partir de plusieurs analyses ou documents.
 
 ## Dossiers publiés
 
-{% for item in dossiers %}
-- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
-{% endfor %}
+<div class="dossier-archive">
+{% include editorial-list.html items=dossiers limit=dossiers.size label="Dossier" %}
+</div>
 
 ---
 

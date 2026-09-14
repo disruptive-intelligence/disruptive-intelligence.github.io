@@ -62,6 +62,10 @@ h1, h2, h3 { text-wrap: pretty; overflow-wrap: anywhere; }
 .read-arrow { font-family: var(--sans); font-size: .85rem; color: var(--accent); white-space: nowrap; }
 .section-dossiers .editorial-list h3 { font-size: 1.65rem; }
 .empty-state { color: var(--muted); font-size: .85rem; font-style: italic; }
+.prose .dossier-archive .editorial-list { list-style: none; padding: 0; margin: 0; }
+.prose .dossier-archive .editorial-list > li { padding: 28px 0; margin: 0; }
+.dossier-archive .editorial-list > li:first-child { border-top: 0; padding-top: 0; }
+.prose .dossier-archive .editorial-list h3 { margin: 12px 0 0; font: 400 clamp(1.55rem, 2.5vw, 2rem)/1.28 var(--serif); letter-spacing: -.02em; }
 .reading { max-width: 800px; margin: auto; padding: 64px 32px 96px; }
 .reading > .content-meta { padding-bottom: 20px; margin-bottom: 28px; border-bottom: 1px solid var(--line); }
 .prose { font: 400 1.18rem/1.85 var(--serif); overflow-wrap: anywhere; }

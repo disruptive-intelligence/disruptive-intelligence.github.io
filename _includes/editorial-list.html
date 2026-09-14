@@ -1,7 +1,14 @@
 <ul class="editorial-list">
   {% for item in include.items limit:include.limit %}
   <li>
+    {% if item.kind == 'dossier' %}
+    <div class="analysis-meta">
+      <div class="analysis-credits">{%- for theme in item.themes -%}{%- assign theme_label = '' -%}{%- case theme -%}{%- when 'ia' -%}{%- assign theme_label = 'IA' -%}{%- when 'cyber' -%}{%- assign theme_label = 'CYBER' -%}{%- when 'geo-ie' -%}{%- assign theme_label = 'GEO / IE' -%}{%- when 'tech' -%}{%- assign theme_label = 'TECH' -%}{%- endcase -%}{%- if theme_label != '' -%}<span class="analysis-theme">{{ theme_label }}</span><span class="analysis-credit"> · </span>{%- endif -%}{%- endfor -%}<span class="analysis-theme">DOSSIER</span></div>
+      <time class="analysis-date" datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: '%d/%m/%Y' }}</time>
+    </div>
+    {% else %}
     <div class="content-meta"><span>{{ include.label }}</span> <time datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: '%d/%m/%Y' }}</time></div>
+    {% endif %}
     <h3><a href="{{ item.url | relative_url }}">{{ item.title | escape }} <span class="read-arrow" aria-hidden="true">↗</span></a></h3>
   </li>
   {% else %}
