@@ -10,9 +10,9 @@ Analyses ponctuelles de rapports, articles, publications et documents.
 
 ## Analyses publiées
 
-{% for item in analyses %}
-- [{{ item.title }}]({{ item.url | relative_url }}) — {{ item.date | date: "%d/%m/%Y" }}
-{% endfor %}
+<div class="analysis-archive">
+{% include analysis-list.html items=analyses limit=analyses.size %}
+</div>
 
 ---
 

@@ -1,0 +1,42 @@
+{% comment %}Temporary display credits for existing analyses. Structured front matter overrides these fallbacks.{% endcomment %}
+<ul class="analysis-list">
+{% for item in include.items limit:include.limit %}
+  {% assign fallback_theme = '' %}
+  {% assign fallback_author = '' %}
+  {% assign fallback_organization = '' %}
+  {% case item.title %}
+    {% when 'Analyse — We Must Pace the Frontier' %}
+      {% assign fallback_theme = 'IA' %}
+      {% assign fallback_author = 'Dario Amodei' %}
+      {% assign fallback_organization = 'Anthropic' %}
+    {% when 'Analyse — Solipsistic Superintelligence is Unlikely to be Cooperative' %}
+      {% assign fallback_theme = 'IA' %}
+      {% assign fallback_author = 'Rakshit S. Trivedi et al.' %}
+      {% assign fallback_organization = 'University of Washington · Google DeepMind' %}
+    {% when 'Analyse — Recommandations de sécurité pour un système d’IA générative' %}
+      {% assign fallback_theme = 'IA' %}
+      {% assign fallback_organization = 'ANSSI' %}
+    {% when 'Analyse — From AGI to ASI' %}
+      {% assign fallback_theme = 'IA' %}
+      {% assign fallback_organization = 'Google DeepMind' %}
+    {% when 'Analyse — The Rise and Fall of Agent Civilizations' %}
+      {% assign fallback_theme = 'IA' %}
+      {% assign fallback_author = 'Dwarkesh Patel' %}
+  {% endcase %}
+  {% assign theme = item.theme | default: fallback_theme | default: 'Analyse' %}
+  {% assign author = item.author | default: fallback_author %}
+  {% assign organization = item.organization | default: fallback_organization %}
+  {% assign display_title = item.title | remove_first: 'Analyse — ' %}
+  <li>
+    <article>
+      <div class="analysis-meta">
+        <div class="analysis-credits"><span class="analysis-theme">{{ theme | remove: '[' | remove: ']' | escape }}</span>{% if author != '' %}<span class="analysis-credit"> · {{ author | escape }}</span>{% endif %}{% if organization != '' %}<span class="analysis-credit"> · {{ organization | escape }}</span>{% endif %}</div>
+        <time class="analysis-date" datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: '%d/%m/%Y' }}</time>
+      </div>
+      <h3 class="analysis-title"><a href="{{ item.url | relative_url }}">{{ display_title | escape }} <span class="read-arrow" aria-hidden="true">↗</span></a></h3>
+    </article>
+  </li>
+{% endfor %}
+</ul>
+
+

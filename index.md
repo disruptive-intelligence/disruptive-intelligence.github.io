@@ -33,7 +33,7 @@ home: true
 <section class="desk-section section-analyses" aria-labelledby="analyses-title">
   <div class="section-heading"><h2 id="analyses-title">Analyses</h2><a href="{{ '/analyses/' | relative_url }}">Toutes les analyses <span aria-hidden="true">→</span></a></div>
   <p class="section-description">Une lecture approfondie des rapports, articles et publications.</p>
-  {% include editorial-list.html items=analyses limit=3 label="Analyse" %}
+  {% include analysis-list.html items=analyses limit=3 %}
 </section>
 
 <section class="desk-section section-dossiers" aria-labelledby="dossiers-title">

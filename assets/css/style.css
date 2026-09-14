@@ -136,3 +136,25 @@ pre code { padding: 0; font-size: inherit; }
   .prose th, .prose td { min-width: 0; }
   pre { white-space: pre-wrap; }
 }
+
+/* Analysis publication catalogue: homepage and archive only. */
+.analysis-list, .prose .analysis-list { list-style: none; padding: 0; margin: 22px 0 0; }
+.analysis-list > li, .prose .analysis-list > li { padding: 24px 0; margin: 0; border-bottom: 1px solid var(--line); }
+.analysis-list > li:first-child { border-top: 1px solid var(--line); }
+.analysis-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font: 500 .62rem/1.7 var(--sans); letter-spacing: .07em; }
+.analysis-credits { min-width: 0; text-transform: uppercase; color: var(--muted); overflow-wrap: anywhere; }
+.analysis-theme { color: var(--accent); font-weight: 700; }
+.analysis-date { flex-shrink: 0; color: var(--muted); font-weight: 400; font-variant-numeric: tabular-nums; letter-spacing: .02em; white-space: nowrap; }
+.analysis-list .analysis-title { margin: 12px 0 0; padding: 0; border: 0; font: 400 1.5rem/1.28 var(--serif); letter-spacing: -.02em; }
+.analysis-title a { color: var(--ink); text-decoration: none; }
+.analysis-title a:hover { color: var(--accent); }
+.analysis-title .read-arrow { display: inline-block; vertical-align: middle; margin-left: .15em; }
+.analysis-archive .analysis-list { margin-top: 0; }
+.analysis-archive .analysis-list > li { padding-block: 28px; }
+.analysis-archive .analysis-list > li:first-child { border-top: 0; padding-top: 0; }
+.analysis-archive .analysis-title { font-size: clamp(1.55rem, 2.5vw, 2rem); }
+@media (max-width: 640px) {
+  .analysis-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .analysis-list > li, .prose .analysis-list > li { padding-block: 22px; }
+  .analysis-list .analysis-title { margin-top: 12px; }
+}
