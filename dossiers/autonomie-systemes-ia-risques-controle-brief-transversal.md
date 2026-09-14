@@ -2,10 +2,19 @@
 title: "Autonomie des systèmes d’IA, risques et mécanismes de contrôle"
 date: 2026-09-07
 kind: dossier
+themes:
+  - ia
 ---
 # Autonomie des systèmes d’IA, risques et mécanismes de contrôle
 
 Brief transversal — 6 septembre 2026
+
+## Sources de synthèse
+
+- **[A1]** `analyses/IA_Dwarkesh-The Rise and Fall of Agent Civilizations_analyse.md`
+- **[A2]** `analyses/IA_Google-DeepMind_From-AGI-to-ASI_analyse.md`
+- **[A3]** `analyses/IA_Google-DeepMind_Solipsistic Superintelligence is Unlikely to be Cooperative_analyse.md`
+- **[A4]** `analyses/IA_ANSSI_Recommandations_de_sécurité_pour_un_système_d_IA_générative_analyse.md`
 
 **Périmètre :** quatre analyses internes, sans recherche Internet ni relecture des sources de `inbox/`. Les identifiants [A1] à [A4] renvoient aux fichiers listés en section 8. Les attributions aux documents originaux sont toujours indirectes, via ces analyses.
 
