@@ -2,6 +2,13 @@
 title: "Guerre cognitive et guerre cognitique : analyse critique du rapport de Patrice Cardot"
 date: 2026-09-23
 kind: analysis
+theme: geo-ie
+author: "Patrice Cardot"
+tags:
+  - guerre cognitive
+  - guerre cognitique
+  - conflits hybrides
+  - neurotechnologies
 ---
 
 # Guerre cognitive et guerre cognitique : analyse critique du rapport de Patrice Cardot
