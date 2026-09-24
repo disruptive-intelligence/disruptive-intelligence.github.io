@@ -107,10 +107,6 @@ pre code { padding: 0; font-size: inherit; }
   .section-analyses { border-right: 0; padding-right: 0; }
   .section-dossiers { grid-column: 1 / -1; padding: 28px 0 0; border-top: 1px solid var(--rule); }
 }
-@media (max-width: 860px) {
-  .reading { padding-right: 80px; }
-  .desk { padding-right: 44px; }
-}
 @media (max-width: 640px) {
   .site-header, .desk, .site-footer { width: calc(100% - 40px); }
   .header-inner { padding-top: 20px; }
@@ -119,7 +115,7 @@ pre code { padding: 0; font-size: inherit; }
   .baseline { font-size: .58rem; letter-spacing: .12em; margin-top: 16px; }
   nav { justify-content: space-between; gap: 0 12px; }
   nav a { font-size: .62rem; letter-spacing: .06em; }
-  .desk { padding: 32px 48px 48px 0; }
+  .desk { padding: 32px 0 48px; }
   .front-page { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
   .desk-intro { border-right: 0; padding: 0 0 28px; border-bottom: 1px solid var(--line); }
   .eyebrow { margin-bottom: 16px; }
@@ -130,7 +126,7 @@ pre code { padding: 0; font-size: inherit; }
   .desk-section, .desk-section:first-child, .desk-section:last-child { padding: 0; border: 0; }
   .desk-section + .desk-section { padding-top: 28px; border-top: 1px solid var(--rule); }
   .section-heading { flex-direction: row; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
-  .reading { padding: 36px 68px 56px 20px; }
+  .reading { padding: 36px 20px 56px; }
   .prose { font-size: 1.08rem; line-height: 1.8; }
   .prose h2 { font-size: 1.85rem; }
   .prose h3 { font-size: 1.35rem; }
