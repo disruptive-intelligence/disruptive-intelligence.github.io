@@ -16,4 +16,4 @@ Synthèses transversales produites à partir de plusieurs analyses ou documents.
 
 ---
 
-[← Retour à l’accueil](../)
+[← Retour à l’accueil]({{ '/' | relative_url }})

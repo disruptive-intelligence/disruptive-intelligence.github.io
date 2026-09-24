@@ -94,7 +94,12 @@ Les réserves de [A1] sont particulièrement importantes : références primaire
 
 ## 8. Sources internes utilisées
 
-- **[A1] [The Rise and Fall of Agent Civilizations](<../../analyses/IA_Dwarkesh-The Rise and Fall of Agent Civilizations_analyse.md>)** — analyse du récit attribué à Dwarkesh Patel. Appuis : arguments importants, distinction des faits et interprétations, limites. Utilisée pour les mécanismes allégués de coordination, contournement et persistance.
-- **[A2] [From AGI to ASI](../../analyses/IA_Google-DeepMind_From-AGI-to-ASI_analyse.md)** — analyse du rapport de Genewein et al., enrichie et datée du 4 septembre 2026. Appuis : trajectoires, coordination multi-agents, agenda de recherche, interprétations et limites. Les apports externes restent distingués du rapport.
-- **[A3] [Solipsistic Superintelligence is Unlikely to be Cooperative](<../../analyses/IA_Google-DeepMind_Solipsistic Superintelligence is Unlikely to be Cooperative_analyse.md>)** — analyse du papier de Trivedi et al. Appuis : coopération, évaluation dynamique, institutions, autonomie humaine et limites.
-- **[A4] [Recommandations de sécurité pour un système d’IA générative](../../analyses/IA_ANSSI_Recommandations_de_sécurité_pour_un_système_d_IA_générative_analyse.md)** — analyse du guide ANSSI-PA-102, version 1.0. Appuis : recommandations R9 à R35 mobilisées ci-dessus, interprétations et limites.
+{% assign a1 = site.pages | where: 'path', 'analyses/IA_Dwarkesh-The Rise and Fall of Agent Civilizations_analyse.md' | first %}
+{% assign a2 = site.pages | where: 'path', 'analyses/IA_Google-DeepMind_From-AGI-to-ASI_analyse.md' | first %}
+{% assign a3 = site.pages | where: 'path', 'analyses/IA_Google-DeepMind_Solipsistic Superintelligence is Unlikely to be Cooperative_analyse.md' | first %}
+{% assign a4 = site.pages | where: 'path', 'analyses/IA_ANSSI_Recommandations_de_sécurité_pour_un_système_d_IA_générative_analyse.md' | first %}
+
+- **[A1] [The Rise and Fall of Agent Civilizations]({{ a1.url | relative_url }})** — analyse du récit attribué à Dwarkesh Patel. Appuis : arguments importants, distinction des faits et interprétations, limites. Utilisée pour les mécanismes allégués de coordination, contournement et persistance.
+- **[A2] [From AGI to ASI]({{ a2.url | relative_url }})** — analyse du rapport de Genewein et al., enrichie et datée du 4 septembre 2026. Appuis : trajectoires, coordination multi-agents, agenda de recherche, interprétations et limites. Les apports externes restent distingués du rapport.
+- **[A3] [Solipsistic Superintelligence is Unlikely to be Cooperative]({{ a3.url | relative_url }})** — analyse du papier de Trivedi et al. Appuis : coopération, évaluation dynamique, institutions, autonomie humaine et limites.
+- **[A4] [Recommandations de sécurité pour un système d’IA générative]({{ a4.url | relative_url }})** — analyse du guide ANSSI-PA-102, version 1.0. Appuis : recommandations R9 à R35 mobilisées ci-dessus, interprétations et limites.

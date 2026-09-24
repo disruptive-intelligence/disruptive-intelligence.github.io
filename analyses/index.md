@@ -16,4 +16,4 @@ Analyses ponctuelles de rapports, articles, publications et documents.
 
 ---
 
-[← Retour à l’accueil](../)
+[← Retour à l’accueil]({{ '/' | relative_url }})
