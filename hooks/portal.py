@@ -15,6 +15,7 @@ avec son en-tête au bon endroit :
   dossier  : title, date, kind: dossier, themes: [..], slug      -> docs/dossiers/<slug>.md
 Le contrat (taxonomie, slug = nom du fichier) est vérifié par check_contract().
 """
+import hashlib
 import html
 import posixpath
 import re
@@ -502,20 +503,22 @@ def pages_library(library):
     return out
 
 
-def library_card(cat, src, max_notes=6):
-    """Carte d'une catégorie : titre cliquable + ses notes cliquables (● importée, ○ à importer)."""
-    items = "".join(
-        f'<li class="{"is-done" if n["imported"] else "is-todo"}"><a href="{href(src, n["src"])}">{esc(n["title"])}</a></li>'
+def library_card(cat, src, max_notes=8):
+    """Carte d'une catégorie, sur le modèle des cartes Ressources : titre, compteur, puis une ligne
+    cliquable par note (pastille pleine = importée, vide = à importer)."""
+    rows = "".join(
+        f'<li><a href="{href(src, n["src"])}"><span>{esc(n["title"])}</span>'
+        f'<span class="kw-lib__dot{" is-done" if n["imported"] else ""}"></span></a></li>'
         for n in cat["notes"][:max_notes])
     more = len(cat["notes"]) - max_notes
     if more > 0:
-        items += f'<li class="kw-lib__more"><a href="{href(src, cat["src"])}">+ {more} autres →</a></li>'
-    if not items:
-        items = '<li class="kw-muted">Catégorie vide</li>'
-    done = sum(n["imported"] for n in cat["notes"])
-    return (f'<div class="kw-card kw-lib"><a class="kw-lib__title" href="{href(src, cat["src"])}">{esc(cat["label"])}</a>'
-            f'<span class="kw-card__meta">{done}/{len(cat["notes"])} importée{"s" if done > 1 else ""}</span>'
-            f'<ul class="kw-lib__notes">{items}</ul></div>')
+        rows += f'<li class="kw-lib__more"><a href="{href(src, cat["src"])}">+ {more} autre{"s" if more > 1 else ""} →</a></li>'
+    if not rows:
+        rows = '<li class="kw-lib__empty">Catégorie vide pour l\'instant</li>'
+    done, total = sum(n["imported"] for n in cat["notes"]), len(cat["notes"])
+    return (f'<div class="kw-card kw-res kw-lib"><a class="kw-res__label" href="{href(src, cat["src"])}">{esc(cat["label"])}</a>'
+            f'<span class="kw-card__meta">{total} note{"s" if total > 1 else ""} · {done} importée{"s" if done > 1 else ""}</span>'
+            f'<ul class="kw-res__tops kw-lib__notes">{rows}</ul></div>')
 
 
 def page_library_index(library, themes, glossary_count):
@@ -640,6 +643,17 @@ def on_config(config):
             nav[i] = {LIBRARY_TAB: list(children) + library_nav(library)}
     config.nav = nav
     return config
+
+
+def on_post_page(output, page, config):
+    """Anti-cache : ajoute l'empreinte du fichier aux styles et scripts du site (extra.css?v=…),
+    pour que chaque nouvelle version soit rechargée par les navigateurs."""
+    for asset in list(config.extra_css or []) + [str(s) for s in (config.extra_javascript or [])]:
+        path = Path(config.docs_dir) / asset
+        if path.exists():
+            digest = hashlib.sha1(path.read_bytes()).hexdigest()[:10]
+            output = output.replace(f'{asset}"', f'{asset}?v={digest}"')
+    return output
 
 
 def on_post_build(config):

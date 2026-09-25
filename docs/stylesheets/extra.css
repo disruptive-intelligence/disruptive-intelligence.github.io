@@ -387,20 +387,41 @@
 .md-typeset ul.kw-todo li::before { content: "○"; position: absolute; left: 0; color: var(--kw-line); }
 .md-typeset a.kw-card--wide { display: flex; flex-direction: column; gap: .3rem; max-width: 32rem; }
 
-/* Bibliothèque : cartes de catégorie avec leurs notes cliquables */
-.kw-carousel--cards .kw-lib { flex: 0 0 17rem; scroll-snap-align: start; }
-.md-typeset .kw-lib { display: flex; flex-direction: column; gap: .3rem; padding: 1rem 1.1rem;
-  background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 10px; }
-.md-typeset .kw-lib:hover { border-color: #4a4d8a; }
-.md-typeset a.kw-lib__title { font-size: 1rem; font-weight: 800; color: var(--md-default-fg-color); }
-.md-typeset a.kw-lib__title:hover { color: #8f9bff; }
-.md-typeset ul.kw-lib__notes, .md-typeset ul.kw-notes { list-style: none; margin: .4rem 0 0; padding: .45rem 0 0; }
-.md-typeset ul.kw-lib__notes { border-top: 1px solid var(--kw-line); }
-.md-typeset .kw-lib__notes li, .md-typeset .kw-notes li { margin: 0 0 .3rem; padding-left: 1rem; position: relative; font-size: .7rem; line-height: 1.4; }
-.md-typeset .kw-notes li { font-size: .8rem; margin-bottom: .45rem; }
-.md-typeset .kw-lib__notes li::before, .md-typeset .kw-notes li::before { position: absolute; left: 0; font-size: .7em; top: .2em; }
-.md-typeset li.is-done::before { content: "●"; color: #8f9bff; }
-.md-typeset li.is-todo::before { content: "○"; color: var(--md-default-fg-color--lighter); }
-.md-typeset li.is-todo a { color: var(--md-default-fg-color--light); }
-.md-typeset li.kw-lib__more { padding-left: 0; }
-.md-typeset li.kw-lib__more a { font-weight: 600; font-size: .66rem; }
+/* Bibliothèque : cartes de catégorie, sur le modèle des cartes Ressources (kw-res) */
+.kw-carousel--cards .kw-lib { flex: 0 0 17rem; }
+.md-typeset .kw-lib .kw-res__label { color: var(--md-default-fg-color); }
+.md-typeset .kw-lib .kw-res__label:hover { color: #8f9bff; }
+.md-typeset .kw-lib:hover { border-color: #4a4d8a; transform: none; }
+.md-typeset .kw-lib__notes li { margin: 0; }
+.md-typeset .kw-lib__notes li a {
+  display: flex; justify-content: space-between; align-items: center; gap: .6rem; width: 100%;
+  padding: .28rem .35rem; margin: 0 -.35rem; border-radius: 6px;
+  color: var(--md-default-fg-color--light); font-size: .7rem; line-height: 1.35;
+}
+.md-typeset .kw-lib__notes li a:hover { background: #2a2323; color: var(--md-default-fg-color); }
+.kw-lib__dot { flex: 0 0 .5rem; height: .5rem; border-radius: 50%; border: 1.5px solid var(--md-default-fg-color--lighter); }
+.kw-lib__dot.is-done { background: #8f9bff; border-color: #8f9bff; }
+.md-typeset .kw-lib__notes li.kw-lib__more a { color: #8f9bff; font-weight: 600; font-size: .66rem; }
+.md-typeset .kw-lib__notes li.kw-lib__empty { color: var(--md-default-fg-color--lighter); font-size: .7rem; padding: .28rem 0; }
+
+/* Page de catégorie : liste des notes (● importée, ○ à importer) */
+.md-typeset ul.kw-notes { list-style: none; margin: .4rem 0 0; padding: 0; }
+.md-typeset .kw-notes li { margin: 0 0 .45rem; padding-left: 1rem; position: relative; font-size: .8rem; line-height: 1.4; }
+.md-typeset .kw-notes li::before { position: absolute; left: 0; font-size: .7em; top: .2em; }
+.md-typeset .kw-notes li.is-done::before { content: "●"; color: #8f9bff; }
+.md-typeset .kw-notes li.is-todo::before { content: "○"; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-notes li.is-todo a { color: var(--md-default-fg-color--light); }
+
+/* Sidebar : une catégorie qui a des sous-pages reste blanche (seules les sous-pages sont lavande) */
+.md-nav--primary .md-nav__item--section > .md-nav > .md-nav__list > .md-nav__item > .md-nav__container > .md-nav__link,
+.md-nav--primary .md-nav__item--section > .md-nav > .md-nav__list > .md-nav__item > label.md-nav__link {
+  color: var(--md-default-fg-color);
+}
+
+/* Les cartes Bibliothèque sont des blocs (elles contiennent plusieurs liens) : même cadre que les cartes-liens */
+.md-typeset div.kw-card.kw-lib {
+  display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.1rem;
+  background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 10px;
+  color: var(--md-default-fg-color); scroll-snap-align: start;
+}
+.md-typeset div.kw-lib .kw-res__label { display: block; line-height: 1.25; }
