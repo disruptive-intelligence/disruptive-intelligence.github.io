@@ -368,3 +368,7 @@
   .kw-une, .kw-editions { grid-template-columns: minmax(0, 1fr); }
   .md-typeset a.kw-ed { flex-basis: 13rem; }
 }
+
+/* Le nom du site dans la barre du haut est un lien vers l'accueil */
+.md-header__title .kw-home-link { color: inherit; display: block; }
+.md-header__title .kw-home-link:hover { color: #8f9bff; }
