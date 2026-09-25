@@ -1,6 +1,6 @@
 # Publication du wiki sur GitHub Pages à chaque push sur main.
 # 1) scan de secrets (gitleaks)  2) build MkDocs strict  3) déploiement Pages
-name: Deploy wiki
+name: Deploy portal
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Installation MkDocs
         run: pip install -r requirements.txt
 
-      - name: Build (strict : échoue au moindre lien cassé)
+      - name: "Build strict (échoue au moindre lien cassé)"
         run: mkdocs build --strict
 
       - uses: actions/upload-pages-artifact@v3
