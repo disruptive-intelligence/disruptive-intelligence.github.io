@@ -1,0 +1,631 @@
+# Ressources de la veille — un thème > des rubriques > des liens.
+# Pour ajouter un lien, copie un bloc existant :
+#   - nom: Nom affiché
+#     url: https://...          (facultatif)
+#     type: Blog | Cours | CTF | Outil | Guide | Article | Plateforme | Encyclopédie | ...
+#     pourquoi: Une phrase sur l'intérêt de la ressource
+# Une rubrique sans lien affiche « À compléter ».
+- id: cyber
+  label: 🛡️ Cyber
+  rubriques:
+  - nom: Threat intel & acteurs
+    liens:
+    - nom: Wiz Threats — Threat actors
+      url: https://threats.wiz.io/all-actors
+      type: Encyclopédie
+      pourquoi: Liste très exhaustive des acteurs de la menace
+    - nom: Wiz Threats — Lexique
+      url: https://threats.wiz.io/
+      type: Encyclopédie
+      pourquoi: Lexique CTI et fiches techniques
+    - nom: Unit 42 (Palo Alto)
+      url: https://unit42.paloaltonetworks.com/
+      type: Blog
+      pourquoi: Condensé d'informations CTI très pertinentes
+    - nom: Unit 42 — Threat actor groups
+      url: https://unit42.paloaltonetworks.com/category/threat-actor-groups/
+      type: Encyclopédie
+      pourquoi: Fiches des groupes suivis par Unit 42
+    - nom: SOCRadar Labs — Threat actors
+      url: https://socradar.io/labs/threat-actor/
+      type: Plateforme
+      pourquoi: Plateforme pertinente pour suivre les acteurs
+    - nom: SOCRadar Labs — Campagnes
+      url: https://socradar.io/labs/campaigns/
+      type: Plateforme
+      pourquoi: Recensement des campagnes
+    - nom: SOCRadar — Blog
+      url: https://socradar.io/blog/
+      type: Blog
+      pourquoi: Excellent blog CTI
+    - nom: Google Cloud — APT groups
+      url: https://cloud.google.com/security/resources/insights/apt-groups
+      type: Encyclopédie
+      pourquoi: Fiches des groupes APT (Mandiant)
+    - nom: Google Cloud Security — Ressources
+      url: https://cloud.google.com/security/resources?hl=en
+      type: Encyclopédie
+      pourquoi: Rapports et publications sécurité
+    - nom: Microsoft Security Blog
+      url: https://www.microsoft.com/en-us/security/blog/
+      type: Blog
+      pourquoi: Recherche et menaces observées par Microsoft
+    - nom: ESET — WeLiveSecurity
+      url: https://www.welivesecurity.com/en/
+      type: Blog
+      pourquoi: Recherche malware et campagnes
+    - nom: Trend Micro Research
+      url: https://www.trendmicro.com/en_us/research.html
+      type: Blog
+      pourquoi: Recherche sur les menaces
+  - nom: IOC & flux
+    liens:
+    - nom: SOCRadar — Flux de threat intel gratuits
+      url: https://socradar.io/blog/the-ultimate-list-of-free-and-open-source-threat-intelligence-feeds/
+      type: Article
+      pourquoi: Liste de flux CTI gratuits et open source
+    - nom: ThreatFox
+      url: https://threatfox.abuse.ch/
+      type: Plateforme
+      pourquoi: IOC partagés par la communauté (abuse.ch)
+    - nom: URLhaus
+      url: https://urlhaus.abuse.ch/
+      type: Plateforme
+      pourquoi: URL malveillantes (abuse.ch)
+    - nom: MalwareBazaar
+      url: https://bazaar.abuse.ch/
+      type: Plateforme
+      pourquoi: Échantillons de malwares (abuse.ch)
+  - nom: Vulnérabilités & CVE
+    liens:
+    - nom: NVD
+      url: https://nvd.nist.gov/
+      type: Encyclopédie
+      pourquoi: Base de vulnérabilités du NIST, scores CVSS
+    - nom: CISA KEV
+      url: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+      type: Encyclopédie
+      pourquoi: Vulnérabilités activement exploitées
+    - nom: CVE.org
+      url: https://www.cve.org/
+      type: Encyclopédie
+      pourquoi: Référentiel officiel des identifiants CVE
+  - nom: Pentest & write-ups
+    liens:
+    - nom: 0xdf hacks stuff
+      url: https://0xdf.gitlab.io/
+      type: Blog
+      pourquoi: Write-ups HTB détaillés, cheat sheets
+    - nom: Public pentesting reports
+      url: https://github.com/juliocesarfort/public-pentesting-reports
+      type: Encyclopédie
+      pourquoi: Grand nombre de rapports de pentest publics
+  - nom: Forensic & preuve numérique
+    liens:
+    - nom: Conseil de l'Europe — Electronic evidence (SOP)
+      url: https://rm.coe.int/3692-sop-electronic-evidence/168097d7cb
+      type: Guide
+      pourquoi: Procédures de collecte, analyse et présentation de la preuve électronique
+    - nom: Conseil de l'Europe — Digital forensics lab
+      url: https://rm.coe.int/glacy-dfl-guide-version-aug-2017-v8/16809ebf68
+      type: Guide
+      pourquoi: Gestion et procédures d'un laboratoire de forensic
+    - nom: Hackers-Arise — Registry analysis
+      url: https://hackers-arise.com/digital-forensics-registry-analysis-for-beginners-part-1-hives-logs-and-acquisition/
+      type: Article
+      pourquoi: 'Analyse du registre Windows : hives, logs, acquisition'
+  - nom: Référentiels & gouvernance
+    liens:
+    - nom: MITRE ATT&CK
+      url: https://attack.mitre.org/
+      type: Référentiel
+      pourquoi: Tactiques et techniques des attaquants
+    - nom: EBIOS RM Pro
+      url: https://github.com/Cyber-Autopsie/ebios-rm-pro
+      type: Outil
+      pourquoi: Outillage pour la méthode EBIOS RM
+    - nom: ANSSI — Sécuriser une migration de SI
+      url: https://messervices.cyber.gouv.fr/guides/migration
+      type: Guide
+      pourquoi: Guide ANSSI
+  - nom: Institutions
+    liens:
+    - nom: CERT-FR
+      url: https://www.cert.ssi.gouv.fr/
+      type: Institution
+      pourquoi: Alertes et avis de l'ANSSI
+    - nom: cyber.gouv.fr
+      url: https://cyber.gouv.fr/
+      type: Institution
+      pourquoi: Guides et publications de l'ANSSI
+    - nom: Europol
+      url: https://www.europol.europa.eu/
+      type: Institution
+      pourquoi: Publications et rapports sur la cybercriminalité
+    - nom: ECTEG
+      url: https://www.ecteg.eu/
+      type: Institution
+      pourquoi: Formation européenne à la lutte contre la cybercriminalité
+    - nom: ECTEG — Publications
+      url: https://www.ecteg.eu/resources-publications-and-updates-on-cybercrime/
+      type: Encyclopédie
+      pourquoi: Ressources et publications cybercrime
+  - nom: Articles
+    liens:
+    - nom: Outil d'espionnage via WhatsApp et Signal
+      url: https://cybernews.com/security/whatsapp-signal-real-time-tracking-battery-drain-flaw/
+      type: Article
+      pourquoi: Suivi en temps réel via les accusés de réception, drain de batterie et de données
+- id: osint
+  label: 🕵️ OSINT & investigation
+  rubriques:
+  - nom: Boîtes à outils & guides
+    liens:
+    - nom: The Ultimate OSINT Collection
+      url: https://start.me/p/DPYPMz/the-ultimate-osint-collection
+      type: Encyclopédie
+      pourquoi: Vue d'ensemble d'outils, articles, ressources
+    - nom: Exposing the Invisible — The Kit
+      url: https://kit.exposingtheinvisible.org/en/
+      type: Guide
+      pourquoi: Kit d'enquête de Tactical Tech
+    - nom: Digital Enquirer Kit
+      url: https://digitalenquirer.org/fr/
+      type: Cours
+      pourquoi: Formation à l'enquête numérique (en français)
+    - nom: GIJN — Resource Center
+      url: https://gijn.org/resource/
+      type: Encyclopédie
+      pourquoi: Guides du réseau mondial de journalisme d'investigation
+    - nom: ONARP — Bibliothèque
+      url: https://pupitre.onarp.org/bibliotheque
+      type: Encyclopédie
+      pourquoi: Bibliothèque de ressources
+    - nom: OSINTme
+      url: https://osintme.com/
+      type: Blog
+      pourquoi: Articles et tutoriels OSINT
+    - nom: Netlas Cookbook
+      url: https://github.com/netlas-io/netlas-cookbook
+      type: Cours
+      pourquoi: Recettes d'investigation avec Netlas
+    - nom: Anti-Crime Academy — HUMINT & OSINT
+      url: https://anti-crime-academy.com/fr/humint-osint-personnalise/
+      type: Cours
+      pourquoi: Ressources HUMINT / OSINT
+    - nom: i2 Analyst's Notebook
+      type: Outil
+      pourquoi: Logiciel d'analyse et de visualisation d'enquête (IBM)
+  - nom: Formations
+    liens:
+    - nom: MOOC OSINT FR
+      url: https://mooc.osintfr.com/course/view.php?id=4
+      type: Cours
+      pourquoi: MOOC OSINT en français
+    - nom: Python for OSINT — 21 jours
+      url: https://github.com/cipher387/python-for-OSINT-21-days
+      type: Cours
+      pourquoi: 21 jours pour apprendre
+    - nom: Linux for OSINT — 21 jours
+      url: https://github.com/cipher387/linux-for-OSINT-21-day
+      type: Cours
+      pourquoi: 21 jours pour apprendre
+    - nom: Cyber for Good — Médias
+      url: https://cyberforgood.org/fr/modules/media/
+      type: Cours
+      pourquoi: Modules de formation
+  - nom: Challenges
+    liens:
+    - nom: Bellingcat Challenges
+      url: https://challenge.bellingcat.com/
+      type: CTF
+      pourquoi: Défis d'enquête de Bellingcat
+    - nom: GeoDetective
+      url: https://geodetective.io/
+      type: CTF
+      pourquoi: Défis de géolocalisation
+    - nom: Challenge OSINT FR
+      url: https://ctf.challenge-osint.fr/
+      type: CTF
+      pourquoi: CTF OSINT francophone
+    - nom: Osintopia
+      url: https://osintopia.fr/
+      type: CTF
+      pourquoi: Défis OSINT
+    - nom: OSINT4Fun
+      url: https://fr.osint4fun.eu/challenges/
+      type: CTF
+      pourquoi: Défis OSINT
+  - nom: Communautés
+    liens:
+    - nom: OSINT FR
+      url: https://discord.com/invite/dWY9sWFKYD
+      type: Communauté
+      pourquoi: Discord
+    - nom: Projet Fox
+      url: https://discord.com/invite/projet-fox-775480337727225879
+      type: Communauté
+      pourquoi: Discord
+    - nom: Oscar Zulu
+      url: https://discord.com/invite/oscar-zulu
+      type: Communauté
+      pourquoi: Discord
+    - nom: Hack'Olyte
+      url: https://discord.com/invite/dbNcPStqb7
+      type: Communauté
+      pourquoi: Discord
+- id: ie
+  label: 🌍 Géopolitique & IE
+  rubriques:
+  - nom: Désinformation & ingérences
+    liens:
+    - nom: VIGINUM — Concept de mode opératoire informationnel
+      url: https://www.sgdsn.gouv.fr/publications/definitions-et-objectifs-du-concept-de-mode-operatoire-informationnel-moi
+      type: Guide
+      pourquoi: Définitions et objectifs du concept de MOI
+    - nom: VIGINUM — Kits de sensibilisation
+      url: https://www.sgdsn.gouv.fr/publications/publication-de-deux-kits-de-sensibilisation-sur-les-ingerences-numeriques-etrangeres
+      type: Guide
+      pourquoi: Sensibilisation aux ingérences numériques étrangères
+    - nom: EUvsDisinfo
+      url: https://euvsdisinfo.eu/articles/
+      type: Blog
+      pourquoi: Analyses de la désinformation pro-Kremlin (SEAE)
+    - nom: SEAE — Guide FIMI
+      url: https://www.eeas.europa.eu/sites/default/files/documents/2024/EEAS-DataTeam-OsintGuidelines-04-Digital.pdf
+      type: Guide
+      pourquoi: Détecter et analyser la désinformation identitaire (FIMI) en sources ouvertes
+    - nom: SOCRadar — Suivi OSINT du conflit États-Unis/Israël–Iran
+      url: https://socradar.io/blog/us-israel-iran-war-osint-track/
+      type: Article
+      pourquoi: Suivi OSINT d'un conflit
+  - nom: Criminalité organisée
+    liens:
+    - nom: Crim'AI
+      url: https://crimai.substack.com/
+      type: Blog
+      pourquoi: Crime organisé et cybercriminalité
+    - nom: Méta-analyse du crime organisé contemporain
+      url: https://crimai.substack.com/p/meta-analyse-du-crime-organise-contemporain
+      type: Article
+      pourquoi: Crim'AI
+  - nom: Revues
+    liens:
+    - nom: Le Grand Continent
+      url: https://legrandcontinent.eu/fr/
+      type: Revue
+      pourquoi: Géopolitique et débats européens
+  - nom: Intelligence économique
+    liens:
+    - nom: Portail de l'IE
+      url: https://www.portail-ie.fr/
+      type: Revue
+      pourquoi: Actualité de l'intelligence économique
+  - nom: Articles
+    liens:
+    - nom: Depopulation trade
+      url: https://www.linkedin.com/pulse/depopulation-trade-unruly-thesis-stefano-bernardi-rludf/
+      type: Article
+      pourquoi: Thèse de Stefano Bernardi
+- id: privacy
+  label: 🔒 Privacy & OPSEC
+  rubriques:
+  - nom: Guides
+    liens:
+    - nom: EFF — Surveillance Self-Defense
+      url: https://ssd.eff.org/
+      type: Guide
+      pourquoi: Les bases et les guides d'outils
+    - nom: Privacy Guides
+      url: https://www.privacyguides.org/en/
+      type: Guide
+      pourquoi: Recommandations d'outils respectueux de la vie privée
+    - nom: Privacy Guides — Wiki communautaire
+      url: https://discuss.privacyguides.net/c/community-wiki/9411/none
+      type: Guide
+      pourquoi: Wiki de la communauté
+    - nom: Privacy International — Guides
+      url: https://www.privacyinternational.org/guides
+      type: Guide
+      pourquoi: Recommandé par Bellingcat
+    - nom: Privacy International — Empreinte numérique
+      url: https://www.privacyinternational.org/explainer/5761/what-digital-fingerprinting-my-device-ever-truly-anonymous
+      type: Article
+      pourquoi: Qu'est-ce que le fingerprinting ?
+    - nom: Activist Checklist
+      url: https://activistchecklist.org/
+      type: Guide
+      pourquoi: Checklists de sécurité numérique
+    - nom: Exposing the Invisible
+      url: https://exposingtheinvisible.org/en
+      type: Guide
+      pourquoi: Tactical Tech
+  - nom: Journalistes & société civile
+    liens:
+    - nom: RSF — Sécurité numérique
+      url: https://resources.rsf.org/digital-safety/
+      type: Guide
+      pourquoi: Ressources de RSF pour les journalistes
+    - nom: RSF — Ressources pour journalistes
+      url: https://resources.rsf.org/about-us/
+      type: Guide
+      pourquoi: Présentation des ressources RSF
+    - nom: Access Now — Assistance sécurité numérique
+      url: https://www.accessnow.org/help-fr/
+      type: Plateforme
+      pourquoi: Ligne d'assistance pour la société civile
+    - nom: Access Now — Actualités
+      url: https://www.accessnow.org/news-updates/
+      type: Blog
+      pourquoi: Droits numériques
+    - nom: Freedom of the Press Foundation
+      url: https://freedom.press/issues/?content-type=release
+      type: Blog
+      pourquoi: Liberté de la presse et sécurité
+    - nom: Amnesty International — Security Lab
+      url: https://securitylab.amnesty.org/
+      type: Blog
+      pourquoi: Enquêtes sur les logiciels espions
+    - nom: MVT — Mobile Verification Toolkit
+      url: https://github.com/mvt-project/mvt
+      type: Outil
+      pourquoi: Forensic mobile, promu par Amnesty
+- id: tech
+  label: 💻 Tech
+  rubriques:
+  - nom: Outils & systèmes
+    liens:
+    - nom: Ventoy
+      url: https://www.ventoy.net/en/download.html
+      type: Outil
+      pourquoi: Clé USB multiboot pour plusieurs OS
+    - nom: ShredOS
+      url: https://code.gouv.fr/sill/detail?name=ShredOS
+      type: Outil
+      pourquoi: OS pour effacer de façon sûre les supports de stockage
+    - nom: EndeavourOS
+      url: https://next.ink/5030/linux-endeavouros-arch-linux-simplifie-mais-faisant-part-belle-a-ligne-commande/
+      type: Article
+      pourquoi: OS basé sur Arch Linux, plus accessible
+    - nom: Kasm Workspaces
+      url: https://kasm.com/
+      type: Outil
+      pourquoi: Postes et navigateurs isolés en conteneurs
+    - nom: fzf
+      url: https://github.com/junegunn/fzf
+      type: Outil
+      pourquoi: Recherche floue en ligne de commande
+    - nom: Hyprland
+      url: https://hyprland.org/
+      type: Outil
+      pourquoi: Gestionnaire de fenêtres Wayland très esthétique
+    - nom: Sphinx
+      url: https://www.sphinx-doc.org/en/master/usage/quickstart.html
+      type: Outil
+      pourquoi: Générateur de documentation
+    - nom: Promethee
+      url: https://www.promethee.io/
+      type: Outil
+  - nom: Curiosités
+    liens:
+    - nom: Printer tracking dots
+      url: https://en.wikipedia.org/wiki/Printer_tracking_dots
+      type: Article
+      pourquoi: Les imprimantes ajoutent des points jaunes invisibles
+  - nom: Robotique & drones
+    liens: []
+  - nom: Semi-conducteurs
+    liens: []
+  - nom: Spatial
+    liens: []
+  - nom: Actualité générale
+    liens:
+    - nom: Next
+      url: https://next.ink/
+      type: Revue
+      pourquoi: Actualité numérique francophone
+- id: ia
+  label: 🚀 IA & rupture
+  rubriques:
+  - nom: Sécurité de l'IA
+    liens:
+    - nom: OWASP GenAI
+      url: https://genai.owasp.org/
+      type: Référentiel
+      pourquoi: Top 10 des risques des applications LLM
+    - nom: MITRE ATLAS
+      url: https://atlas.mitre.org/
+      type: Référentiel
+      pourquoi: Techniques d'attaque contre les systèmes d'IA
+    - nom: Cours IA et cybersécurité
+      url: https://github.com/mo0ogly/openclaw-killchain-analysis
+      type: Cours
+      pourquoi: Support de cours (PDF dans le dépôt)
+  - nom: Recherche
+    liens:
+    - nom: arXiv cs.AI
+      url: https://arxiv.org/list/cs.AI/recent
+      type: Encyclopédie
+      pourquoi: Prépublications en IA
+  - nom: Outils IA
+    liens:
+    - nom: Gamma
+      url: https://gamma.app/fr
+      type: Outil
+      pourquoi: Génération de présentations
+    - nom: Remotion
+      url: https://www.remotion.dev/
+      type: Outil
+      pourquoi: Création de vidéos par le code / les prompts
+    - nom: Fastscribe
+      url: https://fastscribe.io/
+      type: Outil
+      pourquoi: Podcasts transformés en texte
+  - nom: Régulation
+    liens: []
+- id: learn
+  label: 🎓 Apprendre
+  rubriques:
+  - nom: Plateformes cyber
+    liens:
+    - nom: Hack The Box
+      url: https://www.hackthebox.com/
+      type: Cours
+      pourquoi: Aide au choix d'un parcours
+    - nom: LetsDefend — Blue team
+      url: https://letsdefend.io/
+      type: Cours
+      pourquoi: Formation SOC / blue team
+    - nom: LetsDefend — Parcours
+      url: https://app.letsdefend.io/training?learning_type_filter=Path
+      type: Cours
+      pourquoi: Parcours de formation
+    - nom: Mandiant Academy (Google)
+      url: https://cloud.google.com/learn/security/mandiant-academy-courses
+      type: Cours
+      pourquoi: Cours CTI
+    - nom: MITRE ATT&CK — Training
+      url: https://attack.mitre.org/resources/learn-more-about-attack/training/
+      type: Cours
+      pourquoi: Formations officielles ATT&CK
+    - nom: Red Canary — Cybersecurity 101
+      url: https://redcanary.com/cybersecurity-101/
+      type: Cours
+      pourquoi: Bases de la cybersécurité
+    - nom: SANS — Skills roadmap
+      url: https://www.sans.org/cyber-security-skills-roadmap
+      type: Cours
+      pourquoi: Feuille de route des compétences
+    - nom: Google Cybersecurity Certificate
+      url: https://www.coursera.org/google-certificates/cybersecurity-certificate
+      type: Cours
+      pourquoi: Certificat Coursera
+    - nom: Google Skills
+      url: https://www.skills.google/?locale=fr
+      type: Cours
+      pourquoi: Formations Google
+    - nom: Cybrary
+      url: https://www.cybrary.it/career-path
+      type: Cours
+      pourquoi: Parcours de carrière IT
+    - nom: RangeForce
+      url: https://www.rangeforce.com/platform
+      type: Cours
+      pourquoi: Plateforme d'entraînement
+    - nom: Seela
+      url: https://seela.io/
+      type: Cours
+      pourquoi: Formation cyber
+    - nom: ANSSI — MOOC EBIOS RM
+      url: https://messervices.cyber.gouv.fr/services/mooc-ebios-rm.html
+      type: Cours
+      pourquoi: Méthode d'analyse de risque
+    - nom: Splunk — Cybersecurity Defense Analyst
+      url: https://www.splunk.com/en_us/pdfs/training/splunk-test-blueprint-cybersecurity-defense-analyst.pdf
+      type: Cours
+      pourquoi: Programme de la certification
+    - nom: MeasureUp
+      type: Outil
+      pourquoi: Examens blancs de certification
+  - nom: CTF & wargames
+    liens:
+    - nom: OverTheWire
+      url: https://overthewire.org/wargames/
+      type: CTF
+      pourquoi: Wargames en ligne de commande
+    - nom: picoCTF
+      url: https://picoctf.org/
+      type: CTF
+      pourquoi: CTF pour débuter
+    - nom: SadServers
+      url: https://sadservers.com/
+      type: CTF
+      pourquoi: Dépannage de serveurs Linux, conseillé par l'ANSSI
+    - nom: CryptoHack
+      url: https://cryptohack.org/courses/
+      type: CTF
+      pourquoi: Apprendre la cryptographie par les défis
+    - nom: HackThisSite
+      url: https://www.hackthissite.org/
+      type: CTF
+      pourquoi: Défis de hacking
+  - nom: Linux & ligne de commande
+    liens:
+    - nom: Linux Journey
+      url: https://labex.io/fr/linuxjourney
+      type: Cours
+      pourquoi: Apprendre Linux pas à pas
+    - nom: Linux Path
+      url: https://www.linux-path.com/fr
+      type: Cours
+      pourquoi: Version à jour de Linux Journey (moins bien)
+    - nom: cmdchallenge
+      url: https://cmdchallenge.com/
+      type: Jeu
+      pourquoi: Défis en une ligne de commande. Incroyable !
+    - nom: Linux Survival
+      url: https://linuxsurvival.com/
+      type: Jeu
+      pourquoi: Tutoriel interactif
+    - nom: Terminus (MIT)
+      url: https://web.mit.edu/mprat/Public/web/Terminus/Web/main.html
+      type: Jeu
+      pourquoi: Aventure en ligne de commande
+    - nom: HackerRank — Shell
+      url: https://www.hackerrank.com/domains/shell
+      type: Jeu
+      pourquoi: Exercices shell
+    - nom: W3Schools — Bash
+      url: https://www.w3schools.com/bash/
+      type: Cours
+      pourquoi: Référence Bash
+    - nom: Linux Handbook — Courses
+      url: https://linuxhandbook.com/courses/
+      type: Cours
+      pourquoi: Kubernetes, Docker, Bash…
+    - nom: Vim Adventures
+      url: https://vim-adventures.com/
+      type: Jeu
+      pourquoi: Apprendre Vim en jouant
+    - nom: vimtutor
+      type: Cours
+      pourquoi: 'Tutoriel Vim intégré : taper vimtutor dans un terminal'
+  - nom: Conteneurs
+    liens:
+    - nom: Play with Docker
+      url: https://www.docker.com/play-with-docker/
+      type: Cours
+      pourquoi: Bac à sable Docker
+    - nom: Play with Kubernetes
+      url: https://training.play-with-kubernetes.com/
+      type: Cours
+      pourquoi: Bac à sable Kubernetes
+  - nom: Programmation
+    liens:
+    - nom: freeCodeCamp
+      url: https://www.freecodecamp.org/
+      type: Cours
+      pourquoi: Apprendre à coder gratuitement
+    - nom: freeCodeCamp — Python
+      url: https://www.freecodecamp.org/learn/python-v9/
+      type: Cours
+      pourquoi: Parcours Python
+  - nom: Jeux
+    liens:
+    - nom: Bitburner
+      type: Jeu
+      pourquoi: Jeu de programmation (Steam)
+    - nom: Grey Hack
+      type: Jeu
+      pourquoi: Simulateur de hacking (Steam)
+    - nom: World of Haiku
+      type: Jeu
+      pourquoi: Jeu d'apprentissage Linux (Steam)
+    - nom: NetHack
+      url: https://www.nethack.org/index.html
+      type: Jeu
+      pourquoi: Roguelike en terminal
+    - nom: Dungeon Crawl Stone Soup
+      url: https://crawl.develz.org/
+      type: Jeu
+      pourquoi: Roguelike en terminal

@@ -1,0 +1,53 @@
+# Publication du wiki sur GitHub Pages à chaque push sur main.
+# 1) scan de secrets (gitleaks)  2) build MkDocs strict  3) déploiement Pages
+name: Deploy wiki
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # bouton "Run workflow" pour relancer à la main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # tout l'historique, pour le scan de secrets
+
+      - name: Scan de secrets (gitleaks)
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 git /repo --redact --no-banner -v
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Installation MkDocs
+        run: pip install -r requirements.txt
+
+      - name: Build (strict : échoue au moindre lien cassé)
+        run: mkdocs build --strict
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

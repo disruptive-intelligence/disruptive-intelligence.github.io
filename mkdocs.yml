@@ -1,0 +1,119 @@
+site_name: Disruptive Intelligence
+site_description: Tech · IA · Cyber · Géopolitique — veille, analyses et base de connaissances
+site_url: https://disruptive-intelligence.github.io/
+docs_dir: docs
+
+theme:
+  name: material
+  custom_dir: overrides         # surcharge du header (onglets dans la barre)
+  language: fr
+  palette:
+    # Sombre par défaut, bascule clair/sombre disponible
+    - scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/weather-sunny
+        name: Mode clair
+    - scheme: default
+      primary: red
+      accent: red
+      toggle:
+        icon: material/weather-night
+        name: Mode sombre
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs         # onglets en haut : Pentest / Bibliothèque / Veille
+    - navigation.tabs.sticky  # requis : sinon Material ajoute une 2e barre d'onglets
+    - navigation.sections     # grandes parties = en-têtes (style HackTricks)
+    - navigation.indexes      # index.md = page d'accueil d'une section
+    - navigation.path         # fil d'Ariane (breadcrumbs)
+    - navigation.footer       # précédent / suivant
+    - navigation.top          # bouton retour en haut
+    - navigation.tracking     # URL suit la section lue
+    - toc.follow              # la table des matières suit la lecture
+    - search.suggest
+    - search.highlight
+    - content.code.copy       # bouton copier sur les blocs de code
+    - content.code.annotate   # annotations (1) dans le code
+    - content.tabs.link       # onglets Linux/Windows synchronisés
+
+# Génère l'accueil, la veille, les analyses, les dossiers et les ressources
+hooks:
+  - hooks/portal.py
+
+# Recharge le site local quand les données ou le hook changent
+watch:
+  - data
+  - hooks
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/sidebar-toggle.js
+
+plugins:
+  - search:
+      lang: [fr, en]
+  - tags
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition                # callouts : !!! note, warning, tip...
+  - pymdownx.details          # blocs repliables : ??? note
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tasklist:        # cases à cocher [ ] / [x]
+      custom_checkbox: true
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - 🏠 Accueil: index.md    # généré ; Veille, Analyses et Dossiers sont insérés juste après
+  - ⚔️ Pentest:
+    - 🚀 Démarrage:
+        - start/index.md
+        - Checklist avant engagement: start/checklist.md
+        - Conventions: start/conventions.md
+    - 🧭 Méthodologies générales:
+        - Méthodologie pentest:
+            - methodology/index.md
+            - 1. Reconnaissance passive: methodology/01-passive-recon.md
+            - 2. Reconnaissance active: methodology/02-active-recon.md
+            - 3. Énumération: methodology/03-enumeration.md
+            - 4. Accès initial: methodology/04-initial-access.md
+            - 5. Élévation de privilèges: methodology/05-privesc.md
+            - 6. Mouvement latéral: methodology/06-lateral-movement.md
+            - 7. Post-exploitation: methodology/07-post-exploitation.md
+        - Pentest réseau: methodology/network.md
+    - 🌐 Services réseau:
+        - services/index.md
+        - 88 - Kerberos: services/kerberos.md
+        - 139,445 - SMB: services/smb.md
+    - 🕸️ Pentest web:
+        - Méthodologie web: web/methodology.md
+    - 🏰 Active Directory:
+        - active-directory/index.md
+        - Énumération: active-directory/enumeration.md
+    - 🔓 Élévation de privilèges:
+        - privesc/index.md
+        - Linux: privesc/linux.md
+        - Windows: privesc/windows.md
+    - 🧰 Outils:
+        - tools/index.md
+        - Nmap: tools/nmap.md
+  - 📚 Bibliothèque:
+      - library/index.md

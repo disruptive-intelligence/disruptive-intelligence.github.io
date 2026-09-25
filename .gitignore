@@ -1,0 +1,6 @@
+# Site généré par MkDocs (publié par GitHub Actions, jamais versionné)
+site/
+
+# Python
+.venv/
+__pycache__/

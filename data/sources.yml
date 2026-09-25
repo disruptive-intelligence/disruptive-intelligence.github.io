@@ -1,0 +1,129 @@
+# Généré par scripts/export_sources.py — sources actives de veille-agent.
+- name: INCYBER NEWS
+  site: https://incyber.org
+  groups:
+  - tech
+- name: Numerama - Cyberguerre
+  site: https://www.numerama.com
+  groups:
+  - tech
+- name: The Record / Recorded Future News
+  site: https://therecord.media
+  groups:
+  - tech
+- name: Le décodeur de cybersécurité
+  site: http://feeds.feedburner.com
+  groups:
+  - tech
+- name: 'Sécurité informatique : Toute l’actualité sur Le Monde.fr.'
+  site: https://www.lemonde.fr
+  groups:
+  - tech
+- name: L' INTELLIGENCE CYBER par Jean-Paul Pinte
+  site: https://cybercriminalite.blog
+  groups:
+  - tech
+- name: Malwarebytes
+  site: https://www.malwarebytes.com
+  groups:
+  - tech
+- name: Clusif
+  site: https://clusif.fr
+  groups:
+  - tech
+- name: Securelist
+  site: https://securelist.com
+  groups:
+  - tech
+- name: SOCRadar® Cyber Intelligence Inc.
+  site: https://socradar.io
+  groups:
+  - tech
+  - alertes-cyber
+- name: ZATAZ
+  site: http://feeds.feedburner.com
+  groups:
+  - tech
+- name: 'Pixels : Toute l’actualité sur Le Monde.fr.'
+  site: https://www.lemonde.fr
+  groups:
+  - tech
+- name: Unit 42
+  site: https://unit42.paloaltonetworks.com
+  groups:
+  - tech
+  - alertes-cyber
+- name: Krebs on Security
+  site: https://krebsonsecurity.com
+  groups:
+  - tech
+- name: RSS - Actualités CNIL
+  site: https://www.cnil.fr
+  groups:
+  - tech
+- name: ASEC
+  site: https://asec.ahnlab.com
+  groups:
+  - tech
+  - alertes-cyber
+- name: La Quadrature du Net
+  site: https://www.laquadrature.net
+  groups:
+  - tech
+- name: 'Intelligence Online : Dernier Numéro'
+  site: http://feeds.feedburner.com
+  groups:
+  - tech
+  - geopolitique-ie
+- name: CERT-FR
+  site: https://www.cert.ssi.gouv.fr
+  groups:
+  - alertes-cyber
+- name: Didier Stevens
+  site: https://blog.didierstevens.com
+  groups:
+  - alertes-cyber
+- name: BleepingComputer
+  site: https://www.bleepingcomputer.com
+  groups:
+  - alertes-cyber
+- name: Portail de l'IE
+  site: https://www.portail-ie.fr
+  groups:
+  - geopolitique-ie
+- name: AEGE - Le réseau d'experts en intelligence économique
+  site: https://www.aege.fr
+  groups:
+  - geopolitique-ie
+- name: Zone Militaire
+  site: https://www.opex360.com
+  groups:
+  - geopolitique-ie
+- name: Omerta Média
+  site: https://www.omertamedia.fr
+  groups:
+  - geopolitique-ie
+- name: 'Conflits : Revue de Géopolitique'
+  site: https://www.revueconflits.com
+  groups:
+  - geopolitique-ie
+- name: Spécial Défense
+  site: https://specialdefense.over-blog.com
+  groups:
+  - geopolitique-ie
+- name: Le Grand Continent
+  site: https://legrandcontinent.eu
+  groups:
+  - geopolitique-ie
+- name: Revue Défense Nationale
+  site: https://www.defnat.com
+  groups:
+  - geopolitique-ie
+- name: bellingcat
+  site: https://www.bellingcat.com
+  groups:
+  - geopolitique-ie
+- name: Next - Flux Complet
+  site: https://next.ink
+  groups:
+  - geopolitique-ie

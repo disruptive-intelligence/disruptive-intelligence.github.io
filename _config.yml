@@ -1,8 +1,0 @@
-title: Disruptive Intelligence
-description: "Tech · IA · Cyber · Géopolitique"
-lang: fr
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
