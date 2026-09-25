@@ -386,3 +386,21 @@
 .md-typeset ul.kw-todo li { margin: .2em 0; padding-left: 1.2rem; position: relative; color: var(--md-default-fg-color--lighter); }
 .md-typeset ul.kw-todo li::before { content: "○"; position: absolute; left: 0; color: var(--kw-line); }
 .md-typeset a.kw-card--wide { display: flex; flex-direction: column; gap: .3rem; max-width: 32rem; }
+
+/* Bibliothèque : cartes de catégorie avec leurs notes cliquables */
+.kw-carousel--cards .kw-lib { flex: 0 0 17rem; scroll-snap-align: start; }
+.md-typeset .kw-lib { display: flex; flex-direction: column; gap: .3rem; padding: 1rem 1.1rem;
+  background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 10px; }
+.md-typeset .kw-lib:hover { border-color: #4a4d8a; }
+.md-typeset a.kw-lib__title { font-size: 1rem; font-weight: 800; color: var(--md-default-fg-color); }
+.md-typeset a.kw-lib__title:hover { color: #8f9bff; }
+.md-typeset ul.kw-lib__notes, .md-typeset ul.kw-notes { list-style: none; margin: .4rem 0 0; padding: .45rem 0 0; }
+.md-typeset ul.kw-lib__notes { border-top: 1px solid var(--kw-line); }
+.md-typeset .kw-lib__notes li, .md-typeset .kw-notes li { margin: 0 0 .3rem; padding-left: 1rem; position: relative; font-size: .7rem; line-height: 1.4; }
+.md-typeset .kw-notes li { font-size: .8rem; margin-bottom: .45rem; }
+.md-typeset .kw-lib__notes li::before, .md-typeset .kw-notes li::before { position: absolute; left: 0; font-size: .7em; top: .2em; }
+.md-typeset li.is-done::before { content: "●"; color: #8f9bff; }
+.md-typeset li.is-todo::before { content: "○"; color: var(--md-default-fg-color--lighter); }
+.md-typeset li.is-todo a { color: var(--md-default-fg-color--light); }
+.md-typeset li.kw-lib__more { padding-left: 0; }
+.md-typeset li.kw-lib__more a { font-weight: 600; font-size: .66rem; }

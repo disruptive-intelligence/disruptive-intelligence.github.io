@@ -429,40 +429,49 @@ def build_nav(items, themes):
 
 
 def library_nav(library):
-    """Onglet Bibliothèque : un en-tête par domaine (Cyber, IT), une entrée par catégorie
-    (dépliable quand des notes sont importées), puis le Glossaire."""
+    """Onglet Bibliothèque : un en-tête par domaine (Cyber, IT), une entrée dépliable (») par catégorie
+    avec ses notes, puis le Glossaire."""
     nav = []
     for dom in library:
-        cats = []
-        for cat in dom["categories"]:
-            if cat["imported"]:
-                cats.append({cat["label"]: [cat["src"]] + [{n["title"]: n["src"]} for n in cat["imported"]]})
-            else:
-                cats.append({cat["label"]: cat["src"]})
-        nav.append({dom["label"]: cats})
+        nav.append({dom["label"]: [{cat["label"]: [cat["src"]] + [{n["title"]: n["src"]} for n in cat["notes"]]}
+                                   if cat["notes"] else {cat["label"]: cat["src"]}
+                                   for cat in dom["categories"]]})
     return nav + [{"📖 Glossaire": [GLOSSARY_SRC]}]
 
 
 # ---------------------------------------------------------------- bibliothèque
 
 def load_library(docs_dir, tree):
-    """Associe l'arborescence (data/bibliotheque.yml) aux notes réellement présentes dans docs/library/."""
+    """Associe l'arborescence (data/bibliotheque.yml) aux notes présentes dans docs/library/<domaine>/<catégorie>/.
+    Chaque note prévue et pas encore importée reçoit une page d'attente générée, pour rester cliquable ;
+    la vraie note la remplace dès qu'elle est déposée (reconnue par son titre ou son nom de fichier)."""
     out = []
     for dom in tree or []:
         cats = []
         for cat in dom.get("categories", []):
-            folder = docs_dir / "library" / dom["id"] / cat["id"]
-            imported = []
+            base = f"library/{dom['id']}/{cat['id']}"
+            folder = docs_dir / base
+            real = {}
             for f in sorted(folder.glob("*.md")) if folder.exists() else []:
                 if f.name == "index.md":
                     continue
                 body, meta = get_data(f.read_text(encoding="utf-8"))
                 h1 = re.search(r"^# (.+)$", body, re.M)
-                imported.append({"title": str(meta.get("title") or (h1.group(1) if h1 else f.stem)).strip(),
-                                 "src": f.relative_to(docs_dir).as_posix()})
-            done = {slug(n["title"]) for n in imported}
-            cats.append({"id": cat["id"], "label": cat["label"], "src": f"library/{dom['id']}/{cat['id']}/index.md",
-                         "imported": imported, "todo": [n for n in cat.get("notes") or [] if slug(n) not in done]})
+                title = str(meta.get("title") or (h1.group(1) if h1 else f.stem)).strip()
+                note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True}
+                real[slug(title)] = note
+                real.setdefault(slug(f.stem), note)
+            notes, used = [], set()
+            for title in cat.get("notes") or []:
+                hit = real.get(slug(title))
+                if hit:
+                    notes.append(hit)
+                    used.add(hit["src"])
+                else:
+                    notes.append({"title": title, "src": f"{base}/{slug(title)}.md", "imported": False})
+            extra = {n["src"]: n for n in real.values() if n["src"] not in used}
+            notes += list(extra.values())
+            cats.append({"id": cat["id"], "label": cat["label"], "src": f"{base}/index.md", "notes": notes})
         out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
     return out
 
@@ -471,29 +480,48 @@ def pages_library(library):
     out = []
     for dom in library:
         for cat in dom["categories"]:
-            body = f"# {cat['label']}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']}</span>\n\n"
-            if cat["imported"]:
-                body += "## Notes\n\n" + "".join(
-                    f"- [{n['title']}]({posixpath.relpath(n['src'], posixpath.dirname(cat['src']))})\n"
-                    for n in cat["imported"]) + "\n"
-            if cat["todo"]:
-                body += ("## À importer depuis Obsidian\n\n<ul class=\"kw-todo\">"
-                         + "".join(f"<li>{esc(n)}</li>" for n in cat["todo"]) + "</ul>\n")
-            if not cat["imported"] and not cat["todo"]:
+            done = sum(n["imported"] for n in cat["notes"])
+            total = len(cat["notes"])
+            body = (f"# {cat['label']}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']} · "
+                    f"{done}/{total} importée{'s' if done > 1 else ''}</span>\n\n")
+            if cat["notes"]:
+                body += ('<ul class="kw-notes">' + "".join(
+                    f'<li class="{"is-done" if n["imported"] else "is-todo"}">'
+                    f'<a href="{href(cat["src"], n["src"])}">{esc(n["title"])}</a></li>' for n in cat["notes"])
+                    + "</ul>\n\n<span class=\"kw-muted\">● importée · ○ à importer depuis Obsidian</span>\n")
+            else:
                 body += '!!! note "Catégorie vide"\n    Aucune note pour l\'instant.\n'
             out.append((cat["src"], body))
+            for n in cat["notes"]:
+                if not n["imported"]:
+                    out.append((n["src"],
+                                f"# {n['title']}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']} · "
+                                f"[{cat['label']}](index.md)</span>\n\n"
+                                '!!! note "Pas encore importée"\n'
+                                "    Cette note existe dans mes notes Obsidian et sera publiée ici après relecture.\n"))
     return out
+
+
+def library_card(cat, src, max_notes=6):
+    """Carte d'une catégorie : titre cliquable + ses notes cliquables (● importée, ○ à importer)."""
+    items = "".join(
+        f'<li class="{"is-done" if n["imported"] else "is-todo"}"><a href="{href(src, n["src"])}">{esc(n["title"])}</a></li>'
+        for n in cat["notes"][:max_notes])
+    more = len(cat["notes"]) - max_notes
+    if more > 0:
+        items += f'<li class="kw-lib__more"><a href="{href(src, cat["src"])}">+ {more} autres →</a></li>'
+    if not items:
+        items = '<li class="kw-muted">Catégorie vide</li>'
+    done = sum(n["imported"] for n in cat["notes"])
+    return (f'<div class="kw-card kw-lib"><a class="kw-lib__title" href="{href(src, cat["src"])}">{esc(cat["label"])}</a>'
+            f'<span class="kw-card__meta">{done}/{len(cat["notes"])} importée{"s" if done > 1 else ""}</span>'
+            f'<ul class="kw-lib__notes">{items}</ul></div>')
 
 
 def page_library_index(library, themes, glossary_count):
     src = "library/index.md"
-    doms = ""
-    for dom in library:
-        cards = "".join(
-            f'<a class="kw-card" href="{href(src, c["src"])}"><span class="kw-card__title">{esc(c["label"])}</span>'
-            f'<span class="kw-card__meta">{len(c["imported"])} importée{"s" if len(c["imported"]) > 1 else ""}'
-            f' · {len(c["todo"])} à importer</span></a>' for c in dom["categories"])
-        doms += f"\n## {dom['label']}\n\n<div class=\"kw-wiki\">{cards}</div>\n"
+    doms = "".join(f"\n## {dom['label']}\n\n" + carousel(library_card(c, src) for c in dom["categories"]) + "\n"
+                   for dom in library)
     return src, f"""---
 hide:
   - toc
@@ -502,7 +530,7 @@ hide:
 
 Le **savoir de référence** : mes notes de compréhension, reprises d'Obsidian au fil de l'eau, les ressources
 et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la Bibliothèque garde ce qui **dure**.
-
+{doms}
 ## 🧭 Ressources
 
 {resources_carousel(themes, src)}
@@ -510,7 +538,7 @@ et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la
 ## 📖 Glossaire
 
 <a class="kw-card kw-card--wide" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">{glossary_count} notions de A à Z</span><span class="kw-card__text">Alimenté automatiquement par le « Lexique du jour » des Morning Briefs, complété à la main.</span></a>
-{doms}"""
+"""
 
 
 # ---------------------------------------------------------------- glossaire
