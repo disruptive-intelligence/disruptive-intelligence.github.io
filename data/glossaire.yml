@@ -1,0 +1,14 @@
+# Glossaire — ajouts et corrections manuels.
+# Le glossaire est d'abord alimenté automatiquement par les « Lexique du jour » des Morning Briefs
+# (première phrase de chaque définition). Ce fichier est PRIORITAIRE :
+#   - un terme absent des briefs est ajouté ;
+#   - un terme déjà présent voit sa définition remplacée (les liens « Vu dans » sont conservés).
+#
+# Format :
+#   - terme: Nom affiché
+#     definition: Une ou deux phrases générales.
+#     voir: services/kerberos.md        (facultatif : page du site à mettre en lien)
+
+- terme: Kerberoasting
+  definition: Attaque Active Directory qui consiste à demander des tickets de service Kerberos pour des comptes de service, puis à casser leur mot de passe hors ligne.
+  voir: services/kerberos.md

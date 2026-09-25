@@ -74,6 +74,7 @@ markdown_extensions:
   - pymdownx.tasklist:        # cases à cocher [ ] / [x]
       custom_checkbox: true
   - tables
+  - def_list                  # listes de définitions (glossaire)
   - attr_list
   - md_in_html
   - pymdownx.keys

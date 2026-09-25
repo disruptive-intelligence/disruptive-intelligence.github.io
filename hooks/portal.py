@@ -47,6 +47,7 @@ MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 NAV_ANCHOR = "🏠 Accueil"   # les onglets générés sont insérés juste après celui-ci
+LIBRARY_TAB = "📚 Bibliothèque"   # reçoit les sections Ressources et Glossaire
 
 # ---------------------------------------------------------------- utilitaires
 
@@ -303,7 +304,7 @@ def pages_ressources(themes):
     return out
 
 
-def page_home(items, themes):
+def page_home(items, themes, glossary_count=0):
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
     une = ""
@@ -337,7 +338,8 @@ def page_home(items, themes):
     wiki = [("⚔️ Pentest", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
             ("⚔️ Pentest", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
             ("⚔️ Pentest", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
-            ("📚 Bibliothèque", "Notes de cours", "Synthèses pour apprendre et réviser.", "library/index.md")]
+            ("📚 Bibliothèque", "Notes de cours", "Synthèses pour apprendre et réviser.", "library/index.md"),
+            ("📚 Bibliothèque", "Glossaire", f"{glossary_count} notions expliquées dans la veille, de A à Z.", GLOSSARY_SRC)]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
@@ -384,10 +386,7 @@ hide:
 # ---------------------------------------------------------------- navigation
 
 def build_nav(items, themes):
-    veille = ["veille/index.md",
-              {"📚 Ressources": [{t["label"]: [f"veille/ressources/{t['id']}/index.md"]
-                                 + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
-                                for t in themes]}]
+    veille = ["veille/index.md"]
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(
@@ -411,6 +410,88 @@ def build_nav(items, themes):
     return [{"📡 Veille": veille}, {"🔎 Analyses": analyses}, {"🗂️ Dossiers": dossiers}]
 
 
+def library_nav(themes):
+    """Sections ajoutées à l'onglet Bibliothèque : Ressources (adresses inchangées) et Glossaire."""
+    return [{"🧭 Ressources": [{t["label"]: [f"veille/ressources/{t['id']}/index.md"]
+                               + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
+                              for t in themes]},
+            {"📖 Glossaire": [GLOSSARY_SRC]}]
+
+
+# ---------------------------------------------------------------- glossaire
+
+GLOSSARY_SRC = "library/glossaire.md"
+LEXIQUE_ENTRY = re.compile(r"^- \*\*(.+?)\*\*\s+[—–-]\s+(.+)$")
+
+
+def first_sentence(text):
+    """Première phrase = définition générale ; la suite est le contexte propre au brief."""
+    m = re.search(r"^(.+?[.!?])(?=\s+[A-ZÀ-ÖØ-Þ«\"(])", text.strip())
+    return (m.group(1) if m else text).strip()
+
+
+def build_glossary(items, manual):
+    """Termes des « Lexique du jour » des briefs (du plus récent au plus ancien), complétés
+    et corrigés par data/glossaire.yml, prioritaire."""
+    terms = {}
+    for it in items["veille"]:                                   # déjà triés du plus récent au plus ancien
+        m = re.search(r"^## Lexique du jour\s*\n(.*?)(?=^## |^\*Lecture|\Z)", it["body"], re.M | re.S)
+        if not m:
+            continue
+        for line in m.group(1).splitlines():
+            e = LEXIQUE_ENTRY.match(line.strip())
+            if not e:
+                continue
+            key = slug(e.group(1)) or e.group(1).casefold()
+            t = terms.setdefault(key, {"term": e.group(1).strip(), "definition": first_sentence(e.group(2)),
+                                       "seen": [], "see": None})
+            t["seen"].append(it)
+    for entry in manual or []:
+        name = str(entry.get("terme", "")).strip()
+        if not name:
+            continue
+        t = terms.setdefault(slug(name) or name.casefold(), {"term": name, "definition": "", "seen": [], "see": None})
+        t["term"] = name
+        if entry.get("definition"):
+            t["definition"] = str(entry["definition"]).strip()
+        t["see"] = entry.get("voir")
+        t["manual"] = True
+    return sorted(terms.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
+
+
+def page_glossary(glossary):
+    src = GLOSSARY_SRC
+    by_letter = {}
+    for t in glossary:
+        first = (slug(t["term"])[:1] or "#").upper()
+        by_letter.setdefault(first if first.isalpha() else "#", []).append(t)
+    index = " · ".join(f"[{l}](#{l.lower() if l != '#' else 'autres'})" for l in by_letter)
+    body = ""
+    for letter, lst in by_letter.items():
+        anchor = letter.lower() if letter != "#" else "autres"
+        body += f"\n## {letter if letter != '#' else 'Autres'} {{ #{anchor} }}\n\n"
+        for t in lst:
+            seen = " · ".join(
+                f"[{it['date'].day} {short_month(it['date'])}]({posixpath.relpath(it['src'], 'library')})"
+                for it in t["seen"][:6])
+            if len(t["seen"]) > 6:
+                seen += f" · +{len(t['seen']) - 6}"
+            extras = []
+            if seen:
+                extras.append(f"Vu dans : {seen}")
+            if t.get("see"):
+                extras.append(f"[Voir la fiche →]({posixpath.relpath(t['see'], 'library')})")
+            body += f"**{t['term']}**\n:   {t['definition'] or '<span class=\"kw-muted\">Définition à compléter.</span>'}"
+            body += (f"<br><span class=\"kw-muted\">{' · '.join(extras)}</span>" if extras else "") + "\n\n"
+    return src, f"""# 📖 Glossaire
+
+Les notions expliquées dans le **Lexique du jour** des Morning Briefs, rassemblées automatiquement,
+complétées par des ajouts manuels (`data/glossaire.yml`). {len(glossary)} termes.
+
+{index}
+{body}"""
+
+
 # ---------------------------------------------------------------- hooks MkDocs
 
 def on_config(config):
@@ -420,13 +501,20 @@ def on_config(config):
     themes = load_yaml(root / "data" / "ressources.yml", [])
     sources = load_yaml(root / "data" / "sources.yml", [])
 
-    pages = [page_home(items, themes), page_veille(items, sources), page_dossiers(items)]
-    pages += pages_analyses(items) + pages_ressources(themes)
+    glossary = build_glossary(items, load_yaml(root / "data" / "glossaire.yml", []))
+
+    pages = [page_home(items, themes, len(glossary)), page_veille(items, sources), page_dossiers(items)]
+    pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     STATE["pages"] = pages
 
     nav = list(config.nav or [])
     pos = next((i + 1 for i, e in enumerate(nav) if isinstance(e, dict) and NAV_ANCHOR in e), 0)
-    config.nav = nav[:pos] + build_nav(items, themes) + nav[pos:]
+    nav = nav[:pos] + build_nav(items, themes) + nav[pos:]
+    for i, e in enumerate(nav):                  # Ressources + Glossaire rejoignent l'onglet Bibliothèque
+        if isinstance(e, dict) and LIBRARY_TAB in e:
+            children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
+            nav[i] = {LIBRARY_TAB: list(children) + library_nav(themes)}
+    config.nav = nav
     return config
 
 
