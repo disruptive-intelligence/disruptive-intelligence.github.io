@@ -1,0 +1,9 @@
+{#- Icônes : écran d'accueil iPhone / Android et couleur de la barre du navigateur -#}
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'assets/icons/apple-touch-icon.png' | url }}">
+  <link rel="manifest" href="{{ 'site.webmanifest' | url }}">
+  <meta name="apple-mobile-web-app-title" content="Disruptive">
+  <meta name="theme-color" content="#151111">
+{% endblock %}

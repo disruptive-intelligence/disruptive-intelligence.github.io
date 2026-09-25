@@ -304,7 +304,22 @@ def pages_ressources(themes):
     return out
 
 
-def page_home(items, themes, glossary_count=0):
+def resources_carousel(themes, src):
+    """Carrousel des thèmes de ressources : les 3 rubriques les plus fournies de chaque thème."""
+    cards = ""
+    for t in themes:
+        rubs = t["rubriques"]
+        n = sum(len(r.get("liens") or []) for r in rubs)
+        top = sorted(((r["nom"], len(r.get("liens") or [])) for r in rubs if r.get("liens")), key=lambda x: -x[1])[:3]
+        tops = "".join(f'<li><span>{esc(s)}</span><span class="kw-count">{c}</span></li>' for s, c in top)
+        cards += (f'<a class="kw-card kw-res" href="{href(src, "veille/ressources/" + t["id"] + "/index.md")}">'
+                  f'<span class="kw-res__label">{t["label"]}</span>'
+                  f'<span class="kw-card__meta">{n} ressources · {len(rubs)} rubriques</span>'
+                  f'<ul class="kw-res__tops">{tops}</ul></a>')
+    return carousel([cards])
+
+
+def page_home(items, themes, glossary):
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
     une = ""
@@ -323,23 +338,17 @@ def page_home(items, themes, glossary_count=0):
                 f'<span class="kw-card__title">{esc(d["title"])}</span>'
                 f'<span class="kw-card__text">Croiser les analyses pour mettre les enjeux en perspective.</span></a>')
 
-    res_cards, total = "", 0
-    for t in themes:
-        rubs = t["rubriques"]
-        n = sum(len(r.get("liens") or []) for r in rubs)
-        total += n
-        top = sorted(((r["nom"], len(r.get("liens") or [])) for r in rubs if r.get("liens")), key=lambda x: -x[1])[:3]
-        tops = "".join(f'<li><span>{esc(s)}</span><span class="kw-count">{c}</span></li>' for s, c in top)
-        res_cards += (f'<a class="kw-card kw-res" href="{href(src, "veille/ressources/" + t["id"] + "/index.md")}">'
-                      f'<span class="kw-res__label">{t["label"]}</span>'
-                      f'<span class="kw-card__meta">{n} ressources · {len(rubs)} rubriques</span>'
-                      f'<ul class="kw-res__tops">{tops}</ul></a>')
+    total = sum(len(r.get("liens") or []) for t in themes for r in t["rubriques"])
+    # Glossaire : les termes les plus récents (ordre des briefs), en pastilles vers la lettre du glossaire
+    recent = sorted(glossary, key=lambda t: max((it["date"] for it in t["seen"]), default=date.min), reverse=True)[:14]
+    chips = "".join(
+        f'<a class="kw-chip" href="{href(src, GLOSSARY_SRC)}#{letter_anchor(t["term"])}">{esc(t["term"])}</a>'
+        for t in recent)
 
     wiki = [("⚔️ Pentest", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
             ("⚔️ Pentest", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
             ("⚔️ Pentest", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
-            ("📚 Bibliothèque", "Notes de cours", "Synthèses pour apprendre et réviser.", "library/index.md"),
-            ("📚 Bibliothèque", "Glossaire", f"{glossary_count} notions expliquées dans la veille, de A à Z.", GLOSSARY_SRC)]
+            ("📚 Bibliothèque", "Notes de cours", "Cyber et IT : synthèses pour apprendre et réviser.", "library/index.md")]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
@@ -375,7 +384,13 @@ hide:
 
 ## 🧭 Ressources <span class="kw-muted">· {total}</span>
 
-{carousel([res_cards])}
+{resources_carousel(themes, src)}
+
+## 📖 Glossaire <span class="kw-muted">· {len(glossary)}</span>
+
+<a class="kw-more-link" href="{href(src, GLOSSARY_SRC)}">Tout le glossaire →</a>
+
+<div class="kw-chips">{chips}</div>
 
 ## 📚 Le wiki
 
@@ -386,7 +401,10 @@ hide:
 # ---------------------------------------------------------------- navigation
 
 def build_nav(items, themes):
-    veille = ["veille/index.md"]
+    veille = ["veille/index.md",
+              {"🧭 Ressources": [{t["label"]: [f"veille/ressources/{t['id']}/index.md"]
+                                 + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
+                                for t in themes]}]
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(
@@ -410,18 +428,101 @@ def build_nav(items, themes):
     return [{"📡 Veille": veille}, {"🔎 Analyses": analyses}, {"🗂️ Dossiers": dossiers}]
 
 
-def library_nav(themes):
-    """Sections ajoutées à l'onglet Bibliothèque : Ressources (adresses inchangées) et Glossaire."""
-    return [{"🧭 Ressources": [{t["label"]: [f"veille/ressources/{t['id']}/index.md"]
-                               + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
-                              for t in themes]},
-            {"📖 Glossaire": [GLOSSARY_SRC]}]
+def library_nav(library):
+    """Onglet Bibliothèque : un en-tête par domaine (Cyber, IT), une entrée par catégorie
+    (dépliable quand des notes sont importées), puis le Glossaire."""
+    nav = []
+    for dom in library:
+        cats = []
+        for cat in dom["categories"]:
+            if cat["imported"]:
+                cats.append({cat["label"]: [cat["src"]] + [{n["title"]: n["src"]} for n in cat["imported"]]})
+            else:
+                cats.append({cat["label"]: cat["src"]})
+        nav.append({dom["label"]: cats})
+    return nav + [{"📖 Glossaire": [GLOSSARY_SRC]}]
+
+
+# ---------------------------------------------------------------- bibliothèque
+
+def load_library(docs_dir, tree):
+    """Associe l'arborescence (data/bibliotheque.yml) aux notes réellement présentes dans docs/library/."""
+    out = []
+    for dom in tree or []:
+        cats = []
+        for cat in dom.get("categories", []):
+            folder = docs_dir / "library" / dom["id"] / cat["id"]
+            imported = []
+            for f in sorted(folder.glob("*.md")) if folder.exists() else []:
+                if f.name == "index.md":
+                    continue
+                body, meta = get_data(f.read_text(encoding="utf-8"))
+                h1 = re.search(r"^# (.+)$", body, re.M)
+                imported.append({"title": str(meta.get("title") or (h1.group(1) if h1 else f.stem)).strip(),
+                                 "src": f.relative_to(docs_dir).as_posix()})
+            done = {slug(n["title"]) for n in imported}
+            cats.append({"id": cat["id"], "label": cat["label"], "src": f"library/{dom['id']}/{cat['id']}/index.md",
+                         "imported": imported, "todo": [n for n in cat.get("notes") or [] if slug(n) not in done]})
+        out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
+    return out
+
+
+def pages_library(library):
+    out = []
+    for dom in library:
+        for cat in dom["categories"]:
+            body = f"# {cat['label']}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']}</span>\n\n"
+            if cat["imported"]:
+                body += "## Notes\n\n" + "".join(
+                    f"- [{n['title']}]({posixpath.relpath(n['src'], posixpath.dirname(cat['src']))})\n"
+                    for n in cat["imported"]) + "\n"
+            if cat["todo"]:
+                body += ("## À importer depuis Obsidian\n\n<ul class=\"kw-todo\">"
+                         + "".join(f"<li>{esc(n)}</li>" for n in cat["todo"]) + "</ul>\n")
+            if not cat["imported"] and not cat["todo"]:
+                body += '!!! note "Catégorie vide"\n    Aucune note pour l\'instant.\n'
+            out.append((cat["src"], body))
+    return out
+
+
+def page_library_index(library, themes, glossary_count):
+    src = "library/index.md"
+    doms = ""
+    for dom in library:
+        cards = "".join(
+            f'<a class="kw-card" href="{href(src, c["src"])}"><span class="kw-card__title">{esc(c["label"])}</span>'
+            f'<span class="kw-card__meta">{len(c["imported"])} importée{"s" if len(c["imported"]) > 1 else ""}'
+            f' · {len(c["todo"])} à importer</span></a>' for c in dom["categories"])
+        doms += f"\n## {dom['label']}\n\n<div class=\"kw-wiki\">{cards}</div>\n"
+    return src, f"""---
+hide:
+  - toc
+---
+# 📚 Bibliothèque
+
+Le **savoir de référence** : mes notes de compréhension, reprises d'Obsidian au fil de l'eau, les ressources
+et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la Bibliothèque garde ce qui **dure**.
+
+## 🧭 Ressources
+
+{resources_carousel(themes, src)}
+
+## 📖 Glossaire
+
+<a class="kw-card kw-card--wide" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">{glossary_count} notions de A à Z</span><span class="kw-card__text">Alimenté automatiquement par le « Lexique du jour » des Morning Briefs, complété à la main.</span></a>
+{doms}"""
 
 
 # ---------------------------------------------------------------- glossaire
 
 GLOSSARY_SRC = "library/glossaire.md"
 LEXIQUE_ENTRY = re.compile(r"^- \*\*(.+?)\*\*\s+[—–-]\s+(.+)$")
+
+
+def letter_anchor(term):
+    """Ancre de la lettre du glossaire où se trouve le terme (#a, #b… ou #autres)."""
+    c = slug(term)[:1]
+    return c if c.isalpha() else "autres"
 
 
 def first_sentence(text):
@@ -471,14 +572,7 @@ def page_glossary(glossary):
         anchor = letter.lower() if letter != "#" else "autres"
         body += f"\n## {letter if letter != '#' else 'Autres'} {{ #{anchor} }}\n\n"
         for t in lst:
-            seen = " · ".join(
-                f"[{it['date'].day} {short_month(it['date'])}]({posixpath.relpath(it['src'], 'library')})"
-                for it in t["seen"][:6])
-            if len(t["seen"]) > 6:
-                seen += f" · +{len(t['seen']) - 6}"
             extras = []
-            if seen:
-                extras.append(f"Vu dans : {seen}")
             if t.get("see"):
                 extras.append(f"[Voir la fiche →]({posixpath.relpath(t['see'], 'library')})")
             body += f"**{t['term']}**\n:   {t['definition'] or '<span class=\"kw-muted\">Définition à compléter.</span>'}"
@@ -502,9 +596,11 @@ def on_config(config):
     sources = load_yaml(root / "data" / "sources.yml", [])
 
     glossary = build_glossary(items, load_yaml(root / "data" / "glossaire.yml", []))
+    library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
 
-    pages = [page_home(items, themes, len(glossary)), page_veille(items, sources), page_dossiers(items)]
+    pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
+    pages += pages_library(library) + [page_library_index(library, themes, len(glossary))]
     STATE["pages"] = pages
 
     nav = list(config.nav or [])
@@ -513,7 +609,7 @@ def on_config(config):
     for i, e in enumerate(nav):                  # Ressources + Glossaire rejoignent l'onglet Bibliothèque
         if isinstance(e, dict) and LIBRARY_TAB in e:
             children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
-            nav[i] = {LIBRARY_TAB: list(children) + library_nav(themes)}
+            nav[i] = {LIBRARY_TAB: list(children) + library_nav(library)}
     config.nav = nav
     return config
 

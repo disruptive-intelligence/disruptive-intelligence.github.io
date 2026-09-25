@@ -5,6 +5,8 @@ docs_dir: docs
 
 theme:
   name: material
+  favicon: assets/icons/favicon.png
+  logo: assets/icons/logo.png
   custom_dir: overrides         # surcharge du header (onglets dans la barre)
   language: fr
   palette:

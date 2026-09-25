@@ -372,3 +372,17 @@
 /* Le nom du site dans la barre du haut est un lien vers l'accueil */
 .md-header__title .kw-home-link { color: inherit; display: block; }
 .md-header__title .kw-home-link:hover { color: #8f9bff; }
+
+/* Glossaire sur l'accueil : pastilles des termes récents */
+.kw-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .6rem; }
+.md-typeset a.kw-chip {
+  font-size: .68rem; font-weight: 600; padding: .25rem .7rem; border-radius: 1em;
+  background: var(--kw-panel); border: 1px solid var(--kw-line); color: var(--md-default-fg-color);
+}
+.md-typeset a.kw-chip:hover { border-color: #8f9bff; color: #8f9bff; }
+
+/* Bibliothèque : notes restant à importer depuis Obsidian */
+.md-typeset ul.kw-todo { list-style: none; margin-left: 0; }
+.md-typeset ul.kw-todo li { margin: .2em 0; padding-left: 1.2rem; position: relative; color: var(--md-default-fg-color--lighter); }
+.md-typeset ul.kw-todo li::before { content: "○"; position: absolute; left: 0; color: var(--kw-line); }
+.md-typeset a.kw-card--wide { display: flex; flex-direction: column; gap: .3rem; max-width: 32rem; }
