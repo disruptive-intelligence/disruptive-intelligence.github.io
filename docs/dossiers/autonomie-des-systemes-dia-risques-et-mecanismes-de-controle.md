@@ -1,6 +1,6 @@
 ---
 title: Autonomie des systèmes d’IA, risques et mécanismes de contrôle
-date: 2026-09-07
+date: 2026-09-06
 kind: dossier
 themes:
 - ia
