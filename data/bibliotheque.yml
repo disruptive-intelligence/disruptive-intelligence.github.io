@@ -10,57 +10,57 @@
   label: 🛡️ Cyber
   categories:
     - id: cti
-      label: CTI & renseignement
+      label: 🎯 CTI & renseignement
       notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CERT-EU Cyber Threat Intelligence Framework, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique]
     - id: osint
-      label: OSINT
+      label: 🔍 OSINT
       notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping]
     - id: cryptographie
-      label: Cryptographie
+      label: 🔐 Cryptographie
       notes: [Cryptographie]
     - id: forensic
-      label: Forensic
+      label: 🧬 Forensic
       notes: [Digital forensics]
     - id: hardening
-      label: Hardening
+      label: 🧱 Hardening
       notes: []
     - id: cyberdefense
-      label: Cyberdéfense
+      label: 🚨 Cyberdéfense
       notes: [Réponse à incident, Threat hunting, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", GRC, HTB — Réponse à incidents, IA & sécurité, Cours MCS, MITRE ATT&CK, Vulnerability management & intelligence]
     - id: outils
-      label: Outils
+      label: 🧰 Outils
       notes: []
     - id: concepts
-      label: Concepts
+      label: 💡 Concepts
       notes: [Analyste SOC, "HTB — Architecture système et sécurité matérielle", HTB — Attack Surface Management, HTB — Comprendre les types d'attaques, HTB — IAM, HTB — IT Security for Corporates, HTB — Identification des menaces et des logiciels malveillants, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — System Security, VPN, VirusTotal]
     - id: transverse
-      label: Transverse
+      label: 🔗 Transverse
       notes: [Cybersécurité du quotidien, HUMINT & social engineering, OPSEC & privacy, Red teaming, Taxonomie cyber]
 
 - id: it
   label: 💻 IT
   categories:
     - id: linux
-      label: Linux
+      label: 🐧 Linux
       notes: [Administration Linux, Gestion système — cheat sheet, Workflow — cheat sheet, Notions Linux]
     - id: windows
-      label: Windows
+      label: 🪟 Windows
       notes: [CMD — cheat sheet, Fiche Windows, HTB — Windows System Security, PowerShell, Windows, Windows Command Line]
     - id: reseau
-      label: Réseau
+      label: 🌐 Réseau
       notes: [AppSec, Infrastructure IT, "PDU, headers, payload & encapsulation", Notions réseau]
     - id: active-directory
-      label: Active Directory
+      label: 🏰 Active Directory
       notes: [Active Directory]
     - id: scripting
-      label: Scripting & programmation
+      label: ⌨️ Scripting & programmation
       notes: [Bash, JavaScript, Notions Bash, Python]
     - id: conteneurs
-      label: Virtualisation & conteneurs
+      label: 📦 Virtualisation & conteneurs
       notes: [Ansible, Conteneurs — Docker & Kubernetes, Docker, Kubernetes]
     - id: culture
-      label: Culture
+      label: 🧠 Culture
       notes: [Assembleur, How the Web Works, Applications web, IA agentiques — manipuler progressivement, Matériel informatique & connectique, Prospective — systèmes technologiques (vol. 1), Prospective — systèmes technologiques (vol. 2), Questions d'entretien cyber & sysadmin, SQL]
     - id: transverse
-      label: Transverse
+      label: 🔗 Transverse
       notes: [Architecture SI, Requêtes web]

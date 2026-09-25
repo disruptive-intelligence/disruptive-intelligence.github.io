@@ -48,7 +48,9 @@ MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 NAV_ANCHOR = "🏠 Accueil"   # les onglets générés sont insérés juste après celui-ci
-LIBRARY_TAB = "📚 Bibliothèque"   # reçoit les sections Ressources et Glossaire
+LIBRARY_TAB = "📚 Bibliothèque"   # reçoit l'arborescence des notes et le Glossaire
+RESSOURCES_TAB = "🧭 Ressources"   # onglet inséré juste après la Bibliothèque
+RESSOURCES_SRC = "veille/ressources/index.md"   # page d'accueil des ressources (adresses inchangées)
 
 # ---------------------------------------------------------------- utilitaires
 
@@ -302,7 +304,41 @@ def pages_ressources(themes):
                     f"---\nhide:\n  - toc\n---\n# {t['label']} — Ressources\n\n"
                     "Sites, pages et articles de référence, en complément des sources suivies par la veille.\n\n"
                     f'<div class="kw-wiki">{cards}</div>\n'))
+    out.append(page_ressources_index(themes))
     return out
+
+
+def page_ressources_index(themes):
+    """Page d'accueil de l'onglet Ressources : tous les thèmes et toutes leurs rubriques."""
+    src = RESSOURCES_SRC
+    total = sum(len(r.get("liens") or []) for t in themes for r in t["rubriques"])
+    body = ""
+    for t in themes:
+        base = f"veille/ressources/{t['id']}"
+        n = sum(len(r.get("liens") or []) for r in t["rubriques"])
+        cards = ""
+        for r in t["rubriques"]:
+            links = r.get("liens") or []
+            count = f"{len(links)} ressource{'s' if len(links) > 1 else ''}" if links else "À compléter"
+            preview = " · ".join(l["nom"] for l in links[:3])
+            cards += (f'<a class="kw-card" href="{href(src, base + "/" + slug(r["nom"]) + ".md")}">'
+                      f'<span class="kw-card__title">{esc(r["nom"])}</span>'
+                      f'<span class="kw-card__meta">{count}</span>'
+                      f'<span class="kw-card__text">{esc(preview)}</span></a>')
+        body += (f"\n## {t['label']} <span class=\"kw-muted\">· {n}</span>\n\n"
+                 f'<a class="kw-more-link" href="{href(src, base + "/index.md")}">Tout le thème →</a>\n\n'
+                 f'<div class="kw-wiki">{cards}</div>\n')
+    return src, f"""---
+hide:
+  - toc
+---
+# 🧭 Ressources
+
+Sites, outils, formations et lectures de référence, en complément des sources suivies par la veille.
+{total} ressources, {len(themes)} thèmes.
+
+{resources_carousel(themes, src)}
+{body}"""
 
 
 def resources_carousel(themes, src):
@@ -402,10 +438,7 @@ hide:
 # ---------------------------------------------------------------- navigation
 
 def build_nav(items, themes):
-    veille = ["veille/index.md",
-              {"🧭 Ressources": [{t["label"]: [f"veille/ressources/{t['id']}/index.md"]
-                                 + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
-                                for t in themes]}]
+    veille = ["veille/index.md"]
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(
@@ -523,7 +556,8 @@ def library_card(cat, src, max_notes=8):
 
 def page_library_index(library, themes, glossary_count):
     src = "library/index.md"
-    doms = "".join(f"\n## {dom['label']}\n\n" + carousel(library_card(c, src) for c in dom["categories"]) + "\n"
+    doms = "".join(f"\n## {dom['label']}\n\n<div class=\"kw-dom kw-dom--{dom['id']}\">"
+                   + carousel(library_card(c, src) for c in dom["categories"]) + "</div>\n"
                    for dom in library)
     return src, f"""---
 hide:
@@ -637,10 +671,15 @@ def on_config(config):
     nav = list(config.nav or [])
     pos = next((i + 1 for i, e in enumerate(nav) if isinstance(e, dict) and NAV_ANCHOR in e), 0)
     nav = nav[:pos] + build_nav(items, themes) + nav[pos:]
-    for i, e in enumerate(nav):                  # Ressources + Glossaire rejoignent l'onglet Bibliothèque
-        if isinstance(e, dict) and LIBRARY_TAB in e:
+    for i, e in enumerate(nav):                  # arborescence + Glossaire dans l'onglet Bibliothèque,
+        if isinstance(e, dict) and LIBRARY_TAB in e:   # puis l'onglet Ressources juste après
             children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
             nav[i] = {LIBRARY_TAB: list(children) + library_nav(library)}
+            nav.insert(i + 1, {RESSOURCES_TAB: [RESSOURCES_SRC] + [
+                {t["label"]: [f"veille/ressources/{t['id']}/index.md"]
+                 + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
+                for t in themes]})
+            break
     config.nav = nav
     return config
 

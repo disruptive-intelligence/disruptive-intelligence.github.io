@@ -425,3 +425,15 @@
   color: var(--md-default-fg-color); scroll-snap-align: start;
 }
 .md-typeset div.kw-lib .kw-res__label { display: block; line-height: 1.25; }
+
+/* Bibliothèque : cartes plus vivantes — hauteur naturelle, accent de couleur par domaine */
+.kw-dom .kw-carousel { align-items: flex-start; }
+.kw-dom { --kw-dom-accent: #8f9bff; }
+.kw-dom--cyber { --kw-dom-accent: #ed4d5a; }
+.kw-dom--it { --kw-dom-accent: #8f9bff; }
+.md-typeset .kw-dom div.kw-card.kw-lib {
+  border-top: 3px solid var(--kw-dom-accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kw-dom-accent) 9%, var(--kw-panel)) 0%, var(--kw-panel) 5.5rem);
+}
+.md-typeset .kw-dom div.kw-card.kw-lib:hover { border-color: var(--kw-line); border-top-color: var(--kw-dom-accent); }
+.md-typeset .kw-dom .kw-lib .kw-res__label { font-size: 1.05rem; }
