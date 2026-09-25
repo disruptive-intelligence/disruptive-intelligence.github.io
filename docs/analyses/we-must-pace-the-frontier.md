@@ -3,6 +3,7 @@ title: Analyse — We Must Pace the Frontier
 date: 2026-09-12
 kind: analysis
 theme: ia
+slug: we-must-pace-the-frontier
 author: Anthropic · Dario Amodei
 ---
 # Analyse — We Must Pace the Frontier

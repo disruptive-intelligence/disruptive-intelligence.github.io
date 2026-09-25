@@ -1,5 +1,6 @@
 # Métadonnées ajoutées pendant la migration (clé = nom du fichier Jekyll d'origine).
-# theme : ia | cyber | tech | ie | geo   (voir hooks/portal.py -> THEMES)
+# Taxonomie canonique (identique à veille-agent) : ia | cyber | tech | geo-ie
+# Analyse : theme (obligatoire), author (facultatif). Dossier : themes (liste).
 # Après la migration, ces champs vivent directement dans l'en-tête de chaque fichier,
 # et veille-agent devra les écrire lui-même pour les nouvelles publications.
 
@@ -13,7 +14,7 @@ IA_Dwarkesh-The Rise and Fall of Agent Civilizations_analyse.md:
   theme: ia
   author: Dwarkesh Patel
 IA_EPGE_Guerre-cognitive-et-guerre-cognitique_analyse.md:
-  theme: ie
+  theme: geo-ie
   author: Patrice Cardot
 IA_Google-DeepMind_From-AGI-to-ASI_analyse.md:
   theme: ia
@@ -22,4 +23,5 @@ IA_Google-DeepMind_Solipsistic Superintelligence is Unlikely to be Cooperative_a
   theme: ia
   author: Google DeepMind
 autonomie-systemes-ia-risques-controle-brief-transversal.md:
-  theme: ia
+  themes:
+    - ia

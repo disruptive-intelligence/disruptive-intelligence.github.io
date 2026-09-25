@@ -9,7 +9,11 @@
 
 Rien n'est écrit sur le disque : les pages générées n'existent que dans le site
 construit. Pour ajouter du contenu, il suffit de déposer un fichier Markdown
-avec son en-tête (title, date, kind, theme, author) au bon endroit.
+avec son en-tête au bon endroit :
+  veille   : title, date, kind: veille                     -> docs/veille/AAAA/MM/AAAA-MM-JJ.md
+  analyse  : title, date, kind: analysis, theme, slug, [author] -> docs/analyses/<slug>.md
+  dossier  : title, date, kind: dossier, themes: [..], slug      -> docs/dossiers/<slug>.md
+Le contrat (taxonomie, slug = nom du fichier) est vérifié par check_contract().
 """
 import html
 import posixpath
@@ -20,21 +24,23 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import yaml
+from mkdocs.exceptions import PluginError
 from mkdocs.structure.files import File
 from mkdocs.utils.meta import get_data
 
 # ---------------------------------------------------------------- réglages
 
-THEMES = {  # clé du front matter `theme:` -> libellé
+# Taxonomie canonique, identique à celle de veille-agent (validate_editorial_publication.py).
+# Analyse : `theme` (un seul, obligatoire). Dossier : `themes` (liste non vide).
+THEMES = {
     "ia": "🤖 Intelligence artificielle",
     "cyber": "🛡️ Cyber",
     "tech": "💻 Tech",
-    "ie": "📈 Intelligence économique",
-    "geo": "🌍 Géopolitique",
+    "geo-ie": "🌍 Géopolitique & IE",
 }
 # Rubriques des briefs -> quadrants de la page Veille
-QUADS = [("cyber", "🛡️ Cyber"), ("tech", "💻 Tech"), ("ie", "🌍 Géopolitique & IE"), ("ia", "🚀 IA & rupture")]
-GROUP_FALLBACK = [("alertes-cyber", "cyber"), ("geopolitique-ie", "ie"), ("tech", "tech")]
+QUADS = [("cyber", "🛡️ Cyber"), ("tech", "💻 Tech"), ("geo-ie", "🌍 Géopolitique & IE"), ("ia", "🚀 IA & rupture")]
+GROUP_FALLBACK = [("alertes-cyber", "cyber"), ("geopolitique-ie", "geo-ie"), ("tech", "tech")]
 
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
         "août", "septembre", "octobre", "novembre", "décembre"]
@@ -96,7 +102,7 @@ def section_key(heading):
     if "ia &" in h or "rupture" in h:
         return "ia"
     if "géopolitique" in h or "/ ie" in h:
-        return "ie"
+        return "geo-ie"
     if "tech" in h:
         return "tech"
     return None
@@ -105,6 +111,26 @@ def section_key(heading):
 # ---------------------------------------------------------------- lecture du contenu
 
 STATE = {}
+
+
+def check_contract(src, stem, kind, meta):
+    """Garde-fou : le contenu publié doit respecter le contrat partagé avec veille-agent.
+    Une violation fait échouer le build (et donc la publication)."""
+    errors = []
+    if kind == "analysis":
+        if meta.get("theme") not in THEMES:
+            errors.append(f"theme doit valoir {' | '.join(THEMES)} (reçu : {meta.get('theme')!r})")
+    if kind == "dossier":
+        themes = meta.get("themes")
+        if not isinstance(themes, list) or not themes or len(set(themes)) != len(themes) or set(themes) - set(THEMES):
+            errors.append(f"themes doit être une liste non vide et sans doublon parmi {' | '.join(THEMES)} (reçu : {themes!r})")
+        if "theme" in meta:
+            errors.append("un dossier utilise `themes` (liste), pas `theme`")
+    if kind in ("analysis", "dossier") and meta.get("slug") != stem:
+        # Les Morning Briefs ne sont pas concernés : leur nom public est dérivé de la date.
+        errors.append(f"slug ({meta.get('slug')!r}) doit être identique au nom du fichier ({stem!r})")
+    if errors:
+        raise PluginError(f"Contrat éditorial non respecté dans docs/{src} :\n  - " + "\n  - ".join(errors))
 
 
 def load_content(docs_dir):
@@ -116,8 +142,10 @@ def load_content(docs_dir):
             if kind not in items or not meta.get("date"):
                 continue
             d = meta["date"] if isinstance(meta["date"], date) else date.fromisoformat(str(meta["date"]))
-            it = dict(src=f.relative_to(docs_dir).as_posix(), title=str(meta.get("title", f.stem)),
-                      date=d, theme=meta.get("theme"), author=meta.get("author", "—"), body=body)
+            src = f.relative_to(docs_dir).as_posix()
+            check_contract(src, f.stem, kind, meta)
+            it = dict(src=src, title=str(meta.get("title", f.stem)), date=d, theme=meta.get("theme"),
+                      themes=list(meta.get("themes") or []), author=meta.get("author"), body=body)
             if kind == "veille":
                 it["headlines"] = [re.sub(r"\s+", " ", h).strip() for h in re.findall(r"^### ▸ (.+)$", body, re.M)]
             else:
@@ -146,11 +174,20 @@ def edition_card(it, from_src, featured=False):
             + (f'<span class="kw-ed__more">+ {more} autres sujets</span>' if more > 0 else "") + "</a>")
 
 
+def meta_line(*parts):
+    """« auteur · thème » sans séparateur orphelin quand une partie est absente (author est facultatif)."""
+    return " · ".join(esc(p) for p in parts if p)
+
+
+def themes_label(it):
+    return " · ".join(THEMES[t] for t in it["themes"] if t in THEMES)
+
+
 def analysis_card(it, from_src, with_theme=False):
     """with_theme : auteur · thème (accueil) ; sinon auteur · date (pages déjà classées par thème)."""
     second = THEMES.get(it["theme"], "") if with_theme else fr_date(it["date"])
     return (f'<a class="kw-card" href="{href(from_src, it["src"])}">'
-            f'<span class="kw-card__meta">{esc(it["author"])} · {second}</span>'
+            f'<span class="kw-card__meta">{meta_line(it["author"], second)}</span>'
             f'<span class="kw-card__title">{esc(clean_title(it["title"]))}</span>'
             f'<span class="kw-card__text">{esc(it["summary"])}</span></a>')
 
@@ -232,7 +269,7 @@ def pages_analyses(items):
 def page_dossiers(items):
     body = ""
     for key, label in THEMES.items():
-        lst = [it for it in items["dossier"] if it["theme"] == key]
+        lst = [it for it in items["dossier"] if key in it["themes"]]   # un dossier apparaît sous chacun de ses thèmes
         body += f"\n## {label}\n\n"
         body += "".join(f"- [{it['title']}]({posixpath.relpath(it['src'], 'dossiers')}) — {fr_date(it['date'])}\n"
                         for it in lst) if lst else "<span class=\"kw-muted\">Aucun dossier pour l'instant.</span>\n"
@@ -275,13 +312,13 @@ def page_home(items, themes):
     if analyses:
         a = analyses[0]
         une += (f'<a class="kw-card" href="{href(src, a["src"])}"><span class="kw-ed__label">Dernière analyse</span>'
-                f'<span class="kw-card__meta">{esc(a["author"])} · {THEMES.get(a["theme"], "")}</span>'
+                f'<span class="kw-card__meta">{meta_line(a["author"], THEMES.get(a["theme"], ""))}</span>'
                 f'<span class="kw-card__title">{esc(clean_title(a["title"]))}</span>'
                 f'<span class="kw-card__text">{esc(a["summary"])}</span></a>')
     if dossiers:
         d = dossiers[0]
         une += (f'<a class="kw-card" href="{href(src, d["src"])}"><span class="kw-ed__label">Dernier dossier</span>'
-                f'<span class="kw-card__meta">{THEMES.get(d["theme"], "")} · {fr_date(d["date"])}</span>'
+                f'<span class="kw-card__meta">{meta_line(themes_label(d), fr_date(d["date"]))}</span>'
                 f'<span class="kw-card__title">{esc(d["title"])}</span>'
                 f'<span class="kw-card__text">Croiser les analyses pour mettre les enjeux en perspective.</span></a>')
 
@@ -367,7 +404,7 @@ def build_nav(items, themes):
 
     dossiers = ["dossiers/index.md"]
     for key, label in THEMES.items():
-        lst = [it for it in items["dossier"] if it["theme"] == key]
+        lst = [it for it in items["dossier"] if key in it["themes"]]
         if lst:
             dossiers.append({label: [{it["title"]: it["src"]} for it in lst]})
 

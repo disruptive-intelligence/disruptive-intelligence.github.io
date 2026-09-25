@@ -3,6 +3,7 @@ title: Analyse — From AGI to ASI
 date: 2026-09-04
 kind: analysis
 theme: ia
+slug: from-agi-to-asi
 author: Google DeepMind
 ---
 # Analyse — *From AGI to ASI*

@@ -7,7 +7,7 @@ Usage :
 - Analyses  : analyses/*.md                -> docs/analyses/<slug-du-titre>.md
 - Dossiers  : dossiers/*.md                -> docs/dossiers/<slug-du-titre>.md
 
-Le front matter est normalisé (title, date, kind, theme, author) à partir de
+Le front matter est normalisé (title, date, kind, theme | themes, slug, author) à partir de
 scripts/migration_metadata.yml. Les balises Liquid de Jekyll sont converties
 en liens Markdown classiques. Le dépôt source n'est jamais modifié.
 """
@@ -90,10 +90,14 @@ def main():
             + yaml.safe_dump(dict(sorted(old.items())), allow_unicode=True, width=300), encoding="utf-8")
         print(f"{len(old)} redirections -> {args.redirects}")
     for f, meta, body, d in entries:
-        fm = {k: meta[k] for k in ("title", "date", "kind", "theme", "author") if k in meta}
+        if meta["kind"] in ("analysis", "dossier"):
+            meta["slug"] = d.stem          # slug persistant = nom du fichier publié
+        if meta["kind"] == "dossier" and "theme" in meta:
+            meta["themes"] = [meta.pop("theme")]
+        fm = {k: meta[k] for k in ("title", "date", "kind", "theme", "themes", "slug", "author") if k in meta}
         out = dest / d
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text("---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False) + "---\n"
+        out.write_text("---\n" + yaml.safe_dump(fm, allow_unicode=True, sort_keys=False, width=200) + "---\n"
                        + convert_liquid(body, d, path_map), encoding="utf-8", newline="\n")
         print(f"{f.relative_to(src).as_posix():70} -> {d.as_posix()}")
     print(f"{len(entries)} fichiers migrés.")

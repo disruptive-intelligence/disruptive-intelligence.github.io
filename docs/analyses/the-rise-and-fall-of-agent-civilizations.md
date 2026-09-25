@@ -3,6 +3,7 @@ title: Analyse — The Rise and Fall of Agent Civilizations
 date: 2026-09-04
 kind: analysis
 theme: ia
+slug: the-rise-and-fall-of-agent-civilizations
 author: Dwarkesh Patel
 ---
 # Analyse — *The Rise and Fall of Agent Civilizations*

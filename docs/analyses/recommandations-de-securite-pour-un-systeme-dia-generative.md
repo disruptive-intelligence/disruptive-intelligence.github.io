@@ -3,6 +3,7 @@ title: Analyse — Recommandations de sécurité pour un système d’IA génér
 date: 2026-09-05
 kind: analysis
 theme: ia
+slug: recommandations-de-securite-pour-un-systeme-dia-generative
 author: ANSSI
 ---
 # Analyse — *Recommandations de sécurité pour un système d’IA générative*

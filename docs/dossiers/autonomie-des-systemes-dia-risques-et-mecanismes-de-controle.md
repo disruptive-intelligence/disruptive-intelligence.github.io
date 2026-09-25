@@ -2,7 +2,9 @@
 title: Autonomie des systèmes d’IA, risques et mécanismes de contrôle
 date: 2026-09-07
 kind: dossier
-theme: ia
+themes:
+- ia
+slug: autonomie-des-systemes-dia-risques-et-mecanismes-de-controle
 ---
 # Autonomie des systèmes d’IA, risques et mécanismes de contrôle
 
