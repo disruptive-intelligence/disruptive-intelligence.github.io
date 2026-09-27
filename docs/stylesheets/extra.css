@@ -30,7 +30,7 @@ body[data-md-color-scheme="slate"] {
 }
 /* Halos rouges et bordeaux qui dérivent très lentement */
 body[data-md-color-scheme="slate"]::before {
-  content: ""; position: fixed; inset: -20%; pointer-events: none; z-index: 0;
+  content: ""; position: fixed; inset: -20%; pointer-events: none; z-index: -1;
   background:
     radial-gradient(38% 32% at 22% 12%, rgba(158, 40, 53, .30), transparent 70%),
     radial-gradient(34% 30% at 82% 30%, rgba(237, 77, 90, .12), transparent 70%),
@@ -41,7 +41,7 @@ body[data-md-color-scheme="slate"]::before {
 }
 /* Petites particules rouges qui montent doucement */
 body[data-md-color-scheme="slate"]::after {
-  content: ""; position: fixed; inset: -100% 0 0 0; pointer-events: none; z-index: 0;
+  content: ""; position: fixed; inset: -100% 0 0 0; pointer-events: none; z-index: -1;
   background:
     radial-gradient(1.6px 1.6px at 14% 30%, rgba(237, 77, 90, .75) 50%, transparent),
     radial-gradient(1.2px 1.2px at 64% 12%, rgba(237, 77, 90, .6) 50%, transparent),
@@ -62,7 +62,7 @@ body[data-md-color-scheme="slate"]::after {
 @media (prefers-reduced-motion: reduce) {
   body[data-md-color-scheme="slate"]::before, body[data-md-color-scheme="slate"]::after { animation: none; }
 }
-body[data-md-color-scheme="slate"] .md-container { position: relative; z-index: 1; }
+/* Pas de z-index sur .md-container : il enfermerait le menu mobile sous le voile sombre (.md-overlay). */
 [data-md-color-scheme="slate"] .md-main,
 [data-md-color-scheme="slate"] .md-container { background: transparent; }
 
