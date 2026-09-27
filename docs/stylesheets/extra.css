@@ -23,12 +23,46 @@
 @media screen and (min-width: 100em) { html { font-size: 125%; } }
 @media screen and (min-width: 125em) { html { font-size: 125%; } }
 
-/* Fond : dégradé chaud et sombre */
-[data-md-color-scheme="slate"] body {
-  background:
-    radial-gradient(ellipse at 50% -10%, #3a2424 0%, transparent 55%),
-    linear-gradient(180deg, #221b1b 0%, #1a1616 40%, #141212 100%) fixed;
+/* Fond : dégradé chaud et sombre, légèrement animé.
+   Material met l'attribut de couleur SUR <body> : d'où body[data-md-color-scheme="slate"]. */
+body[data-md-color-scheme="slate"] {
+  background: linear-gradient(180deg, #221b1b 0%, #1a1616 40%, #141212 100%) fixed;
 }
+/* Halos rouges et bordeaux qui dérivent très lentement */
+body[data-md-color-scheme="slate"]::before {
+  content: ""; position: fixed; inset: -20%; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(38% 32% at 22% 12%, rgba(158, 40, 53, .30), transparent 70%),
+    radial-gradient(34% 30% at 82% 30%, rgba(237, 77, 90, .12), transparent 70%),
+    radial-gradient(40% 34% at 55% 95%, rgba(90, 30, 38, .35), transparent 70%);
+  filter: blur(20px);
+  animation: kw-glow 48s ease-in-out infinite alternate;
+  will-change: transform;
+}
+/* Petites particules rouges qui montent doucement */
+body[data-md-color-scheme="slate"]::after {
+  content: ""; position: fixed; inset: -100% 0 0 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(1.6px 1.6px at 14% 30%, rgba(237, 77, 90, .75) 50%, transparent),
+    radial-gradient(1.2px 1.2px at 64% 12%, rgba(237, 77, 90, .6) 50%, transparent),
+    radial-gradient(1.8px 1.8px at 82% 58%, rgba(255, 110, 120, .55) 50%, transparent),
+    radial-gradient(1.2px 1.2px at 36% 76%, rgba(237, 77, 90, .5) 50%, transparent),
+    radial-gradient(1.4px 1.4px at 92% 88%, rgba(143, 155, 255, .45) 50%, transparent);
+  background-size: 520px 520px, 440px 440px, 610px 610px, 380px 380px, 700px 700px;
+  opacity: .7;
+  animation: kw-rise 140s linear infinite;
+  will-change: transform;
+}
+@keyframes kw-glow {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(3%, 2%, 0) scale(1.06); }
+  100% { transform: translate3d(-2%, 4%, 0) scale(1.02); }
+}
+@keyframes kw-rise { from { transform: translate3d(0, 50%, 0); } to { transform: translate3d(0, 0, 0); } }
+@media (prefers-reduced-motion: reduce) {
+  body[data-md-color-scheme="slate"]::before, body[data-md-color-scheme="slate"]::after { animation: none; }
+}
+body[data-md-color-scheme="slate"] .md-container { position: relative; z-index: 1; }
 [data-md-color-scheme="slate"] .md-main,
 [data-md-color-scheme="slate"] .md-container { background: transparent; }
 
