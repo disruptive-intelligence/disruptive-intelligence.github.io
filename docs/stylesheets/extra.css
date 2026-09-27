@@ -471,3 +471,74 @@ body[data-md-color-scheme="slate"] .md-container { position: relative; z-index: 
 }
 .md-typeset .kw-dom div.kw-card.kw-lib:hover { border-color: var(--kw-line); border-top-color: var(--kw-dom-accent); }
 .md-typeset .kw-dom .kw-lib .kw-res__label { font-size: 1.05rem; }
+
+/* =========================================================
+   AMBIANCE « AURORE » — identité visuelle du portail (depuis le 28/09/2026)
+   Aurore rouge / magenta / lavande qui ondule en haut de page, braises qui
+   montent, cartes en verre dépoli, rougeoiement au survol, carte « À la une »
+   ambrée, halo rouge doux sur l'en-tête d'accueil, trait sous les titres.
+   Complète le fond animé défini plus haut (kw-glow / kw-rise).
+   ========================================================= */
+/* Aurore : rubans de couleur qui ondulent lentement en haut de page */
+body[data-md-color-scheme="slate"]::before {
+  inset: -30% -20% 30% -20% !important;
+  background:
+    radial-gradient(40% 55% at 20% 20%, rgba(237, 77, 90, .30), transparent 70%),
+    radial-gradient(35% 50% at 55% 10%, rgba(196, 60, 140, .22), transparent 70%),
+    radial-gradient(40% 55% at 85% 25%, rgba(143, 155, 255, .20), transparent 70%) !important;
+  filter: blur(40px) !important;
+  animation: au-wave 22s ease-in-out infinite alternate !important;
+}
+@keyframes au-wave {
+  0%   { transform: translate3d(-4%, 0, 0) skewX(-4deg) scale(1); }
+  50%  { transform: translate3d(3%, 3%, 0) skewX(3deg) scale(1.08); }
+  100% { transform: translate3d(6%, -2%, 0) skewX(-2deg) scale(1.03); }
+}
+/* Particules : reprises de Braise (plus nombreuses, qui montent en scintillant) */
+body[data-md-color-scheme="slate"]::after {
+  background:
+    radial-gradient(2px 2px at 14% 30%, rgba(255, 96, 80, .9) 50%, transparent),
+    radial-gradient(1.4px 1.4px at 64% 12%, rgba(255, 140, 90, .75) 50%, transparent),
+    radial-gradient(2.4px 2.4px at 82% 58%, rgba(237, 77, 90, .8) 50%, transparent),
+    radial-gradient(1.4px 1.4px at 36% 76%, rgba(255, 170, 110, .6) 50%, transparent),
+    radial-gradient(1.8px 1.8px at 52% 44%, rgba(237, 77, 90, .7) 50%, transparent),
+    radial-gradient(1.2px 1.2px at 92% 88%, rgba(143, 155, 255, .6) 50%, transparent) !important;
+  background-size: 420px 420px, 360px 360px, 520px 520px, 300px 300px, 460px 460px, 600px 600px !important;
+  opacity: .85 !important;
+  animation: kw-rise 70s linear infinite, au-flicker 3.5s ease-in-out infinite alternate !important;
+}
+@keyframes au-flicker { from { filter: brightness(.7); } to { filter: brightness(1.25); } }
+
+/* Titres de section : petit trait incandescent dessous (repris de Braise) */
+.md-typeset h2::after { content: ""; display: block; width: 3rem; height: 2px; margin-top: .4em; background: linear-gradient(90deg, #ed4d5a, transparent); }
+
+/* Cartes en verre dépoli */
+.md-typeset a.kw-card, .md-typeset div.kw-card, .md-typeset a.kw-ed, .kw-quad, .kw-hero, .md-sidebar--secondary .md-nav--secondary {
+  background: rgba(33, 28, 28, .55) !important; backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, .07) !important; border-radius: 14px !important;
+}
+/* Survol : rougeoiement repris de Braise (bordure rouge + ombre rouge diffuse + léger soulèvement) */
+.md-typeset a.kw-card, .md-typeset div.kw-card, .md-typeset a.kw-ed { transition: border-color .25s, box-shadow .25s, transform .25s !important; }
+.md-typeset a.kw-card:hover, .md-typeset a.kw-ed:hover, .md-typeset div.kw-card:hover {
+  border-color: rgba(237, 77, 90, .6) !important; transform: translateY(-3px) !important;
+  box-shadow: 0 10px 30px rgba(158, 40, 53, .35), 0 0 0 1px rgba(237, 77, 90, .25) !important;
+}
+/* Carte « À la une » : retour au jaune d'origine (fond ambré, bordure dorée) */
+.md-typeset a.kw-ed--featured {
+  background: linear-gradient(160deg, #3b3217, rgba(33, 28, 28, .85) 70%) !important;
+  border: 1px solid #e0b12a !important;
+  box-shadow: 0 0 40px rgba(237, 160, 60, .12) !important;   /* lueur ambrée diffuse, comme dans Braise */
+}
+.md-typeset a.kw-ed--featured:hover {
+  border-color: #f2c94c !important;
+  box-shadow: 0 10px 30px rgba(237, 160, 60, .22), 0 0 0 1px rgba(242, 201, 76, .3) !important;
+}
+
+/* En-tête d'accueil : le même halo rouge doux que Braise, qui se fond vers le noir */
+.kw-hero {
+  background: radial-gradient(ellipse at 0% 0%, rgba(237, 77, 90, .22) 0%, transparent 60%), var(--kw-panel) !important;
+  border: 1px solid var(--kw-line) !important;
+}
+/* Les grands titres restent en texte blanc plein : un dégradé de texte rendrait les emojis
+   invisibles et laisserait le symbole ¶ affiché en permanence. */
+[data-md-color-scheme="slate"] .md-header { background: rgba(20, 16, 16, .6) !important; backdrop-filter: blur(16px); }
