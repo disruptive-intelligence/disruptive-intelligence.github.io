@@ -454,8 +454,8 @@ def page_veille(items, sources):
         editions = (f'<div class="kw-editions">{edition_card(briefs[0], src, True)}'
                     f'<div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}'
                     f'{all_editions_card(src)}</div></div>'
-                    f'\n\n## Calendrier {{ #calendrier }}\n\n<div class="kw-dash-wrap"><div class="kw-dash">{editions_calendar(briefs, src)}'
-                    f'{agenda_calendar(entries, src)}{upcoming_panel(entries, src)}</div></div>')
+                    f'\n\n## Calendrier {{ #calendrier }}\n\n<div class="kw-dash-wrap"><div class="kw-dash">{veille_calendar(briefs, entries, src)}'
+                    f'{upcoming_panel(entries, src)}{active_threads_panel(STATE.get("threads", {}), src)}</div></div>')
     return src, f"""---
 hide:
   - toc
@@ -946,6 +946,49 @@ def month_range(first, last):
     return out
 
 
+def veille_calendar(briefs, entries, from_src, today=None):
+    """Un seul calendrier : jours d'édition (rouge, lien vers le brief) et jalons de l'agenda
+    (point ambre ; case ambre quand aucun brief n'est paru ce jour-là)."""
+    today = today or date.today()
+    events = {}
+    for when, text, _ in entries:
+        events.setdefault(when, []).append(plain(text, 80))
+    marks = {it["date"]: (href(from_src, it["src"]), f"Morning Brief du {fr_date(it['date'])}", "is-on")
+             for it in briefs}
+    for when, texts in events.items():
+        tip = "À surveiller : " + " · ".join(texts)
+        if when in marks:
+            link, title, cls = marks[when]
+            marks[when] = (link, f"{title} — {tip}", cls + " has-event")
+        else:
+            marks[when] = (href(from_src, AGENDA_SRC) + f"#j-{when.isoformat()}", tip,
+                           "is-event" + (" is-past" if when < today else ""))
+    if not marks:
+        return ""
+    months = month_range(min(list(marks) + [today]), max(list(marks) + [today]))
+    html = month_calendar(marks, months, (today.year, today.month), from_src,
+                          "📡 Éditions et jalons", "kw-cal-veille", today)
+    legend = ('<p class="kw-cal__legend"><span class="kw-dot kw-dot--brief"></span>brief '
+              '<span class="kw-dot kw-dot--event"></span>jalon à surveiller</p>')
+    return html[:-len("</div>")] + legend + "</div>"
+
+
+def active_threads_panel(threads, from_src, today=None, n=5):
+    """Les fils qui bougent : dernier épisode depuis moins d'une semaine, le plus récent d'abord."""
+    today = today or date.today()
+    live = sorted(((entries[-1]["date"], event, entries) for event, entries in threads.items()
+                   if (today - entries[-1]["date"]).days <= THREAD_ACTIVE_DAYS), key=lambda x: x[0], reverse=True)[:n]
+    items = ""
+    for _, event, entries in live:
+        key = section_key(entries[-1]["lane"] or "") or "tech"
+        days = sorted({e["date"] for e in entries})
+        items += (f'<li><a href="{href(from_src, thread_src(event))}"><span class="kw-up__date kw-up__date--lane kw-lane--{key}">'
+                  f'{span_label(days[0], days[-1])}</span><span class="kw-up__text">{esc(plain(thread_title(entries), 90))}'
+                  f' <span class="kw-muted">· {len(days)} éd.</span></span></a></li>')
+    return (f'<div class="kw-up"><p class="kw-up__title">🧵 Fils actifs <a href="{href(from_src, THREADS_DIR + "/index.md")}">tous les fils →</a></p>'
+            + (f'<ul>{items}</ul>' if items else '<p class="kw-muted">Aucun fil actif cette semaine.</p>') + "</div>")
+
+
 def editions_calendar(briefs, from_src):
     if not briefs:
         return ""
@@ -1030,11 +1073,40 @@ def decorate_document(markdown, page):
 
 # ---------------------------------------------------------------- navigation
 
+NAV_ITEMS = 3
+
+
+def nav_label(text, n=46):
+    text = re.sub(r"\s+", " ", str(text)).strip()
+    return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + " …"
+
+
+def latest_readings(briefs):
+    """[(titre, url)] des reading lists, de la plus récente à la plus ancienne."""
+    return [(e.group(2).strip("«» "), e.group(3)) for it in briefs
+            for e in (READING_ENTRY.match(l.strip()) for l in section_body(it["body"], "📚 Reading list").splitlines()) if e]
+
+
 def build_nav(items, themes, threads=None):
     # Fils et semaines : seule leur page d'index figure dans le menu (pages individuelles hors
     # navigation, voir not_in_nav dans mkdocs.yml) pour que la barre latérale reste courte.
-    veille = ["veille/index.md", {"🔎 Explorer": EXPLORER_SRC}, {"🧵 Fils d'actualité": f"{THREADS_DIR}/index.md"},
-              {"🗓️ Semaines": f"{WEEKS_DIR}/index.md"}, {"📅 Agenda": AGENDA_SRC}, {"📚 Pile de lecture": READING_SRC}]
+    # Chaque outil montre ses trois derniers éléments (fils récents, semaines, prochains jalons,
+    # dernières lectures) : le menu reste court quel que soit l'historique.
+    today = date.today()
+    recent_threads = sorted((threads or {}).items(), key=lambda kv: kv[1][-1]["date"], reverse=True)[:NAV_ITEMS]
+    upcoming = [e for e in STATE.get("agenda", []) if e[0] >= today][:NAV_ITEMS]
+    weeks = sorted({iso_week(it["date"]): it["date"] for it in items["veille"]}.items(), reverse=True)[:NAV_ITEMS]
+    readings = latest_readings(items["veille"])[:NAV_ITEMS]
+    veille = ["veille/index.md", {"🔎 Explorer": EXPLORER_SRC},
+              {"🧵 Fils d'actualité": [f"{THREADS_DIR}/index.md"]
+               + [{nav_label(thread_title(e)): thread_src(ev)} for ev, e in recent_threads]},
+              {"🗓️ Semaines": [f"{WEEKS_DIR}/index.md"]
+               + [{f"S{d.isocalendar()[1]} · {week_span(d - timedelta(days=d.weekday()))}": f"{WEEKS_DIR}/{w}.md"}
+                  for w, d in weeks]},
+              {"📅 Agenda": [AGENDA_SRC]
+               + [{nav_label(f"{'1er' if w.day == 1 else w.day} {short_month(w)} · {plain(t)}"): f"/{url_of(AGENDA_SRC)}#j-{w.isoformat()}"}
+                  for w, t, _ in upcoming]},
+              {"📚 Pile de lecture": [READING_SRC] + [{nav_label(title): url} for title, url in readings]}]
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(

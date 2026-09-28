@@ -44,6 +44,11 @@ theme:
 
 # Pages de fils et de semaines générées hors du menu (leurs index y figurent) : la barre
 # latérale reste courte quel que soit le nombre de fils ou de semaines.
+# Liens du menu vers les prochains jalons de l'agenda (/veille/agenda/#j-…) : voulus.
+validation:
+  nav:
+    absolute_links: ignore
+
 not_in_nav: |
   /veille/fils/*.md
   /veille/semaines/*.md
