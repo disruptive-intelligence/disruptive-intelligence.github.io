@@ -1,10 +1,19 @@
 /* Glossaire au survol.
    Charge assets/glossary.json (généré par hooks/portal.py), souligne la PREMIÈRE
-   occurrence de chaque terme dans le texte de la page (pas dans les titres, liens
-   ni blocs de code) et affiche sa définition au survol, au focus clavier ou au toucher. */
+   occurrence de chaque terme dans la page (texte et titres des sujets ; pas le titre
+   de page, les rubriques, les liens, le code ni le Lexique lui-même) et affiche sa
+   définition au survol, au focus clavier ou au toucher.
+   Sigles (TPU, CVE…) : casse exacte. Autres termes : casse libre, pluriel en -s/-x accepté. */
 (function () {
-  var SKIP = "a, code, pre, h1, h2, h3, h4, h5, h6, script, style, button, label, summary, .kw-term, .kw-tip, .headerlink";
-  var MAX_TERMS = 60;
+  var SKIP = "a, code, pre, h1, h2, script, style, button, label, summary, .kw-term, .kw-tip, .headerlink, .kw-toc-m, .kw-thread, .kw-no-gloss";
+  var MAX_TERMS = 80;
+
+  function isAcronym(t) { return t === t.toUpperCase(); }
+
+  function markLexicon(root) {           // les définitions du Lexique ne sont pas re-soulignées
+    var h = Array.prototype.find.call(root.querySelectorAll("h2"), function (e) { return /Lexique|Repères pour comprendre/.test(e.textContent); });
+    for (var n = h && h.nextElementSibling; n && n.tagName !== "H2"; n = n.nextElementSibling) n.classList.add("kw-no-gloss");
+  }
 
   function base() {
     if (window.__md_scope) return window.__md_scope;
@@ -15,10 +24,18 @@
   function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
   function annotate(root, entries) {
+    markLexicon(root);
     var byTerm = {};
-    entries.forEach(function (e, i) { byTerm[e.t] = i; });
-    var terms = entries.map(function (e) { return e.t; }).sort(function (a, b) { return b.length - a.length; });
-    var re = new RegExp("(?<![\\p{L}\\p{N}])(" + terms.map(escapeRe).join("|") + ")(?![\\p{L}\\p{N}])", "gu");
+    entries.forEach(function (e, i) { byTerm[isAcronym(e.t) ? e.t : e.t.toLowerCase()] = i; });
+    function pattern(list, flags) {
+      if (!list.length) return null;
+      list.sort(function (a, b) { return b.length - a.length; });
+      return new RegExp("(?<![\\p{L}\\p{N}])(" + list.map(escapeRe).join("|") + ")(?:s|x)?(?![\\p{L}\\p{N}])", flags);
+    }
+    var terms = entries.map(function (e) { return e.t; });
+    var patterns = [pattern(terms.filter(isAcronym), "gu"), pattern(terms.filter(function (t) { return !isAcronym(t); }), "giu")]
+      .filter(Boolean);
+    function keyOf(found) { return byTerm[found] !== undefined ? found : found.toLowerCase(); }
     var used = {}, count = 0, nodes = [];
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
@@ -29,22 +46,27 @@
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(function (node) {
       if (count >= MAX_TERMS) return;
-      var text = node.nodeValue, last = 0, frag = null, m;
-      re.lastIndex = 0;
-      while ((m = re.exec(text))) {
-        if (used[m[1]] || count >= MAX_TERMS) continue;
-        used[m[1]] = true; count++;
+      var text = node.nodeValue, last = 0, frag = null, found = [];
+      patterns.forEach(function (re) {
+        var m;
+        re.lastIndex = 0;
+        while ((m = re.exec(text))) found.push({ at: m.index, text: m[0], key: keyOf(m[1]) });
+      });
+      found.sort(function (a, b) { return a.at - b.at || b.text.length - a.text.length; });
+      found.forEach(function (f) {
+        if (f.at < last || used[f.key] || count >= MAX_TERMS) return;
+        used[f.key] = true; count++;
         frag = frag || document.createDocumentFragment();
-        frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        frag.appendChild(document.createTextNode(text.slice(last, f.at)));
         var span = document.createElement("span");
         span.className = "kw-term";
         span.tabIndex = 0;
         span.setAttribute("role", "button");
-        span.dataset.i = byTerm[m[1]];
-        span.textContent = m[1];
+        span.dataset.i = byTerm[f.key];
+        span.textContent = f.text;
         frag.appendChild(span);
-        last = m.index + m[1].length;
-      }
+        last = f.at + f.text.length;
+      });
       if (frag) {
         frag.appendChild(document.createTextNode(text.slice(last)));
         node.parentNode.replaceChild(frag, node);

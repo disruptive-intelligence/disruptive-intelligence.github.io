@@ -162,6 +162,127 @@ def load_content(docs_dir):
     return items
 
 
+# ---------------------------------------------------------------- sujets des briefs, fils d'actualité
+
+THREADS_DIR = "veille/fils"
+MARKER = re.compile(r"^<!-- selection: event:(evt-[0-9a-f-]+) -->$")
+HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
+
+
+def heading_ids(markdown):
+    """Identifiants que l'extension toc donnera aux titres (même slugify, même dédoublonnage),
+    dans l'ordre du document : [(niveau, texte, id)]."""
+    from markdown.extensions.toc import slugify, unique
+    ids, out = set(), []
+    for line in markdown.splitlines():
+        m = HEADING.match(line)
+        if m:
+            text = re.sub(r"\*\*?|`|\[([^\]]*)\]\([^)]*\)", r"\1", m.group(2))
+            out.append((len(m.group(1)), text, unique(slugify(html.unescape(text), "-"), ids)))
+    return out
+
+
+def brief_subjects(markdown):
+    """Sujets ### ▸ d'un brief : titre, ancre, rubrique, événement (repère de sélection) et « Le fait »."""
+    headings = iter(heading_ids(markdown))
+    lines, subjects, lane = markdown.splitlines(), [], None
+    for i, line in enumerate(lines):
+        if not HEADING.match(line):
+            continue
+        level, text, anchor = next(headings)
+        if level == 2:
+            lane = text
+        elif level == 3 and text.startswith("▸"):
+            event = MARKER.match(lines[i + 1].strip()) if i + 1 < len(lines) else None
+            fact = ""
+            for follow in lines[i + 1:i + 12]:
+                if follow.startswith("**Le fait :**"):
+                    fact = follow.replace("**Le fait :**", "").strip()
+                    break
+            subjects.append({"title": text.lstrip("▸ ").strip(), "anchor": anchor, "lane": lane,
+                             "event": event.group(1) if event else None, "fact": fact, "line": i})
+    return subjects
+
+
+def thread_src(event_id):
+    return f"{THREADS_DIR}/{event_id[:12]}.md"
+
+
+def build_threads(briefs):
+    """Événements suivis sur au moins deux éditions -> leur chronologie."""
+    by_event = {}
+    for it in sorted(briefs, key=lambda x: x["date"]):
+        for s in brief_subjects(it["body"]):
+            if s["event"]:
+                by_event.setdefault(s["event"], []).append(dict(s, date=it["date"], src=it["src"]))
+    return {e: lst for e, lst in by_event.items() if len({s["date"] for s in lst}) > 1}
+
+
+def thread_title(entries):
+    title = re.sub(r"^(Suivi|Mise à jour|Analyse)\s*[—–:-]\s*", "", entries[-1]["title"])
+    return title[:1].upper() + title[1:]
+
+
+def pages_threads(threads):
+    out, cards = [], []
+    for event, entries in sorted(threads.items(), key=lambda kv: kv[1][-1]["date"], reverse=True):
+        src = thread_src(event)
+        days = sorted({s["date"] for s in entries})
+        body = ""
+        for s in entries:
+            link = posixpath.relpath(s["src"], THREADS_DIR) + "#" + s["anchor"]
+            body += (f"\n### {fr_date(s['date'])} · {s['lane']}\n\n**[{s['title']}]({link})**\n\n"
+                     + (f"{s['fact']}\n" if s["fact"] else ""))
+        title = thread_title(entries)
+        out.append((src, f"""# 🧵 {title}
+
+<span class="kw-muted">Fil d'actualité · {len(days)} éditions, du {fr_date(days[0])} au {fr_date(days[-1])} ·
+les faits tels que rapportés dans chaque Morning Brief, du plus ancien au plus récent.</span>
+{body}"""))
+        cards.append(f'<a class="kw-card" href="{href(THREADS_DIR + "/index.md", src)}">'
+                     f'<span class="kw-card__meta">{len(days)} éditions · dernière le {fr_date(days[-1])}</span>'
+                     f'<span class="kw-card__title">{esc(title)}</span>'
+                     f'<span class="kw-card__text">{esc(entries[-1]["fact"][:220])}</span></a>')
+    grid = f'<div class="kw-cards">{"".join(cards)}</div>' if cards else \
+        '<span class="kw-muted">Aucun événement suivi sur plusieurs éditions pour l\'instant.</span>'
+    out.append((f"{THREADS_DIR}/index.md", f"""# 🧵 Fils d'actualité
+
+Les événements qui reviennent d'une édition à l'autre (suivi, nouvel élément, mise à jour),
+avec leur chronologie. Un fil se crée automatiquement dès qu'un même événement apparaît dans deux Morning Briefs.
+
+{grid}
+"""))
+    return out
+
+
+def decorate_brief(markdown, src):
+    """Page d'un brief : sommaire repliable (téléphone) et lien vers le fil des sujets suivis."""
+    subjects = brief_subjects(markdown)
+    if len(subjects) < 5:
+        return markdown
+    lines = markdown.splitlines()
+    threads = STATE.get("threads", {})
+    for s in reversed(subjects):                       # de la fin vers le début : les numéros de ligne restent justes
+        entries = threads.get(s["event"])
+        if not entries:
+            continue
+        days = sorted({e["date"] for e in entries})
+        others = [d for d in days if d != next(e["date"] for e in entries if e["src"] == src)]
+        when = ", ".join(f"{d.day} {short_month(d)}" for d in others)
+        lines.insert(s["line"] + 2, f'\n<div class="kw-thread">🧵 Fil d\'actualité · aussi le {esc(when)} · '
+                                    f'<a href="{href(src, thread_src(s["event"]))}">chronologie →</a></div>\n')
+    toc, lane = "", None
+    for s in subjects:
+        if s["lane"] != lane:
+            toc += ("</ol>" if lane else "") + f'<p class="kw-toc-m__lane">{esc(s["lane"])}</p><ol>'
+            lane = s["lane"]
+        toc += f'<li><a href="#{s["anchor"]}">{esc(s["title"])}</a></li>'
+    first_h2 = next(i for i, l in enumerate(lines) if l.startswith("## "))
+    lines.insert(first_h2, f'<details class="kw-toc-m"><summary>Sommaire · {len(subjects)} sujets</summary>'
+                           f'{toc}</ol></details>\n')
+    return "\n".join(lines)
+
+
 def load_yaml(path, default):
     return yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else default
 
@@ -242,7 +363,7 @@ hide:
 
 Les éditions du **Morning Intelligence Brief** : les événements retenus, leur contexte et les sources pour approfondir.
 
-<a class="kw-rss" href="feed.xml">📡 S'abonner au flux RSS</a> <span class="kw-muted">· à coller dans un lecteur RSS (Feedly, NetNewsWire, Inoreader…) pour recevoir chaque édition</span>
+<a class="kw-rss" href="feed.xml">📡 S'abonner au flux RSS</a> <a class="kw-rss kw-rss--fils" href="fils/">🧵 Fils d'actualité</a> <span class="kw-muted">· à coller dans un lecteur RSS (Feedly, NetNewsWire, Inoreader…) pour recevoir chaque édition</span>
 
 {editions}
 
@@ -441,8 +562,12 @@ hide:
 
 # ---------------------------------------------------------------- navigation
 
-def build_nav(items, themes):
+def build_nav(items, themes, threads=None):
     veille = ["veille/index.md"]
+    fils = [f"{THREADS_DIR}/index.md"] + [
+        {thread_title(entries): thread_src(event)}
+        for event, entries in sorted((threads or {}).items(), key=lambda kv: kv[1][-1]["date"], reverse=True)]
+    veille.append({"🧵 Fils d'actualité": fils})
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(
@@ -585,7 +710,8 @@ et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la
 # ---------------------------------------------------------------- glossaire
 
 GLOSSARY_SRC = "library/glossaire.md"
-LEXIQUE_ENTRY = re.compile(r"^- \*\*(.+?)\*\*\s+[—–-]\s+(.+)$")
+# Accepte « - **Terme** — déf. », « - **Terme :** déf. », « - **Terme** : déf. » (formats vus dans les briefs)
+LEXIQUE_ENTRY = re.compile(r"^[-*]\s+\*\*([^*]+?)\s*:?\s*\*\*\s*(?:[—–:-]\s*)?(\S.*)$")
 
 
 def letter_anchor(term):
@@ -616,7 +742,9 @@ def build_glossary(items, manual):
             if not e:
                 continue
             key = slug(e.group(1)) or e.group(1).casefold()
-            t = terms.setdefault(key, {"term": e.group(1).strip(), "definition": first_sentence(e.group(2)),
+            definition = e.group(2).strip()
+            definition = definition[:1].upper() + definition[1:]
+            t = terms.setdefault(key, {"term": e.group(1).strip(), "definition": first_sentence(definition),
                                        "seen": [], "see": None})
             t["seen"].append(it)
     for entry in manual or []:
@@ -734,19 +862,21 @@ def on_config(config):
     sources = load_yaml(root / "data" / "sources.yml", [])
 
     glossary = build_glossary(items, load_yaml(root / "data" / "glossaire.yml", []))
+    threads = STATE["threads"] = build_threads(items["veille"])
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary))]
     pages.append(glossary_data(glossary))
+    pages += pages_threads(threads)
     STATE["pages"] = pages
     STATE["items"] = items
     STATE["html"] = {}
 
     nav = list(config.nav or [])
     pos = next((i + 1 for i, e in enumerate(nav) if isinstance(e, dict) and NAV_ANCHOR in e), 0)
-    nav = nav[:pos] + build_nav(items, themes) + nav[pos:]
+    nav = nav[:pos] + build_nav(items, themes, threads) + nav[pos:]
     for i, e in enumerate(nav):                  # arborescence + Glossaire dans l'onglet Bibliothèque,
         if isinstance(e, dict) and LIBRARY_TAB in e:   # puis l'onglet Ressources juste après
             children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
@@ -769,6 +899,14 @@ def on_post_page(output, page, config):
             digest = hashlib.sha1(path.read_bytes()).hexdigest()[:10]
             output = output.replace(f'{asset}"', f'{asset}?v={digest}"')
     return output
+
+
+def on_page_markdown(markdown, page, config, files):
+    """Briefs : sommaire repliable pour téléphone et liens vers les fils d'actualité."""
+    src = page.file.src_uri
+    if src.startswith("veille/") and re.match(r"veille/\d{4}/\d{2}/", src):
+        return decorate_brief(markdown, src)
+    return markdown
 
 
 def on_page_content(html, page, config, files):

@@ -676,3 +676,27 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-404__links a { padding: .4rem .9rem; border-radius: 1em; border: 1px solid var(--kw-line);
   background: var(--kw-panel); color: var(--md-default-fg-color); font-weight: 600; font-size: .75rem; }
 .md-typeset .kw-404__links a:hover { border-color: #ed4d5a; color: #ed4d5a; }
+
+/* Fil d'actualité : pastille sous le titre d'un sujet suivi sur plusieurs éditions */
+.md-typeset .kw-thread { display: inline-block; margin: .1rem 0 .4rem; padding: .2rem .7rem; border-radius: 1em;
+  font-size: .66rem; font-weight: 600; color: var(--md-default-fg-color--light);
+  background: color-mix(in srgb, #ed4d5a 10%, transparent); border: 1px solid color-mix(in srgb, #ed4d5a 35%, transparent); }
+.md-typeset .kw-thread a { color: var(--kw-link); }
+
+/* Sommaire repliable des briefs : téléphone seulement (la table des matières
+   de droite remplit ce rôle sur grand écran) */
+.md-typeset details.kw-toc-m { margin: .8rem 0 1.2rem; padding: .2rem .9rem .5rem; border: 1px solid var(--kw-line);
+  border-left: 4px solid #ed4d5a; border-radius: 12px; background: var(--kw-panel); font-size: .72rem; }
+.md-typeset details.kw-toc-m > summary { font-weight: 800; cursor: pointer; padding: .4rem 0; list-style: none;
+  background: none; color: var(--md-default-fg-color); }
+.md-typeset details.kw-toc-m > summary::before { content: "☰  "; color: #ed4d5a; position: static; width: auto; height: auto;
+  background: none; -webkit-mask-image: none; mask-image: none; }
+.md-typeset details.kw-toc-m > summary::after { display: none; }
+.md-typeset .kw-toc-m__lane { margin: .6rem 0 .2rem; font-weight: 800; font-size: .7rem; }
+.md-typeset details.kw-toc-m ol { margin: 0 0 0 1.1rem; }
+.md-typeset details.kw-toc-m li { margin: .15rem 0; line-height: 1.4; }
+.md-typeset details.kw-toc-m a { color: var(--md-default-fg-color--light); }
+.md-typeset details.kw-toc-m a:hover { color: var(--kw-link); }
+@media screen and (min-width: 60em) { .md-typeset details.kw-toc-m { display: none; } }
+.md-typeset .kw-rss--fils { color: var(--kw-link); }
+.md-typeset .kw-rss--fils:hover { border-color: var(--kw-link); color: var(--kw-link); }
