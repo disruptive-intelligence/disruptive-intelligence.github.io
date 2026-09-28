@@ -807,3 +807,90 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .admonition.abstract { font-size: .74rem; }
 .md-typeset .kw-doc-head__follow { font-size: .68rem; color: var(--md-default-fg-color--light); }
 .md-typeset .kw-doc-head__follow a { font-weight: 600; }
+
+/* ---- Veille : tableau de bord (calendrier des éditions, agenda, à venir) ---- */
+.md-typeset .kw-dash { display: grid; grid-template-columns: auto auto minmax(16rem, 1fr); gap: 1rem; align-items: start; margin: .6rem 0 1.4rem; }
+@media screen and (max-width: 60em) { .md-typeset .kw-dash { grid-template-columns: 1fr; } }
+.md-typeset .kw-cal__nav { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .3rem; }
+.md-typeset .kw-cal__title { font-weight: 800; font-size: .78rem; }
+.md-typeset .kw-cal__nav button { width: 1.7rem; height: 1.7rem; border-radius: 8px; border: 1px solid var(--kw-line);
+  background: var(--kw-soft); color: var(--md-default-fg-color); cursor: pointer; font-size: .9rem; line-height: 1; }
+.md-typeset .kw-cal__nav button:disabled { opacity: .3; cursor: default; }
+.md-typeset .kw-cal:not(.is-paged) .kw-cal__nav button { display: none; }
+.md-typeset .kw-cal__mtitle { margin: 0 0 .4rem; font-size: .7rem; font-weight: 700; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-cal__day.is-today { outline: 2px solid var(--kw-link); outline-offset: -2px; }
+.md-typeset a.kw-cal__day.is-event { color: #1a1313; font-weight: 800; background: #f0b35a; border: 1px solid #f0b35a; }
+.md-typeset a.kw-cal__day.is-event:hover { background: #ffd08a; }
+.md-typeset a.kw-cal__day.is-event.is-past { background: color-mix(in srgb, #f0b35a 30%, transparent); color: var(--md-default-fg-color); }
+.md-typeset .kw-up { padding: .8rem 1rem; border: 1px solid var(--kw-line); border-radius: 14px; background: var(--kw-panel); height: 100%; box-sizing: border-box; }
+.md-typeset .kw-up__title { margin: 0 0 .5rem; font-weight: 800; font-size: .78rem; }
+.md-typeset .kw-up__title a { font-size: .66rem; font-weight: 600; margin-left: .4rem; }
+.md-typeset .kw-up ul { list-style: none; margin: 0; padding: 0; }
+.md-typeset .kw-up li { margin: 0 0 .55rem; padding: 0; }
+.md-typeset .kw-up li a { display: grid; grid-template-columns: 5.2rem 1fr; gap: .5rem; color: var(--md-default-fg-color); }
+.md-typeset .kw-up li a:hover .kw-up__text { color: var(--kw-link); }
+.md-typeset .kw-up__date { font-weight: 800; font-size: .66rem; color: #f0b35a; }
+.md-typeset .kw-up__text { font-size: .68rem; line-height: 1.45; }
+.md-typeset a.kw-ed--all { display: flex; flex-direction: column; justify-content: center; border-style: dashed !important; }
+
+/* ---- Agenda ---- */
+.md-typeset ul.kw-agenda { list-style: none; margin: 0; padding: 0; }
+.md-typeset ul.kw-agenda > li { display: grid; grid-template-columns: 11rem 1fr auto; gap: .8rem; margin: 0 0 .5rem; padding: .6rem .8rem;
+  border: 1px solid var(--kw-line); border-radius: 12px; background: var(--kw-panel); scroll-margin-top: 4rem; }
+.md-typeset ul.kw-agenda > li:target { border-color: #f0b35a; }
+.md-typeset .kw-agenda__date { font-weight: 800; color: #f0b35a; font-size: .72rem; }
+.md-typeset .kw-agenda--past .kw-agenda__date { color: var(--md-default-fg-color--light); }
+.md-typeset .kw-agenda__text { font-size: .72rem; }
+.md-typeset .kw-agenda__brief { font-size: .64rem; white-space: nowrap; }
+@media screen and (max-width: 45em) { .md-typeset ul.kw-agenda > li { grid-template-columns: 1fr; gap: .2rem; } }
+
+/* ---- Explorer : légende et pagination (partagée avec la Pile de lecture) ---- */
+.md-typeset .kw-legend { font-size: .64rem; color: var(--md-default-fg-color--light); margin: -.2rem 0 .8rem; }
+.md-typeset .kw-pager { display: flex; align-items: center; justify-content: center; gap: .8rem; margin: 1rem 0; font-size: .7rem; }
+.md-typeset .kw-pager button { padding: .4rem .9rem; border-radius: 1em; border: 1px solid var(--kw-line); background: var(--kw-panel);
+  color: var(--md-default-fg-color); font-weight: 700; cursor: pointer; }
+.md-typeset .kw-pager button:hover:not(:disabled) { border-color: #ed4d5a; color: #ed4d5a; }
+.md-typeset .kw-pager button:disabled { opacity: .35; cursor: default; }
+
+/* ---- Pile de lecture ---- */
+.md-typeset .kw-readings__bar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; font-size: .72rem; }
+.md-typeset .kw-readings__bar input { accent-color: #ed4d5a; }
+.md-typeset .kw-read__day { font-weight: 800; margin: 1.4rem 0 .6rem; }
+
+/* ---- Fils et semaines : groupes, blocs repliés, cartes de semaine ---- */
+.md-typeset .kw-group { margin: 1.4rem 0 .6rem; font-weight: 800; font-size: .82rem; }
+.md-typeset .kw-group.kw-lane--tech, .md-typeset .kw-group.kw-lane--ia, .md-typeset .kw-group.kw-lane--cyber,
+.md-typeset .kw-group.kw-lane--geo-ie { color: var(--lane); }
+.md-typeset a.kw-card.kw-lane--tech, .md-typeset a.kw-card.kw-lane--ia, .md-typeset a.kw-card.kw-lane--cyber,
+.md-typeset a.kw-card.kw-lane--geo-ie { border-left: 3px solid var(--lane) !important; }
+.md-typeset .kw-card__meta .kw-lanetag { margin-right: .3rem; }
+.md-typeset details.kw-fold { margin: .6rem 0; padding: .3rem .9rem; border: 1px solid var(--kw-line); border-radius: 12px;
+  background: var(--kw-panel); font-size: .75rem; }
+.md-typeset details.kw-fold > summary { cursor: pointer; font-weight: 800; padding: .4rem 0; }
+.md-typeset details.kw-fold > summary::before, .md-typeset details.kw-fold > summary::after { display: none; }
+.md-typeset .kw-weeks { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .6rem; margin: .4rem 0 1rem; }
+.md-typeset a.kw-week { display: grid; grid-template-columns: auto 1fr; gap: .1rem .6rem; padding: .6rem .8rem; border: 1px solid var(--kw-line);
+  border-radius: 12px; background: var(--kw-panel); color: var(--md-default-fg-color); }
+.md-typeset a.kw-week:hover { border-color: #ed4d5a; }
+.md-typeset .kw-week__no { grid-row: span 2; align-self: center; font-weight: 800; font-size: .8rem; color: #ed4d5a; }
+.md-typeset .kw-week__span { font-weight: 800; font-size: .76rem; }
+.md-typeset .kw-week__meta { font-size: .64rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-dash { grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+.md-typeset .kw-dash .kw-cal { box-sizing: border-box; height: 100%; }
+.md-typeset .kw-dash .kw-cal__grid { justify-content: center; }
+.md-typeset .kw-dash .kw-cal__mtitle { text-align: center; }
+
+/* Grille du tableau de bord selon la largeur réelle du contenu (pas celle de l'écran) :
+   1 colonne, puis 2 (le panneau « À venir » en pleine largeur dessous), puis 3. */
+.md-typeset .kw-dash-wrap { container-type: inline-size; }
+.md-typeset .kw-dash-wrap .kw-dash { grid-template-columns: 1fr; }
+@container (min-width: 36rem) {
+  .md-typeset .kw-dash-wrap .kw-dash { grid-template-columns: 1fr 1fr; }
+  .md-typeset .kw-dash-wrap .kw-dash > .kw-up { grid-column: 1 / -1; }
+}
+@container (min-width: 55rem) {
+  .md-typeset .kw-dash-wrap .kw-dash { grid-template-columns: 1fr 1fr 1fr; }
+  .md-typeset .kw-dash-wrap .kw-dash > .kw-up { grid-column: auto; }
+}
+@container (min-width: 36rem) { .md-typeset .kw-dash-wrap .kw-dash--2 > .kw-up { grid-column: auto; } }
+@container (min-width: 55rem) { .md-typeset .kw-dash-wrap .kw-dash--2 > .kw-up { grid-column: span 2; } }

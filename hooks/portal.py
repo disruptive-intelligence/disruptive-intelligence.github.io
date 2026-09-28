@@ -66,9 +66,11 @@ def fr_date(d):
     return f"{'1er' if d.day == 1 else d.day} {MOIS[d.month - 1]} {d.year}"
 
 
+MOIS_COURTS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."]
+
+
 def short_month(d):
-    m = MOIS[d.month - 1]
-    return m if len(m) <= 4 else m[:4] + "."
+    return MOIS_COURTS[d.month - 1]
 
 
 def url_of(src_uri):
@@ -255,20 +257,58 @@ def pages_threads(threads):
 <span class="kw-muted">Fil d'actualité · {len(days)} éditions, du {fr_date(days[0])} au {fr_date(days[-1])} ·
 les faits tels que rapportés dans chaque Morning Brief, du plus ancien au plus récent.</span>
 {body}"""))
-        cards.append(f'<a class="kw-card" href="{href(THREADS_DIR + "/index.md", src)}">'
-                     f'<span class="kw-card__meta">{len(days)} éditions · dernière le {fr_date(days[-1])}</span>'
-                     f'<span class="kw-card__title">{esc(title)}</span>'
-                     f'<span class="kw-card__text">{esc(entries[-1]["fact"][:220])}</span></a>')
-    grid = f'<div class="kw-cards">{"".join(cards)}</div>' if cards else \
-        '<span class="kw-muted">Aucun événement suivi sur plusieurs éditions pour l\'instant.</span>'
-    out.append((f"{THREADS_DIR}/index.md", f"""# 🧵 Fils d'actualité
-
-Les événements qui reviennent d'une édition à l'autre (suivi, nouvel élément, mise à jour),
-avec leur chronologie. Un fil se crée automatiquement dès qu'un même événement apparaît dans deux Morning Briefs.
-
-{grid}
-"""))
+        key = section_key(entries[-1]["lane"] or "") or "tech"
+        cards.append((days[-1], key, f'<a class="kw-card kw-lane--{key}" href="{href(THREADS_DIR + "/index.md", src)}">'
+                      f'<span class="kw-card__meta"><span class="kw-lanetag kw-lane--{key}">{LANE_TAGS.get(key, "")}</span> '
+                      f'{len(days)} éditions · {span_label(days[0], days[-1])}</span>'
+                      f'<span class="kw-card__title">{esc(title)}</span>'
+                      f'<span class="kw-card__text">{esc(plain(entries[-1]["fact"], 170))}</span></a>'))
+    out.append((f"{THREADS_DIR}/index.md", threads_index(cards)))
     return out
+
+
+THREAD_ACTIVE_DAYS = 7
+
+
+def span_label(first, last):
+    """« 24 → 28 sept. » ou « 28 sept. → 2 oct. »"""
+    if first == last:
+        return f"{first.day} {short_month(first)}"
+    head = f"{first.day}" if (first.month, first.year) == (last.month, last.year) else f"{first.day} {short_month(first)}"
+    return f"{head} → {last.day} {short_month(last)}"
+
+
+def threads_index(cards, today=None):
+    """Fils actifs (nouvel élément depuis moins d'une semaine) par rubrique ; les autres, en sommeil,
+    repliés par mois : la page reste courte même après des mois de veille."""
+    today = today or date.today()
+    active = [c for c in cards if (today - c[0]).days <= THREAD_ACTIVE_DAYS]
+    dormant = [c for c in cards if (today - c[0]).days > THREAD_ACTIVE_DAYS]
+    body = ""
+    for key, label in (("tech", "📰 Tech"), ("ia", "🚀 IA & technologies de rupture"),
+                       ("cyber", "🛡️ Cyber / CTI"), ("geo-ie", "🌍 Géopolitique / IE")):
+        lst = [c[2] for c in sorted(active, key=lambda c: c[0], reverse=True) if c[1] == key]
+        if lst:
+            body += f'\n<p class="kw-group kw-lane--{key}">{label} <span class="kw-muted">· {len(lst)}</span></p>\n<div class="kw-cards">{"".join(lst)}</div>\n'
+    if not active:
+        body += '\n<span class="kw-muted">Aucun fil actif cette semaine.</span>\n'
+    months = {}
+    for c in sorted(dormant, key=lambda c: c[0], reverse=True):
+        months.setdefault((c[0].year, c[0].month), []).append(c[2])
+    if months:
+        body += "\n## En sommeil\n\n<span class=\"kw-muted\">Aucun nouvel élément depuis plus d'une semaine ; classés par mois du dernier épisode.</span>\n"
+        for (y, m), lst in months.items():
+            body += (f'\n<details class="kw-fold"><summary>{MOIS[m - 1].capitalize()} {y} · {len(lst)} fil{"s" if len(lst) > 1 else ""}</summary>'
+                     f'<div class="kw-cards">{"".join(lst)}</div></details>\n')
+    return f"""---
+hide:
+  - toc
+---
+# 🧵 Fils d'actualité
+
+Un fil se crée dès qu'un même événement revient dans deux Morning Briefs : sa page donne la chronologie des faits.
+**Actifs** = un nouvel épisode depuis moins de {THREAD_ACTIVE_DAYS} jours, rangés par rubrique.
+{body}"""
 
 
 SOURCE_LABEL = re.compile(r"^(\*\*Sources? :\*\* \[)(.+?)( — )", re.M)
@@ -331,6 +371,15 @@ def load_yaml(path, default):
 
 
 # ---------------------------------------------------------------- composants HTML
+
+RECENT_EDITIONS = 7        # éditions montrées dans les carrousels (celle « à la une » comprise)
+
+
+def all_editions_card(from_src):
+    return (f'<a class="kw-ed kw-ed--all" href="{href(from_src, "veille/index.md")}#calendrier">'
+            f'<span class="kw-ed__label">Archives</span><span class="kw-ed__date">Toutes les éditions →</span>'
+            f'<span class="kw-ed__more">Calendrier et archives mensuelles</span></a>')
+
 
 def edition_card(it, from_src, featured=False):
     d, n = it["date"], 3 if featured else 2
@@ -401,9 +450,12 @@ def page_veille(items, sources):
 
     editions = ""
     if briefs:
+        entries = STATE.get("agenda", [])
         editions = (f'<div class="kw-editions">{edition_card(briefs[0], src, True)}'
-                    f'<div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:8])}</div></div>'
-                    f'\n\n## Toutes les éditions\n\n{calendar(briefs, src)}')
+                    f'<div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}'
+                    f'{all_editions_card(src)}</div></div>'
+                    f'\n\n## Calendrier {{ #calendrier }}\n\n<div class="kw-dash-wrap"><div class="kw-dash">{editions_calendar(briefs, src)}'
+                    f'{agenda_calendar(entries, src)}{upcoming_panel(entries, src)}</div></div>')
     return src, f"""---
 hide:
   - toc
@@ -595,7 +647,7 @@ hide:
 
 <a class="kw-more-link" href="veille/">Toutes les éditions →</a>
 
-<div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:8])}</div>
+<div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}{all_editions_card(src)}</div>
 
 ## 🔎 Analyses récentes
 
@@ -641,48 +693,52 @@ def section_body(body, heading):
     return m.group(1) if m else ""
 
 
+def explorer_data(briefs):
+    """assets/veille-sujets.json : tous les sujets, lus par l'Explorer (affichage paginé côté navigateur)."""
+    rows = []
+    for s in all_subjects(briefs):
+        fact = re.sub(r"\*\*?|`|\[([^\]]*)\]\([^)]*\)", r"\1", s["fact"])
+        rows.append({"d": s["date"].isoformat(), "l": s["key"] or "", "f": s["freshness"] or "",
+                     "t": s["title"], "u": url_of(s["src"]) + "#" + s["anchor"], "s": s["source"] or "",
+                     "x": fact if len(fact) <= 260 else fact[:260].rsplit(" ", 1)[0] + " …"})
+    return "assets/veille-sujets.json", json.dumps(rows, ensure_ascii=False, separators=(",", ":"))
+
+
 def page_explorer(briefs):
-    src = EXPLORER_SRC
-    subjects = all_subjects(briefs)
-    rows = ""
-    for s in subjects:
-        fresh = (f' <span class="kw-fresh kw-fresh--{s["freshness"]}">{FRESHNESS[s["freshness"]]}</span>'
-                 if s["freshness"] in FRESHNESS else "")
-        lane = (f'<span class="kw-lanetag kw-lane--{s["key"]}">{LANE_TAGS[s["key"]]}</span>'
-                if s["key"] in LANE_TAGS else "")
-        fact = s["fact"] if len(s["fact"]) <= 260 else s["fact"][:260].rsplit(" ", 1)[0] + " …"
-        fact = re.sub(r"\*\*?|`|\[([^\]]*)\]\([^)]*\)", r"\1", fact)
-        rows += (f'<tr data-lane="{s["key"] or ""}" data-fresh="{s["freshness"] or ""}">'
-                 f'<td class="kw-ex__date" data-date="{s["date"].isoformat()}">{s["date"].day} {short_month(s["date"])}</td>'
-                 f'<td>{lane}</td>'
-                 f'<td><a href="{href(src, s["src"])}#{s["anchor"]}">{esc(s["title"])}</a>{fresh}'
-                 f'<span class="kw-ex__fact">{esc(fact)}</span></td>'
-                 f'<td class="kw-ex__src">{esc(s["source"] or "")}</td></tr>')
+    subjects = sum(len(brief_subjects(it["body"])) for it in briefs)
     options = "".join(f'<option value="{k}">{v}</option>' for k, v in LANE_TAGS.items())
-    return src, f"""---
+    return EXPLORER_SRC, f"""---
 hide:
   - toc
 ---
 # 🔎 Explorer la veille
 
-<span class="kw-muted">{len(subjects)} sujets dans {len(briefs)} éditions. Filtrer par mot (acteur, pays, technologie, média), rubrique ou fraîcheur.</span>
+<span class="kw-muted">{subjects} sujets dans {len(briefs)} éditions, affichés 50 par page, du plus récent au plus ancien.
+Filtrer par mot (acteur, pays, technologie, média), période, rubrique ou statut.</span>
 
-<div class="kw-explorer" id="kw-explorer">
+<div class="kw-explorer" id="kw-explorer" data-src="assets/veille-sujets.json">
 <div class="kw-explorer__bar">
 <input type="search" class="kw-explorer__q" placeholder="Rechercher : Anthropic, Ukraine, ransomware…" aria-label="Rechercher dans les sujets">
+<select class="kw-explorer__period" aria-label="Période"><option value="">Toute la période</option><option value="7">7 derniers jours</option><option value="30">30 derniers jours</option><option value="90">3 derniers mois</option></select>
 <select class="kw-explorer__lane" aria-label="Rubrique"><option value="">Toutes les rubriques</option>{options}</select>
-<select class="kw-explorer__fresh" aria-label="Fraîcheur"><option value="">Toutes les fraîcheurs</option><option value="updated">Mises à jour</option><option value="carryover">Suivis</option></select>
+<select class="kw-explorer__fresh" aria-label="Statut"><option value="">Tous les statuts</option><option value="new">Nouveaux</option><option value="updated">Mises à jour</option><option value="carryover">Suivis</option></select>
 <span class="kw-explorer__count kw-muted"></span>
 </div>
-<table class="kw-explorer__table"><thead><tr><th>Date</th><th>Rubrique</th><th>Sujet</th><th>Source</th></tr></thead>
-<tbody>{rows}</tbody></table>
+<p class="kw-legend"><strong>Nouveau</strong> : premier traitement du sujet · <strong>Mise à jour</strong> : sujet déjà traité, avec un fait nouveau ce jour-là ·
+<strong>Suivi</strong> : sujet déjà traité, rappelé sans fait nouveau (échéance, enjeu toujours actuel).</p>
+<table class="kw-explorer__table"><thead><tr><th>Date</th><th>Rubrique</th><th>Sujet</th><th>Source</th></tr></thead><tbody></tbody></table>
+<nav class="kw-pager" aria-label="Pages de résultats"></nav>
+<noscript>L'Explorer a besoin de JavaScript ; les éditions restent accessibles depuis la page Veille.</noscript>
 </div>
 """
 
 
+READING_DAYS_PER_PAGE = 5
+
+
 def page_readings(briefs):
     src = READING_SRC
-    blocks, total = "", 0
+    groups, total = "", 0
     for it in briefs:
         entries = [READING_ENTRY.match(l.strip()) for l in section_body(it["body"], "📚 Reading list").splitlines()]
         entries = [e for e in entries if e]
@@ -691,22 +747,28 @@ def page_readings(briefs):
         total += len(entries)
         items = "".join(
             f'<li class="kw-read" data-url="{esc(e.group(3))}"><label><input type="checkbox" class="kw-read__box" '
-            f'aria-label="Marquer comme lu"></label><div><a href="{esc(e.group(3))}">{esc(e.group(2))}</a>'
+            f'aria-label="Marquer comme lu"></label><div><a href="{esc(e.group(3))}">{esc(e.group(2).strip("«» "))}</a>'
             f'<span class="kw-read__meta">{esc(STATE.get("aliases", {}).get(e.group(1).strip(), e.group(1).strip()))}</span>'
             f'<span class="kw-read__why">{esc(re.sub(r"[*`]", "", e.group(4)))}</span></div></li>'
             for e in entries)
-        blocks += (f'<h2 class="kw-read__day">{JOURS[it["date"].weekday()].capitalize()} {fr_date(it["date"])} '
-                   f'<a class="kw-read__brief" href="{href(src, it["src"])}">le brief →</a></h2><ul class="kw-reads">{items}</ul>')
+        groups += (f'<section class="kw-read__group"><p class="kw-read__day">{JOURS[it["date"].weekday()].capitalize()} '
+                   f'{fr_date(it["date"])} <a class="kw-read__brief" href="{href(src, it["src"])}">le brief →</a></p>'
+                   f'<ul class="kw-reads">{items}</ul></section>')
     return src, f"""---
 hide:
   - toc
 ---
 # 📚 Pile de lecture
 
-<span class="kw-muted">{total} lectures approfondies recommandées par les Morning Briefs. Cocher une lecture la marque
-comme lue sur cet appareil. <a href="#" class="kw-read__toggle">Masquer les lectures faites</a></span>
+<span class="kw-muted">{total} lectures approfondies recommandées par les Morning Briefs, {READING_DAYS_PER_PAGE} éditions par page.
+Cocher une lecture la marque comme lue sur cet appareil.</span>
 
-<div class="kw-readings" id="kw-readings">{blocks}</div>
+<div class="kw-readings" id="kw-readings" data-per-page="{READING_DAYS_PER_PAGE}">
+<p class="kw-readings__bar"><label><input type="checkbox" class="kw-read__hide"> Masquer les lectures faites</label>
+<span class="kw-readings__count kw-muted"></span></p>
+{groups}
+<nav class="kw-pager" aria-label="Pages de lectures"></nav>
+</div>
 """
 
 
@@ -724,10 +786,9 @@ def milestone_date(text, edition):
         return None
 
 
-def page_agenda(briefs, today=None):
-    src = AGENDA_SRC
-    today = today or date.today()
-    seen, upcoming, past = set(), [], []
+def agenda_entries(briefs):
+    """Jalons datés des sections « À surveiller » : [(date, texte, brief)], sans doublon."""
+    seen, out = set(), []
     for it in briefs:
         for line in section_body(it["body"], "À surveiller").splitlines():
             line = line.strip()
@@ -738,29 +799,48 @@ def page_agenda(briefs, today=None):
             if not when:
                 continue
             text = head.group(2) if head and milestone_date(head.group(1), it["date"]) else line[2:]
-            key = (when, text[:60])
-            if key in seen:
-                continue
-            seen.add(key)
-            entry = (when, text, it)
-            (upcoming if when >= today else past).append(entry)
-    def render(entries):
-        return "".join(f"- **{JOURS[w.weekday()]} {fr_date(w)}** · {t} "
-                       f'<span class="kw-muted">(brief du [{it["date"].day} {short_month(it["date"])}]'
-                       f'({posixpath.relpath(it["src"], "veille")}))</span>\n' for w, t, it in entries)
-    upcoming.sort(key=lambda e: e[0])
-    past = sorted((e for e in past if (today - e[0]).days <= 45), key=lambda e: e[0], reverse=True)
-    return src, f"""# 🗓️ Agenda
+            if (when, text[:60]) not in seen:
+                seen.add((when, text[:60]))
+                out.append((when, text, it))
+    return sorted(out, key=lambda e: e[0])
+
+
+def plain(text, n=None):
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"[*`]", "", text).strip()
+    return text if n is None or len(text) <= n else text[:n].rsplit(" ", 1)[0] + " …"
+
+
+def page_agenda(briefs, today=None):
+    src = AGENDA_SRC
+    today = today or date.today()
+    entries = STATE.get("agenda") or agenda_entries(briefs)
+    upcoming = [e for e in entries if e[0] >= today]
+    past = [e for e in reversed(entries) if e[0] < today and (today - e[0]).days <= 45]
+
+    def render(lst):
+        return "".join(f'<li id="j-{w.isoformat()}"><span class="kw-agenda__date">{JOURS[w.weekday()]} {fr_date(w)}</span>'
+                       f'<span class="kw-agenda__text">{esc(plain(t))}</span>'
+                       f'<a class="kw-agenda__brief" href="{href(src, it["src"])}">brief du {it["date"].day} {short_month(it["date"])}</a></li>'
+                       for w, t, it in lst)
+    cal = agenda_calendar(entries, src, today)
+    return src, f"""---
+hide:
+  - toc
+---
+# 📅 Agenda
 
 Les jalons datés relevés dans la section « À surveiller » des Morning Briefs.
 
+<div class="kw-dash-wrap"><div class="kw-dash kw-dash--2">{cal}{upcoming_panel(entries, src, today, 8)}</div></div>
+
 ## À venir
 
-{render(upcoming) or '<span class="kw-muted">Aucun jalon à venir pour l’instant.</span>'}
+{f'<ul class="kw-agenda">{render(upcoming)}</ul>' if upcoming else '<span class="kw-muted">Aucun jalon à venir pour l’instant.</span>'}
 
 ## Passés (45 derniers jours)
 
-{render(past) or '<span class="kw-muted">Aucun jalon passé récent.</span>'}
+{f'<ul class="kw-agenda kw-agenda--past">{render(past)}</ul>' if past else '<span class="kw-muted">Aucun jalon passé récent.</span>'}
 """
 
 
@@ -769,18 +849,29 @@ def iso_week(d):
     return f"{y}-s{w:02d}"
 
 
+def week_span(monday):
+    sunday = monday + timedelta(days=6)
+    if monday.month == sunday.month:
+        return f"{monday.day}–{sunday.day} {short_month(sunday)}"
+    return f"{monday.day} {short_month(monday)} – {sunday.day} {short_month(sunday)}"
+
+
+def plural(n, word):
+    return f"{n} {word}{'s' if n > 1 else ''}"
+
+
 def pages_weeks(briefs, threads):
-    """Une page par semaine : les sujets de la semaine par rubrique, un événement une seule fois."""
+    """Une page par semaine : les sujets de la semaine par rubrique, un événement une seule fois.
+    L'index range les semaines par mois ; seuls les deux mois les plus récents sont dépliés."""
     by_week = {}
     for s in all_subjects(briefs):
         by_week.setdefault(iso_week(s["date"]), []).append(s)
-    out, cards = [], []
+    out, rows = [], []
     for week, subjects in sorted(by_week.items(), reverse=True):
         src = f"{WEEKS_DIR}/{week}.md"
         days = sorted({s["date"] for s in subjects})
         monday = days[0] - timedelta(days=days[0].weekday())
         sunday = monday + timedelta(days=6)
-        title = f"Semaine du {monday.day} {MOIS[monday.month - 1] if monday.month != sunday.month else ''} au {fr_date(sunday)}".replace("  ", " ")
         body = ""
         for key, label in (("tech", "📰 Tech"), ("ia", "🚀 IA & technologies de rupture"),
                            ("cyber", "🛡️ Cyber / CTI"), ("geo-ie", "🌍 Géopolitique / IE")):
@@ -797,37 +888,96 @@ def pages_weeks(briefs, threads):
                 thread = (f" · [🧵 fil]({posixpath.relpath(thread_src(last['event']), WEEKS_DIR)})"
                           if last["event"] in threads else "")
                 body += f"- **{last['title']}** — {when}" + (f" · {last['source']}" if last["source"] else "") + thread + "\n"
-        n_events = len({s["event"] or s["anchor"] for s in subjects})
-        out.append((src, f"# 🗓️ {title}\n\n<span class=\"kw-muted\">{len(days)} éditions · {n_events} sujets distincts. "
+        n_subjects = len({s["event"] or s["anchor"] for s in subjects})
+        title = f"Semaine du {monday.day}{' ' + MOIS[monday.month - 1] if monday.month != sunday.month else ''} au {fr_date(sunday)}"
+        out.append((src, f"# 🗓️ {title}\n\n<span class=\"kw-muted\">{plural(len(days), 'édition')} · {n_subjects} sujets distincts. "
                          f"Un sujet repris plusieurs jours n'apparaît qu'une fois, avec ses dates.</span>\n{body}"))
-        cards.append((week, title, src, len(days), n_events))
-    grid = "".join(f'<a class="kw-card" href="{href(WEEKS_DIR + "/index.md", s)}"><span class="kw-card__meta">{d} éditions · '
-                   f'{n} sujets</span><span class="kw-card__title">{esc(t)}</span></a>' for _, t, s, d, n in cards)
+        rows.append((monday, src, len(days), n_subjects))
+    months = {}
+    for monday, s, d, n in rows:
+        months.setdefault((monday.year, monday.month), []).append(
+            f'<a class="kw-week" href="{href(WEEKS_DIR + "/index.md", s)}"><span class="kw-week__no">S{monday.isocalendar()[1]}</span>'
+            f'<span class="kw-week__span">{week_span(monday)}</span>'
+            f'<span class="kw-week__meta">{plural(d, "édition")} · {n} sujets</span></a>')
+    body = ""
+    for i, ((y, m), lst) in enumerate(months.items()):
+        block = f'<div class="kw-weeks">{"".join(lst)}</div>'
+        body += (f'\n<p class="kw-group">{MOIS[m - 1].capitalize()} {y}</p>\n{block}\n' if i < 2 else
+                 f'\n<details class="kw-fold"><summary>{MOIS[m - 1].capitalize()} {y} · {plural(len(lst), "semaine")}</summary>{block}</details>\n')
     out.append((f"{WEEKS_DIR}/index.md", f"---\nhide:\n  - toc\n---\n# 🗓️ Semaines\n\nLa veille relue à l'échelle de la semaine : "
-                                         f"tous les sujets par rubrique, sans doublon.\n\n<div class=\"kw-cards\">{grid}</div>\n"))
-    return out, [(t, s) for _, t, s, _, _ in cards]
+                                         f"tous les sujets par rubrique, sans doublon. Une semaine commence le lundi.\n{body}"))
+    return out
 
 
-def calendar(briefs, from_src):
-    """Calendrier mensuel des éditions (lundi -> dimanche), du mois le plus récent au plus ancien."""
-    by_day = {it["date"]: it for it in briefs}
-    months = sorted({(d.year, d.month) for d in by_day}, reverse=True)
-    out = ""
+# ---------------------------------------------------------------- calendriers
+
+def month_calendar(marks, months, default, from_src, title, cid, today=None):
+    """Calendriers mensuels feuilletables (‹ ›) : marks = {date: (lien, info-bulle, classe)}.
+    Sans JavaScript, tous les mois restent affichés les uns sous les autres."""
+    today = today or date.today()
+    panels = ""
     for y, m in months:
         first = date(y, m, 1)
         nxt = date(y + (m == 12), m % 12 + 1, 1)
         cells = "".join(f'<span class="kw-cal__head">{j[:1].upper()}</span>' for j in JOURS)
         cells += '<span class="kw-cal__pad"></span>' * first.weekday()
-        d = first
+        d, n = first, 0
         while d < nxt:
-            it = by_day.get(d)
-            cells += (f'<a class="kw-cal__day is-on" href="{href(from_src, it["src"])}" title="Morning Brief du {fr_date(d)}">{d.day}</a>'
-                      if it else f'<span class="kw-cal__day">{d.day}</span>')
+            mark = marks.get(d)
+            cls = " is-today" if d == today else ""
+            if mark:
+                n += 1
+                cells += (f'<a class="kw-cal__day {mark[2]}{cls}" href="{mark[0]}" title="{esc(mark[1])}">{d.day}</a>')
+            else:
+                cells += f'<span class="kw-cal__day{cls}">{d.day}</span>'
             d += timedelta(days=1)
-        n = sum(1 for k in by_day if (k.year, k.month) == (y, m))
-        out += (f'<div class="kw-cal"><p class="kw-cal__title">{MOIS[m - 1].capitalize()} {y} '
-                f'<span class="kw-muted">· {n} édition{"s" if n > 1 else ""}</span></p><div class="kw-cal__grid">{cells}</div></div>')
-    return f'<div class="kw-cals">{out}</div>'
+        panels += (f'<div class="kw-cal__month" data-month="{y}-{m:02d}"{" data-default" if (y, m) == default else ""}>'
+                   f'<p class="kw-cal__mtitle">{MOIS[m - 1].capitalize()} {y}</p><div class="kw-cal__grid">{cells}</div></div>')
+    return (f'<div class="kw-cal" id="{cid}"><div class="kw-cal__nav"><button type="button" class="kw-cal__prev" aria-label="Mois précédent">‹</button>'
+            f'<span class="kw-cal__title">{title}</span>'
+            f'<button type="button" class="kw-cal__next" aria-label="Mois suivant">›</button></div>{panels}</div>')
+
+
+def month_range(first, last):
+    out, (y, m) = [], (first.year, first.month)
+    while (y, m) <= (last.year, last.month):
+        out.append((y, m))
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    return out
+
+
+def editions_calendar(briefs, from_src):
+    if not briefs:
+        return ""
+    marks = {it["date"]: (href(from_src, it["src"]), f"Morning Brief du {fr_date(it['date'])}", "is-on")
+             for it in briefs}
+    last = max(marks)
+    return month_calendar(marks, month_range(min(marks), last), (last.year, last.month), from_src,
+                          "📡 Éditions", "kw-cal-editions")
+
+
+def agenda_calendar(entries, from_src, today=None):
+    today = today or date.today()
+    marks = {}
+    for when, text, _ in entries:
+        link = href(from_src, AGENDA_SRC) + f"#j-{when.isoformat()}"
+        prev = marks.get(when)
+        marks[when] = (link, (prev[1] + " · " if prev else "") + plain(text, 90),
+                       "is-event" + (" is-past" if when < today else ""))
+    first = min([today] + list(marks))
+    last = max([today + timedelta(days=31)] + list(marks))
+    return month_calendar(marks, month_range(first, last), (today.year, today.month), from_src,
+                          "📅 Agenda", "kw-cal-agenda", today)
+
+
+def upcoming_panel(entries, from_src, today=None, n=5):
+    today = today or date.today()
+    nxt = [e for e in entries if e[0] >= today][:n]
+    items = "".join(f'<li><a href="{href(from_src, AGENDA_SRC)}#j-{w.isoformat()}"><span class="kw-up__date">'
+                    f'{JOURS[w.weekday()][:3]}. {w.day} {short_month(w)}</span><span class="kw-up__text">{esc(plain(t, 110))}</span></a></li>'
+                    for w, t, _ in nxt)
+    return (f'<div class="kw-up"><p class="kw-up__title">⏳ À venir <a href="{href(from_src, AGENDA_SRC)}">agenda complet →</a></p>'
+            + (f'<ul>{items}</ul>' if items else '<p class="kw-muted">Aucun jalon daté à venir dans les derniers briefs.</p>') + "</div>")
 
 
 # ---------------------------------------------------------------- analyses et dossiers : en-tête
@@ -881,13 +1031,10 @@ def decorate_document(markdown, page):
 # ---------------------------------------------------------------- navigation
 
 def build_nav(items, themes, threads=None):
-    veille = ["veille/index.md"]
-    fils = [f"{THREADS_DIR}/index.md"] + [
-        {thread_title(entries): thread_src(event)}
-        for event, entries in sorted((threads or {}).items(), key=lambda kv: kv[1][-1]["date"], reverse=True)]
-    veille += [{"🔎 Explorer": EXPLORER_SRC}, {"🧵 Fils d'actualité": fils},
-               {"🗓️ Semaines": [f"{WEEKS_DIR}/index.md"] + [{t: w} for t, w in STATE.get("weeks", [])]},
-               {"📅 Agenda": AGENDA_SRC}, {"📚 Pile de lecture": READING_SRC}]
+    # Fils et semaines : seule leur page d'index figure dans le menu (pages individuelles hors
+    # navigation, voir not_in_nav dans mkdocs.yml) pour que la barre latérale reste courte.
+    veille = ["veille/index.md", {"🔎 Explorer": EXPLORER_SRC}, {"🧵 Fils d'actualité": f"{THREADS_DIR}/index.md"},
+              {"🗓️ Semaines": f"{WEEKS_DIR}/index.md"}, {"📅 Agenda": AGENDA_SRC}, {"📚 Pile de lecture": READING_SRC}]
     months = {}
     for it in items["veille"]:
         months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(
@@ -1196,6 +1343,7 @@ def on_config(config):
 
     glossary = build_glossary(items, load_yaml(root / "data" / "glossaire.yml", []))
     threads = STATE["threads"] = build_threads(items["veille"])
+    STATE["agenda"] = agenda_entries(items["veille"])
     STATE["linked"], STATE["mentions"] = {}, {}         # analyses/dossiers <-> événements de la veille
     for doc in sorted(items["analysis"] + items["dossier"], key=lambda x: x["date"], reverse=True):
         for event in doc["events"]:
@@ -1210,8 +1358,9 @@ def on_config(config):
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary))]
     pages.append(glossary_data(glossary))
     pages += pages_threads(threads)
-    weeks, STATE["weeks"] = pages_weeks(items["veille"], threads)
-    pages += weeks + [page_explorer(items["veille"]), page_readings(items["veille"]), page_agenda(items["veille"])]
+    pages += pages_weeks(items["veille"], threads)
+    pages += [page_explorer(items["veille"]), explorer_data(items["veille"]),
+              page_readings(items["veille"]), page_agenda(items["veille"])]
     STATE["pages"] = pages
     STATE["items"] = items
     STATE["html"] = {}

@@ -42,6 +42,12 @@ theme:
     - content.code.annotate   # annotations (1) dans le code
     - content.tabs.link       # onglets Linux/Windows synchronisés
 
+# Pages de fils et de semaines générées hors du menu (leurs index y figurent) : la barre
+# latérale reste courte quel que soit le nombre de fils ou de semaines.
+not_in_nav: |
+  /veille/fils/*.md
+  /veille/semaines/*.md
+
 # Génère l'accueil, la veille, les analyses, les dossiers et les ressources
 hooks:
   - hooks/portal.py
