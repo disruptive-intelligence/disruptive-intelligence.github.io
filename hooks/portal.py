@@ -329,6 +329,11 @@ def page_veille(items, sources):
     src = "veille/index.md"
     briefs = items["veille"]
     # sources : rangées dans la rubrique du brief où elles sont le plus citées
+    # nom cité dans un brief -> source (nom du média ou ancien intitulé du flux)
+    canonical = {}
+    for s in sources:
+        for label in [s["name"]] + list(s.get("aliases") or []):
+            canonical[label.strip()] = s["name"]
     cited = {}
     for it in briefs:
         sec = None
@@ -337,7 +342,7 @@ def page_veille(items, sources):
                 sec = section_key(line)
             m = re.match(r"\*\*Sources? :\*\* \[([^\]]+?) — ", line)
             if m and sec:
-                c = cited.setdefault(m.group(1).strip(), {})
+                c = cited.setdefault(canonical.get(m.group(1).strip(), m.group(1).strip()), {})
                 c[sec] = c.get(sec, 0) + 1
     quads = {k: [] for k, _ in QUADS}
     for s in sources:

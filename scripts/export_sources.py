@@ -3,7 +3,7 @@
 Usage :
     python scripts/export_sources.py --feeds ../veille-agent/config/feeds.json
 
-Seules les informations publiques sont exportées : nom, site, groupes.
+Seules les informations publiques sont exportées : nom du média, site, groupes, alias.
 (À terme, veille-agent pourra écrire ce fichier lui-même à chaque publication.)
 """
 import argparse
@@ -21,10 +21,20 @@ def main():
     args = ap.parse_args()
 
     feeds = json.loads(Path(args.feeds).read_text(encoding="utf-8"))["feeds"]
-    sources = [{"name": f["name"].strip(),
-                "site": "{0.scheme}://{0.netloc}".format(urlparse(f["url"])),
-                "groups": f.get("source_groups", [])}
-               for f in feeds if f.get("enabled")]
+    # Une source par média (display_name) ; les intitulés bruts des flux restent en alias,
+    # car les anciens briefs les citent encore.
+    by_name = {}
+    for f in feeds:
+        if not f.get("enabled"):
+            continue
+        name = (f.get("display_name") or f["name"]).strip()
+        s = by_name.setdefault(name, {"name": name,
+                                      "site": "{0.scheme}://{0.netloc}".format(urlparse(f["url"])),
+                                      "groups": [], "aliases": []})
+        s["groups"] += [g for g in f.get("source_groups", []) if g not in s["groups"]]
+        if f["name"].strip() != name and f["name"].strip() not in s["aliases"]:
+            s["aliases"].append(f["name"].strip())
+    sources = [{k: v for k, v in s.items() if v or k != "aliases"} for s in by_name.values()]
     Path(args.out).write_text(
         "# Généré par scripts/export_sources.py — sources actives de veille-agent.\n"
         + yaml.safe_dump(sources, allow_unicode=True, sort_keys=False), encoding="utf-8")

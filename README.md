@@ -1,61 +1,81 @@
 # Disruptive Intelligence — portail
 
-Veille, analyses, dossiers et wiki technique (pentest, CTF, cyber), construit avec
-[MkDocs](https://www.mkdocs.org/) + [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/).
+Site public **https://disruptive-intelligence.github.io/** : veille quotidienne (Morning
+Intelligence Brief), analyses, dossiers, wiki Pentest, Bibliothèque, Ressources et Glossaire.
+Construit avec [MkDocs](https://www.mkdocs.org/) + [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/),
+identité visuelle « Aurore » (sombre et claire).
 
-## Lancer le wiki en local
+Les contenus de veille sont **produits par [veille-agent](https://github.com/H4ckeurM4n/veille-agent)**
+(dépôt privé) puis copiés ici ; le reste du site est écrit à la main ou généré au build.
+
+## Lancer le site en local
 
 ```powershell
-python -m venv .venv                          # une seule fois
-.\.venv\Scripts\pip install -r requirements.txt   # une seule fois
-.\.venv\Scripts\mkdocs serve
+python -m venv .venv                               # une seule fois
+.\.venv\Scripts\pip install -r requirements.txt    # une seule fois
+.\.venv\Scripts\mkdocs serve -a 127.0.0.1:8002
 ```
 
-Puis ouvrir http://127.0.0.1:8000
+Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`, relancer
+`mkdocs serve` (le hook reste en mémoire). Avant un push : `mkdocs build --strict`.
 
 ## Structure
 
-- `docs/` : contenu Markdown (la source, versionnée)
-  - `veille/AAAA/MM/AAAA-MM-JJ.md`, `analyses/`, `dossiers/` : publiés par veille-agent
-  - le reste : le wiki (Pentest, Bibliothèque)
-- `data/ressources.yml` : ressources de la veille (thème > rubrique > liens), à éditer à la main
-- `data/sources.yml` : sources suivies par veille-agent (`scripts/export_sources.py`)
-- `hooks/portal.py` : génère **à chaque build** l'accueil, les pages d'index et la navigation
-- `mkdocs.yml` : configuration et navigation du wiki
-- `site/` : site généré (ignoré par Git)
+| Chemin | Rôle |
+|---|---|
+| `docs/veille/AAAA/MM/AAAA-MM-JJ.md` | Morning Briefs, publiés par veille-agent (ou déposés en mode secours) |
+| `docs/analyses/<slug>.md`, `docs/dossiers/<slug>.md` | Analyses et dossiers, publiés par veille-agent |
+| `docs/start/`, `methodology/`, `services/`… | Wiki Pentest, écrit à la main |
+| `data/bibliotheque.yml` | Arborescence de la Bibliothèque (miroir des notes Obsidian, notes prévues comprises) |
+| `data/ressources.yml` | Ressources de veille (thème > rubrique > liens), à éditer à la main |
+| `data/sources.yml` | Sources suivies, générées par `scripts/export_sources.py` depuis `veille-agent/config/feeds.json` |
+| `data/glossaire.yml` | Ajouts et corrections manuels du glossaire (prioritaires) |
+| `data/redirects.yml` | Anciennes adresses Jekyll → nouvelles pages |
+| `hooks/portal.py` | Génère **à chaque build** l'accueil, les index, la navigation, le glossaire, les fils d'actualité, les flux RSS et les redirections |
+| `docs/stylesheets/extra.css` | Thème « Aurore » (variables `--kw-*`, déclinaison claire en fin de fichier) |
+| `docs/javascripts/` | Masquage de la barre latérale, infobulles du glossaire |
+| `overrides/` | En-tête (onglets), balises `<head>` (icônes, flux RSS), page 404 |
+| `_preview/` | Maquettes de thèmes (hors site publié) |
+| `site/` | Site généré (ignoré par Git) |
 
-## En-tête des contenus de veille
+## Ce que le hook génère
+
+- **Accueil, pages Veille / Analyses / Dossiers / Ressources / Bibliothèque** et leur navigation,
+  à partir des en-têtes des fichiers : aucune liste à tenir à la main.
+- **Glossaire** : entrées `- **Terme** — définition` (ou `- **Terme :** définition`) des sections
+  « Lexique du jour » des briefs et « Repères pour comprendre le document » des analyses, complétées
+  par `data/glossaire.yml`. Sur tout le site, la première occurrence d'un terme est soulignée et
+  affiche sa définition au survol ou au toucher (`assets/glossary.json`).
+- **Fils d'actualité** (`veille/fils/`) : chaque sujet d'un brief porte un repère
+  `<!-- selection: event:evt-… -->` écrit par veille-agent ; dès qu'un même événement apparaît dans
+  deux éditions, il reçoit une page chronologique et une pastille « Fil d'actualité » sous le sujet.
+- **Sommaire repliable** des 20 sujets en tête de chaque brief (téléphone).
+- **Flux RSS** à contenu complet : `feed.xml` (tout) et `veille/feed.xml` (briefs).
+- **Contrôle du contrat éditorial** : un contenu hors contrat fait échouer le build.
+
+## En-tête des contenus de veille (contrat partagé avec veille-agent)
 
 ```yaml
 ---
-title: "Analyse — Titre"
-date: 2026-09-23
-kind: analysis        # veille | analysis | dossier
-theme: ia             # ia | cyber | tech | ie | geo  (analyses et dossiers)
-author: Google DeepMind   # analyses
+title: "Morning Intelligence Brief — 28 septembre 2026"
+date: 2026-09-28
+kind: veille                 # veille | analysis | dossier
 ---
 ```
 
-## Tester en local avec le contenu de la veille
-
-```powershell
-.\.venv\Scripts\python scripts\migrate_jekyll.py --src ..\disruptive-intelligence.github.io --dest docs
-```
-
-(Dans ce dépôt de travail, `docs/veille`, `docs/analyses` et `docs/dossiers` sont ignorés par Git.)
-
-## Règle de sécurité
-
-Ce dépôt est **public**. Jamais d'IP réelles de lab, flags, mots de passe, tokens
-ou données de machines. Uniquement de la connaissance générique.
+- **Analyse** : `kind: analysis`, `theme` (un seul : `ia | cyber | tech | geo-ie`), `slug` persistant
+  identique au nom du fichier ; `author`, `organization`, `tags` facultatifs.
+- **Dossier** : `kind: dossier`, `themes` (liste parmi `ia | cyber | tech | geo-ie`), `slug`.
+- **Brief** : nom de fichier dérivé de la date, `docs/veille/AAAA/MM/AAAA-MM-JJ.md`.
 
 ## Publication
 
-Chaque push sur `main` déclenche `.github/workflows/deploy.yml` :
-scan de secrets (gitleaks) → build strict → publication sur
-https://disruptive-intelligence.github.io/wiki_knowledge/
+Chaque push sur `main` déclenche `.github/workflows/deploy.yml` : scan de secrets (gitleaks) →
+`mkdocs build --strict` → déploiement GitHub Pages sur https://disruptive-intelligence.github.io/.
+Retour arrière possible : l'étiquette `jekyll-final` pointe sur le dernier état Jekyll.
 
-## Garde-fou local
+## Règles de sécurité
 
-Un hook `pre-commit` (non versionné, dans `.git/hooks/`) lance `gitleaks git --staged`
-et bloque tout commit contenant un secret. À réinstaller si le dépôt est recloné.
+Ce dépôt est **public**. Jamais d'IP réelles de lab, flags, mots de passe, tokens ou données de
+machines ; uniquement de la connaissance générique. Le workflow de publication scanne tout
+l'historique avec gitleaks et refuse de déployer en cas de secret détecté.
