@@ -151,7 +151,8 @@ def load_content(docs_dir):
             src = f.relative_to(docs_dir).as_posix()
             check_contract(src, f.stem, kind, meta)
             it = dict(src=src, title=str(meta.get("title", f.stem)), date=d, theme=meta.get("theme"),
-                      themes=list(meta.get("themes") or []), author=meta.get("author"), body=body)
+                      themes=list(meta.get("themes") or []), author=meta.get("author"), body=body,
+                      kind=kind, events=[str(e) for e in meta.get("events") or []])
             if kind == "veille":
                 it["headlines"] = [re.sub(r"\s+", " ", h).strip() for h in re.findall(r"^### ▸ (.+)$", body, re.M)]
                 ess = re.search(r"^!!! abstract \"L'essentiel\"\s*\n\n((?: {4}[-*] .+\n?)+)", body, re.M)
@@ -244,6 +245,11 @@ def pages_threads(threads):
             body += (f"\n### {fr_date(s['date'])} · {s['lane']}\n\n**[{s['title']}]({link})**\n\n"
                      + (f"{s['fact']}\n" if s["fact"] else ""))
         title = thread_title(entries)
+        docs = STATE.get("linked", {}).get(event, [])
+        if docs:
+            body += "\n## Pour approfondir\n\n" + "".join(
+                f"- {'Analyse' if d['kind'] == 'analysis' else 'Dossier'} : "
+                f"[{clean_title(d['title'])}]({posixpath.relpath(d['src'], THREADS_DIR)})\n" for d in docs)
         out.append((src, f"""# 🧵 {title}
 
 <span class="kw-muted">Fil d'actualité · {len(days)} éditions, du {fr_date(days[0])} au {fr_date(days[-1])} ·
@@ -299,6 +305,9 @@ def decorate_brief(markdown, src):
             when = ", ".join(f"{d.day} {short_month(d)}" for d in others)
             pills += (f'<span class="kw-thread">🧵 Fil d\'actualité · aussi le {esc(when)} · '
                       f'<a href="{href(src, thread_src(s["event"]))}">chronologie →</a></span>')
+        for doc in STATE.get("linked", {}).get(s["event"], []):      # analyses et dossiers liés (`events`)
+            pills += (f'<span class="kw-thread kw-linked">{"🔎 Analyse" if doc["kind"] == "analysis" else "🗂️ Dossier"} · '
+                      f'<a href="{href(src, doc["src"])}">{esc(clean_title(doc["title"]))}</a></span>')
         if pills:
             lines.insert(s["line"] + 2, f'\n<div class="kw-subj-meta">{pills}</div>\n')
     for i, line in enumerate(lines):                   # titres de rubrique
@@ -853,6 +862,17 @@ def decorate_document(markdown, page):
     head = (f'<div class="kw-doc-head"><span class="kw-doc-head__kind">{label}</span>'
             f'<span class="kw-doc-head__meta">{meta_line(who, fr_date(d), f"{reading_minutes(markdown)} min de lecture")}</span>'
             + (f'<span class="kw-doc-head__tags">{tags}</span>' if tags else "") + "</div>\n")
+    follow = []                                        # événements de la veille éclairés par le document
+    for event in meta.get("events") or []:
+        mentions = STATE.get("mentions", {}).get(str(event), [])
+        if str(event) in STATE.get("threads", {}):
+            follow.append(f'<a href="{href(page.file.src_uri, thread_src(str(event)))}">🧵 {esc(thread_title(STATE["threads"][str(event)]))}</a>')
+        elif mentions:
+            m = mentions[-1]
+            follow.append(f'<a href="{href(page.file.src_uri, m["src"])}#{m["anchor"]}">📡 {esc(m["title"])} '
+                          f'({m["date"].day} {short_month(m["date"])})</a>')
+    if follow:
+        head = head.replace("</div>\n", f'<span class="kw-doc-head__follow">Dans la veille : {" · ".join(follow)}</span></div>\n', 1)
     markdown = re.sub(r"^# (?:Analyse\s*—\s*)?(.+)$", lambda m: f"# {m.group(1)}\n\n{head}", markdown, count=1, flags=re.M)
     markdown = fold_section(markdown, "Métadonnées", "info", "Fiche technique du document")
     return fold_section(markdown, "Sources de synthèse", "note", "Sources de synthèse")
@@ -1176,6 +1196,13 @@ def on_config(config):
 
     glossary = build_glossary(items, load_yaml(root / "data" / "glossaire.yml", []))
     threads = STATE["threads"] = build_threads(items["veille"])
+    STATE["linked"], STATE["mentions"] = {}, {}         # analyses/dossiers <-> événements de la veille
+    for doc in sorted(items["analysis"] + items["dossier"], key=lambda x: x["date"], reverse=True):
+        for event in doc["events"]:
+            STATE["linked"].setdefault(event, []).append(doc)
+    for s in sorted(all_subjects(items["veille"]), key=lambda s: s["date"]):
+        if s["event"]:
+            STATE["mentions"].setdefault(s["event"], []).append(s)
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]

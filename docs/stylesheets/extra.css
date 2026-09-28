@@ -805,3 +805,5 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-essentiel ul { margin: 0 0 0 1rem; }
 .md-typeset .kw-essentiel li { margin: .15rem 0; font-size: .74rem; }
 .md-typeset .admonition.abstract { font-size: .74rem; }
+.md-typeset .kw-doc-head__follow { font-size: .68rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-doc-head__follow a { font-weight: 600; }
