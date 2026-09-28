@@ -62,6 +62,11 @@ la nettoyer dans Obsidian, puis relancer. Relire en local avant de committer.
   `<!-- selection: event:evt-… -->` écrit par veille-agent ; dès qu'un même événement apparaît dans
   deux éditions, il reçoit une page chronologique et une pastille « Fil d'actualité » sous le sujet.
 - **Sommaire repliable** des 20 sujets en tête de chaque brief (téléphone).
+- **Outils de veille** (`veille/`) : Explorer (tous les sujets, filtrables), Pile de lecture (reading
+  lists, cases « lu » locales), Agenda (jalons datés d'« À surveiller »), Semaines (sujets par rubrique),
+  calendrier des éditions ; badges de fraîcheur, couleurs de rubrique, encadré « L'essentiel ».
+- **Analyses et dossiers** : en-tête (nature, thème, auteur, date, durée), métadonnées repliées, et
+  liens avec la veille quand l'en-tête déclare `events`.
 - **Flux RSS** à contenu complet : `feed.xml` (tout) et `veille/feed.xml` (briefs).
 - **Contrôle du contrat éditorial** : un contenu hors contrat fait échouer le build.
 
