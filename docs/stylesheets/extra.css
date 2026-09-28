@@ -793,3 +793,15 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-doc-head__meta { font-size: .72rem; color: var(--md-default-fg-color--light); }
 .md-typeset .kw-doc-head__tags { display: flex; flex-wrap: wrap; gap: .3rem; }
 .md-typeset .kw-chip--static { cursor: default; font-size: .6rem; }
+
+/* « L'essentiel » : encadré en tête des briefs et rappel sur l'accueil */
+.md-typeset .admonition.abstract, .md-typeset details.abstract { border-color: #ed4d5a; background: var(--kw-panel); }
+.md-typeset .abstract > .admonition-title { background: color-mix(in srgb, #ed4d5a 12%, transparent); }
+.md-typeset .abstract > .admonition-title::before { background-color: #ed4d5a; }
+.md-typeset .kw-essentiel { margin: 1rem 0 0; padding: .8rem 1.1rem; border: 1px solid var(--kw-line);
+  border-left: 3px solid #ed4d5a; border-radius: 0 14px 14px 0; background: var(--kw-panel); }
+.md-typeset .kw-essentiel__title { margin: 0 0 .3rem; font-weight: 800; }
+.md-typeset .kw-essentiel__title a { font-size: .68rem; font-weight: 600; margin-left: .4rem; }
+.md-typeset .kw-essentiel ul { margin: 0 0 0 1rem; }
+.md-typeset .kw-essentiel li { margin: .15rem 0; font-size: .74rem; }
+.md-typeset .admonition.abstract { font-size: .74rem; }

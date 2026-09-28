@@ -154,6 +154,8 @@ def load_content(docs_dir):
                       themes=list(meta.get("themes") or []), author=meta.get("author"), body=body)
             if kind == "veille":
                 it["headlines"] = [re.sub(r"\s+", " ", h).strip() for h in re.findall(r"^### ▸ (.+)$", body, re.M)]
+                ess = re.search(r"^!!! abstract \"L'essentiel\"\s*\n\n((?: {4}[-*] .+\n?)+)", body, re.M)
+                it["essentiel"] = [l.strip()[2:] for l in ess.group(1).splitlines()] if ess else []
             else:
                 it["summary"] = summary_of(body)
             items[kind].append(it)
@@ -519,6 +521,15 @@ def resources_carousel(themes, src):
     return carousel([cards])
 
 
+def essentiel_block(it, from_src):
+    """Accueil : l'encadré « L'essentiel » du dernier brief, quand il existe (depuis le 29/09)."""
+    if not it.get("essentiel"):
+        return ""
+    lis = "".join(f"<li>{esc(re.sub(r'[*`]', '', x))}</li>" for x in it["essentiel"])
+    return (f'<div class="kw-essentiel"><p class="kw-essentiel__title">L\'essentiel du {it["date"].day} '
+            f'{short_month(it["date"])} <a href="{href(from_src, it["src"])}">lire le brief →</a></p><ul>{lis}</ul></div>')
+
+
 def page_home(items, themes, glossary):
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
@@ -569,6 +580,7 @@ hide:
 ## À la une
 
 <div class="kw-une">{une}</div>
+{essentiel_block(briefs[0], src) if briefs else ""}
 
 ## 📡 Veille récente
 
