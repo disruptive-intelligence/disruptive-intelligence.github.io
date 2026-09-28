@@ -1188,6 +1188,7 @@ def on_config(config):
     STATE["pages"] = pages
     STATE["items"] = items
     STATE["html"] = {}
+    STATE["digests"] = {}
 
     nav = list(config.nav or [])
     pos = next((i + 1 for i, e in enumerate(nav) if isinstance(e, dict) and NAV_ANCHOR in e), 0)
@@ -1208,11 +1209,13 @@ def on_config(config):
 def on_post_page(output, page, config):
     """Anti-cache : ajoute l'empreinte du fichier aux styles et scripts du site (extra.css?v=…),
     pour que chaque nouvelle version soit rechargée par les navigateurs."""
+    digests = STATE.setdefault("digests", {})          # calculées une fois par build, pas à chaque page
     for asset in list(config.extra_css or []) + [str(s) for s in (config.extra_javascript or [])]:
-        path = Path(config.docs_dir) / asset
-        if path.exists():
-            digest = hashlib.sha1(path.read_bytes()).hexdigest()[:10]
-            output = output.replace(f'{asset}"', f'{asset}?v={digest}"')
+        if asset not in digests:
+            path = Path(config.docs_dir) / asset
+            digests[asset] = hashlib.sha1(path.read_bytes()).hexdigest()[:10] if path.exists() else None
+        if digests[asset]:
+            output = output.replace(f'{asset}"', f'{asset}?v={digests[asset]}"')
     return output
 
 

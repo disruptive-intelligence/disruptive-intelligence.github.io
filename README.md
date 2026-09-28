@@ -78,4 +78,5 @@ Retour arrière possible : l'étiquette `jekyll-final` pointe sur le dernier ét
 
 Ce dépôt est **public**. Jamais d'IP réelles de lab, flags, mots de passe, tokens ou données de
 machines ; uniquement de la connaissance générique. Le workflow de publication scanne tout
-l'historique avec gitleaks et refuse de déployer en cas de secret détecté.
+l'historique avec gitleaks (`.gitleaks.toml` : règles par défaut + flags de CTF et IP de lab
+HackTheBox, seule exception : `docs/start/conventions.md`) et refuse de déployer en cas de fuite.

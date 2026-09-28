@@ -1,2 +1,6 @@
+# Versions épinglées volontairement : ne pas mettre à jour à l'aveugle.
+# MkDocs 2.0 supprime plugins, hooks et surcharges de thème ; tout le portail repose sur
+# hooks/portal.py. Rester en 1.6.x ; réévaluer Zensical (successeur de Material) le jour
+# où il offre un équivalent des hooks.
 mkdocs==1.6.1
 mkdocs-material==9.7.7
