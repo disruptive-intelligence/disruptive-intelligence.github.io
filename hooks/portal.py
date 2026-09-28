@@ -24,7 +24,7 @@ import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import quote, urljoin, urlparse
 
 import yaml
 from mkdocs.exceptions import PluginError
@@ -43,6 +43,8 @@ THEMES = {
 }
 # Rubriques des briefs -> quadrants de la page Veille
 QUADS = [("cyber", "🛡️ Cyber"), ("tech", "💻 Tech"), ("geo-ie", "🌍 Géopolitique & IE"), ("ia", "🚀 IA & rupture")]
+# Originaux des analyses : conservés dans le dépôt privé (lien lisible par son seul propriétaire).
+PRIVATE_SOURCES = "https://github.com/H4ckeurM4n/veille-agent/blob/main/"
 GROUP_FALLBACK = [("alertes-cyber", "cyber"), ("ia-rupture", "ia"), ("geopolitique-ie", "geo-ie"), ("tech", "tech")]
 
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
@@ -1066,6 +1068,16 @@ def decorate_document(markdown, page):
                           f'({m["date"].day} {short_month(m["date"])})</a>')
     if follow:
         head = head.replace("</div>\n", f'<span class="kw-doc-head__follow">Dans la veille : {" · ".join(follow)}</span></div>\n', 1)
+    # Document original : lien public (source_url) et/ou fichier du dépôt privé (source_file).
+    # Le portail n'héberge jamais le document lui-même.
+    links = ""
+    if meta.get("source_url"):
+        links += (f'<a class="kw-doc-btn" href="{esc(meta["source_url"])}" rel="noopener">📄 Document original</a>')
+    if meta.get("source_file"):
+        links += (f'<a class="kw-doc-btn kw-doc-btn--private" href="{PRIVATE_SOURCES}{quote(str(meta["source_file"]))}" '
+                  f'rel="noopener" title="Fichier conservé dans le dépôt privé veille-agent (accès réservé)">🔒 Original (privé)</a>')
+    if links:
+        head = head.replace("</div>\n", f'<span class="kw-doc-head__links">{links}</span></div>\n', 1)
     markdown = re.sub(r"^# (?:Analyse\s*—\s*)?(.+)$", lambda m: f"# {m.group(1)}\n\n{head}", markdown, count=1, flags=re.M)
     markdown = fold_section(markdown, "Métadonnées", "info", "Fiche technique du document")
     return fold_section(markdown, "Sources de synthèse", "note", "Sources de synthèse")
