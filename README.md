@@ -27,6 +27,7 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 | `docs/analyses/<slug>.md`, `docs/dossiers/<slug>.md` | Analyses et dossiers, publiés par veille-agent |
 | `docs/start/`, `methodology/`, `services/`… | Wiki Pentest, écrit à la main |
 | `data/bibliotheque.yml` | Arborescence de la Bibliothèque (miroir des notes Obsidian, notes prévues comprises) |
+| `scripts/import_notes.py` | Import de notes Obsidian choisies dans `docs/library/` (liens, images, contrôle secrets/IP/flags) |
 | `data/ressources.yml` | Ressources de veille (thème > rubrique > liens), à éditer à la main |
 | `data/sources.yml` | Sources suivies, générées par `scripts/export_sources.py` depuis `veille-agent/config/feeds.json` |
 | `data/glossaire.yml` | Ajouts et corrections manuels du glossaire (prioritaires) |
@@ -37,6 +38,17 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 | `overrides/` | En-tête (onglets), balises `<head>` (icônes, flux RSS), page 404 |
 | `_preview/` | Maquettes de thèmes (hors site publié) |
 | `site/` | Site généré (ignoré par Git) |
+
+## Importer des notes dans la Bibliothèque
+
+```powershell
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --list        # correspondances
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes Cyber/01_CTI/CTI.md
+```
+
+Seules les notes nommées sont importées ; la page « à importer » correspondante est remplacée.
+Une note contenant un flag, une IP de lab, une clé ou un mot de passe en clair est refusée :
+la nettoyer dans Obsidian, puis relancer. Relire en local avant de committer.
 
 ## Ce que le hook génère
 
