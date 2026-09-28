@@ -1,4 +1,4 @@
-{#- Icônes : écran d'accueil iPhone / Android et couleur de la barre du navigateur -#}
+{#- Icônes : écran d'accueil iPhone / Android, couleur de la barre du navigateur, flux RSS -#}
 {% extends "base.html" %}
 
 {% block extrahead %}
@@ -6,4 +6,6 @@
   <link rel="manifest" href="{{ 'site.webmanifest' | url }}">
   <meta name="apple-mobile-web-app-title" content="Disruptive">
   <meta name="theme-color" content="#151111">
+  <link rel="alternate" type="application/rss+xml" title="Disruptive Intelligence" href="{{ 'feed.xml' | url }}">
+  <link rel="alternate" type="application/rss+xml" title="Morning Intelligence Brief" href="{{ 'veille/feed.xml' | url }}">
 {% endblock %}

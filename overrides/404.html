@@ -1,0 +1,17 @@
+{#- Page introuvable : servie par GitHub Pages pour toute adresse inconnue -#}
+{% extends "main.html" %}
+
+{% block content %}
+<div class="kw-404">
+  <p class="kw-404__code">404</p>
+  <h1>Signal perdu</h1>
+  <p>Cette page n'existe pas, ou elle a changé d'adresse depuis la migration du site.</p>
+  <p class="kw-404__links">
+    <a href="{{ config.site_url }}">🏠 Accueil</a>
+    <a href="{{ config.site_url }}veille/">📡 Dernière veille</a>
+    <a href="{{ config.site_url }}analyses/">🔎 Analyses</a>
+    <a href="{{ config.site_url }}library/">📚 Bibliothèque</a>
+  </p>
+  <p class="kw-muted">Astuce : la loupe en haut à droite cherche dans tout le site.</p>
+</div>
+{% endblock %}

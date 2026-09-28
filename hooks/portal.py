@@ -17,12 +17,14 @@ Le contrat (taxonomie, slug = nom du fichier) est vérifié par check_contract()
 """
 import hashlib
 import html
+import json
 import posixpath
 import re
 import unicodedata
-from datetime import date
+from datetime import date, datetime, timezone
+from email.utils import format_datetime
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import yaml
 from mkdocs.exceptions import PluginError
@@ -239,6 +241,8 @@ hide:
 # 📡 Veille quotidienne
 
 Les éditions du **Morning Intelligence Brief** : les événements retenus, leur contexte et les sources pour approfondir.
+
+<a class="kw-rss" href="feed.xml">📡 S'abonner au flux RSS</a> <span class="kw-muted">· à coller dans un lecteur RSS (Feedly, NetNewsWire, Inoreader…) pour recevoir chaque édition</span>
 
 {editions}
 
@@ -597,11 +601,14 @@ def first_sentence(text):
 
 
 def build_glossary(items, manual):
-    """Termes des « Lexique du jour » des briefs (du plus récent au plus ancien), complétés
+    """Termes des « Lexique du jour » des briefs et des mini-glossaires des analyses
+    (« Repères pour comprendre le document »), du plus récent au plus ancien, complétés
     et corrigés par data/glossaire.yml, prioritaire."""
     terms = {}
-    for it in items["veille"]:                                   # déjà triés du plus récent au plus ancien
-        m = re.search(r"^## Lexique du jour\s*\n(.*?)(?=^## |^\*Lecture|\Z)", it["body"], re.M | re.S)
+    sources = sorted(items["veille"] + items["analysis"], key=lambda x: x["date"], reverse=True)
+    for it in sources:
+        m = re.search(r"^## (?:Lexique du jour|Repères pour comprendre le document)\s*\n(.*?)(?=^## |^\*Lecture|\Z)",
+                      it["body"], re.M | re.S)
         if not m:
             continue
         for line in m.group(1).splitlines():
@@ -644,11 +651,77 @@ def page_glossary(glossary):
             body += (f"<br><span class=\"kw-muted\">{' · '.join(extras)}</span>" if extras else "") + "\n\n"
     return src, f"""# 📖 Glossaire
 
-Les notions expliquées dans le **Lexique du jour** des Morning Briefs, rassemblées automatiquement,
-complétées par des ajouts manuels (`data/glossaire.yml`). {len(glossary)} termes.
+Les notions expliquées dans le **Lexique du jour** des Morning Briefs et dans les repères des analyses,
+rassemblées automatiquement, complétées par des ajouts manuels (`data/glossaire.yml`). {len(glossary)} termes.
+Partout sur le site, un terme souligné en pointillé affiche sa définition au survol ou au toucher.
 
 {index}
 {body}"""
+
+
+def glossary_data(glossary):
+    """assets/glossary.json : lu par javascripts/glossary-tooltips.js pour les infobulles."""
+    url = url_of(GLOSSARY_SRC)
+    def plain(text):                                   # l'infobulle affiche du texte brut
+        text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+        return re.sub(r"\*+|`", "", text).strip()
+    data = [{"t": t["term"], "d": plain(t["definition"]), "u": f"{url}#{letter_anchor(t['term'])}"}
+            for t in glossary if t["definition"] and len(t["term"]) >= 2]
+    return "assets/glossary.json", json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+
+
+# ---------------------------------------------------------------- flux RSS
+
+FEED_SIZE = 20
+
+
+def rfc822(d):
+    """Date de parution à 7 h (heure de Paris) au format RSS."""
+    moment = datetime(d.year, d.month, d.day, 7, 0)
+    try:
+        from zoneinfo import ZoneInfo
+        moment = moment.replace(tzinfo=ZoneInfo("Europe/Paris"))
+    except Exception:                                  # pas de base de fuseaux : UTC
+        moment = moment.replace(tzinfo=timezone.utc)
+    return format_datetime(moment)
+
+
+def absolute_links(fragment, page_url):
+    """Les lecteurs RSS n'ont pas de page de référence : liens et images en adresses absolues."""
+    return re.sub(r'(href|src)="(?![a-z]+:|#)([^"]*)"',
+                  lambda m: f'{m.group(1)}="{urljoin(page_url, m.group(2))}"', fragment)
+
+
+def write_feed(path, title, description, entries, config):
+    site = config.site_url.rstrip("/") + "/"
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>',
+           f"<title>{esc(title)}</title><link>{site}</link><description>{esc(description)}</description>",
+           f'<language>fr</language><atom:link href="{site}{path}" rel="self" type="application/rss+xml"/>']
+    for it in entries[:FEED_SIZE]:
+        link = site + url_of(it["src"])
+        body = STATE["html"].get(it["src"], "")
+        label = {"analysis": "Analyse", "dossier": "Dossier"}.get(it["kind"])
+        name = clean_title(it["title"])
+        xml.append(f"<item><title>{esc(f'{label} — {name}' if label else name)}</title><link>{link}</link>"
+                   f'<guid isPermaLink="true">{link}</guid><pubDate>{rfc822(it["date"])}</pubDate>'
+                   f"<description><![CDATA[{absolute_links(body, link).replace(']]>', ']]&gt;')}]]></description></item>")
+    xml.append("</channel></rss>")
+    out = Path(config.site_dir) / path
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(xml), encoding="utf-8")
+
+
+def write_feeds(config):
+    items = STATE.get("items")
+    if not items or not config.site_url:
+        return
+    tagged = [dict(it, kind=kind) for kind in ("veille", "analysis", "dossier") for it in items[kind]]
+    everything = sorted(tagged, key=lambda x: x["date"], reverse=True)
+    write_feed("feed.xml", "Disruptive Intelligence",
+               "Morning Intelligence Brief, analyses et dossiers : Tech · IA · Cyber · Géopolitique.", everything, config)
+    write_feed("veille/feed.xml", "Disruptive Intelligence — Morning Intelligence Brief",
+               "La veille quotidienne, une édition par jour.", [it for it in everything if it["kind"] == "veille"], config)
 
 
 # ---------------------------------------------------------------- hooks MkDocs
@@ -666,7 +739,10 @@ def on_config(config):
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary))]
+    pages.append(glossary_data(glossary))
     STATE["pages"] = pages
+    STATE["items"] = items
+    STATE["html"] = {}
 
     nav = list(config.nav or [])
     pos = next((i + 1 for i, e in enumerate(nav) if isinstance(e, dict) and NAV_ANCHOR in e), 0)
@@ -695,8 +771,17 @@ def on_post_page(output, page, config):
     return output
 
 
+def on_page_content(html, page, config, files):
+    """Garde le HTML rendu des briefs, analyses et dossiers pour le contenu des flux RSS."""
+    if page.file.src_uri.startswith(("veille/", "analyses/", "dossiers/")) and "html" in STATE:
+        STATE["html"][page.file.src_uri] = html
+    return html
+
+
 def on_post_build(config):
-    """Redirections : chaque ancienne adresse Jekyll devient une petite page qui renvoie vers la nouvelle."""
+    """Flux RSS, puis redirections : chaque ancienne adresse Jekyll devient une petite page
+    qui renvoie vers la nouvelle."""
+    write_feeds(config)
     redirects = load_yaml(Path(config.config_file_path).parent / "data" / "redirects.yml", {}) or {}
     base = "/" + urlparse(config.site_url or "/").path.strip("/")
     base = base.rstrip("/") + "/"

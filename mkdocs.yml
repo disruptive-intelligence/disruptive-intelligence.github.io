@@ -56,6 +56,7 @@ extra_css:
 
 extra_javascript:
   - javascripts/sidebar-toggle.js
+  - javascripts/glossary-tooltips.js   # définitions du glossaire au survol
 
 plugins:
   - search:
