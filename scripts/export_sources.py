@@ -35,9 +35,9 @@ def main():
         if f["name"].strip() != name and f["name"].strip() not in s["aliases"]:
             s["aliases"].append(f["name"].strip())
     sources = [{k: v for k, v in s.items() if v or k != "aliases"} for s in by_name.values()]
-    Path(args.out).write_text(
+    Path(args.out).write_bytes((
         "# Généré par scripts/export_sources.py — sources actives de veille-agent.\n"
-        + yaml.safe_dump(sources, allow_unicode=True, sort_keys=False), encoding="utf-8")
+        + yaml.safe_dump(sources, allow_unicode=True, sort_keys=False)).encode("utf-8"))   # LF, comme le dépôt
     print(f"{len(sources)} sources -> {args.out}")
 
 

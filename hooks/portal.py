@@ -43,7 +43,7 @@ THEMES = {
 }
 # Rubriques des briefs -> quadrants de la page Veille
 QUADS = [("cyber", "🛡️ Cyber"), ("tech", "💻 Tech"), ("geo-ie", "🌍 Géopolitique & IE"), ("ia", "🚀 IA & rupture")]
-GROUP_FALLBACK = [("alertes-cyber", "cyber"), ("geopolitique-ie", "geo-ie"), ("tech", "tech")]
+GROUP_FALLBACK = [("alertes-cyber", "cyber"), ("ia-rupture", "ia"), ("geopolitique-ie", "geo-ie"), ("tech", "tech")]
 
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
         "août", "septembre", "octobre", "novembre", "décembre"]

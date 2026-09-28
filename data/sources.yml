@@ -158,3 +158,83 @@
   - geopolitique-ie
   aliases:
   - Next - Flux Complet
+- name: LeMagIT
+  site: https://www.lemagit.fr
+  groups:
+  - tech
+- name: Siècle Digital
+  site: https://siecledigital.fr
+  groups:
+  - tech
+- name: Rest of World
+  site: https://restofworld.org
+  groups:
+  - tech
+- name: MIT Technology Review
+  site: https://www.technologyreview.com
+  groups:
+  - ia-rupture
+- name: The Decoder
+  site: https://the-decoder.com
+  groups:
+  - ia-rupture
+- name: OpenAI
+  site: https://openai.com
+  groups:
+  - ia-rupture
+- name: Google DeepMind
+  site: https://deepmind.google
+  groups:
+  - ia-rupture
+- name: ActuIA
+  site: https://www.actuia.com
+  groups:
+  - ia-rupture
+- name: Breaking Defense
+  site: https://breakingdefense.com
+  groups:
+  - ia-rupture
+- name: The War Zone
+  site: https://www.twz.com
+  groups:
+  - ia-rupture
+- name: SpaceNews
+  site: https://spacenews.com
+  groups:
+  - ia-rupture
+- name: The Robot Report
+  site: https://www.therobotreport.com
+  groups:
+  - ia-rupture
+- name: IEEE Spectrum
+  site: https://spectrum.ieee.org
+  groups:
+  - ia-rupture
+- name: FOB – Forces Operations Blog
+  site: https://www.forcesoperations.com
+  groups:
+  - ia-rupture
+- name: IRIS
+  site: https://www.iris-france.org
+  groups:
+  - geopolitique-ie
+- name: War on the Rocks
+  site: https://warontherocks.com
+  groups:
+  - geopolitique-ie
+- name: Diploweb
+  site: https://www.diploweb.com
+  groups:
+  - geopolitique-ie
+- name: Le Rubicon
+  site: https://lerubicon.org
+  groups:
+  - geopolitique-ie
+- name: Areion24.news
+  site: https://www.areion24.news
+  groups:
+  - geopolitique-ie
+- name: EUvsDisinfo
+  site: https://euvsdisinfo.eu
+  groups:
+  - geopolitique-ie

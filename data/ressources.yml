@@ -270,7 +270,7 @@
     - nom: EUvsDisinfo
       url: https://euvsdisinfo.eu/articles/
       type: Blog
-      pourquoi: Analyses de la désinformation pro-Kremlin (SEAE)
+      pourquoi: Analyses de la désinformation pro-Kremlin (SEAE, source de la veille)
     - nom: SEAE — Guide FIMI
       url: https://www.eeas.europa.eu/sites/default/files/documents/2024/EEAS-DataTeam-OsintGuidelines-04-Digital.pdf
       type: Guide
@@ -279,6 +279,20 @@
       url: https://socradar.io/blog/us-israel-iran-war-osint-track/
       type: Article
       pourquoi: Suivi OSINT d'un conflit
+  - nom: Défense & industrie
+    liens:
+    - nom: Breaking Defense
+      url: https://breakingdefense.com/
+      type: Revue
+      pourquoi: Technologies militaires et industrie de défense (source de la veille)
+    - nom: The War Zone
+      url: https://www.twz.com/
+      type: Revue
+      pourquoi: Drones, armements et systèmes autonomes (source de la veille)
+    - nom: FOB — Forces Operations Blog
+      url: https://www.forcesoperations.com/
+      type: Blog
+      pourquoi: Industrie de défense et armées françaises (source de la veille)
   - nom: Criminalité organisée
     liens:
     - nom: Crim'AI
@@ -295,6 +309,26 @@
       url: https://legrandcontinent.eu/fr/
       type: Revue
       pourquoi: Géopolitique et débats européens
+    - nom: IRIS
+      url: https://www.iris-france.org/
+      type: Think tank
+      pourquoi: Institut de relations internationales et stratégiques (source de la veille)
+    - nom: Diploweb
+      url: https://www.diploweb.com/
+      type: Revue
+      pourquoi: Géopolitique de fond, cartes et analyses (source de la veille)
+    - nom: Le Rubicon
+      url: https://lerubicon.org/
+      type: Revue
+      pourquoi: Analyses longues de sécurité internationale (source de la veille)
+    - nom: Areion24.news
+      url: https://www.areion24.news/
+      type: Revue
+      pourquoi: "Défense et géopolitique : DSI, Diplomatie, Carto (source de la veille)"
+    - nom: War on the Rocks
+      url: https://warontherocks.com/
+      type: Revue
+      pourquoi: Stratégie et défense, excellentes analyses de fond (source de la veille)
   - nom: Intelligence économique
     liens:
     - nom: Portail de l'IE
@@ -413,17 +447,41 @@
       type: Article
       pourquoi: Les imprimantes ajoutent des points jaunes invisibles
   - nom: Robotique & drones
-    liens: []
+    liens:
+    - nom: The Robot Report
+      url: https://www.therobotreport.com/
+      type: Revue
+      pourquoi: Actualité de la robotique et des humanoïdes (source de la veille)
   - nom: Semi-conducteurs
-    liens: []
+    liens:
+    - nom: IEEE Spectrum
+      url: https://spectrum.ieee.org/
+      type: Revue
+      pourquoi: "Ingénierie, puces, quantique : la revue de l'IEEE (source de la veille)"
   - nom: Spatial
-    liens: []
+    liens:
+    - nom: SpaceNews
+      url: https://spacenews.com/
+      type: Revue
+      pourquoi: Spatial civil et militaire (source de la veille)
   - nom: Actualité générale
     liens:
     - nom: Next
       url: https://next.ink/
       type: Revue
       pourquoi: Actualité numérique francophone
+    - nom: LeMagIT
+      url: https://www.lemagit.fr/
+      type: Revue
+      pourquoi: IT d'entreprise, cloud et souveraineté numérique (source de la veille)
+    - nom: Siècle Digital
+      url: https://siecledigital.fr/
+      type: Revue
+      pourquoi: Business de la tech, plateformes et régulation (source de la veille)
+    - nom: Rest of World
+      url: https://restofworld.org/
+      type: Revue
+      pourquoi: "La tech hors Occident : Chine, Inde, Afrique, Amérique latine (source de la veille)"
 - id: ia
   label: 🚀 IA & rupture
   rubriques:
@@ -441,8 +499,30 @@
       url: https://github.com/mo0ogly/openclaw-killchain-analysis
       type: Cours
       pourquoi: Support de cours (PDF dans le dépôt)
+  - nom: Actualité IA
+    liens:
+    - nom: MIT Technology Review
+      url: https://www.technologyreview.com/
+      type: Revue
+      pourquoi: IA et technologies émergentes, analyses de référence (source de la veille)
+    - nom: The Decoder
+      url: https://the-decoder.com/
+      type: Revue
+      pourquoi: "Actualité quotidienne de l'IA : modèles, recherche, industrie (source de la veille)"
+    - nom: ActuIA
+      url: https://www.actuia.com/
+      type: Revue
+      pourquoi: Actualité de l'IA en français (source de la veille)
   - nom: Recherche
     liens:
+    - nom: OpenAI — News
+      url: https://openai.com/news/
+      type: Blog
+      pourquoi: Annonces et publications officielles d'OpenAI (source de la veille)
+    - nom: Google DeepMind — Blog
+      url: https://deepmind.google/discover/blog/
+      type: Blog
+      pourquoi: Recherche et annonces de DeepMind (source de la veille)
     - nom: arXiv cs.AI
       url: https://arxiv.org/list/cs.AI/recent
       type: Encyclopédie
