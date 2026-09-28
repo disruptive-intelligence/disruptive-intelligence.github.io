@@ -165,7 +165,9 @@ def load_content(docs_dir):
 # ---------------------------------------------------------------- sujets des briefs, fils d'actualité
 
 THREADS_DIR = "veille/fils"
-MARKER = re.compile(r"^<!-- selection: event:(evt-[0-9a-f-]+) -->$")
+# Repère écrit par veille-agent sous chaque sujet : identité de sélection et, depuis le 28/09, fraîcheur.
+MARKER = re.compile(r"^<!-- selection: (event|standalone):(\S+?)(?: freshness:(new|updated|carryover))? -->$")
+FRESHNESS = {"updated": "Mise à jour", "carryover": "Suivi"}   # « new » est la norme : pas de badge
 HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
 
 
@@ -193,14 +195,15 @@ def brief_subjects(markdown):
         if level == 2:
             lane = text
         elif level == 3 and text.startswith("▸"):
-            event = MARKER.match(lines[i + 1].strip()) if i + 1 < len(lines) else None
+            marker = MARKER.match(lines[i + 1].strip()) if i + 1 < len(lines) else None
             fact = ""
             for follow in lines[i + 1:i + 12]:
                 if follow.startswith("**Le fait :**"):
                     fact = follow.replace("**Le fait :**", "").strip()
                     break
             subjects.append({"title": text.lstrip("▸ ").strip(), "anchor": anchor, "lane": lane,
-                             "event": event.group(1) if event else None, "fact": fact, "line": i})
+                             "event": marker.group(2) if marker and marker.group(1) == "event" else None,
+                             "freshness": marker.group(3) if marker else None, "fact": fact, "line": i})
     return subjects
 
 
@@ -276,14 +279,25 @@ def decorate_brief(markdown, src):
     lines = markdown.splitlines()
     threads = STATE.get("threads", {})
     for s in reversed(subjects):                       # de la fin vers le début : les numéros de ligne restent justes
+        key = section_key(s["lane"] or "")
+        if key:                                        # couleur de rubrique (attr_list, retiré du titre avant la toc)
+            lines[s["line"]] += f" {{ .kw-subj .kw-lane--{key} }}"
+        pills = ""
+        if s["freshness"] in FRESHNESS:
+            pills += f'<span class="kw-fresh kw-fresh--{s["freshness"]}">{FRESHNESS[s["freshness"]]}</span>'
         entries = threads.get(s["event"])
-        if not entries:
-            continue
-        days = sorted({e["date"] for e in entries})
-        others = [d for d in days if d != next(e["date"] for e in entries if e["src"] == src)]
-        when = ", ".join(f"{d.day} {short_month(d)}" for d in others)
-        lines.insert(s["line"] + 2, f'\n<div class="kw-thread">🧵 Fil d\'actualité · aussi le {esc(when)} · '
-                                    f'<a href="{href(src, thread_src(s["event"]))}">chronologie →</a></div>\n')
+        if entries:
+            days = sorted({e["date"] for e in entries})
+            others = [d for d in days if d != next(e["date"] for e in entries if e["src"] == src)]
+            when = ", ".join(f"{d.day} {short_month(d)}" for d in others)
+            pills += (f'<span class="kw-thread">🧵 Fil d\'actualité · aussi le {esc(when)} · '
+                      f'<a href="{href(src, thread_src(s["event"]))}">chronologie →</a></span>')
+        if pills:
+            lines.insert(s["line"] + 2, f'\n<div class="kw-subj-meta">{pills}</div>\n')
+    for i, line in enumerate(lines):                   # titres de rubrique
+        key = section_key(line[3:]) if line.startswith("## ") else None
+        if key and any(section_key(s["lane"] or "") == key for s in subjects):
+            lines[i] = line + f" {{ .kw-lane .kw-lane--{key} }}"
     toc, lane = "", None
     for s in subjects:
         if s["lane"] != lane:
