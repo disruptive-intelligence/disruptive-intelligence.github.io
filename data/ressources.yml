@@ -293,6 +293,10 @@
       url: https://www.forcesoperations.com/
       type: Blog
       pourquoi: Industrie de défense et armées françaises (source de la veille)
+    - nom: Defense One
+      url: https://www.defenseone.com/
+      type: Revue
+      pourquoi: Défense américaine et politique technologique (source de la veille)
   - nom: Criminalité organisée
     liens:
     - nom: Crim'AI
@@ -482,6 +486,14 @@
       url: https://restofworld.org/
       type: Revue
       pourquoi: "La tech hors Occident : Chine, Inde, Afrique, Amérique latine (source de la veille)"
+    - nom: Ars Technica
+      url: https://arstechnica.com/
+      type: Revue
+      pourquoi: Actualité tech de fond, très fiable (source de la veille)
+    - nom: Numerama
+      url: https://www.numerama.com/tech/
+      type: Revue
+      pourquoi: Actualité tech en français (source de la veille)
 - id: ia
   label: 🚀 IA & rupture
   rubriques:

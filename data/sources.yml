@@ -11,6 +11,7 @@
   - tech
   aliases:
   - Numerama - Cyberguerre
+  - Numerama - Tech
 - name: The Record
   site: https://therecord.media
   groups:
@@ -89,17 +90,6 @@
   site: https://www.laquadrature.net
   groups:
   - tech
-- name: Intelligence Online
-  site: http://feeds.feedburner.com
-  groups:
-  - tech
-  - geopolitique-ie
-  aliases:
-  - 'Intelligence Online : Dernier Numéro'
-- name: CERT-FR
-  site: https://www.cert.ssi.gouv.fr
-  groups:
-  - alertes-cyber
 - name: Didier Stevens
   site: https://blog.didierstevens.com
   groups:
@@ -128,12 +118,6 @@
   - geopolitique-ie
   aliases:
   - Omerta Média
-- name: Conflits
-  site: https://www.revueconflits.com
-  groups:
-  - geopolitique-ie
-  aliases:
-  - 'Conflits : Revue de Géopolitique'
 - name: Spécial Défense
   site: https://specialdefense.over-blog.com
   groups:
@@ -238,3 +222,11 @@
   site: https://euvsdisinfo.eu
   groups:
   - geopolitique-ie
+- name: Ars Technica
+  site: https://feeds.arstechnica.com
+  groups:
+  - tech
+- name: Defense One
+  site: https://www.defenseone.com
+  groups:
+  - ia-rupture
