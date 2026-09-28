@@ -4,6 +4,8 @@ date: 2026-09-12
 kind: analysis
 theme: ia
 slug: we-must-pace-the-frontier
+events:
+  - evt-c3400a1a-790a-40e7-96e0-5d03e8e598b5
 author: Anthropic · Dario Amodei
 ---
 # Analyse — We Must Pace the Frontier
