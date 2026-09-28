@@ -255,8 +255,21 @@ avec leur chronologie. Un fil se crée automatiquement dès qu'un même événem
     return out
 
 
+SOURCE_LABEL = re.compile(r"^(\*\*Sources? :\*\* \[)(.+?)( — )", re.M)
+READING_LABEL = re.compile(r"^(- \*\*)(.+?)(\*\* — \[)", re.M)
+
+
+def media_names(markdown):
+    """Anciens briefs : l'intitulé brut du flux (« Next - Flux Complet ») devient le nom du média
+    (data/sources.yml, alias). Seules les étiquettes de source sont touchées, pas le texte."""
+    aliases = STATE.get("aliases", {})
+    swap = lambda m: m.group(1) + aliases.get(m.group(2).strip(), m.group(2)) + m.group(3)
+    return READING_LABEL.sub(swap, SOURCE_LABEL.sub(swap, markdown))
+
+
 def decorate_brief(markdown, src):
-    """Page d'un brief : sommaire repliable (téléphone) et lien vers le fil des sujets suivis."""
+    """Page d'un brief : noms des médias, sommaire repliable (téléphone) et lien vers le fil des sujets suivis."""
+    markdown = media_names(markdown)
     subjects = brief_subjects(markdown)
     if len(subjects) < 5:
         return markdown
@@ -529,7 +542,7 @@ hide:
 
 # Disruptive Intelligence
 
-**Tech · IA · Cyber · Géopolitique** — veille quotidienne, analyses approfondies et base de connaissances technique.
+<p class="kw-hero__tagline"><strong>Tech · IA · Cyber · Géopolitique</strong> — veille quotidienne, analyses et base de connaissances.</p>
 
 </div>
 
@@ -765,6 +778,14 @@ def build_glossary(items, manual):
     return sorted(terms.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
 
 
+def seen_label(it):
+    """Lien « Vu dans » : la date pour un brief, le titre court pour une analyse."""
+    if it["src"].startswith("veille/"):
+        return f"{it['date'].day} {short_month(it['date'])}"
+    title = clean_title(it["title"])
+    return "analyse « " + (title if len(title) <= 40 else title[:40].rsplit(" ", 1)[0] + " … ") + " »"
+
+
 def page_glossary(glossary):
     src = GLOSSARY_SRC
     by_letter = {}
@@ -780,6 +801,10 @@ def page_glossary(glossary):
             extras = []
             if t.get("see"):
                 extras.append(f"[Voir la fiche →]({posixpath.relpath(t['see'], 'library')})")
+            seen = list({it["src"]: it for it in t["seen"]}.values())[:6]   # du plus récent au plus ancien
+            if seen:
+                extras.append("Vu dans : " + ", ".join(
+                    f"[{seen_label(it)}]({posixpath.relpath(it['src'], 'library')})" for it in seen))
             body += f"**{t['term']}**\n:   {t['definition'] or '<span class=\"kw-muted\">Définition à compléter.</span>'}"
             body += (f"<br><span class=\"kw-muted\">{' · '.join(extras)}</span>" if extras else "") + "\n\n"
     return src, f"""# 📖 Glossaire
@@ -877,6 +902,7 @@ def on_config(config):
     pages += pages_threads(threads)
     STATE["pages"] = pages
     STATE["items"] = items
+    STATE["aliases"] = {a.strip(): s["name"] for s in sources for a in s.get("aliases") or []}
     STATE["html"] = {}
 
     nav = list(config.nav or [])

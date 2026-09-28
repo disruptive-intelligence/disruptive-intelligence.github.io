@@ -355,10 +355,13 @@ body[data-md-color-scheme="slate"]::after {
 .md-typeset h2 .kw-muted { font-size: .7em; font-weight: 600; }
 
 /* ---------- v3 : accueil ---------- */
-.kw-hero { padding: 1.4rem 1.6rem 1rem; margin: .4rem 0 1rem; border: 1px solid var(--kw-line); border-radius: 14px;
+.kw-hero { padding: .9rem 1.4rem .8rem; margin: .2rem 0 .6rem; border: 1px solid var(--kw-line); border-radius: 14px;
   background: radial-gradient(ellipse at 0% 0%, #3a2424 0%, transparent 60%), var(--kw-panel); }
-.md-typeset .kw-hero h1 { margin: 0 0 .4rem; font-size: 2.3em; }
-.kw-hero__tagline { color: var(--md-default-fg-color--light); margin: 0; }
+.md-typeset .kw-hero h1 { margin: 0 0 .2rem; font-size: 1.9em; }
+/* Bandeau compact : titre et accroche sur une ligne dès que la largeur le permet */
+.kw-hero > * { display: inline; }
+.md-typeset .kw-hero h1 { display: inline-block; margin-right: 1rem; vertical-align: baseline; }
+.md-typeset .kw-hero__tagline { display: inline; color: var(--md-default-fg-color--light); margin: 0; }
 
 .kw-une { display: grid; grid-template-columns: 15rem repeat(2, minmax(0, 1fr)); gap: 1rem; }
 @media screen and (max-width: 60em) { .kw-une { grid-template-columns: 1fr; } }
@@ -402,8 +405,9 @@ body[data-md-color-scheme="slate"]::after {
 
 /* Téléphone : titre d'accueil plus petit, sans coupure au milieu des mots */
 @media screen and (max-width: 45em) {
-  .kw-hero { padding: 1rem 1.1rem .6rem; }
-  .md-typeset .kw-hero h1 { font-size: 1.7em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+  .kw-hero { padding: .7rem 1rem .6rem; }
+  .md-typeset .kw-hero h1 { display: block; font-size: 1.35em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+  .md-typeset .kw-hero__tagline { font-size: .7rem; }
 }
 @media screen and (max-width: 60em) {
   .kw-une, .kw-editions { grid-template-columns: minmax(0, 1fr); }
@@ -700,3 +704,12 @@ body[data-md-color-scheme="default"]::after {
 @media screen and (min-width: 60em) { .md-typeset details.kw-toc-m { display: none; } }
 .md-typeset .kw-rss--fils { color: var(--kw-link); }
 .md-typeset .kw-rss--fils:hover { border-color: var(--kw-link); color: var(--kw-link); }
+
+/* Fil d'Ariane (téléphone) : défilement horizontal discret, sans barre ni retour à la ligne */
+.md-path__list { scrollbar-width: none; }
+.md-path__list::-webkit-scrollbar { display: none; }
+.md-path__item, .md-path__link { white-space: nowrap; }
+@media screen and (max-width: 45em) {
+  .md-path { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+             mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
