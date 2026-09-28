@@ -57,6 +57,7 @@ extra_css:
 extra_javascript:
   - javascripts/sidebar-toggle.js
   - javascripts/glossary-tooltips.js   # définitions du glossaire au survol
+  - javascripts/veille-tools.js        # Explorer, Pile de lecture, barre de lecture
 
 plugins:
   - search:
