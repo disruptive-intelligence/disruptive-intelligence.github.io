@@ -4,7 +4,7 @@ date: 2026-09-29
 kind: analysis
 theme: cyber
 slug: piratage-de-la-dgfip-identifiants-voles-reseau-ouvert-supervision-aveugle
-organization: "Agence nationale de la sécurité des systèmes d'information (ANSSI)"
+organization: "Agence nationale de la sécurité des systèmes d’information (ANSSI)"
 tags:
   - DGFiP
   - ANSSI
