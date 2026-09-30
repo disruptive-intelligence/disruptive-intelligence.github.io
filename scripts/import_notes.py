@@ -118,7 +118,7 @@ CONCLUSION_TITLE = re.compile(r"(?i)^(conclusion|fin du cours|synth[èe]se (fina
 CHEAT_TITLE = re.compile(r"(?i)cheat.?sheet|aide-m[ée]moire")   # une fiche de rappel reste d'un seul tenant
 # Mots ignorés pour reconnaître le titre de tête d'une note (« # Cours complet de scripting Bash » = « Bash »)
 TITLE_NOISE = {"htb", "cours", "complet", "note", "notes", "fiche", "les", "des", "une", "pour", "dans", "avec",
-               "aux", "sur", "the", "and", "version", "vfull", "synthese"}
+               "aux", "sur", "the", "and", "version", "complete", "vfull", "synthese"}
 LINK_MARK = "@@"       # lien interne provisoire « @@library/…/page.md#ancre », rendu relatif page par page
 
 
@@ -241,8 +241,10 @@ def clean_heading(text):
 def is_title(heading, title):
     """Le titre de tête reprend-il le titre de la note ? (sinon c'est une vraie section, à garder)"""
     words = {w for w in slug(title).split("-") if len(w) > 2 and w not in TITLE_NOISE}
-    found = set(slug(heading).split("-"))
-    return bool(words) and len(words & found) / len(words) >= 0.5
+    joined = slug(heading).replace("-", "")
+    found = {w for w in words if w in set(slug(heading).split("-")) or w in joined}   # « crypto-actifs »
+    common = len(words & found)                        # « Gestion des incidents » n'est pas « HTB — Réponse à incidents »
+    return bool(words) and common / len(words) >= 0.5 and (common >= 2 or len(words) == 1)
 
 
 def is_split(text, title=""):
@@ -260,8 +262,9 @@ def is_split(text, title=""):
     if sum(bool(PART_TITLE.match(t)) for _, _, t in heads) >= 2 and len(text) > MIN_SPLIT_PARTS:
         return True                                   # fiche organisée en parties : une page par partie
     if len(text) > SPLIT_SECTIONS_AT and heads:
-        top = min(lv for _, lv, _ in heads)
-        count = sum(lv == top for _, lv, _ in heads)
+        levels = [lv for _, lv, _ in heads]            # même règle que sections() : premier niveau à 3 titres
+        top = next((lv for lv in range(1, 7) if levels.count(lv) >= 3), min(levels))
+        count = sum(lv <= top for lv in levels)
         # une suite de petites sections numérotées (fiche) reste d'un seul tenant
         return count >= 3 and len(text) / count >= MIN_CHAPTER_AVG
     return False
@@ -512,7 +515,25 @@ def normalize_headings(text, title, shield):
         out.append(f"{h.group(1)} {head}")
         if lead:
             out += ["", lead]
-    return "\n".join(rebase(out)).strip("\n")
+    return "\n".join(close_gaps(rebase(out))).strip("\n")
+
+
+def close_gaps(lines):
+    """Sauts de niveau (## suivi de ####, habitude des exports Notion) : chaque titre descend d'un
+    seul cran sous son parent, pour une table des matières bien emboîtée."""
+    stack, out = [], []                               # (niveau d'origine, niveau publié)
+    for line in lines:
+        m = HEADING.match(line)
+        if not m:
+            out.append(line)
+            continue
+        level = len(m.group(1))
+        while stack and stack[-1][0] >= level:
+            stack.pop()
+        new = min(level, stack[-1][1] + 1) if stack else level
+        stack.append((level, new))
+        out.append(f"{'#' * new} {m.group(2)}")
+    return out
 
 
 def drop_quizzes(body, shield):
@@ -552,8 +573,9 @@ def structure(body, shield, sections_only=False):
     kinds = [kind_of(t) for _, _, t in heads]
     chapters = [lv for (_, lv, _), k in zip(heads, kinds) if k == "chapter"]
     mode = "sections" if sections_only or len(chapters) < 2 else "chapters"
-    chap_lv = (collections.Counter(chapters).most_common(1)[0][0] if mode == "chapters"
-               else min(lv for _, lv, _ in heads))
+    levels = [lv for _, lv, _ in heads]
+    chap_lv = (collections.Counter(chapters).most_common(1)[0][0] if mode == "chapters"      # sinon : premier
+               else next((lv for lv in range(1, 7) if levels.count(lv) >= 3), min(levels)))   # niveau à 3 titres
 
     def holds_chapters(k):
         """Le titre n°k ouvre-t-il un groupe qui contient des chapitres ?"""

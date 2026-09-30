@@ -60,7 +60,7 @@ format: synthese
 
 Je veux qu'on sépare deux choses.
 
-#### `AGENTS.md`
+### `AGENTS.md`
 
 Il explique **comment l'agent doit se comporter** :
 
@@ -74,7 +74,7 @@ Quelle langue utiliser ?
 ```
 
 
-#### `templates/analyse-article.md`
+### `templates/analyse-article.md`
 
 Il explique **à quoi ressemble le résultat attendu** :
 

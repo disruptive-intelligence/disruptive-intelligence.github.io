@@ -8,7 +8,7 @@ up:
 ---
 
 - Active Directory est un service d'annuaire Microsoft utilisé pour centraliser la gestion des identités, groupes, ordinateurs et ressources dans un environnement Windows.
-### Gestion centralisée des identités
+## Gestion centralisée des identités
 
 - Gestion centralisée des comptes utilisateurs et credentials.
 - Une même identité peut être utilisée pour accéder à plusieurs ressources du domaine.
@@ -16,7 +16,7 @@ up:
     - password policies ;
     - autorisations ;
     - contrôles de sécurité.
-### Gestion centralisée des ressources
+## Gestion centralisée des ressources
 
 - facilite la configuration et la mise à jour régulières des ressources ainsi que le contrôle des droits d'accès.
 - AD permet de gérer notamment :
@@ -27,11 +27,11 @@ up:
 	- shared folders ;
 	- imprimantes ;
 	- autres ressources réseau.
-### Stratégie de groupe
+## Stratégie de groupe
 
 - Les stratégies de groupe sont utilisées pour gérer de manière centralisée les paramètres de configuration des utilisateurs et des ordinateurs.
 - Ces stratégies incluent des paramètres de sécurité, des paramètres de bureau, des paramètres d'application, et plus encore.
-### Group Policy — GPO
+## Group Policy — GPO
 
 - Les **Group Policies** permettent de configurer centralement les utilisateurs et ordinateurs du domaine.
 - Elles peuvent gérer :
@@ -49,7 +49,7 @@ Users / Computers
 → configuration homogène
 ```
 
-### Concepts de base AD
+## Concepts de base AD
 
 | Concept    | Rôle                                                                        |
 | ---------- | --------------------------------------------------------------------------- |
@@ -58,10 +58,10 @@ Users / Computers
 | **Group**  | Regroupement logique permettant notamment d’attribuer des permissions       |
 | **Object** | Élément stocké dans AD : user, computer, group, printer, OU…                |
 
-#### Objet
+### Objet
 
 - Éléments de base dans Active Directory. Les utilisateurs, les ordinateurs, les imprimantes, les groupes, les OU et d'autres objets constituent les blocs de construction de la base de données dans Active Directory.
-#### Domain
+### Domain
 
 - Le domaine est utilisé comme l'unité de gestion de base d'un réseau.
 - Les comptes d'utilisateurs, les groupes, les comptes d'ordinateurs et d'autres objets se trouvent dans le domaine, qui fournit une authentification et un contrôle d'accès communs.
@@ -69,7 +69,7 @@ Users / Computers
     - authentification ;
     - gestion ;
     - contrôle d’accès.
-#### Organizational Unit — OU
+### Organizational Unit — OU
 
 - L'unité d'organisation (Organizational Unit ou OU) est utilisée pour regrouper et gérer les objets au sein du domaine de manière plus organisée.
 - Utile pour :
@@ -78,11 +78,11 @@ Users / Computers
     - application de GPO.
 
 > **OU ≠ Security Group** : une OU sert surtout à organiser/déléguer/appliquer des GPO, tandis qu’un groupe sert notamment à attribuer des permissions.
-#### Groupes
+### Groupes
 
 - Les groupes sont utilisés pour regrouper logiquement des utilisateurs ou des ordinateurs.
 - Le regroupement d'utilisateurs par caractéristiques ou fonctions similaires facilite la gestion des droits d'accès et des autorisations.
-### Comptes par défaut — Default Accounts
+## Comptes par défaut — Default Accounts
 
 - Certains comptes sont créés automatiquement, par exemple :
     - `Administrator` ;
@@ -105,7 +105,7 @@ Default Account
 ```
 
 > Un nom de compte connu n’est pas en lui-même une vulnérabilité : le problème vient surtout de **privilèges élevés, credentials faibles, mauvaise surveillance ou utilisation permanente**.
-### Groupes privilégiés
+## Groupes privilégiés
 Les groupes comme :
 
 ```
@@ -129,7 +129,7 @@ Privileged Admin
 ```
 
 > ⚠️ Le compte `Administrator` intégré ne doit pas être considéré comme une exception à utiliser quotidiennement. Il doit lui aussi être fortement protégé et réservé aux usages réellement nécessaires.
-#### Just-In-Time Privilege
+### Just-In-Time Privilege
 
 - Le cours recommande d’ajouter temporairement un compte à `Domain Admins`, puis de le retirer une fois l’opération terminée.
 - Conceptuellement :
@@ -142,7 +142,7 @@ Need Admin Privilege
 ```
 
 → approche proche du **Just-In-Time (JIT)**.
-### Séparer compte utilisateur et compte administrateur
+## Séparer compte utilisateur et compte administrateur
 
 - Pourquoi utiliser plusieurs comptes ? 
 	- Séparation des privilèges ;
@@ -155,14 +155,14 @@ Account 1 → tâches quotidiennes
 Account 2 → tâches administratives
 ```
 
-#### Compte utilisateur standard
+### Compte utilisateur standard
 Utilisé pour :
 
 - email ;
 - Web ;
 - bureautique ;
 - tâches quotidiennes.
-#### Compte administratif
+### Compte administratif
 Utilisé seulement pour :
 
 - administration système ;
@@ -180,7 +180,7 @@ Admin Account compromised
 ```
 
 → la séparation réduit l’exposition des credentials privilégiés.
-### Stratégie d’audit — Audit Policy
+## Stratégie d’audit — Audit Policy
 
 - Les **Audit Policies** déterminent quels événements Windows sont enregistrés.
 - Dans un domaine, elles peuvent être déployées via GPO sur les endpoints et serveurs.
@@ -214,7 +214,7 @@ Admin Account compromised
 |                        | Security State Change           | Success           |
 |                        | Security System Extension       | Success + Failure |
 |                        | System Integrity                | Success + Failure |
-#### Process Creation
+### Process Creation
 
 - L’audit de création de processus est particulièrement intéressant pour le SOC :
 
@@ -233,7 +233,7 @@ User
 ```
 
 - Avec une configuration adaptée, la **command line** peut également être enregistrée.
-### Windows LAPS
+## Windows LAPS
 
 - **Windows LAPS — Local Administrator Password Solution** automatise la gestion des mots de passe des comptes administrateur locaux.
 - Permet :
@@ -264,7 +264,7 @@ PC03 → RandomPassword-C
 ```
 
 → chaque machine possède idéalement un secret distinct.
-#### Avantages et bonnes pratiques
+### Avantages et bonnes pratiques
 
 - gestion centralisée ;
 - génération de passwords forts ;
@@ -281,7 +281,7 @@ Restricted Retrieval
 → Local Admin Risk ↓
 ```
 
-##### Point important
+#### Point important
 Le password LAPS doit être :
 
 - accessible uniquement aux comptes autorisés ;
@@ -289,7 +289,7 @@ Le password LAPS doit être :
 - audité lors de sa consultation.
 
 > Les logs doivent tracer les **rotations et accès au secret**, pas exposer le mot de passe en clair.
-### Password Policy dans Active Directory
+## Password Policy dans Active Directory
 Une politique de mot de passe peut définir :
 
 - longueur minimale ;
@@ -307,7 +307,7 @@ Password Policy
 └─ Account Lockout
 ```
 
-##### Complexité
+### Complexité
 Le cours recommande de combiner :
 
 - uppercase ;
@@ -316,7 +316,7 @@ Le cours recommande de combiner :
 - symbols.
 
 > En pratique, une **longueur suffisante** et le blocage des mots de passe faibles/compromis sont souvent plus importants qu’une complexité artificielle excessive.
-#### Password History
+### Password History
 
 - Empêche l’utilisateur de réutiliser immédiatement ses anciens passwords.
 
@@ -328,7 +328,7 @@ Password1
 X Password1
 ```
 
-#### Stratégie de verrouillage de compte - Account Lockout
+### Stratégie de verrouillage de compte - Account Lockout
 
 - Une **Account Lockout Policy** verrouille temporairement un compte après un certain nombre de tentatives d’authentification échouées.
 - Objectif principal : limiter les attaques de type **brute force** et rendre les tentatives répétées plus coûteuses pour l’attaquant.
@@ -349,7 +349,7 @@ Avantages :
 
 → peut réduire l’efficacité du brute force online, mais les seuils doivent être configurés pour éviter de faciliter un **DoS par verrouillage de comptes**.
 ![W Lockout](../../../assets/htb-windows-system-security-w-lockout.png){ width="550" }
-##### Étapes de création d'une stratégie de mot de passe dans Active Directory
+#### Étapes de création d'une stratégie de mot de passe dans Active Directory
 
 - Ouvrez les Outils d'administration Active Directory et sélectionnez Gestion des stratégies de groupe.
 - Pour gérer les mots de passe, accédez aux Stratégies de mot de passe.
@@ -361,7 +361,7 @@ Avantages :
 
 ![W Length](../../../assets/htb-windows-system-security-w-length.png){ width="550" }
 
-### SAW — Secure Admin Workstation
+## SAW — Secure Admin Workstation
 
 - Une **Secure Admin Workstation** est une machine dédiée exclusivement aux opérations administratives utilisant des comptes privilégiés.
 
@@ -375,28 +375,28 @@ SAW
 ```
 
 - Objectif : empêcher que des credentials administratifs soient exposés sur une workstation utilisée pour des activités plus risquées comme le Web ou les emails.
-#### Caractéristiques d’une SAW
-##### Environnement isolé
+### Caractéristiques d’une SAW
+#### Environnement isolé
 
 - Séparé des usages utilisateur classiques.
 - Réseau et configuration adaptés aux opérations administratives.
-##### Pas d’accès Internet
+#### Pas d’accès Internet
 
 - Ne pas utiliser la SAW pour :
     - consulter ses emails ;
     - naviguer sur Internet ;
     - effectuer des tâches quotidiennes.
-##### Authentification forte
+#### Authentification forte
 
 - Comptes privilégiés fortement protégés.
 - Utilisation de :
     - passwords robustes ;
     - MFA lorsque possible.
-##### Applications minimales
+#### Applications minimales
 
 - Installer uniquement les outils nécessaires à l’administration.
 - Supprimer les logiciels inutiles afin de réduire l’**Attack Surface**.
-##### Patching
+#### Patching
 
 - OS et applications maintenus à jour.
 - Correctifs de sécurité appliqués régulièrement.
@@ -410,25 +410,25 @@ SAW
 → Fully Patched
 ```
 
-#### Avantages d’une SAW
+### Avantages d’une SAW
 
 - réduit l’exposition des comptes privilégiés ;
 - diminue le risque de malware/ransomware ;
 - facilite le contrôle des opérations administratives ;
 - améliore la surveillance des activités privilégiées.
-### Support du système d’exploitation
+## Support du système d’exploitation
 
 - Utiliser des versions Windows encore **supportées** est essentiel.
 - Un OS **End-of-Life / End-of-Support** ne recevant plus de security patches augmente fortement le risque.
-### Gestion des comptes de service
+## Gestion des comptes de service
 
 - Les **Service Accounts** sont utilisés par des applications, services ou systèmes pour fonctionner automatiquement.
 - Ils représentent une cible importante car ils peuvent :
     - disposer de privilèges élevés ;
     - avoir des passwords rarement modifiés ;
     - accéder à plusieurs ressources.
-#### Bonnes pratiques
-##### Un compte par service
+### Bonnes pratiques
+#### Un compte par service
 
 ```
 Service A → Account A
@@ -442,7 +442,7 @@ Cela facilite :
 - auditing ;
 - révocation ;
 - limitation de l’impact d’une compromission.
-##### Least Privilege
+#### Least Privilege
 
 - Un compte de service ne doit posséder que les droits indispensables.
 
@@ -452,16 +452,16 @@ Service Account
 → Required Permissions Only
 ```
 
-##### Gestion des credentials
+#### Gestion des credentials
 
 - Utiliser des secrets forts.
 - Automatiser leur rotation lorsque possible.
 - Préférer des mécanismes de **managed service accounts** lorsqu’ils sont disponibles.
-##### Restreindre le réseau
+#### Restreindre le réseau
 
 - Limiter les systèmes auxquels le compte peut accéder.
 - Bloquer les communications inutiles.
-##### Monitoring
+#### Monitoring
 Surveiller :
 
 - authentifications inhabituelles ;
@@ -469,10 +469,10 @@ Surveiller :
 - horaires anormaux ;
 - accès inhabituels ;
 - modifications de privilèges.
-##### Patch Management
+#### Patch Management
 
 - Maintenir à jour les systèmes et applications exécutant ces comptes.
-### Surveillance des modifications utilisateurs / groupes
+## Surveillance des modifications utilisateurs / groupes
 
 - Les modifications AD importantes doivent être auditées :
 
@@ -501,7 +501,7 @@ Le SIEM facilite :
 - analyse ;
 - détection d’anomalies ;
 - génération d’alertes.
-#### Événements sensibles
+### Événements sensibles
 
 - Exemples particulièrement importants à surveiller :
 
@@ -528,11 +528,11 @@ Administrators
 ```
 
 -> doit recevoir une attention particulière.
-##### Tableau user
+#### Tableau user
 ![W Act User](../../../assets/htb-windows-system-security-w-act-user.png){ width="400" }
-##### Tableau group
+#### Tableau group
 ![W Act Group](../../../assets/htb-windows-system-security-w-act-group.png){ width="400" }
-#### Contrôle de l'appartenance au groupe d'admin. locaux
+### Contrôle de l'appartenance au groupe d'admin. locaux
 
 - Un membre du groupe local **Administrators** possède des privilèges élevés sur la machine.
 - Il peut notamment :
@@ -550,7 +550,7 @@ Local Administrators
 
 Les utilisateurs standards ne devraient pas disposer de droits admin locaux sans nécessité métier.
 ![W Local Admin](../../../assets/htb-windows-system-security-w-local-admin.png){ width="550" }
-##### Risque des Local Admin Rights
+#### Risque des Local Admin Rights
 
 - Une compromission d’un compte administrateur local peut permettre à l’attaquant de :
 
@@ -563,7 +563,7 @@ Execute as Admin
 ```
 
 → supprimer les droits locaux inutiles réduit donc fortement l’impact potentiel d’une compromission.
-##### Gestion centralisée
+#### Gestion centralisée
 
 - Le cours recommande de contrôler les appartenances au groupe `Administrators` via des mécanismes centralisés, notamment **Group Policy**.
 

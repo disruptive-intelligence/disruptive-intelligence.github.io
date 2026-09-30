@@ -143,6 +143,12 @@ class HeadingTests(VaultCase):
         self.assertIn("terms:\n  SQL: Langage de requête.", page)
         self.assertNotIn("termes:", page.split("---", 2)[2])            # propriétés Obsidian : pas dans le texte
 
+    def test_heading_gaps_closed(self):
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              "## A\n\n#### A1\n\n#### A2\n\n### A3\n\n## B\n\n##### B1\n")
+        body = pages["library/it/scripting/bash.md"]
+        self.assertIn("## A\n\n### A1\n\n### A2\n\n### A3\n\n## B\n\n### B1", body)
+
     def test_excluded_document_not_listed(self):
         (self.vault / "Cyber/01_CTI").mkdir(parents=True)
         self.write("Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md", "# CERT-EU\n")

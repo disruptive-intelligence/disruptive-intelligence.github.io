@@ -18,7 +18,7 @@ up:
 
 ---
 
-### Exemples concrets de payloads applicatifs (couche 7)
+## Exemples concrets de payloads applicatifs (couche 7)
 
 **Requête HTTP GET** (tu tapes une URL dans ton navigateur) :
 

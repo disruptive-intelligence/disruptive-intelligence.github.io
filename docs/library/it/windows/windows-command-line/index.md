@@ -4,9 +4,7 @@ source: IT/02_Windows/Windows_Command-Line.md
 format: cours
 ---
 
-## Introduction à la ligne de commande Windows
-
-### CMD et PowerShell pour naviguer, diagnostiquer et administrer Windows
+*CMD et PowerShell pour naviguer, diagnostiquer et administrer Windows*
 
 -----
 

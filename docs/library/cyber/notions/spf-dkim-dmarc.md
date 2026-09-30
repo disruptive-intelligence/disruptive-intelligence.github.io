@@ -67,7 +67,7 @@ p=reject
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents.md) (Protection des e-mails)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md) (Protection des e-mails)*
 
 Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (contournable), DKIM seul ne suffit pas (pas de politique de rejet), DMARC orchestre les deux et fournit du reporting.
 
@@ -94,7 +94,7 @@ cornpany.com
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents.md)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md)*
 
 ## Déployer
 
@@ -115,7 +115,7 @@ Monitor
 
 -> Un mauvais déploiement peut bloquer des messages légitimes.
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents.md)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md)*
 
 ⚠️ **Erreur fréquente** — DMARC en mode permissif (« none ») jamais durci, donc sans effet.
 

@@ -1180,11 +1180,33 @@ def note_nav(note):
     return {nav_title(note): note["src"]}
 
 
-FORMAT_MARK = {"synthese": "📝 "}      # seules les synthèses sont marquées : le menu reste sobre
-
-
 def nav_title(note):
-    return FORMAT_MARK.get(note.get("format"), "") + note["title"]
+    """Titre du menu : sans marque (les cours se distinguent par la couleur, voir on_post_page)."""
+    return note["title"]
+
+
+FORMAT_LABEL = {"synthese": "Synthèse", "cours": "Cours", "fiche": "Fiche notion"}
+
+
+def mark_courses(output, page):
+    """Menu latéral et listes : les liens vers un cours (page d'entrée) reçoivent la classe kw-cours
+    (couleur propre) ; les synthèses gardent le lavande des sous-pages."""
+    courses = STATE.get("course_urls")
+    if not courses or "md-nav__link" not in output:
+        return output
+    here = posixpath.dirname("/" + (page.url or "").rstrip("/") + "/x")
+
+    def tag(m):
+        href = m.group(2)
+        if href.startswith(("http", "#", "mailto")):
+            return m.group(0)
+        target = posixpath.normpath(posixpath.join(here, href.split("#")[0])).lstrip("/").rstrip("/") + "/"
+        label = html.unescape(re.sub(r"<[^>]+>", "", m.group(4).split(">", 1)[-1])).strip()
+        if courses.get(target) != label:              # une sous-rubrique repliée pointe aussi vers un cours
+            return m.group(0)
+        return m.group(1) + ' kw-cours' + m.group(3) + m.group(4) + "</a>"
+
+    return re.sub(r'(<a href="([^"]+)" class="md-nav__link[^"]*)(")(.*?)</a>', tag, output, flags=re.S)
 
 
 def title_words(title):
@@ -1287,10 +1309,12 @@ def pages_library(library):
             if cat["notes"]:
                 for label, notes in grouped(cat["notes"]):
                     body += (f"## {label}\n\n" if label else "") + ('<ul class="kw-notes">' + "".join(
-                        f'<li class="{"is-done" if n["imported"] else "is-todo"}">'
+                        f'<li class="{"is-done" if n["imported"] else "is-todo"}{" kw-cours" if n.get("format") == "cours" else ""}">'
                         f'<a href="{href(cat["src"], n["src"])}">{esc(nav_title(n))}</a></li>' for n in notes)
                         + "</ul>\n\n")
-                body += "<span class=\"kw-muted\">● importée · ○ à importer depuis Obsidian</span>\n"
+                body += ('<span class="kw-muted"><span class="kw-format kw-format--cours">Cours</span> complet · '
+                         '<span class="kw-format kw-format--synthese">Synthèse</span> ou fiche · '
+                         "○ à importer depuis Obsidian</span>\n")
             else:
                 body += '!!! note "Catégorie vide"\n    Aucune note pour l\'instant.\n'
             out.append((cat["src"], body))
@@ -1612,6 +1636,7 @@ def on_config(config):
     link_formats(library)
     STATE["library"] = library
     STATE["notes_by_src"] = {n["src"]: n for d in library for c in d["categories"] for n in c["notes"]}
+    STATE["course_urls"] = {url_of(src): n["title"] for src, n in STATE["notes_by_src"].items() if n.get("format") == "cours"}
     glossary = add_fiche_terms(glossary, library)
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
@@ -1653,7 +1678,7 @@ def on_post_page(output, page, config):
             digests[asset] = hashlib.sha1(path.read_bytes()).hexdigest()[:10] if path.exists() else None
         if digests[asset]:
             output = output.replace(f'{asset}"', f'{asset}?v={digests[asset]}"')
-    return output
+    return mark_courses(output, page)
 
 
 def on_page_markdown(markdown, page, config, files):
@@ -1688,14 +1713,15 @@ def decorate_note(markdown, page):
     note = STATE.get("notes_by_src", {}).get(here)    # page d'entrée d'une note : son format et ses liens
     if note:
         links = lambda notes: " · ".join(f"[{esc(n['title'])}]({rel(n['src'])})" for n in notes)
-        line = {"synthese": "📝 Synthèse", "cours": "📘 Cours", "fiche": "📌 Fiche notion"}.get(note.get("format"), "")
+        kind = note.get("format")
+        line = f'<span class="kw-format kw-format--{kind}">{FORMAT_LABEL[kind]}</span>' if kind in FORMAT_LABEL else ""
         if note.get("deeper"):
-            line += f" · pour approfondir : {links(note['deeper'])}"
+            line += f" pour approfondir : {links(note['deeper'])}"
         elif note.get("digests"):
-            line += f" · en synthèse : {links(note['digests'])}"
+            line += f" en synthèse : {links(note['digests'])}"
         elif note.get("terms"):
-            line += " · " + ", ".join(esc(t) for t in note["terms"])
-        if line and (note.get("format") != "cours" or note.get("digests")):
+            line += " " + ", ".join(esc(t) for t in note["terms"])
+        if line and (kind != "cours" or note.get("digests")):
             head += f'<br><span class="kw-muted">{line}</span>'
     return head + "\n\n" + markdown
 
