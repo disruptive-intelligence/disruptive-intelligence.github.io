@@ -49,7 +49,7 @@ FOLDERS = {
     "Cyber/10_Tools": ("cyber", "outils"), "Cyber/99_Concepts": ("cyber", "concepts"), "Cyber": ("cyber", "concepts"),
     "IT/01_Linux": ("it", "linux"), "IT/02_Windows": ("it", "windows"), "IT/03_Networking": ("it", "reseau"),
     "IT/04_Active-Directory": ("it", "active-directory"), "IT/05_Scripting_Langage-Prog": ("it", "scripting"),
-    "IT/10_virtualization-containers": ("it", "conteneurs"), "IT/Culture": ("it", "culture"), "IT": ("it", "transverse"),
+    "IT/10_virtualization-containers": ("it", "conteneurs"), "IT/Culture": ("it", "culture"), "IT": ("it", "infrastructure"),
 }
 # Notes rangées sur le site ailleurs que leur dossier du coffre (le coffre Obsidian n'est pas réorganisé).
 PLACES = {
@@ -65,6 +65,15 @@ PLACES = {
     "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
     "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
     "Cyber/Red_Teaming.md": ("cyber", "cti"),
+    "IT/02_Windows/HTB_Windows System Sécurity.md": ("cyber", "hardening"),
+    "IT/03_Networking/AppSec.md": ("cyber", "hardening"),
+    "IT/03_Networking/Infrastructure_IT.md": ("it", "infrastructure"),
+    "IT/Culture/Materiel_informatique-connectique-andco.md": ("it", "infrastructure"),
+    "IT/Culture/Fiche_How-The-Web-Works.md": ("it", "web"),
+    "IT/Culture/Fiche_WebApp.md": ("it", "web"),
+    "IT/Fiche_Web-Requests.md": ("it", "web"),
+    "IT/Culture/SQL.md": ("it", "scripting"),
+    "IT/Culture/Assembleur.md": ("it", "scripting"),
 }
 # Noms de fichier trop éloignés du titre prévu : correspondance explicite (chemin relatif au coffre).
 TITLES = {

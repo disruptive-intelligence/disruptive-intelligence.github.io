@@ -20,6 +20,9 @@ class VaultCase(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.vault = Path(self.tmp.name)
+        places = mock.patch.dict(imp.PLACES, clear=True)    # rangement du vrai coffre : hors sujet ici
+        places.start()
+        self.addCleanup(places.stop)
         (self.vault / "IT/05_Scripting_Langage-Prog").mkdir(parents=True)
         (self.vault / "IT/Culture").mkdir(parents=True)
         self.write("IT/Culture/SQL.md", "# SQL\n\nDu SQL.\n")

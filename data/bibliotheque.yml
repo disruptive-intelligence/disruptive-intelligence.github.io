@@ -13,7 +13,7 @@
       label: 🎯 CTI & renseignement
       notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique, OPSEC & privacy, Red teaming]
     - id: osint
-      label: 🔍 OSINT & HUMINT
+      label: 🔍 OSINT
       notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping, HUMINT & social engineering]
     - id: cryptographie
       label: 🔐 Cryptographie
@@ -22,8 +22,8 @@
       label: 🧬 Forensic
       notes: [Digital forensics]
     - id: hardening
-      label: 🧱 Sécurisation & architecture
-      notes: [HTB — IAM, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — IT Security for Corporates, HTB — System Security]
+      label: 🧱 Hardening & architecture
+      notes: [HTB — Windows System Security, HTB — IAM, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — IT Security for Corporates, HTB — System Security, AppSec]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
       notes: [Analyste SOC, Réponse à incident, HTB — Réponse à incidents, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", HTB — Identification des menaces et des logiciels malveillants, HTB — Attack Surface Management, Vulnerability management & intelligence, Cours MCS, GRC, IA & sécurité]
@@ -39,25 +39,28 @@
   categories:
     - id: linux
       label: 🐧 Linux
-      notes: [Administration Linux, Gestion système — cheat sheet, Workflow — cheat sheet, Notions Linux]
+      notes: [Notions Linux, Administration Linux, Gestion système — cheat sheet, Workflow — cheat sheet]
     - id: windows
       label: 🪟 Windows
-      notes: [CMD — cheat sheet, Fiche Windows, HTB — Windows System Security, PowerShell, Windows, Windows Command Line]
-    - id: reseau
-      label: 🌐 Réseau
-      notes: [AppSec, Infrastructure IT, "PDU, headers, payload & encapsulation", Notions réseau]
+      notes: [Windows, Fiche Windows, Windows Command Line, PowerShell, CMD — cheat sheet]
     - id: active-directory
       label: 🏰 Active Directory
       notes: [Active Directory]
+    - id: reseau
+      label: 🌐 Réseau
+      notes: [Notions réseau, "PDU, headers, payload & encapsulation"]
+    - id: web
+      label: 🕸️ Web & applications
+      notes: [How the Web Works, Requêtes web, Applications web]
+    - id: infrastructure
+      label: 🏗️ Infrastructure & architecture
+      notes: [Infrastructure IT, Architecture SI, Matériel informatique & connectique]
     - id: scripting
       label: ⌨️ Scripting & programmation
-      notes: [Bash, JavaScript, Notions Bash, Python]
+      notes: [Bash, Notions Bash, Python, JavaScript, SQL, Assembleur]
     - id: conteneurs
       label: 📦 Virtualisation & conteneurs
-      notes: [Ansible, Conteneurs — Docker & Kubernetes, Docker, Kubernetes]
+      notes: [Conteneurs — Docker & Kubernetes, Docker, Kubernetes, Ansible]
     - id: culture
       label: 🧠 Culture
-      notes: [Assembleur, How the Web Works, Applications web, IA agentiques — manipuler progressivement, Matériel informatique & connectique, Prospective — systèmes technologiques (vol. 1), Prospective — systèmes technologiques (vol. 2), Questions d'entretien cyber & sysadmin, SQL]
-    - id: transverse
-      label: 🔗 Transverse
-      notes: [Architecture SI, Requêtes web]
+      notes: [Prospective — systèmes technologiques (vol. 1), Prospective — systèmes technologiques (vol. 2), IA agentiques — manipuler progressivement, Questions d'entretien cyber & sysadmin]
