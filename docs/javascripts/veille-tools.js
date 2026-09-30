@@ -1,5 +1,6 @@
 /* Outils de lecture de la veille (pages générées par hooks/portal.py) :
    - Explorer : sujets lus dans assets/veille-sujets.json, filtrés, affichés 50 par page ;
+   - Recherche de la Bibliothèque : texte intégral des notes (search/bibliotheque.json), 50 sections par page ;
    - Pile de lecture : lectures cochées « lues » (mémorisées dans ce navigateur), pagination par éditions ;
    - calendriers feuilletables (‹ ›) de la page Veille et de l'Agenda ;
    - barre de progression de lecture sur les pages longues. */
@@ -20,7 +21,8 @@
   }
 
   /* Pagination commune : « ‹ Précédent · Page n / N · Suivant › » */
-  function pager(nav, page, pages, go) {
+  function pager(nav, page, pages, go, labels) {
+    labels = labels || ["‹ Plus récents", "Plus anciens ›"];
     nav.innerHTML = "";
     if (pages <= 1) return;
     function button(label, target, disabled) {
@@ -29,11 +31,11 @@
       b.addEventListener("click", function () { go(target); nav.parentNode.scrollIntoView({ behavior: "smooth" }); });
       nav.appendChild(b);
     }
-    button("‹ Plus récents", page - 1, page === 0);
+    button(labels[0], page - 1, page === 0);
     var info = document.createElement("span");
     info.textContent = "Page " + (page + 1) + " / " + pages;
     nav.appendChild(info);
-    button("Plus anciens ›", page + 1, page >= pages - 1);
+    button(labels[1], page + 1, page >= pages - 1);
   }
 
   function explorer() {
@@ -153,7 +155,65 @@
     update();
   }
 
-  function init() { explorer(); readings(); calendars(); progress(); }
+  /* Recherche dans les notes de la Bibliothèque : texte intégral lu dans search/bibliotheque.json
+     (retiré de l'index de recherche global, qui ne garde que leurs titres), chargé seulement sur cette page. */
+  function librarySearch() {
+    var root = document.getElementById("kw-libsearch");
+    if (!root) return;
+    var q = root.querySelector(".kw-explorer__q"), count = root.querySelector(".kw-explorer__count"),
+        list = root.querySelector(".kw-libsearch__hits"), nav = root.querySelector(".kw-pager"),
+        site = base(), rows = [], page = 0, timer;
+    function snippet(r, words) {
+      var at = words.length ? r._body.indexOf(words[0]) : -1;
+      var start = Math.max(0, at - 90), text = r.x.slice(start, start + 260);
+      text = esc((start ? "…" : "") + text + (start + 260 < r.x.length ? "…" : ""));
+      words.forEach(function (w) {
+        var re = new RegExp("(" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+        if (/^[a-z0-9]+$/.test(w)) text = text.replace(re, "<mark>$1</mark>");
+      });
+      return text;
+    }
+    function apply(keepPage) {
+      var words = fold(q.value).split(/\s+/).filter(function (w) { return w.length > 1; });
+      if (!words.length) {
+        list.innerHTML = ""; nav.innerHTML = "";
+        count.textContent = rows.length + " sections indexées";
+        return;
+      }
+      var hits = [];
+      rows.forEach(function (r) {
+        var score = 0;
+        for (var i = 0; i < words.length; i++) {
+          var inTitle = r._title.indexOf(words[i]) >= 0, inBody = r._body.indexOf(words[i]) >= 0;
+          if (!inTitle && !inBody) return;
+          score += (inTitle ? 10 : 0) + (inBody ? 1 : 0);
+        }
+        hits.push([score, r]);
+      });
+      hits.sort(function (a, b) { return b[0] - a[0]; });
+      var pages = Math.max(1, Math.ceil(hits.length / PAGE));
+      if (!keepPage) page = 0;
+      page = Math.min(page, pages - 1);
+      list.innerHTML = hits.slice(page * PAGE, (page + 1) * PAGE).map(function (h) {
+        var r = h[1];
+        return '<li><a href="' + esc(new URL(r.l, site).href) + '">' + esc(r.t) + "</a>" +
+          '<span class="kw-libsearch__note">' + esc(r.n) + "</span>" +
+          '<span class="kw-ex__fact">' + snippet(r, words) + "</span></li>";
+      }).join("") || '<li class="kw-muted">Aucune section ne correspond.</li>';
+      count.textContent = hits.length + " section" + (hits.length > 1 ? "s" : "");
+      pager(nav, page, pages, function (p) { page = p; apply(true); }, ["‹ Précédents", "Suivants ›"]);
+    }
+    count.textContent = "Chargement des notes…";
+    fetch(new URL(root.dataset.src, site)).then(function (r) { return r.json(); }).then(function (data) {
+      rows = data.map(function (d) { return { l: d[0], t: d[1], n: d[2], x: d[3], _title: fold(d[1] + " " + d[2]), _body: fold(d[3]) }; });
+      var initial = new URLSearchParams(location.search).get("mots");   // « q » ouvrirait la recherche de Material
+      if (initial) q.value = initial;
+      q.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { apply(false); }, 150); });
+      apply(false);
+    }).catch(function () { count.textContent = "Chargement des notes impossible."; });
+  }
+
+  function init() { explorer(); librarySearch(); readings(); calendars(); progress(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

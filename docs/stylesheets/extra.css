@@ -764,6 +764,13 @@ body[data-md-color-scheme="default"]::after {
   .md-typeset table.kw-explorer__table td:nth-child(3) { grid-column: 1 / -1; }
 }
 
+/* Recherche dans les notes de la Bibliothèque */
+.md-typeset ol.kw-libsearch__hits { list-style: none; margin: 0; padding: 0; }
+.md-typeset ol.kw-libsearch__hits > li { margin: 0; padding: .6rem 0; border-bottom: 1px solid var(--kw-line); font-size: .72rem; }
+.md-typeset ol.kw-libsearch__hits > li > a { font-weight: 700; }
+.md-typeset .kw-libsearch__note { display: block; font-size: .6rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-libsearch mark { background: color-mix(in srgb, #ed4d5a 28%, transparent); color: inherit; padding: 0 .1em; border-radius: 3px; }
+
 .md-typeset h2.kw-read__day { font-size: .9rem; margin: 1.6rem 0 .6rem; }
 .md-typeset .kw-read__brief { font-size: .65rem; font-weight: 600; margin-left: .5rem; }
 .md-typeset ul.kw-reads { list-style: none; margin: 0; padding: 0; }

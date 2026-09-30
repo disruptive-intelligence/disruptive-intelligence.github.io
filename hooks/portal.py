@@ -1147,10 +1147,17 @@ def library_nav(library):
     avec ses notes, puis le Glossaire."""
     nav = []
     for dom in library:
-        nav.append({dom["label"]: [{cat["label"]: [cat["src"]] + [{n["title"]: n["src"]} for n in cat["notes"]]}
+        nav.append({dom["label"]: [{cat["label"]: [cat["src"]] + [note_nav(n) for n in cat["notes"]]}
                                    if cat["notes"] else {cat["label"]: cat["src"]}
                                    for cat in dom["categories"]]})
-    return nav + [{"📖 Glossaire": [GLOSSARY_SRC]}]
+    return nav + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire": [GLOSSARY_SRC]}]
+
+
+def note_nav(note):
+    """Note simple : un lien. Note découpée : une entrée dépliable, présentation puis chapitres."""
+    if note.get("chapters"):
+        return {note["title"]: [note["src"]] + [{c["title"]: c["src"]} for c in note["chapters"]]}
+    return {note["title"]: note["src"]}
 
 
 # ---------------------------------------------------------------- bibliothèque
@@ -1166,15 +1173,21 @@ def load_library(docs_dir, tree):
             base = f"library/{dom['id']}/{cat['id']}"
             folder = docs_dir / base
             real = {}
-            for f in sorted(folder.glob("*.md")) if folder.exists() else []:
-                if f.name == "index.md":
+            found = (sorted(folder.glob("*.md")) + sorted(folder.glob("*/index.md"))) if folder.exists() else []
+            for f in found:
+                if f.name == "index.md" and f.parent == folder:
                     continue
                 body, meta = get_data(f.read_text(encoding="utf-8"))
                 h1 = re.search(r"^# (.+)$", body, re.M)
-                title = str(meta.get("title") or (h1.group(1) if h1 else f.stem)).strip()
+                stem = f.parent.name if f.name == "index.md" else f.stem
+                title = str(meta.get("title") or (h1.group(1) if h1 else stem)).strip()
                 note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True}
+                if f.name == "index.md":                    # note découpée : ses chapitres, dans l'ordre
+                    note["chapters"] = [{"title": str(get_data(c.read_text(encoding="utf-8"))[1].get("title") or c.stem),
+                                         "src": c.relative_to(docs_dir).as_posix()}
+                                        for c in sorted(f.parent.glob("*.md")) if c.name != "index.md"]
                 real[slug(title)] = note
-                real.setdefault(slug(f.stem), note)
+                real.setdefault(slug(stem), note)
             notes, used = [], set()
             for title in cat.get("notes") or []:
                 hit = real.get(slug(title))
@@ -1247,6 +1260,8 @@ hide:
 
 Le **savoir de référence** : mes notes de compréhension, reprises d'Obsidian au fil de l'eau, les ressources
 et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la Bibliothèque garde ce qui **dure**.
+
+<a class="kw-card kw-card--wide" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {sum(n["imported"] for d in library for c in d["categories"] for n in c["notes"])} notes publiées : un mot, une commande, un acteur.</span></a>
 {doms}
 ## 🧭 Ressources
 
@@ -1256,6 +1271,71 @@ et le glossaire. Veille, Analyses et Dossiers racontent ce qui **se passe** ; la
 
 <a class="kw-card kw-card--wide" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">{glossary_count} notions de A à Z</span><span class="kw-card__text">Alimenté automatiquement par le « Lexique du jour » des Morning Briefs, complété à la main.</span></a>
 """
+
+
+LIBRARY_SEARCH_SRC = "library/recherche.md"
+LIBRARY_SEARCH_DATA = "search/bibliotheque.json"
+
+
+def page_library_search(library):
+    notes = sum(n["imported"] for d in library for c in d["categories"] for n in c["notes"])
+    return LIBRARY_SEARCH_SRC, f"""---
+hide:
+  - toc
+search:
+  exclude: true
+---
+# 🔎 Rechercher dans mes notes
+
+<span class="kw-muted">Texte intégral des {notes} notes publiées. Tous les mots saisis doivent figurer dans la section ;
+un mot trouvé dans le titre la fait remonter. La recherche du site (en haut) ne connaît que les titres des notes.</span>
+
+<div class="kw-explorer kw-libsearch" id="kw-libsearch" data-src="{LIBRARY_SEARCH_DATA}">
+<div class="kw-explorer__bar">
+<input type="search" class="kw-explorer__q" placeholder="Rechercher : kerberoasting, nmap -sV, Lazarus…" aria-label="Rechercher dans les notes" autofocus>
+<span class="kw-explorer__count kw-muted"></span>
+</div>
+<ol class="kw-libsearch__hits"></ol>
+<nav class="kw-pager" aria-label="Pages de résultats"></nav>
+<noscript>La recherche a besoin de JavaScript ; les notes restent accessibles depuis la Bibliothèque.</noscript>
+</div>
+"""
+
+
+def split_search_index(config):
+    """Le texte des notes de la Bibliothèque (plusieurs dizaines de Mo) sort de l'index de recherche global,
+    que Material recharge à chaque page : il n'y garde que ses titres et intertitres, et le texte intégral
+    part dans search/bibliotheque.json, lu seulement par la page « Rechercher dans mes notes »."""
+    path = Path(config.site_dir) / "search" / "search_index.json"
+    if not path.exists():
+        return
+    labels = {}
+    for dom in STATE.get("library", []):
+        for cat in dom["categories"]:
+            for n in cat["notes"]:
+                if n["imported"]:
+                    labels[url_of(n["src"])] = n["title"]
+                    for c in n.get("chapters", []):
+                        labels[url_of(c["src"])] = f"{n['title']} · {c['title']}"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    notes, kept, pages = [], [], {}
+    for doc in data.get("docs", []):
+        page = doc["location"].split("#")[0]
+        if page not in labels:
+            kept.append(doc)
+            continue
+        text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", doc.get("text") or ""))).strip()
+        if text:                                          # texte brut : balises de l'index Material retirées
+            notes.append([doc["location"], html.unescape(doc["title"]), labels[page], text])
+        if "#" not in doc["location"]:                   # une entrée par page : son titre, ses intertitres en texte
+            pages[page] = dict(doc, text="")
+            kept.append(pages[page])
+        elif page in pages and doc["title"]:
+            pages[page]["text"] += (" · " if pages[page]["text"] else "") + doc["title"]
+    data["docs"] = kept
+    path.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (path.parent / "bibliotheque.json").write_text(json.dumps(notes, ensure_ascii=False, separators=(",", ":")),
+                                                   encoding="utf-8")
 
 
 # ---------------------------------------------------------------- glossaire
@@ -1436,10 +1516,11 @@ def on_config(config):
         if s["event"]:
             STATE["mentions"].setdefault(s["event"], []).append(s)
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
+    STATE["library"] = library
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
-    pages += pages_library(library) + [page_library_index(library, themes, len(glossary))]
+    pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages.append(glossary_data(glossary))
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
@@ -1486,7 +1567,28 @@ def on_page_markdown(markdown, page, config, files):
         return decorate_brief(markdown, src)
     if re.fullmatch(r"(analyses|dossiers)/[^/]+\.md", src) and page.meta.get("kind") in ("analysis", "dossier"):
         return decorate_document(markdown, page)
+    if src.startswith("library/") and page.meta.get("source"):
+        return decorate_note(markdown, page)
     return markdown
+
+
+def decorate_note(markdown, page):
+    """Notes de la Bibliothèque : fil (domaine · catégorie · note) et, pour un chapitre, sa place dans la note."""
+    here = page.file.src_uri
+    parts = here.split("/")
+    dom = next((d for d in STATE.get("library", []) if d["id"] == parts[1]), None)
+    cat = next((c for c in dom["categories"] if c["id"] == parts[2]), None) if dom else None
+
+    def rel(src):
+        return posixpath.relpath(src, posixpath.dirname(here))
+
+    crumbs = [f"[📚 Bibliothèque]({rel('library/index.md')})"]
+    if dom and cat:
+        crumbs.append(f"{esc(dom['label'])} · [{esc(cat['label'])}]({rel(cat['src'])})")
+    if page.meta.get("chapter"):
+        crumbs.append(f"[{esc(page.meta.get('note', ''))}](index.md) · "
+                      f"chapitre {page.meta['chapter']}/{page.meta.get('chapters')}")
+    return f'<span class="kw-muted">{" · ".join(crumbs)}</span>\n\n' + markdown
 
 
 def on_page_content(html, page, config, files):
@@ -1500,6 +1602,7 @@ def on_post_build(config):
     """Flux RSS, puis redirections : chaque ancienne adresse Jekyll devient une petite page
     qui renvoie vers la nouvelle."""
     write_feeds(config)
+    split_search_index(config)
     redirects = load_yaml(Path(config.config_file_path).parent / "data" / "redirects.yml", {}) or {}
     base = "/" + urlparse(config.site_url or "/").path.strip("/")
     base = base.rstrip("/") + "/"

@@ -22,3 +22,16 @@ keywords = ["10.10.", "10.129."]
 [[allowlists]]
 description = "Adresses d'exemple documentées"
 paths = ['''^docs/start/conventions\.md$''']
+
+# Bibliothèque : identifiants factices des exemples de cours (curl -u admin:admin, clé « sk_live_abc123… »).
+[[allowlists]]
+description = "Exemples de cours de la Bibliothèque"
+condition = "AND"
+paths = ['''^docs[\\/]library[\\/]''']   # « \ » : contrôle local de scripts/import_notes.py sous Windows
+regexTarget = "line"
+regexes = [
+  '''\badmin:admin\b''',
+  '''YWRtaW46YWRtaW4=''',
+  '''\buser:pass\b''',
+  '''sk_live_(?:abc123|secret)\.\.\.''',
+]

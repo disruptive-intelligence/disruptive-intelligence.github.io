@@ -27,7 +27,7 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 | `docs/analyses/<slug>.md`, `docs/dossiers/<slug>.md` | Analyses et dossiers, publiés par veille-agent |
 | `docs/start/`, `methodology/`, `services/`… | Wiki Pentest, écrit à la main |
 | `data/bibliotheque.yml` | Arborescence de la Bibliothèque (miroir des notes Obsidian, notes prévues comprises) |
-| `scripts/import_notes.py` | Import de notes Obsidian choisies dans `docs/library/` (liens, images, contrôle secrets/IP/flags) |
+| `scripts/import_notes.py` | Import des notes Obsidian dans `docs/library/` (liens, images, découpage, masquage IP, gitleaks) — testé par `tests/` |
 | `data/ressources.yml` | Ressources de veille (thème > rubrique > liens), à éditer à la main |
 | `data/sources.yml` | Sources suivies, générées par `scripts/export_sources.py` depuis `veille-agent/config/feeds.json` |
 | `data/glossaire.yml` | Ajouts et corrections manuels du glossaire (prioritaires) |
@@ -42,13 +42,26 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 ## Importer des notes dans la Bibliothèque
 
 ```powershell
-.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --list        # correspondances
-.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes Cyber/01_CTI/CTI.md
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --list        # état note -> page
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --all         # routine : tout mettre à jour
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes Cyber/01_CTI/CTI.md   # une note
+.\.venv\Scripts\python -m unittest discover -s tests                                   # tests du convertisseur
 ```
 
-Seules les notes nommées sont importées ; la page « à importer » correspondante est remplacée.
-Une note contenant un flag, une IP de lab, une clé ou un mot de passe en clair est refusée :
-la nettoyer dans Obsidian, puis relancer. Relire en local avant de committer.
+`--all` (ré)importe chaque note rangée du coffre et retire les pages dont la note a disparu ; ensuite
+`mkdocs build --strict`, puis commit des fichiers nommés (`git add docs/library/…`, jamais `git add .`).
+
+- **Conversion** (hors code : `[[ -z $x ]]` en Bash reste intact) : `[[Note]]` et `[[#Titre]]` deviennent de vrais
+  liens, les ancres des sommaires écrits à la main suivent le titre réel, images copiées dans
+  `docs/library/assets/`, blocs `<details>` rendus en Markdown, surlignage `==…==` et schémas Mermaid.
+- **Découpage** : au-delà de 150 000 caractères, la note devient un dossier `<slug>/` (présentation + sommaire
+  dans `index.md`, une page par partie ou chapitre) ; le menu l'affiche comme une entrée dépliable.
+- **Dépôt public** : IP de lab HackTheBox masquées (10.10.x.y → 10.0.x.y, 10.129.x.y → 10.1.x.y) ; flag, clé
+  privée ou vrai jeton = note refusée ; puis gitleaks (s'il est installé) contrôle les pages écrites avec
+  `.gitleaks.toml`. Un exemple de cours factice signalé par gitleaks s'ajoute à l'allowlist « Bibliothèque ».
+- **Recherche** : l'index global de Material (rechargé à chaque page) ne garde des notes que titres et
+  intertitres ; leur texte intégral part dans `search/bibliotheque.json`, lu par la page
+  « 🔎 Rechercher dans mes notes » (`/library/recherche/?mots=…`).
 
 ## Ce que le hook génère
 

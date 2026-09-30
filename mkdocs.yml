@@ -79,7 +79,12 @@ markdown_extensions:
       permalink: true
   - admonition                # callouts : !!! note, warning, tip...
   - pymdownx.details          # blocs repliables : ??? note
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:          # schémas ```mermaid des notes Obsidian
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.mark             # surlignage ==texte== des notes Obsidian
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.highlight:
