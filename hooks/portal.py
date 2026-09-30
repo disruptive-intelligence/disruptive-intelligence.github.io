@@ -1293,6 +1293,9 @@ def load_library(docs_dir, tree):
                     notes.append({"title": title, "src": f"{base}/{slug(title)}.md", "imported": False, "group": group})
             extra = {n["src"]: n for n in real.values() if n["src"] not in used}
             notes += list(extra.values())
+            groups = list(dict.fromkeys(n.get("group") for n in notes))   # dans chaque sous-rubrique : cours d'abord
+            notes = [n for _, _, _, n in sorted((groups.index(n.get("group")), n.get("format") != "cours", i, n)
+                                                for i, n in enumerate(notes))]
             cats.append({"id": cat["id"], "label": cat["label"], "src": f"{base}/index.md", "notes": notes})
         out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
     return out

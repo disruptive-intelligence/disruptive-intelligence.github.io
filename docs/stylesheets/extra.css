@@ -14,7 +14,6 @@
   --md-accent-fg-color: #ff4d5a;
   --md-typeset-a-color: #8f9bff;             /* liens bleu-lavande */
   --kw-sub: #b9b8f0;                         /* sous-pages lavande */
-  --kw-course: #f2a7ad;                      /* cours complets : rose aurore (synthèses : lavande) */
   --kw-line: #3a3232;
   --kw-panel: #211c1c;
   --kw-sidebar: #151111;
@@ -573,7 +572,6 @@ body[data-md-color-scheme="slate"]::after {
   --md-accent-fg-color: #c8323f;
   --md-typeset-a-color: #4450c4;
   --kw-sub: #5a5fb8;
-  --kw-course: #b43d49;
   --kw-line: #eadbd6;
   --kw-panel: #ffffff;
   --kw-sidebar: #f6eeeb;
@@ -910,11 +908,11 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset a.kw-doc-btn:hover { border-color: #ed4d5a; color: #ed4d5a; }
 .md-typeset a.kw-doc-btn--private { border-color: var(--kw-line); background: var(--kw-soft); color: var(--md-default-fg-color--light); }
 
-/* Bibliothèque : cours complets en rose aurore, synthèses dans le lavande des sous-pages */
-.md-nav--primary .md-nav__link.kw-cours:not(.md-nav__link--active):not(:hover) { color: var(--kw-course) !important; }
-.md-typeset .kw-notes li.kw-cours a { color: var(--kw-course); }
+/* Bibliothèque : cours complets en premier et en texte plein, synthèses dans le lavande plus discret */
+.md-nav--primary .md-nav__link.kw-cours:not(.md-nav__link--active):not(:hover) { color: var(--kw-strong) !important; font-weight: 600; }
+.md-typeset .kw-notes li.kw-cours a { color: var(--kw-strong); font-weight: 600; }
 .md-typeset .kw-format { display: inline-block; font-size: .58rem; font-weight: 800; letter-spacing: .02em;
   padding: .02rem .45rem; margin-right: .3rem; border-radius: 1em; border: 1px solid currentColor; }
-.md-typeset .kw-format--cours { color: var(--kw-course); }
+.md-typeset .kw-format--cours { color: var(--kw-strong); }
 .md-typeset .kw-format--synthese { color: var(--kw-sub); }
 .md-typeset .kw-format--fiche { color: var(--kw-link); }
