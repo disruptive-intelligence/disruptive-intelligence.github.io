@@ -1,7 +1,6 @@
 ---
 title: Taxonomie cyber
 source: Cyber/Taxonomie_Cyber.md
-chapters: 15
 ---
 
 **Référentiel de référence — Principes, attaques, défenses et réponse à incident**
@@ -60,20 +59,81 @@ NIST CSF 2.0 · MITRE ATT&CK · MITRE D3FEND · MITRE CAPEC · CWE · OWASP Top 
 
 ---
 
+## Référentiel complet de taxonomie cyber — principes, familles d'attaques, défenses et raisonnement SOC/IR
+
+> **Référentiel de référence — Volume 1/8**
+> Parties 1 à 3 : Fondations · Grands principes défensifs · Gouvernance, risque et conformité
+>
+> Ce cours est conçu comme un **cours-pivot** : son objectif n'est pas de cataloguer des attaques isolées, mais de bâtir une **carte mentale** de toute la cybersécurité. On apprend à *classer*, à *relier*, et à passer de l'attaque à la défense.
+
+---
+
+### Comment lire ce cours
+
+Encadrés récurrents utilisés tout au long du cours :
+
+- 🎯 **À retenir** — l'essentiel d'un chapitre, mémorisable en une phrase.
+- ⚠️ **Erreur fréquente** — la confusion ou la faute classique à éviter.
+- 🔧 **Exemple concret** — illustration conceptuelle, jamais un payload offensif.
+- 🛡️ **Défense** — les contre-mesures associées.
+- 🧭 **Taxonomie** — où ranger la notion, à quoi elle se relie.
+
+**Cadres de référence** mobilisés (utilisés comme ossature, pas recopiés) : NIST Cybersecurity Framework 2.0 (Govern, Identify, Protect, Detect, Respond, Recover), MITRE ATT&CK (tactiques/techniques/sous-techniques), MITRE D3FEND (contre-mesures), MITRE CAPEC (patterns d'attaque), CWE (faiblesses logicielles), OWASP Top 10 / API Security Top 10 / ASVS.
+
+**Posture du cours :** légal, défensif, pédagogique. On explique les *mécanismes*, les *familles*, les *impacts*, les *signaux de détection* et les *défenses*. On ne fournit ni payload exploitable, ni procédure offensive opérationnelle.
+
+---
+
+## Introduction — Pourquoi une taxonomie ?
+
+### Pourquoi la cybersécurité est illisible sans classification
+
+La cybersécurité souffre d'un problème de **volume** et de **vocabulaire**. Un débutant rencontre en quelques jours des centaines de termes — XSS, SSRF, Kerberoasting, EDR, BOLA, golden ticket, MFA fatigue — sans grille de lecture pour les organiser. Le résultat est une connaissance en « liste de courses » : on connaît des noms, mais on ne sait pas les *ranger*, donc on ne sait pas *raisonner*.
+
+Une taxonomie résout ce problème. Elle transforme une liste plate en **arbre** : familles, sous-familles, types, sous-types. Quand une attaque inconnue apparaît, on n'a plus besoin de la connaître par cœur : il suffit de la rattacher à une famille connue, et on hérite immédiatement de tout ce qu'on sait sur cette famille (mécanisme général, impacts probables, défenses applicables).
+
+### Apprendre des attaques isolées vs comprendre des familles
+
+Apprendre « le reflected XSS » isolément, c'est mémoriser un cas. Comprendre « l'injection » comme famille — *mélange de données et de code, exécuté par un interpréteur qui ne distingue pas les deux* — c'est obtenir une clé qui ouvre XSS, SQLi, command injection, LDAP injection, SSTI, etc. La famille donne le **principe** ; les sous-types ne sont que des variations de contexte (un navigateur, une base SQL, un shell, un annuaire LDAP, un moteur de templates).
+
+C'est la différence entre retenir 300 faits et comprendre 12 principes qui génèrent ces 300 faits.
+
+### Le fil rouge du cours
+
+Tout le cours suit une chaîne de raisonnement unique, déclinée encore et encore :
+
+> **comprendre → classer → relier → défendre → répondre**
+
+Et au niveau d'un objet de sécurité, la chaîne canonique est :
+
+> **actif → menace → vulnérabilité → risque → attaque → impact → détection → réponse → remédiation**
+
+Retenez cette chaîne : elle est le squelette de toute la discipline. Chaque chapitre du cours occupe une position précise sur cette chaîne.
+
+🎯 **À retenir** — La cybersécurité ne se mémorise pas, elle se *classe*. Une bonne taxonomie est un multiplicateur : elle vous fait comprendre des attaques que vous n'avez jamais vues.
+
+---
+
 ## Sommaire
 
-1. [Référentiel complet de taxonomie cyber — principes, familles d'attaques, défenses et raisonnement SOC/IR](01-referentiel-complet-de-taxonomie-cyber-principes-familles-d.md)
-2. [Partie 1 — Fondations de la cybersécurité](02-partie-1-fondations-de-la-cybersecurite.md)
-3. [Partie 2 — Grands principes défensifs](03-partie-2-grands-principes-defensifs.md)
-4. [Partie 3 — Gouvernance, risque et conformité (GRC)](04-partie-3-gouvernance-risque-et-conformite-grc.md)
-5. [Partie 4 — Taxonomie des surfaces d'attaque](05-partie-4-taxonomie-des-surfaces-d-attaque.md)
-6. [Partie 5 — Taxonomie des vulnérabilités](06-partie-5-taxonomie-des-vulnerabilites.md)
-7. [Partie 6 — Attaques web et applicatives](07-partie-6-attaques-web-et-applicatives.md)
-8. [Partie 7 — Attaques réseau et infrastructure](08-partie-7-attaques-reseau-et-infrastructure.md)
-9. [Partie 8 — Identité, Active Directory et privilèges](09-partie-8-identite-active-directory-et-privileges.md)
-10. [Partie 9 — Malware, phishing et attaques client-side](10-partie-9-malware-phishing-et-attaques-client-side.md)
-11. [Partie 10 — Cloud, API, conteneurs et supply chain](11-partie-10-cloud-api-conteneurs-et-supply-chain.md)
-12. [Partie 11 — Détection, SOC et réponse à incident](12-partie-11-detection-soc-et-reponse-a-incident.md)
-13. [Partie 12 — Taxonomie des défenses](13-partie-12-taxonomie-des-defenses.md)
-14. [Partie 13 — Synthèse transversale](14-partie-13-synthese-transversale.md)
-15. [Partie 14 — Cas filés d'investigation SOC/IR (V2)](15-partie-14-cas-files-d-investigation-soc-ir-v2.md)
+- [Partie 1 — Fondations de la cybersécurité](01-partie-1-fondations-de-la-cybersecurite.md)
+- [Partie 2 — Grands principes défensifs](02-partie-2-grands-principes-defensifs.md)
+- [Partie 3 — Gouvernance, risque et conformité (GRC)](03-partie-3-gouvernance-risque-et-conformite-grc.md)
+- [Partie 4 — Taxonomie des surfaces d'attaque](04-partie-4-taxonomie-des-surfaces-d-attaque.md)
+- [Partie 5 — Taxonomie des vulnérabilités](05-partie-5-taxonomie-des-vulnerabilites.md)
+- [Partie 6 — Attaques web et applicatives](06-partie-6-attaques-web-et-applicatives.md)
+- [Partie 7 — Attaques réseau et infrastructure](07-partie-7-attaques-reseau-et-infrastructure.md)
+- [Partie 8 — Identité, Active Directory et privilèges](08-partie-8-identite-active-directory-et-privileges.md)
+- [Partie 9 — Malware, phishing et attaques client-side](09-partie-9-malware-phishing-et-attaques-client-side.md)
+- [Partie 10 — Cloud, API, conteneurs et supply chain](10-partie-10-cloud-api-conteneurs-et-supply-chain.md)
+- [Partie 11 — Détection, SOC et réponse à incident](11-partie-11-detection-soc-et-reponse-a-incident.md)
+- [Partie 12 — Taxonomie des défenses](12-partie-12-taxonomie-des-defenses.md)
+- [Partie 13 — Synthèse transversale](13-partie-13-synthese-transversale.md)
+- [Partie 14 — Cas filés d'investigation SOC/IR (V2)](14-partie-14-cas-files-d-investigation-soc-ir-v2/index.md)
+    - [Chapitre 314 — Cas 1 : Phishing avec vol d'identifiants](14-partie-14-cas-files-d-investigation-soc-ir-v2/01-chapitre-314-cas-1-phishing-avec-vol-d-identifiant.md)
+    - [Chapitre 315 — Cas 2 : Suspicion de Kerberoasting](14-partie-14-cas-files-d-investigation-soc-ir-v2/02-chapitre-315-cas-2-suspicion-de-kerberoasting.md)
+    - [Chapitre 316 — Cas 3 : Malware sur un poste de travail](14-partie-14-cas-files-d-investigation-soc-ir-v2/03-chapitre-316-cas-3-malware-sur-un-poste-de-travail.md)
+    - [Chapitre 317 — Cas 4 : Exfiltration depuis le cloud](14-partie-14-cas-files-d-investigation-soc-ir-v2/04-chapitre-317-cas-4-exfiltration-depuis-le-cloud.md)
+    - [Chapitre 318 — Cas 5 : Ransomware](14-partie-14-cas-files-d-investigation-soc-ir-v2/05-chapitre-318-cas-5-ransomware.md)
+    - [Chapitre 319 — Cas 6 : SSRF vers les métadonnées cloud](14-partie-14-cas-files-d-investigation-soc-ir-v2/06-chapitre-319-cas-6-ssrf-vers-les-metadonnees-cloud.md)
+- [Annexes](15-annexes.md)

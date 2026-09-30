@@ -1,9 +1,10 @@
 ---
-title: PARTIE 10 — ORGANISER UN PROJET ANSIBLE
+title: Partie 10 — Organiser un projet ansible
 source: IT/10_virtualization-containers/Ansible.md
 note: Ansible
-chapter: 11
-chapters: 13
+up:
+- - Ansible
+  - index.md
 ---
 
 > **Objectif de la partie :** passer de petits playbooks éparpillés à un **projet propre**, structuré, versionné et documenté.
@@ -33,6 +34,7 @@ mon-projet/
 └── .gitignore             # fichiers à ne pas versionner
 ```
 
+
 > **L'idée :** chaque chose à sa place. Inventaire, variables, playbooks, roles, templates sont rangés dans des dossiers prévisibles. N'importe qui (toi dans six mois, ou un collègue) **s'y retrouve**.
 
 ### Très utile en pratique
@@ -50,6 +52,7 @@ mon-projet/
 └── playbooks/
     └── site.yml
 ```
+
 
 ### ❌ Erreur classique
 
@@ -92,6 +95,7 @@ private_key_file = ~/.ssh/id_ed25519 # clé privée à utiliser
 host_key_checking = False            # pratique en lab (voir avertissement)
 ```
 
+
 > **Avec `ansible.cfg`, les commandes raccourcissent :**
 > ```bash
 > # Avant :
@@ -107,6 +111,7 @@ host_key_checking = False            # pratique en lab (voir avertissement)
 ansible --version       # affiche le chemin du fichier de config lu
 ```
 
+
 Quand tu lances une commande depuis un dossier contenant un `ansible.cfg`, Ansible le lit **automatiquement**.
 
 ### Exemple simple
@@ -116,6 +121,7 @@ Quand tu lances une commande depuis un dossier contenant un `ansible.cfg`, Ansib
 inventory = ./inventory.ini
 remote_user = admin
 ```
+
 
 Avec ça, `ansible all -m ansible.builtin.ping` fonctionne **sans** `-i` ni `-u`.
 
@@ -162,6 +168,7 @@ Un projet Ansible devrait être dans **Git** : historique des changements, retou
 .vault_pass          # le mot de passe Vault, JAMAIS dans Git
 ```
 
+
 > 🛡️ **Réflexe sécurité :** le `.gitignore` empêche de versionner les fichiers sensibles. Exclus tout fichier de **mot de passe Vault** et toute **clé privée**. Les fichiers **chiffrés par Vault**, eux, peuvent être versionnés (ils sont illisibles sans la clé).
 
 #### Documenter avec un README
@@ -177,11 +184,13 @@ git status              # VÉRIFIER qu'aucun secret en clair n'est suivi !
 git commit -m "Projet Ansible : inventaire, playbooks, role common"
 ```
 
+
 > 🔍 **Réflexe diagnostic / sécurité :** avant **chaque** commit, lance `git status` et **vérifie** qu'aucun fichier sensible (secret en clair, clé privée) n'est sur le point d'être versionné.
 
 ### Exemple simple
 
 Un `README.md` minimal :
+
 ```markdown
 # Mon projet Ansible
 
@@ -190,6 +199,7 @@ Administration des serveurs web.
 ## Utilisation
 ansible-playbook playbooks/site.yml --ask-vault-pass
 ```
+
 
 ### ❌ Erreur classique
 

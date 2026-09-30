@@ -23,11 +23,13 @@ HTTP = client demande, serveur répond, en clair, sur le port 80.
 ## 2. URL : structure
 
 ### À retenir
+
 ```
 http://admin:password@inlanefreight.com:80/dashboard.php?login=true#status
 └─┬─┘ └──────┬───────┘ └────────┬────────┘└┬┘└─────┬──────┘└────┬─────┘└──┬──┘
 scheme   user info           host        port    path      query string fragment
 ```
+
 
 | Composant | Exemple | Rôle |
 |---|---|---|
@@ -47,6 +49,7 @@ Seuls **scheme** et **host** sont obligatoires. Le reste est optionnel.
 ## 3. HTTP Flow
 
 ### À retenir
+
 1. L'utilisateur saisit le domaine (`inlanefreight.com`).
 2. **Résolution DNS** : le domaine est traduit en IP (le navigateur consulte d'abord `/etc/hosts`).
 3. Le navigateur envoie un **GET /** sur le port 80.
@@ -74,9 +77,11 @@ HTTPS = HTTP **chiffré** via TLS. Port **443**. Même si le trafic est intercep
 HTTP expose les credentials sur le réseau (Wi-Fi public = capture facile). Même en HTTPS, un **DNS en clair** peut révéler les sites visités → utiliser DNS chiffré (8.8.8.8, 1.1.1.1) ou VPN. Attention aux **HTTP downgrade attacks** (MiTM).
 
 ### Commandes utiles
+
 ```bash
 curl -k https://inlanefreight.com   # ignore les erreurs de certificat (labs/SSL invalide)
 ```
+
 
 ### Point clé à mémoriser
 HTTPS chiffre tout sur le port 443. `-k` ignore le certificat (à n'utiliser qu'en lab).
@@ -94,6 +99,7 @@ Host: inlanefreight.com
 User-Agent: Mozilla/5.0
 Cookie: PHPSESSID=c4ggt4jull9obt7aupa55o8vbf
 ```
+
 
 | Champ | Exemple | Rôle |
 |---|---|---|
@@ -118,6 +124,7 @@ Set-Cookie: PHPSESSID=m4u64rqlpfthrvvb12ai9voqgf
 Content-Type: text/html; charset=UTF-8
 ```
 
+
 ### Point clé à mémoriser
 Ligne 1 = version + code. Le body peut être bien plus que du HTML (JSON, fichiers).
 
@@ -128,6 +135,7 @@ Ligne 1 = version + code. Le body peut être bien plus que du HTML (JSON, fichie
 > **Définition courte + intérêt cyber** pour chaque header.
 
 ### Request headers (envoyés par le client)
+
 - **Host** — domaine/IP ciblé. *Cyber : un même serveur héberge plusieurs sites → cible d'énumération (virtual hosts).*
 - **User-Agent** — décrit le client (navigateur, OS). *Cyber : manipulable, utile pour usurper un client ou tester du filtrage.*
 - **Referer** — d'où vient la requête. *Cyber : facilement falsifiable, ne jamais s'y fier pour la sécurité.*
@@ -136,26 +144,31 @@ Ligne 1 = version + code. Le body peut être bien plus que du HTML (JSON, fichie
 - **Authorization** — token d'authentification (`Basic …`, `Bearer …`). *Cyber : `Basic` = Base64 décodable.*
 
 ### Response headers (envoyés par le serveur)
+
 - **Server** — logiciel/version du serveur (ex. `Apache/2.2.14`). *Cyber : fuite d'info → fingerprinting et recherche de CVE.*
 - **Set-Cookie** — pose un cookie côté client.
 - **WWW-Authenticate** — type d'auth requis (ex. `Basic realm="..."`).
 
 ### Entity headers (décrivent le contenu)
+
 - **Content-Type** — type de la ressource (`text/html`, `application/json`). *Cyber : crucial, influence l'interprétation de l'input par le serveur.*
 - **Content-Length** — taille du body.
 - **Content-Encoding** — compression (ex. `gzip`).
 
 ### Security headers (réponse)
+
 - **Content-Security-Policy (CSP)** — sources autorisées. *Cyber : protège contre le XSS.*
 - **Strict-Transport-Security (HSTS)** — force HTTPS. *Cyber : empêche le sniffing / downgrade.*
 - **Referrer-Policy** — contrôle l'envoi du Referer. *Cyber : évite la fuite d'URLs sensibles.*
 
 ### Commandes utiles
+
 ```bash
 curl -I https://site.com          # HEAD : affiche seulement les headers de réponse
 curl -i https://site.com          # affiche headers + body
 curl -H 'Header: valeur' URL      # envoyer un header custom
 ```
+
 
 ### Point clé à mémoriser
 Les headers `Server`, `Set-Cookie` et `Authorization` sont des mines d'or en pentest.
@@ -187,6 +200,7 @@ PUT et DELETE mal sécurisées = upload malveillant ou suppression de données.
 ## 9. Codes de statut HTTP
 
 ### À retenir — les familles
+
 - **1xx** : informationnel
 - **2xx** : succès
 - **3xx** : redirection
@@ -194,6 +208,7 @@ PUT et DELETE mal sécurisées = upload malveillant ou suppression de données.
 - **5xx** : erreur **serveur**
 
 ### Codes utiles
+
 | Code | Signification | Intérêt cyber |
 |---|---|---|
 | **200 OK** | Succès, ressource renvoyée | — |
@@ -262,6 +277,7 @@ Les paramètres GET sont **dans l'URL** : `search.php?search=london`. Un seul `?
 curl 'http://SERVER/search.php?search=le' -H 'Authorization: Basic YWRtaW46YWRtaW4='
 ```
 
+
 ### Pourquoi c'est important en cyber
 Repérer la page réelle interrogée par une fonction (ex. une recherche appelle `search.php`) permet de l'attaquer directement, souvent en récupérant du JSON brut.
 
@@ -287,6 +303,7 @@ curl -X POST -d '{"search":"london"}' \
      -b 'PHPSESSID=xxx' http://SERVER/search.php
 ```
 
+
 ### Pourquoi c'est important en cyber
 Savoir forger manuellement un POST (login, JSON) permet de tester l'auth et les fonctions sans passer par le front-end. Sans le bon `Content-Type`, le serveur n'interprète pas correctement le body.
 
@@ -298,6 +315,7 @@ POST = données dans le body. Pour du JSON : `-H 'Content-Type: application/json
 ## 14. Cookies et authentification
 
 ### À retenir
+
 - **Set-Cookie** (réponse) : le serveur pose un cookie après login.
 - **Cookie** (requête) : le client le renvoie à chaque requête.
 - **PHPSESSID** : identifiant de session PHP typique.
@@ -311,6 +329,7 @@ curl http://admin:admin@SERVER/                    # via l'URL
 curl -H 'Authorization: Basic YWRtaW46YWRtaW4=' http://SERVER/   # header manuel
 curl -b 'PHPSESSID=xxx' http://SERVER/             # cookie de session
 ```
+
 
 ### Pourquoi c'est important en cyber
 Voler ou rejouer un cookie de session permet d'usurper un utilisateur (cf. XSS). Le Basic Auth en Base64 est trivial à décoder → jamais sécurisé sans HTTPS.
@@ -335,6 +354,7 @@ Une API CRUD associe une **opération** à une **méthode HTTP** sur une ressour
 > `PUT` = remplace toute l'entrée, `PATCH` = modification partielle. `OPTIONS` indique laquelle est acceptée.
 
 ### Commandes utiles
+
 ```bash
 # Read (jq formate le JSON)
 curl -s http://SERVER/api.php/city/london | jq
@@ -352,6 +372,7 @@ curl -X PUT http://SERVER/api.php/city/london \
 # Delete
 curl -X DELETE http://SERVER/api.php/city/New_HTB_City
 ```
+
 
 ### Pourquoi c'est important en cyber
 Une API qui autorise PUT/DELETE **sans contrôle d'accès** = vulnérabilité critique (n'importe qui modifie/supprime des données). L'auth se fait via cookie ou header (JWT).
@@ -391,6 +412,7 @@ curl -b 'PHPSESSID=xxx' URL                 # cookie
 curl -L URL                                 # suivre les redirections
 curl -s URL | jq                            # JSON propre
 ```
+
 
 ---
 

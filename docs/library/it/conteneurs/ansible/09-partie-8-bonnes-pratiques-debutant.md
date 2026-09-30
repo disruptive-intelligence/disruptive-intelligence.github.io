@@ -1,9 +1,10 @@
 ---
-title: PARTIE 8 — BONNES PRATIQUES DÉBUTANT
+title: Partie 8 — Bonnes pratiques débutant
 source: IT/10_virtualization-containers/Ansible.md
 note: Ansible
-chapter: 9
-chapters: 13
+up:
+- - Ansible
+  - index.md
 ---
 
 > **Objectif de la partie :** acquérir les bons réflexes sans alourdir. Quelques habitudes simples qui font la différence entre un playbook fragile et un playbook fiable.
@@ -31,9 +32,11 @@ Deux habitudes qui rendent tes playbooks **lisibles et fiables** :
 - ansible.builtin.shell: apt install -y nginx
 ```
 
+
 ### Très utile en pratique
 
 Un playbook lisible, c'est :
+
 - des `name:` qui décrivent **ce que fait** chaque tâche ;
 - des modules dédiés plutôt que du `shell` ;
 - une structure claire (un play par objectif).
@@ -58,6 +61,7 @@ C'est ce qui te permet, dans six mois, de **relire** ton playbook et de le compr
         state: started
         enabled: true
 ```
+
 
 On **lit** ce playbook comme une recette.
 
@@ -97,6 +101,7 @@ Tu connais déjà `--check` (Partie 4). Ajoute **`--diff`** : il **montre les ch
 ansible-playbook -i inventory.ini site.yml --check --diff
 ```
 
+
 - **`--check`** : simule (ne modifie rien).
 - **`--diff`** : montre **le détail** de ce qui changerait.
 
@@ -113,11 +118,13 @@ Combinés, ils te donnent un **aperçu précis** avant d'agir.
 +PermitRootLogin no
 ```
 
+
 ### Exemple simple
 
 ```bash
 ansible-playbook -i inventory.ini hardening.yml --check --diff
 ```
+
 Tu **vois** ce qui changerait, sans rien toucher.
 
 ### 🔍 Réflexe diagnostic
@@ -161,6 +168,7 @@ Quand tu lances un playbook, il s'applique à **tout** ce que vise `hosts:`. L'o
 ansible-playbook -i inventory.ini site.yml --limit cible1
 ```
 
+
 > **`--limit` est ton garde-fou de périmètre.** Il te permet de **tester sur une seule machine** avant d'appliquer à tout le groupe. Indispensable pour les actions importantes.
 
 ### Très utile en pratique
@@ -174,6 +182,7 @@ La bonne démarche pour une action importante :
 4. lancer sur tout le groupe (sans --limit)
 ```
 
+
 Tu valides sur une machine **témoin** avant de généraliser.
 
 ### Exemple simple
@@ -182,6 +191,7 @@ Tu valides sur une machine **témoin** avant de généraliser.
 ansible-playbook -i inventory.ini site.yml --limit cible1   # une seule machine
 ansible-playbook -i inventory.ini site.yml                  # tout le groupe
 ```
+
 
 ### 🧪 Lab vs production
 
@@ -231,16 +241,20 @@ Quelques réflexes simples, sans transformer ce cours en cours de sécurité :
 ### Exemple simple
 
 Mauvais (mot de passe en clair) :
+
 ```yaml
 vars:
   db_password: SuperSecret123    # ❌ JAMAIS en clair
 ```
 
+
 Bon (on chiffrera ça avec Vault, Partie 9) :
+
 ```yaml
 vars_files:
   - secrets.yml                  # ✅ fichier chiffré par Vault
 ```
+
 
 ### 🧪 Lab vs production
 

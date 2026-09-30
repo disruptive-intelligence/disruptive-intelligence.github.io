@@ -1,9 +1,10 @@
 ---
-title: PARTIE 6 — VARIABLES, FACTS, CONDITIONS ET BOUCLES
+title: Partie 6 — Variables, facts, conditions et boucles
 source: IT/10_virtualization-containers/Ansible.md
 note: Ansible
-chapter: 7
-chapters: 13
+up:
+- - Ansible
+  - index.md
 ---
 
 > **Objectif de la partie :** rendre tes playbooks **adaptables**. Avec les variables, les facts, les conditions et les boucles, un même playbook s'ajuste à chaque machine au lieu de tout coder en dur.
@@ -30,11 +31,13 @@ Une **variable** permet de ne pas coder une valeur « en dur ». Au lieu d'écri
         state: present
 ```
 
+
 > **La syntaxe `{{ nom_variable }}`** sert à **utiliser** une variable. Les doubles accolades disent à Ansible : « remplace ceci par la valeur de la variable ».
 
 ### Très utile en pratique
 
 Les variables servent à :
+
 - Éviter de répéter une valeur (et de devoir la changer à dix endroits).
 - Adapter un playbook selon le contexte (un port différent par groupe, par exemple).
 - Rendre un playbook **réutilisable**.
@@ -49,6 +52,7 @@ tasks:
     ansible.builtin.debug:
       msg: "Le port configuré est {{ port }}"
 ```
+
 
 ### ❌ Erreur classique
 
@@ -92,11 +96,13 @@ projet/
     └── cible1.yml       # variables pour l'hôte "cible1" uniquement
 ```
 
+
 ```yaml
 # group_vars/web.yml
 paquet_web: nginx
 port_web: 80
 ```
+
 
 > **Le principe :** Ansible charge **tout seul** les variables du bon fichier selon le groupe ou l'hôte ciblé. Une machine du groupe `web` reçoit les variables de `group_vars/web.yml`. C'est propre et organisé.
 
@@ -106,6 +112,7 @@ port_web: 80
 # Voir toutes les variables effectives d'un hôte
 ansible-inventory -i inventory.ini --host cible1
 ```
+
 
 La règle de priorité, version simple :
 
@@ -120,6 +127,7 @@ fuseau_horaire: Europe/Paris
 # group_vars/web.yml
 paquet_web: nginx
 ```
+
 
 Toutes les machines reçoivent `fuseau_horaire` ; celles du groupe `web` reçoivent **en plus** `paquet_web`.
 
@@ -167,12 +175,14 @@ ansible cible1 -i inventory.ini -m ansible.builtin.setup
 ansible cible1 -i inventory.ini -m ansible.builtin.setup -a "filter=ansible_distribution"
 ```
 
+
 ```yaml
 # Utiliser un fact dans un playbook
 - name: Afficher la distribution
   ansible.builtin.debug:
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
 ```
+
 
 > **Les facts sont une mine d'or :** sans rien configurer, Ansible connaît l'OS, la version, l'IP de chaque machine. Quelques facts utiles : `ansible_distribution` (Ubuntu, Debian…), `ansible_distribution_version`, `ansible_os_family` (Debian, RedHat…), `ansible_hostname`.
 
@@ -187,6 +197,7 @@ Les facts servent surtout à **adapter** un playbook : faire quelque chose **sel
   ansible.builtin.debug:
     msg: "{{ ansible_hostname }} tourne sous {{ ansible_distribution }}"
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -242,6 +253,7 @@ Avec `filter=ansible_*`, explore quelques facts (mémoire, processeur, interface
   become: true
 ```
 
+
 Une tâche dont la condition est **fausse** apparaît en **`skipped`** (rappel : Partie 2).
 
 ### Très utile en pratique
@@ -256,6 +268,7 @@ Une tâche dont la condition est **fausse** apparaît en **`skipped`** (rappel :
     msg: "Cette machine est sous Ubuntu"
   when: ansible_distribution == "Ubuntu"
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -307,6 +320,7 @@ Combine **deux** conditions avec `and` (par exemple : famille Debian **et** un c
   become: true
 ```
 
+
 > **Le mot-clé `item`** représente l'élément en cours de la boucle. À chaque tour, `{{ item }}` prend la valeur suivante de la liste.
 
 ### Très utile en pratique
@@ -326,6 +340,7 @@ Combine **deux** conditions avec `and` (par exemple : famille Debian **et** un c
     - charlie
   become: true
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -373,6 +388,7 @@ Le module **`debug`** affiche un message ou la valeur d'une variable. C'est ton 
     var: paquet_web        # affiche le contenu de la variable paquet_web
 ```
 
+
 > Deux usages : **`msg`** pour un message libre (avec des `{{ }}` dedans), et **`var`** pour afficher directement le contenu d'une variable.
 
 ### Très utile en pratique
@@ -386,6 +402,7 @@ Le module **`debug`** affiche un message ou la valeur d'une variable. C'est ton 
   ansible.builtin.debug:
     var: ansible_distribution
 ```
+
 
 ### 🔍 Réflexe diagnostic
 

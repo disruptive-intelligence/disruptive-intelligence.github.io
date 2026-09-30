@@ -1,9 +1,10 @@
 ---
-title: PARTIE 5 — MODULES ESSENTIELS D'ADMINISTRATION LINUX
+title: Partie 5 — Modules essentiels d'administration linux
 source: IT/10_virtualization-containers/Ansible.md
 note: Ansible
-chapter: 6
-chapters: 13
+up:
+- - Ansible
+  - index.md
 ---
 
 > **Objectif de la partie :** apprendre les **modules** Ansible les plus utiles pour administrer une machine Linux : paquets, services, fichiers, permissions, utilisateurs et groupes. Ce sont tes outils du quotidien.
@@ -25,7 +26,9 @@ Pour installer ou retirer des logiciels, on utilise le module de paquets de la d
   become: true
 ```
 
+
 Les états possibles :
+
 - `state: present` → le paquet **doit être installé**.
 - `state: absent` → le paquet **ne doit pas être là** (Ansible le retire s'il est présent).
 - `state: latest` → le paquet doit être à sa **dernière version**.
@@ -52,6 +55,7 @@ Les états possibles :
   become: true
 ```
 
+
 > `update_cache: true` équivaut à un `apt update` avant l'installation : utile pour être sûr d'avoir la liste de paquets à jour.
 
 ### Exemple simple
@@ -63,6 +67,7 @@ Les états possibles :
     state: present
   become: true
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -111,7 +116,9 @@ Pour démarrer, arrêter ou activer un service, on utilise le module **`service`
   become: true
 ```
 
+
 Les options principales :
+
 - `state: started` / `stopped` / `restarted` → l'état de marche **maintenant**.
 - `enabled: true` / `false` → démarrage **automatique au boot** ou non.
 
@@ -127,6 +134,7 @@ Les options principales :
   become: true
 ```
 
+
 ### Exemple simple
 
 ```yaml
@@ -136,6 +144,7 @@ Les options principales :
     state: started
   become: true
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -196,9 +205,11 @@ Deux modules pour gérer fichiers et dossiers :
   become: true
 ```
 
+
 ### Très utile en pratique
 
 Les **permissions** (`mode`) s'écrivent en notation octale, **entre guillemets** :
+
 - `"0644"` → lecture/écriture pour le propriétaire, lecture pour les autres (fichiers courants).
 - `"0600"` → lecture/écriture pour le propriétaire **seulement** (fichiers sensibles).
 - `"0750"` → dossier accessible au propriétaire et au groupe, pas aux autres.
@@ -215,6 +226,7 @@ Les **permissions** (`mode`) s'écrivent en notation octale, **entre guillemets*
     mode: "0644"
   become: true
 ```
+
 
 ### ❌ Erreur classique
 
@@ -258,6 +270,7 @@ Parfois, tu ne veux pas remplacer **tout** un fichier, juste **t'assurer qu'une 
   become: true
 ```
 
+
 - `path` : le fichier à modifier.
 - `regexp` : le motif de la ligne à chercher.
 - `line` : la ligne voulue (ajoutée si absente, corrigée si différente).
@@ -275,6 +288,7 @@ Parfois, tu ne veux pas remplacer **tout** un fichier, juste **t'assurer qu'une 
     line: "Machine administrée par Ansible"
   become: true
 ```
+
 
 ### 🔀 À ne pas confondre
 
@@ -329,6 +343,7 @@ Pour gérer les comptes, deux modules : **`group`** (les groupes) et **`user`** 
   become: true
 ```
 
+
 - `state: present` → le compte/groupe **doit exister**.
 - `state: absent` → il **ne doit pas exister** (Ansible le supprime).
 
@@ -346,6 +361,7 @@ Pour gérer les comptes, deux modules : **`group`** (les groupes) et **`user`** 
   become: true
 ```
 
+
 > 🛡️ **Réflexe sécurité :** gérer les comptes **par Ansible** rend la gestion des accès **centralisée et reproductible**. Créer ou retirer un utilisateur sur tout le parc devient une opération propre, plutôt que des `useradd` éparpillés à la main.
 
 ### Exemple simple
@@ -357,6 +373,7 @@ Pour gérer les comptes, deux modules : **`group`** (les groupes) et **`user`** 
     state: present
   become: true
 ```
+
 
 ### ❌ Erreur classique
 

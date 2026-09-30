@@ -1154,10 +1154,33 @@ def library_nav(library):
 
 
 def note_nav(note):
-    """Note simple : un lien. Note découpée : une entrée dépliable, présentation puis chapitres."""
+    """Note simple : un lien. Note découpée : une entrée dépliable (présentation, puis parties et chapitres)."""
     if note.get("chapters"):
-        return {note["title"]: [note["src"]] + [{c["title"]: c["src"]} for c in note["chapters"]]}
+        return {note["title"]: [note["src"]] + [note_nav(c) for c in note["chapters"]]}
     return {note["title"]: note["src"]}
+
+
+def note_pages(folder, docs_dir):
+    """Pages d'une note découpée, dans l'ordre : NN-titre.md, ou NN-titre/ (partie : index.md + chapitres)."""
+    out = []
+    for f in sorted(folder.iterdir()):
+        page = f / "index.md" if f.is_dir() else f
+        if not page.is_file() or page.suffix != ".md" or (not f.is_dir() and f.name == "index.md"):
+            continue
+        entry = {"title": str(get_data(page.read_text(encoding="utf-8"))[1].get("title") or f.stem),
+                 "src": page.relative_to(docs_dir).as_posix()}
+        if f.is_dir():
+            entry["chapters"] = note_pages(f, docs_dir)
+        out.append(entry)
+    return out
+
+
+def walk_pages(note, trail=()):
+    """(page, libellé « Note · Partie · Chapitre ») de toutes les pages d'une note."""
+    label = " · ".join(trail + (note["title"],))
+    yield note["src"], label
+    for c in note.get("chapters", []):
+        yield from walk_pages(c, trail + (note["title"],))
 
 
 # ---------------------------------------------------------------- bibliothèque
@@ -1182,10 +1205,8 @@ def load_library(docs_dir, tree):
                 stem = f.parent.name if f.name == "index.md" else f.stem
                 title = str(meta.get("title") or (h1.group(1) if h1 else stem)).strip()
                 note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True}
-                if f.name == "index.md":                    # note découpée : ses chapitres, dans l'ordre
-                    note["chapters"] = [{"title": str(get_data(c.read_text(encoding="utf-8"))[1].get("title") or c.stem),
-                                         "src": c.relative_to(docs_dir).as_posix()}
-                                        for c in sorted(f.parent.glob("*.md")) if c.name != "index.md"]
+                if f.name == "index.md":                    # note découpée : parties et chapitres, dans l'ordre
+                    note["chapters"] = note_pages(f.parent, docs_dir)
                 real[slug(title)] = note
                 real.setdefault(slug(stem), note)
             notes, used = [], set()
@@ -1314,9 +1335,7 @@ def split_search_index(config):
         for cat in dom["categories"]:
             for n in cat["notes"]:
                 if n["imported"]:
-                    labels[url_of(n["src"])] = n["title"]
-                    for c in n.get("chapters", []):
-                        labels[url_of(c["src"])] = f"{n['title']} · {c['title']}"
+                    labels.update((url_of(src), label) for src, label in walk_pages(n))
     data = json.loads(path.read_text(encoding="utf-8"))
     notes, kept, pages = [], [], {}
     for doc in data.get("docs", []):
@@ -1573,7 +1592,8 @@ def on_page_markdown(markdown, page, config, files):
 
 
 def decorate_note(markdown, page):
-    """Notes de la Bibliothèque : fil (domaine · catégorie · note) et, pour un chapitre, sa place dans la note."""
+    """Notes de la Bibliothèque : fil (domaine · catégorie · note · partie), d'après l'en-tête « up »
+    écrit par scripts/import_notes.py (liens relatifs à la page)."""
     here = page.file.src_uri
     parts = here.split("/")
     dom = next((d for d in STATE.get("library", []) if d["id"] == parts[1]), None)
@@ -1585,9 +1605,8 @@ def decorate_note(markdown, page):
     crumbs = [f"[📚 Bibliothèque]({rel('library/index.md')})"]
     if dom and cat:
         crumbs.append(f"{esc(dom['label'])} · [{esc(cat['label'])}]({rel(cat['src'])})")
-    if page.meta.get("chapter"):
-        crumbs.append(f"[{esc(page.meta.get('note', ''))}](index.md) · "
-                      f"chapitre {page.meta['chapter']}/{page.meta.get('chapters')}")
+    for label, path in page.meta.get("up") or []:
+        crumbs.append(f"[{esc(label)}]({path})")
     return f'<span class="kw-muted">{" · ".join(crumbs)}</span>\n\n' + markdown
 
 

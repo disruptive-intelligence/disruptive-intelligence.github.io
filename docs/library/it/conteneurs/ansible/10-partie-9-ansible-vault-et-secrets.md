@@ -1,9 +1,10 @@
 ---
-title: PARTIE 9 — ANSIBLE VAULT ET SECRETS
+title: Partie 9 — Ansible vault et secrets
 source: IT/10_virtualization-containers/Ansible.md
 note: Ansible
-chapter: 10
-chapters: 13
+up:
+- - Ansible
+  - index.md
 ---
 
 > **Objectif de la partie :** gérer les secrets (mots de passe, clés) **sans** les écrire en clair, grâce à Ansible Vault.
@@ -25,6 +26,7 @@ Tes playbooks ont parfois besoin de **secrets** : un mot de passe, une clé d'AP
 ### Très utile en pratique
 
 Un secret peut traîner dans :
+
 - une variable de playbook (`db_password: ...`) ;
 - un fichier de variables (`group_vars/...`) ;
 - l'inventaire.
@@ -34,10 +36,12 @@ Partout où il y a un secret, il faut le **chiffrer** avec Vault.
 ### Exemple simple
 
 À éviter absolument :
+
 ```yaml
 vars:
   db_password: SuperSecret123    # ❌ lisible par tous, versionné dans Git
 ```
+
 
 ### ❌ Erreur classique
 
@@ -85,12 +89,14 @@ ansible-vault view secrets.yml
 ansible-vault encrypt group_vars/web/secrets.yml
 ```
 
+
 Un fichier chiffré ressemble à ça — **illisible**, donc **versionnable sans danger** :
 
 ```text
 $ANSIBLE_VAULT;1.1;AES256
 66386439653...   (contenu chiffré)
 ```
+
 
 ### Très utile en pratique
 
@@ -105,9 +111,11 @@ ansible-vault create secrets.yml
 # Tu sauvegardes : le fichier est chiffré.
 ```
 
+
 ```bash
 cat secrets.yml      # → contenu chiffré, illisible
 ```
+
 
 ### ❌ Erreur classique
 
@@ -154,11 +162,13 @@ Une fois ton secret chiffré, tu l'utilises dans un playbook **comme une variabl
         msg: "Le mot de passe est chargé (longueur : {{ db_password | length }})"
 ```
 
+
 Pour lancer un playbook qui utilise des secrets Vault, il faut **fournir le mot de passe** :
 
 ```bash
 ansible-playbook -i inventory.ini site.yml --ask-vault-pass
 ```
+
 
 `--ask-vault-pass` demande le mot de passe Vault au lancement.
 
@@ -173,6 +183,7 @@ group_vars/
     └── vault.yml       # variables SECRÈTES (chiffrées par Vault)
 ```
 
+
 Ansible charge **automatiquement** les deux pour le groupe `web`. Les secrets sont chiffrés, le reste reste lisible.
 
 ### Exemple simple
@@ -181,6 +192,7 @@ Ansible charge **automatiquement** les deux pour le groupe `web`. Les secrets so
 ansible-playbook -i inventory.ini site.yml --ask-vault-pass
 # → Ansible demande le mot de passe Vault, puis déchiffre les secrets à la volée
 ```
+
 
 ### 🔍 Réflexe diagnostic
 

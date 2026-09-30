@@ -88,38 +88,104 @@ class ConversionTests(VaultCase):
         self.assertIn('<details markdown="1">', pages["library/it/scripting/bash.md"])
 
 
-class SplitTests(VaultCase):
-    def test_long_note_split_by_parts_with_cross_page_anchors(self):
-        filler = "Lorem ipsum dolor sit amet. " * 200
-        text = ("# SQL\n\nPrésentation.\n\n## Table des matières\n\n- [Filtrer](#chapitre-3--filtrer-avec-where)\n\n"
-                f"# PARTIE I — Bases\n\n{filler}\n\n# Chapitre 1 — Pourquoi\n\n{filler}\n\n"
-                f"# Chapitre 2 — Modèle\n\n{filler}\n\n# PARTIE II — Lire\n\n{filler}\n\n"
-                f"# Chapitre 3 — Filtrer avec WHERE\n\nVoir [le début](#chapitre-1--pourquoi).\n\n{filler}\n")
-        with mock.patch.object(imp, "SPLIT_AT", 1000), mock.patch.object(imp, "MIN_SECTION", 100):
-            pages, notes = self.build("IT/Culture/SQL.md", text)
-        paths = list(pages)
-        self.assertEqual(paths[0], "library/it/culture/sql/index.md")
-        self.assertEqual(len(paths), 3)                  # présentation + 2 parties
-        self.assertIn("2 pages", notes)
-        index, part1, part2 = (pages[p] for p in paths)
-        self.assertIn("## Sommaire", index)
-        self.assertIn("(2-partie-ii-lire.md#chapitre-3-filtrer-avec-where)", index)   # sommaire manuel suivi
-        self.assertIn("title: PARTIE II — Lire", part2)
-        self.assertIn("chapter: 2", part2)
-        self.assertIn("(1-partie-i-bases.md#chapitre-1-pourquoi)", part2)
+class HeadingTests(VaultCase):
+    def test_first_heading_kept_when_not_the_note_title(self):
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              "# Définitions de base\n\nTexte.\n\n## Concept\n\nSuite.\n")
+        body = pages["library/it/scripting/bash.md"]
+        self.assertIn("## Définitions de base", body)   # vraie section (fiche HTB), pas un titre de note
+        self.assertIn("### Concept", body)
 
-    def test_many_small_chapters_one_page_each(self):
-        filler = "texte " * 600
-        text = "# Python\n\n" + "".join(f"# Chapitre {i} — Sujet {i}\n\n{filler}\n\n" for i in range(1, 6))
-        with mock.patch.object(imp, "SPLIT_AT", 1000):
+    def test_course_title_dropped_and_subtitle_becomes_lead(self):
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              "# Cours complet de scripting Bash\n\n## De zéro à l'automatisation\n\n"
+                              "Prérequis : aucun.\n\n## Glossaire\n\nmots\n")
+        body = pages["library/it/scripting/bash.md"]
+        self.assertNotIn("Cours complet", body)
+        self.assertIn("*De zéro à l'automatisation*", body)
+        self.assertIn("## Glossaire", body)
+
+    def test_sentence_headings_are_shortened_and_levels_rebased(self):
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              "### Kill chain\n\n#### 1. Reconnaissance : But de l'attaquant : collecter des infos "
+                              "publiques sur la cible avant l'attaque\n\ntexte\n\n"
+                              "#### Network/Host artifacts (ex : clés de registre, chemins, mutex, patterns réseau)\n")
+        body = pages["library/it/scripting/bash.md"]
+        self.assertIn("## Kill chain", body)
+        self.assertIn("### 1. Reconnaissance\n\nBut de l'attaquant : collecter", body)
+        self.assertIn("### Network/Host artifacts\n\n*(ex : clés de registre", body)
+
+    def test_lists_code_and_html_images_are_spaced_and_converted(self):
+        (self.vault / "assets").mkdir()
+        (self.vault / "assets/iam.png").write_bytes(b"\x89PNG")
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              "## IAAA\n**IAAA** regroupe :\n- **Identification** ;\n- **Authentication**.\n"
+                              '<img src="../../assets/iam.png" alt="IAM" width="550">\nExemples :\n- username ;\n'
+                              "```\nUser\n```\n> citation\n- étape\n    ```bash\n    ls\n    ```\n")
+        body = pages["library/it/scripting/bash.md"]
+        self.assertIn("regroupe :\n\n- **Identification**", body)
+        self.assertIn('![IAM](../../assets/bash-iam.png){ width="550" }', body)
+        self.assertIn("Exemples :\n\n- username ;\n\n```\nUser\n```\n\n> citation", body)
+        self.assertIn("- étape\n    ```bash\n    ls\n    ```", body)       # code d'une liste : indentation gardée
+
+    def test_excluded_document_not_listed(self):
+        (self.vault / "Cyber/01_CTI").mkdir(parents=True)
+        self.write("Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md", "# CERT-EU\n")
+        names = [p.name for p in imp.vault_notes(self.vault)]
+        self.assertNotIn("CERT-EU-Cyber-Threat-Intelligence-Framework.md", names)
+
+
+class SplitTests(VaultCase):
+    FILLER = "Lorem ipsum dolor sit amet. " * 130
+
+    def course(self):
+        f = self.FILLER
+        return ("# SQL et bases de données\n\n## Prérequis\n\nAucun.\n\n## Fil rouge : Opération Nexus\n\n"
+                f"{f}\n\n## Table des matières\n\n- [Filtrer](#chapitre-3--filtrer-avec-where)\n\n"
+                f"## PARTIE I — Bases\n\nIntro de la partie.\n\n### Chapitre 1 — Pourquoi\n\n{f}\n\n"
+                f"### Chapitre 2 — Modèle\n\n#### Détail\n\n```sql\n{'SELECT nom, prenom FROM clients;' * 100}\n```\n\n"
+                f"## PARTIE II — Lire\n\n### Chapitre 3 — Filtrer avec WHERE\n\nVoir [le début](#chapitre-1--pourquoi).\n\n{f}\n\n"
+                f"## Annexe A — Glossaire\n\n{f}\n\n## Annexe B — Ressources\n\n{f}\n")
+
+    def test_course_parts_chapters_and_annexes(self):
+        pages, notes = self.build("IT/Culture/SQL.md", self.course())
+        paths = [p.replace("library/it/culture/sql/", "") for p in pages]
+        self.assertEqual(paths, ["index.md",
+                                 "01-partie-i-bases/index.md",
+                                 "01-partie-i-bases/01-chapitre-1-pourquoi.md",
+                                 "01-partie-i-bases/02-chapitre-2-modele.md",
+                                 "02-partie-ii-lire/index.md",
+                                 "02-partie-ii-lire/01-chapitre-3-filtrer-avec-where.md",
+                                 "03-annexes/index.md",
+                                 "03-annexes/01-annexe-a-glossaire.md",
+                                 "03-annexes/02-annexe-b-ressources.md"])
+        index = pages["library/it/culture/sql/index.md"]
+        self.assertIn("## Prérequis", index)                  # présentation : prérequis, fil rouge
+        self.assertIn("## Fil rouge : Opération Nexus", index)
+        self.assertNotIn("Table des matières", index)         # remplacée par le sommaire
+        self.assertIn("- [PARTIE I — Bases](01-partie-i-bases/index.md)\n"
+                      "    - [Chapitre 1 — Pourquoi](01-partie-i-bases/01-chapitre-1-pourquoi.md)", index)
+        part = pages["library/it/culture/sql/01-partie-i-bases/index.md"]
+        self.assertIn("Intro de la partie.", part)
+        self.assertIn("## Dans cette partie", part)
+        chapter = pages["library/it/culture/sql/02-partie-ii-lire/01-chapitre-3-filtrer-avec-where.md"]
+        self.assertIn("(../01-partie-i-bases/01-chapitre-1-pourquoi.md)", chapter)
+        self.assertIn("- - SQL\n  - ../index.md\n- - PARTIE II — Lire\n  - index.md", chapter)   # fil d'Ariane
+        self.assertNotIn("## Chapitre 3", chapter)             # le titre est devenu celui de la page
+        short = pages["library/it/culture/sql/01-partie-i-bases/02-chapitre-2-modele.md"]
+        self.assertIn("## Détail", short)                      # chapitre court (presque que du code) gardé
+
+    def test_cheat_sheet_stays_one_page(self):
+        text = "".join(f"## Chapitre {i} — Commandes\n\n{self.FILLER}\n\n" for i in range(1, 5))
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md", text)
+        self.assertEqual(len(pages), 5)                         # cours : présentation + 4 chapitres
+        with mock.patch.dict(imp.TITLES, {"IT/05_Scripting_Langage-Prog/Python.md": "Python — cheat sheet"}):
             pages, _ = self.build("IT/05_Scripting_Langage-Prog/Python.md", text)
-        self.assertEqual(len(pages), 6)
-        chapter = pages["library/it/scripting/python/1-chapitre-1-sujet-1.md"]
-        self.assertNotIn("## Chapitre 1", chapter)      # le titre de section est devenu celui de la page
+        self.assertEqual(len(pages), 1)
 
     def test_split_entry_matches_link_index(self):
-        with mock.patch.object(imp, "SPLIT_AT", 10):
-            index = imp.build_index(self.vault, TREE)
+        self.write("IT/Culture/SQL.md", self.course())
+        index = imp.build_index(self.vault, TREE)
         self.assertEqual(index["sql"], "library/it/culture/sql/index.md")
 
 

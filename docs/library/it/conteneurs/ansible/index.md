@@ -1,10 +1,9 @@
 ---
 title: Ansible
 source: IT/10_virtualization-containers/Ansible.md
-chapters: 13
 ---
 
-### Automatiser l'administration de machines Linux pas à pas
+*Automatiser l'administration de machines Linux pas à pas*
 
 ---
 
@@ -45,6 +44,7 @@ Si tu ne retiens qu'une chose de ce cours, c'est ceci :
    "nginx installé"          "nginx est-il là ?"          "non → je l'installe"
                                                           "oui → je ne touche à rien"
 ```
+
 
 Avec Ansible, tu ne décris **pas** une suite d'ordres (« installe, puis démarre, puis vérifie »). Tu décris un **résultat souhaité** (« nginx doit être installé et démarré »), et Ansible se débrouille pour y arriver — **et** pour ne **rien** refaire si c'est déjà bon.
 
@@ -110,16 +110,43 @@ Ne te juge pas si un chapitre demande deux lectures. **La régularité compte pl
 
 ## Sommaire
 
-1. [PARTIE 0 — INTRODUCTION](01-partie-0-introduction.md)
-2. [PARTIE 1 — PRÉPARER LE LAB](02-partie-1-preparer-le-lab.md)
-3. [PARTIE 2 — INVENTAIRE ET PREMIÈRES COMMANDES](03-partie-2-inventaire-et-premieres-commandes.md)
-4. [PARTIE 3 — COMPRENDRE LES SORTIES ET L'IDEMPOTENCE](04-partie-3-comprendre-les-sorties-et-l-idempotence.md)
-5. [PARTIE 4 — YAML ET PREMIERS PLAYBOOKS](05-partie-4-yaml-et-premiers-playbooks.md)
-6. [PARTIE 5 — MODULES ESSENTIELS D'ADMINISTRATION LINUX](06-partie-5-modules-essentiels-d-administration-linux.md)
-7. [PARTIE 6 — VARIABLES, FACTS, CONDITIONS ET BOUCLES](07-partie-6-variables-facts-conditions-et-boucles.md)
-8. [PARTIE 7 — TEMPLATES ET HANDLERS](08-partie-7-templates-et-handlers.md)
-9. [PARTIE 8 — BONNES PRATIQUES DÉBUTANT](09-partie-8-bonnes-pratiques-debutant.md)
-10. [PARTIE 9 — ANSIBLE VAULT ET SECRETS](10-partie-9-ansible-vault-et-secrets.md)
-11. [PARTIE 10 — ORGANISER UN PROJET ANSIBLE](11-partie-10-organiser-un-projet-ansible.md)
-12. [PARTIE 11 — ROLES SIMPLES](12-partie-11-roles-simples.md)
-13. [PARTIE 12 — MINI-PROJETS PRATIQUES (RÉCAPITULATIF)](13-partie-12-mini-projets-pratiques-recapitulatif.md)
+- [Partie 0 — Introduction](01-partie-0-introduction/index.md)
+    - [Chapitre 0.1 — Pourquoi Ansible existe](01-partie-0-introduction/01-chapitre-0-1-pourquoi-ansible-existe.md)
+    - [Chapitre 0.2 — L'idée d'Ansible : l'état souhaité](01-partie-0-introduction/02-chapitre-0-2-l-idee-d-ansible-l-etat-souhaite.md)
+    - [Chapitre 0.3 — L'idempotence en une image](01-partie-0-introduction/03-chapitre-0-3-l-idempotence-en-une-image.md)
+    - [Chapitre 0.4 — Ansible dans l'écosystème infra (court)](01-partie-0-introduction/04-chapitre-0-4-ansible-dans-l-ecosysteme-infra-court.md)
+- [Partie 1 — Préparer le lab](02-partie-1-preparer-le-lab/index.md)
+    - [Chapitre 1.1 — Control node et machines cibles](02-partie-1-preparer-le-lab/01-chapitre-1-1-control-node-et-machines-cibles.md)
+    - [Chapitre 1.2 — SSH et clés](02-partie-1-preparer-le-lab/02-chapitre-1-2-ssh-et-cles.md)
+    - [Chapitre 1.3 — Installer Ansible](02-partie-1-preparer-le-lab/03-chapitre-1-3-installer-ansible.md)
+    - [Chapitre 1.4 — Snapshots et erreurs SSH classiques](02-partie-1-preparer-le-lab/04-chapitre-1-4-snapshots-et-erreurs-ssh-classiques.md)
+- [Partie 2 — Inventaire et premières commandes](03-partie-2-inventaire-et-premieres-commandes/index.md)
+    - [Chapitre 2.1 — L'inventaire INI](03-partie-2-inventaire-et-premieres-commandes/01-chapitre-2-1-l-inventaire-ini.md)
+    - [Chapitre 2.2 — Variables simples d'inventaire](03-partie-2-inventaire-et-premieres-commandes/02-chapitre-2-2-variables-simples-d-inventaire.md)
+    - [Chapitre 2.3 — Le ping et les commandes ad hoc](03-partie-2-inventaire-et-premieres-commandes/03-chapitre-2-3-le-ping-et-les-commandes-ad-hoc.md)
+    - [Chapitre 2.4 — command et shell](03-partie-2-inventaire-et-premieres-commandes/04-chapitre-2-4-command-et-shell.md)
+    - [Chapitre 2.5 — Lire les sorties : ok, changed, failed, skipped, unreachable](03-partie-2-inventaire-et-premieres-commandes/05-chapitre-2-5-lire-les-sorties-ok-changed-failed-sk.md)
+- [Partie 3 — Comprendre les sorties et L'idempotence](04-partie-3-comprendre-les-sorties-et-l-idempotence/index.md)
+    - [Chapitre 3.1 — ok vs changed](04-partie-3-comprendre-les-sorties-et-l-idempotence/01-chapitre-3-1-ok-vs-changed.md)
+    - [Chapitre 3.2 — Voir l'idempotence en relançant](04-partie-3-comprendre-les-sorties-et-l-idempotence/02-chapitre-3-2-voir-l-idempotence-en-relancant.md)
+    - [Chapitre 3.3 — Modules dédiés vs command/shell](04-partie-3-comprendre-les-sorties-et-l-idempotence/03-chapitre-3-3-modules-dedies-vs-command-shell.md)
+- [Partie 4 — YAML et premiers playbooks](05-partie-4-yaml-et-premiers-playbooks/index.md)
+    - [Chapitre 4.1 — YAML sans peur](05-partie-4-yaml-et-premiers-playbooks/01-chapitre-4-1-yaml-sans-peur.md)
+    - [Chapitre 4.2 — Anatomie d'un playbook](05-partie-4-yaml-et-premiers-playbooks/02-chapitre-4-2-anatomie-d-un-playbook.md)
+    - [Chapitre 4.3 — become : les droits root](05-partie-4-yaml-et-premiers-playbooks/03-chapitre-4-3-become-les-droits-root.md)
+    - [Chapitre 4.4 — Vérifier avant d'agir : --syntax-check et --check](05-partie-4-yaml-et-premiers-playbooks/04-chapitre-4-4-verifier-avant-d-agir-syntax-check-et.md)
+- [Partie 5 — Modules essentiels d'administration linux](06-partie-5-modules-essentiels-d-administration-linux.md)
+- [Partie 6 — Variables, facts, conditions et boucles](07-partie-6-variables-facts-conditions-et-boucles.md)
+- [Partie 7 — Templates et handlers](08-partie-7-templates-et-handlers/index.md)
+    - [Chapitre 7.1 — Les templates Jinja2 (template)](08-partie-7-templates-et-handlers/01-chapitre-7-1-les-templates-jinja2-template.md)
+    - [Chapitre 7.2 — copy vs template (bien choisir)](08-partie-7-templates-et-handlers/02-chapitre-7-2-copy-vs-template-bien-choisir.md)
+    - [Chapitre 7.3 — Les handlers (notify)](08-partie-7-templates-et-handlers/03-chapitre-7-3-les-handlers-notify.md)
+- [Partie 8 — Bonnes pratiques débutant](09-partie-8-bonnes-pratiques-debutant.md)
+- [Partie 9 — Ansible vault et secrets](10-partie-9-ansible-vault-et-secrets.md)
+- [Partie 10 — Organiser un projet ansible](11-partie-10-organiser-un-projet-ansible.md)
+- [Partie 11 — Roles simples](12-partie-11-roles-simples/index.md)
+    - [Chapitre 11.1 — Pourquoi les roles existent](12-partie-11-roles-simples/01-chapitre-11-1-pourquoi-les-roles-existent.md)
+    - [Chapitre 11.2 — La structure d'un role](12-partie-11-roles-simples/02-chapitre-11-2-la-structure-d-un-role.md)
+    - [Chapitre 11.3 — Créer et utiliser un role simple](12-partie-11-roles-simples/03-chapitre-11-3-creer-et-utiliser-un-role-simple.md)
+- [Partie 12 — Mini-projets pratiques (récapitulatif)](13-partie-12-mini-projets-pratiques-recapitulatif.md)
+- [Annexes](14-annexes.md)

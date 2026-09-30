@@ -34,6 +34,7 @@ Techniques
 Sub-techniques
 ```
 
+
 > ATT&CK n’est pas forcément une chronologie stricte : un attaquant peut utiliser plusieurs techniques/tactiques dans différents ordres.
 
 ---
@@ -79,6 +80,7 @@ Persistence
 Lateral Movement
 Exfiltration
 ```
+
 
 ---
 
@@ -129,6 +131,7 @@ Les attaques ICS peuvent viser non seulement :
 Confidentialité / données
 ```
 
+
 mais aussi :
 
 ```
@@ -136,6 +139,7 @@ Disponibilité
 Contrôle physique
 Sécurité des personnes / équipements
 ```
+
 
 Exemples :
 
@@ -154,6 +158,7 @@ Mobile     → Android / iOS
 ICS        → systèmes industriels
 ```
 
+
 La Matrix est surtout une **cartographie des comportements adverses** :
 
 ```
@@ -161,6 +166,7 @@ Tactic → objectif de l’attaquant
 Technique → méthode utilisée
 Sub-technique → méthode plus précise
 ```
+
 
 Exemple :
 
@@ -171,6 +177,7 @@ OS Credential Dumping
       ↓
 LSASS Memory
 ```
+
 
 → On part de l’objectif général pour aller vers la méthode précise utilisée par l’attaquant.
 
@@ -191,6 +198,7 @@ Tactic     = Pourquoi ?
 Technique  = Comment ?
 ```
 
+
 Exemple :
 
 ```
@@ -200,6 +208,7 @@ OS Credential Dumping       → technique utilisée
     ↓
 LSASS Memory                → sub-technique précise
 ```
+
 
 > Les tactics ATT&CK ne représentent **pas forcément des étapes chronologiques**.
 > 
@@ -257,6 +266,7 @@ Exfiltration
 Impact
 ```
 
+
 Avec également des tactics spécifiques aux appareils mobiles :
 
 - **Network Effects**
@@ -291,6 +301,7 @@ Manipulation PLC
 Altération du procédé physique
 ```
 
+
 ---
 
 ### À retenir
@@ -301,6 +312,7 @@ Technique = méthode / HOW
 Sub-technique = méthode plus précise
 ```
 
+
 Exemple complet :
 
 ```
@@ -310,6 +322,7 @@ OS Credential Dumping
         ↓
 LSASS Memory
 ```
+
 
 Et la chaîne Enterprise peut grossièrement se visualiser comme :
 
@@ -335,6 +348,7 @@ C2 / Exfiltration
 Impact
 ```
 
+
 Mais **ATT&CK n’est pas une kill chain stricte** : cet ordre sert seulement à visualiser un scénario plausible.
 
   
@@ -354,6 +368,7 @@ Sub-Technique = Comment, précisément ?
 Procedure     = Comment cela a été réellement utilisé ?
 ```
 
+
 Exemple :
 
 ```
@@ -363,6 +378,7 @@ OS Credential Dumping
         ↓
 LSASS Memory
 ```
+
 
 - Une **Technique** représente une méthode générale utilisée par l’attaquant.
 - Une **Sub-Technique** décrit une variante / implémentation plus précise.
@@ -379,6 +395,7 @@ Chaque technique possède un ID unique :
 T1003 = OS Credential Dumping
 ```
 
+
 Les sub-techniques reprennent l’ID de la technique avec un suffixe :
 
 ```
@@ -386,6 +403,7 @@ T1003.001 = LSASS Memory
 T1003.002 = Security Account Manager
 T1003.003 = NTDS
 ```
+
 
 Très utile dans :
 
@@ -401,6 +419,7 @@ Exemple :
 Alert: accès suspect à LSASS
 → MITRE ATT&CK T1003.001
 ```
+
 
 ---
 
@@ -419,6 +438,7 @@ Tactic
  └── Technique
 ```
 
+
 Les techniques disposant de sub-techniques peuvent être développées dans l’interface ATT&CK pour afficher les variantes associées.
 
 Exemple :
@@ -431,6 +451,7 @@ OS Credential Dumping (T1003)
     ├── SAM (T1003.002)
     └── NTDS (T1003.003)
 ```
+
 
 ---
 
@@ -480,12 +501,14 @@ Un malware / threat actor utilise Mimikatz
 pour récupérer des credentials depuis LSASS
 ```
 
+
 Donc :
 
 ```
 Technique = concept général
 Procedure = utilisation réelle et concrète de ce concept
 ```
+
 
 Une procedure **n’est pas une nouvelle technique ATT&CK** : c’est un exemple documenté de son utilisation.
 
@@ -508,6 +531,7 @@ Un attaquant utilise un outil de credential dumping
 pour récupérer des secrets présents dans la mémoire LSASS.
 ```
 
+
 Autre exemple :
 
 ```
@@ -525,6 +549,7 @@ Utilisation de PowerShell pour exécuter
 un script/payload sur la machine compromise.
 ```
 
+
 ---
 
 ### À retenir
@@ -536,12 +561,14 @@ Sub-Technique → méthode plus précise
 Procedure     → exemple concret observé
 ```
 
+
 Avec les IDs :
 
 ```
 Technique     → Txxxx
 Sub-Technique → Txxxx.xxx
 ```
+
 
 Exemple à connaître :
 
@@ -551,6 +578,7 @@ Credential Access
 → T1003.001 LSASS Memory
 → utilisation concrète d'un outil pour extraire les credentials de LSASS
 ```
+
 
 MITRE permet donc de passer d'une **vision générale de l'objectif** jusqu'à la **méthode réellement observée sur le terrain**.
 
@@ -570,6 +598,7 @@ Technique = ce que fait l’attaquant
 Mitigation = ce que le défenseur peut faire pour réduire ce risque
 ```
 
+
 ![image 12.png](../../assets/mitre-att-ck-framework-image-12.png)
 
 Exemple :
@@ -581,6 +610,7 @@ T1003 - OS Credential Dumping
 Mitigation
 Credential protections / restriction d’accès
 ```
+
 
 ---
 
@@ -614,11 +644,13 @@ Les mitigations possèdent généralement un ID du type :
 Mxxxx
 ```
 
+
 Exemple :
 
 ```
 M1032 - Multi-factor Authentication
 ```
+
 
 Comme pour les techniques, l’ID facilite le mapping dans :
 
@@ -656,6 +688,7 @@ Initial Access
 → Phishing
 ```
 
+
 Mitigations possibles :
 
 ```
@@ -665,12 +698,14 @@ Email Filtering
 Disable/Restrict Macros
 ```
 
+
 Autre exemple :
 
 ```
 Lateral Movement
 → Remote Services
 ```
+
 
 Mitigations possibles :
 
@@ -681,12 +716,14 @@ Least Privilege
 Restrict Remote Services
 ```
 
+
 Donc :
 
 ```
 1 Technique → plusieurs Mitigations possibles
 1 Mitigation → peut réduire plusieurs Techniques
 ```
+
 
 ---
 
@@ -703,11 +740,13 @@ Exemple :
 PowerShell malveillant
 ```
 
+
 Mitigation :
 
 ```
 Application Control / restriction PowerShell
 ```
+
 
 Detection :
 
@@ -717,6 +756,7 @@ EDR
 Process creation
 Command-line monitoring
 ```
+
 
 Les deux sont complémentaires.
 
@@ -732,6 +772,7 @@ Procedure     → Exemple concret observé
 Mitigation    → Comment réduire / empêcher la technique
 ```
 
+
 Exemple complet :
 
 ```
@@ -746,6 +787,7 @@ Procedure : dump de LSASS
 Mitigation : protections credentials,
 restriction des privilèges, Credential Guard...
 ```
+
 
 MITRE ATT&CK ne sert donc pas uniquement à décrire les attaques : il permet aussi de relier les comportements adverses à des **mesures défensives concrètes**.
 
@@ -770,6 +812,7 @@ MITRE ATT&CK ne sert donc pas uniquement à décrire les attaques : il permet au
 Group = QUI mène l’attaque
 Technique = COMMENT il opère
 ```
+
 
 > Une attribution n’est jamais parfaite : plusieurs sociétés de sécurité peuvent suivre le même acteur sous des noms différents.
 
@@ -809,6 +852,7 @@ Software associé
     └── Tool B
 ```
 
+
 ---
 
 ### Group ID
@@ -818,6 +862,7 @@ Les groupes possèdent un identifiant de type :
 ```
 Gxxxx
 ```
+
 
 Comme pour les Techniques (`Txxxx`) ou Mitigations (`Mxxxx`), cela permet d’utiliser une référence stable dans :
 
@@ -843,6 +888,7 @@ Même acteur
 └── Nom retenu par MITRE
 ```
 
+
 Très important en CTI : deux noms différents ne signifient pas forcément deux groupes différents.
 
 ---
@@ -863,6 +909,7 @@ T1003 - OS Credential Dumping
 Procedure : utilisation observée d’un outil pour dumper des credentials
 ```
 
+
 Cela permet de construire le **profil ATT&CK** d’un threat actor.
 
 Utilités :
@@ -881,6 +928,7 @@ Point important :
 ```
 Comportement similaire ≠ preuve que c’est le même groupe
 ```
+
 
 L’attribution repose souvent sur plusieurs indices :
 
@@ -905,6 +953,7 @@ Technique  → COMMENT ?
 Tactic     → POURQUOI ?
 ```
 
+
 Exemple :
 
 ```
@@ -922,6 +971,7 @@ afin d’atteindre
   ↓
 Tactic
 ```
+
 
 ---
 
@@ -963,6 +1013,7 @@ Technique  → COMMENT ?
 Tactic     → POURQUOI ?
 ```
 
+
 > Un Software ATT&CK n’est pas forcément malveillant par nature.
 > 
 > Des outils légitimes comme des utilitaires d’administration peuvent être détournés par des attaquants.
@@ -1000,6 +1051,7 @@ réalise
 Txxxx - Technique
 ```
 
+
 ---
 
 ### Malware vs Tool
@@ -1021,11 +1073,13 @@ PsExec
 → peut être utilisé pour mouvement latéral / exécution distante
 ```
 
+
 Donc :
 
 ```
 Présence d’un outil ATT&CK ≠ preuve automatique d’une compromission
 ```
+
 
 Il faut toujours regarder le **contexte d’utilisation**.
 
@@ -1045,6 +1099,7 @@ Malware / Tool
 ├── File and Directory Discovery
 └── Command and Control
 ```
+
 
 Cela permet de construire rapidement le **profil ATT&CK du logiciel**.
 
@@ -1068,6 +1123,7 @@ Software X
 └── Group C
 ```
 
+
 Et un même groupe utilise généralement plusieurs logiciels :
 
 ```
@@ -1078,12 +1134,14 @@ Group A
 └── Custom Malware
 ```
 
+
 Donc :
 
 ```
 1 Group → plusieurs Software
 1 Software → plusieurs Groups possibles
 ```
+
 
 ---
 
@@ -1099,6 +1157,7 @@ Collection
 Command & Control
 ```
 
+
 MITRE relie alors le logiciel aux techniques précises observées dans les campagnes réelles.
 
 ---
@@ -1112,6 +1171,7 @@ Technique    → comportement réalisé
 Procedure    → exemple concret d’utilisation
 ```
 
+
 IDs ATT&CK :
 
 ```
@@ -1121,12 +1181,14 @@ Technique  → Txxxx
 Mitigation → Mxxxx
 ```
 
+
 La section **Software** permet donc de répondre à deux questions importantes :
 
 ```
 Quelles techniques ce malware / outil peut-il réaliser ?
 Quels groupes l’ont utilisé ?
 ```
+
 
 Le nombre de logiciels référencés évolue régulièrement → inutile de mémoriser le chiffre donné dans le cours.
 

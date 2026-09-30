@@ -1,10 +1,9 @@
 ---
 title: Assembleur
 source: IT/Culture/Assembleur.md
-chapters: 10
 ---
 
-### De zéro au reverse engineering débutant — Guide pour débutant absolu
+*De zéro au reverse engineering débutant — Guide pour débutant absolu*
 
 ---
 
@@ -112,6 +111,7 @@ Avant d'écrire la moindre ligne de code, il faut comprendre la logique de base.
   script reçoit    fait avec            produit comme résultat
 ```
 
+
 En **assembleur**, le modèle mental change. Tu raisonnes en termes de **trois mondes** qui s'échangent des données :
 
 ```
@@ -120,6 +120,7 @@ En **assembleur**, le modèle mental change. Tu raisonnes en termes de **trois m
   │    (CPU)    │    │    (RAM)    │    │     (SYSTÈME)     │
   └─────────────┘    └─────────────┘    └──────────────────┘
 ```
+
 
 - Les **registres**, c'est ton bureau de travail (petit, rapide, mais limité).
 - La **mémoire**, c'est ta bibliothèque (grande, plus lente, on y va chercher et on y range).
@@ -205,82 +206,108 @@ Ne te juge pas. La patience compte plus que la vitesse.
 
 **PARTIE I — COMPRENDRE LA MACHINE**
 
-1. [Qu'est-ce que l'assembleur et pourquoi l'apprendre ?](01-partie-i-comprendre-la-machine.md#chapitre-1-quest-ce-que-lassembleur-et-pourquoi-lapprendre)
-2. [CPU, RAM, registres : le modèle mental minimum](01-partie-i-comprendre-la-machine.md#chapitre-2-cpu-ram-registres-le-modele-mental-minimum)
-3. [Binaire, hexadécimal, ASCII et tailles de données](01-partie-i-comprendre-la-machine.md#chapitre-3-binaire-hexadecimal-ascii-et-tailles-de-donnees)
+1. [Qu'est-ce que l'assembleur et pourquoi l'apprendre ?](01-partie-i-comprendre-la-machine/01-chapitre-1-qu-est-ce-que-l-assembleur-et-pourquoi.md)
+2. [CPU, RAM, registres : le modèle mental minimum](01-partie-i-comprendre-la-machine/02-chapitre-2-cpu-ram-registres-le-modele-mental-mini.md)
+3. [Binaire, hexadécimal, ASCII et tailles de données](01-partie-i-comprendre-la-machine/03-chapitre-3-binaire-hexadecimal-ascii-et-tailles-de.md)
 
 **PARTIE II — INSTALLER, ÉCRIRE, EXÉCUTER**
 
-4. [Environnement de travail et premier programme](02-partie-ii-installer-ecrire-executer.md#chapitre-4-environnement-de-travail-et-premier-programme)
-5. [Anatomie d'un fichier .asm](02-partie-ii-installer-ecrire-executer.md#chapitre-5-anatomie-dun-fichier-asm)
-6. [Premier affichage avec `write`](02-partie-ii-installer-ecrire-executer.md#chapitre-6-premier-affichage-avec-write)
+4. [Environnement de travail et premier programme](02-partie-ii-installer-ecrire-executer/01-chapitre-4-environnement-de-travail-et-premier-pro.md)
+5. [Anatomie d'un fichier .asm](02-partie-ii-installer-ecrire-executer/02-chapitre-5-anatomie-d-un-fichier-asm.md)
+6. [Premier affichage avec `write`](02-partie-ii-installer-ecrire-executer/03-chapitre-6-premier-affichage-avec-write.md)
 
 **PARTIE III — REGISTRES, CALCULS ET OBSERVATION**
 
-7. [Déplacer des données avec `mov`](03-partie-iii-registres-calculs-et-observation.md#chapitre-7-deplacer-des-donnees-avec-mov)
-8. [Calculer avec les registres](03-partie-iii-registres-calculs-et-observation.md#chapitre-8-calculer-avec-les-registres)
-9. [GDB pour observer les registres](03-partie-iii-registres-calculs-et-observation.md#chapitre-9-gdb-pour-observer-les-registres)
+7. [Déplacer des données avec `mov`](03-partie-iii-registres-calculs-et-observation/01-chapitre-7-deplacer-des-donnees-avec-mov.md)
+8. [Calculer avec les registres](03-partie-iii-registres-calculs-et-observation/02-chapitre-8-calculer-avec-les-registres.md)
+9. [GDB pour observer les registres](03-partie-iii-registres-calculs-et-observation/03-chapitre-9-gdb-pour-observer-les-registres.md)
 
 **PARTIE IV — MÉMOIRE, ADRESSES ET CHAÎNES**
 
-10. [Mémoire, adresses et variables](04-partie-iv-memoire-adresses-et-chaines.md#chapitre-10-memoire-adresses-et-variables)
-11. [Chaînes de caractères et octets](04-partie-iv-memoire-adresses-et-chaines.md#chapitre-11-chaines-de-caracteres-et-octets)
-12. [`lea` et modes d'adressage](04-partie-iv-memoire-adresses-et-chaines.md#chapitre-12-lea-et-modes-dadressage)
+10. [Mémoire, adresses et variables](04-partie-iv-memoire-adresses-et-chaines/01-chapitre-10-memoire-adresses-et-variables.md)
+11. [Chaînes de caractères et octets](04-partie-iv-memoire-adresses-et-chaines/02-chapitre-11-chaines-de-caracteres-et-octets.md)
+12. [`lea` et modes d'adressage](04-partie-iv-memoire-adresses-et-chaines/03-chapitre-12-lea-et-modes-d-adressage.md)
 
 **PARTIE V — ENTRÉES, SORTIES ET CONVERSIONS**
 
-13. [Lire au clavier avec `read`](05-partie-v-entrees-sorties-et-conversions.md#chapitre-13-lire-au-clavier-avec-read)
-14. [Convertir texte et nombres](05-partie-v-entrees-sorties-et-conversions.md#chapitre-14-convertir-texte-et-nombres)
-15. [Fichiers et syscalls utiles](05-partie-v-entrees-sorties-et-conversions.md#chapitre-15-fichiers-et-syscalls-utiles)
+13. [Lire au clavier avec `read`](05-partie-v-entrees-sorties-et-conversions/01-chapitre-13-lire-au-clavier-avec-read.md)
+14. [Convertir texte et nombres](05-partie-v-entrees-sorties-et-conversions/02-chapitre-14-convertir-texte-et-nombres.md)
+15. [Fichiers et syscalls utiles](05-partie-v-entrees-sorties-et-conversions/03-chapitre-15-fichiers-et-syscalls-utiles.md)
 
 **PARTIE VI — LOGIQUE ET CONTRÔLE DE FLUX**
 
-16. [Comparaisons, flags et sauts](06-partie-vi-logique-et-controle-de-flux.md#chapitre-16-comparaisons-flags-et-sauts)
-17. [Boucles](06-partie-vi-logique-et-controle-de-flux.md#chapitre-17-boucles)
+16. [Comparaisons, flags et sauts](06-partie-vi-logique-et-controle-de-flux/01-chapitre-16-comparaisons-flags-et-sauts.md)
+17. [Boucles](06-partie-vi-logique-et-controle-de-flux/02-chapitre-17-boucles.md)
 
 **PARTIE VII — PILE ET FONCTIONS**
 
-18. [La pile avec `push`, `pop` et `rsp`](07-partie-vii-pile-et-fonctions.md#chapitre-18-la-pile-avec-push-pop-et-rsp)
-19. [Fonctions avec `call` et `ret`](07-partie-vii-pile-et-fonctions.md#chapitre-19-fonctions-avec-call-et-ret)
-20. [Stack frame, `rbp` et variables locales](07-partie-vii-pile-et-fonctions.md#chapitre-20-stack-frame-rbp-et-variables-locales)
+18. [La pile avec `push`, `pop` et `rsp`](07-partie-vii-pile-et-fonctions/01-chapitre-18-la-pile-avec-push-pop-et-rsp.md)
+19. [Fonctions avec `call` et `ret`](07-partie-vii-pile-et-fonctions/02-chapitre-19-fonctions-avec-call-et-ret.md)
+20. [Stack frame, `rbp` et variables locales](07-partie-vii-pile-et-fonctions/03-chapitre-20-stack-frame-rbp-et-variables-locales.md)
 
 **PARTIE VIII — LIEN AVEC C ET LIBC**
 
-21. [Appeler la libc depuis l'assembleur](08-partie-viii-lien-avec-c-et-libc.md#chapitre-21-appeler-la-libc-depuis-lassembleur)
-22. [Du C vers l'assembleur](08-partie-viii-lien-avec-c-et-libc.md#chapitre-22-du-c-vers-lassembleur)
+21. [Appeler la libc depuis l'assembleur](08-partie-viii-lien-avec-c-et-libc/01-chapitre-21-appeler-la-libc-depuis-l-assembleur.md)
+22. [Du C vers l'assembleur](08-partie-viii-lien-avec-c-et-libc/02-chapitre-22-du-c-vers-l-assembleur.md)
 
 **PARTIE IX — LECTURE DE BINAIRES ET REVERSE DÉBUTANT**
 
-23. [Désassembler un binaire ELF](09-partie-ix-lecture-de-binaires-et-reverse-debutant.md#chapitre-23-desassembler-un-binaire-elf)
-24. [Reverse engineering débutant avec GDB](09-partie-ix-lecture-de-binaires-et-reverse-debutant.md#chapitre-24-reverse-engineering-debutant-avec-gdb)
+23. [Désassembler un binaire ELF](09-partie-ix-lecture-de-binaires-et-reverse-debutant/01-chapitre-23-desassembler-un-binaire-elf.md)
+24. [Reverse engineering débutant avec GDB](09-partie-ix-lecture-de-binaires-et-reverse-debutant/02-chapitre-24-reverse-engineering-debutant-avec-gdb.md)
 
 **PARTIE X — SYNTHÈSE**
 
-25. [Récapitulatif complet du débutant](10-partie-x-synthese-et-boite-a-outils.md#chapitre-25-recapitulatif-complet-du-debutant)
+25. [Récapitulatif complet du débutant](10-partie-x-synthese-et-boite-a-outils/01-chapitre-25-recapitulatif-complet-du-debutant.md)
 
 **ANNEXES**
 
-- A. [Syntaxe AT&T pour la lecture](10-partie-x-synthese-et-boite-a-outils.md#annexe-a-syntaxe-att-pour-la-lecture)
-- B. [x86 32 bits vs x86-64](10-partie-x-synthese-et-boite-a-outils.md#annexe-b-x86-32-bits-vs-x86-64)
-- C. [Linux System V ABI vs Windows x64 ABI](10-partie-x-synthese-et-boite-a-outils.md#annexe-c-linux-system-v-abi-vs-windows-x64-abi)
-- D. [Nombres signés, complément à deux et débordements](10-partie-x-synthese-et-boite-a-outils.md#annexe-d-nombres-signes-complement-a-deux-et-debordements)
-- E. [Little-endian](10-partie-x-synthese-et-boite-a-outils.md#annexe-e-little-endian)
-- F. [Makefile et commandes utiles](10-partie-x-synthese-et-boite-a-outils.md#annexe-f-makefile-et-commandes-utiles)
-- G. [Glossaire assembleur / reverse](10-partie-x-synthese-et-boite-a-outils.md#annexe-g-glossaire-assembleur-reverse)
-- H. [Panorama des outils de reverse](10-partie-x-synthese-et-boite-a-outils.md#annexe-h-panorama-des-outils-de-reverse)
-- I. [Suite logique après ce cours](10-partie-x-synthese-et-boite-a-outils.md#annexe-i-suite-logique-apres-ce-cours)
+- A. [Syntaxe AT&T pour la lecture](11-annexes.md#annexe-a-syntaxe-att-pour-la-lecture)
+- B. [x86 32 bits vs x86-64](11-annexes.md#annexe-b-x86-32-bits-vs-x86-64)
+- C. [Linux System V ABI vs Windows x64 ABI](11-annexes.md#annexe-c-linux-system-v-abi-vs-windows-x64-abi)
+- D. [Nombres signés, complément à deux et débordements](11-annexes.md#annexe-d-nombres-signes-complement-a-deux-et-debordements)
+- E. [Little-endian](11-annexes.md#annexe-e-little-endian)
+- F. [Makefile et commandes utiles](11-annexes.md#annexe-f-makefile-et-commandes-utiles)
+- G. [Glossaire assembleur / reverse](11-annexes.md#annexe-g-glossaire-assembleur-reverse)
+- H. [Panorama des outils de reverse](11-annexes.md#annexe-h-panorama-des-outils-de-reverse)
+- I. [Suite logique après ce cours](11-annexes.md#annexe-i-suite-logique-apres-ce-cours)
 
 ---
 
 ## Sommaire
 
-1. [PARTIE I — COMPRENDRE LA MACHINE](01-partie-i-comprendre-la-machine.md)
-2. [PARTIE II — INSTALLER, ÉCRIRE, EXÉCUTER](02-partie-ii-installer-ecrire-executer.md)
-3. [PARTIE III — REGISTRES, CALCULS ET OBSERVATION](03-partie-iii-registres-calculs-et-observation.md)
-4. [PARTIE IV — MÉMOIRE, ADRESSES ET CHAÎNES](04-partie-iv-memoire-adresses-et-chaines.md)
-5. [PARTIE V — ENTRÉES, SORTIES ET CONVERSIONS](05-partie-v-entrees-sorties-et-conversions.md)
-6. [PARTIE VI — LOGIQUE ET CONTRÔLE DE FLUX](06-partie-vi-logique-et-controle-de-flux.md)
-7. [PARTIE VII — PILE ET FONCTIONS](07-partie-vii-pile-et-fonctions.md)
-8. [PARTIE VIII — LIEN AVEC C ET LIBC](08-partie-viii-lien-avec-c-et-libc.md)
-9. [PARTIE IX — LECTURE DE BINAIRES ET REVERSE DÉBUTANT](09-partie-ix-lecture-de-binaires-et-reverse-debutant.md)
-10. [PARTIE X — SYNTHÈSE ET BOÎTE À OUTILS](10-partie-x-synthese-et-boite-a-outils.md)
+- [Partie I — Comprendre LA machine](01-partie-i-comprendre-la-machine/index.md)
+    - [Chapitre 1 — Qu'est-ce que l'assembleur et pourquoi l'apprendre](01-partie-i-comprendre-la-machine/01-chapitre-1-qu-est-ce-que-l-assembleur-et-pourquoi.md)
+    - [Chapitre 2 — CPU, RAM, registres : le modèle mental minimum](01-partie-i-comprendre-la-machine/02-chapitre-2-cpu-ram-registres-le-modele-mental-mini.md)
+    - [Chapitre 3 — Binaire, hexadécimal, ASCII et tailles de données](01-partie-i-comprendre-la-machine/03-chapitre-3-binaire-hexadecimal-ascii-et-tailles-de.md)
+- [Partie II — Installer, écrire, exécuter](02-partie-ii-installer-ecrire-executer/index.md)
+    - [Chapitre 4 — Environnement de travail et premier programme](02-partie-ii-installer-ecrire-executer/01-chapitre-4-environnement-de-travail-et-premier-pro.md)
+    - [Chapitre 5 — Anatomie d'un fichier .asm](02-partie-ii-installer-ecrire-executer/02-chapitre-5-anatomie-d-un-fichier-asm.md)
+    - [Chapitre 6 — Premier affichage avec write](02-partie-ii-installer-ecrire-executer/03-chapitre-6-premier-affichage-avec-write.md)
+- [Partie III — Registres, calculs ET observation](03-partie-iii-registres-calculs-et-observation/index.md)
+    - [Chapitre 7 — Déplacer des données avec mov](03-partie-iii-registres-calculs-et-observation/01-chapitre-7-deplacer-des-donnees-avec-mov.md)
+    - [Chapitre 8 — Calculer avec les registres](03-partie-iii-registres-calculs-et-observation/02-chapitre-8-calculer-avec-les-registres.md)
+    - [Chapitre 9 — GDB pour observer les registres](03-partie-iii-registres-calculs-et-observation/03-chapitre-9-gdb-pour-observer-les-registres.md)
+- [Partie IV — Mémoire, adresses ET chaînes](04-partie-iv-memoire-adresses-et-chaines/index.md)
+    - [Chapitre 10 — Mémoire, adresses et variables](04-partie-iv-memoire-adresses-et-chaines/01-chapitre-10-memoire-adresses-et-variables.md)
+    - [Chapitre 11 — Chaînes de caractères et octets](04-partie-iv-memoire-adresses-et-chaines/02-chapitre-11-chaines-de-caracteres-et-octets.md)
+    - [Chapitre 12 — lea et modes d'adressage](04-partie-iv-memoire-adresses-et-chaines/03-chapitre-12-lea-et-modes-d-adressage.md)
+- [Partie V — Entrées, sorties ET conversions](05-partie-v-entrees-sorties-et-conversions/index.md)
+    - [Chapitre 13 — Lire au clavier avec read](05-partie-v-entrees-sorties-et-conversions/01-chapitre-13-lire-au-clavier-avec-read.md)
+    - [Chapitre 14 — Convertir texte et nombres](05-partie-v-entrees-sorties-et-conversions/02-chapitre-14-convertir-texte-et-nombres.md)
+    - [Chapitre 15 — Fichiers et syscalls utiles](05-partie-v-entrees-sorties-et-conversions/03-chapitre-15-fichiers-et-syscalls-utiles.md)
+- [Partie VI — Logique ET contrôle de flux](06-partie-vi-logique-et-controle-de-flux/index.md)
+    - [Chapitre 16 — Comparaisons, flags et sauts](06-partie-vi-logique-et-controle-de-flux/01-chapitre-16-comparaisons-flags-et-sauts.md)
+    - [Chapitre 17 — Boucles](06-partie-vi-logique-et-controle-de-flux/02-chapitre-17-boucles.md)
+- [Partie VII — Pile ET fonctions](07-partie-vii-pile-et-fonctions/index.md)
+    - [Chapitre 18 — La pile avec push, pop et rsp](07-partie-vii-pile-et-fonctions/01-chapitre-18-la-pile-avec-push-pop-et-rsp.md)
+    - [Chapitre 19 — Fonctions avec call et ret](07-partie-vii-pile-et-fonctions/02-chapitre-19-fonctions-avec-call-et-ret.md)
+    - [Chapitre 20 — Stack frame, rbp et variables locales](07-partie-vii-pile-et-fonctions/03-chapitre-20-stack-frame-rbp-et-variables-locales.md)
+- [Partie VIII — Lien avec C ET libc](08-partie-viii-lien-avec-c-et-libc/index.md)
+    - [Chapitre 21 — Appeler la libc depuis l'assembleur](08-partie-viii-lien-avec-c-et-libc/01-chapitre-21-appeler-la-libc-depuis-l-assembleur.md)
+    - [Chapitre 22 — Du C vers l'assembleur](08-partie-viii-lien-avec-c-et-libc/02-chapitre-22-du-c-vers-l-assembleur.md)
+- [Partie IX — Lecture de binaires ET reverse débutant](09-partie-ix-lecture-de-binaires-et-reverse-debutant/index.md)
+    - [Chapitre 23 — Désassembler un binaire ELF](09-partie-ix-lecture-de-binaires-et-reverse-debutant/01-chapitre-23-desassembler-un-binaire-elf.md)
+    - [Chapitre 24 — Reverse engineering débutant avec GDB](09-partie-ix-lecture-de-binaires-et-reverse-debutant/02-chapitre-24-reverse-engineering-debutant-avec-gdb.md)
+- [Partie X — Synthèse ET boîte à outils](10-partie-x-synthese-et-boite-a-outils/index.md)
+    - [Chapitre 25 — Récapitulatif complet du débutant](10-partie-x-synthese-et-boite-a-outils/01-chapitre-25-recapitulatif-complet-du-debutant.md)
+- [Annexes](11-annexes.md)

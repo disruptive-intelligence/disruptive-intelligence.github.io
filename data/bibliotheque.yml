@@ -11,7 +11,7 @@
   categories:
     - id: cti
       label: 🎯 CTI & renseignement
-      notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CERT-EU Cyber Threat Intelligence Framework, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique]
+      notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique]
     - id: osint
       label: 🔍 OSINT
       notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping]

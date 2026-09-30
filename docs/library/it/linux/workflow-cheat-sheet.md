@@ -77,6 +77,7 @@ cat /var/log/auth.log | tail
 
 ```
 
+
 #### System configuration
 
 ```bash
@@ -100,6 +101,7 @@ cat /etc/resolv.conf
 
 ```
 
+
 #### Mécanismes de persistance
 
 ```bash
@@ -114,6 +116,7 @@ systemctl list-unit-files --type=service
 cat ~/.bashrc
 
 ```
+
 
 #### Evidence d’exécution
 
@@ -132,6 +135,7 @@ cat ~/.viminfo
 
 ```
 
+
 #### Log files
 
 ```bash
@@ -149,6 +153,7 @@ ls /var/log
 
 ```
 
+
 #### Processus/Services
 
 ```bash
@@ -165,6 +170,7 @@ sudo systemctl list-units --type=service
 
 ```
 
+
 ```bash
 # journalctl (logs)
 sudo journalctl -u nginx.service         # logs de nginx
@@ -174,6 +180,7 @@ sudo journalctl -b                       # logs du boot courant
 sudo journalctl -S "2024-09-01" -U "now" # fenêtre temporelle
 
 ```
+
 
 #### Commandes utiles (inventaire)
 
@@ -208,6 +215,7 @@ which python
 
 ```
 
+
 ```bash
 # find : trouver & filtrer puis agir
 find <location> <options>
@@ -216,12 +224,14 @@ find / -type f -name "*.conf" -user root -size +20k -newermt 2020-03-03 -exec ls
 
 ```
 
+
 ```bash
 # locate : via base d’index locale (rapide)
 sudo updatedb
 locate *.conf
 
 ```
+
 
 #### Filtrer contenus
 
@@ -262,6 +272,7 @@ cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}' 
 
 ```
 
+
 #### REGEX (opérateurs vus)
 
 | Opérateurs | Description |
@@ -281,6 +292,7 @@ grep -E "(my.*false)" /etc/passwd
 
 ```
 
+
 #### Gestion des permissions
 
 ```bash
@@ -293,6 +305,7 @@ chown <user>:<group> <file|directory>
 chown root:root shell && ls -l shell
 
 ```
+
 
 > Notes vues : bloc permissions sur 10 caractères -rwxr-xr-x ; ordre toujours r w x; octal r=4 w=2 x=1.
 > 
@@ -326,6 +339,7 @@ cat << EOF > stream.txt
 EOF
 
 ```
+
 
 ## Pipe
 

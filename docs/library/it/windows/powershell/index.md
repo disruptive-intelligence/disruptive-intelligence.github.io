@@ -1,10 +1,9 @@
 ---
 title: PowerShell
 source: IT/02_Windows/Powershell.md
-chapters: 8
 ---
 
-### De zéro à l'automatisation, l'Active Directory et la cybersécurité — Guide pour débutant absolu
+*De zéro à l'automatisation, l'Active Directory et la cybersécurité — Guide pour débutant absolu*
 
 ---
 
@@ -82,6 +81,7 @@ PowerShell fonctionne partout, mais **toutes les cmdlets ne sont pas disponibles
         └──────── domaine lab.local ────────┘
 ```
 
+
 > **Important :** ce cours n'est **pas** un tutoriel d'installation de lab (monter un domaine AD est un sujet à part entière). Mais garde en tête cette distinction : si tu tapes `Get-ADUser` sur ton Windows 11 personnel sans domaine ni RSAT, ça ne marchera pas — et c'est normal. Chaque chapitre te signale l'environnement et les droits nécessaires.
 
 **Windows PowerShell 5.1 vs PowerShell 7 :** les deux coexistent (on détaille au Ch.1). Pour la majorité de ce cours, la version intégrée à Windows (5.1) suffit. Les rares points spécifiques à PowerShell 7 sont signalés par le marqueur `[⚡ PS7+]`. Les opérations nécessitant des droits administrateur sont signalées par `[🔑 Admin]`, et celles spécifiques à Windows Server par `[🖥️ Server]`.
@@ -137,62 +137,62 @@ Reviens ici dès qu'un terme te semble flou.
 
 **PARTIE I — FONDAMENTAUX POWERSHELL POUR ADMINISTRER WINDOWS**
 
-1. [PowerShell dans l'écosystème Windows](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-1-powershell-dans-lecosysteme-windows)
-2. [Variables, types et informations système](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-2-variables-types-et-informations-systeme)
-3. [Paramètres et scripts administrables](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-3-parametres-et-scripts-administrables)
-4. [Le pipeline et les objets : le concept fondamental](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-4-le-pipeline-et-les-objets)
-5. [Opérateurs et conditions](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-5-operateurs-et-conditions)
-6. [Collections, hashtables et boucles](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-6-collections-hashtables-et-boucles)
-7. [Fonctions et scripts structurés](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-7-fonctions-et-scripts-structures)
-8. [Gestion des erreurs et débogage](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md#chapitre-8-gestion-des-erreurs-et-debogage)
+1. [PowerShell dans l'écosystème Windows](01-partie-i-fondamentaux-powershell-pour-administrer/01-chapitre-1-powershell-dans-l-ecosysteme-windows.md)
+2. [Variables, types et informations système](01-partie-i-fondamentaux-powershell-pour-administrer/02-chapitre-2-variables-types-et-informations-systeme.md)
+3. [Paramètres et scripts administrables](01-partie-i-fondamentaux-powershell-pour-administrer/03-chapitre-3-parametres-et-scripts-administrables.md)
+4. [Le pipeline et les objets : le concept fondamental](01-partie-i-fondamentaux-powershell-pour-administrer/04-chapitre-4-le-pipeline-et-les-objets.md)
+5. [Opérateurs et conditions](01-partie-i-fondamentaux-powershell-pour-administrer/05-chapitre-5-operateurs-et-conditions.md)
+6. [Collections, hashtables et boucles](01-partie-i-fondamentaux-powershell-pour-administrer/06-chapitre-6-collections-hashtables-et-boucles.md)
+7. [Fonctions et scripts structurés](01-partie-i-fondamentaux-powershell-pour-administrer/07-chapitre-7-fonctions-et-scripts-structures.md)
+8. [Gestion des erreurs et débogage](01-partie-i-fondamentaux-powershell-pour-administrer/08-chapitre-8-gestion-des-erreurs-et-debogage.md)
 
 **PARTIE II — ADMINISTRATION WINDOWS LOCALE**
 
-9. [Fichiers, dossiers et permissions NTFS](2-partie-ii-administration-windows-locale.md#chapitre-9-fichiers-dossiers-et-permissions-ntfs)
-10. [Utilisateurs et groupes locaux](2-partie-ii-administration-windows-locale.md#chapitre-10-utilisateurs-et-groupes-locaux)
-11. [Processus et services](2-partie-ii-administration-windows-locale.md#chapitre-11-processus-et-services)
-12. [Le registre Windows](2-partie-ii-administration-windows-locale.md#chapitre-12-le-registre-windows)
-13. [Tâches planifiées](2-partie-ii-administration-windows-locale.md#chapitre-13-taches-planifiees)
-14. [Disques, volumes et stockage](2-partie-ii-administration-windows-locale.md#chapitre-14-disques-volumes-et-stockage) · [Rôles, fonctionnalités et logiciels](2-partie-ii-administration-windows-locale.md#roles-fonctionnalites-et-logiciels)
+9. [Fichiers, dossiers et permissions NTFS](02-partie-ii-administration-windows-locale/01-chapitre-9-fichiers-dossiers-et-permissions-ntfs.md)
+10. [Utilisateurs et groupes locaux](02-partie-ii-administration-windows-locale/02-chapitre-10-utilisateurs-et-groupes-locaux.md)
+11. [Processus et services](02-partie-ii-administration-windows-locale/03-chapitre-11-processus-et-services.md)
+12. [Le registre Windows](02-partie-ii-administration-windows-locale/04-chapitre-12-le-registre-windows.md)
+13. [Tâches planifiées](02-partie-ii-administration-windows-locale/05-chapitre-13-taches-planifiees.md)
+14. [Disques, volumes et stockage](02-partie-ii-administration-windows-locale/06-chapitre-14-disques-volumes-et-stockage.md) · [Rôles, fonctionnalités et logiciels](02-partie-ii-administration-windows-locale/06-chapitre-14-disques-volumes-et-stockage.md#roles-fonctionnalites-et-logiciels)
 
 **PARTIE III — ADMINISTRATION RÉSEAU WINDOWS**
 
-15. [Interfaces et configuration IP](3-partie-iii-administration-reseau-windows.md#chapitre-15-interfaces-et-configuration-ip)
-16. [DNS client et résolution](3-partie-iii-administration-reseau-windows.md#chapitre-16-dns-client-et-resolution)
-17. [Routage et connexions](3-partie-iii-administration-reseau-windows.md#chapitre-17-routage-et-connexions)
-18. [Pare-feu Windows](3-partie-iii-administration-reseau-windows.md#chapitre-18-pare-feu-windows)
+15. [Interfaces et configuration IP](03-partie-iii-administration-reseau-windows/01-chapitre-15-interfaces-et-configuration-ip.md)
+16. [DNS client et résolution](03-partie-iii-administration-reseau-windows/02-chapitre-16-dns-client-et-resolution.md)
+17. [Routage et connexions](03-partie-iii-administration-reseau-windows/03-chapitre-17-routage-et-connexions.md)
+18. [Pare-feu Windows](03-partie-iii-administration-reseau-windows/04-chapitre-18-pare-feu-windows.md)
 
 **PARTIE IV — ADMINISTRATION ACTIVE DIRECTORY**
 
-19. [Comprendre Active Directory](4-partie-iv-administration-active-directory.md#chapitre-19-comprendre-active-directory)
-20. [Utilisateurs AD](4-partie-iv-administration-active-directory.md#chapitre-20-utilisateurs-ad)
-21. [Groupes AD](4-partie-iv-administration-active-directory.md#chapitre-21-groupes-ad)
-22. [Ordinateurs et unités d'organisation](4-partie-iv-administration-active-directory.md#chapitre-22-ordinateurs-et-unites-dorganisation)
-23. [Recherche et filtrage AD](4-partie-iv-administration-active-directory.md#chapitre-23-recherche-et-filtrage-ad)
-24. [Administration en masse avec CSV](4-partie-iv-administration-active-directory.md#chapitre-24-administration-en-masse-avec-csv)
+19. [Comprendre Active Directory](04-partie-iv-administration-active-directory/01-chapitre-19-comprendre-active-directory.md)
+20. [Utilisateurs AD](04-partie-iv-administration-active-directory/02-chapitre-20-utilisateurs-ad.md)
+21. [Groupes AD](04-partie-iv-administration-active-directory/03-chapitre-21-groupes-ad.md)
+22. [Ordinateurs et unités d'organisation](04-partie-iv-administration-active-directory/04-chapitre-22-ordinateurs-et-unites-d-organisation.md)
+23. [Recherche et filtrage AD](04-partie-iv-administration-active-directory/05-chapitre-23-recherche-et-filtrage-ad.md)
+24. [Administration en masse avec CSV](04-partie-iv-administration-active-directory/06-chapitre-24-administration-en-masse-avec-csv.md)
 
 **PARTIE V — GPO ET SERVICES WINDOWS SERVER**
 
-25. [Group Policy (GPO)](5-partie-v-gpo-et-services-windows-server.md#chapitre-25-group-policy-gpo)
-26. [DNS Server](5-partie-v-gpo-et-services-windows-server.md#chapitre-26-dns-server)
-27. [DHCP Server](5-partie-v-gpo-et-services-windows-server.md#chapitre-27-dhcp-server)
-28. [File Server et partages SMB](5-partie-v-gpo-et-services-windows-server.md#chapitre-28-file-server-et-partages-smb)
+25. [Group Policy (GPO)](05-partie-v-gpo-et-services-windows-server/01-chapitre-25-group-policy-gpo.md)
+26. [DNS Server](05-partie-v-gpo-et-services-windows-server/02-chapitre-26-dns-server.md)
+27. [DHCP Server](05-partie-v-gpo-et-services-windows-server/03-chapitre-27-dhcp-server.md)
+28. [File Server et partages SMB](05-partie-v-gpo-et-services-windows-server/04-chapitre-28-file-server-et-partages-smb.md)
 
 **PARTIE VI — ADMINISTRATION DISTANTE, API ET AUTOMATISATION**
 
-29. [PowerShell Remoting](6-partie-vi-administration-distante-api-et-automatisation.md#chapitre-29-powershell-remoting)
-30. [Authentification, autorisation et tokens](6-partie-vi-administration-distante-api-et-automatisation.md#chapitre-30-authentification-autorisation-et-tokens)
-31. [API REST avec PowerShell](6-partie-vi-administration-distante-api-et-automatisation.md#chapitre-31-api-rest-avec-powershell)
-32. [Microsoft Graph et Entra ID](6-partie-vi-administration-distante-api-et-automatisation.md#chapitre-32-microsoft-graph-et-entra-id)
+29. [PowerShell Remoting](06-partie-vi-administration-distante-api-et-automatis/01-chapitre-29-powershell-remoting.md)
+30. [Authentification, autorisation et tokens](06-partie-vi-administration-distante-api-et-automatis/02-chapitre-30-authentification-autorisation-et-token.md)
+31. [API REST avec PowerShell](06-partie-vi-administration-distante-api-et-automatis/03-chapitre-31-api-rest-avec-powershell.md)
+32. [Microsoft Graph et Entra ID](06-partie-vi-administration-distante-api-et-automatis/04-chapitre-32-microsoft-graph-et-entra-id.md)
 
 **PARTIE VII — AUTOMATISATION ET INDUSTRIALISATION**
 
-33. [Industrialiser ses scripts](7-partie-vii-automatisation-et-industrialisation.md#chapitre-33-industrialiser-ses-scripts)
+33. [Industrialiser ses scripts](07-partie-vii-automatisation-et-industrialisation/01-chapitre-33-industrialiser-ses-scripts.md)
 
 **PARTIE VIII — POWERSHELL POUR LA CYBERSÉCURITÉ**
 
-34. [Diagnostic, logs et triage](8-partie-viii-powershell-pour-la-cybersecurite.md#chapitre-34-diagnostic-logs-et-triage)
-35. [Sécurité de l'exécution et durcissement](8-partie-viii-powershell-pour-la-cybersecurite.md#chapitre-35-securite-de-lexecution-et-durcissement)
+34. [Diagnostic, logs et triage](08-partie-viii-powershell-pour-la-cybersecurite/01-chapitre-34-diagnostic-logs-et-triage.md)
+35. [Sécurité de l'exécution et durcissement](08-partie-viii-powershell-pour-la-cybersecurite/02-chapitre-35-securite-de-l-execution-et-durcissemen.md)
 
 **ANNEXES**
 
@@ -200,11 +200,47 @@ Reviens ici dès qu'un terme te semble flou.
 
 ## Sommaire
 
-1. [PARTIE I — FONDAMENTAUX POWERSHELL POUR ADMINISTRER WINDOWS](1-partie-i-fondamentaux-powershell-pour-administrer-windows.md)
-2. [PARTIE II — ADMINISTRATION WINDOWS LOCALE](2-partie-ii-administration-windows-locale.md)
-3. [PARTIE III — ADMINISTRATION RÉSEAU WINDOWS](3-partie-iii-administration-reseau-windows.md)
-4. [PARTIE IV — ADMINISTRATION ACTIVE DIRECTORY](4-partie-iv-administration-active-directory.md)
-5. [PARTIE V — GPO ET SERVICES WINDOWS SERVER](5-partie-v-gpo-et-services-windows-server.md)
-6. [PARTIE VI — ADMINISTRATION DISTANTE, API ET AUTOMATISATION](6-partie-vi-administration-distante-api-et-automatisation.md)
-7. [PARTIE VII — AUTOMATISATION ET INDUSTRIALISATION](7-partie-vii-automatisation-et-industrialisation.md)
-8. [PARTIE VIII — POWERSHELL POUR LA CYBERSÉCURITÉ](8-partie-viii-powershell-pour-la-cybersecurite.md)
+- [Partie I — Fondamentaux powershell pour administrer windows](01-partie-i-fondamentaux-powershell-pour-administrer/index.md)
+    - [Chapitre 1 — PowerShell dans l'écosystème Windows](01-partie-i-fondamentaux-powershell-pour-administrer/01-chapitre-1-powershell-dans-l-ecosysteme-windows.md)
+    - [Chapitre 2 — Variables, types et informations système](01-partie-i-fondamentaux-powershell-pour-administrer/02-chapitre-2-variables-types-et-informations-systeme.md)
+    - [Chapitre 3 — Paramètres et scripts administrables](01-partie-i-fondamentaux-powershell-pour-administrer/03-chapitre-3-parametres-et-scripts-administrables.md)
+    - [Chapitre 4 — Le pipeline et les objets](01-partie-i-fondamentaux-powershell-pour-administrer/04-chapitre-4-le-pipeline-et-les-objets.md)
+    - [Chapitre 5 — Opérateurs et conditions](01-partie-i-fondamentaux-powershell-pour-administrer/05-chapitre-5-operateurs-et-conditions.md)
+    - [Chapitre 6 — Collections, hashtables et boucles](01-partie-i-fondamentaux-powershell-pour-administrer/06-chapitre-6-collections-hashtables-et-boucles.md)
+    - [Chapitre 7 — Fonctions et scripts structurés](01-partie-i-fondamentaux-powershell-pour-administrer/07-chapitre-7-fonctions-et-scripts-structures.md)
+    - [Chapitre 8 — Gestion des erreurs et débogage](01-partie-i-fondamentaux-powershell-pour-administrer/08-chapitre-8-gestion-des-erreurs-et-debogage.md)
+- [Partie II — Administration windows locale](02-partie-ii-administration-windows-locale/index.md)
+    - [Chapitre 9 — Fichiers, dossiers et permissions NTFS](02-partie-ii-administration-windows-locale/01-chapitre-9-fichiers-dossiers-et-permissions-ntfs.md)
+    - [Chapitre 10 — Utilisateurs et groupes locaux](02-partie-ii-administration-windows-locale/02-chapitre-10-utilisateurs-et-groupes-locaux.md)
+    - [Chapitre 11 — Processus et services](02-partie-ii-administration-windows-locale/03-chapitre-11-processus-et-services.md)
+    - [Chapitre 12 — Le registre Windows](02-partie-ii-administration-windows-locale/04-chapitre-12-le-registre-windows.md)
+    - [Chapitre 13 — Tâches planifiées](02-partie-ii-administration-windows-locale/05-chapitre-13-taches-planifiees.md)
+    - [Chapitre 14 — Disques, volumes et stockage](02-partie-ii-administration-windows-locale/06-chapitre-14-disques-volumes-et-stockage.md)
+- [Partie III — Administration réseau windows](03-partie-iii-administration-reseau-windows/index.md)
+    - [Chapitre 15 — Interfaces et configuration IP](03-partie-iii-administration-reseau-windows/01-chapitre-15-interfaces-et-configuration-ip.md)
+    - [Chapitre 16 — DNS client et résolution](03-partie-iii-administration-reseau-windows/02-chapitre-16-dns-client-et-resolution.md)
+    - [Chapitre 17 — Routage et connexions](03-partie-iii-administration-reseau-windows/03-chapitre-17-routage-et-connexions.md)
+    - [Chapitre 18 — Pare-feu Windows](03-partie-iii-administration-reseau-windows/04-chapitre-18-pare-feu-windows.md)
+- [Partie IV — Administration active directory](04-partie-iv-administration-active-directory/index.md)
+    - [Chapitre 19 — Comprendre Active Directory](04-partie-iv-administration-active-directory/01-chapitre-19-comprendre-active-directory.md)
+    - [Chapitre 20 — Utilisateurs AD](04-partie-iv-administration-active-directory/02-chapitre-20-utilisateurs-ad.md)
+    - [Chapitre 21 — Groupes AD](04-partie-iv-administration-active-directory/03-chapitre-21-groupes-ad.md)
+    - [Chapitre 22 — Ordinateurs et unités d'organisation](04-partie-iv-administration-active-directory/04-chapitre-22-ordinateurs-et-unites-d-organisation.md)
+    - [Chapitre 23 — Recherche et filtrage AD](04-partie-iv-administration-active-directory/05-chapitre-23-recherche-et-filtrage-ad.md)
+    - [Chapitre 24 — Administration en masse avec CSV](04-partie-iv-administration-active-directory/06-chapitre-24-administration-en-masse-avec-csv.md)
+- [Partie V — GPO ET services windows server](05-partie-v-gpo-et-services-windows-server/index.md)
+    - [Chapitre 25 — Group Policy (GPO)](05-partie-v-gpo-et-services-windows-server/01-chapitre-25-group-policy-gpo.md)
+    - [Chapitre 26 — DNS Server](05-partie-v-gpo-et-services-windows-server/02-chapitre-26-dns-server.md)
+    - [Chapitre 27 — DHCP Server](05-partie-v-gpo-et-services-windows-server/03-chapitre-27-dhcp-server.md)
+    - [Chapitre 28 — File Server et partages SMB](05-partie-v-gpo-et-services-windows-server/04-chapitre-28-file-server-et-partages-smb.md)
+- [Partie VI — Administration distante, API ET automatisation](06-partie-vi-administration-distante-api-et-automatis/index.md)
+    - [Chapitre 29 — PowerShell Remoting](06-partie-vi-administration-distante-api-et-automatis/01-chapitre-29-powershell-remoting.md)
+    - [Chapitre 30 — Authentification, autorisation et tokens](06-partie-vi-administration-distante-api-et-automatis/02-chapitre-30-authentification-autorisation-et-token.md)
+    - [Chapitre 31 — API REST avec PowerShell](06-partie-vi-administration-distante-api-et-automatis/03-chapitre-31-api-rest-avec-powershell.md)
+    - [Chapitre 32 — Microsoft Graph et Entra ID](06-partie-vi-administration-distante-api-et-automatis/04-chapitre-32-microsoft-graph-et-entra-id.md)
+- [Partie VII — Automatisation ET industrialisation](07-partie-vii-automatisation-et-industrialisation/index.md)
+    - [Chapitre 33 — Industrialiser ses scripts](07-partie-vii-automatisation-et-industrialisation/01-chapitre-33-industrialiser-ses-scripts.md)
+- [Partie VIII — Powershell pour LA cybersécurité](08-partie-viii-powershell-pour-la-cybersecurite/index.md)
+    - [Chapitre 34 — Diagnostic, logs et triage](08-partie-viii-powershell-pour-la-cybersecurite/01-chapitre-34-diagnostic-logs-et-triage.md)
+    - [Chapitre 35 — Sécurité de l'exécution et durcissement](08-partie-viii-powershell-pour-la-cybersecurite/02-chapitre-35-securite-de-l-execution-et-durcissemen.md)
+- [Annexes](09-annexes.md)

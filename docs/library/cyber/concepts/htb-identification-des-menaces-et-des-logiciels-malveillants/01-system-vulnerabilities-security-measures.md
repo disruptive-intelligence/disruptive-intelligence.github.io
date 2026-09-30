@@ -1,0 +1,108 @@
+---
+title: System Vulnerabilities & Security Measures
+source: Cyber/99_Concepts/HTB_Identification des menaces et des logiciels malveillants.md
+note: HTB — Identification des menaces et des logiciels malveillants
+up:
+- - HTB — Identification des menaces et des logiciels malveillants
+  - index.md
+---
+
+## Zero-Day
+
+- Zero-Day vulnérabilité : Vuln inconnue de l'éditeur, donc aucun patch officiel dispo au moment de sa découverte/exploitation
+- Risque élevé car les défenses classiques basées sur signatures/patchs peuvent être inefficaces.
+### Défense en profondeur :
+
+- Patching régulier des autres composants ;
+- application layer Firewall / WAF ;
+- IPS pour détecter/bloquer des comportements suspects ;
+- EDR / monitoring comportemental en complément.
+- Le patching ne corrige pas directement un vrai zero-day tant que le vendor n'a pas publié de fix mais réduit l'exposition globale et les autres chemins d'attaque.
+
+## Origines des vulnérabilités
+### Weak configuration / Misconfiguration
+
+- Une mauvaise configuration peut rendre un système vulnérable même si aucun bug logiciel n'existe.
+
+| Problème                         | Risque / exemple                                                             |
+| -------------------------------- | ---------------------------------------------------------------------------- |
+| **Open Permissions**             | Droits trop larges, comptes guest/anonymous capables de modifier des données |
+| **Unsecure Admin/Root Accounts** | Comptes privilégiés mal protégés ou trop nombreux                            |
+| **Configuration Errors**         | Ex : DNS Zone Transfer accessible sans restriction                           |
+| **Weak Encryption**              | Chiffrement faible ou absent pour données au repos/en transit                |
+| **Unsecure Protocols**           | HTTP/Telnet/FTP au lieu de HTTPS/SSH/protocoles sécurisés                    |
+| **Default Settings**             | Services inutiles installés/activés par défaut                               |
+| **Open Ports & Services**        | Services inutiles exposés → surface d’attaque plus grande                    |
+### Third-Party Risks
+
+- Un fournisseur ou partenaire peut introduire des vulnérabilités dans l'environnement.
+
+| Problème                    | Risque / exemple                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vendor Management           | Vérifier comment le produit s'intégre au réseau, protocoles utilisés, comptes nécessaires, support/patch encore dispo.                      |
+| Supply Chain                | Fournisseur compromis peut livrer un produit/composant déjà malveillant.                                                                    |
+| Outsourced code development | Code développé sans secure coding -> vuln applicatives.                                                                                     |
+| Data storage                | Données stockées chez un tiers doivent rester : chiffrées, correctement contrôlées, idéalement déchiffrables uniquement par l'organisation. |
+### Patch management
+
+- L'absence de stratégie de patching laisse les vuln connues exploitables.
+- A maintenir à jour : 
+	- Firmware : serveurs, routeurs, switches, appliances...
+	- Operating System : patchs Windows/Linux/Mac...
+	- Applications : Une app vuln peut compromettre l'host.
+
+### Vendor support / Legacy systems
+
+- Legacy system : ancien système encore utilisé souvent : 
+	- Plus supporté, plus patché, utilisant des protocoles obsolètes.
+- Risque élevé car les vulns restent ouvertes.
+- Si remplacement impossible :
+	- isoler sur un segment réseau dédié, limiter flux autorisés, monitorer fortement, restreindre les accès.
+
+## Impacts possibles d'une vulnérabilité non traitées
+
+|Impact|Description|
+|---|---|
+|**Data Loss**|Suppression/chiffrement de données, ex : ransomware|
+|**Data Breach**|Accès non autorisé à des données confidentielles|
+|**Data Exfiltration**|Transfert non autorisé de données hors de l’organisation|
+|**Identity Theft**|Données personnelles utilisées pour fraude/usurpation|
+|**Financial Loss**|Arrêt de production, récupération, pertes commerciales|
+|**Reputation Damage**|Perte de confiance clients/partenaires|
+|**Availability Loss**|Service/système indisponible|
+### Data breach vs data exfiltration
+
+- Breach : accès non autorisé aux données
+- Exfiltration : données effectivement transférées hors de l'environnement.
+- Exemple de protection contre exfiltration : 
+	- désactivation/restriction USB, DLP, contrôle des uploads/emails, monitoring réseau.
+
+## Configuration faible ou mauvaise configuration
+### Unencrypted credentials / Cleartext
+
+- Certains protocoles historiques transmettent les credentials sans chiffrement.
+### Logs & Event Anomalies
+
+- Activer les logs ;
+- Connaître leur emplacement ;
+- Rechercher : 
+	- Anomalies ;
+	- event inhabituels ;
+	- connexions suspectes ;
+	- changement de configuration.
+### Permission issues
+
+- Mauvaises permissions = cause fréquente de compromission interne.
+- Appliquer : moindre privilege, revoir régulièrement ACL et permissions.
+### Access Violations
+
+- Accès à une ressource par un user non autorisé.
+- Prévention :
+	- Authentification obligatoire ;
+	- trafic de login chiffré ;
+	- permissions correctes ;
+	- contrôles d'accès.
+### Certificate issues
+
+- Les certificats sécurisent : web, email, communications serveur <-> serveur
+- A vérifier : certificat non expiré, non révoqué, chaîne de confiance valdie, CA de confiance, nom du certificat correspondant au service.

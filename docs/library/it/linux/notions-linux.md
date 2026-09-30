@@ -91,6 +91,7 @@ Login Information : sudo last -f /var/log/wtmp
 Authentification Logs : cat /var/log/auth.log |tail
 ```
 
+
 #### System configuration
 
 ```bash
@@ -113,6 +114,7 @@ DNS Information :
 	- cat /etc/resolv.conf
 ```
 
+
 #### Mécanismes de persistance
 
 ```bash
@@ -125,6 +127,7 @@ Service startup : ls /etc/init.d/
 .Bashrc : cat ~/.bashrc 
 	- Fichier de conf exécuté automatiquement à l'ouverture d'un shell bash
 ```
+
 
 #### Evidence d’exécution
 
@@ -144,6 +147,7 @@ Files accessed using Vim : cat ~/.viminfo
 f
 ```
 
+
 #### Log files
 
 ```bash
@@ -159,6 +163,7 @@ Auth log : cat /var/log/auth.log
 Third-Party Logs (/var/log/...) : ls /var/log
 	- Chaque service/appli a ses propres logs
 ```
+
 
 #### Processus/Services
 
@@ -179,7 +184,9 @@ sudo systemctl list-units --type=service
 
 ```
 
+
 - journalctl → consulter les journaux collectés par systemd-journald.
+
 “visionneuse de logs” : filtre par service, priorité, période, boot, etc.
 
 ```bash
@@ -191,6 +198,7 @@ sudo journalctl -p err                     # erreurs et + grave
 sudo journalctl -b                         # logs du boot courant
 sudo journalctl -S "2024-09-01" -U "now"   # fenêtre temporelle
 ```
+
 
 | **Description** | **Command** |
 | --- | --- |
@@ -221,6 +229,7 @@ sudo journalctl -S "2024-09-01" -U "now"   # fenêtre temporelle
 | Utilisation des disques montés | `df -h` |
 | liste utilisateurs | `cat /etc/passwd| column -t -s :` |
 | sudo last -f /var/log/fichier_de_log | wtmp : Historique de connexion 
+
 btmp : connexion échouée |
 
 #### Identité
@@ -240,6 +249,7 @@ btmp : connexion échouée |
 | which | Retourne chemin du binaire exécuté pour vérifier si un programme est présent |
 | find | Permet de trouver fichiers/répertoires et de filtrer (taille, date…) puis d’agir sur les résultats |
 | locate | Chercher avec find peut-être long. Locate s’appuie sur base locale de chemins (index) donc bien plus rapide. |
+
 - which : Retourne chemin du binaire exécuté pour vérifier si un programme est présent
     
     ```bash
@@ -296,6 +306,7 @@ btmp : connexion échouée |
 | Find | Supprimer de manière sûre  |
 | ls -la "/chemin/vers/dossier"
  | Reflexe sécu pour vérifier ce que * va cibler |
+
 - Supprimer dossier avec tout contenu (y compris sous-dossiers)
     
     ```bash
@@ -402,6 +413,7 @@ btmp : connexion échouée |
 | expand / unexpand | Permet de ré ajuster les tabulations / espaces pour éviter certains problèmes d’affichages de fichiers mal formatés au niveau de l’allignement du texte |
 | join  | Fusionne lignes de deux fichiers en se basant sur un champ commun |
 | split | Divise fichier volumineux en morceaux plus petits plus faciles à gérezr |
+
 - more : Affiche fichier page par page
     
     ```bash
@@ -640,6 +652,7 @@ Chercher ligne contenant motif spécifique
 grep -E "(my|false)" /etc/passwd
 ```
 
+
 #### Opérateur ET
 
 Chercher ligne contenant mot1 puis plus loin mot2 (dans cet ordre)
@@ -647,6 +660,7 @@ Chercher ligne contenant mot1 puis plus loin mot2 (dans cet ordre)
 ```bash
 grep -E "(my.*false)" /etc/passwd
 ```
+
 
 #### Gestion des permissions [chmod, SUID…]
 
@@ -676,7 +690,7 @@ Chaque objets a un propriétaire (user) et un groupe, les droits définissent ce
     |____________ File type (- = File, d = Directory, l = Link, ... )
     ```
     
-    ![image.png](attachment:10449252-70e6-436d-bc89-9458a885ad9e:image.png)
+    
     
     ### Système Octal (r=4, w=2, x=1)
     
@@ -717,6 +731,7 @@ cry0l1t3@htb[/htb]$ ls -l shell
 -rwxr-x--x   1 cry0l1t3 htbteam 0 May  4 22:12 shell
 ```
 
+
 ```bash
 chmod a+r shell : ajoute lecture pour tous
 
@@ -726,9 +741,11 @@ cry0l1t3@htb[/htb]$ chmod a+r shell && ls -l shell
 -rwxr-xr-x   1 cry0l1t3 htbteam 0 May  4 22:12 shell
 ```
 
+
 ```bash
 chmod 754 shell : Fixer via notation octale (lecture seule pour other)
 ```
+
 
 - Compréhension droits
     
@@ -771,6 +788,7 @@ chown <user>:<group> <file/directory>
 	chown root:root shell && ls -l shell
 ```
 
+
 #### Identité : UID, GID, PID
 
 - PID (Process ID) : Chaque programme qui tourne a un numéro unique
@@ -810,7 +828,7 @@ File descriptor (FD) sous Unix/Linux est une référence, gérée par noyau qui 
 
 On dnne une entrée (STDIN) à cat, une fois “entrée”, ressort sur la sortie standard (STDOUT) 
 
-![image.png](attachment:3d34ce70-0522-408a-bebe-baa2bfb3f5ea:image.png)
+
 
 #### STDOUT et STDERR
 
@@ -818,7 +836,7 @@ Les résultats “normaux” sur STDOUT, les erreurs sur STDERR, ex : Permission
 
 - On peut rediriger erreur 2>/dev/null.
 
-![image.png](attachment:de885977-20e0-4135-8bb0-16e3ad55af04:image.png)
+
 
 #### Rediriger STDOUT dans un fichier
 
@@ -830,7 +848,8 @@ cat results.txt
 # Attention : > : écrase fichier s'il existe
 ```
 
-![image.png](attachment:ef8446c9-a2f5-4bf4-842d-cd38e50a0cee:image.png)
+
+
 
 #### Rediriger STDOUT et STDERR vers fichiers séparés
 
@@ -838,7 +857,8 @@ cat results.txt
 find /etc/ -name shadow 2> stderr.txt 1> stdout.txt
 ```
 
-![image.png](attachment:e31e1f56-85a7-49fd-9d2b-0c8306210ab0:image.png)
+
+
 
 #### Redirection de STDIN
 
@@ -848,7 +868,8 @@ find /etc/ -name shadow 2> stderr.txt 1> stdout.txt
 cat < stdout.txt
 ```
 
-![image.png](attachment:4c3fde71-861c-43c2-943c-a3f4415d3575:image.png)
+
+
 
 #### Rediriger STDOUT ajouter au lieu d’écraser
 
@@ -859,7 +880,8 @@ find /etc/ -name passwd >> stdout.txt 2>/dev/null
 cat stdout.txt
 ```
 
-![image.png](attachment:82b5be7e-8021-476d-8693-3c7da9b3f283:image.png)
+
+
 
 #### Rediriger flux STDIN vers fichier
 
@@ -869,7 +891,8 @@ cat stdout.txt
 cat << EOF > stream.txt
 ```
 
-![image.png](attachment:fe4b4103-fca7-4535-bd4e-8a4c20db689f:image.png)
+
+
 
 ## Pipe
 
@@ -878,6 +901,7 @@ cat << EOF > stream.txt
 - | wc : Permet de compter nombre de mot
 	- Nombre package : dpkg -l | grep '^ii' | wc -l
 ```
+
 
 #### Gestion du système
 
@@ -895,7 +919,9 @@ cat << EOF > stream.txt
 | `passwd` | Changer MDP. |
 | `cat /etc/passwd| column -t -s` | Liste utilisateurs |
 | sudo last -f /var/log/fichier_de_log | wtmp : Historique de connexion 
+
 btmp : connexion échouée |
+
 - /etc/passwd
     
     Ligne type :
@@ -1016,6 +1042,7 @@ apt list --installed
 sudo apt install <paquet> -y
 ```
 
+
 #### Process install complet
 
 #### Le Processus "Bout en Bout" 🔄
@@ -1090,11 +1117,13 @@ Une fois les fichiers copiés, DPKG exécute les **scripts de post-installation*
 git clone https:...
 ```
 
+
 #### PIP (Python Package Installer)
 
 ```bash
 python3 -m pip install <paquet>
 ```
+
 
 #### Gestion des process et service [daemons, Systemd, SIGTERM…]
 
@@ -1114,6 +1143,7 @@ python3 -m pip install <paquet>
 - Dispo et charge : uptime
 ```
 
+
 - Matériel & ressources
 
 ```bash
@@ -1126,6 +1156,7 @@ lsblk        # topologie des block devices (disques/partitions, tailles, points 
 
 ```
 
+
 - Logiciels installés
 
 ```bash
@@ -1136,6 +1167,7 @@ lsblk        # topologie des block devices (disques/partitions, tailles, points 
 	- Affiche les 30 premiers paquets installés (et leur provenance/canal). Même usage : survol rapide, détection d’éléments inattendus.
 ```
 
+
 - Profil réseau
 
 ```bash
@@ -1145,6 +1177,7 @@ lsblk        # topologie des block devices (disques/partitions, tailles, points 
 
 - Connexions & sockets : ss
 ```
+
 
 #### Hunting for processes
 
@@ -1165,6 +1198,7 @@ strace : appels système d’un processus (très verbeux).
 
 vmstat : perf globale (ordonnancement/mémoire).
 ```
+
 
 ```bash
 # Vue large + hiérarchie détaillée
@@ -1192,6 +1226,7 @@ sudo lsof -p <PID>
 ss -tulpen
 
 ```
+
 
 | Besoin | Outil | Commande rapide | Idée clé |
 | --- | --- | --- | --- |
@@ -1228,6 +1263,7 @@ sudo systemctl list-unit-files --type=service
 
 ```
 
+
 Piloter :
 
 ```bash
@@ -1239,6 +1275,7 @@ sudo systemctl disable <service>    # désactiver au démarrage
 sudo systemctl status <service>     # état + PID + dernier log
 
 ```
+
 
 Inspecter un service précis :
 
@@ -1253,6 +1290,7 @@ sudo systemctl cat <service>
 sudo systemctl show <service> -p ExecStart -p FragmentPath -p User -p Group -p Restart
 
 ```
+
 
 ---
 
@@ -1276,6 +1314,7 @@ sudo grep -R "^ExecStart=" /etc/systemd/system /lib/systemd/system | grep -vE "/
 
 ```
 
+
 ---
 
 ### Voir les logs d’un service (avec `journalctl`)
@@ -1294,6 +1333,7 @@ sudo journalctl -p err -u <service>
 sudo journalctl -u <service> -b
 
 ```
+
 
 > Si besoin de conserver les journaux après reboot, dans /etc/systemd/journald.conf : Storage=persistent (puis redémarrer systemd-journald).
 > 
@@ -1351,6 +1391,7 @@ sudo systemctl stop <service>     # si à bloquer
 
 ```
 
+
 #### Investiguer connexions réseau
 
 ```bash
@@ -1366,6 +1407,7 @@ iptables : règles pare-feu (contexte).
 
 Autres vus : nmap, ping, traceroute, dig/nslookup, hostname, ifconfig/ip, arp, route, curl/wget, netcat, whois.
 ```
+
 
 #### Linux incident surface
 
@@ -1392,6 +1434,7 @@ START heure de démarrage · COMMAND binaire + arguments
 
 ```
 
+
 - Osquery : Outil pour explorer process et ses connexions réseau.
 
 ```bash
@@ -1400,6 +1443,7 @@ START heure de démarrage · COMMAND binaire + arguments
 - Interroger sockets ouverts par PID précis : SELECT pid, fd, socket, local_address, remote_address FROM process_open_sockets WHERE pid = 2372;
 
 ```
+
 
 #### Persistance
 
@@ -1417,6 +1461,7 @@ echo "attacker ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 - Emplacement compte : grep attacker /etc/passwd
 ```
 
+
 #### Cron jobs
 
 ```bash
@@ -1430,6 +1475,7 @@ echo "attacker ALL=(ALL:ALL) ALL" | sudo tee -a /etc/sudoers
 - Crontab par users : /var/spool/cron/crontabs/<user>
 - Chercher exécution : grep CRON /var/log/syslog
 ```
+
 
 #### Services systemd
 
@@ -1458,6 +1504,7 @@ sudo systemctl start  suspicious.service
 sudo systemctl status suspicious.service
 ```
 
+
 ```bash
 Trace : 
 
@@ -1468,6 +1515,7 @@ Trace :
 - Journal systemd : sudo journalctl -u suspicious
 
 ```
+
 
 ### Où regarder globalement
 
@@ -1486,6 +1534,7 @@ Trace :
 
 > Objectif : relier l’action (compte/cron/service) à ses empreintes (fichiers de config + logs) pour confirmer une persistance.
 > 
+
 - `Service`, aussi appelé `daemon`, effectuent tâches pour fonctionnement du système et fournit fonctionnalités supp, tournent en arrière-plan. Par convention, finit souvent par d (sshd, httpd..) Classer en deux catégories :
     - Services système : Interne requis lors du démarrage (init matériel, composants…)
     - Services installés par user : applis serveur, tâches en fond
@@ -1506,6 +1555,7 @@ systemctl list-units --type=service
 kill XXX
 ```
 
+
 ```bash
 # Démarrer / arrêter / redémarrer / recharger
 systemctl start ssh
@@ -1513,6 +1563,7 @@ systemctl stop ssh
 systemctl restart ssh
 systemctl reload ssh
 ```
+
 
 ```bash
 # Etat / logs récents / liste / Echecs (failed & journalctl)
@@ -1522,12 +1573,14 @@ systemctl --failed
 journalctl -u ssh.service --no-pager
 ```
 
+
 ```bash
 # Activer au démarrage / désactiver / Check
 systemctl enable ssh
 systemctl disable ssh
 ps -aux | grep ssh
 ```
+
 
 #### Lister / chercher [PS, PSTREE, SS -lntp]
 
@@ -1545,6 +1598,7 @@ which sshd
 systemctl list-units --type=service
 ```
 
+
 #### Kill process & signaux
 
 - Process peut-être dans états suivants :
@@ -1560,6 +1614,7 @@ kill -i : Lister tous signaux
 pgrep <nom_process> # Donne PID
 ```
 
+
 - Envoyer signaux (par PID)
 
 ```bash
@@ -1569,12 +1624,14 @@ kill XX
 
 ```
 
+
 - Par nom de process
 
 ```bash
 pkill -TERM -x nom_process
 pkill -KILL -x nom_process
 ```
+
 
 | **Signal** | **Description** |
 | --- | --- |
@@ -1597,6 +1654,7 @@ bg %X # Permet de relancer jobs souhaité en arrière
 command & # Esperluète à la fin permet de mettre en arrière
 fg X # Permet de relancer en avant
 ```
+
 
 #### Exécuter multiple commandes
 
@@ -1640,6 +1698,7 @@ ss -tulpn          # Connaitre ports
 	-tulpn4          # IPv3 uniquement
 netstat -tulnp4    # Connaitre ports (legacy)
 ```
+
 
 #### Configurer interfaces
 
@@ -1719,6 +1778,7 @@ tcpdump -i eth0 -n host <ip>
 nmap -sS -sV -O -Pn <cible>
 ```
 
+
 #### Network Access Control (NAC)
 
 - DAC (Discretionary Access Control) : Propriétaire choisit qui accède à la ressource.
@@ -1750,6 +1810,7 @@ sudo mkdir /etc/systemd/system/mytimer.timer.d
 sudo vim /etc/systemd/system/mytimer.timer
 ```
 
+
 - Créer script pour timer, doit contenir trois éléments :
     - Unit : Description pour timer
     - Timer : Spécifier quand commencer timer et quand l’activer
@@ -1767,6 +1828,7 @@ OnUnitActiveSec=1hour
 WantedBy=timers.target
 ```
 
+
 - OnBootSec : délai après boot (s’exécute qu’une fois)
 - OnUnitActiveSec : Fréquence après dernière exécution (régulier)
 
@@ -1777,6 +1839,7 @@ WantedBy=timers.target
 ```bash
 sudo vim /etc/systemd/system/mytimer.service
 ```
+
 
 - Contenu de mytimer.service
     - Path complet du script
@@ -1792,6 +1855,7 @@ ExecStart=/full/path/to/my/script.sh
 WantedBy=multi-user.target
 ```
 
+
 - Reload systemd, puis lancer et activer le timer
 
 ```bash
@@ -1799,6 +1863,7 @@ sudo systemctl daemon-reload
 sudo systemctl start mytimer.timer
 sudo systemctl enable mytimer.timer
 ```
+
 
 #### Cron
 
@@ -1890,6 +1955,7 @@ systemctl status ssh
 ssh user@ip
 ```
 
+
 #### NFS
 
 Permet de stocker et gérer fichiers sur systèmes distants comme s’ils étaient locaux (collaboration, centralisation). Aussi utile pour répliquer systèmes de fichiers entre serveurs. NFS-UTILS (Ubuntu)
@@ -1901,6 +1967,7 @@ sudo apt install nfs-kernel-server -y
 # Vérifier service 
 systemctl status nfs-kernel-server
 ```
+
 
 #### Créer et configurer NFS
 
@@ -1915,6 +1982,7 @@ systemctl status nfs-kernel-server
 | `root_squash` | Restricts the rights of the root user on the client to the rights of a normal user. |
 | `sync` | Synchronizes the transfer of data to ensure that changes are only transferred after they have been saved on the file system. |
 | `async` | Transfers data asynchronously, which makes the transfer faster, but may cause inconsistencies in the file system if changes have not been fully committed. |
+
 - Créer NFS Share
 
 ```bash
@@ -1922,6 +1990,7 @@ mkdir nfs_sharing
 echo '/home/cry0l1t3/nfs_sharing hostname(rw,sync,no_root_squash)' >> /etc/exports
 cat /etc/exports | grep -v "#"
 ```
+
 
 - Mount NFS Share
     - Pour travailler avec le partage, doit le monter.
@@ -1931,6 +2000,7 @@ cat /etc/exports | grep -v "#"
 mkdir ~/target_nfs
 mount 10.1.12.17:/home/john/dev_scripts ~/target_nfs
 ```
+
 
 #### Serveur Web [Python, NPM, PHP…]
 
@@ -1944,6 +2014,7 @@ Serveurs web (Apache, Nginx…), délivrent contenu/app via HTTP(S). Pour pentes
 sudo apt install apache2 -y
 ```
 
+
 #### Serveur Web Python
 
 - Install Python & Web server
@@ -1953,6 +2024,7 @@ sudo apt install python3 -y
 python3 -m http.server # Par défaut port TCP/8000 et dossier où c'est lancé
 ```
 
+
 - Host dossier spécifique / Port spécifique
     
     ```bash
@@ -1960,7 +2032,7 @@ python3 -m http.server # Par défaut port TCP/8000 et dossier où c'est lancé
     python3 -m http.server 443
     ```
     
-    ![image.png](attachment:61cd1f35-593e-48e4-b52e-352a110c9b8e:image.png)
+    
     
 
 #### VPN
@@ -1978,6 +2050,7 @@ sudo apt install openvpn -y
 sudo openvpn --config internal.ovpn
 ```
 
+
 #### Divers
 
 ```bash
@@ -1987,6 +2060,7 @@ http-server -p XX
 # php
 php -S 127.0.0.1:8080
 ```
+
 
 #### Services Web [Apache, cURL, WGET]
 
@@ -2004,6 +2078,7 @@ php -S 127.0.0.1:8080
 sudo apt install apache2 -y
 sudo systemctl start apache2
 ```
+
 
 - Modifier conf / changer le port
     - /etc/apache2/ports.conf
@@ -2023,6 +2098,7 @@ curl -L http://exemple.tld          # suivre redirections
 curl -k https://localhost           # ignorer cert non valide
 ```
 
+
 #### Wget (télécharger / fichiers)
 
 Pratique pour télécharger et faire des récupérations récursives simples.
@@ -2030,6 +2106,7 @@ Pratique pour télécharger et faire des récupérations récursives simples.
 ```bash
 wget http://localhost
 ```
+
 
 #### Backup et restauration [Rsync, Deja Dup]
 
@@ -2091,6 +2168,7 @@ Pour assurer sécurité, coupler avec SSH pour transfert secure.
 rsync -avz -e ssh /path/to/mydirectory user@backup_server:/path/to/backup/directory
 ```
 
+
 - Authentification par clé
     
     ```bash
@@ -2111,6 +2189,7 @@ Combiner rsync et cron.
 
 rsync -avz -e ssh /path/to/mydirectory user@backup_server:/path/to/backup/directory
 ```
+
 
 - Ajouter permissions
     
@@ -2168,6 +2247,7 @@ df -i                       # inodes libres/utilisés par FS
 du -sh <chemin>             # taille d’un dossier/fichier
 ```
 
+
 #### Liens symboliques
 
 ```bash
@@ -2175,6 +2255,7 @@ ln -s <cible> <lien>        # créer un symlink
 	ln -s tmp/files/take-the-command-challenge take-the-command-challenge 
 readlink -f <lien>          # résoudre la cible
 ```
+
 
 #### Disque et partitions
 
@@ -2184,6 +2265,7 @@ lsblk -f                    # arborescence disques/FS/labels/UUID
 blkid                       # UUID et types FS
 sudo parted -l              # idem, GPT-friendly
 ```
+
 
 #### Montage
 
@@ -2234,6 +2316,7 @@ swapon --show # Liste swap actifs
 free -h # Vue RAM/Swap
 cat /proc/swaps # Détail noyau
 ```
+
 
 - Créer swapfile
     
@@ -2367,6 +2450,7 @@ sudo tail /var/log/dmesg
 sudo dmesg -T | grep 'custom_kernel'
 ```
 
+
 #### Authentification : auth.log
 
 Tout ce qui touche à l’authent (SSH, sudo, succès/echecs)
@@ -2381,6 +2465,7 @@ sudo tail -f /var/log/auth.log
 - Historique commande sudo : grep 'sudo' /var/log/auth.log
 ```
 
+
 #### Journal syslog
 
 Messages système généraux (cron, noyau, services…) 
@@ -2391,6 +2476,7 @@ Messages système généraux (cron, noyau, services…)
 - Message kernel visibles : grep 'kernel' /var/log/syslog
 ```
 
+
 #### Traces de connexions : btmp & wtmp
 
 ```bash
@@ -2398,6 +2484,7 @@ Echecs de connexion : **/var/log/btmp
 
 C**onnexions/déconnexions (qui, quand). **: /var/log/wtmp**
 ```
+
 
 ```bash
 # Noyau (buffer mémoire)
@@ -2417,6 +2504,7 @@ grep 'sudo' /var/log/auth.log
 grep 'CRON' /var/log/syslog
 grep 'kernel' /var/log/syslog
 ```
+
 
 #### Logging levels & Kernel logs
 
@@ -2438,6 +2526,7 @@ sudo less /var/log/kern.log
 # Les 200 dernières lignes (vue rapide)
 sudo tail -n 200 /var/log/kern.log
 ```
+
 
 #### Journalctl
 
@@ -2463,6 +2552,7 @@ Lire les logs : sudo journalctl
 - Sans pager : journalctl --no-pager
 ```
 
+
 ```bash
 Filtre : 
 
@@ -2475,6 +2565,7 @@ Filtre :
 - Par priorité : sudo journalctl -p crit
 
 ```
+
 
 #### Cas d’usage typiques en IR/DFIR
 
@@ -2550,6 +2641,7 @@ journalctl -xe (erreurs récentes)
 journalctl -u ssh --since "today" (service donné)
 journalctl -k (messages kernel)
 ```
+
 
 #### Shell [Instable, Alias, env…]
 
@@ -2646,6 +2738,7 @@ Fichier de conf :
 sudo grub-mkpasswd-pbkdf2 
 ```
 
+
 #### Partition et chiffrement filesystem
 
 #### Firewall
@@ -2667,6 +2760,7 @@ sudo iptables -A INPUT  -j DROP
 sudo iptables -A OUTPUT -j DROP
 ```
 
+
 - nftables
     - Remplace progressivement iptables. On crée d’abord une table puis des chains (intput/output) puis des rules
 
@@ -2686,6 +2780,7 @@ sudo nft list table ip fwfilter
 
 ```
 
+
 - UFW
     - Très simple, gère iptables/nftables
 
@@ -2703,6 +2798,7 @@ sudo ufw allow 22/tcp
 # Vérifier l’état
 sudo ufw status verbose
 ```
+
 
 ### Mini check-list
 
@@ -2730,6 +2826,7 @@ PasswordAuthentication no  # désactive l’authentification par mot de passe
 
 ```
 
+
 #### Securiser User Accounts
 
 Ne pas utiliser le compte root
@@ -2744,6 +2841,7 @@ usermod -aG sudo username
 # username: le compte à modifier
 ```
 
+
 #### Disable root
 
 Une fois compte admin prêt, désactiver root en changeant son shell dans /etc/passwd
@@ -2755,6 +2853,7 @@ root:x:0:0:root:/root:/bin/bash
 # Après
 root:x:0:0:root:/root:/sbin/nologin
 ```
+
 
 #### Politique de MDP forte
 
@@ -2772,6 +2871,7 @@ michael:x:1000:1000:Michael:/home/michael:/usr/bin/fish
 michael:x:1000:1000:Michael:/home/michael:/sbin/nologin
 
 ```
+
 
 Notions diverses :
 
@@ -2857,11 +2957,11 @@ Techno de vritualisation légère permet d’exécuter plusieurs systèmes Linux
 
 #### Arborescence Linux
 
-![Untitled](attachment:78d94b91-1a9b-432b-9437-0031e4fc72c4:Untitled.png)
+
 
 #### Gestion des permissions
 
-![Untitled](attachment:c5bcf2fd-a71d-4818-a2d0-3ea465de3cba:Untitled.png)
+
 
 #### Méthodologie
 
@@ -3094,7 +3194,7 @@ Techno de vritualisation légère permet d’exécuter plusieurs systèmes Linux
         
         - ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
         
-        ![image.png](attachment:df4e056b-dd11-4147-9db2-ec7e96428037:image.png)
+        
         
         ### Level 1-2
         
@@ -3103,7 +3203,7 @@ Techno de vritualisation légère permet d’exécuter plusieurs systèmes Linux
             - cat > -
         - 263JGJPfgU6LtdEvgfWU1XP5yac29mFx
         
-        ![image.png](attachment:33f1befe-a0ff-4861-8443-69da0e9398e2:image.png)
+        
         
         ### Level 2-3
         
@@ -3111,7 +3211,7 @@ Techno de vritualisation légère permet d’exécuter plusieurs systèmes Linux
             - cat "./--spaces in this filename--”
         - MNk8KNH3Usiio41PRUEoDFPqfxLPlSmx
         
-        ![image.png](attachment:e801d0a0-a2d6-4328-ad4f-16c3e6628208:image.png)
+        
         
         ### Level 3-4
         

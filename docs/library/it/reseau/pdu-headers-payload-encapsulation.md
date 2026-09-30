@@ -3,7 +3,7 @@ title: PDU, headers, payload & encapsulation
 source: IT/03_Networking/PDU_Headers_Payload_Encapsulation.md
 ---
 
-## Objectif de la section
+*Objectif de la section*
 Comprendre ce qu'est une PDU à chaque couche, la structure concrète des headers et du payload, puis maîtriser le processus d'encapsulation (envoi) et de décapsulation (réception) des données à travers les couches du modèle OSI/TCP-IP. Savoir comment ces éléments s'imbriquent, y compris dans un contexte VPN.
 
 ---
@@ -117,6 +117,7 @@ Protocol (couche 3)   →  identifie le protocole L4  (6 = TCP, 17 = UDP, 1 = IC
 Port destination (L4) →  identifie l'application    (80 = HTTP, 443 = HTTPS, 53 = DNS)
 ```
 
+
 Sans cette chaîne, les données arriveraient au bon endroit physiquement mais personne ne saurait quoi en faire.
 
 ---
@@ -149,6 +150,7 @@ Sans cette chaîne, les données arriveraient au bon endroit physiquement mais p
 #### Exemples concrets de payloads applicatifs (couche 7)
 
 **Requête HTTP GET** (tu tapes une URL dans ton navigateur) :
+
 ```
 GET /index.html HTTP/1.1
 Host: www.example.com
@@ -156,7 +158,9 @@ User-Agent: Mozilla/5.0
 Accept: text/html
 ```
 
+
 **Requête HTTP POST** (tu soumets un formulaire de login) :
+
 ```
 POST /login HTTP/1.1
 Host: www.example.com
@@ -165,7 +169,9 @@ Content-Type: application/x-www-form-urlencoded
 username=jean&password=secret123
 ```
 
+
 **Réponse HTTP** (le serveur renvoie la page) :
+
 ```
 HTTP/1.1 200 OK
 Content-Type: text/html
@@ -173,12 +179,16 @@ Content-Type: text/html
 <html><body><h1>Bienvenue</h1></body></html>
 ```
 
+
 **Requête DNS** (résolution de nom) :
+
 ```
 Query: www.example.com → A record?
 ```
 
+
 **Commande SMTP** (envoi d'email) :
+
 ```
 MAIL FROM:<jean@example.com>
 RCPT TO:<alice@example.com>
@@ -187,6 +197,7 @@ Subject: Bonjour
 Ceci est un email.
 .
 ```
+
 
 Tous ces exemples sont des **payloads de la couche transport** (TCP ou UDP). Pour TCP/UDP, ce texte est juste un bloc d'octets à transporter. Pour IP, ce bloc + le header TCP = juste un payload à router. Et ainsi de suite — chaque couche ne voit que son propre niveau.
 
@@ -199,6 +210,7 @@ Le schéma de principe est toujours le même :
 ```
 PDU = Header + Payload
 ```
+
 
 Et le payload d'une couche = la PDU complète de la couche du dessus. Voici une vue concrète d'une requête HTTPS traversant toutes les couches :
 
@@ -233,6 +245,7 @@ COUCHE LIAISON (Trame Ethernet)
 └──────────────┴────────────────────────────────────────────────────────────────┴─────────┘
 ```
 
+
 **Ce qu'il faut voir** : à chaque couche, le header "emballe" tout ce qui vient du dessus. La couche Ethernet ne sait pas qu'elle transporte du HTTP — elle voit juste un bloc d'octets. IP ne sait pas qu'il y a une requête web dans son payload — il voit juste un bloc à router vers l'IP destination. **Chaque couche ne lit que son propre header** et traite le reste comme un payload opaque — c'est le principe d'**indépendance des couches**.
 
 ---
@@ -257,6 +270,7 @@ Couche N reçoit la PDU de la couche N+1
          = PDU de la couche N
 ```
 
+
 Voici le parcours complet d'une requête HTTPS envoyée depuis un navigateur vers un serveur web.
 
 ---
@@ -268,14 +282,18 @@ Voici le parcours complet d'une requête HTTPS envoyée depuis un navigateur ver
 **PDU** : **Data** (Données)
 
 **Exemple concret** :
+
 ```
 GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
 ```
 
+
 **Résultat** :
+
 ```
 [ Données HTTP ]
 ```
+
 
 > C'est le point de départ. L'utilisateur saisit une URL, le navigateur génère la requête HTTP et la transmet à la couche Transport.
 
@@ -290,9 +308,11 @@ GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
 **Header TCP ajouté** : ports source/destination, sequence number, acknowledgment number, flags, window size, checksum, options (détails → voir section 2).
 
 **Résultat** :
+
 ```
 [ Header TCP | Données HTTP ]
 ```
+
 
 > **Point important** : les ports source/destination sont ajoutés **ici**, à la couche 4. C'est pour ça qu'un firewall doit inspecter au-delà du header IP pour filtrer par port.
 
@@ -307,9 +327,11 @@ GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
 **Header IP ajouté** : version, IHL, DSCP/ToS, total length, identification/flags/fragment offset, TTL, protocol, checksum, IP source, IP destination (détails → voir section 2).
 
 **Résultat** :
+
 ```
 [ Header IP | Header TCP | Données HTTP ]
 ```
+
 
 > **Champ Protocol** : c'est ce champ qui permet au destinataire de savoir à quel protocole de couche 4 remettre le payload (6 → TCP, 17 → UDP).
 
@@ -325,9 +347,11 @@ GET / HTTP/1.1\r\nHost: example.com\r\n\r\n
 **Trailer ajouté** : FCS (4 octets, CRC-32).
 
 **Résultat** :
+
 ```
 [ Header Ethernet | Header IP | Header TCP | Données HTTP | FCS ]
 ```
+
 
 > **MAC destination ≠ IP destination** : c'est un point fondamental. La MAC destination **change à chaque saut** réseau (routeur → routeur), alors que l'IP destination **reste la même** de bout en bout. La MAC est une adresse locale (saut par saut), l'IP est une adresse globale (end-to-end).
 
@@ -374,6 +398,7 @@ Couche 1   │  01101001 01010011 11001010 01110101 00101101 ...
            │  → signaux électriques / optiques / radio
 ```
 
+
 **Chaque couche emballe la précédente sans la modifier.** L'empilement des headers forme une structure de "poupées russes" — le destinataire les retirera une par une dans l'ordre inverse.
 
 ---
@@ -392,26 +417,31 @@ Couche 1   │  01101001 01010011 11001010 01110101 00101101 ...
 01101001 01010011 ... → [ Header Eth | Header IP | Header TCP | Data HTTP | FCS ]
 ```
 
+
 ---
 
 #### Étape 2 — Couche 2 (Liaison)
 
 **Actions** :
+
 1. **Vérification FCS** → si le checksum CRC-32 ne correspond pas, la trame est **rejetée** (erreur de transmission)
 2. **Lecture MAC destination** → si l'adresse correspond à la NIC locale → traiter. Sinon → ignorer (ou router si c'est un switch/routeur)
 3. **Lecture EtherType** → détermine à quel protocole couche 3 remettre le payload (0x0800 → IPv4)
 4. **Retrait du header Ethernet et du trailer FCS**
 
 **Transmis à la couche 3** :
+
 ```
 [ Header IP | Header TCP | Données HTTP ]
 ```
+
 
 ---
 
 #### Étape 3 — Couche 3 (Réseau)
 
 **Actions** :
+
 1. **Vérification checksum IP** → si invalide, le paquet est rejeté
 2. **Lecture IP destination** → si correspond à une IP locale → traiter. Sinon → router vers le prochain saut
 3. **Décrémentation du TTL** → si TTL = 0, le paquet est détruit (et un message ICMP "Time Exceeded" est renvoyé)
@@ -419,15 +449,18 @@ Couche 1   │  01101001 01010011 11001010 01110101 00101101 ...
 5. **Retrait du header IP**
 
 **Transmis à la couche 4** :
+
 ```
 [ Header TCP | Données HTTP ]
 ```
+
 
 ---
 
 #### Étape 4 — Couche 4 (Transport)
 
 **Actions** :
+
 1. **Vérification checksum TCP** → si invalide, le segment est rejeté
 2. **Lecture port destination** → identifie l'application destinataire (443 → HTTPS)
 3. **Gestion du séquencement** → remise des segments dans l'ordre grâce au Sequence Number
@@ -435,9 +468,11 @@ Couche 1   │  01101001 01010011 11001010 01110101 00101101 ...
 5. **Retrait du header TCP**
 
 **Transmis à la couche 7** :
+
 ```
 [ Données HTTP ]
 ```
+
 
 ---
 
@@ -448,6 +483,7 @@ Couche 1   │  01101001 01010011 11001010 01110101 00101101 ...
 ```
 GET / HTTP/1.1\r\nHost: example.com\r\n\r\n  →  traité par le navigateur
 ```
+
 
 ---
 
@@ -470,6 +506,7 @@ Couche 4   │  Vérifie checksum TCP ✓ → Lit port dest → Gère séquence/
 Couche 7   │  Application reçoit les données pures
            │  → Navigateur affiche la page
 ```
+
 
 **Pattern commun à chaque couche** : Vérifier l'intégrité → Vérifier que les données nous sont destinées → Lire les champs de contrôle → Retirer le header → Transmettre le payload à la couche du dessus.
 
@@ -558,6 +595,7 @@ AVEC VPN (IPsec Tunnel Mode) :
                 │                              └─ Tout ce bloc est CHIFFRÉ
                 └─ IPs du tunnel VPN (client VPN ↔ serveur VPN)
 ```
+
 
 Le paquet original (IP + TCP + Data) est chiffré et devient le **payload** du nouveau paquet IP. Les routeurs intermédiaires ne voient que les adresses IP du tunnel VPN — ils **ne peuvent pas lire** les IP originales, les ports, ni les données.
 

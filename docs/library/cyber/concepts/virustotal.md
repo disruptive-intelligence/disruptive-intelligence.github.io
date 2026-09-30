@@ -3,9 +3,9 @@ title: VirusTotal
 source: Cyber/99_Concepts/VirusTotal.md
 ---
 
-### VirusTotal — Points d’attention [Stale Results, Reanalyse, Detection Tags]
+## VirusTotal — Points d’attention [Stale Results, Reanalyse, Detection Tags]
 
-### Résultats d’analyse anciens
+## Résultats d’analyse anciens
 
 VirusTotal peut afficher un **ancien résultat d’analyse** au lieu de rescanner immédiatement une URL ou un fichier.
 
@@ -15,6 +15,7 @@ Exemple :
 URL analysée il y a 1 mois
 → tous les moteurs = Clean
 ```
+
 
 Problème : le contenu derrière l’URL peut avoir changé depuis.
 
@@ -28,13 +29,15 @@ Scénario possible :
 5. L’analyste consulte l’ancien résultat → faux sentiment de sécurité
 ```
 
+
 Donc :
 
 ```
 Old analysis ≠ Current state
 ```
 
-### Reanalyse
+
+## Reanalyse
 
 Toujours vérifier :
 
@@ -47,6 +50,7 @@ Si le résultat est ancien ou si le contenu peut avoir changé :
 ```
 Reanalyse
 ```
+
 
 → force VirusTotal à refaire l’analyse avec l’état actuel de la ressource.
 
@@ -61,13 +65,14 @@ Particulièrement important pour :
 
 Une URL est un IOC beaucoup plus “volatile” qu’un hash de fichier.
 
-### Hash vs URL
+## Hash vs URL
 
 Un hash comme :
 
 ```
 SHA256
 ```
+
 
 identifie précisément le contenu d’un fichier.
 
@@ -79,11 +84,13 @@ Une URL, elle, peut rester identique tout en servant un contenu complètement di
 <https://site.com/update.exe>
 ```
 
+
 Aujourd’hui :
 
 ```
 → programme légitime
 ```
+
 
 Demain :
 
@@ -91,11 +98,12 @@ Demain :
 → malware
 ```
 
+
 Donc les résultats liés aux URLs doivent être considérés comme plus temporels.
 
 ---
 
-### Detection Tags / Verdicts AV
+## Detection Tags / Verdicts AV
 
 Le nombre de détections ne suffit pas pour décider qu’un fichier est malveillant.
 
@@ -104,6 +112,7 @@ Exemple :
 ```
 10 / 52
 ```
+
 
 peut sembler inquiétant, mais il faut regarder **comment les vendors classifient le fichier**.
 
@@ -119,9 +128,10 @@ Downloader
 Ransomware
 ```
 
+
 Ils n’ont pas tous la même gravité.
 
-### PUA / PUP / Adware
+## PUA / PUP / Adware
 
 Des logiciels légitimes peuvent être détectés car ils contiennent :
 
@@ -139,6 +149,7 @@ Adware = logiciel affichant de la publicité
 Riskware = logiciel légitime pouvant être détourné
 ```
 
+
 Exemple du cours : un installateur WinRAR légitime peut être signalé par certains moteurs, notamment à cause de composants/comportements associés à de l’adware ou des logiciels potentiellement indésirables.
 
 Donc :
@@ -149,7 +160,8 @@ Donc :
 10 détections "Trojan/Ransomware"
 ```
 
-### Interprétation correcte d’un score
+
+## Interprétation correcte d’un score
 
 Ne pas faire :
 
@@ -157,6 +169,7 @@ Ne pas faire :
 20/60 → Malware
 0/60  → Safe
 ```
+
 
 Faire plutôt :
 
@@ -174,6 +187,7 @@ History
 Contexte
 ```
 
+
 Exemple :
 
 ```
@@ -185,6 +199,7 @@ connexion C2
 +
 persistance registre
 ```
+
 
 → beaucoup plus inquiétant qu’un simple `3/60`.
 
@@ -200,11 +215,12 @@ uniquement PUA/Adware
 signature valide
 ```
 
+
 → peut être un logiciel légitime mais potentiellement indésirable.
 
 ---
 
-### Faux positifs
+## Faux positifs
 
 Un **false positive** correspond à un élément légitime détecté comme malveillant.
 
@@ -227,13 +243,14 @@ PowerShell scripts
 Remote administration tools
 ```
 
+
 Certains sont légitimes mais peuvent aussi être utilisés offensivement.
 
 → Toujours replacer la détection dans son **contexte d’utilisation**.
 
 ---
 
-### Points à retenir
+## Points à retenir
 
 - Toujours vérifier **la date de l’analyse VirusTotal**.
 - Pour une URL, ancien résultat `Clean` ≠ URL actuellement sûre.

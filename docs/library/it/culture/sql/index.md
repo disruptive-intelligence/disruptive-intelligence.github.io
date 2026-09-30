@@ -1,10 +1,9 @@
 ---
 title: SQL
 source: IT/Culture/SQL.md
-chapters: 8
 ---
 
-### De zéro à l’interrogation de données — Guide pour débutant absolu
+*De zéro à l’interrogation de données — Guide pour débutant absolu*
 
 -----
 
@@ -102,6 +101,7 @@ Avant d’écrire la moindre ligne de SQL, il faut comprendre la logique de base
                              city = 'Paris';
 ```
 
+
 Concrètement, **6 grandes opérations** suffisent à résoudre 90% des questions :
 
 1. **Choisir** une table (`FROM`)
@@ -131,59 +131,59 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
 
 **PARTIE I — COMPRENDRE LES BASES (Ch.1-4)**
 
-1. [Pourquoi les bases de données existent](1-partie-i-comprendre-les-bases.md#chapitre-1-pourquoi-les-bases-de-donnees-existent)
-1. [Comprendre le modèle relationnel](1-partie-i-comprendre-les-bases.md#chapitre-2-comprendre-le-modele-relationnel)
-1. [SQL, SGBD et dialectes](1-partie-i-comprendre-les-bases.md#chapitre-3-sql-sgbd-et-dialectes)
-1. [Installer et explorer l’environnement de lab](1-partie-i-comprendre-les-bases.md#chapitre-4-installer-et-explorer-lenvironnement-de-lab)
+1. [Pourquoi les bases de données existent](01-partie-i-comprendre-les-bases/01-chapitre-1-pourquoi-les-bases-de-donnees-existent.md)
+1. [Comprendre le modèle relationnel](01-partie-i-comprendre-les-bases/02-chapitre-2-comprendre-le-modele-relationnel.md)
+1. [SQL, SGBD et dialectes](01-partie-i-comprendre-les-bases/03-chapitre-3-sql-sgbd-et-dialectes.md)
+1. [Installer et explorer l’environnement de lab](01-partie-i-comprendre-les-bases/04-chapitre-4-installer-et-explorer-lenvironnement-de.md)
 
 **PARTIE II — LIRE DES DONNÉES (Ch.5-10)**
 
-1. [Première requête avec SELECT](2-partie-ii-lire-des-donnees.md#chapitre-5-premiere-requete-avec-select)
-1. [Améliorer l’affichage : alias, DISTINCT, commentaires](2-partie-ii-lire-des-donnees.md#chapitre-6-ameliorer-laffichage-alias-distinct-commentaires)
-1. [Filtrer avec WHERE](2-partie-ii-lire-des-donnees.md#chapitre-7-filtrer-avec-where)
-1. [Conditions multiples : AND, OR, NOT](2-partie-ii-lire-des-donnees.md#chapitre-8-conditions-multiples-and-or-not)
-1. [Filtres utiles : LIKE, IN, BETWEEN, NULL](2-partie-ii-lire-des-donnees.md#chapitre-9-filtres-utiles-like-in-between-null)
-1. [Trier, limiter et paginer](2-partie-ii-lire-des-donnees.md#chapitre-10-trier-limiter-et-paginer)
+1. [Première requête avec SELECT](02-partie-ii-lire-des-donnees/01-chapitre-5-premiere-requete-avec-select.md)
+1. [Améliorer l’affichage : alias, DISTINCT, commentaires](02-partie-ii-lire-des-donnees/02-chapitre-6-ameliorer-laffichage-alias-distinct-com.md)
+1. [Filtrer avec WHERE](02-partie-ii-lire-des-donnees/03-chapitre-7-filtrer-avec-where.md)
+1. [Conditions multiples : AND, OR, NOT](02-partie-ii-lire-des-donnees/04-chapitre-8-conditions-multiples-and-or-not.md)
+1. [Filtres utiles : LIKE, IN, BETWEEN, NULL](02-partie-ii-lire-des-donnees/05-chapitre-9-filtres-utiles-like-in-between-null.md)
+1. [Trier, limiter et paginer](02-partie-ii-lire-des-donnees/06-chapitre-10-trier-limiter-et-paginer.md)
 
 **PARTIE III — CALCULER ET REGROUPER (Ch.11-14)**
 
-1. [Fonctions et calculs simples](3-partie-iii-calculer-et-regrouper.md#chapitre-11-fonctions-et-calculs-simples)
-1. [Fonctions d’agrégation](3-partie-iii-calculer-et-regrouper.md#chapitre-12-fonctions-dagregation)
-1. [Regrouper avec GROUP BY](3-partie-iii-calculer-et-regrouper.md#chapitre-13-regrouper-avec-group-by)
-1. [Filtrer les groupes avec HAVING](3-partie-iii-calculer-et-regrouper.md#chapitre-14-filtrer-les-groupes-avec-having)
+1. [Fonctions et calculs simples](03-partie-iii-calculer-et-regrouper/01-chapitre-11-fonctions-et-calculs-simples.md)
+1. [Fonctions d’agrégation](03-partie-iii-calculer-et-regrouper/02-chapitre-12-fonctions-dagregation.md)
+1. [Regrouper avec GROUP BY](03-partie-iii-calculer-et-regrouper/03-chapitre-13-regrouper-avec-group-by.md)
+1. [Filtrer les groupes avec HAVING](03-partie-iii-calculer-et-regrouper/04-chapitre-14-filtrer-les-groupes-avec-having.md)
 
 **PARTIE IV — CROISER LES TABLES (Ch.15-19)**
 
-1. [Comprendre les relations entre tables](4-partie-iv-croiser-les-tables.md#chapitre-15-comprendre-les-relations-entre-tables)
-1. [Première jointure avec INNER JOIN](4-partie-iv-croiser-les-tables.md#chapitre-16-premiere-jointure-avec-inner-join)
-1. [LEFT JOIN et données sans correspondance](4-partie-iv-croiser-les-tables.md#chapitre-17-left-join-et-donnees-sans-correspondance)
-1. [Jointures sur plusieurs tables](4-partie-iv-croiser-les-tables.md#chapitre-18-jointures-sur-plusieurs-tables)
-1. [Pièges classiques des jointures](4-partie-iv-croiser-les-tables.md#chapitre-19-pieges-classiques-des-jointures)
+1. [Comprendre les relations entre tables](04-partie-iv-croiser-les-tables/01-chapitre-15-comprendre-les-relations-entre-tables.md)
+1. [Première jointure avec INNER JOIN](04-partie-iv-croiser-les-tables/02-chapitre-16-premiere-jointure-avec-inner-join.md)
+1. [LEFT JOIN et données sans correspondance](04-partie-iv-croiser-les-tables/03-chapitre-17-left-join-et-donnees-sans-correspondan.md)
+1. [Jointures sur plusieurs tables](04-partie-iv-croiser-les-tables/04-chapitre-18-jointures-sur-plusieurs-tables.md)
+1. [Pièges classiques des jointures](04-partie-iv-croiser-les-tables/05-chapitre-19-pieges-classiques-des-jointures.md)
 
 **PARTIE V — MODIFIER LES DONNÉES (Ch.20-23)**
 
-1. [Ajouter des données avec INSERT](5-partie-v-modifier-les-donnees.md#chapitre-20-ajouter-des-donnees-avec-insert)
-1. [Modifier avec UPDATE](5-partie-v-modifier-les-donnees.md#chapitre-21-modifier-avec-update)
-1. [Supprimer avec DELETE](5-partie-v-modifier-les-donnees.md#chapitre-22-supprimer-avec-delete)
-1. [Transactions : BEGIN, COMMIT, ROLLBACK](5-partie-v-modifier-les-donnees.md#chapitre-23-transactions-begin-commit-rollback)
+1. [Ajouter des données avec INSERT](05-partie-v-modifier-les-donnees/01-chapitre-20-ajouter-des-donnees-avec-insert.md)
+1. [Modifier avec UPDATE](05-partie-v-modifier-les-donnees/02-chapitre-21-modifier-avec-update.md)
+1. [Supprimer avec DELETE](05-partie-v-modifier-les-donnees/03-chapitre-22-supprimer-avec-delete.md)
+1. [Transactions : BEGIN, COMMIT, ROLLBACK](05-partie-v-modifier-les-donnees/04-chapitre-23-transactions-begin-commit-rollback.md)
 
 **PARTIE VI — CRÉER ET STRUCTURER UNE BASE (Ch.24-26)**
 
-1. [Créer une table avec CREATE TABLE](6-partie-vi-creer-et-structurer-une-base.md#chapitre-24-creer-une-table-avec-create-table)
-1. [Types de données et contraintes](6-partie-vi-creer-et-structurer-une-base.md#chapitre-25-types-de-donnees-et-contraintes)
-1. [Modélisation simple](6-partie-vi-creer-et-structurer-une-base.md#chapitre-26-modelisation-simple)
+1. [Créer une table avec CREATE TABLE](06-partie-vi-creer-et-structurer-une-base/01-chapitre-24-creer-une-table-avec-create-table.md)
+1. [Types de données et contraintes](06-partie-vi-creer-et-structurer-une-base/02-chapitre-25-types-de-donnees-et-contraintes.md)
+1. [Modélisation simple](06-partie-vi-creer-et-structurer-une-base/03-chapitre-26-modelisation-simple.md)
 
 **PARTIE VII — POUR ALLER PLUS LOIN (Ch.27-30) — 🔴 BONUS**
 
-1. [Bonnes pratiques SQL et vues](7-partie-vii-pour-aller-plus-loin-bonus.md#chapitre-27-bonnes-pratiques-sql-et-vues)
-1. [Index et performance : introduction](7-partie-vii-pour-aller-plus-loin-bonus.md#chapitre-28-index-et-performance-introduction)
-1. [Sécurité et SQL injection : aperçu défensif](7-partie-vii-pour-aller-plus-loin-bonus.md#chapitre-29-securite-et-sql-injection-apercu-defensif)
-1. [SQL depuis Python : passerelle](7-partie-vii-pour-aller-plus-loin-bonus.md#chapitre-30-sql-depuis-python-passerelle)
+1. [Bonnes pratiques SQL et vues](07-partie-vii-pour-aller-plus-loin-bonus/01-chapitre-27-bonnes-pratiques-sql-et-vues.md)
+1. [Index et performance : introduction](07-partie-vii-pour-aller-plus-loin-bonus/02-chapitre-28-index-et-performance-introduction.md)
+1. [Sécurité et SQL injection : aperçu défensif](07-partie-vii-pour-aller-plus-loin-bonus/03-chapitre-29-securite-et-sql-injection-apercu-defen.md)
+1. [SQL depuis Python : passerelle](07-partie-vii-pour-aller-plus-loin-bonus/04-chapitre-30-sql-depuis-python-passerelle.md)
 
 **PARTIE VIII — SYNTHÈSE (Ch.31-32)**
 
-1. [Skills Assessment — Évaluation finale](8-partie-viii-synthese.md#chapitre-31-skills-assessment-evaluation-finale)
-1. [Synthèse et boîte à outils SQL](8-partie-viii-synthese.md#chapitre-32-synthese-et-boite-a-outils-sql)
+1. [Skills Assessment — Évaluation finale](08-partie-viii-synthese/01-chapitre-31-skills-assessment-evaluation-finale.md)
+1. [Synthèse et boîte à outils SQL](08-partie-viii-synthese/02-chapitre-32-synthese-et-boite-a-outils-sql.md)
 
 **ANNEXES**
 
@@ -191,11 +191,44 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
 
 ## Sommaire
 
-1. [PARTIE I — COMPRENDRE LES BASES](1-partie-i-comprendre-les-bases.md)
-2. [PARTIE II — LIRE DES DONNÉES](2-partie-ii-lire-des-donnees.md)
-3. [PARTIE III — CALCULER ET REGROUPER](3-partie-iii-calculer-et-regrouper.md)
-4. [PARTIE IV — CROISER LES TABLES](4-partie-iv-croiser-les-tables.md)
-5. [PARTIE V — MODIFIER LES DONNÉES](5-partie-v-modifier-les-donnees.md)
-6. [PARTIE VI — CRÉER ET STRUCTURER UNE BASE](6-partie-vi-creer-et-structurer-une-base.md)
-7. [PARTIE VII — POUR ALLER PLUS LOIN — 🔴 BONUS](7-partie-vii-pour-aller-plus-loin-bonus.md)
-8. [PARTIE VIII — SYNTHÈSE](8-partie-viii-synthese.md)
+- [Partie I — Comprendre les bases](01-partie-i-comprendre-les-bases/index.md)
+    - [Chapitre 1 — Pourquoi les bases de données existent](01-partie-i-comprendre-les-bases/01-chapitre-1-pourquoi-les-bases-de-donnees-existent.md)
+    - [Chapitre 2 — Comprendre le modèle relationnel](01-partie-i-comprendre-les-bases/02-chapitre-2-comprendre-le-modele-relationnel.md)
+    - [Chapitre 3 — SQL, SGBD et dialectes](01-partie-i-comprendre-les-bases/03-chapitre-3-sql-sgbd-et-dialectes.md)
+    - [Chapitre 4 — Installer et explorer l’environnement de lab](01-partie-i-comprendre-les-bases/04-chapitre-4-installer-et-explorer-lenvironnement-de.md)
+- [Partie II — Lire des données](02-partie-ii-lire-des-donnees/index.md)
+    - [Chapitre 5 — Première requête avec SELECT](02-partie-ii-lire-des-donnees/01-chapitre-5-premiere-requete-avec-select.md)
+    - [Chapitre 6 — Améliorer l’affichage : alias, DISTINCT, commentaires](02-partie-ii-lire-des-donnees/02-chapitre-6-ameliorer-laffichage-alias-distinct-com.md)
+    - [Chapitre 7 — Filtrer avec WHERE](02-partie-ii-lire-des-donnees/03-chapitre-7-filtrer-avec-where.md)
+    - [Chapitre 8 — Conditions multiples : AND, OR, NOT](02-partie-ii-lire-des-donnees/04-chapitre-8-conditions-multiples-and-or-not.md)
+    - [Chapitre 9 — Filtres utiles : LIKE, IN, BETWEEN, NULL](02-partie-ii-lire-des-donnees/05-chapitre-9-filtres-utiles-like-in-between-null.md)
+    - [Chapitre 10 — Trier, limiter et paginer](02-partie-ii-lire-des-donnees/06-chapitre-10-trier-limiter-et-paginer.md)
+- [Partie III — Calculer ET regrouper](03-partie-iii-calculer-et-regrouper/index.md)
+    - [Chapitre 11 — Fonctions et calculs simples](03-partie-iii-calculer-et-regrouper/01-chapitre-11-fonctions-et-calculs-simples.md)
+    - [Chapitre 12 — Fonctions d’agrégation](03-partie-iii-calculer-et-regrouper/02-chapitre-12-fonctions-dagregation.md)
+    - [Chapitre 13 — Regrouper avec GROUP BY](03-partie-iii-calculer-et-regrouper/03-chapitre-13-regrouper-avec-group-by.md)
+    - [Chapitre 14 — Filtrer les groupes avec HAVING](03-partie-iii-calculer-et-regrouper/04-chapitre-14-filtrer-les-groupes-avec-having.md)
+- [Partie IV — Croiser les tables](04-partie-iv-croiser-les-tables/index.md)
+    - [Chapitre 15 — Comprendre les relations entre tables](04-partie-iv-croiser-les-tables/01-chapitre-15-comprendre-les-relations-entre-tables.md)
+    - [Chapitre 16 — Première jointure avec INNER JOIN](04-partie-iv-croiser-les-tables/02-chapitre-16-premiere-jointure-avec-inner-join.md)
+    - [Chapitre 17 — LEFT JOIN et données sans correspondance](04-partie-iv-croiser-les-tables/03-chapitre-17-left-join-et-donnees-sans-correspondan.md)
+    - [Chapitre 18 — Jointures sur plusieurs tables](04-partie-iv-croiser-les-tables/04-chapitre-18-jointures-sur-plusieurs-tables.md)
+    - [Chapitre 19 — Pièges classiques des jointures](04-partie-iv-croiser-les-tables/05-chapitre-19-pieges-classiques-des-jointures.md)
+- [Partie V — Modifier les données](05-partie-v-modifier-les-donnees/index.md)
+    - [Chapitre 20 — Ajouter des données avec INSERT](05-partie-v-modifier-les-donnees/01-chapitre-20-ajouter-des-donnees-avec-insert.md)
+    - [Chapitre 21 — Modifier avec UPDATE](05-partie-v-modifier-les-donnees/02-chapitre-21-modifier-avec-update.md)
+    - [Chapitre 22 — Supprimer avec DELETE](05-partie-v-modifier-les-donnees/03-chapitre-22-supprimer-avec-delete.md)
+    - [Chapitre 23 — Transactions : BEGIN, COMMIT, ROLLBACK](05-partie-v-modifier-les-donnees/04-chapitre-23-transactions-begin-commit-rollback.md)
+- [Partie VI — Créer ET structurer une base](06-partie-vi-creer-et-structurer-une-base/index.md)
+    - [Chapitre 24 — Créer une table avec CREATE TABLE](06-partie-vi-creer-et-structurer-une-base/01-chapitre-24-creer-une-table-avec-create-table.md)
+    - [Chapitre 25 — Types de données et contraintes](06-partie-vi-creer-et-structurer-une-base/02-chapitre-25-types-de-donnees-et-contraintes.md)
+    - [Chapitre 26 — Modélisation simple](06-partie-vi-creer-et-structurer-une-base/03-chapitre-26-modelisation-simple.md)
+- [Partie VII — Pour aller plus loin — 🔴 Bonus](07-partie-vii-pour-aller-plus-loin-bonus/index.md)
+    - [Chapitre 27 — Bonnes pratiques SQL et vues](07-partie-vii-pour-aller-plus-loin-bonus/01-chapitre-27-bonnes-pratiques-sql-et-vues.md)
+    - [Chapitre 28 — Index et performance : introduction](07-partie-vii-pour-aller-plus-loin-bonus/02-chapitre-28-index-et-performance-introduction.md)
+    - [Chapitre 29 — Sécurité et SQL injection : aperçu défensif](07-partie-vii-pour-aller-plus-loin-bonus/03-chapitre-29-securite-et-sql-injection-apercu-defen.md)
+    - [Chapitre 30 — SQL depuis Python : passerelle](07-partie-vii-pour-aller-plus-loin-bonus/04-chapitre-30-sql-depuis-python-passerelle.md)
+- [Partie VIII — Synthèse](08-partie-viii-synthese/index.md)
+    - [Chapitre 31 — Skills Assessment — Évaluation finale](08-partie-viii-synthese/01-chapitre-31-skills-assessment-evaluation-finale.md)
+    - [Chapitre 32 — Synthèse et boîte à outils SQL](08-partie-viii-synthese/02-chapitre-32-synthese-et-boite-a-outils-sql.md)
+- [Annexes](09-annexes.md)

@@ -1,10 +1,9 @@
 ---
 title: Python & scraping
 source: Cyber/02_OSINT/Python_Scraping.md
-chapters: 7
 ---
 
-### De la collecte web à l’automatisation d’enquête
+*De la collecte web à l’automatisation d’enquête*
 
 -----
 
@@ -116,6 +115,7 @@ Avant la moindre ligne de code, un analyste se pose **quatre questions**. Cet or
                  l’enquête reproductible ?
 ```
 
+
 Tout le cours s’articule autour de cette boucle. À la fin, tu auras une **fiche d’enquête** type que tu rempliras pour chaque projet.
 
 > **À retenir :** on ne scrape **jamais** « pour voir ». Si tu n’as pas répondu aux quatre questions ci-dessus, n’écris pas de code.
@@ -140,6 +140,7 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 
 ### Table des matières
 
+
 #### Partie I — Fondations
 
 - **Chapitre 0 — Préparer son environnement de travail**
@@ -148,16 +149,19 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - Chapitre 3 — Comment fonctionne le web (vu côté collecteur)
 - Chapitre 4 — Choisir la source la plus propre
 
+
 #### Partie II — Premières collectes
 
 - Chapitre 5 — Premières requêtes avec `requests`
 - Chapitre 6 — Parser du HTML avec BeautifulSoup
 - Chapitre 7 — Extraction structurée d’une page
 
+
 #### Partie III — Structurer et nettoyer les données
 
 - Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)
 - Chapitre 9 — Nettoyer, normaliser, enrichir
+
 
 #### Partie IV — Passer à l’échelle
 
@@ -165,30 +169,36 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - Chapitre 11 — Utiliser des APIs publiques
 - Chapitre 12 — Bonnes pratiques professionnelles
 
+
 #### Partie V — Enquête, veille et reporting
 
 - Chapitre 13 — Veille et détection de changements
 - Chapitre 14 — Du script au rapport d’enquête
 
-#### Partie VI — Projet final
-
-- Chapitre 15 — Outil OSINT de collecte web défensive
-
-#### Annexes
-
-- A — Sites d’entraînement légaux
-- B — Modules à explorer ensuite
-- C — Repères juridiques à vérifier avant usage réel
-- D — Modèle de fiche d’enquête
-
------
-
 ## Sommaire
 
-1. [Chapitre 0 — Préparer son environnement de travail](1-chapitre-0-preparer-son-environnement-de-travail.md)
-2. [PARTIE I — FONDATIONS](2-partie-i-fondations.md)
-3. [PARTIE II — PREMIÈRES COLLECTES](3-partie-ii-premieres-collectes.md)
-4. [PARTIE III — STRUCTURER ET NETTOYER LES DONNÉES](4-partie-iii-structurer-et-nettoyer-les-donnees.md)
-5. [PARTIE IV — PASSER À L’ÉCHELLE](5-partie-iv-passer-a-lechelle.md)
-6. [PARTIE V — ENQUÊTE, VEILLE ET REPORTING](6-partie-v-enquete-veille-et-reporting.md)
-7. [PARTIE VI — PROJET FINAL](7-partie-vi-projet-final.md)
+- [Partie VI — Projet final](01-partie-vi-projet-final/index.md)
+    - [Chapitre 0 — Préparer son environnement de travail](01-partie-vi-projet-final/01-chapitre-0-preparer-son-environnement-de-travail.md)
+- [Partie I — Fondations](02-partie-i-fondations/index.md)
+    - [Chapitre 1 — Qu’est-ce que l’OSINT et le web scraping ?](02-partie-i-fondations/01-chapitre-1-quest-ce-que-losint-et-le-web-scraping.md)
+    - [Chapitre 2 — Cadre légal, éthique et OPSEC du scraping](02-partie-i-fondations/02-chapitre-2-cadre-legal-ethique-et-opsec-du-scrapin.md)
+    - [Chapitre 3 — Comment fonctionne le web (vu côté collecteur)](02-partie-i-fondations/03-chapitre-3-comment-fonctionne-le-web-vu-cote-colle.md)
+    - [Chapitre 4 — Choisir la source la plus propre](02-partie-i-fondations/04-chapitre-4-choisir-la-source-la-plus-propre.md)
+- [Partie II — Premières collectes](03-partie-ii-premieres-collectes/index.md)
+    - [Chapitre 5 — Premières requêtes avec requests](03-partie-ii-premieres-collectes/01-chapitre-5-premieres-requetes-avec-requests.md)
+    - [Chapitre 6 — Parser du HTML avec BeautifulSoup](03-partie-ii-premieres-collectes/02-chapitre-6-parser-du-html-avec-beautifulsoup.md)
+    - [Chapitre 7 — Extraction structurée d’une page](03-partie-ii-premieres-collectes/03-chapitre-7-extraction-structuree-dune-page.md)
+- [Partie III — Structurer et nettoyer les données](04-partie-iii-structurer-et-nettoyer-les-donnees/index.md)
+    - [Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)](04-partie-iii-structurer-et-nettoyer-les-donnees/01-chapitre-8-stocker-les-resultats-csv-json-jsonl.md)
+    - [Chapitre 9 — Nettoyer, normaliser, enrichir](04-partie-iii-structurer-et-nettoyer-les-donnees/02-chapitre-9-nettoyer-normaliser-enrichir.md)
+- [Partie IV — Passer à L’échelle](05-partie-iv-passer-a-lechelle/index.md)
+    - [Chapitre 10 — Pagination et collecte multi-pages](05-partie-iv-passer-a-lechelle/01-chapitre-10-pagination-et-collecte-multi-pages.md)
+    - [Chapitre 11 — Utiliser des APIs publiques](05-partie-iv-passer-a-lechelle/02-chapitre-11-utiliser-des-apis-publiques.md)
+    - [Chapitre 12 — Bonnes pratiques professionnelles](05-partie-iv-passer-a-lechelle/03-chapitre-12-bonnes-pratiques-professionnelles.md)
+- [Partie V — Enquête, veille et reporting](06-partie-v-enquete-veille-et-reporting/index.md)
+    - [Chapitre 13 — Veille et détection de changements](06-partie-v-enquete-veille-et-reporting/01-chapitre-13-veille-et-detection-de-changements.md)
+    - [Chapitre 14 — Du script au rapport d’enquête](06-partie-v-enquete-veille-et-reporting/02-chapitre-14-du-script-au-rapport-denquete.md)
+- [Partie VI — Projet final](07-partie-vi-projet-final/index.md)
+    - [Chapitre 15 — Outil OSINT de collecte web défensive](07-partie-vi-projet-final/01-chapitre-15-outil-osint-de-collecte-web-defensive.md)
+- [Annexes](08-annexes.md)
+- [Conclusion du cours](09-conclusion-du-cours.md)

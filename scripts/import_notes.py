@@ -21,6 +21,7 @@ Pour chaque note :
 Rien n'est commité : relire (mkdocs serve), puis committer les fichiers nommés.
 """
 import argparse
+import collections
 import difflib
 import json
 import posixpath
@@ -63,6 +64,10 @@ TITLES = {
     "IT/Culture/Fiche_WebApp.md": "Applications web",
 }
 SKIP = {"README.md"}
+# Documents du coffre qui ne sont pas des notes personnelles : jamais publiés (--all retire leur page).
+EXCLUDED = {
+    "Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md",   # cadre publié par le CERT-EU
+}
 # Ce qui ne doit jamais atteindre le dépôt public : la note est refusée.
 BLOCKING = [
     ("flag de CTF", re.compile(r"(?i)\b(?:HTB|THM|flag)\{[^}\s]{4,}\}")),
@@ -73,11 +78,20 @@ BLOCKING = [
 LAB_IP = re.compile(r"\b10\.(10|129)\.(\d{1,3}\.\d{1,3})\b")
 LAB_IP_TO = {"10": "10.0", "129": "10.1"}
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
-SPLIT_AT = 150_000     # caractères : au-delà, la note est découpée en pages
-MIN_SECTION = 2_000    # section plus courte (intertitre, « Fin du cours ») : rattachée à la précédente
-MAX_PAGE = 160_000     # partie plus longue : redécoupée en ses chapitres
+SPLIT_AT = 150_000       # caractères : au-delà, la note est toujours découpée en pages
+SPLIT_SECTIONS_AT = 30_000   # note plus longue avec au moins trois grandes sections : une page par section
+MIN_SECTION = 2_000      # page plus courte (intertitre, « Fin du cours ») : rattachée à sa voisine
+MIN_CHAPTER = 300        # un vrai chapitre garde sa page, sauf s'il est vide
+MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glossaire) : restent dans la page de leur partie
 TOC_TITLE = re.compile(r"(?i)^(table des mati[eè]res|sommaire|table of contents)\b")
-PART_TITLE = re.compile(r"(?i)^(partie|part|volume|livre)\b")
+PART_TITLE = re.compile(r"(?i)^(partie|part|volume|livre|module)\b")
+CHAPTER_TITLE = re.compile(r"(?i)^(chapitre|chapter|ch\.?|le[çc]on|lesson)\s*\d")
+ANNEX_TITLE = re.compile(r"(?i)^annexes?\b")
+CONCLUSION_TITLE = re.compile(r"(?i)^(conclusion|fin du cours|synth[èe]se (finale|g[ée]n[ée]rale)|bilan)\b")
+CHEAT_TITLE = re.compile(r"(?i)cheat.?sheet|aide-m[ée]moire")   # une fiche de rappel reste d'un seul tenant
+# Mots ignorés pour reconnaître le titre de tête d'une note (« # Cours complet de scripting Bash » = « Bash »)
+TITLE_NOISE = {"htb", "cours", "complet", "note", "notes", "fiche", "les", "des", "une", "pour", "dans", "avec",
+               "aux", "sur", "the", "and", "version", "vfull", "synthese"}
 LINK_MARK = "@@"       # lien interne provisoire « @@library/…/page.md#ancre », rendu relatif page par page
 
 
@@ -116,7 +130,8 @@ def guess_title(path, candidates):
 def vault_notes(vault):
     """Notes du coffre rangées dans un dossier (les fichiers de la racine et README sont ignorés)."""
     return sorted(p for p in vault.rglob("*.md")
-                  if ".obsidian" not in p.parts and ".git" not in p.parts and p.parent != vault and p.name not in SKIP)
+                  if ".obsidian" not in p.parts and ".git" not in p.parts and p.parent != vault and p.name not in SKIP
+                  and p.relative_to(vault).as_posix() not in EXCLUDED)
 
 
 def resolve(vault, rel, tree, title=None, to=None):
@@ -138,8 +153,57 @@ def read_note(path):
     return re.sub(r"\A---\n.*?\n---\n", "", text, flags=re.S)              # en-tête Obsidian éventuel
 
 
-def is_split(text):
-    return len(text) > SPLIT_AT
+HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*$")
+
+
+def outline(text):
+    """[(numéro de ligne, niveau, texte)] des titres hors blocs de code."""
+    out, fence = [], None
+    for i, line in enumerate(text.split("\n")):
+        m = re.match(r"^\s*(`{3,}|~{3,})", line)
+        if m:
+            if fence is None:
+                fence = m.group(1)
+            elif line.strip().startswith(fence):
+                fence = None
+            continue
+        h = HEADING.match(line) if fence is None else None
+        if h:
+            out.append((i, len(h.group(1)), clean_heading(h.group(2))))
+    return out
+
+
+def clean_heading(text):
+    """Texte lisible d'un titre : « ## ## Titre » (coquille), gras, liens et « # » finaux retirés."""
+    text = re.sub(r"^(#+\s*)+", "", text)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"<[^>]+>", "", text)
+    return re.sub(r"[*_=]{1,3}", "", text).strip().rstrip("#").strip()
+
+
+def is_title(heading, title):
+    """Le titre de tête reprend-il le titre de la note ? (sinon c'est une vraie section, à garder)"""
+    words = {w for w in slug(title).split("-") if len(w) > 2 and w not in TITLE_NOISE}
+    found = set(slug(heading).split("-"))
+    return bool(words) and len(words & found) / len(words) >= 0.5
+
+
+def is_split(text, title=""):
+    """Note publiée en plusieurs pages : très longue, cours en chapitres, ou longue et en grandes sections.
+    Une cheat sheet reste d'un seul tenant (on la parcourt avec Ctrl+F)."""
+    if CHEAT_TITLE.search(title):
+        return False
+    if len(text) > SPLIT_AT:
+        return True
+    heads = outline(text)
+    if heads and heads[0][1] == 1 and is_title(heads[0][2], title) and not text[:text.find("#")].strip():
+        heads = heads[1:]
+    if sum(bool(CHAPTER_TITLE.match(t)) for _, _, t in heads) >= 3:
+        return True
+    if len(text) > SPLIT_SECTIONS_AT and heads:
+        top = min(lv for _, lv, _ in heads)
+        return sum(lv == top for _, lv, _ in heads) >= 3
+    return False
 
 
 def note_target(dom, cat, title, split):
@@ -155,26 +219,30 @@ class Shield:
     (les tests Bash « [[ -z $x ]] » ne sont pas des liens Obsidian)."""
     def __init__(self):
         self.saved = []
+        self.blocks = set()                                  # jetons de blocs de code (une ligne à eux seuls)
 
-    def _keep(self, chunk):
+    def _keep(self, chunk, block=False):
         self.saved.append(chunk)
-        return f"\x00{len(self.saved) - 1}\x00"
+        token = f"\x00{len(self.saved) - 1}\x00"
+        if block:
+            self.blocks.add(token)
+        return token
 
     def hide(self, text):
-        out, block, fence = [], [], None
+        out, block, fence, indent = [], [], None, ""
         for line in text.split("\n"):
-            m = re.match(r"^\s*(`{3,}|~{3,})", line)
-            if fence is None and m:
-                fence, block = m.group(1), [line]
+            m = re.match(r"^(\s*)(`{3,}|~{3,})", line)
+            if fence is None and m:                          # l'indentation reste devant le jeton (code
+                indent, fence, block = m.group(1), m.group(2), [line[len(m.group(1)):]]   # dans une liste)
             elif fence is not None:
                 block.append(line)
                 if line.strip().startswith(fence) and not line.strip()[len(fence):].strip():
-                    out.append(self._keep("\n".join(block)))
+                    out.append(indent + self._keep("\n".join(block), block=True))
                     fence = None
             else:
                 out.append(re.sub(r"(`+)(?!`)(.+?)(?<!`)\1(?!`)", lambda m: self._keep(m.group(0)), line))
         if fence is not None:                               # bloc jamais refermé : laissé tel quel
-            out.append(self._keep("\n".join(block)))
+            out.append(indent + self._keep("\n".join(block), block=True))
         return "\n".join(out)
 
     def show(self, text):
@@ -190,6 +258,43 @@ class Shield:
 
 
 # ------------------------------------------------------------------ conversion
+
+LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+
+
+def space_blocks(text, shield):
+    """Obsidian accepte une liste, une citation, un tableau ou un bloc de code collés au paragraphe qui
+    précède ; MkDocs en ferait du texte en ligne (« …d'accès : - Identification ; - Authentication »).
+    Ajoute la ligne vide manquante (texte déjà protégé : les blocs de code sont des jetons)."""
+    def kind(line):
+        s = line.strip()
+        if not s:
+            return "blank"
+        if s in shield.blocks:
+            return "code"
+        if LIST_ITEM.match(line):
+            return "list"
+        if s.startswith(">"):
+            return "quote"
+        if s.startswith("|"):
+            return "table"
+        if HEADING.match(line):
+            return "heading"
+        return "text"
+
+    out, prev = [], "blank"
+    for line in text.split("\n"):
+        k = kind(line)
+        indented = line[:1] in (" ", "\t")
+        if prev != "blank" and out:
+            if (k in ("list", "quote", "table") and prev != k and not (indented and prev == "list")) \
+                    or (k == "code" and not (indented and prev == "list")) \
+                    or (prev == "code" and not indented) \
+                    or (k == "text" and not indented and prev in ("list", "table")):
+                out.append("")
+        out.append(line)
+        prev = k if not (indented and prev == "list" and k in ("text", "code")) else "list"
+    return "\n".join(out)
 
 class Converter:
     def __init__(self, vault, tree, index=None):
@@ -229,6 +334,8 @@ class Converter:
 
         def local(m):
             bang, label, target = m.group(1), m.group(2), m.group(3)
+            if target.startswith("attachment:"):              # image d'un export Notion, absente du coffre
+                return ""
             if re.match(r"^([a-z][a-z0-9+.-]*:|#|/)", target, re.I) or target.startswith(LINK_MARK):
                 return m.group(0)
             path, _, frag = target.partition("#")
@@ -243,13 +350,29 @@ class Converter:
                     return f"{bang}[{label}]({LINK_MARK}{page})"
             return label or path                              # lien local introuvable : texte
 
+        def html_image(m):
+            """<img src="../../assets/x.png" width="550"> -> image Markdown (copiée, largeur gardée)."""
+            attrs = dict(re.findall(r'(\w+)\s*=\s*"([^"]*)"', m.group(0)))
+            src = attrs.get("src", "")
+            if not src or re.match(r"^[a-z]+:", src, re.I):
+                return m.group(0)
+            found = (source.parent / unquote(src)).resolve()
+            if not found.is_file():
+                found = self.find(src)
+            if not found or found.suffix.lower() not in IMAGE_EXT:
+                return f"*{attrs.get('alt') or Path(src).stem}*"
+            width = f'{{ width="{attrs["width"]}" }}' if attrs.get("width", "").isdigit() else ""
+            return f"![{attrs.get('alt', '')}]({self.asset(source, found)}){width}"
+
         text = re.sub(r"%%.*?%%", "", text, flags=re.S)                    # commentaires Obsidian
         text = shield.hide(text)
         text = re.sub(r"!\[\[([^\]]+)\]\]", embed, text)
         text = re.sub(r"\[\[([^\]]+)\]\]", wikilink, text)
+        text = re.sub(r"<img\s[^>]*>", html_image, text)
         text = re.sub(r"(!?)\[([^\]\n]*)\]\(<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\)", local, text)
         # Blocs repliables HTML (exports Notion) : leur contenu reste du Markdown (extension md_in_html)
-        return re.sub(r"<details(?![^>]*\bmarkdown=)([^>]*)>", r'<details markdown="1"\1>', text)
+        text = re.sub(r"<details(?![^>]*\bmarkdown=)([^>]*)>", r'<details markdown="1"\1>', text)
+        return space_blocks(text, shield)
 
 
 def build_index(vault, tree):
@@ -261,7 +384,7 @@ def build_index(vault, tree):
             dom, cat, title = resolve(vault, rel, tree)
         except ValueError:
             continue
-        index[slug(note.stem)] = note_target(dom, cat, title, is_split(read_note(note)))
+        index[slug(note.stem)] = note_target(dom, cat, title, is_split(read_note(note), title))
     return index
 
 
@@ -278,94 +401,226 @@ def heading_text(raw, shield):
     return re.sub(r"[*_=]{1,3}", "", text).strip().rstrip("#").strip()
 
 
-HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*$")
+def split_heading(text):
+    """Titre-phrase -> (titre court, accroche) : « 1. Reconnaissance : But de l'attaquant… » ou
+    « Network/Host artifacts (ex : clés de registre, chemins…) » ; un titre court reste tel quel."""
+    if len(text) <= 70:
+        return text, ""
+    for m in re.finditer(r"\s:\s", text):
+        before = text[:m.start()]
+        if 3 <= len(before) <= 60 and before.count("(") == before.count(")"):
+            return before.strip(), text[m.end():].strip()
+    m = re.match(r"^(.{3,60}?)\s*\((.{25,})\)\s*$", text)
+    if m:
+        return m.group(1).strip(), f"*({m.group(2).strip()})*"
+    return text, ""
 
 
-def normalize_headings(text):
-    """Le titre de tête s'efface devant le titre de la page ; s'il reste des « # », tout descend d'un niveau."""
+def rebase(lines, top=2):
+    """Décale tous les titres pour que le plus haut soit de niveau `top` (sous le titre de la page)."""
+    levels = [len(m.group(1)) for m in map(HEADING.match, lines) if m]
+    shift = (min(levels) - top) if levels else 0
+    if not shift:
+        return lines
+    return [f"{'#' * max(1, min(6, len(m.group(1)) - shift))} {m.group(2)}" if (m := HEADING.match(l)) else l
+            for l in lines]
+
+
+def normalize_headings(text, title, shield):
+    """Titres d'aplomb : le titre de tête qui reprend celui de la note s'efface (la page a le sien) et le
+    sous-titre qui le suit devient une accroche ; « ## ## » corrigé, titres-phrases coupés ;
+    le plus haut niveau présent devient ## ."""
     lines = text.split("\n")
     first = next((i for i, l in enumerate(lines) if l.strip()), None)
-    if first is not None and re.match(r"^# ", lines[first]):
+    m = re.match(r"^#[ \t]+(.+)$", lines[first]) if first is not None else None
+    if m and is_title(heading_text(m.group(1), shield), title):
         lines[first] = ""
-    if any(re.match(r"^# ", l) for l in lines):
-        lines = [("#" + l if HEADING.match(l) and not l.startswith("######") else l) for l in lines]
-    return "\n".join(lines).strip("\n")
-
-
-def sections(text):
-    """(préambule, [(titre, texte)]) : découpe au premier niveau de titre qui compte au moins trois
-    sections ; un titre isolé plus haut (« Annexes », « Fin du cours ») ouvre aussi une section."""
-    lines = text.split("\n")
-    levels = [len(m.group(1)) for m in map(HEADING.match, lines) if m]
-    if not levels:
-        return text, []
-    top = next((lv for lv in range(1, 7) if levels.count(lv) >= 3), min(levels))
-    pre, secs, cur = [], [], None
+        heads = [(i, len(h.group(1)), h.group(2)) for i, l in enumerate(lines) if (h := HEADING.match(l))]
+        nxt = next((i for i in range(first + 1, len(lines)) if lines[i].strip()), None)
+        sub = heading_text(heads[0][2], shield) if heads else ""
+        if heads and heads[0][0] == nxt and kind_of(sub) == "other" and len(sub.split()) >= 4 \
+                and (len(heads) == 1 or heads[1][1] <= heads[0][1]):
+            lines[nxt] = f"*{heading_text(heads[0][2], shield)}*"       # sous-titre du cours -> accroche
+    out = []
     for line in lines:
-        m = HEADING.match(line)
-        if m and len(m.group(1)) <= top:
-            cur = [m.group(2), [line]]
-            secs.append(cur)
-        elif cur:
-            cur[1].append(line)
-        else:
-            pre.append(line)
-    return "\n".join(pre).strip("\n"), [(t, "\n".join(body)) for t, body in secs]
+        h = HEADING.match(line)
+        if not h:
+            out.append(line)
+            continue
+        head, lead = split_heading(re.sub(r"^(#+\s*)+", "", h.group(2)))
+        out.append(f"{h.group(1)} {head}")
+        if lead:
+            out += ["", lead]
+    return "\n".join(rebase(out)).strip("\n")
 
 
-def group_pages(secs, shield):
-    """Regroupe les sections en pages : une page par partie si la note en a, sinon une par section ;
-    les sections courtes rejoignent la précédente, les parties trop longues sont redécoupées."""
-    secs = [(t, b) for t, b in secs if not TOC_TITLE.match(heading_text(t, shield))]
-    if not secs:
-        return []
-    if sum(bool(PART_TITLE.match(heading_text(t, shield))) for t, _ in secs) >= 2:
-        pages = []
-        for t, b in secs:
-            if PART_TITLE.match(heading_text(t, shield)) or not pages:
-                pages.append([(t, b)])
-            else:
-                pages[-1].append((t, b))
-        out = []
-        for page in pages:
-            if sum(len(b) for _, b in page) > MAX_PAGE and len(page) > 2:
-                chunk, size = [], 0
-                for t, b in page:
-                    if chunk and size + len(b) > MAX_PAGE // 2:
-                        out.append(chunk)
-                        chunk, size = [], 0
-                    chunk.append((t, b))
-                    size += len(b)
-                out.append(chunk)
-            else:
-                out.append(page)
-        pages = out
-    else:
-        pages = [[s] for s in secs]
-    merged = []
-    for page in pages:
-        if merged and sum(len(b) for _, b in page) < MIN_SECTION:
-            merged[-1] += page
-        else:
-            merged.append(page)
-    if len(merged) > 1 and sum(len(b) for _, b in merged[0]) < MIN_SECTION:
-        merged[1] = merged[0] + merged[1]
-        merged.pop(0)
-    return [(heading_text(page[0][0], shield), "\n\n".join(b for _, b in page)) for page in merged]
+def kind_of(text):
+    for kind, pattern in (("toc", TOC_TITLE), ("part", PART_TITLE), ("chapter", CHAPTER_TITLE),
+                          ("annex", ANNEX_TITLE), ("end", CONCLUSION_TITLE)):
+        if pattern.match(text):
+            return kind
+    return "other"
 
 
-def chapter_body(body):
-    """Le titre de la section devient celui de la page : sa ligne disparaît et, si la page ne regroupe
-    qu'une section, ses sous-titres remontent d'un niveau (le sommaire latéral reste lisible)."""
+def structure(body, shield, sections_only=False):
+    """Plan d'une note normalisée : (présentation, [nœuds]) ; nœud = {"title", "lines", "children"}.
+    - cours à parties : une partie = une entrée (page d'introduction) et une page par chapitre ;
+    - cours à chapitres : une page par chapitre ;
+    - sinon (sections_only) : une page par grande section.
+    Ce qui précède le premier chapitre (prérequis, fil rouge, glossaire…) va dans la présentation ;
+    les annexes sont regroupées ; le sommaire écrit à la main disparaît (la présentation a le sien)."""
     lines = body.split("\n")
-    top = HEADING.match(lines[0])
-    if not top:
-        return body
-    rest = lines[1:]
-    level = len(top.group(1))
-    if not any((m := HEADING.match(l)) and len(m.group(1)) <= level for l in rest):
-        rest = [l[1:] if (m := HEADING.match(l)) and len(m.group(1)) > level else l for l in rest]
-    return "\n".join(rest).strip("\n")
+    heads = [(i, len(m.group(1)), heading_text(m.group(2), shield)) for i, l in enumerate(lines)
+             if (m := HEADING.match(l))]
+    if not heads:
+        return body, []
+    kinds = [kind_of(t) for _, _, t in heads]
+    chapters = [lv for (_, lv, _), k in zip(heads, kinds) if k == "chapter"]
+    mode = "sections" if sections_only or len(chapters) < 2 else "chapters"
+    chap_lv = (collections.Counter(chapters).most_common(1)[0][0] if mode == "chapters"
+               else min(lv for _, lv, _ in heads))
+
+    def holds_chapters(k):
+        """Le titre n°k ouvre-t-il un groupe qui contient des chapitres ?"""
+        lv = heads[k][1]
+        for j in range(k + 1, len(heads)):
+            if heads[j][1] <= lv and kinds[j] != "chapter":
+                return False
+            if kinds[j] == "chapter":
+                return True
+        return False
+
+    pre, nodes, group, current, started = [], [], None, None, mode == "sections"
+    bounds = {i: (lv, kind) for (i, lv, _), kind in zip(heads, kinds) if lv <= chap_lv or kind == "part"}
+    skipping = False
+    for i, line in enumerate(lines):
+        if i in bounds:
+            lv, kind = bounds[i]
+            title = heading_text(HEADING.match(line).group(2), shield)
+            k = next(n for n, h in enumerate(heads) if h[0] == i)
+            skipping = False
+            if kind == "toc" and not started:
+                skipping, current = True, None
+                continue
+            if kind == "annex" and mode == "chapters":
+                if re.fullmatch(r"(?i)annexes?\W*", title):           # « ANNEXES » ouvre le groupe
+                    group = current = {"title": title, "lines": [line], "children": []}
+                    nodes.append(group)
+                else:                                                  # « Annexe A — … » : une page
+                    if not group or not ANNEX_TITLE.match(group["title"]):
+                        group = {"title": "Annexes", "lines": [], "children": []}
+                        nodes.append(group)
+                    current = {"title": title, "lines": [line], "children": []}
+                    group["children"].append(current)
+                started = True
+                continue
+            if kind == "part" or (lv < chap_lv and kind != "end"):
+                if mode == "chapters" and not holds_chapters(k) and kind != "part":
+                    if not started:
+                        pre.append(line)
+                        current = None
+                        continue
+                    current = {"title": title, "lines": [line], "children": []}
+                    nodes.append(current)
+                    group = None
+                    continue
+                group = current = {"title": title, "lines": [line], "children": []}
+                nodes.append(group)
+                started = True
+                continue
+            if kind == "end" and started:
+                group, current = None, {"title": title, "lines": [line], "children": []}
+                nodes.append(current)
+                continue
+            if kind == "chapter" or started:
+                current = {"title": title, "lines": [line], "children": []}
+                (group["children"] if group else nodes).append(current)
+                started = True
+                continue
+            pre.append(line)
+            current = None
+            continue
+        if skipping:
+            continue
+        (current["lines"] if current else pre).append(line)
+    nodes = merge_small(nodes, pre, shield)
+    acronyms = acronyms_of(body)
+
+    def tidy(siblings):
+        for node in siblings:
+            node["title"] = tidy_title(node["title"], acronyms)
+            tidy(node["children"])
+
+    tidy(nodes)
+    return "\n".join(pre).strip("\n"), nodes
+
+
+def acronyms_of(text):
+    """Sigles de la note (OSINT, CTI, NEXUS…) : mots en capitales dans des lignes qui ne le sont pas."""
+    found = set()
+    for line in text.split("\n"):
+        letters = [c for c in line if c.isalpha()]
+        if letters and sum(c.isupper() for c in letters) / len(letters) < 0.6:
+            found.update(re.findall(r"\b[A-ZÀ-Ý][A-ZÀ-Ý0-9]+\b", line))
+    return found
+
+
+def tidy_title(title, acronyms):
+    """« PARTIE I — FONDATIONS : PENSER EN ÉCOSYSTÈME » -> « Partie I — Fondations : penser en écosystème »
+    (titres tout en capitales seulement ; sigles et chiffres romains gardés)."""
+    letters = [c for c in title if c.isalpha()]
+    if len(letters) < 6 or sum(c.isupper() for c in letters) / len(letters) < 0.9:
+        return title
+    out, start = [], True
+    for token in re.split(r"(\W+)", title):
+        if not token or not token[0].isalnum():
+            out.append(token)
+            if re.search(r"[—–.]", token):          # après « : », minuscule (usage français)
+                start = True
+            continue
+        if token in acronyms or re.fullmatch(r"[IVXLC]+", token) or any(c.isdigit() for c in token):
+            word = token
+        else:
+            word = token.lower()
+        out.append(word[:1].upper() + word[1:] if start else word)
+        start = False
+    return "".join(out)
+
+
+def size(node, shield):
+    """Taille réelle (code compris) d'une page et de ses sous-pages."""
+    return (len(shield.show("\n".join(node["lines"][1:])).strip())
+            + sum(size(c, shield) for c in node["children"]))
+
+
+def merge_small(nodes, pre, shield):
+    """Pages minuscules (intertitre seul, « Fin du cours ») rattachées à leur voisine précédente ;
+    un groupe sans chapitre devient une simple page."""
+    out = []
+    for node in nodes:
+        node["children"] = merge_small(node["children"], node["lines"], shield)
+        kids = node["children"]
+        if kids and sum(size(c, shield) for c in kids) / len(kids) < MIN_CHAPTER_AVG:
+            for c in kids:                                   # fiches de référentiel : la partie tient en une page
+                node["lines"] += [""] + c["lines"]
+            node["children"] = []
+        chapter = kind_of(node["title"]) in ("chapter", "annex", "part")
+        if node["children"] or size(node, shield) >= (MIN_CHAPTER if chapter else MIN_SECTION):
+            out.append(node)
+            continue
+        host = out[-1] if out else None
+        while host and host["children"]:
+            host = host["children"][-1]
+        if host:
+            host["lines"] += [""] + node["lines"]
+        else:
+            pre += [""] + node["lines"]
+    return out
+
+
+def page_lines(node):
+    """Corps d'une page : son titre devient celui de la page, le reste remonte sous lui."""
+    return rebase(node["lines"][1:] if node["lines"] and HEADING.match(node["lines"][0]) else node["lines"])
 
 
 def anchor_map(pages, shield):
@@ -390,6 +645,9 @@ def guess_anchor(frag, anchors):
     titre qui commence par l'ancre, puis même numéro de chapitre, puis titre le plus proche."""
     keys = [k for k in anchors if k]
     hits = [k for k in keys if k.startswith(frag)]
+    if not hits:                                        # titre-phrase raccourci à l'import
+        longest = max((k for k in keys if len(k) >= 8 and frag.startswith(k)), key=len, default=None)
+        hits = [longest] if longest else []
     num = re.match(r"(chapitre|ch)-?(\d+)(?!\d)", frag)
     if not hits and num:
         hits = [k for k in keys if re.match(rf"(?:chapitre|ch)-?{num.group(2)}(?!\d)", k)]
@@ -443,38 +701,59 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         notes.append(f"{masked} IP de lab masquée(s)")
     shield = Shield()
     conv = Converter(vault, tree, index)
-    body = normalize_headings(conv.convert(text, source, shield))
+    body = normalize_headings(conv.convert(text, source, shield), title, shield)
     meta = {"title": title, "source": Path(rel).as_posix()}
-    split = is_split(text)
+    split = is_split(text, title)
     entry = note_target(dom, cat, title, split)       # même règle que build_index : les liens entrants tiennent
-    pages, chapters, tops = [], [], {}
+    pages, tops, nodes = [], {}, []
     if split:
-        pre, secs = sections(body)
-        chapters = group_pages(secs, shield)
-    if len(chapters) < 2:
-        chapters = []
-        pages.append((entry, body))
+        pre, nodes = structure(body, shield)
+        if len(nodes) < 2 and not any(n["children"] for n in nodes):
+            pre, nodes = structure(body, shield, sections_only=True)
+    if not split or not nodes:
+        pages.append((entry, body, meta))
     else:
         folder = posixpath.dirname(entry)
-        width = len(str(len(chapters)))
-        paths = [f"{folder}/{i:0{width}d}-{slug(t)[:60].strip('-') or 'partie'}.md" for i, (t, _) in enumerate(chapters, 1)]
-        summary = "\n".join(f"{i}. [{t}]({LINK_MARK}{p})" for i, ((t, _), p) in enumerate(zip(chapters, paths), 1))
-        pages.append((entry, (pre + "\n\n" if pre.strip() else "") + f"## Sommaire\n\n{summary}"))
-        for p, (t, b) in zip(paths, chapters):
-            pages.append((p, chapter_body(b)))
-            for key in (github_slug(t), toc_slugify(t, "-")):
-                tops.setdefault(key, (p, None))       # le titre du chapitre est devenu celui de la page
-        notes.append(f"{len(chapters)} pages")
-    anchors = {**tops, **anchor_map(pages, shield)}
+
+        def place(siblings, where, up):
+            """Chemins des pages : NN-titre.md, ou NN-titre/index.md pour une partie et ses chapitres."""
+            width = max(2, len(str(len(siblings))))
+            for i, node in enumerate(siblings, 1):
+                name = f"{i:0{width}d}-{slug(node['title'])[:50].strip('-') or 'page'}"
+                if node["children"]:
+                    node["path"] = f"{where}/{name}/index.md"
+                    place(node["children"], f"{where}/{name}", up + [node])
+                else:
+                    node["path"] = f"{where}/{name}.md"
+                node["up"] = up
+
+        def summary(siblings, depth=0):
+            return "\n".join("    " * depth + f"- [{n['title']}]({LINK_MARK}{n['path']})"
+                             + ("\n" + summary(n["children"], depth + 1) if n["children"] else "")
+                             for n in siblings)
+
+        def emit(siblings):
+            for node in siblings:
+                here = posixpath.dirname(node["path"])
+                up = [[title, posixpath.relpath(entry, here)]] + [
+                    [p["title"], posixpath.relpath(p["path"], here)] for p in node["up"]]
+                content = "\n".join(page_lines(node)).strip("\n")
+                if node["children"]:
+                    content += f"\n\n## Dans cette partie\n\n{summary(node['children'])}"
+                pages.append((node["path"], content, {"title": node["title"], "source": meta["source"],
+                                                      "note": title, "up": up}))
+                for key in (github_slug(node["title"]), toc_slugify(node["title"], "-")):
+                    tops.setdefault(key, (node["path"], None))   # titre devenu celui de la page
+                emit(node["children"])
+
+        place(nodes, folder, [])
+        pages.append((entry, (pre + "\n\n" if pre.strip() else "") + f"## Sommaire\n\n{summary(nodes)}", meta))
+        emit(nodes)
+        notes.append(f"{len(pages) - 1} pages")
+    anchors = {**tops, **anchor_map([(p, c) for p, c, _ in pages], shield)}
     out = {}
-    for i, (path, content) in enumerate(pages):
-        content = shield.show(finish_links(content, path, anchors)).strip()
-        if chapters and i:
-            head = {"title": chapters[i - 1][0], "source": meta["source"], "note": title,
-                    "chapter": i, "chapters": len(chapters)}
-        else:
-            head = dict(meta, **({"chapters": len(chapters)} if chapters else {}))
-        out[path] = front(head) + content + "\n"
+    for path, content, head in pages:
+        out[path] = front(head) + shield.show(finish_links(content, path, anchors)).strip() + "\n"
     return out, conv.images, notes
 
 
@@ -508,13 +787,21 @@ def gitleaks(files):
         return [f"{Path(x['File']).name}:{x['StartLine']} ({x['RuleID']})" for x in data]
 
 
+def remove_pages(files):
+    """Supprime des pages publiées et les dossiers (note découpée, partie) restés vides."""
+    for f in files:
+        if f.exists():
+            f.unlink()
+        folder = f.parent
+        while folder != LIBRARY and folder.exists() and not any(folder.iterdir()):
+            folder.rmdir()
+            folder = folder.parent
+
+
 def write_note(vault, rel, tree, title=None, to=None, index=None, existing=None):
     pages, images, notes = build(vault, rel, tree, title, to, index)
     old = (existing if existing is not None else published()).get(Path(rel).as_posix(), [])
-    for f in old:                                        # version précédente (autre titre, découpage…)
-        f.unlink()
-        if f.parent != LIBRARY and not any(f.parent.iterdir()):
-            f.parent.rmdir()
+    remove_pages(old)                                    # version précédente (autre titre, découpage…)
     written = []
     for path, content in pages.items():
         target = DOCS / path
@@ -563,7 +850,7 @@ def main(argv=None):
                 print(f"?  {rel}  ({str(exc).split(' : ', 1)[-1]})")
                 continue
             mark = "●" if rel in existing else "○"
-            cut = " · découpée" if is_split(read_note(note)) else ""
+            cut = " · découpée" if is_split(read_note(note), title) else ""
             print(f"{mark}  {rel}  ->  {dom}/{cat} · {title}{cut}")
         print("\n● publiée · ○ à publier · ? --title / --to nécessaires")
         return 0
@@ -583,12 +870,14 @@ def main(argv=None):
             code = 1
     if args.all:
         for src, files in existing.items():
-            if not (vault / src).is_file():
-                for f in files:
-                    f.unlink()
-                    if not any(f.parent.iterdir()):
-                        f.parent.rmdir()
-                print(f"RETIRÉE : {src} (note absente du coffre)")
+            if not (vault / src).is_file() or src in EXCLUDED:
+                remove_pages(files)
+                print(f"RETIRÉE : {src} (note absente du coffre ou exclue)")
+        used = {m for f in LIBRARY.rglob("*.md") for m in re.findall(r"assets/([^)\s\"]+)", f.read_text(encoding="utf-8"))}
+        for image in (LIBRARY / "assets").glob("*") if (LIBRARY / "assets").exists() else []:
+            if image.name not in used:                   # image qu'aucune page n'utilise plus
+                image.unlink()
+                print(f"IMAGE RETIRÉE : {image.name}")
     if todo:
         print("Relire les pages (mkdocs serve), puis committer les fichiers nommés.")
     return code

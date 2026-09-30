@@ -1,10 +1,9 @@
 ---
 title: JavaScript
 source: IT/05_Scripting_Langage-Prog/JavaScript.md
-chapters: 35
 ---
 
-### De zéro aux scripts web, au DOM, aux APIs et aux bases de la sécurité web
+*De zéro aux scripts web, au DOM, aux APIs et aux bases de la sécurité web*
 
 -----
 
@@ -67,6 +66,7 @@ Avant d'écrire la moindre ligne, comprends la logique de base. Comme tout langa
   code reçoit      fait avec            produit / affiche / modifie
 ```
 
+
 En contexte web et cyber, ce schéma est partout :
 
 ```text
@@ -74,10 +74,12 @@ En contexte web et cyber, ce schéma est partout :
   de logs          IP avec une regex    dédoublonnées
 ```
 
+
 ```text
   Un clic      →   On lit un champ   →  On affiche un résultat
   utilisateur      et on le traite      dans la page (en sécurité)
 ```
+
 
 Il n'y a que 5 briques de base, comme dans n'importe quel langage :
 
@@ -144,10 +146,15 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 
 ### Table des matières
 
+
 #### Partie 0 — Ouverture
 *(Glossaire, Comment penser JavaScript, différence avec Python/Bash, Boîte à risques — ci-dessus.)*
 
-#### Partie 1 — Fondamentaux du langage (dans la console et un premier fichier)
+
+#### Partie 1 — Fondamentaux du langage
+
+*(dans la console et un premier fichier)*
+
 1. Découverte de JavaScript et premier code
 2. Console, fichier `.js` et page minimale
 3. Variables et types
@@ -155,7 +162,9 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 5. Conditions
 6. Boucles
 
+
 #### Partie 2 — Structurer les données et le code
+
 7. Fonctions
 8. Chaînes de caractères et l'objet `URL`
 9. Regex simples pour OSINT / SOC *(chapitre court)*
@@ -164,82 +173,73 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 12. JSON
 13. Erreurs, exceptions et débogage
 
+
 #### Partie 3 — JavaScript dans le navigateur : DOM et événements
+
 14. Le DOM : comprendre et sélectionner
 15. Modifier le DOM en sécurité (`textContent` vs `innerHTML`)
 16. Événements
 17. Formulaires et limites de la validation côté client
 
+
 #### Partie 4 — Stockage navigateur et sécurité des données client
+
 18. LocalStorage et SessionStorage
 19. Cookies et les limites de JavaScript
 
+
 #### Partie 5 — Le web dynamique : requêtes HTTP et asynchrone
+
 20. Comprendre l'asynchrone
 21. Promesses
 22. `fetch` et requêtes HTTP
 23. `async` / `await`
 24. CORS : comprendre le blocage
 
+
 #### Partie 6 — Node.js : automatiser et scripter hors navigateur
+
 25. Découverte de Node.js
 26. Lire et écrire des fichiers
 27. Arguments et petits outils CLI
 28. Modules
 29. `npm`, `package.json` et dépendances
 
-#### Partie 7 — Sécurité web côté client : synthèse défensive
-30. XSS et DOM XSS expliqués
-31. CSP, en-têtes et défenses navigateur
-32. Le réflexe fondamental : le client n'est jamais de confiance
-33. Lire un script JavaScript inconnu
-
-#### Synthèse finale & cheat-sheets
-
-#### Annexes
-- A — `var`, hoisting, `this`, prototypes
-- B — TypeScript
-- C — Frameworks front (React, Vue, Angular, Next.js)
-- D — Outillage moderne (Vite, bundlers)
-- E — Express / backend
-- F — Pont vers la suite cyber (Web Security, bug bounty débutant, OSINT tooling)
-
------
-
 ## Sommaire
 
-1. [Chapitre 1 — Découverte de JavaScript et premier code](01-chapitre-1-decouverte-de-javascript-et-premier-code.md)
-2. [Chapitre 2 — Console, fichier .js et page minimale](02-chapitre-2-console-fichier-js-et-page-minimale.md)
-3. [Chapitre 3 — Variables et types](03-chapitre-3-variables-et-types.md)
-4. [Chapitre 4 — Opérateurs, comparaisons et logique](04-chapitre-4-operateurs-comparaisons-et-logique.md)
-5. [Chapitre 5 — Conditions](05-chapitre-5-conditions.md)
-6. [Chapitre 6 — Boucles](06-chapitre-6-boucles.md)
-7. [Chapitre 7 — Fonctions](07-chapitre-7-fonctions.md)
-8. [Chapitre 8 — Chaînes de caractères et l'objet URL](08-chapitre-8-chaines-de-caracteres-et-l-objet-url.md)
-9. [Chapitre 9 — Regex simples pour OSINT / SOC](09-chapitre-9-regex-simples-pour-osint-soc.md)
-10. [Chapitre 10 — Tableaux et méthodes utiles](10-chapitre-10-tableaux-et-methodes-utiles.md)
-11. [Chapitre 11 — Objets](11-chapitre-11-objets.md)
-12. [Chapitre 12 — JSON](12-chapitre-12-json.md)
-13. [Chapitre 13 — Erreurs, exceptions et débogage](13-chapitre-13-erreurs-exceptions-et-debogage.md)
-14. [Chapitre 14 — Le DOM : comprendre et sélectionner](14-chapitre-14-le-dom-comprendre-et-selectionner.md)
-15. [Chapitre 15 — Modifier le DOM en sécurité (textContent vs innerHTML)](15-chapitre-15-modifier-le-dom-en-securite-textcontent-vs-inner.md)
-16. [Chapitre 16 — Événements](16-chapitre-16-evenements.md)
-17. [Chapitre 17 — Formulaires et limites de la validation côté client](17-chapitre-17-formulaires-et-limites-de-la-validation-cote-cli.md)
-18. [Chapitre 18 — LocalStorage et SessionStorage](18-chapitre-18-localstorage-et-sessionstorage.md)
-19. [Chapitre 19 — Cookies et les limites de JavaScript](19-chapitre-19-cookies-et-les-limites-de-javascript.md)
-20. [Chapitre 20 — Comprendre l'asynchrone](20-chapitre-20-comprendre-l-asynchrone.md)
-21. [Chapitre 21 — Promesses](21-chapitre-21-promesses.md)
-22. [Chapitre 22 — fetch et requêtes HTTP](22-chapitre-22-fetch-et-requetes-http.md)
-23. [Chapitre 23 — async / await](23-chapitre-23-async-await.md)
-24. [Chapitre 24 — CORS : comprendre le blocage](24-chapitre-24-cors-comprendre-le-blocage.md)
-25. [Chapitre 25 — Découverte de Node.js](25-chapitre-25-decouverte-de-node-js.md)
-26. [Chapitre 26 — Lire et écrire des fichiers](26-chapitre-26-lire-et-ecrire-des-fichiers.md)
-27. [Chapitre 27 — Arguments et petits outils CLI](27-chapitre-27-arguments-et-petits-outils-cli.md)
-28. [Chapitre 28 — Modules](28-chapitre-28-modules.md)
-29. [Chapitre 29 — npm, package.json et dépendances](29-chapitre-29-npm-package-json-et-dependances.md)
-30. [Chapitre 30 — XSS et DOM XSS expliqués](30-chapitre-30-xss-et-dom-xss-expliques.md)
-31. [Chapitre 31 — CSP, en-têtes et défenses navigateur](31-chapitre-31-csp-en-tetes-et-defenses-navigateur.md)
-32. [Chapitre 32 — Le réflexe fondamental : le client n'est jamais de confiance](32-chapitre-32-le-reflexe-fondamental-le-client-n-est-jamais-de.md)
-33. [Chapitre 33 — Lire un script JavaScript inconnu](33-chapitre-33-lire-un-script-javascript-inconnu.md)
-34. [Synthèse finale & cheat-sheets](34-synthese-finale-cheat-sheets.md)
-35. [Annexes](35-annexes.md)
+- [Partie 7 — Sécurité web côté client : synthèse défensive](01-partie-7-securite-web-cote-client-synthese-defensi/index.md)
+    - [Chapitre 1 — Découverte de JavaScript et premier code](01-partie-7-securite-web-cote-client-synthese-defensi/01-chapitre-1-decouverte-de-javascript-et-premier-cod.md)
+    - [Chapitre 2 — Console, fichier .js et page minimale](01-partie-7-securite-web-cote-client-synthese-defensi/02-chapitre-2-console-fichier-js-et-page-minimale.md)
+    - [Chapitre 3 — Variables et types](01-partie-7-securite-web-cote-client-synthese-defensi/03-chapitre-3-variables-et-types.md)
+    - [Chapitre 4 — Opérateurs, comparaisons et logique](01-partie-7-securite-web-cote-client-synthese-defensi/04-chapitre-4-operateurs-comparaisons-et-logique.md)
+    - [Chapitre 5 — Conditions](01-partie-7-securite-web-cote-client-synthese-defensi/05-chapitre-5-conditions.md)
+    - [Chapitre 6 — Boucles](01-partie-7-securite-web-cote-client-synthese-defensi/06-chapitre-6-boucles.md)
+    - [Chapitre 7 — Fonctions](01-partie-7-securite-web-cote-client-synthese-defensi/07-chapitre-7-fonctions.md)
+    - [Chapitre 8 — Chaînes de caractères et l'objet URL](01-partie-7-securite-web-cote-client-synthese-defensi/08-chapitre-8-chaines-de-caracteres-et-l-objet-url.md)
+    - [Chapitre 9 — Regex simples pour OSINT / SOC](01-partie-7-securite-web-cote-client-synthese-defensi/09-chapitre-9-regex-simples-pour-osint-soc.md)
+    - [Chapitre 10 — Tableaux et méthodes utiles](01-partie-7-securite-web-cote-client-synthese-defensi/10-chapitre-10-tableaux-et-methodes-utiles.md)
+    - [Chapitre 11 — Objets](01-partie-7-securite-web-cote-client-synthese-defensi/11-chapitre-11-objets.md)
+    - [Chapitre 12 — JSON](01-partie-7-securite-web-cote-client-synthese-defensi/12-chapitre-12-json.md)
+    - [Chapitre 13 — Erreurs, exceptions et débogage](01-partie-7-securite-web-cote-client-synthese-defensi/13-chapitre-13-erreurs-exceptions-et-debogage.md)
+    - [Chapitre 14 — Le DOM : comprendre et sélectionner](01-partie-7-securite-web-cote-client-synthese-defensi/14-chapitre-14-le-dom-comprendre-et-selectionner.md)
+    - [Chapitre 15 — Modifier le DOM en sécurité (textContent vs innerHTML)](01-partie-7-securite-web-cote-client-synthese-defensi/15-chapitre-15-modifier-le-dom-en-securite-textconten.md)
+    - [Chapitre 16 — Événements](01-partie-7-securite-web-cote-client-synthese-defensi/16-chapitre-16-evenements.md)
+    - [Chapitre 17 — Formulaires et limites de la validation côté client](01-partie-7-securite-web-cote-client-synthese-defensi/17-chapitre-17-formulaires-et-limites-de-la-validatio.md)
+    - [Chapitre 18 — LocalStorage et SessionStorage](01-partie-7-securite-web-cote-client-synthese-defensi/18-chapitre-18-localstorage-et-sessionstorage.md)
+    - [Chapitre 19 — Cookies et les limites de JavaScript](01-partie-7-securite-web-cote-client-synthese-defensi/19-chapitre-19-cookies-et-les-limites-de-javascript.md)
+    - [Chapitre 20 — Comprendre l'asynchrone](01-partie-7-securite-web-cote-client-synthese-defensi/20-chapitre-20-comprendre-l-asynchrone.md)
+    - [Chapitre 21 — Promesses](01-partie-7-securite-web-cote-client-synthese-defensi/21-chapitre-21-promesses.md)
+    - [Chapitre 22 — fetch et requêtes HTTP](01-partie-7-securite-web-cote-client-synthese-defensi/22-chapitre-22-fetch-et-requetes-http.md)
+    - [Chapitre 23 — async / await](01-partie-7-securite-web-cote-client-synthese-defensi/23-chapitre-23-async-await.md)
+    - [Chapitre 24 — CORS : comprendre le blocage](01-partie-7-securite-web-cote-client-synthese-defensi/24-chapitre-24-cors-comprendre-le-blocage.md)
+    - [Chapitre 25 — Découverte de Node.js](01-partie-7-securite-web-cote-client-synthese-defensi/25-chapitre-25-decouverte-de-node-js.md)
+    - [Chapitre 26 — Lire et écrire des fichiers](01-partie-7-securite-web-cote-client-synthese-defensi/26-chapitre-26-lire-et-ecrire-des-fichiers.md)
+    - [Chapitre 27 — Arguments et petits outils CLI](01-partie-7-securite-web-cote-client-synthese-defensi/27-chapitre-27-arguments-et-petits-outils-cli.md)
+    - [Chapitre 28 — Modules](01-partie-7-securite-web-cote-client-synthese-defensi/28-chapitre-28-modules.md)
+    - [Chapitre 29 — npm, package.json et dépendances](01-partie-7-securite-web-cote-client-synthese-defensi/29-chapitre-29-npm-package-json-et-dependances.md)
+    - [Chapitre 30 — XSS et DOM XSS expliqués](01-partie-7-securite-web-cote-client-synthese-defensi/30-chapitre-30-xss-et-dom-xss-expliques.md)
+    - [Chapitre 31 — CSP, en-têtes et défenses navigateur](01-partie-7-securite-web-cote-client-synthese-defensi/31-chapitre-31-csp-en-tetes-et-defenses-navigateur.md)
+    - [Chapitre 32 — Le réflexe fondamental](01-partie-7-securite-web-cote-client-synthese-defensi/32-chapitre-32-le-reflexe-fondamental.md)
+    - [Chapitre 33 — Lire un script JavaScript inconnu](01-partie-7-securite-web-cote-client-synthese-defensi/33-chapitre-33-lire-un-script-javascript-inconnu.md)
+- [Synthèse finale & cheat-sheets](02-synthese-finale-cheat-sheets.md)
+- [Annexes](03-annexes.md)

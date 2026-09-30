@@ -1,10 +1,9 @@
 ---
 title: Python
 source: IT/05_Scripting_Langage-Prog/Python.md
-chapters: 20
 ---
 
-### De zéro à l'automatisation défensive — Guide pour débutant absolu
+*De zéro à l'automatisation défensive — Guide pour débutant absolu*
 
 -----
 
@@ -54,12 +53,14 @@ Avant d'écrire la moindre ligne de code, il faut comprendre la logique de base.
   script reçoit    fait avec            produit comme résultat
 ```
 
+
 En cyber défensive, ce schéma est partout :
 
 ```
   Un fichier   →   On extrait les    →  Une liste d'IP
   de logs          IP suspectes         à bloquer
 ```
+
 
 Concrètement, il n'y a que 5 briques de base dans un script :
 
@@ -90,53 +91,28 @@ Python a ses propres outils, souvent plus puissants et plus lisibles que les com
 
 ### Table des matières
 
-#### Partie 1 — Fondamentaux Python (orientés cyber défensive)
-
-1. [Découverte de Python et premier script](01-chapitre-1-decouverte-de-python-et-premier-script.md)
-2. [Variables, types, affichage et saisie utilisateur](02-chapitre-2-variables-types-affichage-et-saisie-utilisateur.md)
-3. [Arguments, terminal et scripts paramétrés](03-chapitre-3-arguments-terminal-et-scripts-parametres.md)
-4. [Opérateurs, calculs et logique](04-chapitre-4-operateurs-calculs-et-logique.md)
-5. Conditions
-6. Chaînes de caractères
-7. Listes et boucles
-8. Fonctions
-9. Dictionnaires
-10. Fichiers, chemins, CSV, JSON
-11. Erreurs, débogage et code propre
-12. Cas pratiques et automatisation
-
-#### Partie 2 — Python pour la cybersécurité défensive
-
-13. Regex avec `re` — extraire IP, emails, domaines, URLs, hash
-14. Parsing de logs : SSH, web et événements structurés
-15. Manipulation d'IOC : IP, domaines, URLs, hash
-16. Requêtes HTTP et APIs CTI avec `requests`
-17. JSON avancé pour APIs CTI/SIEM
-18. Calcul de hash avec `hashlib`
-19. Validation d'IP et réseaux avec `ipaddress`
-20. Mini-projets cyber défensifs
-
------
-
 ## Sommaire
 
-1. [Chapitre 1 — Découverte de Python et premier script](01-chapitre-1-decouverte-de-python-et-premier-script.md)
-2. [Chapitre 2 — Variables, types, affichage et saisie utilisateur](02-chapitre-2-variables-types-affichage-et-saisie-utilisateur.md)
-3. [Chapitre 3 — Arguments, terminal et scripts paramétrés](03-chapitre-3-arguments-terminal-et-scripts-parametres.md)
-4. [Chapitre 4 — Opérateurs, calculs et logique](04-chapitre-4-operateurs-calculs-et-logique.md)
-5. [Chapitre 5 — Conditions](05-chapitre-5-conditions.md)
-6. [Chapitre 6 — Chaînes de caractères](06-chapitre-6-chaines-de-caracteres.md)
-7. [Chapitre 7 — Listes et boucles](07-chapitre-7-listes-et-boucles.md)
-8. [Chapitre 8 — Fonctions](08-chapitre-8-fonctions.md)
-9. [Chapitre 9 — Dictionnaires](09-chapitre-9-dictionnaires.md)
-10. [Chapitre 10 — Fichiers, chemins, CSV et JSON](10-chapitre-10-fichiers-chemins-csv-et-json.md)
-11. [Chapitre 11 — Erreurs, débogage et code propre](11-chapitre-11-erreurs-debogage-et-code-propre.md)
-12. [Chapitre 12 — Cas pratiques et automatisation](12-chapitre-12-cas-pratiques-et-automatisation.md)
-13. [Chapitre 13 — Regex avec re : extraire IP, emails, domaines, URLs et hash](13-chapitre-13-regex-avec-re-extraire-ip-emails-domaines-urls-e.md)
-14. [Chapitre 14 — Parsing de logs : SSH, web et événements structurés](14-chapitre-14-parsing-de-logs-ssh-web-et-evenements-structures.md)
-15. [Chapitre 15 — Manipulation d'IOC : IP, domaines, URLs, hash](15-chapitre-15-manipulation-d-ioc-ip-domaines-urls-hash.md)
-16. [Chapitre 16 — Requêtes HTTP et APIs CTI avec requests](16-chapitre-16-requetes-http-et-apis-cti-avec-requests.md)
-17. [Chapitre 17 — JSON avancé pour APIs CTI/SIEM](17-chapitre-17-json-avance-pour-apis-cti-siem.md)
-18. [Chapitre 18 — Calcul de hash avec hashlib](18-chapitre-18-calcul-de-hash-avec-hashlib.md)
-19. [Chapitre 19 — Validation d'IP et réseaux avec ipaddress](19-chapitre-19-validation-d-ip-et-reseaux-avec-ipaddress.md)
-20. [Chapitre 20 — Mini-projets cyber défensifs](20-chapitre-20-mini-projets-cyber-defensifs.md)
+- [Partie 1 — Fondamentaux Python (orientés cyber défensive)](01-partie-1-fondamentaux-python-orientes-cyber-defens.md)
+- [Partie 2 — Python pour la cybersécurité défensive](02-partie-2-python-pour-la-cybersecurite-defensive/index.md)
+    - [Chapitre 1 — Découverte de Python et premier script](02-partie-2-python-pour-la-cybersecurite-defensive/01-chapitre-1-decouverte-de-python-et-premier-script.md)
+    - [Chapitre 2 — Variables, types, affichage et saisie utilisateur](02-partie-2-python-pour-la-cybersecurite-defensive/02-chapitre-2-variables-types-affichage-et-saisie-uti.md)
+    - [Chapitre 3 — Arguments, terminal et scripts paramétrés](02-partie-2-python-pour-la-cybersecurite-defensive/03-chapitre-3-arguments-terminal-et-scripts-parametre.md)
+    - [Chapitre 4 — Opérateurs, calculs et logique](02-partie-2-python-pour-la-cybersecurite-defensive/04-chapitre-4-operateurs-calculs-et-logique.md)
+    - [Chapitre 5 — Conditions](02-partie-2-python-pour-la-cybersecurite-defensive/05-chapitre-5-conditions.md)
+    - [Chapitre 6 — Chaînes de caractères](02-partie-2-python-pour-la-cybersecurite-defensive/06-chapitre-6-chaines-de-caracteres.md)
+    - [Chapitre 7 — Listes et boucles](02-partie-2-python-pour-la-cybersecurite-defensive/07-chapitre-7-listes-et-boucles.md)
+    - [Chapitre 8 — Fonctions](02-partie-2-python-pour-la-cybersecurite-defensive/08-chapitre-8-fonctions.md)
+    - [Chapitre 9 — Dictionnaires](02-partie-2-python-pour-la-cybersecurite-defensive/09-chapitre-9-dictionnaires.md)
+    - [Chapitre 10 — Fichiers, chemins, CSV et JSON](02-partie-2-python-pour-la-cybersecurite-defensive/10-chapitre-10-fichiers-chemins-csv-et-json.md)
+    - [Chapitre 11 — Erreurs, débogage et code propre](02-partie-2-python-pour-la-cybersecurite-defensive/11-chapitre-11-erreurs-debogage-et-code-propre.md)
+    - [Chapitre 12 — Cas pratiques et automatisation](02-partie-2-python-pour-la-cybersecurite-defensive/12-chapitre-12-cas-pratiques-et-automatisation.md)
+- [Partie 2 — Python pour la cybersécurité défensive](03-partie-2-python-pour-la-cybersecurite-defensive/index.md)
+    - [Chapitre 13 — Regex avec re](03-partie-2-python-pour-la-cybersecurite-defensive/01-chapitre-13-regex-avec-re.md)
+    - [Chapitre 14 — Parsing de logs : SSH, web et événements structurés](03-partie-2-python-pour-la-cybersecurite-defensive/02-chapitre-14-parsing-de-logs-ssh-web-et-evenements.md)
+    - [Chapitre 15 — Manipulation d'IOC : IP, domaines, URLs, hash](03-partie-2-python-pour-la-cybersecurite-defensive/03-chapitre-15-manipulation-d-ioc-ip-domaines-urls-ha.md)
+    - [Chapitre 16 — Requêtes HTTP et APIs CTI avec requests](03-partie-2-python-pour-la-cybersecurite-defensive/04-chapitre-16-requetes-http-et-apis-cti-avec-request.md)
+    - [Chapitre 17 — JSON avancé pour APIs CTI/SIEM](03-partie-2-python-pour-la-cybersecurite-defensive/05-chapitre-17-json-avance-pour-apis-cti-siem.md)
+    - [Chapitre 18 — Calcul de hash avec hashlib](03-partie-2-python-pour-la-cybersecurite-defensive/06-chapitre-18-calcul-de-hash-avec-hashlib.md)
+    - [Chapitre 19 — Validation d'IP et réseaux avec ipaddress](03-partie-2-python-pour-la-cybersecurite-defensive/07-chapitre-19-validation-d-ip-et-reseaux-avec-ipaddr.md)
+    - [Chapitre 20 — Mini-projets cyber défensifs](03-partie-2-python-pour-la-cybersecurite-defensive/08-chapitre-20-mini-projets-cyber-defensifs.md)

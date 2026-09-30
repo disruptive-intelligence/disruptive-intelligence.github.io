@@ -50,11 +50,13 @@ apt list --installed
 sudo apt install <paquet> -y
 ```
 
+
 ### Git (cloner outil)
 
 ```bash
 git clone https:...
 ```
+
 
 ### DPKG
 
@@ -66,11 +68,13 @@ wget http...
 sudo dpkg -i fichier.deb
 ```
 
+
 ### PIP (Python Package Installer)
 
 ```bash
 python3 -m pip install <paquet>
 ```
+
 
 ---
 
@@ -89,6 +93,7 @@ ps -aux | grep <service>
 systemctl list-units --type=service
 ```
 
+
 ```bash
 # Démarrer / arrêter / redémarrer / recharger
 systemctl start ssh
@@ -96,6 +101,7 @@ systemctl stop ssh
 systemctl restart ssh
 systemctl reload ssh
 ```
+
 
 ```bash
 # État / logs récents / liste / Échecs
@@ -105,12 +111,14 @@ systemctl --failed
 journalctl -u ssh.service --no-pager
 ```
 
+
 ```bash
 # Activer au démarrage / désactiver / Check
 systemctl enable ssh
 systemctl disable ssh
 ps -aux | grep ssh
 ```
+
 
 ### Lister / chercher
 
@@ -127,6 +135,7 @@ systemctl cat ssh.service
 which sshd
 systemctl list-units --type=service
 ```
+
 
 ### Kill process & signaux
 
@@ -145,6 +154,7 @@ kill -KILL <PID>   # ou: kill 9 <PID>
 pkill -TERM -x nom_process
 pkill -KILL -x nom_process
 ```
+
 
 | Signal | Description |
 | ------ | ----------- |
@@ -166,6 +176,7 @@ command &  # lancer direct en arrière-plan
 fg X       # repasser au 1er plan
 ```
 
+
 ### Exécuter plusieurs commandes
 
 ```bash
@@ -179,6 +190,7 @@ cmd1 && cmd2 && cmd3
 cmd1 | cmd2 | cmd3
 ```
 
+
 ---
 
 ## Planification de tâches
@@ -190,6 +202,7 @@ cmd1 | cmd2 | cmd3
 sudo mkdir /etc/systemd/system/mytimer.timer.d
 sudo vim /etc/systemd/system/mytimer.timer
 ```
+
 
 ```ini
 [Unit]
@@ -203,10 +216,12 @@ OnUnitActiveSec=1hour
 WantedBy=timers.target
 ```
 
+
 ```bash
 # Créer service
 sudo vim /etc/systemd/system/mytimer.service
 ```
+
 
 ```ini
 [Unit]
@@ -219,12 +234,14 @@ ExecStart=/full/path/to/my/script.sh
 WantedBy=multi-user.target
 ```
 
+
 ```bash
 # Activer
 sudo systemctl daemon-reload
 sudo systemctl start mytimer.timer
 sudo systemctl enable mytimer.timer
 ```
+
 
 ### Cron
 
@@ -233,6 +250,7 @@ sudo systemctl enable mytimer.timer
 * * * * *  /chemin/vers/script.sh
 # min heure jour mois jourSemaine
 ```
+
 
 ```bash
 # Éditer / lister
@@ -243,6 +261,7 @@ sudo vim /etc/crontab
 sudo ls /etc/cron.d/
 ```
 
+
 ```bash
 # Exemples
 0 */6 * * * /path/to/update_software.sh
@@ -250,6 +269,7 @@ sudo ls /etc/cron.d/
 0 0 * * 0 /path/to/scripts/clean_database.sh
 0 0 * * 7 /path/to/scripts/backup.sh
 ```
+
 
 ```bash
 # Forensic / persistance
@@ -261,11 +281,13 @@ sudo crontab -l
 sudo grep -R . /etc/cron.* /etc/crontab
 ```
 
+
 ```bash
 # Connaître le type d’un service user
 systemctl --user show -p Type dconf.service
 systemctl --user cat dconf.service | grep -i '^Type='
 ```
+
 
 ---
 
@@ -284,6 +306,7 @@ systemctl status ssh
 ssh user@ip
 ```
 
+
 ### NFS
 
 ```bash
@@ -293,6 +316,7 @@ sudo apt install nfs-kernel-server -y
 # Vérifier service
 systemctl status nfs-kernel-server
 ```
+
 
 * Exports : `/etc/exports`
 
@@ -317,6 +341,7 @@ mkdir -p "$dir"
 mount 10.1.12.17:/home/john/dev_scripts "$dir"
 ```
 
+
 ### Serveur Web / VPN / Divers
 
 ```bash
@@ -326,6 +351,7 @@ sudo systemctl start apache2
 # (conf: /etc/apache2/ports.conf ; /etc/apache2/apache2.conf)
 ```
 
+
 ```bash
 # Serveur Web Python
 sudo apt install python3 -y
@@ -334,6 +360,7 @@ python3 -m http.server --directory /home/cry0l1t3/target_files
 python3 -m http.server 443
 ```
 
+
 ```bash
 # OpenVPN
 sudo apt install openvpn -y
@@ -341,11 +368,13 @@ sudo openvpn --config internal.ovpn
 # (conf: /etc/openvpn/server.conf)
 ```
 
+
 ```bash
 # Divers
 http-server -p XX
 php -S 127.0.0.1:8080
 ```
+
 
 ### cURL / Wget
 
@@ -357,6 +386,7 @@ curl -k https://localhost
 
 wget http://localhost
 ```
+
 
 ---
 
@@ -386,6 +416,7 @@ rsync -a /media/kali/NOM_DU_DISQUE/backups/mon_projet/ /home/kali/mon_projet/
 0 * * * * rsync -a --delete /home/kali/mon_projet/ /media/kali/NOM_DU_DISQUE/backups/mon_projet/ >/tmp/rsync.log 2>&1
 ```
 
+
 ```bash
 # Rsync via SSH
 rsync -avz -e ssh /path/to/mydirectory user@backup_server:/path/to/backup/directory
@@ -394,6 +425,7 @@ rsync -avz -e ssh /path/to/mydirectory user@backup_server:/path/to/backup/direct
 ssh-keygen -t rsa -b 2048
 ssh-copy-id user@backup_server
 ```
+
 
 ```bash
 # Script autosync (ex.)
@@ -405,6 +437,7 @@ chmod -x RSYNC_Backup.sh
 # Cron
 0 * * * * /path/to/RSYNC_Backup.sh >> /var/log/rsync-backup.log 2>&1
 ```
+
 
 ---
 
@@ -420,12 +453,14 @@ df -i
 du -sh <chemin>
 ```
 
+
 ### Liens symboliques
 
 ```bash
 ln -s <cible> <lien>
 readlink -f <lien>
 ```
+
 
 ### Disque et partitions
 
@@ -435,6 +470,7 @@ lsblk -f
 blkid
 sudo parted -l
 ```
+
 
 ### Montage
 
@@ -460,6 +496,7 @@ cat /etc/fstab
 # /dev/sdb1 /mnt/usb ext4 rw,noauto,user 0 0
 ```
 
+
 ### SWAP
 
 ```bash
@@ -474,6 +511,7 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 swapon --show && free -h
 ```
+
 
 ---
 
@@ -500,12 +538,14 @@ sudo vim /etc/network/interfaces
 sudo systemctl restart networking
 ```
 
+
 ### DNS
 
 ```bash
 # Config
 sudo nano /etc/resolv.conf
 ```
+
 
 ### Troubleshooting
 
@@ -516,6 +556,7 @@ dig example.com @8.8.8.8
 tcpdump -i eth0 -n host <ip>
 nmap -sS -sV -O -Pn <cible>
 ```
+
 
 ### NAC & Durcissement (rappels)
 
@@ -537,6 +578,7 @@ sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 sudo iptables -L -n -v
 ```
 
+
 ```bash
 # nftables : exemple
 sudo nft add chain ip fwfilter fwinput  '{ type filter hook input  priority 0; }'
@@ -546,6 +588,7 @@ sudo nft add rule ip fwfilter fwoutput tcp sport 22 accept
 sudo nft list table ip fwfilter
 ```
 
+
 ```bash
 # UFW
 sudo ufw enable
@@ -554,6 +597,7 @@ sudo ufw default allow outgoing
 sudo ufw allow 22/tcp
 sudo ufw status verbose
 ```
+
 
 ---
 
@@ -577,10 +621,12 @@ grep 'CRON' /var/log/syslog
 grep 'kernel' /var/log/syslog
 ```
 
+
 ```bash
 # Traces connexions
 # /var/log/btmp (échecs) ; /var/log/wtmp (connexions/déconnexions)
 ```
+
 
 ### dmesg / kern.log (raccourcis)
 
@@ -591,6 +637,7 @@ sudo cat /var/log/kern.log
 sudo less /var/log/kern.log
 sudo tail -n 200 /var/log/kern.log
 ```
+
 
 ### journalctl (visions)
 
@@ -606,6 +653,7 @@ journalctl -n 20
 journalctl --no-pager
 ```
 
+
 ```bash
 # Filtres
 date abs :  sudo journalctl -S "2024-02-06 15:30:00" -U "2024-02-17 15:29:59"
@@ -613,6 +661,7 @@ date rel :  sudo journalctl -S "2 hours ago"
 service  :  sudo journalctl -u nginx.service
 prio     :  sudo journalctl -p crit
 ```
+
 
 ### Lire & fouiller (mémo)
 
