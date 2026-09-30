@@ -135,7 +135,17 @@ dig _dmarc.technovert.fr TXT
 
 *↳ [OPSEC & privacy](../cti/opsec-privacy/index.md)*
 
-Dans une alerte de la solution de sécurité e-mail : action `Delivered / Blocked / Quarantined` ; résultats SPF / DKIM / DMARC.
+- Complément pertinent côté SOC :
+	- sender / recipient ;
+	- subject ;
+	- timestamp ;
+	- source IP ;
+	- verdict ;
+	- URL détectée ;
+	- fichier joint ;
+	- hash ;
+	- action : `Delivered / Blocked / Quarantined` ;
+	- résultats SPF / DKIM / DMARC.
 
 *↳ [HTB — Solutions de sécurité](../outils/htb-solutions-de-securite/index.md)*
 

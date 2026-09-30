@@ -48,7 +48,7 @@
       notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", HTB — Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
     - id: notions
       label: 📌 Notions
-      notes: ["SPF, DKIM, DMARC"]
+      notes: [Défense en profondeur, "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Triade CIA, Zero Trust]
 
 - id: it
   label: 💻 IT
