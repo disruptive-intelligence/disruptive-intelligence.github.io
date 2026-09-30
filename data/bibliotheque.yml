@@ -11,10 +11,10 @@
   categories:
     - id: cti
       label: 🎯 CTI & renseignement
-      notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique]
+      notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique, OPSEC & privacy, Red teaming]
     - id: osint
-      label: 🔍 OSINT
-      notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping]
+      label: 🔍 OSINT & HUMINT
+      notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping, HUMINT & social engineering]
     - id: cryptographie
       label: 🔐 Cryptographie
       notes: [Cryptographie]
@@ -22,20 +22,17 @@
       label: 🧬 Forensic
       notes: [Digital forensics]
     - id: hardening
-      label: 🧱 Hardening
-      notes: []
+      label: 🧱 Sécurisation & architecture
+      notes: [HTB — IAM, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — IT Security for Corporates, HTB — System Security]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
-      notes: [Réponse à incident, Threat hunting, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", GRC, HTB — Réponse à incidents, IA & sécurité, Cours MCS, MITRE ATT&CK, Vulnerability management & intelligence]
+      notes: [Analyste SOC, Réponse à incident, HTB — Réponse à incidents, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", HTB — Identification des menaces et des logiciels malveillants, HTB — Attack Surface Management, Vulnerability management & intelligence, Cours MCS, GRC, IA & sécurité]
     - id: outils
       label: 🧰 Outils
-      notes: []
+      notes: [VirusTotal]
     - id: concepts
       label: 💡 Concepts
-      notes: [Analyste SOC, "HTB — Architecture système et sécurité matérielle", HTB — Attack Surface Management, HTB — Comprendre les types d'attaques, HTB — IAM, HTB — IT Security for Corporates, HTB — Identification des menaces et des logiciels malveillants, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — System Security, VPN, VirusTotal]
-    - id: transverse
-      label: 🔗 Transverse
-      notes: [Cybersécurité du quotidien, HUMINT & social engineering, OPSEC & privacy, Red teaming, Taxonomie cyber]
+      notes: [Taxonomie cyber, HTB — Comprendre les types d'attaques, "HTB — Architecture système et sécurité matérielle", Cybersécurité du quotidien, VPN]
 
 - id: it
   label: 💻 IT

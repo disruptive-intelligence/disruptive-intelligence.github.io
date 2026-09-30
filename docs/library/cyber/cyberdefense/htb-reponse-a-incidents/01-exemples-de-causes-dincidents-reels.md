@@ -1,192 +1,11 @@
 ---
-title: HTB — Réponse à incidents
+title: Exemples de causes d’incidents réels
 source: Cyber/05_Cyberdefense/HTB_Réponse à incidents.md
+note: HTB — Réponse à incidents
+up:
+- - HTB — Réponse à incidents
+  - index.md
 ---
-
-### Définition et portée de la gestion des incidents
-
-- **Incident Handling — IH** désigne la capacité d’une organisation à gérer et répondre de manière structurée aux incidents de sécurité.
-- Même avec des mesures préventives, une organisation doit être capable de réagir lorsqu’un incident affecte :
-    - confidentialité ;
-    - intégrité ;
-    - disponibilité.
-- Cette capacité peut être :
-    - interne ;
-    - externalisée auprès d’un prestataire ;
-    - hybride.
-- La gestion des incidents est un ensemble de procédures clairement définies pour gérer et répondre aux incidents de sécurité, permettant de : 
-	- identifier ;
-	- analyser ;
-	- contenir ;
-	- éradiquer ;
-	- récupérer ;
-	- documenter les incidents.
-#### Cycle de vie
-
-```
-Preparation
-    ↓
-Detection & Analysis
-    ↓
-Containment
-    ↓
-Eradication
-    ↓
-Recovery
-    ↓
-Post-Incident Activity
-    ↺
-```
-
-![IR](../../assets/htb-reponse-a-incidents-ir.png){ width="550" }
-
-- Le processus est **itératif** :
-    - les enseignements tirés d’un incident améliorent la préparation future.
-- L’objectif final est de restaurer les opérations normales aussi rapidement et efficacement que possible.
-
-> Un événement suspect peut devoir être traité **comme un incident jusqu’à preuve du contraire**, car sa nature réelle n’est parfois visible qu’après investigation initiale.
-### Événement vs Incident
-#### Événement — Event
-
-- Un **événement** est une action qui se produit dans un système ou un réseau.
-
-Exemples :
-
-- Un utilisateur envoie un e-mail.
-- Un clic de souris.
-- Un pare-feu autorise une demande de connexion.
-
-→ un événement n’est **pas forcément malveillant ou problématique**.
-#### Incident
-
-- Un **incident** est un événement ayant une conséquence négative.
-
-Exemples :
-
-- panne système ;
-- accès non autorisé ;
-- perte de disponibilité ;
-- catastrophe naturelle ;
-- panne électrique.
-#### Incident de sécurité informatique
-
-- Il n’existe pas une définition universelle unique.
-- Dans le cours, un incident de sécurité est considéré comme un événement dirigé contre un système avec une intention claire de causer un préjudice.
-
-Exemples :
-
-- vol de données ;
-- vol de fonds ;
-- accès non autorisé ;
-- installation de malware ;
-- utilisation d’outils d’accès à distance.
-
-```
-Event
-→ activité observée
-
-Incident
-→ conséquence négative
-
-Security Incident
-→ événement malveillant ou compromission nécessitant une réponse
-```
-
-### Portée de la gestion des incidents
-
-- La gestion des incidents ne concerne pas uniquement les intrusions.
-
-Elle couvre aussi :
-
-- insider threat ;
-- availability issues ;
-- perte de propriété intellectuelle ;
-- compromission de données ;
-- incidents techniques ;
-- incidents physiques ou environnementaux.
-
-```
-Incident Handling
-≠ seulement intrusion réseau
-```
-
-### Valeur de la gestion des incidents
-
-- Les incidents peuvent toucher :
-    - quelques endpoints ;
-    - un système critique ;
-    - une grande partie de l’environnement.
-- Une équipe spécialisée permet d’appliquer une réponse :
-    - structurée ;
-    - cohérente ;
-    - documentée ;
-    - reproductible.
-
-Objectifs :
-
-```
-Incident
-→ Investigation
-→ Remediation
-→ Minimize Impact
-```
-
-La réponse cherche notamment à limiter :
-
-- vol d’informations ;
-- interruption de service ;
-- propagation ;
-- impact métier.
-### Priorisation des incidents
-
-- Tous les incidents n’ont pas la même criticité.
-
-Il faut évaluer :
-
-- gravité ;
-- impact ;
-- nombre de systèmes concernés ;
-- données touchées ;
-- criticité métier ;
-- urgence.
-
-```
-High Severity
-→ Immediate Response
-→ More Resources
-
-Lower Severity
-→ Initial Investigation
-→ Confirm / Reject Incident
-```
-
-### Équipe de réponse aux incidents
-
-- L’équipe de gestion des incidents est souvent appelée **Incident Response Team**.
-- Elle peut être dirigée par :
-    - SOC Manager ;
-    - CISO / RSSI ;
-    - CIO / DSI ;
-    - prestataire tiers de confiance.
-#### Incident Manager
-
-- Coordonne les activités de réponse.
-- Doit pouvoir :
-    - obtenir les informations nécessaires ;
-    - mobiliser d’autres équipes ;
-    - suivre l’avancement ;
-    - centraliser la communication.
-
-```
-Incident Manager
-→ Coordination
-→ Communication
-→ Tracking
-→ Decision Support
-```
-
-- Il agit comme **point de communication unique** pendant l’incident.
-## Exemples de causes d’incidents réels
 
 ### Fuites d'identifiants - Credentials compromis
 #### Rançongiciel contre Colonial Pipeline
@@ -289,6 +108,7 @@ Vendor Compromise
 → Widespread Access
 ```
 
+
 ## Rapports d’incident
 
 - Un rapport d’incident doit documenter les événements de manière **chronologique et séquentielle**.
@@ -348,6 +168,7 @@ Many Incidents
 
 - Par exemple rapport de l'Unit 42 :
 	- https://www.paloaltonetworks.com/engage/unit42-2025-global-incident-response-report
+
 ## Scénario (fictif) d'incident
 
 - Le module utilise un scénario fictif autour de **Insight Nexus**, entreprise manipulant des données concurrentielles sensibles.
@@ -388,6 +209,7 @@ Ce scénario illustre plusieurs faiblesses combinées :
 - mauvaise configuration RDP ;
 - abuse de GPO ;
 - déploiement de malware à grande échelle.
+
 ## Phase de préparation — Preparation
 
 - La phase **Preparation** poursuit deux objectifs distincts :
@@ -429,6 +251,7 @@ Technology
 → Incident Response Readiness
 ```
 
+
 ## Équipe de réponse aux incidents
 
 - Les membres doivent connaître :
@@ -448,6 +271,7 @@ Internal Capability
 External Expertise if needed
 → Effective Response
 ```
+
 
 ## Politiques & documentation
 La documentation doit être **préparée avant l’incident** et maintenue à jour.
@@ -526,6 +350,7 @@ Cela concerne notamment :
 - médias
 
 > Une communication non coordonnée pendant un incident peut créer des risques juridiques, opérationnels ou réputationnels.
+
 ## Baselines / Golden Images
 
 - Conserver des **baselines** représentant un état normal et sain des systèmes et réseaux.
@@ -557,6 +382,7 @@ Difference?
     - restaurer un environnement propre
 
 > **Golden Image ≠ Backup** : elle représente une configuration de référence, pas nécessairement les données actuelles du système.
+
 ## Schémas réseau
 
 - Les diagrammes réseau doivent être :
@@ -580,6 +406,7 @@ Utiles pour :
 - comprendre la segmentation ;
 - isoler des systèmes ;
 - suivre le lateral movement.
+
 ## Asset Management
 
 - Disposer d’un inventaire central des assets :
@@ -604,6 +431,7 @@ Unknown Asset
 ```
 
 L’asset inventory est donc directement utile à l’Incident Response.
+
 ## Comptes privilégiés dédiés à l’IR
 
 - Prévoir des comptes avec les privilèges nécessaires pour intervenir sur les systèmes critiques.
@@ -626,6 +454,7 @@ Avantages :
 - accès disponible rapidement en cas d’urgence.
 
 > Cela s’apparente à une approche **Just-In-Time / Break Glass**, à condition que l’usage soit strictement contrôlé et audité.
+
 ## Capacité d’achat d’urgence
 
 - Un incident peut nécessiter rapidement :
@@ -643,6 +472,7 @@ Incident
 → Emergency Procurement
 → No multi-week approval delay
 ```
+
 
 ## Cheat Sheets / Runbooks
 
@@ -663,6 +493,7 @@ Stressful Incident
 → Less Error
 ```
 
+
 ## Legal & Compliance
 Certains incidents peuvent nécessiter :
 
@@ -682,6 +513,7 @@ Les exigences dépendent notamment :
 > ⚠️ Le cours simplifie le RGPD : une violation de données personnelles susceptible d’engendrer un risque doit généralement être notifiée à **l’autorité de contrôle compétente**, pas automatiquement aux forces de l’ordre. Des obligations supplémentaires peuvent exister selon le contexte.
 
 → Legal / Compliance doit donc être impliqué **avant l’incident**, pas découvert au moment de la crise.
+
 ## Documentation pendant l’incident
 
  - La documentation ne doit pas seulement exister avant l’incident : elle doit être maintenue **pendant toute l’investigation**. 
@@ -729,300 +561,3 @@ How?
     - lessons learned.
 
 > Les actions de l’équipe IR elles-mêmes doivent être documentées, car elles peuvent modifier l’état du système ou des preuves.
-## Outils logiciels & matériels
-
-- L’équipe IR doit disposer des outils nécessaires **avant** qu’un incident ne survienne.
-### Forensic Workstation
-
-- Poste dédié à :
-    - forensic imaging ;
-    - memory analysis ;
-    - log analysis ;
-    - malware analysis ;
-    - processing evidence.
-
-```
-Evidence
-→ Dedicated Forensic Workstation
-→ Analysis
-```
-
-- Il doit être isolé et traité comme un environnement potentiellement dangereux.
-
-> Le cours évoque la désactivation de l’antivirus parce que des échantillons malveillants peuvent être manipulés. Cela doit se faire sur une **workstation/lab isolé**, pas sur un poste connecté normalement au réseau de production.
-### Disk Forensics
-Prévoir :
-
-- forensic imaging tools ;
-- disques de stockage dédiés ;
-- write blockers.
-#### Write Blocker
-
-- Empêche la modification du support original pendant l’acquisition.
-
-```
-Original Disk
-→ Write Blocker
-→ Forensic Workstation
-→ Forensic Image
-```
-
-Objectif :
-
-- préserver l’intégrité de la preuve.
-### Memory Forensics
-Prévoir des outils pour :
-
-```
-RAM
-→ Capture
-→ Memory Dump
-→ Analysis
-```
-
-La mémoire peut révéler :
-
-- processes ;
-- network connections ;
-- loaded modules ;
-- injected code ;
-- credentials/secrets temporaires ;
-- malware fileless.
-### Live Response
-
-- Acquisition d’informations sur une machine encore active.
-
-Exemples :
-
-- running processes ;
-- users ;
-- network connections ;
-- logged-on sessions ;
-- services ;
-- volatile data.
-
-```
-Running System
-→ Live Response
-→ Volatile Evidence
-```
-
-> Certaines informations disparaissent après extinction : il faut donc décider avec prudence entre **live acquisition** et arrêt du système.
-
-### Log Analysis
-Prévoir des outils capables d’analyser :
-
-- Windows Event Logs ;
-- firewall logs ;
-- EDR ;
-- authentication logs ;
-- application logs ;
-- proxy / DNS ;
-- SIEM.
-
-```
-Multiple Log Sources
-→ Timeline / Correlation
-→ Incident Reconstruction
-```
-
-### Network Capture & Analysis
-Outils nécessaires pour :
-
-- packet capture ;
-- PCAP analysis ;
-- flow analysis ;
-- protocol analysis.
-
-```
-Network Traffic
-→ PCAP / Flow
-→ Analysis
-→ C2 / Exfiltration / Lateral Movement
-```
-
-### IOC Management
-Disposer d’une capacité à :
-
-1. créer/enrichir des IOC ;
-2. rechercher ces IOC dans tout l’environnement.
-
-Exemples :
-
-```
-Hash
-IP
-Domain
-URL
-Filename
-Registry Key
-```
-
-
-```
-IOC identified on HOST-A
-→ Search enterprise-wide
-→ HOST-B / HOST-C also affected?
-```
-
-
-→ essentiel pour déterminer le **scope** réel de l’incident.
-## Chain of Custody — Chaîne de possession
-
-- Les preuves doivent être traçables depuis leur collecte jusqu’à leur stockage/analyse.
-
-Documenter notamment :
-
-```
-Evidence ID
-→ Collected by
-→ Date / Time
-→ Location
-→ Transfer
-→ Storage
-→ Analyst
-```
-
-Objectifs :
-
-- intégrité ;
-- traçabilité ;
-- admissibilité éventuelle ;
-- démontrer qui a manipulé la preuve.
-## Ticketing / Case Management
-
-- Utiliser un système de suivi pour centraliser :
-
-```
-Incident
-├─ Alerts
-├─ Evidence
-├─ Actions
-├─ Timeline
-├─ Owners
-└─ Status
-```
-
-Cela facilite :
-
-- coordination ;
-- handover ;
-- documentation ;
-- reporting.
-## Jump Bag
-
-- Ensemble de matériel et outils **préparés à l’avance**, disponibles immédiatement en cas d’incident.
-
-Peut contenir :
-
-- forensic drives ;
-- write blockers ;
-- câbles ;
-- network switch ;
-- adaptateurs ;
-- outils matériels ;
-- software/media ;
-- chain-of-custody forms ;
-- alimentation.
-
-```
-Incident occurs
-→ Grab Jump Bag
-→ Respond immediately
-```
-
-Sans préparation :
-
-```
-Incident
-→ Search for cables/tools/drives
-→ Delay
-→ Evidence / containment opportunity lost
-```
-
-## Infrastructure indépendante
-
-- Un point particulièrement important : certains outils IR doivent être **indépendants de l’environnement potentiellement compromis**.
-
-Cela concerne notamment :
-
-- incident management ;
-- documentation ;
-- communication ;
-- stockage de certaines informations critiques.
-
-```
-Corporate Domain
-→ Assume Compromised
-
-IR Infrastructure
-→ Separate / Secure
-```
-
-Pourquoi ?
-
-- AD peut être compromis ;
-- email peut être lu ;
-- file shares peuvent être indisponibles ;
-- collaboration tools peuvent être contrôlés ;
-- credentials internes peuvent être compromis.
-### Out-of-Band Communication
-Pendant un incident grave :
-
-```
-Do not assume:
-Corporate Email = Safe
-Teams/Slack = Safe
-AD = Safe
-```
-
-
-Prévoir un canal **Out-of-Band — OOB** :
-
-- comptes séparés ;
-- infrastructure distincte ;
-- téléphone sécurisé ;
-- plateforme de communication indépendante.
-
-```
-Compromised Environment
-      X
-IR Communication Channel
-```
-
-
-> Principe : **Assume Breach**. Si le domaine entier est compromis, l’attaquant ne doit pas pouvoir observer les communications et décisions de l’équipe de réponse.
-### Vue d'ensemble
-
-```
-Preparation
-│
-├─ People
-│  ├─ IR Team
-│  └─ Trained Staff
-│
-├─ Processes
-│  ├─ Policies
-│  ├─ Plans
-│  ├─ Playbooks
-│  ├─ Legal / Compliance
-│  └─ Reporting
-│
-├─ Knowledge
-│  ├─ Asset Inventory
-│  ├─ Network Diagrams
-│  └─ Baselines / Golden Images
-│
-├─ Tools
-│  ├─ Forensic Workstation
-│  ├─ Disk / Memory Tools
-│  ├─ Network Tools
-│  ├─ IOC Search
-│  └─ Jump Bag
-│
-└─ Resilience
-   ├─ Independent IR Platform
-   └─ Out-of-Band Communications
-```
-
-- Le point central de la phase **Preparation** est d’éviter de découvrir pendant l’incident qu’il manque les **personnes, procédures, accès, outils, informations ou moyens de communication** nécessaires pour y répondre.

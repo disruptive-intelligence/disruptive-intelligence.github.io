@@ -46,10 +46,25 @@ FOLDERS = {
     "Cyber/01_CTI": ("cyber", "cti"), "Cyber/02_OSINT": ("cyber", "osint"),
     "Cyber/03_Cryptographie": ("cyber", "cryptographie"), "Cyber/03_Forensic": ("cyber", "forensic"),
     "Cyber/04_Hardening": ("cyber", "hardening"), "Cyber/05_Cyberdefense": ("cyber", "cyberdefense"),
-    "Cyber/10_Tools": ("cyber", "outils"), "Cyber/99_Concepts": ("cyber", "concepts"), "Cyber": ("cyber", "transverse"),
+    "Cyber/10_Tools": ("cyber", "outils"), "Cyber/99_Concepts": ("cyber", "concepts"), "Cyber": ("cyber", "concepts"),
     "IT/01_Linux": ("it", "linux"), "IT/02_Windows": ("it", "windows"), "IT/03_Networking": ("it", "reseau"),
     "IT/04_Active-Directory": ("it", "active-directory"), "IT/05_Scripting_Langage-Prog": ("it", "scripting"),
     "IT/10_virtualization-containers": ("it", "conteneurs"), "IT/Culture": ("it", "culture"), "IT": ("it", "transverse"),
+}
+# Notes rangées sur le site ailleurs que leur dossier du coffre (le coffre Obsidian n'est pas réorganisé).
+PLACES = {
+    "Cyber/99_Concepts/Analyste_SOC.md": ("cyber", "cyberdefense"),
+    "Cyber/99_Concepts/HTB_Attack Surface Management.md": ("cyber", "cyberdefense"),
+    "Cyber/99_Concepts/HTB_Identification des menaces et des logiciels malveillants.md": ("cyber", "cyberdefense"),
+    "Cyber/99_Concepts/HTB_IAM.md": ("cyber", "hardening"),
+    "Cyber/99_Concepts/HTB_Secure Network Design (RBAC, ABAC...).md": ("cyber", "hardening"),
+    "Cyber/99_Concepts/HTB_Solutions de sécurité.md": ("cyber", "hardening"),
+    "Cyber/99_Concepts/HTB_IT Security for Corporates.md": ("cyber", "hardening"),
+    "Cyber/99_Concepts/HTB_System Security.md": ("cyber", "hardening"),
+    "Cyber/99_Concepts/VirusTotal.md": ("cyber", "outils"),
+    "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
+    "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
+    "Cyber/Red_Teaming.md": ("cyber", "cti"),
 }
 # Noms de fichier trop éloignés du titre prévu : correspondance explicite (chemin relatif au coffre).
 TITLES = {
@@ -79,7 +94,7 @@ LAB_IP = re.compile(r"\b10\.(10|129)\.(\d{1,3}\.\d{1,3})\b")
 LAB_IP_TO = {"10": "10.0", "129": "10.1"}
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
 SPLIT_AT = 150_000       # caractères : au-delà, la note est toujours découpée en pages
-SPLIT_SECTIONS_AT = 30_000   # note plus longue avec au moins trois grandes sections : une page par section
+SPLIT_SECTIONS_AT = 20_000   # note plus longue avec au moins trois grandes sections : une page par section
 MIN_SECTION = 2_000      # page plus courte (intertitre, « Fin du cours ») : rattachée à sa voisine
 MIN_CHAPTER = 300        # un vrai chapitre garde sa page, sauf s'il est vide
 MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glossaire) : restent dans la page de leur partie
@@ -102,6 +117,8 @@ def slug(text):
 
 
 def category_of(rel):
+    if Path(rel).as_posix() in PLACES:
+        return PLACES[Path(rel).as_posix()]
     parts = rel.parent.as_posix()
     while parts:
         if parts in FOLDERS:

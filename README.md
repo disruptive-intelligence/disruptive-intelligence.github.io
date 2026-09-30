@@ -48,6 +48,8 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 .\.venv\Scripts\python -m unittest discover -s tests                                   # tests du convertisseur
 ```
 
+La rubrique d'une note vient de son dossier du coffre (`FOLDERS`), ou de `PLACES` quand le site la range
+ailleurs (ex. VirusTotal dans Outils) ; `EXCLUDED` liste les documents du coffre à ne jamais publier.
 `--all` (ré)importe chaque note rangée du coffre et retire les pages dont la note a disparu ; ensuite
 `mkdocs build --strict`, puis commit des fichiers nommés (`git add docs/library/…`, jamais `git add .`).
 
