@@ -2,6 +2,7 @@
 title: Applications web
 source: IT/Culture/Fiche_WebApp.md
 format: synthese
+revue: '2026-09-30'
 ---
 
 > Fiche intermédiaire orientée cybersécurité (HTB, eJPT, pentest débutant).

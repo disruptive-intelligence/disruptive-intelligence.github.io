@@ -2,6 +2,7 @@
 title: OSINT Mastery
 source: Cyber/02_OSINT/20260516_OSINT_Mastery_vFULL.md
 format: cours
+revue: '2026-05-16'
 ---
 
 *Investigation en sources ouvertes : doctrine, méthode, collecte, vérification, IA et production de renseignement*

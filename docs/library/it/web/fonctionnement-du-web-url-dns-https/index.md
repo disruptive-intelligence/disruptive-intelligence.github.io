@@ -2,6 +2,7 @@
 title: 'Fonctionnement du web : URL, DNS, HTTPS'
 source: IT/Culture/Fiche_How-The-Web-Works.md
 format: synthese
+revue: '2026-09-30'
 ---
 
 > Cours intermédiaire orienté cybersécurité (Hack The Box, eJPT, pentest débutant, analyse web).

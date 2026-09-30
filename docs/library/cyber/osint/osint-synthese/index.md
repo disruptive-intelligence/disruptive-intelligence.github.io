@@ -2,6 +2,7 @@
 title: OSINT — synthèse
 source: Cyber/02_OSINT/OSINT_Synthese.md
 format: synthese
+revue: '2026-05-10'
 ---
 
 *Investiguer • Collecter • Analyser • Documenter*

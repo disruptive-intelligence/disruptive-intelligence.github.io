@@ -2,6 +2,7 @@
 title: Assembleur
 source: IT/Culture/Assembleur.md
 format: cours
+revue: '2026-05-17'
 ---
 
 *De zéro au reverse engineering débutant — Guide pour débutant absolu*

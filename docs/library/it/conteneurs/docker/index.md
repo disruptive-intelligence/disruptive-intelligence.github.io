@@ -2,6 +2,7 @@
 title: Docker
 source: IT/10_virtualization-containers/Docker.md
 format: cours
+revue: '2026-06-14'
 ---
 
 *De zéro à la conteneurisation, au diagnostic et à la sécurité défensive — Guide pour débutant*

@@ -149,6 +149,17 @@ class HeadingTests(VaultCase):
         body = pages["library/it/scripting/bash.md"]
         self.assertIn("## A\n\n### A1\n\n### A2\n\n### A3\n\n## B\n\n### B1", body)
 
+    def test_provenance_formats_and_optional_properties(self):
+        (self.vault / "IT/05_Scripting_Langage-Prog/HTB_Bash.md").write_text(
+            "---\nniveau: débutant\nobjectif: écrire un premier script\n---\n## Variables\n\ntexte\n", encoding="utf-8")
+        with mock.patch.dict(imp.TITLES, {"IT/05_Scripting_Langage-Prog/HTB_Bash.md": "Bash"}), \
+                mock.patch.dict(imp.FORMATS, {"IT/05_Scripting_Langage-Prog/HTB_Bash.md": "atelier"}):
+            pages, _, _ = imp.build(self.vault, "IT/05_Scripting_Langage-Prog/HTB_Bash.md", TREE)
+        page = pages["library/it/scripting/bash.md"]
+        for expected in ("format: atelier", "provenance: HTB Academy", "niveau: débutant",
+                         "objectif: écrire un premier script", "revue: '20"):
+            self.assertIn(expected, page)
+
     def test_excluded_document_not_listed(self):
         (self.vault / "Cyber/01_CTI").mkdir(parents=True)
         self.write("Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md", "# CERT-EU\n")

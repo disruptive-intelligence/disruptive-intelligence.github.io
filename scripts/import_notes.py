@@ -22,6 +22,7 @@ Rien n'est commité : relire (mkdocs serve), puis committer les fichiers nommés
 """
 import argparse
 import collections
+import datetime
 import difflib
 import json
 import posixpath
@@ -61,6 +62,7 @@ PLACES = {
     "Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md": ("cyber", "cyberdefense"),
     "Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md": ("cyber", "cyberdefense"),
     "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
+    "Cyber/05_Cyberdefense/IA_Secu.md": ("cyber", "ia"),
     "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
     "Cyber/Red_Teaming.md": ("cyber", "cti"),
     "IT/02_Windows/HTB_Windows System Sécurity.md": ("cyber", "hardening"),
@@ -75,18 +77,61 @@ PLACES = {
 }
 # Noms de fichier trop éloignés du titre prévu : correspondance explicite (chemin relatif au coffre).
 TITLES = {
-    "Cyber/01_CTI/APT_vFULL.md": "APT — version complète",
-    "Cyber/01_CTI/CTI_Work.md": "CTI — travaux pratiques",
+    # Convention : sujet clair d'abord, angle ou niveau ensuite ; la provenance (HTB, L2I) va en badge.
+    "Cyber/01_CTI/20260405_L2I_Contre-Ingerence.md": "Contre-ingérence et guerre informationnelle",
+    "Cyber/01_CTI/APT_vFULL.md": "APT — menaces persistantes avancées",
+    "Cyber/01_CTI/APT_Synthese.md": "APT — synthèse",
+    "Cyber/01_CTI/CTI.md": "Cyber Threat Intelligence (CTI)",
+    "Cyber/01_CTI/CTI_Work.md": "Cyber Threat Intelligence — travaux pratiques",
+    "Cyber/01_CTI/EtatdeLart_Panorama_Cybermenace.md": "Panorama de la cybermenace — état de l'art",
     "Cyber/01_CTI/IE.md": "Intelligence économique",
-    "Cyber/05_Cyberdefense/MCS_COURS_v1.6_2026-08-01.md": "Cours MCS",
-    "Cyber/05_Cyberdefense/HTB_Réponse à incidents.md": "HTB — Réponse à incidents",
-    "IT/02_Windows/Fiche_Windows.md": "Fiche Windows",
-    "IT/02_Windows/CS_CMD.md": "CMD — cheat sheet",
-    "IT/03_Networking/networking_notion.md": "Notions réseau",
+    "Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md": "Cartographie des écosystèmes cybercriminels",
+    "Cyber/01_CTI/Dark_Web_vFULL.md": "Dark Web",
+    "Cyber/02_OSINT/20260516_OSINT_Mastery_vFULL.md": "OSINT Mastery",
+    "Cyber/02_OSINT/Python_Scraping.md": "Python pour l'OSINT et le scraping",
+    "Cyber/02_OSINT/OSINT_ressources.md": "OSINT — ressources",
+    "Cyber/02_OSINT/OSINT_Synthese.md": "OSINT — synthèse",
+    "Cyber/03_Forensic/Digital_Forensics.md": "Digital forensics",
+    "Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md": "Architecture et sécurité des systèmes",
+    "Cyber/04_Hardening/HTB_Identités et contrôle d'accès.md": "Identités et contrôle d'accès",
+    "Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md": "Sauvegardes et reprise d'activité",
+    "Cyber/04_Hardening/HTB_Solutions de sécurité.md": "Solutions de sécurité",
+    "Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md": "Sécurité IT en entreprise",
+    "Cyber/05_Cyberdefense/20260401_Reponse_Incident.md": "Réponse à incident",
+    "Cyber/05_Cyberdefense/HTB_Réponse à incidents.md": "Réponse à incident — synthèse",
+    "Cyber/05_Cyberdefense/GRC.md": "Gouvernance, risques et conformité (GRC)",
+    "Cyber/05_Cyberdefense/IA_Secu.md": "IA et sécurité",
+    "Cyber/05_Cyberdefense/MCS_COURS_v1.6_2026-08-01.md": "Maintien en condition de sécurité (MCS)",
+    "Cyber/99_Concepts/HTB_Attack Surface Management.md": "Attack Surface Management",
+    "Cyber/99_Concepts/HTB_Menaces, attaques et malwares.md": "Menaces, attaques et malwares",
+    "Cyber/Taxonomie_Cyber.md": "Taxonomie de la cybersécurité",
+    "Cyber/Red_Teaming.md": "Red teaming analytique",
+    "IT/01_Linux/CS_GestionSystem.md": "Gestion système Linux — aide-mémoire",
+    "IT/01_Linux/CS_Workflow.md": "Workflow Linux — aide-mémoire",
+    "IT/01_Linux/Notion_Linux.md": "Linux — prises de notes",
+    "IT/02_Windows/CS_CMD.md": "CMD — aide-mémoire",
+    "IT/02_Windows/Fiche_Windows.md": "Windows — fiche cyber",
+    "IT/02_Windows/Windows.md": "Windows en profondeur",
+    "IT/02_Windows/Windows_Command-Line.md": "Ligne de commande Windows",
+    "IT/02_Windows/HTB_Windows System Sécurity.md": "Sécurité système Windows",
+    "IT/03_Networking/networking_notion.md": "Réseau — prises de notes",
+    "IT/05_Scripting_Langage-Prog/Notion_Bash.md": "Bash — prises de notes",
+    "IT/Architecture_SI.md": "Architecture des systèmes d'information",
     "IT/Culture/Fiche_WebApp.md": "Applications web",
     "IT/Culture/Fiche_How-The-Web-Works.md": "Fonctionnement du web : URL, DNS, HTTPS",
     "IT/Fiche_Web-Requests.md": "HTTP & requêtes web",
 }
+# Format imposé quand la règle automatique ne convient pas (sinon : propriété Obsidian « format »).
+FORMATS = {
+    "Cyber/01_CTI/CTI_Work.md": "atelier",
+    "Cyber/02_OSINT/OSINT_ressources.md": "ressources",
+    "IT/Culture/Questions_Entretien_Cyber_SysAdmin.md": "revision",
+    "IT/01_Linux/Notion_Linux.md": "synthese",
+    "IT/03_Networking/networking_notion.md": "synthese",
+    "IT/05_Scripting_Langage-Prog/Notion_Bash.md": "synthese",
+}
+# Provenance (badge) : notes reprises d'une formation extérieure.
+PROVENANCE = [(re.compile(r"(^|/)HTB_"), "HTB Academy"), (re.compile(r"_L2I_"), "L2I")]
 SKIP = {"README.md"}
 # Documents du coffre qui ne sont pas des notes personnelles : jamais publiés (--all retire leur page).
 EXCLUDED = {
@@ -192,15 +237,20 @@ def read_props(path):
     return props if isinstance(props, dict) else {}
 
 
-def note_format(text, title, props, cat):
-    """cours (exhaustif) | synthese (plus court) | fiche (une notion) | None (cheat sheet).
-    Règle automatique, sauf propriété « format » dans la note."""
-    if props.get("format") in ("cours", "synthese", "fiche"):
+FORMAT_NAMES = ("cours", "synthese", "fiche", "aide-memoire", "atelier", "ressources", "revision")
+
+
+def note_format(text, title, props, cat, rel=""):
+    """cours (exhaustif) | synthese (parcours condensé) | fiche (une notion) | aide-memoire | atelier |
+    ressources (liens) | revision (questions). Propriété « format » de la note, puis FORMATS, puis règle."""
+    if props.get("format") in FORMAT_NAMES:
         return props["format"]
+    if rel in FORMATS:
+        return FORMATS[rel]
     if cat == "notions":
         return "fiche"
     if CHEAT_TITLE.search(title):
-        return None
+        return "aide-memoire"
     if re.search(r"(?i)synth[èe]se", title):
         return "synthese"
     heads = outline(text)
@@ -807,9 +857,16 @@ def build(vault, rel, tree, title=None, to=None, index=None):
     body = drop_quizzes(normalize_headings(conv.convert(text, source, shield), title, shield), shield)
     meta = {"title": title, "source": Path(rel).as_posix()}
     props = read_props(source)
-    kind = note_format(text, title, props, cat)
+    kind = note_format(text, title, props, cat, Path(rel).as_posix())
     if kind:
         meta["format"] = kind
+    origin = props.get("provenance") or next((name for rx, name in PROVENANCE if rx.search(Path(rel).as_posix())), None)
+    if origin:
+        meta["provenance"] = str(origin)
+    meta["revue"] = datetime.date.fromtimestamp(source.stat().st_mtime).isoformat()   # dernière modification
+    for key in ("niveau", "objectif", "prerequis"):    # propriétés Obsidian facultatives, affichées si présentes
+        if props.get(key):
+            meta[key] = str(props[key])
     if isinstance(props.get("termes"), dict):          # fiche notion : termes du glossaire (terme: définition)
         meta["terms"] = {str(k): str(v) for k, v in props["termes"].items()}
     split = is_split(text, title)

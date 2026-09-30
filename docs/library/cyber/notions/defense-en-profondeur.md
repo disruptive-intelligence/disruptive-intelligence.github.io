@@ -2,6 +2,7 @@
 title: Défense en profondeur
 source: Cyber/00_Notions/Fiche_Defense_en_profondeur.md
 format: fiche
+revue: '2026-10-01'
 terms:
   Défense en profondeur: Empiler plusieurs couches de sécurité indépendantes, pour qu'aucune faille unique ne soit fatale.
 ---
@@ -14,7 +15,7 @@ terms:
 
 **Principe.** Chaque couche peut échouer ; ce qui protège, c'est que l'attaquant doive *toutes* les franchir. Les couches doivent être **diverses** (pas dix firewalls identiques, mais firewall + segmentation + EDR + MFA + journalisation) pour qu'une même faille ne les traverse pas toutes.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 11)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 11)*
 
 ## Comment l'expliquer
 
@@ -24,13 +25,13 @@ C'est le fait de superposer plusieurs couches de sécurité plutôt que de compt
 
 **Defense in depth** : multiples couches de défense indépendantes, de manière à ce qu’une défaillance à une couche soit compensée par les suivantes. Couches typiques : sécurité périmétrique, endpoint, identity, cloud/SaaS, réseau interne, applicatif, données, détection/réponse. Un attaquant qui franchit une couche doit en franchir d’autres avant d’atteindre les données critiques.
 
-*↳ [APT — version complète](../cti/apt-version-complete/index.md)*
+*↳ [APT — version complète](../cti/apt-menaces-persistantes-avancees/index.md)*
 
 ## Exemples
 
 🔧 **Exemple concret** — Un mail malveillant doit franchir : filtrage mail → sensibilisation de l'utilisateur → antivirus → EDR → segmentation → moindre privilège → détection SOC. Chaque couche réduit la probabilité de succès complet.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 11)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 11)*
 
 La stratégie de défense en profondeur : code sécurisé (fondation) → tests automatisés (vérification) → WAF (filet) → monitoring et alerting (détection) → incident response (réaction). Si une couche échoue, la suivante rattrape.
 
@@ -44,13 +45,13 @@ La stratégie de défense en profondeur : code sécurisé (fondation) → tests 
 
 ⚠️ **Erreur fréquente** — La « défense en largeur » : empiler des couches *redondantes* (même type) au lieu de *complémentaires*. Trois antivirus ne valent pas un antivirus + une segmentation.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 11)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 11)*
 
 ## À retenir
 
 🎯 **À retenir** — Aucune couche n'est parfaite ; la profondeur transforme une faille unique en simple incident.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 11)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 11)*
 
 ## Voir aussi
 

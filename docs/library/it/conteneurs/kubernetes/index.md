@@ -2,6 +2,7 @@
 title: Kubernetes
 source: IT/10_virtualization-containers/Kubernetes.md
 format: cours
+revue: '2026-06-13'
 ---
 
 *De zéro à l'opération, au diagnostic et à la sécurité défensive — Guide pour débutant*

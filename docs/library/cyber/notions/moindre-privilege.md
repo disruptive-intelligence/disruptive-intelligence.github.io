@@ -2,6 +2,7 @@
 title: Moindre privilège
 source: Cyber/00_Notions/Fiche_Moindre_privilege.md
 format: fiche
+revue: '2026-10-01'
 terms:
   Moindre privilège: Accorder à chaque utilisateur, service ou processus uniquement les droits strictement nécessaires à sa fonction, et rien de plus.
 ---
@@ -14,7 +15,7 @@ terms:
 
 **Principe.** Réduit l'impact d'une compromission : un compte limité, une fois volé, ne donne accès qu'à peu de choses. Inclut la *limitation dans le temps* (droits temporaires, just-in-time) et dans le *périmètre*.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 12)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 12)*
 
 ## Comment l'expliquer
 
@@ -26,7 +27,7 @@ C'est le principe qui consiste à donner à chaque utilisateur, application ou p
 
 🔧 **Exemple concret** — Une application web qui ne fait que *lire* une base ne doit pas avoir de droits d'*écriture* ni d'*administration*. Si elle est compromise par injection SQL, les dégâts restent limités à de la lecture.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 12)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 12)*
 
 **Le principe de moindre privilège** : un compte applicatif ne devrait avoir que les permissions strictement nécessaires. Le compte qui sert le site web n’a pas besoin de pouvoir `DROP TABLE` ou `CREATE USER`.
 
@@ -44,19 +45,19 @@ C'est le principe qui consiste à donner à chaque utilisateur, application ou p
 
 Les principes de gouvernance IAM : moindre privilège (ne donner que les droits nécessaires à la fonction), séparation des devoirs (l'approbateur n'est pas l'exécutant), besoin d'en connaître (l'accès à une information est conditionné par la nécessité fonctionnelle).
 
-*↳ [GRC](../cyberdefense/grc/index.md)*
+*↳ [GRC](../cyberdefense/gouvernance-risques-et-conformite-grc/index.md)*
 
 ## Erreur fréquente
 
 ⚠️ **Erreur fréquente** — Donner les droits administrateur « pour que ça marche tout de suite », puis ne jamais les retirer. L'accumulation de droits (privilege creep) est un fléau silencieux.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 12)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 12)*
 
 ## À retenir
 
 🎯 **À retenir** — Le moindre privilège ne *prévient* pas l'intrusion, il en *limite l'impact*. C'est l'application de « assume breach ».
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 12)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 12)*
 
 ## Voir aussi
 

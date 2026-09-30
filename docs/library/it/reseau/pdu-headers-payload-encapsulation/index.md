@@ -2,6 +2,7 @@
 title: PDU, headers, payload & encapsulation
 source: IT/03_Networking/PDU_Headers_Payload_Encapsulation.md
 format: synthese
+revue: '2026-04-15'
 ---
 
 *Objectif de la section*

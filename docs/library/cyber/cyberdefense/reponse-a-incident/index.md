@@ -2,6 +2,7 @@
 title: Réponse à incident
 source: Cyber/05_Cyberdefense/20260401_Reponse_Incident.md
 format: cours
+revue: '2026-09-30'
 ---
 
 *Préparer • Détecter • Qualifier • Investiguer • Contenir • Éradiquer • Restaurer • Capitaliser*

@@ -2,6 +2,7 @@
 title: VirusTotal
 source: Cyber/99_Concepts/VirusTotal.md
 format: synthese
+revue: '2026-08-10'
 ---
 
 ## VirusTotal — Points d’attention [Stale Results, Reanalyse, Detection Tags]

@@ -2,6 +2,7 @@
 title: Triade CIA
 source: Cyber/00_Notions/Fiche_Triade_CIA.md
 format: fiche
+revue: '2026-10-01'
 terms:
   Triade CIA: Confidentialité, intégrité, disponibilité (DIC en français) — la boussole de la sécurité ; toute mesure sert au moins l'une de ces trois propriétés.
   Triptyque CIA: Confidentialité, intégrité, disponibilité (DIC en français) — la boussole de la sécurité ; toute mesure sert au moins l'une de ces trois propriétés.
@@ -19,13 +20,13 @@ terms:
 
 **Extensions fréquentes** : on ajoute parfois la **traçabilité/imputabilité** (preuve de qui a fait quoi) et la **non-répudiation** (impossibilité de nier une action). Certains parlent du modèle étendu « Parkerian hexad ».
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 5)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 5)*
 
 ## Exemples
 
 🔧 **Exemple concret** — Un ransomware chiffre les fichiers : il attaque surtout la **disponibilité** (et parfois la confidentialité par double extorsion). Une falsification de relevé bancaire attaque l'**intégrité**. Un vol de base de données attaque la **confidentialité**.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 5)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 5)*
 
 **Disponibilité prioritaire.** En IT, la triade CIA priorise souvent la confidentialité. En OT, c'est l'inverse : la disponibilité prime, puis l'intégrité, puis la confidentialité. Un arrêt de production a un coût immédiat (et parfois un risque safety) qui dépasse souvent le risque d'une vulnérabilité.
 
@@ -41,13 +42,13 @@ Quatre piliers du contrôle d'accès, souvent regroupés sous **AAA** (Authentic
 
 🎯 **À retenir** — Authentification = *qui*. Autorisation = *quoi*. Traçabilité = *preuve*. Imputabilité = *attribution*.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 6)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 6)*
 
 ## À retenir
 
 🎯 **À retenir** — Quand vous analysez une attaque, demandez : *quelle propriété CIA est visée ?* La réponse oriente immédiatement la défense.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 5)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 5)*
 
 ## Voir aussi
 

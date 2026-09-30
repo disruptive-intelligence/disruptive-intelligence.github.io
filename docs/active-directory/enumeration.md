@@ -4,6 +4,12 @@ tags:
 ---
 # Énumération Active Directory
 
+!!! info "📚 Cours de fond"
+    Pour comprendre le fonctionnement avant la pratique :
+
+    - [Active Directory](../library/it/active-directory/active-directory/index.md)
+    - [PowerShell](../library/it/windows/powershell/index.md)
+
 !!! abstract "En bref"
     _À compléter._
 

@@ -2,6 +2,7 @@
 title: Intelligence économique
 source: Cyber/01_CTI/IE.md
 format: cours
+revue: '2026-04-08'
 ---
 
 *Veille • Protection • Influence • Décision*

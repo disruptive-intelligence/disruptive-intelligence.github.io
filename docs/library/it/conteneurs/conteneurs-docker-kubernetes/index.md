@@ -2,6 +2,7 @@
 title: Conteneurs — Docker & Kubernetes
 source: IT/10_virtualization-containers/Containers_Docker_K8s.md
 format: cours
+revue: '2026-04-15'
 ---
 
 *De zéro à la maîtrise — Comprendre, déployer et sécuriser*

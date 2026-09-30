@@ -2,6 +2,7 @@
 title: Active Directory
 source: IT/04_Active-Directory/Active_Directory.md
 format: cours
+revue: '2026-09-11'
 ---
 
 *Comprendre • Attaquer • Défendre • Répondre*

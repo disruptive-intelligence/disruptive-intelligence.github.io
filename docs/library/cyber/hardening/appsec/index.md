@@ -2,6 +2,7 @@
 title: AppSec
 source: IT/03_Networking/AppSec.md
 format: cours
+revue: '2026-04-08'
 ---
 
 ## SÉCURITÉ APPLICATIVE

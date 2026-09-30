@@ -2,6 +2,7 @@
 title: Threat hunting
 source: Cyber/05_Cyberdefense/ADD_Threat_Hunting.md
 format: synthese
+revue: '2026-04-15'
 ---
 
 ---

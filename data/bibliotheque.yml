@@ -1,53 +1,71 @@
 # Arborescence de la Bibliothèque — miroir du dépôt CyberSec-notes (Obsidian).
-# domaine > catégorie > notes prévues.
+# domaine > catégorie > notes (ou sous-rubriques : groups > label + notes).
 #
 # Une note IMPORTÉE est un fichier Markdown déposé dans docs/library/<domaine>/<catégorie>/
-# (avec un titre `# ...` ou `title:` dans l'en-tête) : elle apparaît alors en lien dans le menu
-# et sur la page de la catégorie. Les notes listées ici et pas encore importées s'affichent
-# « à importer » : c'est la liste de travail de l'import depuis Obsidian.
+# (scripts/import_notes.py) : elle apparaît dans le menu et sur la page de la catégorie.
+# Une note listée ici et pas encore importée s'affiche « à importer ».
+# Par catégorie : description (une phrase de périmètre) et debut (note conseillée pour commencer),
+# affichées sur l'index de la Bibliothèque. glossaire: true = rangée sous « Glossaire & notions ».
+# Titres : sujet clair d'abord, angle ensuite ; la provenance (HTB, L2I) est un badge, pas le titre.
 
 - id: cyber
   label: 🛡️ Cyber
   categories:
     - id: cti
       label: 🎯 CTI & renseignement
-      notes: [Contre-ingérence (L2I), APT — synthèse, APT — version complète, CTI, CTI — travaux pratiques, Cartographie des écosystèmes cybercriminels, Dark Web, État de l'art — panorama de la cybermenace, Intelligence économique, OPSEC & privacy, Red teaming]
+      description: Comprendre les acteurs de la menace, produire et diffuser du renseignement.
+      debut: Cyber Threat Intelligence (CTI)
+      notes: [Cyber Threat Intelligence (CTI), APT — menaces persistantes avancées, APT — synthèse, Cartographie des écosystèmes cybercriminels, Dark Web, Panorama de la cybermenace — état de l'art, Contre-ingérence et guerre informationnelle, Intelligence économique, OPSEC & privacy, Red teaming analytique, Cyber Threat Intelligence — travaux pratiques]
     - id: osint
       label: 🔍 OSINT
-      notes: [OSINT Mastery, FININT — investigation financière, OSINT & cryptoactifs, OSINT — synthèse, OSINT — ressources, Python & scraping, HUMINT & social engineering]
+      description: Rechercher, recouper et exploiter l'information ouverte, y compris financière et humaine.
+      debut: OSINT — synthèse
+      notes: [OSINT Mastery, OSINT — synthèse, FININT — investigation financière, OSINT & cryptoactifs, HUMINT & social engineering, Python pour l'OSINT et le scraping, OSINT — ressources]
     - id: cryptographie
       label: 🔐 Cryptographie
+      description: Les bases du chiffrement et de ses usages.
       notes: [Cryptographie]
     - id: forensic
       label: 🧬 Forensic
+      description: Collecter et analyser les traces d'un incident sur disque, en mémoire et dans les journaux.
       notes: [Digital forensics]
     - id: hardening
       label: 🧱 Hardening
-      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, AppSec]
+      description: Réduire la surface d'attaque des systèmes, des identités et des applications.
+      notes: [Sécurité système Windows, Identités et contrôle d'accès, AppSec]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
+      description: Détecter, investiguer et répondre ; gérer l'exposition ; piloter la sécurité dans la durée.
+      debut: Analyste SOC
       groups:
-        - label: 🛰️ Détection & réponse
-          notes: [Analyste SOC, Réponse à incident, HTB — Réponse à incidents, Threat hunting]
-        - label: 🧭 Référentiels
-          notes: [MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)"]
-        - label: 🩹 Vulnérabilités & exposition
-          notes: [Vulnerability management & intelligence, HTB — Attack Surface Management, Cours MCS]
-        - label: 🏛️ Gouvernance & résilience
-          notes: [GRC, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, IA & sécurité]
+        - label: 🛰️ Détection, investigation et réponse
+          notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)"]
+        - label: 🩹 Vulnérabilités, exposition et MCS
+          notes: [Vulnerability management & intelligence, Maintien en condition de sécurité (MCS), Attack Surface Management]
+        - label: 🏛️ Gouvernance et résilience
+          notes: ["Gouvernance, risques et conformité (GRC)", Sécurité IT en entreprise, Sauvegardes et reprise d'activité]
+    - id: ia
+      label: 🤖 IA & sécurité
+      description: Les menaces propres à l'IA et la sécurisation de ses déploiements.
+      notes: [IA et sécurité]
     - id: outils
       label: 🧰 Outils & solutions
+      description: Les outils et solutions de sécurité, rangés par usage.
       # Sous-rubriques : à compléter au fil des notes (ex. « 📡 Scan & découverte », « 🕸️ Analyse web »)
       groups:
         - label: 🔎 Analyse & qualification d'IOC
           notes: [VirusTotal]
         - label: 🛡️ Solutions de sécurité
-          notes: [HTB — Solutions de sécurité]
+          notes: [Solutions de sécurité]
     - id: concepts
       label: 💡 Concepts
-      notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", HTB — Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
+      description: Les fondamentaux — vocabulaire, familles d'attaques, fonctionnement des systèmes.
+      debut: Menaces, attaques et malwares
+      notes: [Taxonomie de la cybersécurité, "Menaces, attaques et malwares", Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
     - id: notions
-      label: 📌 Notions
+      label: 📌 Fiches notions
+      description: Une notion par page — l'essentiel, des exemples, où l'approfondir.
+      glossaire: true
       notes: [Défense en profondeur, "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Triade CIA, Zero Trust]
 
 - id: it
@@ -55,28 +73,41 @@
   categories:
     - id: linux
       label: 🐧 Linux
-      notes: [Notions Linux, Administration Linux, Gestion système — cheat sheet, Workflow — cheat sheet]
+      description: Administrer, dépanner et investiguer un système Linux.
+      debut: Administration Linux
+      notes: [Administration Linux, Linux — prises de notes, Gestion système Linux — aide-mémoire, Workflow Linux — aide-mémoire]
     - id: windows
       label: 🪟 Windows
-      notes: [Windows, Fiche Windows, Windows Command Line, PowerShell, CMD — cheat sheet]
+      description: Comprendre Windows de l'intérieur et l'administrer en ligne de commande.
+      debut: Windows en profondeur
+      notes: [Windows en profondeur, Ligne de commande Windows, PowerShell, Windows — fiche cyber, CMD — aide-mémoire]
     - id: active-directory
       label: 🏰 Active Directory
+      description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.
       notes: [Active Directory]
     - id: reseau
       label: 🌐 Réseau
-      notes: [Notions réseau, "PDU, headers, payload & encapsulation"]
+      description: Modèle OSI, protocoles, adressage et encapsulation.
+      notes: [Réseau — prises de notes, "PDU, headers, payload & encapsulation"]
     - id: web
       label: 🕸️ Web & applications
+      description: Du fonctionnement du web aux applications et à leurs failles.
+      debut: "Fonctionnement du web : URL, DNS, HTTPS"
       notes: ["Fonctionnement du web : URL, DNS, HTTPS", HTTP & requêtes web, Applications web]
     - id: infrastructure
       label: 🏗️ Infrastructure & architecture
-      notes: [Infrastructure IT, Architecture SI, Matériel informatique & connectique]
+      description: Lire et concevoir une infrastructure, du matériel jusqu'à l'architecture du SI.
+      notes: [Infrastructure IT, Architecture des systèmes d'information, Matériel informatique & connectique]
     - id: scripting
       label: ⌨️ Scripting & programmation
-      notes: [Bash, Notions Bash, Python, JavaScript, SQL, Assembleur]
+      description: Automatiser et programmer — Bash, Python, JavaScript, SQL, assembleur.
+      debut: Bash
+      notes: [Bash, Bash — prises de notes, Python, JavaScript, SQL, Assembleur]
     - id: conteneurs
       label: 📦 Virtualisation & conteneurs
+      description: Conteneurs, orchestration et automatisation de l'infrastructure.
       notes: [Conteneurs — Docker & Kubernetes, Docker, Kubernetes, Ansible]
     - id: culture
       label: 🧠 Culture
+      description: Prospective technologique, usages de l'IA et préparation aux entretiens.
       notes: [Prospective — systèmes technologiques (vol. 1), Prospective — systèmes technologiques (vol. 2), IA agentiques — manipuler progressivement, Questions d'entretien cyber & sysadmin]

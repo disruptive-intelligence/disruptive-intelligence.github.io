@@ -2,6 +2,7 @@
 title: Dark Web
 source: Cyber/01_CTI/Dark_Web_vFULL.md
 format: cours
+revue: '2026-04-27'
 ---
 
 *Architecture • Écosystèmes • OPSEC • Investigation • Renseignement*

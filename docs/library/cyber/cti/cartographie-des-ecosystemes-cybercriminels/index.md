@@ -2,6 +2,7 @@
 title: Cartographie des écosystèmes cybercriminels
 source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
 format: cours
+revue: '2026-04-08'
 ---
 
 *Comprendre • Relier • Analyser • Produire*

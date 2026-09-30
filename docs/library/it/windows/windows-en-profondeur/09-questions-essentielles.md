@@ -1,0 +1,23 @@
+---
+title: Questions essentielles
+source: IT/02_Windows/Windows.md
+note: Windows en profondeur
+up:
+- - Windows en profondeur
+  - index.md
+---
+
+- **Question :** Décrivez l'arbre de processus normal de Windows et comment vous l'utilisez pour détecter des anomalies.
+  - **Réponse type :** L'arbre normal suit une chaîne précise : System → smss.exe → csrss.exe + wininit.exe → services.exe → svchost.exe. En parallèle, winlogon.exe → explorer.exe → applications. Pour chaque processus critique, je vérifie quatre choses : le parent est-il le bon, le chemin d'image est-il le bon (System32), le nombre d'instances est-il normal (un seul lsass.exe), et l'utilisateur est-il attendu (services.exe sous SYSTEM). Si un de ces critères ne colle pas, c'est suspect.
+
+- **Question :** Comment un attaquant vole-t-il les credentials sur Windows et comment s'en protéger ?
+  - **Réponse type :** La cible principale c'est lsass.exe, qui contient en mémoire les hashes NTLM et les tickets Kerberos. L'outil classique c'est Mimikatz. L'attaquant peut aussi extraire la SAM et SYSTEM du registre pour récupérer les hashes locaux, ou faire un DCSync pour extraire les hashes du contrôleur de domaine. Côté protection : Credential Guard isole lsass dans un environnement virtuel, RunAsPPL protège le processus contre les injections, et LAPS évite que le même mot de passe admin local soit utilisé partout.
+
+- **Question :** Qu'est-ce qu'un LOLBin et pourquoi c'est un problème ?
+  - **Réponse type :** Un LOLBin, c'est un binaire légitime de Windows détourné par un attaquant — par exemple certutil pour télécharger un payload, rundll32 pour exécuter une DLL malveillante, ou mshta pour lancer un script distant. Le problème, c'est que ces binaires sont signés Microsoft, présents sur toutes les machines, et passent souvent sous le radar des antivirus. La détection repose sur Sysmon et les Event Logs — on cherche des command lines suspectes sur des binaires légitimes.
+
+- **Question :** Expliquez la chaîne MotW → SmartScreen → Protected View.
+  - **Réponse type :** Quand un fichier est téléchargé depuis Internet, Windows lui ajoute un Mark of the Web dans un Alternate Data Stream. Ce MotW déclenche SmartScreen qui vérifie la réputation du fichier. Si c'est un document Office, il s'ouvre en Protected View avec les macros désactivées. C'est une défense en couches — chaque étape réduit le risque. C'est pour ça que les attaquants essaient de supprimer le MotW ou d'inciter l'utilisateur à cliquer sur "Activer le contenu".
+
+- **Question :** Quels Event Logs surveillez-vous en priorité en tant qu'analyste SOC ?
+  - **Réponse type :** Les Security Logs : 4624/4625 (connexions réussies/échouées), 4672 (attribution de privilèges spéciaux), 4688 (création de processus — avec la command line si activée). Sysmon Event 1 (création de processus avec hash et parent), Event 3 (connexions réseau), Event 10 (accès à un processus — critique pour détecter le dump de lsass), Event 7 (chargement de DLL). PowerShell 4104 (Script Block Logging). Et Event 7045 (création de service — PsExec par exemple).

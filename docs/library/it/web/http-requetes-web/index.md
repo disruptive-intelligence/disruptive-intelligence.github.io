@@ -2,6 +2,7 @@
 title: HTTP & requêtes web
 source: IT/Fiche_Web-Requests.md
 format: synthese
+revue: '2026-09-30'
 ---
 
 > Fiche de révision orientée pratique cyber (HTB / eJPT / pentest débutant).

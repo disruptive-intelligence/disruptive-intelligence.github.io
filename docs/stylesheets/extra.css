@@ -916,3 +916,17 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-format--cours { color: var(--kw-strong); }
 .md-typeset .kw-format--synthese { color: var(--kw-sub); }
 .md-typeset .kw-format--fiche { color: var(--kw-link); }
+
+/* Bibliothèque : grille de rubriques (périmètre, formats, point de départ) et parcours */
+.kw-libgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .9rem; margin: .6rem 0 1.2rem; }
+.md-typeset .kw-libcard { display: flex; flex-direction: column; gap: .4rem; padding: 1rem 1.1rem;
+  background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 10px; }
+.md-typeset .kw-libcard:hover { border-color: var(--kw-toggle-line); }
+.md-typeset a.kw-libcard__title { font-size: .85rem; font-weight: 800; line-height: 1.3; color: var(--md-default-fg-color); }
+.md-typeset a.kw-libcard__title:hover { color: var(--kw-link); }
+.md-typeset a.kw-libcard__start { margin-top: auto; padding-top: .3rem; font-size: .66rem; font-weight: 600; color: var(--kw-link); }
+.md-typeset .kw-format--source { color: var(--md-default-fg-color--light); }
+.md-typeset .kw-format--aide-memoire, .md-typeset .kw-format--atelier,
+.md-typeset .kw-format--ressources, .md-typeset .kw-format--revision { color: var(--kw-sub); }
+.md-typeset .kw-notes .kw-format { margin-left: .4rem; }
+.kw-anchor { scroll-margin-top: 4.5rem; }

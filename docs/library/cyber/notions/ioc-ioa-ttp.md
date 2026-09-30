@@ -2,6 +2,7 @@
 title: IOC, IOA, TTP
 source: Cyber/00_Notions/Fiche_IOC_IOA_TTP.md
 format: fiche
+revue: '2026-10-01'
 terms:
   IOC: Indicator of Compromise — trace technique d'une compromission (adresse, condensat de fichier, domaine malveillant), concrète mais éphémère.
   IOA: Indicator of Attack — signe d'un comportement d'attaque en cours, indépendant des artefacts précis.
@@ -20,7 +21,7 @@ terms:
 
 **Principe : la « pyramide de la douleur ».** Bloquer un IOC gêne peu l'attaquant (il le change) ; détecter ses TTP l'oblige à changer ses méthodes — bien plus coûteux pour lui.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 247)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 247)*
 
 ## Comment l'expliquer
 
@@ -36,17 +37,17 @@ Un IOC (Indicator of Compromise) est un artefact observable qui indique qu'une c
 
 La **corrélation TTP** est plus nuancée : les mêmes techniques ATT&CK sont observées dans deux incidents. C'est un indice de possible lien — mais les techniques ATT&CK sont partagées par de nombreux acteurs (T1059.001 PowerShell est utilisé par quasiment tout le monde). C'est la procédure (le « comment exactement ») qui discrimine, pas la technique générique.
 
-*↳ [CTI](../cti/cti/index.md)*
+*↳ [CTI](../cti/cyber-threat-intelligence-cti/index.md)*
 
 **Métriques de maturité :** pourcentage des détections basées sur les TTP vs les IoC (plus le % TTP est élevé, plus la CTI est mature — un SOC qui ne détecte que les IoC est au bas de la Pyramid of Pain), […]
 
-*↳ [CTI](../cti/cti/index.md)*
+*↳ [CTI](../cti/cyber-threat-intelligence-cti/index.md)*
 
 ## À retenir
 
 🎯 **À retenir** — Détecter au niveau TTP (comportements/méthodes) fait bien plus mal à l'attaquant que bloquer des IOC volatils.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 247)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 247)*
 
 ## Voir aussi
 

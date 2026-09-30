@@ -2,6 +2,7 @@
 title: Prospective — systèmes technologiques (vol. 2)
 source: IT/Culture/Prospective_SYSTEMES-TECHNOLOGIQUES-Volume-2.md
 format: cours
+revue: '2026-08-24'
 ---
 
 ## FRONTIÈRES TECHNOLOGIQUES

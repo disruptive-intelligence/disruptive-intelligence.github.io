@@ -2,6 +2,7 @@
 title: Matériel informatique & connectique
 source: IT/Culture/Materiel_informatique-connectique-andco.md
 format: cours
+revue: '2026-06-09'
 ---
 
 *Édition 2.1 — Référence de culture matérielle IT & cyber*

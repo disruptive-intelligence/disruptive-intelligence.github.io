@@ -2,6 +2,7 @@
 title: Digital forensics
 source: Cyber/03_Forensic/Digital_Forensics.md
 format: cours
+revue: '2026-04-08'
 ---
 
 *Acquisition • Analyse • Preuve • Rapport*

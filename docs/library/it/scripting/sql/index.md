@@ -2,6 +2,7 @@
 title: SQL
 source: IT/Culture/SQL.md
 format: cours
+revue: '2026-05-10'
 ---
 
 *De zéro à l’interrogation de données — Guide pour débutant absolu*

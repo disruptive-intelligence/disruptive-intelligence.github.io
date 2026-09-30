@@ -1,5 +1,13 @@
 # Méthodologie web
 
+!!! info "📚 Cours de fond"
+    Pour comprendre le fonctionnement avant la pratique :
+
+    - [Fonctionnement du web : URL, DNS, HTTPS](../library/it/web/fonctionnement-du-web-url-dns-https/index.md)
+    - [HTTP & requêtes web](../library/it/web/http-requetes-web/index.md)
+    - [Applications web](../library/it/web/applications-web/index.md)
+    - [AppSec](../library/cyber/hardening/appsec/index.md)
+
 !!! abstract "Objectif"
     Approche générale face à une application web.
 

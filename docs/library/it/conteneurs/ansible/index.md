@@ -2,6 +2,7 @@
 title: Ansible
 source: IT/10_virtualization-containers/Ansible.md
 format: cours
+revue: '2026-06-24'
 ---
 
 *Automatiser l'administration de machines Linux pas à pas*

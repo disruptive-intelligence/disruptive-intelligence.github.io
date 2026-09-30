@@ -2,6 +2,7 @@
 title: Infrastructure IT
 source: IT/03_Networking/Infrastructure_IT.md
 format: cours
+revue: '2026-04-08'
 ---
 
 *Comprendre ce qu'on attaque et ce qu'on défend*

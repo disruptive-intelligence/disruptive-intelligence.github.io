@@ -2,6 +2,7 @@
 title: SPF, DKIM, DMARC
 source: Cyber/00_Notions/Fiche_SPF_DKIM_DMARC.md
 format: fiche
+revue: '2026-10-01'
 terms:
   SPF: Enregistrement TXT DNS qui liste les serveurs autorisés à envoyer des mails pour un domaine.
   DKIM: Signature cryptographique du mail par le serveur d'envoi ; le destinataire la vérifie avec la clé publique publiée dans le DNS.
@@ -18,7 +19,7 @@ Mécanismes d'*authentification de l'expéditeur* d'e-mail.
 - **DKIM** : signe les messages (intégrité + origine).
 - **DMARC** : politique combinant SPF/DKIM et reporting (que faire des messages non authentifiés).
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 294)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
 
 ## Comment ça fonctionne
 
@@ -67,7 +68,7 @@ p=reject
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md) (Protection des e-mails)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md) (Protection des e-mails)*
 
 Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (contournable), DKIM seul ne suffit pas (pas de politique de rejet), DMARC orchestre les deux et fournit du reporting.
 
@@ -77,7 +78,7 @@ Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (cont
 
 **Contre quoi.** Usurpation de domaine (spoofing), phishing/BEC par usurpation directe.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 294)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
 
 Le spoofing d'adresse exploite l'absence ou la mauvaise configuration de SPF/DKIM/DMARC pour envoyer un email qui affiche une adresse légitime dans le champ « From ».
 
@@ -94,7 +95,7 @@ cornpany.com
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md)*
 
 ## Déployer
 
@@ -115,11 +116,11 @@ Monitor
 
 -> Un mauvais déploiement peut bloquer des messages légitimes.
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/htb-reponse-a-incidents/index.md)*
+*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md)*
 
 ⚠️ **Erreur fréquente** — DMARC en mode permissif (« none ») jamais durci, donc sans effet.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 294)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
 
 ## Vérifier
 
@@ -147,7 +148,7 @@ dig _dmarc.technovert.fr TXT
 	- action : `Delivered / Blocked / Quarantined` ;
 	- résultats SPF / DKIM / DMARC.
 
-*↳ [HTB — Solutions de sécurité](../outils/htb-solutions-de-securite/index.md)*
+*↳ [HTB — Solutions de sécurité](../outils/solutions-de-securite/index.md)*
 
 ## À retenir
 
@@ -157,4 +158,4 @@ dig _dmarc.technovert.fr TXT
 
 🎯 **À retenir** — SPF+DKIM+DMARC (en mode actif) empêchent l'usurpation directe du domaine : socle anti-phishing/BEC.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 294)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*

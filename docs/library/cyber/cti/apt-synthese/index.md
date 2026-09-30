@@ -2,6 +2,7 @@
 title: APT — synthèse
 source: Cyber/01_CTI/APT_Synthese.md
 format: synthese
+revue: '2026-05-21'
 ---
 
 *Advanced Persistent Threats — Acteurs étatiques, campagnes et géopolitique cyber*

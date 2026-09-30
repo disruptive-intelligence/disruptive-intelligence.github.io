@@ -2,6 +2,7 @@
 title: Cybersécurité du quotidien
 source: Cyber/Cybersecurite_du_Quotidien.md
 format: cours
+revue: '2026-04-27'
 ---
 
 *Se protéger • Détecter • Éviter • Réagir*

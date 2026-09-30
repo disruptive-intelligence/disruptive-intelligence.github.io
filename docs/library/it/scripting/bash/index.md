@@ -2,6 +2,7 @@
 title: Bash
 source: IT/05_Scripting_Langage-Prog/Bash.md
 format: cours
+revue: '2026-05-10'
 ---
 
 *De zéro à l'automatisation — Guide pour débutant absolu*

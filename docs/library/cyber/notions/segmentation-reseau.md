@@ -2,6 +2,7 @@
 title: Segmentation réseau
 source: Cyber/00_Notions/Fiche_Segmentation_reseau.md
 format: fiche
+revue: '2026-10-01'
 terms:
   Segmentation réseau: Découpage du réseau en zones (sous-réseaux, VLAN) filtrées entre elles, pour contenir un incident et limiter le mouvement latéral.
   Microsegmentation: Segmentation fine au niveau de chaque charge de travail, avec des règles « qui peut parler à qui » flux par flux.
@@ -18,7 +19,7 @@ terms:
 
 **Principe.** Sans segmentation, une fois un poste compromis, tout le réseau est atteignable (réseau « plat »). Avec segmentation, l'attaquant est contenu dans une zone.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 15)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 15)*
 
 ## Comment l'expliquer
 
@@ -42,7 +43,7 @@ Un VLAN est un mécanisme technique de segmentation réseau au niveau 2. Une DMZ
 
 🔧 **Exemple concret** — Isoler le réseau bureautique du réseau industriel (OT) empêche un ransomware bureautique d'arrêter l'usine.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 15)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 15)*
 
 ## Microsegmentation
 
@@ -50,13 +51,13 @@ Un VLAN est un mécanisme technique de segmentation réseau au niveau 2. Une DMZ
 
 **Principe.** Plutôt que de cloisonner par grands sous-réseaux, on définit *qui peut parler à qui* au niveau de chaque flux applicatif (par exemple : ce serveur web peut parler à cette base sur ce port, et à rien d'autre). C'est un fondement opérationnel du Zero Trust.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 16)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 16)*
 
 ## À retenir
 
 🎯 **À retenir** — Un réseau plat transforme une intrusion locale en compromission globale. Segmenter, c'est compartimenter le naufrage.
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-cyber/index.md) (chapitre 15)*
+*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 15)*
 
 ## Voir aussi
 

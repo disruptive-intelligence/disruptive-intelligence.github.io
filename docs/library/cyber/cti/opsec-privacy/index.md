@@ -2,6 +2,7 @@
 title: OPSEC & privacy
 source: Cyber/OPSEC_Privacy.md
 format: cours
+revue: '2026-06-01'
 ---
 
 *Manuel de sécurité numérique défensive pour journalistes d’investigation, sources, activistes, dirigeants, professionnels exposés et particuliers exigeants (2025-2026)*

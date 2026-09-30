@@ -2,6 +2,7 @@
 title: Administration Linux
 source: IT/01_Linux/Admin_Linux.md
 format: cours
+revue: '2026-06-08'
 ---
 
 *De zéro à l'autonomie — Guide pour débutant absolu*

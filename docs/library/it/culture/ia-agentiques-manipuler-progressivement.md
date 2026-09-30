@@ -2,6 +2,7 @@
 title: IA agentiques — manipuler progressivement
 source: IT/Culture/IA Agentiques - Manipuler progressivement.md
 format: synthese
+revue: '2026-09-06'
 ---
 
 - Créer projet 

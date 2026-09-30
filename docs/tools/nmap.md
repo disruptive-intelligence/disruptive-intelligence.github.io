@@ -4,6 +4,12 @@ tags:
 ---
 # Nmap
 
+!!! info "📚 Cours de fond"
+    Pour comprendre le fonctionnement avant la pratique :
+
+    - [Réseau — prises de notes](../library/it/reseau/reseau-prises-de-notes/index.md)
+    - [PDU, headers, payload & encapsulation](../library/it/reseau/pdu-headers-payload-encapsulation/index.md)
+
 !!! abstract "En bref"
     _À compléter._
 
