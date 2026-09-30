@@ -1,6 +1,7 @@
 ---
 title: Architecture SI
 source: IT/Architecture_SI.md
+format: cours
 ---
 
 *Comprendre, lire et concevoir un système d'information*

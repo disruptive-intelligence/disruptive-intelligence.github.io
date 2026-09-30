@@ -1,6 +1,7 @@
 ---
 title: Windows
 source: IT/02_Windows/Windows.md
+format: cours
 ---
 
 *Architecture • Internals • Sécurité • Investigation*

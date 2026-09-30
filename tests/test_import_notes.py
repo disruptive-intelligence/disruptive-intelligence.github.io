@@ -131,6 +131,18 @@ class HeadingTests(VaultCase):
         self.assertIn("Exemples :\n\n- username ;\n\n```\nUser\n```\n\n> citation", body)
         self.assertIn("- étape\n    ```bash\n    ls\n    ```", body)       # code d'une liste : indentation gardée
 
+    def test_format_automatic_and_fiche_terms(self):
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md", "## DNS\n\ntexte\n")
+        self.assertIn("format: synthese", pages["library/it/scripting/bash.md"])
+        course = "".join(f"## Chapitre {i} — Sujet\n\n{'mot ' * 900}\n\n" for i in range(1, 4))
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Python.md", course)
+        self.assertIn("format: cours", pages["library/it/scripting/python/index.md"])
+        pages, _ = self.build("IT/Culture/SQL.md", "---\nformat: fiche\ntermes:\n  SQL: Langage de requête.\n---\n# SQL\n\nTexte.\n")
+        page = pages["library/it/culture/sql.md"]
+        self.assertIn("format: fiche", page)
+        self.assertIn("terms:\n  SQL: Langage de requête.", page)
+        self.assertNotIn("termes:", page.split("---", 2)[2])            # propriétés Obsidian : pas dans le texte
+
     def test_excluded_document_not_listed(self):
         (self.vault / "Cyber/01_CTI").mkdir(parents=True)
         self.write("Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md", "# CERT-EU\n")

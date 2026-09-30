@@ -1,6 +1,7 @@
 ---
 title: Assembleur
 source: IT/Culture/Assembleur.md
+format: cours
 ---
 
 *De zéro au reverse engineering débutant — Guide pour débutant absolu*

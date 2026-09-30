@@ -1,6 +1,7 @@
 ---
 title: Cybersécurité du quotidien
 source: Cyber/Cybersecurite_du_Quotidien.md
+format: cours
 ---
 
 *Se protéger • Détecter • Éviter • Réagir*

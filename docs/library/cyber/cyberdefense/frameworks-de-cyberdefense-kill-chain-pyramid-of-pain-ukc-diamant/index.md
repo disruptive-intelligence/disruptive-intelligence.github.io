@@ -1,6 +1,7 @@
 ---
 title: Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)
 source: Cyber/05_Cyberdefense/Frameworks Cyber Defense (Kill chain, Pyramid of pain, UKC, Diamant).md
+format: synthese
 ---
 
 ## Sommaire

@@ -1,6 +1,7 @@
 ---
 title: HTB — Sauvegardes et reprise d'activité
 source: Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md
+format: synthese
 ---
 
 ## Sommaire

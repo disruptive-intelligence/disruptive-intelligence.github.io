@@ -89,7 +89,7 @@
       title.textContent = e.t;
       var link = document.createElement("a");
       link.href = new URL(e.u, scope).href;
-      link.textContent = "Glossaire →";
+      link.textContent = /^library\/(?!glossaire\/)/.test(e.u) ? "Voir la fiche →" : "Glossaire →";   // fiche notion
       tip.append(title, document.createTextNode(e.d + " "), link);
       tip.classList.add("is-open");
       var r = term.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;

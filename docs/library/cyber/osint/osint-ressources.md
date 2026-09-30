@@ -1,6 +1,7 @@
 ---
 title: OSINT — ressources
 source: Cyber/02_OSINT/OSINT_ressources.md
+format: synthese
 ---
 
 | Ressource | Résumé |

@@ -1,6 +1,7 @@
 ---
 title: IA & sécurité
 source: Cyber/05_Cyberdefense/IA_Secu.md
+format: cours
 ---
 
 **Cours expert — 28 chapitres · 7 parties · 7 annexes**

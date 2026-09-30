@@ -1,6 +1,7 @@
 ---
 title: Taxonomie cyber
 source: Cyber/Taxonomie_Cyber.md
+format: cours
 ---
 
 **Référentiel de référence — Principes, attaques, défenses et réponse à incident**

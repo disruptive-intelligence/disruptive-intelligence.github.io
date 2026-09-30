@@ -1,6 +1,7 @@
 ---
 title: OSINT — synthèse
 source: Cyber/02_OSINT/OSINT_Synthese.md
+format: synthese
 ---
 
 *Investiguer • Collecter • Analyser • Documenter*

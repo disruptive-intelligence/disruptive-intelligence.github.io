@@ -1,6 +1,7 @@
 ---
 title: HTB — Solutions de sécurité
 source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+format: synthese
 ---
 
 ## Sommaire

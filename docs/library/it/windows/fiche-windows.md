@@ -1,6 +1,7 @@
 ---
 title: Fiche Windows
 source: IT/02_Windows/Fiche_Windows.md
+format: synthese
 ---
 
 > Fiche intermédiaire orientée compréhension (eJPT / Hack The Box).

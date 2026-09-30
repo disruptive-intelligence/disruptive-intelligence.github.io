@@ -1,6 +1,7 @@
 ---
 title: PDU, headers, payload & encapsulation
 source: IT/03_Networking/PDU_Headers_Payload_Encapsulation.md
+format: synthese
 ---
 
 *Objectif de la section*

@@ -1,6 +1,7 @@
 ---
 title: MITRE ATT&CK
 source: Cyber/05_Cyberdefense/MITRE ATT&CK Framework.md
+format: synthese
 ---
 
 - **Tactics** = le _pourquoi_ / objectif de l’attaquant

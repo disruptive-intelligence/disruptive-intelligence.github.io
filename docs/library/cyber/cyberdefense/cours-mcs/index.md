@@ -1,6 +1,7 @@
 ---
 title: Cours MCS
 source: Cyber/05_Cyberdefense/MCS_COURS_v1.6_2026-08-01.md
+format: cours
 ---
 
 *Connaître, décider, corriger, maintenir, prouver et financer la sécurité dans la durée*

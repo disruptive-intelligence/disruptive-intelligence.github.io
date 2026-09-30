@@ -1,6 +1,7 @@
 ---
 title: HTB — Sécurité IT en entreprise
 source: Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md
+format: synthese
 ---
 
 ## Sommaire

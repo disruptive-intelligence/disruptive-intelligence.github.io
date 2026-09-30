@@ -1,6 +1,7 @@
 ---
 title: HTB — Attack Surface Management
 source: Cyber/99_Concepts/HTB_Attack Surface Management.md
+format: synthese
 ---
 
 > Fiche courte, complément des chapitres 28 et 29 du cours [Vulnerability management & intelligence](../vulnerability-management-intelligence/index.md).

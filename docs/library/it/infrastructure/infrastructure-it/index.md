@@ -1,6 +1,7 @@
 ---
 title: Infrastructure IT
 source: IT/03_Networking/Infrastructure_IT.md
+format: cours
 ---
 
 *Comprendre ce qu'on attaque et ce qu'on défend*

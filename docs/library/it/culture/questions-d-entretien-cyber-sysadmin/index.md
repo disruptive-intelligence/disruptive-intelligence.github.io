@@ -1,6 +1,7 @@
 ---
 title: Questions d'entretien cyber & sysadmin
 source: IT/Culture/Questions_Entretien_Cyber_SysAdmin.md
+format: synthese
 ---
 
 *Préparation complète — Réponses orales, claires, professionnelles*

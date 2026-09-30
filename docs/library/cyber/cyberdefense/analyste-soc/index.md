@@ -1,6 +1,7 @@
 ---
 title: Analyste SOC
 source: Cyber/99_Concepts/Analyste_SOC.md
+format: cours
 ---
 
 *Détecter • Investiguer • Répondre • Construire*

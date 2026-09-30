@@ -1,6 +1,7 @@
 ---
 title: Active Directory
 source: IT/04_Active-Directory/Active_Directory.md
+format: cours
 ---
 
 *Comprendre • Attaquer • Défendre • Répondre*

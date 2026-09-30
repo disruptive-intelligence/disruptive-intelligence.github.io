@@ -1,6 +1,7 @@
 ---
 title: AppSec
 source: IT/03_Networking/AppSec.md
+format: cours
 ---
 
 ## SÉCURITÉ APPLICATIVE

@@ -1,6 +1,7 @@
 ---
 title: Windows Command Line
 source: IT/02_Windows/Windows_Command-Line.md
+format: cours
 ---
 
 ## Introduction à la ligne de commande Windows

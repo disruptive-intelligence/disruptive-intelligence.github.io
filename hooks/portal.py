@@ -1176,8 +1176,37 @@ def grouped(notes):
 def note_nav(note):
     """Note simple : un lien. Note découpée : une entrée dépliable (présentation, puis parties et chapitres)."""
     if note.get("chapters"):
-        return {note["title"]: [note["src"]] + [note_nav(c) for c in note["chapters"]]}
-    return {note["title"]: note["src"]}
+        return {nav_title(note): [note["src"]] + [note_nav(c) for c in note["chapters"]]}
+    return {nav_title(note): note["src"]}
+
+
+FORMAT_MARK = {"synthese": "📝 "}      # seules les synthèses sont marquées : le menu reste sobre
+
+
+def nav_title(note):
+    return FORMAT_MARK.get(note.get("format"), "") + note["title"]
+
+
+def title_words(title):
+    noise = {"htb", "synthese", "fiche", "notions", "version", "complete", "cours", "les", "des", "and"}
+    return {w for w in slug(title).split("-") if len(w) > 2 and w not in noise}
+
+
+def link_formats(library):
+    """Dans chaque catégorie, une synthèse renvoie aux cours dont le titre reprend le sien
+    (« HTB — Réponse à incidents » -> « Réponse à incident ») ; le cours liste ses synthèses."""
+    for dom in library:
+        for cat in dom["categories"]:
+            courses = [n for n in cat["notes"] if n.get("format") == "cours"]
+            for n in cat["notes"]:
+                if n.get("format") != "synthese" or not title_words(n["title"]):
+                    continue
+                words = title_words(n["title"])
+                for c in courses:
+                    common = words & title_words(c["title"])
+                    if common and len(common) / len(words) >= 0.5:
+                        n.setdefault("deeper", []).append(c)
+                        c.setdefault("digests", []).append(n)
 
 
 def note_pages(folder, docs_dir):
@@ -1224,7 +1253,8 @@ def load_library(docs_dir, tree):
                 h1 = re.search(r"^# (.+)$", body, re.M)
                 stem = f.parent.name if f.name == "index.md" else f.stem
                 title = str(meta.get("title") or (h1.group(1) if h1 else stem)).strip()
-                note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True}
+                note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True,
+                        "format": meta.get("format"), "terms": meta.get("terms") or {}}
                 if f.name == "index.md":                    # note découpée : parties et chapitres, dans l'ordre
                     note["chapters"] = note_pages(f.parent, docs_dir)
                 real[slug(title)] = note
@@ -1258,7 +1288,7 @@ def pages_library(library):
                 for label, notes in grouped(cat["notes"]):
                     body += (f"## {label}\n\n" if label else "") + ('<ul class="kw-notes">' + "".join(
                         f'<li class="{"is-done" if n["imported"] else "is-todo"}">'
-                        f'<a href="{href(cat["src"], n["src"])}">{esc(n["title"])}</a></li>' for n in notes)
+                        f'<a href="{href(cat["src"], n["src"])}">{esc(nav_title(n))}</a></li>' for n in notes)
                         + "</ul>\n\n")
                 body += "<span class=\"kw-muted\">● importée · ○ à importer depuis Obsidian</span>\n"
             else:
@@ -1434,6 +1464,23 @@ def build_glossary(items, manual):
     return sorted(terms.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
 
 
+def add_fiche_terms(glossary, library):
+    """Termes déclarés par les fiches notions de la Bibliothèque (propriété « termes » dans Obsidian) :
+    entrée du glossaire créée si besoin (définition de la fiche), avec « Voir la fiche → » ;
+    une définition manuelle (data/glossaire.yml) reste prioritaire."""
+    by_key = {slug(t["term"]) or t["term"].casefold(): t for t in glossary}
+    for dom in library:
+        for cat in dom["categories"]:
+            for n in cat["notes"]:
+                for term, definition in (n.get("terms") or {}).items():
+                    t = by_key.setdefault(slug(term) or term.casefold(),
+                                          {"term": term, "definition": "", "seen": [], "see": None})
+                    if not t.get("manual"):                  # la fiche prime sur la définition d'un brief
+                        t["definition"] = str(definition).strip()
+                    t["see"] = t.get("see") or n["src"]
+    return sorted(by_key.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
+
+
 def seen_label(it):
     """Lien « Vu dans » : la date pour un brief, le titre court pour une analyse."""
     if it["src"].startswith("veille/"):
@@ -1479,7 +1526,10 @@ def glossary_data(glossary):
     def plain(text):                                   # l'infobulle affiche du texte brut
         text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
         return re.sub(r"\*+|`", "", text).strip()
-    data = [{"t": t["term"], "d": plain(t["definition"]), "u": f"{url}#{letter_anchor(t['term'])}"}
+    def link(t):                                       # terme d'une fiche notion : l'infobulle y mène
+        see = str(t.get("see") or "")
+        return url_of(see) if see.startswith("library/") else f"{url}#{letter_anchor(t['term'])}"
+    data = [{"t": t["term"], "d": plain(t["definition"]), "u": link(t)}
             for t in glossary if t["definition"] and len(t["term"]) >= 2]
     return "assets/glossary.json", json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
@@ -1559,7 +1609,10 @@ def on_config(config):
         if s["event"]:
             STATE["mentions"].setdefault(s["event"], []).append(s)
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
+    link_formats(library)
     STATE["library"] = library
+    STATE["notes_by_src"] = {n["src"]: n for d in library for c in d["categories"] for n in c["notes"]}
+    glossary = add_fiche_terms(glossary, library)
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
@@ -1631,7 +1684,20 @@ def decorate_note(markdown, page):
         crumbs.append(f"{esc(dom['label'])} · [{esc(cat['label'])}]({rel(cat['src'])})")
     for label, path in page.meta.get("up") or []:
         crumbs.append(f"[{esc(label)}]({path})")
-    return f'<span class="kw-muted">{" · ".join(crumbs)}</span>\n\n' + markdown
+    head = f'<span class="kw-muted">{" · ".join(crumbs)}</span>'
+    note = STATE.get("notes_by_src", {}).get(here)    # page d'entrée d'une note : son format et ses liens
+    if note:
+        links = lambda notes: " · ".join(f"[{esc(n['title'])}]({rel(n['src'])})" for n in notes)
+        line = {"synthese": "📝 Synthèse", "cours": "📘 Cours", "fiche": "📌 Fiche notion"}.get(note.get("format"), "")
+        if note.get("deeper"):
+            line += f" · pour approfondir : {links(note['deeper'])}"
+        elif note.get("digests"):
+            line += f" · en synthèse : {links(note['digests'])}"
+        elif note.get("terms"):
+            line += " · " + ", ".join(esc(t) for t in note["terms"])
+        if line and (note.get("format") != "cours" or note.get("digests")):
+            head += f'<br><span class="kw-muted">{line}</span>'
+    return head + "\n\n" + markdown
 
 
 def on_page_content(html, page, config, files):

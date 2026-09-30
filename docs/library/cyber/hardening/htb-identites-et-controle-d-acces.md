@@ -1,6 +1,7 @@
 ---
 title: HTB — Identités et contrôle d'accès
 source: Cyber/04_Hardening/HTB_Identités et contrôle d'accès.md
+format: synthese
 ---
 
 ## Définitions et concepts de base

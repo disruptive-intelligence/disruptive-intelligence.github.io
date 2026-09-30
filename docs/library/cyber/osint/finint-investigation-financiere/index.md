@@ -1,6 +1,7 @@
 ---
 title: FININT — investigation financière
 source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+format: cours
 ---
 
 *Suivre l’argent dans l’économie réelle — Registres, sociétés, bénéficiaires effectifs, flux bancaires, criminalité financière et asset recovery*

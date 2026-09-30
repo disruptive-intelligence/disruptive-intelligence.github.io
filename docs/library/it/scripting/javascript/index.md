@@ -1,6 +1,7 @@
 ---
 title: JavaScript
 source: IT/05_Scripting_Langage-Prog/JavaScript.md
+format: cours
 ---
 
 *De zéro aux scripts web, au DOM, aux APIs et aux bases de la sécurité web*

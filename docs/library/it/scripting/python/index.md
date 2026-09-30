@@ -1,6 +1,7 @@
 ---
 title: Python
 source: IT/05_Scripting_Langage-Prog/Python.md
+format: cours
 ---
 
 *De zéro à l'automatisation défensive — Guide pour débutant absolu*

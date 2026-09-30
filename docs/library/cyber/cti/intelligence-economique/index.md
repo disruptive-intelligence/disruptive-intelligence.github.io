@@ -1,6 +1,7 @@
 ---
 title: Intelligence économique
 source: Cyber/01_CTI/IE.md
+format: cours
 ---
 
 *Veille • Protection • Influence • Décision*

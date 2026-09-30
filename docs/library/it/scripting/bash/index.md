@@ -1,6 +1,7 @@
 ---
 title: Bash
 source: IT/05_Scripting_Langage-Prog/Bash.md
+format: cours
 ---
 
 *De zéro à l'automatisation — Guide pour débutant absolu*

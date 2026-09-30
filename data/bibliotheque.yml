@@ -28,7 +28,7 @@
       label: 🚨 Cyberdéfense
       groups:
         - label: 🛰️ Détection & réponse
-          notes: [Analyste SOC, Réponse à incident, Threat hunting]
+          notes: [Analyste SOC, Réponse à incident, HTB — Réponse à incidents, Threat hunting]
         - label: 🧭 Référentiels
           notes: [MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)"]
         - label: 🩹 Vulnérabilités & exposition
@@ -46,6 +46,9 @@
     - id: concepts
       label: 💡 Concepts
       notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", HTB — Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
+    - id: notions
+      label: 📌 Notions
+      notes: ["SPF, DKIM, DMARC"]
 
 - id: it
   label: 💻 IT

@@ -1,6 +1,7 @@
 ---
 title: PowerShell
 source: IT/02_Windows/Powershell.md
+format: cours
 ---
 
 *De zéro à l'automatisation, l'Active Directory et la cybersécurité — Guide pour débutant absolu*

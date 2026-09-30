@@ -1,6 +1,7 @@
 ---
 title: Notions Bash
 source: IT/05_Scripting_Langage-Prog/Notion_Bash.md
+format: cours
 ---
 
 <aside>

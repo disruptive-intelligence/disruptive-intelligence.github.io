@@ -1,6 +1,7 @@
 ---
 title: APT — version complète
 source: Cyber/01_CTI/APT_vFULL.md
+format: cours
 ---
 
 *Advanced Persistent Threats — Acteurs étatiques, campagnes et géopolitique cyber*

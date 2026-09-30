@@ -1,6 +1,7 @@
 ---
 title: HTB — Architecture et sécurité des systèmes
 source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+format: synthese
 ---
 
 ## Sommaire

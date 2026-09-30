@@ -1,6 +1,7 @@
 ---
 title: Notions Linux
 source: IT/01_Linux/Notion_Linux.md
+format: synthese
 ---
 
 ### Usages courants

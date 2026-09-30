@@ -43,7 +43,7 @@ LIBRARY = DOCS / "library"
 ASSETS = "library/assets"
 # Dossiers du coffre -> (domaine, catégorie) de data/bibliotheque.yml
 FOLDERS = {
-    "Cyber/01_CTI": ("cyber", "cti"), "Cyber/02_OSINT": ("cyber", "osint"),
+    "Cyber/00_Notions": ("cyber", "notions"), "Cyber/01_CTI": ("cyber", "cti"), "Cyber/02_OSINT": ("cyber", "osint"),
     "Cyber/03_Cryptographie": ("cyber", "cryptographie"), "Cyber/03_Forensic": ("cyber", "forensic"),
     "Cyber/04_Hardening": ("cyber", "hardening"), "Cyber/05_Cyberdefense": ("cyber", "cyberdefense"),
     "Cyber/10_Tools": ("cyber", "outils"), "Cyber/99_Concepts": ("cyber", "concepts"), "Cyber": ("cyber", "concepts"),
@@ -108,6 +108,7 @@ MIN_SECTION = 1_500      # page plus courte (intertitre, « Fin du cours ») : r
 MIN_CHAPTER = 300        # un vrai chapitre garde sa page, sauf s'il est vide
 MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glossaire) : restent dans la page de leur partie
 MIN_SPLIT_PARTS = 8_000  # fiche plus courte : pas de sous-pages même si elle a des parties
+COURSE_AT = 120_000      # note plus longue, même sans chapitres : un cours (sinon une synthèse)
 QUIZ_TITLE = re.compile(r"(?i)\bmini-?quiz\b")   # quiz de révision : gardés dans le coffre, pas publiés
 TOC_TITLE = re.compile(r"(?i)^(table des mati[eè]res|sommaire|table of contents)\b")
 PART_TITLE = re.compile(r"(?i)^(partie|part|volume|livre|module)\b")
@@ -179,6 +180,34 @@ def resolve(vault, rel, tree, title=None, to=None):
 def read_note(path):
     text = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
     return re.sub(r"\A---\n.*?\n---\n", "", text, flags=re.S)              # en-tête Obsidian éventuel
+
+
+def read_props(path):
+    """Propriétés Obsidian (en-tête YAML) : format (cours | synthese | fiche), termes (terme: définition)."""
+    m = re.match(r"\A---\n(.*?)\n---\n", path.read_text(encoding="utf-8-sig").replace("\r\n", "\n"), re.S)
+    try:
+        props = yaml.safe_load(m.group(1)) if m else {}
+    except yaml.YAMLError:
+        return {}
+    return props if isinstance(props, dict) else {}
+
+
+def note_format(text, title, props, cat):
+    """cours (exhaustif) | synthese (plus court) | fiche (une notion) | None (cheat sheet).
+    Règle automatique, sauf propriété « format » dans la note."""
+    if props.get("format") in ("cours", "synthese", "fiche"):
+        return props["format"]
+    if cat == "notions":
+        return "fiche"
+    if CHEAT_TITLE.search(title):
+        return None
+    if re.search(r"(?i)synth[èe]se", title):
+        return "synthese"
+    heads = outline(text)
+    if (sum(bool(CHAPTER_TITLE.match(t)) for _, _, t in heads) >= 3
+            or sum(bool(re.match(r"(?i)partie\b", t)) for _, _, t in heads) >= 2 or len(text) > COURSE_AT):
+        return "cours"
+    return "synthese"
 
 
 HEADING = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*$")
@@ -755,6 +784,12 @@ def build(vault, rel, tree, title=None, to=None, index=None):
     conv = Converter(vault, tree, index)
     body = drop_quizzes(normalize_headings(conv.convert(text, source, shield), title, shield), shield)
     meta = {"title": title, "source": Path(rel).as_posix()}
+    props = read_props(source)
+    kind = note_format(text, title, props, cat)
+    if kind:
+        meta["format"] = kind
+    if isinstance(props.get("termes"), dict):          # fiche notion : termes du glossaire (terme: définition)
+        meta["terms"] = {str(k): str(v) for k, v in props["termes"].items()}
     split = is_split(text, title)
     entry = note_target(dom, cat, title, split)       # même règle que build_index : les liens entrants tiennent
     pages, tops, nodes = [], {}, []

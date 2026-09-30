@@ -1,6 +1,7 @@
 ---
 title: HTTP & requêtes web
 source: IT/Fiche_Web-Requests.md
+format: synthese
 ---
 
 > Fiche de révision orientée pratique cyber (HTB / eJPT / pentest débutant).

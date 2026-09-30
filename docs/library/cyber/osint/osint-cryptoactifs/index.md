@@ -1,6 +1,7 @@
 ---
 title: OSINT & cryptoactifs
 source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+format: cours
 ---
 
 *Adresse → Transaction → Entité → Flux → Cashout → Attribution prudente → Rapport*

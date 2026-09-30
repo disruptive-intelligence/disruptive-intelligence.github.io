@@ -1,6 +1,7 @@
 ---
 title: État de l'art — panorama de la cybermenace
 source: Cyber/01_CTI/EtatdeLart_Panorama_Cybermenace.md
+format: cours
 ---
 
 *Acteurs, écosystèmes, méthodes d'analyse et stratégies de résilience (2025–2026)*

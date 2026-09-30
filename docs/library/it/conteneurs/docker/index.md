@@ -1,6 +1,7 @@
 ---
 title: Docker
 source: IT/10_virtualization-containers/Docker.md
+format: cours
 ---
 
 *De zéro à la conteneurisation, au diagnostic et à la sécurité défensive — Guide pour débutant*

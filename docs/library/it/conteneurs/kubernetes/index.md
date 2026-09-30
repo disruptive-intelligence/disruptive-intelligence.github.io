@@ -1,6 +1,7 @@
 ---
 title: Kubernetes
 source: IT/10_virtualization-containers/Kubernetes.md
+format: cours
 ---
 
 *De zéro à l'opération, au diagnostic et à la sécurité défensive — Guide pour débutant*

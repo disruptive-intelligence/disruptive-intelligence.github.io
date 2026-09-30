@@ -1,6 +1,7 @@
 ---
 title: Applications web
 source: IT/Culture/Fiche_WebApp.md
+format: synthese
 ---
 
 > Fiche intermédiaire orientée cybersécurité (HTB, eJPT, pentest débutant).

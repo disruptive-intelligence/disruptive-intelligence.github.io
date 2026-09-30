@@ -1,6 +1,7 @@
 ---
 title: Notions réseau
 source: IT/03_Networking/networking_notion.md
+format: cours
 ---
 
 ## Sommaire

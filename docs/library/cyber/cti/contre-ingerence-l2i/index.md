@@ -1,6 +1,7 @@
 ---
 title: Contre-ingérence (L2I)
 source: Cyber/01_CTI/20260405_L2I_Contre-Ingerence.md
+format: cours
 ---
 
 ## GUERRE INFORMATIONNELLE ET OPÉRATIONS D'INFLUENCE

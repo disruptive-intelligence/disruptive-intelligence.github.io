@@ -1,6 +1,7 @@
 ---
 title: HUMINT & social engineering
 source: Cyber/HUMINT_Social_Engineering.md
+format: cours
 ---
 
 **Cours de référence — Niveau expert opérationnel**

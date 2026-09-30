@@ -1,6 +1,7 @@
 ---
 title: CTI
 source: Cyber/01_CTI/CTI.md
+format: cours
 ---
 
 ## CYBER THREAT INTELLIGENCE

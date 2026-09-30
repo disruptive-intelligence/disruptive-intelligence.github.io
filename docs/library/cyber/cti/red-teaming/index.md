@@ -1,6 +1,7 @@
 ---
 title: Red teaming
 source: Cyber/Red_Teaming.md
+format: cours
 ---
 
 *Penser comme l'adversaire pour décider sous incertitude*

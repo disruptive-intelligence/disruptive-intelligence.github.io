@@ -1,6 +1,7 @@
 ---
 title: CTI — travaux pratiques
 source: Cyber/01_CTI/CTI_Work.md
+format: cours
 ---
 
 ## Cyber Threat Intelligence

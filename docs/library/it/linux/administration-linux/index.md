@@ -1,6 +1,7 @@
 ---
 title: Administration Linux
 source: IT/01_Linux/Admin_Linux.md
+format: cours
 ---
 
 *De zéro à l'autonomie — Guide pour débutant absolu*

@@ -1,6 +1,7 @@
 ---
 title: Dark Web
 source: Cyber/01_CTI/Dark_Web_vFULL.md
+format: cours
 ---
 
 *Architecture • Écosystèmes • OPSEC • Investigation • Renseignement*

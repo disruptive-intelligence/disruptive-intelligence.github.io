@@ -1,6 +1,7 @@
 ---
 title: Digital forensics
 source: Cyber/03_Forensic/Digital_Forensics.md
+format: cours
 ---
 
 *Acquisition • Analyse • Preuve • Rapport*

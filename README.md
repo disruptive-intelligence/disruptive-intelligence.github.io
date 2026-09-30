@@ -48,6 +48,11 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 .\.venv\Scripts\python -m unittest discover -s tests                                   # tests du convertisseur
 ```
 
+Formats (règle automatique, ou propriété Obsidian `format:`) : **cours** (≥ 3 chapitres, parties ou
+plus de 120 000 caractères), **synthèse** (le reste, ou « synthèse » dans le titre ; marquée 📝 dans le menu,
+reliée aux cours de même sujet de sa rubrique), **fiche** (rubrique 📌 Notions, dossier `Cyber/00_Notions`).
+Une fiche déclare ses termes (`termes: {SPF: définition…}`) : ils entrent au glossaire et leur infobulle,
+sur tout le site, mène à la fiche.
 Dans `data/bibliotheque.yml`, une rubrique liste ses notes (`notes:`) ou les répartit en sous-rubriques
 (`groups:` → `label` + `notes`, ex. « Outils & solutions ») ; l'adresse des pages ne dépend pas des sous-rubriques.
 La rubrique d'une note vient de son dossier du coffre (`FOLDERS`), ou de `PLACES` quand le site la range

@@ -1,6 +1,7 @@
 ---
 title: Python & scraping
 source: Cyber/02_OSINT/Python_Scraping.md
+format: cours
 ---
 
 *De la collecte web à l’automatisation d’enquête*

@@ -1,6 +1,7 @@
 ---
 title: HTB — Windows System Security
 source: IT/02_Windows/HTB_Windows System Sécurity.md
+format: synthese
 ---
 
 ## Sommaire

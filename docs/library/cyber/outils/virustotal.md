@@ -1,6 +1,7 @@
 ---
 title: VirusTotal
 source: Cyber/99_Concepts/VirusTotal.md
+format: synthese
 ---
 
 ## VirusTotal — Points d’attention [Stale Results, Reanalyse, Detection Tags]

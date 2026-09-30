@@ -1,6 +1,7 @@
 ---
 title: GRC
 source: Cyber/05_Cyberdefense/GRC.md
+format: cours
 ---
 
 *Le cadre qui donne sens à la technique*

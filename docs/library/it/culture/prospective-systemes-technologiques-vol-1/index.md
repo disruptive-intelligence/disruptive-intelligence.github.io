@@ -1,6 +1,7 @@
 ---
 title: Prospective — systèmes technologiques (vol. 1)
 source: IT/Culture/Prospective_SYSTEMES-TECHNOLOGIQUES-Volume-1.md
+format: cours
 ---
 
 *Comprendre les technologies, leurs contraintes et leur diffusion*
