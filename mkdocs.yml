@@ -29,6 +29,7 @@ theme:
   features:
     - navigation.tabs         # onglets en haut : Pentest / Bibliothèque / Veille
     - navigation.tabs.sticky  # requis : sinon Material ajoute une 2e barre d'onglets
+    - navigation.prune        # menu : seule la partie visible est écrite dans chaque page (Bibliothèque : 400+ pages)
     - navigation.sections     # grandes parties = en-têtes (style HackTricks)
     - navigation.indexes      # index.md = page d'accueil d'une section
     - navigation.path         # fil d'Ariane (breadcrumbs)
