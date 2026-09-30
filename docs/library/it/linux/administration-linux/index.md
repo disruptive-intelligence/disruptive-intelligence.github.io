@@ -121,49 +121,103 @@ sudo apt install tree        # installe le paquet "tree"
 
 ### Table des matières
 
-
 #### Partie 0 — Avant de commencer
 *(glossaire, état d'esprit, prudence, installation — ci-dessus)*
 
+#### Partie 1 — Survivre dans le terminal
+
+1. [Le terminal, le shell et l'aide](01-partie-1-survivre-dans-le-terminal/01-chapitre-1-le-terminal-le-shell-et-l-aide.md)
+2. [Se repérer dans l'arborescence](01-partie-1-survivre-dans-le-terminal/02-chapitre-2-se-reperer-dans-l-arborescence.md)
+3. [Lire le contenu des fichiers](01-partie-1-survivre-dans-le-terminal/03-chapitre-3-lire-le-contenu-des-fichiers.md)
+4. [Chercher, filtrer et transformer du texte](01-partie-1-survivre-dans-le-terminal/04-chapitre-4-chercher-filtrer-et-transformer-du-text.md)
+
+#### Partie 2 — Manipuler le système de fichiers
+
+5. [Créer, copier, déplacer, supprimer](02-partie-2-manipuler-le-systeme-de-fichiers/01-chapitre-5-creer-copier-deplacer-supprimer.md)
+6. [Éditer des fichiers dans le terminal](02-partie-2-manipuler-le-systeme-de-fichiers/02-chapitre-6-editer-des-fichiers-dans-le-terminal.md)
+7. [Liens, redirections et tuyaux](02-partie-2-manipuler-le-systeme-de-fichiers/03-chapitre-7-liens-redirections-et-tuyaux.md)
+8. [Variables d'environnement et configuration du shell](02-partie-2-manipuler-le-systeme-de-fichiers/04-chapitre-8-variables-d-environnement-et-configurat.md)
+
+#### Partie 3 — Qui a le droit de quoi
+
+9. [Comprendre les permissions](03-partie-3-qui-a-le-droit-de-quoi/01-chapitre-9-comprendre-les-permissions.md)
+10. [Propriété, utilisateurs et groupes](03-partie-3-qui-a-le-droit-de-quoi/02-chapitre-10-propriete-utilisateurs-et-groupes.md)
+11. [sudo et l'élévation de privilèges](03-partie-3-qui-a-le-droit-de-quoi/03-chapitre-11-sudo-et-l-elevation-de-privileges.md)
+12. [Permissions avancées (panorama)](03-partie-3-qui-a-le-droit-de-quoi/04-chapitre-12-permissions-avancees-panorama.md)
+
+#### Partie 4 — La machine vivante
+
+13. [Les processus](04-partie-4-la-machine-vivante/01-chapitre-13-les-processus.md)
+14. [Les services avec systemd](04-partie-4-la-machine-vivante/02-chapitre-14-les-services-avec-systemd.md)
+15. [Les logs et journaux](04-partie-4-la-machine-vivante/03-chapitre-15-les-logs-et-journaux.md)
+16. [Tâches planifiées](04-partie-4-la-machine-vivante/04-chapitre-16-taches-planifiees.md)
+
+#### Partie 5 — Linux en réseau
+
+17. [Les bases du réseau Linux](05-partie-5-linux-en-reseau/01-chapitre-17-les-bases-du-reseau-linux.md)
+18. [SSH : se connecter à distance](05-partie-5-linux-en-reseau/02-chapitre-18-ssh-se-connecter-a-distance.md)
+19. [Transférer des fichiers](05-partie-5-linux-en-reseau/03-chapitre-19-transferer-des-fichiers.md)
+
+#### Partie 6 — Entretenir le système
+
+20. [Gérer les paquets et logiciels](06-partie-6-entretenir-le-systeme/01-chapitre-20-gerer-les-paquets-et-logiciels.md)
+21. [Stockage et espace disque](06-partie-6-entretenir-le-systeme/02-chapitre-21-stockage-et-espace-disque.md)
+22. [Archives et compression](06-partie-6-entretenir-le-systeme/03-chapitre-22-archives-et-compression.md)
+23. [Sauvegardes](06-partie-6-entretenir-le-systeme/04-chapitre-23-sauvegardes.md)
+
+#### Partie 7 — Diagnostiquer, sécuriser, automatiser
+
+24. [Diagnostic système (méthode)](07-partie-7-diagnostiquer-securiser-automatiser/01-chapitre-24-diagnostic-systeme-methode.md)
+25. [Sécurité de base (durcissement)](07-partie-7-diagnostiquer-securiser-automatiser/02-chapitre-25-securite-de-base-durcissement.md)
+26. [Automatiser avec Bash (admin)](07-partie-7-diagnostiquer-securiser-automatiser/03-chapitre-26-automatiser-avec-bash-admin.md)
+27. [Mini-projets pratiques](07-partie-7-diagnostiquer-securiser-automatiser/04-chapitre-27-mini-projets-pratiques.md)
+
+#### Synthèse finale
+
+- Cheat-sheets, erreurs classiques, arbre de décision, pour continuer
+
+#### Annexes
+
+- Regex, sed/awk avancés, stockage avancé, pare-feu avancé, conteneurs, familles de distributions
+
+---
+---
+
 ## Sommaire
 
-- [Partie 1 — Survivre dans le terminal](01-partie-1-survivre-dans-le-terminal.md)
-- [Partie 2 — Manipuler le système de fichiers](02-partie-2-manipuler-le-systeme-de-fichiers.md)
-- [Partie 3 — Qui a le droit de quoi](03-partie-3-qui-a-le-droit-de-quoi.md)
-- [Partie 7 — Diagnostiquer, sécuriser, automatiser](04-partie-7-diagnostiquer-securiser-automatiser.md)
-- [PARTIE 1 — Survivre dans le terminal](05-partie-1-survivre-dans-le-terminal/index.md)
-    - [Chapitre 1 — Le terminal, le shell et l'aide](05-partie-1-survivre-dans-le-terminal/01-chapitre-1-le-terminal-le-shell-et-l-aide.md)
-    - [Chapitre 2 — Se repérer dans l'arborescence](05-partie-1-survivre-dans-le-terminal/02-chapitre-2-se-reperer-dans-l-arborescence.md)
-    - [Chapitre 3 — Lire le contenu des fichiers](05-partie-1-survivre-dans-le-terminal/03-chapitre-3-lire-le-contenu-des-fichiers.md)
-    - [Chapitre 4 — Chercher, filtrer et transformer du texte](05-partie-1-survivre-dans-le-terminal/04-chapitre-4-chercher-filtrer-et-transformer-du-text.md)
-- [PARTIE 2 — Manipuler le système de fichiers](06-partie-2-manipuler-le-systeme-de-fichiers/index.md)
-    - [Chapitre 5 — Créer, copier, déplacer, supprimer](06-partie-2-manipuler-le-systeme-de-fichiers/01-chapitre-5-creer-copier-deplacer-supprimer.md)
-    - [Chapitre 6 — Éditer des fichiers dans le terminal](06-partie-2-manipuler-le-systeme-de-fichiers/02-chapitre-6-editer-des-fichiers-dans-le-terminal.md)
-    - [Chapitre 7 — Liens, redirections et tuyaux](06-partie-2-manipuler-le-systeme-de-fichiers/03-chapitre-7-liens-redirections-et-tuyaux.md)
-    - [Chapitre 8 — Variables d'environnement et configuration du shell](06-partie-2-manipuler-le-systeme-de-fichiers/04-chapitre-8-variables-d-environnement-et-configurat.md)
-- [PARTIE 3 — Qui a le droit de quoi](07-partie-3-qui-a-le-droit-de-quoi/index.md)
-    - [Chapitre 9 — Comprendre les permissions](07-partie-3-qui-a-le-droit-de-quoi/01-chapitre-9-comprendre-les-permissions.md)
-    - [Chapitre 10 — Propriété, utilisateurs et groupes](07-partie-3-qui-a-le-droit-de-quoi/02-chapitre-10-propriete-utilisateurs-et-groupes.md)
-    - [Chapitre 11 — sudo et l'élévation de privilèges](07-partie-3-qui-a-le-droit-de-quoi/03-chapitre-11-sudo-et-l-elevation-de-privileges.md)
-    - [Chapitre 12 — Permissions avancées (panorama)](07-partie-3-qui-a-le-droit-de-quoi/04-chapitre-12-permissions-avancees-panorama.md)
-- [PARTIE 4 — La machine vivante](08-partie-4-la-machine-vivante/index.md)
-    - [Chapitre 13 — Les processus](08-partie-4-la-machine-vivante/01-chapitre-13-les-processus.md)
-    - [Chapitre 14 — Les services avec systemd](08-partie-4-la-machine-vivante/02-chapitre-14-les-services-avec-systemd.md)
-    - [Chapitre 15 — Les logs et journaux](08-partie-4-la-machine-vivante/03-chapitre-15-les-logs-et-journaux.md)
-    - [Chapitre 16 — Tâches planifiées](08-partie-4-la-machine-vivante/04-chapitre-16-taches-planifiees.md)
-- [PARTIE 5 — Linux en réseau](09-partie-5-linux-en-reseau/index.md)
-    - [Chapitre 17 — Les bases du réseau Linux](09-partie-5-linux-en-reseau/01-chapitre-17-les-bases-du-reseau-linux.md)
-    - [Chapitre 18 — SSH : se connecter à distance](09-partie-5-linux-en-reseau/02-chapitre-18-ssh-se-connecter-a-distance.md)
-    - [Chapitre 19 — Transférer des fichiers](09-partie-5-linux-en-reseau/03-chapitre-19-transferer-des-fichiers.md)
-- [PARTIE 6 — Entretenir le système](10-partie-6-entretenir-le-systeme/index.md)
-    - [Chapitre 20 — Gérer les paquets et logiciels](10-partie-6-entretenir-le-systeme/01-chapitre-20-gerer-les-paquets-et-logiciels.md)
-    - [Chapitre 21 — Stockage et espace disque](10-partie-6-entretenir-le-systeme/02-chapitre-21-stockage-et-espace-disque.md)
-    - [Chapitre 22 — Archives et compression](10-partie-6-entretenir-le-systeme/03-chapitre-22-archives-et-compression.md)
-    - [Chapitre 23 — Sauvegardes](10-partie-6-entretenir-le-systeme/04-chapitre-23-sauvegardes.md)
-- [PARTIE 7 — Diagnostiquer, sécuriser, automatiser](11-partie-7-diagnostiquer-securiser-automatiser/index.md)
-    - [Chapitre 24 — Diagnostic système (méthode)](11-partie-7-diagnostiquer-securiser-automatiser/01-chapitre-24-diagnostic-systeme-methode.md)
-    - [Chapitre 25 — Sécurité de base (durcissement)](11-partie-7-diagnostiquer-securiser-automatiser/02-chapitre-25-securite-de-base-durcissement.md)
-    - [Chapitre 26 — Automatiser avec Bash (admin)](11-partie-7-diagnostiquer-securiser-automatiser/03-chapitre-26-automatiser-avec-bash-admin.md)
-    - [Chapitre 27 — Mini-projets pratiques](11-partie-7-diagnostiquer-securiser-automatiser/04-chapitre-27-mini-projets-pratiques.md)
-- [Synthèse finale](12-synthese-finale.md)
-- [Annexes](13-annexes.md)
+- [PARTIE 1 — Survivre dans le terminal](01-partie-1-survivre-dans-le-terminal/index.md)
+    - [Chapitre 1 — Le terminal, le shell et l'aide](01-partie-1-survivre-dans-le-terminal/01-chapitre-1-le-terminal-le-shell-et-l-aide.md)
+    - [Chapitre 2 — Se repérer dans l'arborescence](01-partie-1-survivre-dans-le-terminal/02-chapitre-2-se-reperer-dans-l-arborescence.md)
+    - [Chapitre 3 — Lire le contenu des fichiers](01-partie-1-survivre-dans-le-terminal/03-chapitre-3-lire-le-contenu-des-fichiers.md)
+    - [Chapitre 4 — Chercher, filtrer et transformer du texte](01-partie-1-survivre-dans-le-terminal/04-chapitre-4-chercher-filtrer-et-transformer-du-text.md)
+- [PARTIE 2 — Manipuler le système de fichiers](02-partie-2-manipuler-le-systeme-de-fichiers/index.md)
+    - [Chapitre 5 — Créer, copier, déplacer, supprimer](02-partie-2-manipuler-le-systeme-de-fichiers/01-chapitre-5-creer-copier-deplacer-supprimer.md)
+    - [Chapitre 6 — Éditer des fichiers dans le terminal](02-partie-2-manipuler-le-systeme-de-fichiers/02-chapitre-6-editer-des-fichiers-dans-le-terminal.md)
+    - [Chapitre 7 — Liens, redirections et tuyaux](02-partie-2-manipuler-le-systeme-de-fichiers/03-chapitre-7-liens-redirections-et-tuyaux.md)
+    - [Chapitre 8 — Variables d'environnement et configuration du shell](02-partie-2-manipuler-le-systeme-de-fichiers/04-chapitre-8-variables-d-environnement-et-configurat.md)
+- [PARTIE 3 — Qui a le droit de quoi](03-partie-3-qui-a-le-droit-de-quoi/index.md)
+    - [Chapitre 9 — Comprendre les permissions](03-partie-3-qui-a-le-droit-de-quoi/01-chapitre-9-comprendre-les-permissions.md)
+    - [Chapitre 10 — Propriété, utilisateurs et groupes](03-partie-3-qui-a-le-droit-de-quoi/02-chapitre-10-propriete-utilisateurs-et-groupes.md)
+    - [Chapitre 11 — sudo et l'élévation de privilèges](03-partie-3-qui-a-le-droit-de-quoi/03-chapitre-11-sudo-et-l-elevation-de-privileges.md)
+    - [Chapitre 12 — Permissions avancées (panorama)](03-partie-3-qui-a-le-droit-de-quoi/04-chapitre-12-permissions-avancees-panorama.md)
+- [PARTIE 4 — La machine vivante](04-partie-4-la-machine-vivante/index.md)
+    - [Chapitre 13 — Les processus](04-partie-4-la-machine-vivante/01-chapitre-13-les-processus.md)
+    - [Chapitre 14 — Les services avec systemd](04-partie-4-la-machine-vivante/02-chapitre-14-les-services-avec-systemd.md)
+    - [Chapitre 15 — Les logs et journaux](04-partie-4-la-machine-vivante/03-chapitre-15-les-logs-et-journaux.md)
+    - [Chapitre 16 — Tâches planifiées](04-partie-4-la-machine-vivante/04-chapitre-16-taches-planifiees.md)
+- [PARTIE 5 — Linux en réseau](05-partie-5-linux-en-reseau/index.md)
+    - [Chapitre 17 — Les bases du réseau Linux](05-partie-5-linux-en-reseau/01-chapitre-17-les-bases-du-reseau-linux.md)
+    - [Chapitre 18 — SSH : se connecter à distance](05-partie-5-linux-en-reseau/02-chapitre-18-ssh-se-connecter-a-distance.md)
+    - [Chapitre 19 — Transférer des fichiers](05-partie-5-linux-en-reseau/03-chapitre-19-transferer-des-fichiers.md)
+- [PARTIE 6 — Entretenir le système](06-partie-6-entretenir-le-systeme/index.md)
+    - [Chapitre 20 — Gérer les paquets et logiciels](06-partie-6-entretenir-le-systeme/01-chapitre-20-gerer-les-paquets-et-logiciels.md)
+    - [Chapitre 21 — Stockage et espace disque](06-partie-6-entretenir-le-systeme/02-chapitre-21-stockage-et-espace-disque.md)
+    - [Chapitre 22 — Archives et compression](06-partie-6-entretenir-le-systeme/03-chapitre-22-archives-et-compression.md)
+    - [Chapitre 23 — Sauvegardes](06-partie-6-entretenir-le-systeme/04-chapitre-23-sauvegardes.md)
+- [PARTIE 7 — Diagnostiquer, sécuriser, automatiser](07-partie-7-diagnostiquer-securiser-automatiser/index.md)
+    - [Chapitre 24 — Diagnostic système (méthode)](07-partie-7-diagnostiquer-securiser-automatiser/01-chapitre-24-diagnostic-systeme-methode.md)
+    - [Chapitre 25 — Sécurité de base (durcissement)](07-partie-7-diagnostiquer-securiser-automatiser/02-chapitre-25-securite-de-base-durcissement.md)
+    - [Chapitre 26 — Automatiser avec Bash (admin)](07-partie-7-diagnostiquer-securiser-automatiser/03-chapitre-26-automatiser-avec-bash-admin.md)
+    - [Chapitre 27 — Mini-projets pratiques](07-partie-7-diagnostiquer-securiser-automatiser/04-chapitre-27-mini-projets-pratiques.md)
+- [Synthèse finale](08-synthese-finale.md)
+- [Annexes](09-annexes.md)

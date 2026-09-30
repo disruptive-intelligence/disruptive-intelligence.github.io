@@ -119,55 +119,6 @@ Certaines explications de topologie doivent tendre vers 30 % de texte et 70 % de
 
 ---
 
-### Les trois niveaux de lecture
-
-**Ce cours distingue trois statuts, et il ne faut pas les confondre.** Vingt-cinq acronymes mémorisés au même niveau ne servent à rien ; trois catégories bien tenues changent une carrière.
-
-| Niveau | Ce qu'on attend de vous | Exemples |
-|---|---|---|
-| 🧠 **À MAÎTRISER** | **Savoir raisonner avec.** C'est le corps du cours : vous devez pouvoir expliquer le rôle, les dépendances, l'effet d'une panne et les compromis | Résolution de noms · routage · pare-feu · segmentation · identité · certificats · flux · virtualisation · stockage |
-| 🔭 **À RECONNAÎTRE** | **Savoir ce que ça signifie quand ça apparaît** sur un schéma ou dans une réunion — et quelle question poser. Pas configurer, pas concevoir | BGP · MPLS · SD-WAN · VXLAN · HSM · NAC · hyperconvergence · maillage de services |
-| 📚 **À APPROFONDIR** | **Savoir que ça existe et où chercher.** Leur maîtrise relève d'une formation dédiée | Configuration des protocoles de routage · administration d'un réseau de stockage · conception d'un système distribué |
-
-⚠️ **Le contrat pédagogique du niveau 🔭 est explicite** : *vous n'avez pas besoin de savoir configurer ces technologies pour ce cours. Vous devez en revanche comprendre ce qu'elles impliquent lorsqu'elles apparaissent.*
-
-**Chaque bloc 🔭 répond à six questions, et à six seulement** :
-
-```
-   ①  Qu'est-ce que c'est ?
-   ②  Quel problème cela résout-il ?
-   ③  Où le rencontre-t-on dans un SI ?
-   ④  Qu'est-ce que cela change dans les flux et les dépendances ?
-   ⑤  Quel nouveau coût ou risque cela introduit-il ?
-   ⑥  Que demander si je le vois sur un schéma ou l'entends en réunion ?
-```
-
-
----
-
-### Comment lire les blocs de ce cours
-
-| Bloc | Signification |
-|---|---|
-| 🖼 **SCHÉMA** | Représentation. **Elle porte l'information, elle ne l'illustre pas** |
-| ❓ **QUE VOYEZ-VOUS ?** | Questions posées **avant** l'explication. Cherchez avant de lire |
-| 👁 **CE QU'IL FALLAIT OBSERVER** | Ce qui distingue un œil exercé d'un débutant |
-| 🔴 **FIL ROUGE** | Un fragment du schéma d'HELIOMED s'éclaire |
-| 🏭 **TROIS TAILLES** | Le même composant chez Atelier Martin, HELIOMED et Novaris |
-| ⚖️ **CONTRAINTE ET COÛT** | Ce que le composant résout, ce qu'il coûte — *principe du coût* |
-| 🔥 **SCÉNARIO** | Une panne réelle : symptôme · hypothèse naïve · dépendance réelle · ce que le schéma aurait dû montrer |
-| 🗣 **VOCABULAIRE DE RÉUNION** | Ce que vous entendrez · ce que la personne veut dire · **ce qu'il faut vérifier avant de le croire** |
-| 🔭 **À RECONNAÎTRE** | Une technologie que vous rencontrerez sans avoir à la maîtriser · six questions |
-| 🔬 **MINI-LAB** | Exercice sur schéma, avec corrigé commenté |
-| 🎯 **QUELLE ERREUR ÇA ÉVITE ?** | Une situation · la mauvaise décision · ce qui l'aurait évitée |
-| 👁 **CE QU'IL FALLAIT OBSERVER** | Ce qui distingue un œil exercé d'un débutant |
-| 🏭 **TROIS TAILLES** | Le même composant chez Atelier Martin, HELIOMED et Novaris |
-| ⚖️ **CONTRAINTE ET COÛT** | Ce que le composant résout · ce qu'il coûte — *principe du coût* |
-| ⚠️ **PIÈGE** | Erreur de lecture fréquente |
-| 📌 **LIMITES** | Ce que le schéma ne dit pas |
-
----
-
 ## Sommaire
 
 - [PARTIE I — Lire un système d'information](01-partie-i-lire-un-systeme-d-information/index.md)
@@ -180,16 +131,17 @@ Certaines explications de topologie doivent tendre vers 30 % de texte et 70 % de
     - [Chapitre 7 — Ce que fait un architecte, ce que fait un lecteur](01-partie-i-lire-un-systeme-d-information/07-chapitre-7-ce-que-fait-un-architecte-ce-que-fait-u.md)
 - [PARTIE II — Les composants d'infrastructure](02-partie-ii-les-composants-d-infrastructure.md)
 - [Préambule — Le socle réseau minimal](03-preambule-le-socle-reseau-minimal/index.md)
-    - [Chapitre 8 — Le commutateur](03-preambule-le-socle-reseau-minimal/01-chapitre-8-le-commutateur.md)
-    - [Chapitre 9 — Le routeur](03-preambule-le-socle-reseau-minimal/02-chapitre-9-le-routeur.md)
-    - [Chapitre 10 — Le pare-feu](03-preambule-le-socle-reseau-minimal/03-chapitre-10-le-pare-feu.md)
-    - [Chapitre 11 — Le mandataire sortant](03-preambule-le-socle-reseau-minimal/04-chapitre-11-le-mandataire-sortant.md)
-    - [Chapitre 12 — Le mandataire inverse](03-preambule-le-socle-reseau-minimal/05-chapitre-12-le-mandataire-inverse.md)
-    - [Chapitre 13 — Le répartiteur de charge](03-preambule-le-socle-reseau-minimal/06-chapitre-13-le-repartiteur-de-charge.md)
-    - [Chapitre 14 — La résolution de noms](03-preambule-le-socle-reseau-minimal/07-chapitre-14-la-resolution-de-noms.md)
-    - [Chapitre 15 — L'attribution d'adresses](03-preambule-le-socle-reseau-minimal/08-chapitre-15-l-attribution-d-adresses.md)
-    - [Chapitre 16 — L'annuaire](03-preambule-le-socle-reseau-minimal/09-chapitre-16-l-annuaire.md)
-    - [Chapitre 17 — L'infrastructure de clés](03-preambule-le-socle-reseau-minimal/10-chapitre-17-l-infrastructure-de-cles.md)
+    - [P.4 Traduction d'adresses](03-preambule-le-socle-reseau-minimal/01-p-4-traduction-d-adresses.md)
+    - [Chapitre 8 — Le commutateur](03-preambule-le-socle-reseau-minimal/02-chapitre-8-le-commutateur.md)
+    - [Chapitre 9 — Le routeur](03-preambule-le-socle-reseau-minimal/03-chapitre-9-le-routeur.md)
+    - [Chapitre 10 — Le pare-feu](03-preambule-le-socle-reseau-minimal/04-chapitre-10-le-pare-feu.md)
+    - [Chapitre 11 — Le mandataire sortant](03-preambule-le-socle-reseau-minimal/05-chapitre-11-le-mandataire-sortant.md)
+    - [Chapitre 12 — Le mandataire inverse](03-preambule-le-socle-reseau-minimal/06-chapitre-12-le-mandataire-inverse.md)
+    - [Chapitre 13 — Le répartiteur de charge](03-preambule-le-socle-reseau-minimal/07-chapitre-13-le-repartiteur-de-charge.md)
+    - [Chapitre 14 — La résolution de noms](03-preambule-le-socle-reseau-minimal/08-chapitre-14-la-resolution-de-noms.md)
+    - [Chapitre 15 — L'attribution d'adresses](03-preambule-le-socle-reseau-minimal/09-chapitre-15-l-attribution-d-adresses.md)
+    - [Chapitre 16 — L'annuaire](03-preambule-le-socle-reseau-minimal/10-chapitre-16-l-annuaire.md)
+    - [Chapitre 17 — L'infrastructure de clés](03-preambule-le-socle-reseau-minimal/11-chapitre-17-l-infrastructure-de-cles.md)
 - [PARTIE III — Les serveurs et l'exécution](04-partie-iii-les-serveurs-et-l-execution/index.md)
     - [Chapitre 18 — Le serveur web](04-partie-iii-les-serveurs-et-l-execution/01-chapitre-18-le-serveur-web.md)
     - [Chapitre 19 — Le serveur applicatif](04-partie-iii-les-serveurs-et-l-execution/02-chapitre-19-le-serveur-applicatif.md)

@@ -107,3 +107,4 @@ Les épisodes DARKSTREAM jalonnent le cours aux moments où le concept enseigné
     - [Annexe E — Grille d'évaluation de crédibilité](10-annexes/05-annexe-e-grille-d-evaluation-de-credibilite.md)
     - [Annexe F — Templates de livrables](10-annexes/06-annexe-f-templates-de-livrables.md)
     - [Annexe G — Ressources et veille](10-annexes/07-annexe-g-ressources-et-veille.md)
+- [Les quatre idées centrales](11-les-quatre-idees-centrales.md)

@@ -140,7 +140,6 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 
 ### Table des matières
 
-
 #### Partie I — Fondations
 
 - **Chapitre 0 — Préparer son environnement de travail**
@@ -149,19 +148,16 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - Chapitre 3 — Comment fonctionne le web (vu côté collecteur)
 - Chapitre 4 — Choisir la source la plus propre
 
-
 #### Partie II — Premières collectes
 
 - Chapitre 5 — Premières requêtes avec `requests`
 - Chapitre 6 — Parser du HTML avec BeautifulSoup
 - Chapitre 7 — Extraction structurée d’une page
 
-
 #### Partie III — Structurer et nettoyer les données
 
 - Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)
 - Chapitre 9 — Nettoyer, normaliser, enrichir
-
 
 #### Partie IV — Passer à l’échelle
 
@@ -169,16 +165,27 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - Chapitre 11 — Utiliser des APIs publiques
 - Chapitre 12 — Bonnes pratiques professionnelles
 
-
 #### Partie V — Enquête, veille et reporting
 
 - Chapitre 13 — Veille et détection de changements
 - Chapitre 14 — Du script au rapport d’enquête
 
+#### Partie VI — Projet final
+
+- Chapitre 15 — Outil OSINT de collecte web défensive
+
+#### Annexes
+
+- A — Sites d’entraînement légaux
+- B — Modules à explorer ensuite
+- C — Repères juridiques à vérifier avant usage réel
+- D — Modèle de fiche d’enquête
+
+-----
+
 ## Sommaire
 
-- [Partie VI — Projet final](01-partie-vi-projet-final/index.md)
-    - [Chapitre 0 — Préparer son environnement de travail](01-partie-vi-projet-final/01-chapitre-0-preparer-son-environnement-de-travail.md)
+- [Chapitre 0 — Préparer son environnement de travail](01-chapitre-0-preparer-son-environnement-de-travail.md)
 - [Partie I — Fondations](02-partie-i-fondations/index.md)
     - [Chapitre 1 — Qu’est-ce que l’OSINT et le web scraping ?](02-partie-i-fondations/01-chapitre-1-quest-ce-que-losint-et-le-web-scraping.md)
     - [Chapitre 2 — Cadre légal, éthique et OPSEC du scraping](02-partie-i-fondations/02-chapitre-2-cadre-legal-ethique-et-opsec-du-scrapin.md)

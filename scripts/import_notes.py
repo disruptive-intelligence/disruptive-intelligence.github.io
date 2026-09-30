@@ -56,6 +56,8 @@ PLACES = {
     "Cyber/99_Concepts/Analyste_SOC.md": ("cyber", "cyberdefense"),
     "Cyber/99_Concepts/HTB_Attack Surface Management.md": ("cyber", "cyberdefense"),
     "Cyber/99_Concepts/VirusTotal.md": ("cyber", "outils"),
+    "Cyber/04_Hardening/HTB_Solutions de sécurité.md": ("cyber", "outils"),
+    "Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md": ("cyber", "concepts"),
     "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
     "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
     "Cyber/Red_Teaming.md": ("cyber", "cti"),
@@ -99,8 +101,8 @@ LAB_IP = re.compile(r"\b10\.(10|129)\.(\d{1,3}\.\d{1,3})\b")
 LAB_IP_TO = {"10": "10.0", "129": "10.1"}
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
 SPLIT_AT = 150_000       # caractères : au-delà, la note est toujours découpée en pages
-SPLIT_SECTIONS_AT = 20_000   # note plus longue avec au moins trois grandes sections : une page par section
-MIN_SECTION = 2_000      # page plus courte (intertitre, « Fin du cours ») : rattachée à sa voisine
+SPLIT_SECTIONS_AT = 15_000   # note plus longue avec au moins trois grandes sections : une page par section
+MIN_SECTION = 1_500      # page plus courte (intertitre, « Fin du cours ») : rattachée à sa voisine
 MIN_CHAPTER = 300        # un vrai chapitre garde sa page, sauf s'il est vide
 MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glossaire) : restent dans la page de leur partie
 MIN_SPLIT_PARTS = 8_000  # fiche plus courte : pas de sous-pages même si elle a des parties
@@ -138,8 +140,8 @@ def planned(tree, dom, cat):
     for d in tree:
         if d["id"] == dom:
             for c in d.get("categories", []):
-                if c["id"] == cat:
-                    return c.get("notes") or []
+                if c["id"] == cat:          # notes directes, ou réparties en sous-rubriques (groups)
+                    return (c.get("notes") or []) + [n for g in c.get("groups") or [] for n in g.get("notes") or []]
     raise ValueError(f"catégorie inconnue dans data/bibliotheque.yml : {dom}/{cat}")
 
 
@@ -533,16 +535,22 @@ def structure(body, shield, sections_only=False):
         return False
 
     pre, nodes, group, current, started = [], [], None, None, mode == "sections"
-    bounds = {i: (lv, kind) for (i, lv, _), kind in zip(heads, kinds) if lv <= chap_lv or kind == "part"}
-    skipping = False
+    # Parties : seulement au niveau principal (un sommaire écrit à la main répète « ### Partie V — … »)
+    part_lv = min((lv for (_, lv, _), k in zip(heads, kinds) if k == "part"), default=0)
+    bounds = {i: (lv, kind) for (i, lv, _), kind in zip(heads, kinds)
+              if lv <= chap_lv or (kind == "part" and lv <= part_lv)}
+    skipping = None                                   # niveau du sommaire manuel en cours d'omission
     for i, line in enumerate(lines):
+        h = HEADING.match(line)
+        if skipping is not None and h and len(h.group(1)) > skipping:
+            continue                                  # titres internes du sommaire : omis avec lui
         if i in bounds:
             lv, kind = bounds[i]
-            title = heading_text(HEADING.match(line).group(2), shield)
-            k = next(n for n, h in enumerate(heads) if h[0] == i)
-            skipping = False
+            title = heading_text(h.group(2), shield)
+            k = next(n for n, x in enumerate(heads) if x[0] == i)
+            skipping = None
             if kind == "toc" and not started:
-                skipping, current = True, None
+                skipping, current = lv, None
                 continue
             if kind == "annex" and mode == "chapters":
                 if re.fullmatch(r"(?i)annexes?\W*", title):           # « ANNEXES » ouvre le groupe
@@ -582,7 +590,7 @@ def structure(body, shield, sections_only=False):
             pre.append(line)
             current = None
             continue
-        if skipping:
+        if skipping is not None:
             continue
         (current["lines"] if current else pre).append(line)
     nodes = merge_small(nodes, pre, shield)

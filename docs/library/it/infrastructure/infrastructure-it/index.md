@@ -46,3 +46,4 @@ source: IT/03_Networking/Infrastructure_IT.md
 - [Partie VII — Opérations, monitoring ET cas de synthèse](07-partie-vii-operations-monitoring-et-cas-de-synthes.md)
 - [Annexes](08-annexes.md)
 - [Questions essentielles](09-questions-essentielles.md)
+- [Réponses flash](10-reponses-flash.md)

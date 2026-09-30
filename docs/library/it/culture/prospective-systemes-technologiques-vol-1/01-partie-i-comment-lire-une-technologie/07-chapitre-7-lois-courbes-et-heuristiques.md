@@ -13,7 +13,7 @@ ce qui est vrai, et à quel titre
 
 Le vocabulaire de la technologie est peuplé de « lois ». Loi de Moore, courbe en S, hype cycle, TRL, loi d'Amara. Elles sont utiles. Elles ne sont pas du même type, et les confondre produit des erreurs prévisibles.
 
-### 7.1 Quatre statuts, à ne jamais mélanger
+## 7.1 Quatre statuts, à ne jamais mélanger
 
 | Statut | Définition | Ce qu'on peut en faire | Exemple |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Une loi physique interdit. Une régularité empirique décrit tant qu'elle dure.
 
 **L'erreur type consiste à traiter un modèle narratif comme une régularité empirique**, c'est-à-dire à en tirer une prévision. Nous y venons en 7.5.
 
-### 7.2 Loi de Moore
+## 7.2 Loi de Moore
 
 **Ce que c'était.** En 1965, Gordon Moore observe que le nombre de composants par circuit intégré double à intervalle régulier, et prévoit la poursuite de cette tendance. La formulation est révisée en 1975 à un doublement environ tous les deux ans.
 
@@ -34,7 +34,7 @@ Une loi physique interdit. Une régularité empirique décrit tant qu'elle dure.
 
 **Ce qu'elle est devenue.** Le doublement de la densité de transistors s'est poursuivi longtemps, mais plusieurs corollaires qu'on lui associait ont cessé plus tôt : l'augmentation de la fréquence d'horloge, la baisse du coût par transistor à chaque nœud, et la réduction de la consommation à performance constante. C'est un point capital pour la suite du cours : **quand une régularité cesse, elle cesse rarement d'un coup, et jamais sur toutes ses dimensions en même temps**. On continue à observer la dimension qui tient et on en conclut que rien n'a changé.
 
-### 7.3 Courbes en S de diffusion
+## 7.3 Courbes en S de diffusion
 
 **Ce qu'elles décrivent.** L'adoption d'une technologie suit fréquemment une forme en S : démarrage lent, accélération, saturation. La forme se retrouve dans de nombreux cas historiques, ce qui en fait une régularité empirique solide.
 
@@ -46,7 +46,7 @@ Ensuite, **une phase de croissance rapide ne prouve pas qu'on est sur une courbe
 
 Enfin, **la courbe décrit et n'explique pas**. Elle ne dit pas quelle condition de diffusion a été franchie ni laquelle bloquera. C'est un résultat, pas un mécanisme — et ce cours porte sur les mécanismes.
 
-### 7.4 TRL : ce que l'échelle mesure et ce qu'elle masque
+## 7.4 TRL : ce que l'échelle mesure et ce qu'elle masque
 
 L'échelle de maturité technologique (*Technology Readiness Level*), issue du domaine spatial puis largement reprise, gradue de 1 à 9 le chemin du principe observé au système qualifié en opération.
 
@@ -62,7 +62,7 @@ L'échelle de maturité technologique (*Technology Readiness Level*), issue du d
 
 **En pratique :** un TRL est une information sur l'objet et sur celui qui l'annonce. Demandez toujours *TRL sur quelle dimension, dans quel environnement, évalué par qui*.
 
-### 7.5 Le *hype cycle*
+## 7.5 Le *hype cycle*
 
 pourquoi il est populaire, pourquoi ce n'est pas un instrument de mesure
 
@@ -79,7 +79,7 @@ Le modèle a été introduit par l'analyste Jackie Fenn chez Gartner en 1995, et
 
 **Retenez la formulation exacte :** un positionnement sur un *hype cycle* est une opinion d'analyste informée, pas un fait vérifié. Cela ne le disqualifie pas ; cela indique le poids qu'on peut lui donner.
 
-### 7.6 Amara, Jevons, et l'usage correct d'une heuristique
+## 7.6 Amara, Jevons, et l'usage correct d'une heuristique
 
 **Loi d'Amara.** Attribuée à Roy Amara : nous surestimons l'effet d'une technologie à court terme et le sous-estimons à long terme. C'est une heuristique, pas une régularité mesurable — elle n'est ni quantifiée, ni datée, ni réfutable telle quelle. Elle reste utile parce qu'elle nomme un biais réel et qu'elle rappelle que les deux erreurs de ce cours (surestimation et sous-estimation) coexistent souvent sur le même objet, à des horizons différents. Son abus consiste à l'invoquer pour justifier n'importe quelle prédiction en jouant sur l'horizon.
 
@@ -87,7 +87,7 @@ Le modèle a été introduit par l'analyste Jackie Fenn chez Gartner en 1995, et
 
 **Règle générale d'usage d'une heuristique :** elle sert à **ouvrir une question**, jamais à la clore. Le jour où vous entendez une heuristique servir de conclusion, c'est qu'elle a changé de statut sans prévenir.
 
-### 7.7 Utiliser un modèle dont on connaît les limites
+## 7.7 Utiliser un modèle dont on connaît les limites
 
 Aucun modèle de ce chapitre n'est à jeter. Trois règles suffisent à les utiliser sans se tromper.
 
@@ -105,45 +105,5 @@ Aucun modèle de ce chapitre n'est à jeter. Trois règles suffisent à les util
 * interroger un TRL sur sa dimension, son environnement et son évaluateur ;
 * utiliser le *hype cycle* comme vocabulaire sans le prendre pour une mesure ;
 * exiger un mécanisme derrière toute régularité que vous mobilisez.
-
----
-
-
-## Fin de la Partie I — Bilan
-
-🎓 **Ce que vous savez faire maintenant**
-
-Vous disposez de cinq instruments, et vous les avez tous utilisés au moins une fois :
-
-| Instrument | Ce qu'il vous permet |
-|---|---|
-| L'échelle d'abstraction | savoir de quel type d'objet on vous parle |
-| Les neuf conditions | savoir ce qui gouverne sa diffusion |
-| Les quatre questions | mobiliser tout cela en trois minutes, de mémoire |
-| Les ordres de grandeur | trancher ce qui se calcule, et localiser la difficulté |
-| L'administration de la preuve | trancher ce qui ne se calcule pas |
-
-Concrètement, vous pouvez désormais prendre une annonce technologique quelconque, dire de quoi elle parle, à quel échelon de preuve elle se situe, quelle condition bloque, si ses chiffres tiennent, et ce qui vous ferait changer d'avis. C'est déjà davantage que ce que produisent beaucoup d'analyses professionnelles.
-
-**Ce que vous ne savez pas encore**
-
-Vous n'avez encore aucune connaissance technique. Vos instruments sont affûtés et vides. Vous pouvez demander « quelle est la densité énergétique ? » sans savoir ce qu'est une densité énergétique acceptable ; vous pouvez demander « quel est le rendement de fabrication ? » sans savoir ce qui le détermine.
-
-C'est l'objet de la Partie II : onze familles technologiques, traitées selon une grille commune, précédées d'un chapitre sur les contraintes physiques qui les traversent toutes. Cette carte est un moyen, pas une finalité — vous ne la retiendrez pas en entier, et ce n'est pas nécessaire. Ce qui compte est que vos instruments aient de la matière sur laquelle s'exercer, et que vous commenciez à reconnaître les mêmes murs sous des noms différents.
-
----
-
----
-
----
-
-
-## Ouverture de la Partie II
-
-Vous disposez d'instruments. Ils sont affûtés et vides.
-
-Cette partie leur donne de la matière : onze familles technologiques, traitées selon une structure commune, suffisamment pour raisonner et pas davantage. Ce n'est pas une encyclopédie et vous ne la retiendrez pas en entier — ce n'est pas nécessaire. Ce qui compte est que vous commenciez à reconnaître, sous des noms différents, **les mêmes murs**.
-
-C'est l'objet de ce premier chapitre. Il ne traite d'aucune technologie. Il traite de ce qui les contraint toutes.
 
 ---

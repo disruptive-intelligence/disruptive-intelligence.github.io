@@ -81,4 +81,5 @@ source: Cyber/05_Cyberdefense/20260401_Reponse_Incident.md
     - [Annexe F — Tableau d'outils de référence IR](09-annexes/06-annexe-f-tableau-d-outils-de-reference-ir.md)
     - [Annexe G — Grilles d'évaluation et RACI](09-annexes/07-annexe-g-grilles-d-evaluation-et-raci.md)
 - [Questions essentielles](10-questions-essentielles.md)
-- [Réponses flash](11-reponses-flash.md)
+- [Questions complémentaires](11-questions-complementaires.md)
+- [Réponses flash](12-reponses-flash.md)

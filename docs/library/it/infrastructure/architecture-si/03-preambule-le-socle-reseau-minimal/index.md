@@ -84,80 +84,16 @@ up:
 
 ⚠️ **Ce que cela change en lecture** : sur un schéma, une flèche sans sens est ambiguë — §3.2. **Le sens d'établissement est l'information la plus déterminante d'un flux**, et c'est celle qui manque le plus souvent.
 
-
-## P.4 Traduction d'adresses
-
-**Un mécanisme omniprésent dans les architectures réelles, et quasi absent des schémas.**
-
-**Le problème qu'il résout** : les adresses employées à l'intérieur d'une organisation ne sont pas utilisables directement sur Internet. Il faut donc les traduire au passage.
-
-🖼 **SCHÉMA P.2 — Les deux traductions**
-
-```
-  SORTANTE — plusieurs machines internes derrière une adresse publique
-
-     10.0.4.23 ──┐
-     10.0.4.24 ──┼──► [ traduction ] ──► 203.0.113.7 ──► Internet
-     10.0.4.25 ──┘
-     → Vu de l'extérieur, les trois machines ont LA MÊME adresse.
-
-  ENTRANTE — une adresse publique redirigée vers une machine interne
-
-     Internet ──► 203.0.113.7:443 ──► [ traduction ] ──► 10.0.4.80:8443
-     → C'est ainsi qu'un service interne devient joignable de l'extérieur.
-```
-
-
-**Les quatre conséquences en lecture**, et elles comptent toutes :
-
-| Conséquence | Où elle se manifeste |
-|---|---|
-| **L'adresse observée n'est pas celle de la machine d'origine** | Journaux d'un serveur derrière une traduction · investigation |
-| Plusieurs machines partagent une adresse vue de l'extérieur | Blocage d'une adresse : on bloque tout le monde |
-| Un service exposé n'est pas à l'adresse qu'on croit | Publication, pare-feu |
-| **Un composant intermédiaire peut aussi masquer l'origine** | Mandataire inverse, répartiteur de charge — §34.1 |
-
-⚠️ **La première ligne est la plus lourde de conséquences.** Elle explique pourquoi corréler un journal applicatif avec un utilisateur réel est difficile — §34.1 — et pourquoi une adresse dans un journal n'identifie pas une machine sans information complémentaire.
-
-
-## P.5 Deux familles d'adressage
-
-📌 **Ce qu'il faut savoir, et rien de plus** :
-
-| | **IPv4** | **IPv6** |
-|---|---|---|
-| Espace d'adressage | Limité — d'où la traduction d'adresses | Très vaste |
-| Traduction d'adresses | **Structurante** : la quasi-totalité des réseaux internes en dépend | **Généralement inutile** — les machines peuvent avoir une adresse routable |
-| Conséquence en lecture | L'adresse observée n'est souvent pas l'origine | **L'adresse observée peut être celle de la machine** |
-| Présence | Partout | Croissante, souvent en parallèle du premier |
-
-⚠️ **Pourquoi cela figure dans ce cours** : le modèle mental *« adresse interne + traduction »* que nous employons dans tout le volume **n'est pas universel**. Une machine peut disposer simultanément des deux familles — c'est la double pile — et suivre alors **deux chemins différents selon la famille employée**.
-
-**La question de lecture qui en découle** : *ce schéma décrit-il un adressage, ou les deux ?* Dans la majorité des schémas, la question n'est pas tranchée — et un flux peut passer dans une famille et être bloqué dans l'autre.
-
-
-## P.6 Ce que ce préambule permet de faire
-
-☐ Expliquer pourquoi deux machines d'un même segment se joignent sans routeur
-☐ Expliquer pourquoi une machine sans passerelle ne sort pas de son segment
-☐ Distinguer le sens d'établissement d'un flux, et savoir pourquoi il détermine tout
-☐ Comprendre pourquoi une adresse dans un journal n'identifie pas une machine
-☐ Savoir qu'un service exposé n'est pas nécessairement à l'adresse annoncée
-☐ Savoir que le modèle « adresse interne + traduction » n'est pas universel
-
-**Ce qu'il ne permet pas, volontairement** : dimensionner un plan d'adressage, choisir un protocole de routage, configurer quoi que ce soit — *principe de coupe*.
-
----
-
 ## Dans cette partie
 
-- [Chapitre 8 — Le commutateur](01-chapitre-8-le-commutateur.md)
-- [Chapitre 9 — Le routeur](02-chapitre-9-le-routeur.md)
-- [Chapitre 10 — Le pare-feu](03-chapitre-10-le-pare-feu.md)
-- [Chapitre 11 — Le mandataire sortant](04-chapitre-11-le-mandataire-sortant.md)
-- [Chapitre 12 — Le mandataire inverse](05-chapitre-12-le-mandataire-inverse.md)
-- [Chapitre 13 — Le répartiteur de charge](06-chapitre-13-le-repartiteur-de-charge.md)
-- [Chapitre 14 — La résolution de noms](07-chapitre-14-la-resolution-de-noms.md)
-- [Chapitre 15 — L'attribution d'adresses](08-chapitre-15-l-attribution-d-adresses.md)
-- [Chapitre 16 — L'annuaire](09-chapitre-16-l-annuaire.md)
-- [Chapitre 17 — L'infrastructure de clés](10-chapitre-17-l-infrastructure-de-cles.md)
+- [P.4 Traduction d'adresses](01-p-4-traduction-d-adresses.md)
+- [Chapitre 8 — Le commutateur](02-chapitre-8-le-commutateur.md)
+- [Chapitre 9 — Le routeur](03-chapitre-9-le-routeur.md)
+- [Chapitre 10 — Le pare-feu](04-chapitre-10-le-pare-feu.md)
+- [Chapitre 11 — Le mandataire sortant](05-chapitre-11-le-mandataire-sortant.md)
+- [Chapitre 12 — Le mandataire inverse](06-chapitre-12-le-mandataire-inverse.md)
+- [Chapitre 13 — Le répartiteur de charge](07-chapitre-13-le-repartiteur-de-charge.md)
+- [Chapitre 14 — La résolution de noms](08-chapitre-14-la-resolution-de-noms.md)
+- [Chapitre 15 — L'attribution d'adresses](09-chapitre-15-l-attribution-d-adresses.md)
+- [Chapitre 16 — L'annuaire](10-chapitre-16-l-annuaire.md)
+- [Chapitre 17 — L'infrastructure de clés](11-chapitre-17-l-infrastructure-de-cles.md)

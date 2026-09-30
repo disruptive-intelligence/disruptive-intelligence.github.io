@@ -1147,10 +1147,30 @@ def library_nav(library):
     avec ses notes, puis le Glossaire."""
     nav = []
     for dom in library:
-        nav.append({dom["label"]: [{cat["label"]: [cat["src"]] + [note_nav(n) for n in cat["notes"]]}
+        nav.append({dom["label"]: [{cat["label"]: [cat["src"]] + category_nav(cat)}
                                    if cat["notes"] else {cat["label"]: cat["src"]}
                                    for cat in dom["categories"]]})
     return nav + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire": [GLOSSARY_SRC]}]
+
+
+def category_nav(cat):
+    """Notes d'une catégorie ; celles d'une sous-rubrique (group) sous une entrée dépliable."""
+    items = []
+    for label, notes in grouped(cat["notes"]):
+        entries = [note_nav(n) for n in notes]
+        items += [{label: entries}] if label else entries
+    return items
+
+
+def grouped(notes):
+    """[(sous-rubrique ou None, [notes consécutives])], dans l'ordre de data/bibliotheque.yml."""
+    out = []
+    for n in notes:
+        if out and out[-1][0] == n.get("group"):
+            out[-1][1].append(n)
+        else:
+            out.append((n.get("group"), [n]))
+    return out
 
 
 def note_nav(note):
@@ -1210,13 +1230,15 @@ def load_library(docs_dir, tree):
                 real[slug(title)] = note
                 real.setdefault(slug(stem), note)
             notes, used = [], set()
-            for title in cat.get("notes") or []:
+            planned = [(t, None) for t in cat.get("notes") or []] + [
+                (t, g["label"]) for g in cat.get("groups") or [] for t in g.get("notes") or []]
+            for title, group in planned:            # sous-rubrique (group) : menu et page de catégorie
                 hit = real.get(slug(title))
                 if hit:
-                    notes.append(hit)
+                    notes.append(dict(hit, group=group))
                     used.add(hit["src"])
                 else:
-                    notes.append({"title": title, "src": f"{base}/{slug(title)}.md", "imported": False})
+                    notes.append({"title": title, "src": f"{base}/{slug(title)}.md", "imported": False, "group": group})
             extra = {n["src"]: n for n in real.values() if n["src"] not in used}
             notes += list(extra.values())
             cats.append({"id": cat["id"], "label": cat["label"], "src": f"{base}/index.md", "notes": notes})
@@ -1233,10 +1255,12 @@ def pages_library(library):
             body = (f"# {cat['label']}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']} · "
                     f"{done}/{total} importée{'s' if done > 1 else ''}</span>\n\n")
             if cat["notes"]:
-                body += ('<ul class="kw-notes">' + "".join(
-                    f'<li class="{"is-done" if n["imported"] else "is-todo"}">'
-                    f'<a href="{href(cat["src"], n["src"])}">{esc(n["title"])}</a></li>' for n in cat["notes"])
-                    + "</ul>\n\n<span class=\"kw-muted\">● importée · ○ à importer depuis Obsidian</span>\n")
+                for label, notes in grouped(cat["notes"]):
+                    body += (f"## {label}\n\n" if label else "") + ('<ul class="kw-notes">' + "".join(
+                        f'<li class="{"is-done" if n["imported"] else "is-todo"}">'
+                        f'<a href="{href(cat["src"], n["src"])}">{esc(n["title"])}</a></li>' for n in notes)
+                        + "</ul>\n\n")
+                body += "<span class=\"kw-muted\">● importée · ○ à importer depuis Obsidian</span>\n"
             else:
                 body += '!!! note "Catégorie vide"\n    Aucune note pour l\'instant.\n'
             out.append((cat["src"], body))

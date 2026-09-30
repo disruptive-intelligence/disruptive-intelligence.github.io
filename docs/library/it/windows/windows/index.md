@@ -34,4 +34,5 @@ source: IT/02_Windows/Windows.md
 - [Partie VII — Hardening, cas de synthèse et référence](07-partie-vii-hardening-cas-de-synthese-et-reference.md)
 - [Annexes](08-annexes.md)
 - [Questions essentielles](09-questions-essentielles.md)
-- [Réponses flash](10-reponses-flash.md)
+- [Questions complémentaires](10-questions-complementaires.md)
+- [Réponses flash](11-reponses-flash.md)

@@ -22,17 +22,22 @@
       label: 🧬 Forensic
       notes: [Digital forensics]
     - id: hardening
-      label: 🧱 Hardening & architecture
-      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, HTB — Solutions de sécurité, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, HTB — Architecture et sécurité des systèmes, AppSec]
+      label: 🧱 Hardening
+      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, AppSec]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
       notes: [Analyste SOC, Réponse à incident, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", Vulnerability management & intelligence, HTB — Attack Surface Management, Cours MCS, GRC, IA & sécurité]
     - id: outils
-      label: 🧰 Outils
-      notes: [VirusTotal]
+      label: 🧰 Outils & solutions
+      # Sous-rubriques : à compléter au fil des notes (ex. « 📡 Scan & découverte », « 🕸️ Analyse web »)
+      groups:
+        - label: 🔎 Analyse & qualification d'IOC
+          notes: [VirusTotal]
+        - label: 🛡️ Solutions de sécurité
+          notes: [HTB — Solutions de sécurité]
     - id: concepts
       label: 💡 Concepts
-      notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", Cybersécurité du quotidien, VPN]
+      notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", HTB — Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
 
 - id: it
   label: 💻 IT
