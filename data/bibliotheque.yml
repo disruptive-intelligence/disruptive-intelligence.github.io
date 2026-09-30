@@ -23,10 +23,18 @@
       notes: [Digital forensics]
     - id: hardening
       label: 🧱 Hardening
-      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, AppSec]
+      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, AppSec]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
-      notes: [Analyste SOC, Réponse à incident, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", Vulnerability management & intelligence, HTB — Attack Surface Management, Cours MCS, GRC, IA & sécurité]
+      groups:
+        - label: 🛰️ Détection & réponse
+          notes: [Analyste SOC, Réponse à incident, Threat hunting]
+        - label: 🧭 Référentiels
+          notes: [MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)"]
+        - label: 🩹 Vulnérabilités & exposition
+          notes: [Vulnerability management & intelligence, HTB — Attack Surface Management, Cours MCS]
+        - label: 🏛️ Gouvernance & résilience
+          notes: [GRC, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, IA & sécurité]
     - id: outils
       label: 🧰 Outils & solutions
       # Sous-rubriques : à compléter au fil des notes (ex. « 📡 Scan & découverte », « 🕸️ Analyse web »)

@@ -58,6 +58,8 @@ PLACES = {
     "Cyber/99_Concepts/VirusTotal.md": ("cyber", "outils"),
     "Cyber/04_Hardening/HTB_Solutions de sécurité.md": ("cyber", "outils"),
     "Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md": ("cyber", "concepts"),
+    "Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md": ("cyber", "cyberdefense"),
+    "Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md": ("cyber", "cyberdefense"),
     "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
     "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
     "Cyber/Red_Teaming.md": ("cyber", "cti"),
