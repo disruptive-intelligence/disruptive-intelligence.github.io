@@ -1,6 +1,6 @@
 ---
 title: HTB — Solutions de sécurité
-source: Cyber/99_Concepts/HTB_Solutions de sécurité.md
+source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
 ---
 
 ## Sommaire
@@ -16,3 +16,4 @@ source: Cyber/99_Concepts/HTB_Solutions de sécurité.md
 - [Répartiteur de charge — Load Balancer](09-repartiteur-de-charge-load-balancer.md)
 - [Serveur mandataire — Proxy Server](10-serveur-mandataire-proxy-server.md)
 - [Solutions de sécurité de la messagerie — Email Security](11-solutions-de-securite-de-la-messagerie-email-secur.md)
+- [Analyse des résultats des outils de sécurité](12-analyse-des-resultats-des-outils-de-securite.md)

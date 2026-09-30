@@ -55,12 +55,6 @@ FOLDERS = {
 PLACES = {
     "Cyber/99_Concepts/Analyste_SOC.md": ("cyber", "cyberdefense"),
     "Cyber/99_Concepts/HTB_Attack Surface Management.md": ("cyber", "cyberdefense"),
-    "Cyber/99_Concepts/HTB_Identification des menaces et des logiciels malveillants.md": ("cyber", "cyberdefense"),
-    "Cyber/99_Concepts/HTB_IAM.md": ("cyber", "hardening"),
-    "Cyber/99_Concepts/HTB_Secure Network Design (RBAC, ABAC...).md": ("cyber", "hardening"),
-    "Cyber/99_Concepts/HTB_Solutions de sécurité.md": ("cyber", "hardening"),
-    "Cyber/99_Concepts/HTB_IT Security for Corporates.md": ("cyber", "hardening"),
-    "Cyber/99_Concepts/HTB_System Security.md": ("cyber", "hardening"),
     "Cyber/99_Concepts/VirusTotal.md": ("cyber", "outils"),
     "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
     "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
@@ -86,6 +80,8 @@ TITLES = {
     "IT/02_Windows/CS_CMD.md": "CMD — cheat sheet",
     "IT/03_Networking/networking_notion.md": "Notions réseau",
     "IT/Culture/Fiche_WebApp.md": "Applications web",
+    "IT/Culture/Fiche_How-The-Web-Works.md": "Fonctionnement du web : URL, DNS, HTTPS",
+    "IT/Fiche_Web-Requests.md": "HTTP & requêtes web",
 }
 SKIP = {"README.md"}
 # Documents du coffre qui ne sont pas des notes personnelles : jamais publiés (--all retire leur page).
@@ -107,6 +103,8 @@ SPLIT_SECTIONS_AT = 20_000   # note plus longue avec au moins trois grandes sect
 MIN_SECTION = 2_000      # page plus courte (intertitre, « Fin du cours ») : rattachée à sa voisine
 MIN_CHAPTER = 300        # un vrai chapitre garde sa page, sauf s'il est vide
 MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glossaire) : restent dans la page de leur partie
+MIN_SPLIT_PARTS = 8_000  # fiche plus courte : pas de sous-pages même si elle a des parties
+QUIZ_TITLE = re.compile(r"(?i)\bmini-?quiz\b")   # quiz de révision : gardés dans le coffre, pas publiés
 TOC_TITLE = re.compile(r"(?i)^(table des mati[eè]res|sommaire|table of contents)\b")
 PART_TITLE = re.compile(r"(?i)^(partie|part|volume|livre|module)\b")
 CHAPTER_TITLE = re.compile(r"(?i)^(chapitre|chapter|ch\.?|le[çc]on|lesson)\s*\d")
@@ -156,7 +154,7 @@ def guess_title(path, candidates):
 def vault_notes(vault):
     """Notes du coffre rangées dans un dossier (les fichiers de la racine et README sont ignorés)."""
     return sorted(p for p in vault.rglob("*.md")
-                  if ".obsidian" not in p.parts and ".git" not in p.parts and p.parent != vault and p.name not in SKIP
+                  if not {".obsidian", ".git", "_archives"} & set(p.parts) and p.parent != vault and p.name not in SKIP
                   and p.relative_to(vault).as_posix() not in EXCLUDED)
 
 
@@ -226,9 +224,13 @@ def is_split(text, title=""):
         heads = heads[1:]
     if sum(bool(CHAPTER_TITLE.match(t)) for _, _, t in heads) >= 3:
         return True
+    if sum(bool(PART_TITLE.match(t)) for _, _, t in heads) >= 2 and len(text) > MIN_SPLIT_PARTS:
+        return True                                   # fiche organisée en parties : une page par partie
     if len(text) > SPLIT_SECTIONS_AT and heads:
         top = min(lv for _, lv, _ in heads)
-        return sum(lv == top for _, lv, _ in heads) >= 3
+        count = sum(lv == top for _, lv, _ in heads)
+        # une suite de petites sections numérotées (fiche) reste d'un seul tenant
+        return count >= 3 and len(text) / count >= MIN_CHAPTER_AVG
     return False
 
 
@@ -480,6 +482,20 @@ def normalize_headings(text, title, shield):
     return "\n".join(rebase(out)).strip("\n")
 
 
+def drop_quizzes(body, shield):
+    """Sections « Mini-quiz » retirées de la page publiée (elles restent dans la note Obsidian)."""
+    out, skip = [], None
+    for line in body.split("\n"):
+        m = HEADING.match(line)
+        if m and skip is not None and len(m.group(1)) <= skip:
+            skip = None
+        if m and skip is None and QUIZ_TITLE.search(heading_text(m.group(2), shield)):
+            skip = len(m.group(1))
+        if skip is None:
+            out.append(line)
+    return "\n".join(out).rstrip("\n")
+
+
 def kind_of(text):
     for kind, pattern in (("toc", TOC_TITLE), ("part", PART_TITLE), ("chapter", CHAPTER_TITLE),
                           ("annex", ANNEX_TITLE), ("end", CONCLUSION_TITLE)):
@@ -727,7 +743,7 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         notes.append(f"{masked} IP de lab masquée(s)")
     shield = Shield()
     conv = Converter(vault, tree, index)
-    body = normalize_headings(conv.convert(text, source, shield), title, shield)
+    body = drop_quizzes(normalize_headings(conv.convert(text, source, shield), title, shield), shield)
     meta = {"title": title, "source": Path(rel).as_posix()}
     split = is_split(text, title)
     entry = note_target(dom, cat, title, split)       # même règle que build_index : les liens entrants tiennent
@@ -887,6 +903,11 @@ def main(argv=None):
     todo = [n.relative_to(vault).as_posix() for n in vault_notes(vault)] if args.all else args.notes
     index = build_index(vault, tree)
     code = 0
+    if args.all:                  # d'abord : une note fusionnée peut reprendre le titre (et les pages) d'une archivée
+        for src, files in existing.items():
+            if not (vault / src).is_file() or src in EXCLUDED:
+                remove_pages(files)
+                print(f"RETIRÉE : {src} (note absente du coffre ou exclue)")
     for rel in todo:
         try:
             entry, notes = write_note(vault, rel, tree, args.title, args.to, index, existing)
@@ -895,10 +916,6 @@ def main(argv=None):
             print(f"NON PUBLIÉE : {exc}", file=sys.stderr)
             code = 1
     if args.all:
-        for src, files in existing.items():
-            if not (vault / src).is_file() or src in EXCLUDED:
-                remove_pages(files)
-                print(f"RETIRÉE : {src} (note absente du coffre ou exclue)")
         used = {m for f in LIBRARY.rglob("*.md") for m in re.findall(r"assets/([^)\s\"]+)", f.read_text(encoding="utf-8"))}
         for image in (LIBRARY / "assets").glob("*") if (LIBRARY / "assets").exists() else []:
             if image.name not in used:                   # image qu'aucune page n'utilise plus

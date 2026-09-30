@@ -186,6 +186,18 @@ class SplitTests(VaultCase):
             pages, _ = self.build("IT/05_Scripting_Langage-Prog/Python.md", text)
         self.assertEqual(len(pages), 1)
 
+    def test_parts_split_small_sections_not_and_quiz_dropped(self):
+        f = "texte " * 350
+        sections = "".join(f"## {i}. Sujet {i}\n\n{f}\n\n" for i in range(1, 7))
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Bash.md",
+                              f"# Partie 1 — DNS\n\n{sections}# Partie 2 — HTTP\n\n{sections}"
+                              "## 33. Mini-quiz (15 questions)\n\nQ1 ?\n")
+        self.assertEqual([p.rsplit("/", 1)[-1] for p in pages], ["index.md", "01-partie-1-dns.md", "02-partie-2-http.md"])
+        self.assertNotIn("Mini-quiz", "".join(pages.values()))
+        small = "".join(f"## {i}. Point {i}\n\n{'mot ' * 250}\n\n" for i in range(1, 30))   # 29 × ~1 000 car.
+        pages, _ = self.build("IT/05_Scripting_Langage-Prog/Python.md", small)
+        self.assertEqual(list(pages), ["library/it/scripting/python.md"])            # fiche : une page
+
     def test_split_entry_matches_link_index(self):
         self.write("IT/Culture/SQL.md", self.course())
         index = imp.build_index(self.vault, TREE)

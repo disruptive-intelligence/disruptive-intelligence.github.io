@@ -23,16 +23,16 @@
       notes: [Digital forensics]
     - id: hardening
       label: 🧱 Hardening & architecture
-      notes: [HTB — Windows System Security, HTB — IAM, "HTB — Secure Network Design (RBAC, ABAC)", HTB — Solutions de sécurité, HTB — IT Security for Corporates, HTB — System Security, AppSec]
+      notes: [HTB — Windows System Security, HTB — Identités et contrôle d'accès, HTB — Solutions de sécurité, HTB — Sécurité IT en entreprise, HTB — Sauvegardes et reprise d'activité, HTB — Architecture et sécurité des systèmes, AppSec]
     - id: cyberdefense
       label: 🚨 Cyberdéfense
-      notes: [Analyste SOC, Réponse à incident, HTB — Réponse à incidents, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", HTB — Identification des menaces et des logiciels malveillants, HTB — Attack Surface Management, Vulnerability management & intelligence, Cours MCS, GRC, IA & sécurité]
+      notes: [Analyste SOC, Réponse à incident, Threat hunting, MITRE ATT&CK, "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)", Vulnerability management & intelligence, HTB — Attack Surface Management, Cours MCS, GRC, IA & sécurité]
     - id: outils
       label: 🧰 Outils
       notes: [VirusTotal]
     - id: concepts
       label: 💡 Concepts
-      notes: [Taxonomie cyber, HTB — Comprendre les types d'attaques, "HTB — Architecture système et sécurité matérielle", Cybersécurité du quotidien, VPN]
+      notes: [Taxonomie cyber, "HTB — Menaces, attaques et malwares", Cybersécurité du quotidien, VPN]
 
 - id: it
   label: 💻 IT
@@ -51,7 +51,7 @@
       notes: [Notions réseau, "PDU, headers, payload & encapsulation"]
     - id: web
       label: 🕸️ Web & applications
-      notes: [How the Web Works, Requêtes web, Applications web]
+      notes: ["Fonctionnement du web : URL, DNS, HTTPS", HTTP & requêtes web, Applications web]
     - id: infrastructure
       label: 🏗️ Infrastructure & architecture
       notes: [Infrastructure IT, Architecture SI, Matériel informatique & connectique]

@@ -3,6 +3,8 @@ title: HTB — Attack Surface Management
 source: Cyber/99_Concepts/HTB_Attack Surface Management.md
 ---
 
+> Fiche courte, complément des chapitres 28 et 29 du cours [Vulnerability management & intelligence](vulnerability-management-intelligence/index.md).
+
 - **ASM — Attack Surface Management** consiste à identifier, évaluer, réduire et surveiller en continu les éléments exposés pouvant être exploités par un attaquant.
 - Le processus varie selon l’organisation, mais repose généralement sur plusieurs étapes principales.
 - La surface d’attaque est la somme de tous les points qu’un attaquant est susceptible d’exploiter pour accéder aux systèmes et données d’une entreprise. Elle englobe :

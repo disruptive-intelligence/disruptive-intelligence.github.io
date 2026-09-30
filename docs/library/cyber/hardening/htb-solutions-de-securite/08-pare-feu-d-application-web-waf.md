@@ -1,6 +1,6 @@
 ---
 title: Pare-feu d'application web — WAF
-source: Cyber/99_Concepts/HTB_Solutions de sécurité.md
+source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
 note: HTB — Solutions de sécurité
 up:
 - - HTB — Solutions de sécurité
