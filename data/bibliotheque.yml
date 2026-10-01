@@ -57,7 +57,7 @@
       debut: Analyste SOC
       mots: [SOC, supervision, réponse à incident, incident de sécurité, threat hunting, MITRE, ATT&CK, kill chain, EDR, SIEM]
       notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse]
-      liens: [Modèles d'analyse de la menace]
+      liens: [Modèles d'analyse de la menace, "MTTD, MTTC, MTTR"]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
@@ -94,7 +94,7 @@
       label: 📌 Fiches notions
       description: Une notion par page — l'essentiel, des exemples, où l'approfondir.
       glossaire: true
-      notes: ["CVE, CWE, CVSS, EPSS, KEV", Défense en profondeur, "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Triade CIA, Zero Trust]
+      notes: ["CVE, CWE, CVSS, EPSS, KEV", Défense en profondeur, "MTTD, MTTC, MTTR", "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Triade CIA, Zero Trust]
 
 - id: it
   label: 💻 IT
