@@ -35,19 +35,17 @@
       pourquoi: L'autre moitié du parc et ses traces.
     - note: "IOC, IOA, TTP"
       pourquoi: Ce qu'on cherche dans la télémétrie, du plus fragile au plus durable.
-    - note: MITRE ATT&CK
-      pourquoi: Le référentiel commun des techniques d'attaque.
-    - note: "Frameworks de cyberdéfense (Kill chain, Pyramid of pain, UKC, Diamant)"
-      pourquoi: Les modèles qui structurent l'analyse d'une attaque.
+    - note: Modèles d'analyse de la menace
+      pourquoi: Kill Chain, Pyramid of Pain, Diamant et MITRE ATT&CK — les modèles qui structurent l'analyse d'une attaque.
+    - note: "CVE, CWE, CVSS, EPSS, KEV"
+      pourquoi: Lire une vulnérabilité citée dans une alerte ou un bulletin.
     - note: Analyste SOC
       pourquoi: Le métier — journaux, SIEM, détection, triage.
     - note: Réponse à incident — synthèse
       pourquoi: La gestion d'incident en une lecture.
     - note: Réponse à incident
       pourquoi: Le cours complet, de la préparation au retour d'expérience.
-    - note: Threat hunting
-      pourquoi: Chercher ce que les alertes ne voient pas.
-    - note: Digital forensics
+    - note: Investigation numérique (forensic)
       pourquoi: Aller jusqu'à la preuve sur disque et en mémoire.
 
 - id: osint
@@ -58,7 +56,7 @@
       pourquoi: Le panorama de la discipline en une lecture.
     - note: OPSEC & privacy
       pourquoi: Se protéger avant d'enquêter.
-    - note: OSINT Mastery
+    - note: OSINT — cours complet
       pourquoi: Le cours complet — méthode, sources, outils.
     - note: OSINT — ressources
       pourquoi: Les outils et sites de départ.
@@ -70,3 +68,14 @@
       pourquoi: Suivre l'argent.
     - note: OSINT & cryptoactifs
       pourquoi: Enquêter sur la blockchain.
+
+- id: conteneurs
+  titre: Conteneurs, de Docker à Kubernetes
+  description: Conteneuriser une application, l'orchestrer, puis tout reprendre en profondeur, sécurité comprise.
+  etapes:
+    - note: Docker
+      pourquoi: Comprendre et manipuler les conteneurs — images, réseau, volumes, Compose.
+    - note: Kubernetes
+      pourquoi: Passer à l'orchestration — pods, déploiements, services.
+    - note: Conteneurs — Docker & Kubernetes
+      pourquoi: Le cours complet — production, CI/CD, observabilité et sécurité des conteneurs.

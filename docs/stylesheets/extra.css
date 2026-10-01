@@ -908,9 +908,15 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset a.kw-doc-btn:hover { border-color: #ed4d5a; color: #ed4d5a; }
 .md-typeset a.kw-doc-btn--private { border-color: var(--kw-line); background: var(--kw-soft); color: var(--md-default-fg-color--light); }
 
-/* Bibliothèque : cours complets en premier et en texte plein, synthèses dans le lavande plus discret */
-.md-nav--primary .md-nav__link.kw-cours:not(.md-nav__link--active):not(:hover) { color: var(--kw-strong) !important; font-weight: 600; }
-.md-typeset .kw-notes li.kw-cours a { color: var(--kw-strong); font-weight: 600; }
+/* Bibliothèque : la couleur du menu suit la profondeur (rubrique blanche, notes gris clair, chapitres
+   lavande), pas le format ; le format et la durée s'affichent en gris dans les pages de rubrique */
+.md-nav--primary .md-nav__link.kw-note:not(.md-nav__link--active):not(:hover) { color: var(--md-default-fg-color--light) !important; }
+.md-typeset .kw-note-meta { margin-left: .5rem; font-size: .66rem; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-note-meta a { color: var(--md-default-fg-color--light); text-decoration: underline dotted; }
+.md-typeset .kw-note-meta a:hover { color: var(--kw-link); }
+.md-typeset a.kw-more-link--inline { display: inline-block; float: none; margin: .2rem 0 .4rem; }
+.md-typeset a.kw-libcard__item { font-size: .72rem; line-height: 1.35; color: var(--md-default-fg-color--light); }
+.md-typeset a.kw-libcard__item:hover { color: var(--kw-link); }
 .md-typeset .kw-format { display: inline-block; font-size: .58rem; font-weight: 800; letter-spacing: .02em;
   padding: .02rem .45rem; margin-right: .3rem; border-radius: 1em; border: 1px solid currentColor; }
 .md-typeset .kw-format--cours { color: var(--kw-strong); }

@@ -157,7 +157,8 @@ def load_content(docs_dir):
             check_contract(src, f.stem, kind, meta)
             it = dict(src=src, title=str(meta.get("title", f.stem)), date=d, theme=meta.get("theme"),
                       themes=list(meta.get("themes") or []), author=meta.get("author"), body=body,
-                      kind=kind, events=[str(e) for e in meta.get("events") or []])
+                      kind=kind, events=[str(e) for e in meta.get("events") or []],
+                      tags=[str(x) for x in meta.get("tags") or []])
             if kind == "veille":
                 it["headlines"] = [re.sub(r"\s+", " ", h).strip() for h in re.findall(r"^### ▸ (.+)$", body, re.M)]
                 ess = re.search(r"^!!! abstract \"L'essentiel\"\s*\n\n((?: {4}[-*] .+\n?)+)", body, re.M)
@@ -594,6 +595,27 @@ def essentiel_block(it, from_src):
             f'{short_month(it["date"])} <a href="{href(from_src, it["src"])}">lire le brief →</a></p><ul>{lis}</ul></div>')
 
 
+def library_home(src):
+    """Accueil : notion du jour (une fiche, change chaque jour), notes récemment mises à jour, révision."""
+    library = STATE.get("library", [])
+    fiches = [n for d in library for c in d["categories"] if c.get("glossaire") for n in c["notes"] if n["imported"]]
+    notes = [n for d in library for c in d["categories"] if not c.get("glossaire") for n in c["notes"]
+             if n["imported"] and n.get("revue")]
+    cards = ""
+    if fiches:
+        f = fiches[date.today().toordinal() % len(fiches)]
+        term, definition = next(iter((f.get("terms") or {f["title"]: ""}).items()))
+        cards += (f'<a class="kw-card" href="{href(src, f["src"])}"><span class="kw-ed__label">Notion du jour</span>'
+                  f'<span class="kw-card__title">{esc(f["title"])}</span>'
+                  f'<span class="kw-card__text">{esc(definition)}</span></a>')
+    recent = sorted(notes, key=lambda n: n["revue"], reverse=True)[:4]
+    if recent:
+        cards += ('<div class="kw-card kw-libcard"><span class="kw-ed__label">Récemment mis à jour</span>' + "".join(
+            f'<a class="kw-libcard__item" href="{href(src, n["src"])}">{esc(n["title"])}</a>' for n in recent) + "</div>")
+    cards += revision_card(src)
+    return f'<div class="kw-libgrid">{cards}</div>' if cards else ""
+
+
 def page_home(items, themes, glossary):
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
@@ -623,7 +645,7 @@ def page_home(items, themes, glossary):
     wiki = [("⚔️ Pentest", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
             ("⚔️ Pentest", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
             ("⚔️ Pentest", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
-            ("📚 Bibliothèque", "Notes de cours", "Cyber et IT : synthèses pour apprendre et réviser.", "library/index.md")]
+            ("📚 Bibliothèque", "Cours et fiches", "Cyber et IT : cours complets, synthèses, fiches notions et révision.", "library/index.md")]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
@@ -651,6 +673,8 @@ hide:
 <a class="kw-more-link" href="library/">Toute la Bibliothèque →</a>
 
 {parcours_cards(src)}
+
+{library_home(src)}
 
 ## 📡 Veille récente
 
@@ -1048,6 +1072,19 @@ def fold_section(markdown, heading, admonition, title):
     return markdown[:m.start()] + f'??? {admonition} "{title}"\n\n{body}\n\n' + markdown[m.end():]
 
 
+def library_matches(title, tags, limit=3):
+    """Rubriques de la Bibliothèque dont un mot-clé (« mots » de data/bibliotheque.yml) apparaît dans le
+    titre ou les mots-clés d'une analyse ou d'un dossier."""
+    text = str(title) + " | " + " | ".join(str(x) for x in tags)
+    out = []
+    for dom in STATE.get("library", []):
+        for cat in dom["categories"]:
+            words = cat.get("mots") or []
+            if words and re.search(r"(?<![\w-])(?:" + "|".join(re.escape(w) for w in words) + r")(?![\w-])", text, re.I):
+                out.append(cat)
+    return out[:limit]
+
+
 def decorate_document(markdown, page):
     """Analyse ou dossier : en-tête (nature, thème, auteur, date, temps de lecture) et
     métadonnées internes repliées."""
@@ -1075,6 +1112,11 @@ def decorate_document(markdown, page):
                           f'({m["date"].day} {short_month(m["date"])})</a>')
     if follow:
         head = head.replace("</div>\n", f'<span class="kw-doc-head__follow">Dans la veille : {" · ".join(follow)}</span></div>\n', 1)
+    rubrics = library_matches(meta.get("title", ""), meta.get("tags") or [])
+    if rubrics:
+        here = page.file.src_uri
+        links_lib = " · ".join(f'<a href="{href(here, c["src"])}">{esc(c["label"])}</a>' for c in rubrics)
+        head = head.replace("</div>\n", f'<span class="kw-doc-head__follow">Dans la Bibliothèque : {links_lib}</span></div>\n', 1)
     # Document original : lien public (source_url) et/ou fichier du dépôt privé (source_file).
     # Le portail n'héberge jamais le document lui-même.
     links = ""
@@ -1151,7 +1193,7 @@ def build_nav(items, themes, threads=None):
 
 def library_nav(library):
     """Onglet Bibliothèque : un en-tête par domaine (Cyber, IT), une entrée dépliable (») par catégorie
-    avec ses notes, puis le Glossaire."""
+    avec ses notes, puis la Révision, la recherche et le Glossaire."""
     nav, fiches = [], []
     for dom in library:
         cats = []
@@ -1159,18 +1201,20 @@ def library_nav(library):
             if cat.get("glossaire"):                  # fiches notions : rangées sous le Glossaire
                 fiches += [n for n in cat["notes"] if n["imported"]]
                 continue
-            cats.append({cat["label"]: [cat["src"]] + category_nav(cat)} if cat["notes"] else {cat["label"]: cat["src"]})
+            # toujours une section (même vide) : une page index.md isolée deviendrait l'accueil du domaine
+            cats.append({cat["label"]: [cat["src"]] + category_nav(cat)})
         nav.append({dom["label"]: cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": [note_nav(n) for n in fiches]}] if fiches else [])
     paths = [{"🎓 Parcours": [PARCOURS_SRC] + [{p["titre"]: p["src"]} for p in STATE.get("parcours", [])]}]
-    return (paths if STATE.get("parcours") else []) + nav + [
-        {"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
+    return ((paths if STATE.get("parcours") else []) + nav + revision_nav()
+            + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}])
 
 
 def category_nav(cat):
-    """Notes d'une catégorie ; celles d'une sous-rubrique (group) sous une entrée dépliable."""
+    """Notes d'une catégorie ; celles d'une sous-rubrique (group) sous une entrée dépliable.
+    Une synthèse rangée sous son cours (paire) n'a pas d'entrée à elle."""
     items = []
-    for label, notes in grouped(cat["notes"]):
+    for label, notes in grouped([n for n in cat["notes"] if not n.get("paired")]):
         entries = [note_nav(n) for n in notes]
         items += [{label: entries}] if label else entries
     return items
@@ -1188,14 +1232,20 @@ def grouped(notes):
 
 
 def note_nav(note):
-    """Note simple : un lien. Note découpée : une entrée dépliable (présentation, puis parties et chapitres)."""
-    if note.get("chapters"):
-        return {nav_title(note): [note["src"]] + [note_nav(c) for c in note["chapters"]]}
+    """Note simple : un lien. Note découpée : une entrée dépliable (présentation, puis parties et chapitres).
+    Cours avec synthèse : la synthèse est la première entrée du cours (« En synthèse »)."""
+    pair = note.get("pair")
+    if note.get("chapters") or pair:
+        children = [note["src"]]
+        if pair:
+            children.append({"En synthèse": [pair["src"]] + [note_nav(c) for c in pair.get("chapters", [])]}
+                            if pair.get("chapters") else {"En synthèse": pair["src"]})
+        return {nav_title(note): children + [note_nav(c) for c in note.get("chapters", [])]}
     return {nav_title(note): note["src"]}
 
 
 def nav_title(note):
-    """Titre du menu : sans marque (les cours se distinguent par la couleur, voir on_post_page)."""
+    """Titre du menu, sans marque de format (voir mark_notes pour la couleur)."""
     return note["title"]
 
 
@@ -1203,11 +1253,11 @@ FORMAT_LABEL = {"synthese": "Synthèse", "cours": "Cours", "fiche": "Fiche notio
                 "atelier": "Atelier", "ressources": "Ressources", "revision": "Révision"}
 
 
-def mark_courses(output, page):
-    """Menu latéral et listes : les liens vers un cours (page d'entrée) reçoivent la classe kw-cours
-    (couleur propre) ; les synthèses gardent le lavande des sous-pages."""
-    courses = STATE.get("course_urls")
-    if not courses or "md-nav__link" not in output:
+def mark_notes(output, page):
+    """Menu latéral : les entrées de notes de la Bibliothèque reçoivent la classe kw-note (gris clair),
+    entre la rubrique (blanc) et les chapitres (lavande) : la couleur suit la profondeur, pas le format."""
+    notes = STATE.get("note_urls")
+    if not notes or "md-nav__link" not in output:
         return output
     here = posixpath.dirname("/" + (page.url or "").rstrip("/") + "/x")
 
@@ -1217,9 +1267,9 @@ def mark_courses(output, page):
             return m.group(0)
         target = posixpath.normpath(posixpath.join(here, href.split("#")[0])).lstrip("/").rstrip("/") + "/"
         label = html.unescape(re.sub(r"<[^>]+>", "", m.group(4).split(">", 1)[-1])).strip()
-        if courses.get(target) != label:              # une sous-rubrique repliée pointe aussi vers un cours
+        if notes.get(target) != label:                 # une sous-rubrique repliée pointe aussi vers une note
             return m.group(0)
-        return m.group(1) + ' kw-cours' + m.group(3) + m.group(4) + "</a>"
+        return m.group(1) + ' kw-note' + m.group(3) + m.group(4) + "</a>"
 
     return re.sub(r'(<a href="([^"]+)" class="md-nav__link[^"]*)(")(.*?)</a>', tag, output, flags=re.S)
 
@@ -1292,9 +1342,11 @@ def load_library(docs_dir, tree):
                 stem = f.parent.name if f.name == "index.md" else f.stem
                 title = str(meta.get("title") or (h1.group(1) if h1 else stem)).strip()
                 note = {"title": title, "src": f.relative_to(docs_dir).as_posix(), "imported": True,
-                        "format": meta.get("format"), "terms": meta.get("terms") or {}}
+                        "format": meta.get("format"), "terms": meta.get("terms") or {},
+                        "revision": meta.get("revision"), "revue": str(meta.get("revue") or "")}
                 if f.name == "index.md":                    # note découpée : parties et chapitres, dans l'ordre
                     note["chapters"] = note_pages(f.parent, docs_dir)
+                note["minutes"] = reading_time(note, docs_dir)
                 real[slug(title)] = note
                 real.setdefault(slug(stem), note)
             notes, used = [], set()
@@ -1312,11 +1364,52 @@ def load_library(docs_dir, tree):
             groups = list(dict.fromkeys(n.get("group") for n in notes))   # dans chaque sous-rubrique : cours d'abord
             notes = [n for _, _, _, n in sorted((groups.index(n.get("group")), n.get("format") != "cours", i, n)
                                                 for i, n in enumerate(notes))]
+            pair_up(notes)
+            revision = f"{REVISION_DIR}/{cat['id']}.md"
             cats.append({"id": cat["id"], "label": cat["label"], "src": f"{base}/index.md", "notes": notes,
                          "description": cat.get("description", ""), "debut": cat.get("debut"),
-                         "glossaire": bool(cat.get("glossaire"))})
+                         "glossaire": bool(cat.get("glossaire")), "mots": [str(w) for w in cat.get("mots") or []],
+                         "revision": revision if (docs_dir / revision).exists() else None})
         out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
     return out
+
+
+WORDS_PER_MINUTE = 230
+
+
+def reading_time(note, docs_dir):
+    """Minutes de lecture d'une note (toutes ses pages), d'après le nombre de mots."""
+    words = 0
+    for src, _ in walk_pages(note):
+        path = docs_dir / src
+        if path.exists():
+            body = get_data(path.read_text(encoding="utf-8"))[0]
+            words += len(re.sub(r"```.*?```", " ", body, flags=re.S).split())
+    return max(1, round(words / WORDS_PER_MINUTE))
+
+
+def duration(minutes):
+    """« 25 min », « 1 h », « 6 h 30 » (arrondi au quart d'heure au-delà d'une heure)."""
+    if not minutes:
+        return ""
+    if minutes < 55:
+        return f"{max(5, round(minutes / 5) * 5)} min"
+    q = round(minutes / 15) * 15
+    h, m = divmod(q, 60)
+    return f"{h} h" + (f" {m:02d}" if m else "")
+
+
+def pair_up(notes):
+    """« APT — synthèse » se range sous le cours de la même rubrique dont le titre commence par « APT »."""
+    for s in notes:
+        m = re.match(r"^(.+?)\s+[—–-]\s+synth[èe]se$", s["title"], re.I)
+        if not (m and s["imported"] and s.get("format") == "synthese"):
+            continue
+        key = slug(m.group(1))
+        course = next((c for c in notes if c is not s and c["imported"] and c.get("format") == "cours"
+                       and not c.get("pair") and slug(c["title"]).startswith(key)), None)
+        if course:
+            course["pair"], s["paired"] = s, course
 
 
 FORMAT_PLURAL = {"cours": ("cours", "cours"), "synthese": ("synthèse", "synthèses"), "fiche": ("fiche", "fiches"),
@@ -1345,27 +1438,63 @@ def starting_note(cat):
             or (notes[0] if notes else None))
 
 
+def note_line(n, src):
+    """Ligne d'une note dans une page de rubrique : titre, format et durée en gris, synthèse liée."""
+    if not n["imported"]:
+        return (f'<li class="is-todo"><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a>'
+                '<span class="kw-note-meta">à importer</span></li>')
+    bits = [FORMAT_LABEL.get(n.get("format"), "").lower(), duration(n.get("minutes"))]
+    meta = " · ".join(b for b in bits if b)
+    pair = n.get("pair")
+    if pair:
+        meta += f' · <a href="{href(src, pair["src"])}">en synthèse</a> ({duration(pair.get("minutes"))})'
+    return (f'<li class="is-done"><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a>'
+            f'<span class="kw-note-meta">{meta}</span></li>')
+
+
+def veille_matches(words, limit=5):
+    """Analyses et dossiers dont le titre ou les mots-clés citent un des mots (du plus récent au plus ancien)."""
+    if not words:
+        return []
+    rx = re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(w) for w in words) + r")(?![\w-])", re.I)
+    items = STATE.get("items") or {}
+    docs = sorted(items.get("analysis", []) + items.get("dossier", []), key=lambda d: d["date"], reverse=True)
+    return [d for d in docs if rx.search(d["title"] + " | " + " | ".join(d.get("tags") or []))][:limit]
+
+
+def veille_block(cat, src):
+    hits = veille_matches(cat.get("mots"))
+    if not hits:
+        return ""
+    lines = "".join(
+        f'<li><a href="{href(src, d["src"])}">{esc(clean_title(d["title"]))}</a>'
+        f'<span class="kw-note-meta">{"analyse" if d["kind"] == "analysis" else "dossier"} · '
+        f'{d["date"].day} {short_month(d["date"])} {d["date"].year}</span></li>' for d in hits)
+    return f'\n## Dans la veille\n\n<ul class="kw-notes kw-notes--veille">{lines}</ul>\n'
+
+
 def pages_library(library):
     out = []
     for dom in library:
         for cat in dom["categories"]:
             counts = format_counts(cat["notes"])
+            src = cat["src"]
             body = f"# {cat['label']}\n\n"
             if cat.get("description"):
                 body += f"{esc(cat['description'])}\n\n"
             body += f"<span class=\"kw-muted\">Bibliothèque · {dom['label']}{' · ' + counts if counts else ''}</span>\n\n"
-            if cat["notes"]:
-                for label, notes in grouped(cat["notes"]):
-                    body += (f"## {label}\n\n" if label else "") + ('<ul class="kw-notes">' + "".join(
-                        f'<li class="{"is-done" if n["imported"] else "is-todo"}{" kw-cours" if n.get("format") == "cours" else ""}">'
-                        f'<a href="{href(cat["src"], n["src"])}">{esc(nav_title(n))}</a>{format_pill(n)}</li>' for n in notes)
-                        + "</ul>\n\n")
-                todo = any(not n["imported"] for n in cat["notes"])
-                body += ('<span class="kw-muted">Cours complets en premier, en texte plein ; synthèses et fiches ensuite'
-                         + (" · ○ à importer depuis Obsidian" if todo else "") + "</span>\n")
+            listed = [n for n in cat["notes"] if not n.get("paired")]
+            if listed:
+                for label, notes in grouped(listed):
+                    body += (f"## {label}\n\n" if label else "") + (
+                        '<ul class="kw-notes">' + "".join(note_line(n, src) for n in notes) + "</ul>\n\n")
             else:
-                body += '!!! note "Catégorie vide"\n    Aucune note pour l\'instant.\n'
-            out.append((cat["src"], body))
+                body += "Pas encore de cours dans cette rubrique.\n\n"
+            if cat.get("revision"):
+                body += (f'<a class="kw-more-link kw-more-link--inline" href="{href(src, cat["revision"])}">'
+                         "📝 Réviser : questions d'entretien de la rubrique →</a>\n\n")
+            body += veille_block(cat, src)
+            out.append((src, body))
             for n in cat["notes"]:
                 if not n["imported"]:
                     out.append((n["src"],
@@ -1411,6 +1540,7 @@ Veille, Analyses et Dossiers racontent ce qui **se passe** ; la Bibliothèque ga
 <div class="kw-libgrid">
 <a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {published} notes publiées : un mot, une commande, un acteur.</span></a>
 <a class="kw-card" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">📖 Glossaire & notions</span><span class="kw-card__text">{glossary_count} définitions de A à Z et {len(fiches)} fiches notions pour aller à l'essentiel.</span></a>
+{revision_card(src)}
 </div>
 {doms}
 <span class="kw-muted">Les liens externes sélectionnés (outils, sites, lectures) sont rangés à part, dans l'onglet [🧭 Ressources]({posixpath.relpath(RESSOURCES_SRC, "library")}).</span>
@@ -1458,6 +1588,80 @@ def pages_parcours():
         out.append((p["src"], f"# {p['titre']}\n\n<span class=\"kw-muted\">[🎓 Parcours](index.md)</span>\n\n"
                     f"{esc(p['description'])}\n\n{steps}\n"))
     return out
+
+
+# ---------------------------------------------------------------- révision
+
+REVISION_DIR = "library/revision"
+REVISION_INDEX = f"{REVISION_DIR}/index.md"
+
+
+def load_revisions(docs_dir, library):
+    """Pages de l'espace Révision écrites par scripts/import_notes.py, dans l'ordre des rubriques."""
+    order = [f"{d['id']}/{c['id']}" for d in library for c in d["categories"]]
+    out = []
+    for f in sorted((docs_dir / REVISION_DIR).glob("*.md")) if (docs_dir / REVISION_DIR).exists() else []:
+        if f.name == "index.md":
+            continue
+        body, meta = get_data(f.read_text(encoding="utf-8"))
+        rubric = str(meta.get("revision") or "transverse")
+        out.append({"title": str(meta.get("title") or f.stem), "src": f.relative_to(docs_dir).as_posix(),
+                    "rubric": rubric, "domain": str(meta.get("domaine") or "") or "Transverse",
+                    "questions": len(re.findall(r"\*\*Question\s*:\*\*", body)),
+                    "label": re.sub(r"^Révision — ", "", str(meta.get("title") or f.stem))})
+    return sorted(out, key=lambda r: order.index(r["rubric"]) if r["rubric"] in order else len(order))
+
+
+def revision_nav():
+    revisions = STATE.get("revisions") or []
+    if not revisions:
+        return []
+    by_domain = {}
+    for r in revisions:
+        by_domain.setdefault(r["domain"], []).append({r["label"]: r["src"]})
+    return [{"📝 Révision": [REVISION_INDEX] + [{d: entries} for d, entries in by_domain.items()]}]
+
+
+def revision_card(src):
+    revisions = STATE.get("revisions") or []
+    if not revisions:
+        return ""
+    total = sum(r["questions"] for r in revisions)
+    return (f'<a class="kw-card" href="{href(src, REVISION_INDEX)}"><span class="kw-card__title">📝 Révision</span>'
+            f'<span class="kw-card__text">{total} questions d\'entretien et leurs réponses types, '
+            f'rangées en {len(revisions)} domaines.</span></a>')
+
+
+def page_revision_index():
+    revisions = STATE.get("revisions") or []
+    by_domain = {}
+    for r in revisions:
+        by_domain.setdefault(r["domain"], []).append(r)
+    body = ""
+    for domain, lst in by_domain.items():
+        body += f"\n## {domain}\n\n" + '<ul class="kw-notes">' + "".join(
+            f'<li class="is-done"><a href="{posixpath.relpath(r["src"], REVISION_DIR)}">{esc(r["label"])}</a>'
+            f'<span class="kw-note-meta">{r["questions"]} questions</span></li>' for r in lst) + "</ul>\n"
+    return REVISION_INDEX, f"""# 📝 Révision
+
+Les questions types d'entretien de mes cours, avec une réponse courte à savoir dire à voix haute.
+Elles restent écrites dans les cours (annexe « Questions types d'entretien ») et sont regroupées ici par
+domaine ; chaque page renvoie au cours d'origine.
+{body}"""
+
+
+def decorate_revision(markdown, page):
+    here = page.file.src_uri
+    rel = lambda src: posixpath.relpath(src, posixpath.dirname(here))
+    domain = page.meta.get("domaine") or "Transverse"
+    head = (f'<span class="kw-muted">[📚 Bibliothèque]({rel("library/index.md")}) · '
+            f'[📝 Révision]({rel(REVISION_INDEX)}) · {esc(domain)}</span>')
+    rubric = str(page.meta.get("revision") or "")
+    cat = next((c for d in STATE.get("library", []) for c in d["categories"]
+                if f"{d['id']}/{c['id']}" == rubric), None)
+    if cat:
+        head += f'<br><span class="kw-muted">Rubrique : [{esc(cat["label"])}]({rel(cat["src"])})</span>'
+    return head + "\n\n" + markdown
 
 
 LIBRARY_SEARCH_SRC = "library/recherche.md"
@@ -1615,6 +1819,87 @@ def add_fiche_terms(glossary, library):
     return sorted(by_key.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
 
 
+GLOSS_HEADING = re.compile(r"(?i)glossaire")
+TABLE_ROW = re.compile(r"^\|\s*\**([^|*]+?)\**\s*\|\s*([^|]+?)\s*\|")
+BOLD_LINE = re.compile(r"^(?:[-*]\s+)?\*\*([^*]{2,80}?)\*\*\s*(\([^)]{0,120}\))?\s*(?:[—–:]|\.(?=\s))?\s*(\S.*)$")
+SECTION_REF = re.compile(r"\s*(?:\(?\s*§\s*[\d.]+(?:\s*[,;et]+\s*§?\s*[\d.]+)*\s*\)?)\.?\s*$")
+
+
+def course_terms(library, docs_dir):
+    """Termes des glossaires des cours (sections « Glossaire » des pages publiées) :
+    {clé: {"term", "definition", "courses": [(titre du cours, page#ancre)]}}, dans l'ordre de la Bibliothèque."""
+    from markdown.extensions.toc import slugify as toc_slugify
+    found = {}
+    for dom in library:
+        for cat in dom["categories"]:
+            if cat.get("glossaire"):
+                continue
+            for note in cat["notes"]:
+                if not note["imported"]:
+                    continue
+                for src, _ in walk_pages(note):
+                    path = docs_dir / src
+                    if not path.exists():
+                        continue
+                    body, meta = get_data(path.read_text(encoding="utf-8"))
+                    lines = body.split("\n")
+                    starts = [(0, 0, "")] if GLOSS_HEADING.search(str(meta.get("title") or "")) else []
+                    for i, line in enumerate(lines):
+                        h = HEADING.match(line)
+                        if h and GLOSS_HEADING.search(h.group(2)):
+                            text = re.sub(r"[*_`]", "", h.group(2)).strip()
+                            starts.append((i + 1, len(h.group(1)), "#" + toc_slugify(text, "-")))
+                    for start, level, anchor in starts:
+                        for term, definition in glossary_rows(lines[start:], level):
+                            entry = found.setdefault(slug(term), {"term": term, "definition": definition, "courses": []})
+                            if all(c[0] != note["title"] for c in entry["courses"]):
+                                entry["courses"].append((note["title"], f"{src}{anchor}"))
+    return found
+
+
+def glossary_rows(lines, level):
+    """(terme, définition) d'une section de glossaire : tableau « Terme | Définition », lignes
+    « **Terme** — définition » ou puces « - **Terme** : définition » ; s'arrête au titre suivant."""
+    table_ok = None
+    for row in lines:
+        hh = HEADING.match(row)
+        if hh and level and len(hh.group(1)) <= level:
+            return
+        if row.startswith("|"):
+            cells = [c.strip() for c in row.strip().strip("|").split("|")]
+            if table_ok is None:                          # en-tête : « Terme | Définition »
+                table_ok = len(cells) >= 2 and re.search(r"(?i)définition", cells[1]) is not None
+                continue
+            if not table_ok or set(cells[0]) <= set("-: ") or len(cells) < 2:
+                continue
+            term, definition = re.sub(r"[*`]", "", cells[0]).strip(), cells[1]
+        else:
+            table_ok = None
+            m = BOLD_LINE.match(row.strip())
+            if not m:
+                continue
+            term = m.group(1).strip().rstrip(".:").strip()
+            definition = ((m.group(2) or "") + " " + m.group(3)).strip()
+        definition = SECTION_REF.sub("", definition.strip()).strip()
+        if (len(term) < 2 or len(definition) < 12 or re.fullmatch(r"[A-Z]", term)
+                or re.search(r"(?i)\bce glossaire\b", definition)):
+            continue
+        yield term, definition
+
+
+def add_course_terms(glossary, library, docs_dir):
+    """Ajoute au glossaire les définitions des cours ; un terme déjà défini (briefs, analyses, fiches,
+    ajouts manuels) garde sa définition et gagne « Dans les cours »."""
+    by_key = {slug(t["term"]) or t["term"].casefold(): t for t in glossary}
+    for key, entry in course_terms(library, docs_dir).items():
+        t = by_key.get(key)
+        if t is None:
+            t = by_key[key] = {"term": entry["term"], "definition": entry["definition"], "seen": [], "see": None,
+                               "course_only": True}
+        t["courses"] = entry["courses"]
+    return sorted(by_key.values(), key=lambda t: slug(t["term"]) or t["term"].casefold())
+
+
 def seen_label(it):
     """Lien « Vu dans » : la date pour un brief, le titre court pour une analyse."""
     if it["src"].startswith("veille/"):
@@ -1642,6 +1927,12 @@ def page_glossary(glossary):
             if seen:
                 extras.append("Vu dans : " + ", ".join(
                     f"[{seen_label(it)}]({posixpath.relpath(it['src'], 'library')})" for it in seen))
+            courses = t.get("courses") or []
+            if courses:
+                extras.append("Dans les cours : " + ", ".join(
+                    f"[{esc(name)}]({posixpath.relpath(target.split('#')[0], 'library')}"
+                    f"{'#' + target.split('#', 1)[1] if '#' in target else ''})" for name, target in courses[:6])
+                    + (f" (+{len(courses) - 6})" if len(courses) > 6 else ""))
             body += (f"<span class=\"kw-anchor\" id=\"{term_anchor(t['term'])}\"></span>**{t['term']}**\n:   "
                      f"{t['definition'] or '<span class=\"kw-muted\">Définition à compléter.</span>'}")
             body += (f"<br><span class=\"kw-muted\">{' · '.join(extras)}</span>" if extras else "") + "\n\n"
@@ -1652,7 +1943,8 @@ def page_glossary(glossary):
 
 Trois niveaux de lecture : la **définition** (ici, et au survol de tout terme souligné en pointillé sur le site),
 la **fiche notion** quand une notion mérite l'essentiel en une page, puis les **cours** pour approfondir.
-Les définitions viennent du Lexique des Morning Briefs, des repères des analyses et des fiches.
+Les définitions viennent du Lexique des Morning Briefs, des repères des analyses, des fiches notions et
+des glossaires de mes cours ; « Dans les cours » mène à la définition dans le cours.
 {len(glossary)} définitions, {len(fiches)} fiches.
 
 ## 📌 Fiches notions
@@ -1674,8 +1966,10 @@ def glossary_data(glossary):
     def link(t):                                       # terme d'une fiche notion : l'infobulle y mène
         see = str(t.get("see") or "")
         return url_of(see) if see.startswith("library/") else f"{url}#{term_anchor(t['term'])}"
+    # infobulles : briefs, analyses, fiches et ajouts manuels ; les termes venus des seuls glossaires de cours
+    # restent sur la page Glossaire (des centaines de mots courants souligneraient tout le site)
     data = [{"t": t["term"], "d": plain(t["definition"]), "u": link(t)}
-            for t in glossary if t["definition"] and len(t["term"]) >= 2]
+            for t in glossary if t["definition"] and len(t["term"]) >= 2 and not t.get("course_only")]
     return "assets/glossary.json", json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
 
@@ -1753,18 +2047,23 @@ def on_config(config):
     for s in sorted(all_subjects(items["veille"]), key=lambda s: s["date"]):
         if s["event"]:
             STATE["mentions"].setdefault(s["event"], []).append(s)
+    STATE["items"] = items
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
     link_formats(library)
     STATE["library"] = library
     STATE["notes_by_src"] = {n["src"]: n for d in library for c in d["categories"] for n in c["notes"]}
-    STATE["course_urls"] = {url_of(src): n["title"] for src, n in STATE["notes_by_src"].items() if n.get("format") == "cours"}
+    STATE["note_urls"] = {url_of(src): n["title"] for src, n in STATE["notes_by_src"].items() if n["imported"]}
+    STATE["revisions"] = load_revisions(docs_dir, library)
     glossary = add_fiche_terms(glossary, library)
+    glossary = add_course_terms(glossary, library, docs_dir)
     STATE["parcours"] = load_parcours(root, library)
 
     pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages += pages_parcours()
+    if STATE["revisions"]:
+        pages.append(page_revision_index())
     pages.append(glossary_data(glossary))
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
@@ -1801,7 +2100,7 @@ def on_post_page(output, page, config):
             digests[asset] = hashlib.sha1(path.read_bytes()).hexdigest()[:10] if path.exists() else None
         if digests[asset]:
             output = output.replace(f'{asset}"', f'{asset}?v={digests[asset]}"')
-    return mark_courses(output, page)
+    return mark_notes(output, page)
 
 
 def on_page_markdown(markdown, page, config, files):
@@ -1813,6 +2112,8 @@ def on_page_markdown(markdown, page, config, files):
         return decorate_document(markdown, page)
     if src.startswith("library/") and page.meta.get("source"):
         return decorate_note(markdown, page)
+    if src.startswith(REVISION_DIR + "/") and page.meta.get("revision"):
+        return decorate_revision(markdown, page)
     return markdown
 
 
@@ -1847,12 +2148,20 @@ def decorate_note(markdown, page):
         line = " ".join(bits)
         if meta.get("revue"):
             line += f" mis à jour le {fr_date(date.fromisoformat(str(meta['revue'])))}"
-        if note.get("deeper"):
+        if note.get("minutes") and kind != "fiche":
+            line += f" · {duration(note['minutes'])} de lecture"
+        if note.get("pair"):
+            line += f" · en synthèse : {links([note['pair']])} ({duration(note['pair'].get('minutes'))})"
+        elif note.get("paired"):
+            line += f" · synthèse du cours {links([note['paired']])} ({duration(note['paired'].get('minutes'))})"
+        elif note.get("deeper"):
             line += f" · pour approfondir : {links(note['deeper'])}"
         elif note.get("digests"):
             line += f" · en synthèse : {links(note['digests'])}"
         elif note.get("terms"):
             line += " · " + ", ".join(esc(t) for t in note["terms"])
+        if meta.get("revision"):
+            line += f" · [📝 questions de révision]({rel(str(meta['revision']))})"
         head += f'<br><span class="kw-muted">{line}</span>'
         about = [f"**{label} :** {esc(meta[key])}" for key, label in
                  (("niveau", "Niveau"), ("objectif", "Objectif"), ("prerequis", "Prérequis")) if meta.get(key)]

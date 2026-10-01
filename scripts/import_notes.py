@@ -1,20 +1,24 @@
-"""Importe les notes Obsidian (CyberSec-notes) dans la Bibliothèque du portail.
+"""Importe les notes Obsidian (CyberSec-notes-v2) dans la Bibliothèque du portail.
 
-    python scripts/import_notes.py --vault ../CyberSec-notes --list      # correspondances, sans rien écrire
-    python scripts/import_notes.py --vault ../CyberSec-notes --all       # publie / met à jour toutes les notes
-    python scripts/import_notes.py --vault ../CyberSec-notes Cyber/01_CTI/CTI.md [autres notes…]
-    python scripts/import_notes.py --vault ../CyberSec-notes IT/Culture/SQL.md --title "SQL" --to it/culture
+    python scripts/import_notes.py --vault ../CyberSec-notes-v2 --list      # correspondances, sans rien écrire
+    python scripts/import_notes.py --vault ../CyberSec-notes-v2 --all       # publie / met à jour toutes les notes
+    python scripts/import_notes.py --vault ../CyberSec-notes-v2 "Cyber/02 OSINT/OSINT — synthèse.md" [autres…]
 
 --all est la commande de routine (« publie mes notes ») : chaque note du coffre rangée dans une rubrique
 est (ré)importée, les pages dont la note source a disparu du coffre sont supprimées.
+Le coffre suit l'arborescence de data/bibliotheque.yml : Domaine/NN Rubrique[/Sous-rubrique]/Titre.md.
 Pour chaque note :
-  - rubrique déduite du dossier du coffre (Cyber/01_CTI -> cyber/cti…), ou --to dom/cat ;
-  - titre = la note prévue dans data/bibliotheque.yml la plus proche du nom de fichier, ou --title ;
+  - rubrique = dossiers du coffre (libellés de data/bibliotheque.yml sans emoji ni numéro), ou --to dom/cat ;
+  - titre = nom du fichier (la note prévue de même nom, « : » s'écrivant « - »), ou --title ;
+  - propriétés Obsidian lues : format, provenance, niveau, objectif, prerequis, termes, rubrique ;
   - syntaxe Obsidian convertie hors du code : [[Note]] et [[#Titre]] -> vrais liens, ![[image]] et images
     locales -> copiées dans docs/library/assets/, liens locaux introuvables -> texte ;
   - titres : le titre de tête laisse la place au titre de la page, les autres « # » descendent d'un niveau ;
   - note de plus de SPLIT_AT caractères -> dossier <slug>/ : index.md (présentation + sommaire)
     et une page par partie ou chapitre ; les liens d'ancre suivent le chapitre où le titre a atterri ;
+  - non publiés : mini-quiz, notes de rédaction (registre de cohérence, en-tête de maintenance, journal des
+    modifications) ; l'annexe « Questions types d'entretien » part dans l'espace Révision (une page par
+    rubrique, avec les notes du dossier Révision/ du coffre) ;
   - dépôt public : les IP de lab HackTheBox sont masquées (10.10.x.y -> 10.0.x.y, 10.129.x.y -> 10.1.x.y),
     un flag de CTF, une clé privée ou un vrai jeton empêchent l'import, puis gitleaks (s'il est installé)
     contrôle les pages écrites avec la configuration du dépôt ; au moindre constat la note est retirée.
@@ -42,101 +46,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
 LIBRARY = DOCS / "library"
 ASSETS = "library/assets"
-# Dossiers du coffre -> (domaine, catégorie) de data/bibliotheque.yml
-FOLDERS = {
-    "Cyber/00_Notions": ("cyber", "notions"), "Cyber/01_CTI": ("cyber", "cti"), "Cyber/02_OSINT": ("cyber", "osint"),
-    "Cyber/03_Cryptographie": ("cyber", "cryptographie"), "Cyber/03_Forensic": ("cyber", "forensic"),
-    "Cyber/04_Hardening": ("cyber", "hardening"), "Cyber/05_Cyberdefense": ("cyber", "cyberdefense"),
-    "Cyber/10_Tools": ("cyber", "outils"), "Cyber/99_Concepts": ("cyber", "concepts"), "Cyber": ("cyber", "concepts"),
-    "IT/01_Linux": ("it", "linux"), "IT/02_Windows": ("it", "windows"), "IT/03_Networking": ("it", "reseau"),
-    "IT/04_Active-Directory": ("it", "active-directory"), "IT/05_Scripting_Langage-Prog": ("it", "scripting"),
-    "IT/10_virtualization-containers": ("it", "conteneurs"), "IT/Culture": ("it", "culture"), "IT": ("it", "infrastructure"),
-}
-# Notes rangées sur le site ailleurs que leur dossier du coffre (le coffre Obsidian n'est pas réorganisé).
-PLACES = {
-    "Cyber/99_Concepts/Analyste_SOC.md": ("cyber", "cyberdefense"),
-    "Cyber/99_Concepts/HTB_Attack Surface Management.md": ("cyber", "cyberdefense"),
-    "Cyber/99_Concepts/VirusTotal.md": ("cyber", "outils"),
-    "Cyber/04_Hardening/HTB_Solutions de sécurité.md": ("cyber", "outils"),
-    "Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md": ("cyber", "concepts"),
-    "Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md": ("cyber", "cyberdefense"),
-    "Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md": ("cyber", "cyberdefense"),
-    "Cyber/HUMINT_Social_Engineering.md": ("cyber", "osint"),
-    "Cyber/05_Cyberdefense/IA_Secu.md": ("cyber", "ia"),
-    "Cyber/OPSEC_Privacy.md": ("cyber", "cti"),
-    "Cyber/Red_Teaming.md": ("cyber", "cti"),
-    "IT/02_Windows/HTB_Windows System Sécurity.md": ("cyber", "hardening"),
-    "IT/03_Networking/AppSec.md": ("cyber", "hardening"),
-    "IT/03_Networking/Infrastructure_IT.md": ("it", "infrastructure"),
-    "IT/Culture/Materiel_informatique-connectique-andco.md": ("it", "infrastructure"),
-    "IT/Culture/Fiche_How-The-Web-Works.md": ("it", "web"),
-    "IT/Culture/Fiche_WebApp.md": ("it", "web"),
-    "IT/Fiche_Web-Requests.md": ("it", "web"),
-    "IT/Culture/SQL.md": ("it", "scripting"),
-    "IT/Culture/Assembleur.md": ("it", "scripting"),
-}
-# Noms de fichier trop éloignés du titre prévu : correspondance explicite (chemin relatif au coffre).
-TITLES = {
-    # Convention : sujet clair d'abord, angle ou niveau ensuite ; la provenance (HTB, L2I) va en badge.
-    "Cyber/01_CTI/20260405_L2I_Contre-Ingerence.md": "Contre-ingérence et guerre informationnelle",
-    "Cyber/01_CTI/APT_vFULL.md": "APT — menaces persistantes avancées",
-    "Cyber/01_CTI/APT_Synthese.md": "APT — synthèse",
-    "Cyber/01_CTI/CTI.md": "Cyber Threat Intelligence (CTI)",
-    "Cyber/01_CTI/CTI_Work.md": "Cyber Threat Intelligence — travaux pratiques",
-    "Cyber/01_CTI/EtatdeLart_Panorama_Cybermenace.md": "Panorama de la cybermenace — état de l'art",
-    "Cyber/01_CTI/IE.md": "Intelligence économique",
-    "Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md": "Cartographie des écosystèmes cybercriminels",
-    "Cyber/01_CTI/Dark_Web_vFULL.md": "Dark Web",
-    "Cyber/02_OSINT/20260516_OSINT_Mastery_vFULL.md": "OSINT Mastery",
-    "Cyber/02_OSINT/Python_Scraping.md": "Python pour l'OSINT et le scraping",
-    "Cyber/02_OSINT/OSINT_ressources.md": "OSINT — ressources",
-    "Cyber/02_OSINT/OSINT_Synthese.md": "OSINT — synthèse",
-    "Cyber/03_Forensic/Digital_Forensics.md": "Digital forensics",
-    "Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md": "Architecture et sécurité des systèmes",
-    "Cyber/04_Hardening/HTB_Identités et contrôle d'accès.md": "Identités et contrôle d'accès",
-    "Cyber/04_Hardening/HTB_Sauvegardes et reprise d'activité.md": "Sauvegardes et reprise d'activité",
-    "Cyber/04_Hardening/HTB_Solutions de sécurité.md": "Solutions de sécurité",
-    "Cyber/04_Hardening/HTB_Sécurité IT en entreprise.md": "Sécurité IT en entreprise",
-    "Cyber/05_Cyberdefense/20260401_Reponse_Incident.md": "Réponse à incident",
-    "Cyber/05_Cyberdefense/HTB_Réponse à incidents.md": "Réponse à incident — synthèse",
-    "Cyber/05_Cyberdefense/GRC.md": "Gouvernance, risques et conformité (GRC)",
-    "Cyber/05_Cyberdefense/IA_Secu.md": "IA et sécurité",
-    "Cyber/05_Cyberdefense/MCS_COURS_v1.6_2026-08-01.md": "Maintien en condition de sécurité (MCS)",
-    "Cyber/99_Concepts/HTB_Attack Surface Management.md": "Attack Surface Management",
-    "Cyber/99_Concepts/HTB_Menaces, attaques et malwares.md": "Menaces, attaques et malwares",
-    "Cyber/Taxonomie_Cyber.md": "Taxonomie de la cybersécurité",
-    "Cyber/Red_Teaming.md": "Red teaming analytique",
-    "IT/01_Linux/CS_GestionSystem.md": "Gestion système Linux — aide-mémoire",
-    "IT/01_Linux/CS_Workflow.md": "Workflow Linux — aide-mémoire",
-    "IT/01_Linux/Notion_Linux.md": "Linux — prises de notes",
-    "IT/02_Windows/CS_CMD.md": "CMD — aide-mémoire",
-    "IT/02_Windows/Fiche_Windows.md": "Windows — fiche cyber",
-    "IT/02_Windows/Windows.md": "Windows en profondeur",
-    "IT/02_Windows/Windows_Command-Line.md": "Ligne de commande Windows",
-    "IT/02_Windows/HTB_Windows System Sécurity.md": "Sécurité système Windows",
-    "IT/03_Networking/networking_notion.md": "Réseau — prises de notes",
-    "IT/05_Scripting_Langage-Prog/Notion_Bash.md": "Bash — prises de notes",
-    "IT/Architecture_SI.md": "Architecture des systèmes d'information",
-    "IT/Culture/Fiche_WebApp.md": "Applications web",
-    "IT/Culture/Fiche_How-The-Web-Works.md": "Fonctionnement du web : URL, DNS, HTTPS",
-    "IT/Fiche_Web-Requests.md": "HTTP & requêtes web",
-}
-# Format imposé quand la règle automatique ne convient pas (sinon : propriété Obsidian « format »).
-FORMATS = {
-    "Cyber/01_CTI/CTI_Work.md": "atelier",
-    "Cyber/02_OSINT/OSINT_ressources.md": "ressources",
-    "IT/Culture/Questions_Entretien_Cyber_SysAdmin.md": "revision",
-    "IT/01_Linux/Notion_Linux.md": "synthese",
-    "IT/03_Networking/networking_notion.md": "synthese",
-    "IT/05_Scripting_Langage-Prog/Notion_Bash.md": "synthese",
-}
-# Provenance (badge) : notes reprises d'une formation extérieure.
-PROVENANCE = [(re.compile(r"(^|/)HTB_"), "HTB Academy"), (re.compile(r"_L2I_"), "L2I")]
+REVISION = "library/revision"     # espace Révision : une page par rubrique (questions d'entretien)
+REVISION_FOLDER = "Révision"      # dossier du coffre des notes de révision autonomes
 SKIP = {"README.md"}
-# Documents du coffre qui ne sont pas des notes personnelles : jamais publiés (--all retire leur page).
-EXCLUDED = {
-    "Cyber/01_CTI/CERT-EU-Cyber-Threat-Intelligence-Framework.md",   # cadre publié par le CERT-EU
-}
 # Ce qui ne doit jamais atteindre le dépôt public : la note est refusée.
 BLOCKING = [
     ("flag de CTF", re.compile(r"(?i)\b(?:HTB|THM|flag)\{[^}\s]{4,}\}")),
@@ -155,6 +67,10 @@ MIN_CHAPTER_AVG = 3_000  # chapitres plus courts en moyenne (référentiel, glos
 MIN_SPLIT_PARTS = 8_000  # fiche plus courte : pas de sous-pages même si elle a des parties
 COURSE_AT = 120_000      # note plus longue, même sans chapitres : un cours (sinon une synthèse)
 QUIZ_TITLE = re.compile(r"(?i)\bmini-?quiz\b")   # quiz de révision : gardés dans le coffre, pas publiés
+# Notes de travail de la rédaction (cours écrits par tranches) : gardées dans le coffre, pas publiées
+SCAFFOLD_TITLE = re.compile(r"(?i)^(registre de coh[ée]rence|en-t[êe]te de maintenance|journal des modifications)\b")
+# Annexe de questions d'entretien : publiée dans l'espace Révision plutôt qu'à la fin du cours
+REVISION_TITLE = re.compile(r"(?i)^annexe\s*[—–-]\s*questions types d.entretien")
 TOC_TITLE = re.compile(r"(?i)^(table des mati[eè]res|sommaire|table of contents)\b")
 PART_TITLE = re.compile(r"(?i)^(partie|part|volume|livre|module)\b")
 CHAPTER_TITLE = re.compile(r"(?i)^(chapitre|chapter|ch\.?|le[çc]on|lesson)\s*\d")
@@ -173,14 +89,21 @@ def slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
-def category_of(rel):
-    if Path(rel).as_posix() in PLACES:
-        return PLACES[Path(rel).as_posix()]
-    parts = rel.parent.as_posix()
-    while parts:
-        if parts in FOLDERS:
-            return FOLDERS[parts]
-        parts = parts.rsplit("/", 1)[0] if "/" in parts else ""
+def label_key(label):
+    """Libellé du site ou dossier du coffre, comparables : « 🛰️ Détection & réponse » = « 06 Détection & réponse »."""
+    return slug(re.sub(r"^\d+\s*[-_.]?\s*", "", str(label).strip()))
+
+
+def category_of(rel, tree):
+    """(domaine, catégorie) d'après les dossiers du coffre : Domaine/NN Rubrique/…"""
+    parts = Path(rel).parts
+    if len(parts) < 3:
+        return None
+    for d in tree:
+        if label_key(d["label"]) == label_key(parts[0]):
+            for c in d.get("categories", []):
+                if label_key(c["label"]) == label_key(parts[1]):
+                    return d["id"], c["id"]
     return None
 
 
@@ -193,60 +116,63 @@ def planned(tree, dom, cat):
     raise ValueError(f"catégorie inconnue dans data/bibliotheque.yml : {dom}/{cat}")
 
 
-def guess_title(path, candidates):
-    """Note prévue la plus proche du nom de fichier (dates, « vFULL », « ADD_ » ignorés)."""
-    stem = re.sub(r"^\d{8}_|_?vFULL$|^ADD_|^Fiche_", "", path.stem)
-    stem = slug(stem.replace("_", " "))
-    scored = sorted(((difflib.SequenceMatcher(None, stem, slug(c)).ratio(), c) for c in candidates), reverse=True)
-    return scored[0] if scored else (0, None)
-
-
 def vault_notes(vault):
     """Notes du coffre rangées dans un dossier (les fichiers de la racine et README sont ignorés)."""
     return sorted(p for p in vault.rglob("*.md")
-                  if not {".obsidian", ".git", "_archives"} & set(p.parts) and p.parent != vault and p.name not in SKIP
-                  and p.relative_to(vault).as_posix() not in EXCLUDED)
+                  if not {".obsidian", ".git", "_archives"} & set(p.parts) and p.parent != vault and p.name not in SKIP)
+
+
+def is_revision(vault, rel):
+    """Note de révision autonome : rangée dans Révision/ ou déclarée « format: revision »."""
+    return Path(rel).parts[0] == REVISION_FOLDER or read_props(vault / rel).get("format") == "revision"
 
 
 def resolve(vault, rel, tree, title=None, to=None):
-    """(domaine, catégorie, titre) d'une note du coffre ; ValueError si la rubrique ou le titre manquent."""
-    dom, cat = to.split("/") if to else (category_of(Path(rel)) or (None, None))
+    """(domaine, catégorie, titre) d'une note du coffre ; ValueError si la rubrique manque.
+    Titre : la note prévue dans data/bibliotheque.yml dont le nom de fichier reprend le titre, sinon le nom
+    du fichier lui-même (une nouvelle note publiée sans rien déclarer)."""
+    dom, cat = to.split("/") if to else (category_of(Path(rel), tree) or (None, None))
     if not dom:
-        raise ValueError(f"{rel} : rubrique inconnue, préciser --to domaine/catégorie")
-    title = title or TITLES.get(Path(rel).as_posix())
+        raise ValueError(f"{rel} : rubrique inconnue (dossier hors de l'arborescence du site), préciser --to domaine/catégorie")
     if not title:
-        score, title = guess_title(vault / rel, planned(tree, dom, cat))
-        if not title or score < 0.45:
-            raise ValueError(f"{rel} : aucune note prévue ne correspond dans {dom}/{cat} "
-                             f"(meilleur score {score:.2f}), préciser --title")
+        stem = Path(rel).stem
+        title = next((c for c in planned(tree, dom, cat) if slug(c) == slug(stem)), stem)
     return dom, cat, title
 
 
+def front_matter(text):
+    """(propriétés, texte sans en-tête) ; un « --- » qui n'ouvre pas de vraies propriétés reste du texte."""
+    m = re.match(r"\A---\n(.*?)\n---\n", text, re.S)
+    if m:
+        try:
+            props = yaml.safe_load(m.group(1))
+        except yaml.YAMLError:
+            props = None
+        if isinstance(props, dict):
+            return props, text[m.end():]
+        if re.match(r"^[\w-]+:", m.group(1)):          # propriétés illisibles (« : » sans guillemets) : retirées
+            print(f"  propriétés Obsidian illisibles, ignorées : {m.group(1).splitlines()[0][:60]}…", file=sys.stderr)
+            return {}, text[m.end():]
+    return {}, text
+
+
 def read_note(path):
-    text = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
-    return re.sub(r"\A---\n.*?\n---\n", "", text, flags=re.S)              # en-tête Obsidian éventuel
+    return front_matter(path.read_text(encoding="utf-8-sig").replace("\r\n", "\n"))[1]
 
 
 def read_props(path):
-    """Propriétés Obsidian (en-tête YAML) : format (cours | synthese | fiche), termes (terme: définition)."""
-    m = re.match(r"\A---\n(.*?)\n---\n", path.read_text(encoding="utf-8-sig").replace("\r\n", "\n"), re.S)
-    try:
-        props = yaml.safe_load(m.group(1)) if m else {}
-    except yaml.YAMLError:
-        return {}
-    return props if isinstance(props, dict) else {}
+    """Propriétés Obsidian (en-tête YAML) : format, provenance, niveau, objectif, prerequis, termes, rubrique."""
+    return front_matter(path.read_text(encoding="utf-8-sig").replace("\r\n", "\n"))[0]
 
 
 FORMAT_NAMES = ("cours", "synthese", "fiche", "aide-memoire", "atelier", "ressources", "revision")
 
 
-def note_format(text, title, props, cat, rel=""):
+def note_format(text, title, props, cat):
     """cours (exhaustif) | synthese (parcours condensé) | fiche (une notion) | aide-memoire | atelier |
-    ressources (liens) | revision (questions). Propriété « format » de la note, puis FORMATS, puis règle."""
+    ressources (liens) | revision (questions). Propriété « format » de la note, sinon règle automatique."""
     if props.get("format") in FORMAT_NAMES:
         return props["format"]
-    if rel in FORMATS:
-        return FORMATS[rel]
     if cat == "notions":
         return "fiche"
     if CHEAT_TITLE.search(title):
@@ -297,6 +223,24 @@ def is_title(heading, title):
     return bool(words) and common / len(words) >= 0.5 and (common >= 2 or len(words) == 1)
 
 
+def lone_h1(heads):
+    """[(niveau, texte)] : le premier titre est le seul de niveau 1 de la note (hors sections non publiées) ;
+    dans une note longue, c'est alors son titre, même s'il ne reprend pas ses mots (« DIGITAL FORENSICS ») ;
+    une fiche courte qui s'ouvre sur « # Définitions de base » garde cette vraie section."""
+    if not heads or heads[0][0] != 1:
+        return False
+    skip = None
+    for level, text in heads[1:]:
+        if skip is not None and level <= skip:
+            skip = None
+        if skip is None and dropped(text):
+            skip = level
+            continue
+        if skip is None and level == 1:
+            return False
+    return True
+
+
 def is_split(text, title=""):
     """Note publiée en plusieurs pages : très longue, cours en chapitres, ou longue et en grandes sections.
     Une cheat sheet reste d'un seul tenant (on la parcourt avec Ctrl+F)."""
@@ -305,7 +249,8 @@ def is_split(text, title=""):
     if len(text) > SPLIT_AT:
         return True
     heads = outline(text)
-    if heads and heads[0][1] == 1 and is_title(heads[0][2], title) and not text[:text.find("#")].strip():
+    lone = lone_h1([(lv, x) for _, lv, x in heads]) and len(text) > SPLIT_SECTIONS_AT   # cours long : son titre
+    if heads and heads[0][1] == 1 and (is_title(heads[0][2], title) or lone) and not text[:text.find("#")].strip():
         heads = heads[1:]
     if sum(bool(CHAPTER_TITLE.match(t)) for _, _, t in heads) >= 3:
         return True
@@ -515,13 +460,21 @@ def heading_text(raw, shield):
     return re.sub(r"[*_=]{1,3}", "", text).strip().rstrip("#").strip()
 
 
+# Début de titre trop vague pour servir seul (« Chapitre 34 — Cas complet : profilage… ») : titre gardé entier
+GENERIC_LEAD = re.compile(r"(?i)^(?:(?:chapitre|chapter|ch\.?)\s*\d+\s*[—–-]\s*)?(?:cas(?: complet| pratique| de synthèse)?"
+                          r"|étude de cas|exercice|lab|atelier|synthèse|exemple)\s*\d*$")
+
+
 def split_heading(text):
     """Titre-phrase -> (titre court, accroche) : « 1. Reconnaissance : But de l'attaquant… » ou
-    « Network/Host artifacts (ex : clés de registre, chemins…) » ; un titre court reste tel quel."""
+    « Network/Host artifacts (ex : clés de registre, chemins…) » ; un titre court reste tel quel, comme
+    celui dont le début ne dit rien seul (« Cas complet : … »)."""
     if len(text) <= 70:
         return text, ""
     for m in re.finditer(r"\s:\s", text):
         before = text[:m.start()]
+        if GENERIC_LEAD.match(before.strip()):
+            return text, ""
         if 3 <= len(before) <= 60 and before.count("(") == before.count(")"):
             return before.strip(), text[m.end():].strip()
     m = re.match(r"^(.{3,60}?)\s*\((.{25,})\)\s*$", text)
@@ -547,7 +500,8 @@ def normalize_headings(text, title, shield):
     lines = text.split("\n")
     first = next((i for i, l in enumerate(lines) if l.strip()), None)
     m = re.match(r"^#[ \t]+(.+)$", lines[first]) if first is not None else None
-    if m and is_title(heading_text(m.group(1), shield), title):
+    every = [(len(h.group(1)), heading_text(h.group(2), shield)) for l in lines if (h := HEADING.match(l))]
+    if m and (is_title(heading_text(m.group(1), shield), title) or (lone_h1(every) and len(text) > SPLIT_SECTIONS_AT)):
         lines[first] = ""
         heads = [(i, len(h.group(1)), h.group(2)) for i, l in enumerate(lines) if (h := HEADING.match(l))]
         nxt = next((i for i in range(first + 1, len(lines)) if lines[i].strip()), None)
@@ -586,14 +540,19 @@ def close_gaps(lines):
     return out
 
 
-def drop_quizzes(body, shield):
-    """Sections « Mini-quiz » retirées de la page publiée (elles restent dans la note Obsidian)."""
+def dropped(heading):
+    """Section non publiée avec la note : mini-quiz, note de rédaction, annexe de questions d'entretien."""
+    return bool(QUIZ_TITLE.search(heading) or SCAFFOLD_TITLE.match(heading) or REVISION_TITLE.match(heading))
+
+
+def drop_sections(body, shield):
+    """Retire de la page publiée les sections non publiées (elles restent dans la note Obsidian)."""
     out, skip = [], None
     for line in body.split("\n"):
         m = HEADING.match(line)
         if m and skip is not None and len(m.group(1)) <= skip:
             skip = None
-        if m and skip is None and QUIZ_TITLE.search(heading_text(m.group(2), shield)):
+        if m and skip is None and dropped(heading_text(m.group(2), shield)):
             skip = len(m.group(1))
         if skip is None:
             out.append(line)
@@ -626,6 +585,15 @@ def structure(body, shield, sections_only=False):
     levels = [lv for _, lv, _ in heads]
     chap_lv = (collections.Counter(chapters).most_common(1)[0][0] if mode == "chapters"      # sinon : premier
                else next((lv for lv in range(1, 7) if levels.count(lv) >= 3), min(levels)))   # niveau à 3 titres
+
+    def chapters_follow(k):
+        """Un bilan suivi d'autres chapitres avant la partie suivante est intermédiaire : il reste dans sa partie."""
+        for j in range(k + 1, len(heads)):
+            if kinds[j] == "chapter":
+                return True
+            if kinds[j] in ("part", "annex") and heads[j][1] <= heads[k][1]:
+                return False
+        return False
 
     def holds_chapters(k):
         """Le titre n°k ouvre-t-il un groupe qui contient des chapitres ?"""
@@ -681,7 +649,7 @@ def structure(body, shield, sections_only=False):
                 nodes.append(group)
                 started = True
                 continue
-            if kind == "end" and started:
+            if kind == "end" and started and not chapters_follow(k):
                 group, current = None, {"title": title, "lines": [line], "children": []}
                 nodes.append(current)
                 continue
@@ -714,30 +682,61 @@ def acronyms_of(text):
     for line in text.split("\n"):
         letters = [c for c in line if c.isalpha()]
         if letters and sum(c.isupper() for c in letters) / len(letters) < 0.6:
-            found.update(re.findall(r"\b[A-ZÀ-Ý][A-ZÀ-Ý0-9]+\b", line))
+            found.update(w for w in re.findall(r"\b[A-ZÀ-Ý][A-ZÀ-Ý0-9]+\b", line) if w.lower() not in SMALL_WORDS)
     return found
+
+
+# Mots français jamais pris pour des sigles (« Profilage d'acteur ET attribution »)
+SMALL_WORDS = {"et", "ou", "de", "du", "des", "la", "le", "les", "un", "une", "en", "au", "aux", "a", "à", "pour",
+               "par", "sur", "sous", "sans", "avec", "dans", "pas", "ne", "que", "qui", "quoi", "ce", "ces", "son",
+               "sa", "ses", "leur", "leurs", "avant", "après", "apres", "comme", "vers", "entre", "mais", "donc",
+               "quand", "est", "sont", "plus", "moins", "tout", "tous", "chez", "contre", "depuis", "selon"}
+ELIDED = {"l", "d", "j", "n", "s", "c", "qu", "jusqu", "lorsqu", "puisqu"}   # L'…, D'…, QU'…
+# Noms propres et sigles écrits en minuscules par la remise en casse (« administration windows locale »)
+PROPER = {"windows": "Windows", "linux": "Linux", "powershell": "PowerShell", "docker": "Docker",
+          "kubernetes": "Kubernetes", "ansible": "Ansible", "python": "Python", "javascript": "JavaScript",
+          "bash": "Bash", "sql": "SQL", "iran": "Iran", "chine": "Chine", "russie": "Russie", "europe": "Europe",
+          "france": "France", "internet": "Internet", "microsoft": "Microsoft", "mitre": "MITRE",
+          "api": "API", "apis": "API", "ot": "OT", "ia": "IA", "dprk": "DPRK", "osint": "OSINT",
+          "cti": "CTI", "ie": "IE", "soc": "SOC", "grc": "GRC", "mcs": "MCS", "ssi": "SSI",
+          "tcp": "TCP", "ip": "IP", "dns": "DNS", "http": "HTTP", "https": "HTTPS", "vpn": "VPN", "gpo": "GPO",
+          "ntfs": "NTFS", "smb": "SMB", "dhcp": "DHCP", "ssh": "SSH", "uac": "UAC", "edr": "EDR", "siem": "SIEM",
+          "devsecops": "DevSecOps", "ics": "ICS", "rgpd": "RGPD", "nis2": "NIS2"}
+PROPER_PHRASES = [(re.compile(r"\bcorée du nord\b", re.I), "Corée du Nord")]
 
 
 def tidy_title(title, acronyms):
     """« PARTIE I — FONDATIONS : PENSER EN ÉCOSYSTÈME » -> « Partie I — Fondations : penser en écosystème »
-    (titres tout en capitales seulement ; sigles et chiffres romains gardés)."""
+    (titres tout en capitales seulement ; sigles, chiffres romains et noms propres gardés)."""
     letters = [c for c in title if c.isalpha()]
     if len(letters) < 6 or sum(c.isupper() for c in letters) / len(letters) < 0.9:
         return title
+    tokens = re.split(r"(\W+)", title)
     out, start = [], True
-    for token in re.split(r"(\W+)", title):
+    for i, token in enumerate(tokens):
         if not token or not token[0].isalnum():
             out.append(token)
             if re.search(r"[—–.]", token):          # après « : », minuscule (usage français)
                 start = True
             continue
-        if token in acronyms or re.fullmatch(r"[IVXLC]+", token) or any(c.isdigit() for c in token):
+        low = token.lower()
+        after = tokens[i + 1] if i + 1 < len(tokens) else ""
+        if low in ELIDED and after[:1] in ("'", "’"):
+            word = low                                # « L'intelligence », pas « L » (chiffre romain)
+        elif low in PROPER:
+            word = PROPER[low]
+        elif low in SMALL_WORDS:
+            word = low
+        elif token in acronyms or re.fullmatch(r"[IVXLC]+", token) or any(c.isdigit() for c in token):
             word = token
         else:
-            word = token.lower()
+            word = low
         out.append(word[:1].upper() + word[1:] if start else word)
         start = False
-    return "".join(out)
+    text = "".join(out)
+    for rx, fixed in PROPER_PHRASES:
+        text = rx.sub(fixed, text)
+    return text
 
 
 def size(node, shield):
@@ -854,19 +853,20 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         notes.append(f"{masked} IP de lab masquée(s)")
     shield = Shield()
     conv = Converter(vault, tree, index)
-    body = drop_quizzes(normalize_headings(conv.convert(text, source, shield), title, shield), shield)
+    body = drop_sections(normalize_headings(conv.convert(text, source, shield), title, shield), shield)
     meta = {"title": title, "source": Path(rel).as_posix()}
     props = read_props(source)
-    kind = note_format(text, title, props, cat, Path(rel).as_posix())
+    kind = note_format(text, title, props, cat)
     if kind:
         meta["format"] = kind
-    origin = props.get("provenance") or next((name for rx, name in PROVENANCE if rx.search(Path(rel).as_posix())), None)
-    if origin:
-        meta["provenance"] = str(origin)
+    if props.get("provenance"):                        # badge : HTB Academy, L2I…
+        meta["provenance"] = str(props["provenance"])
     meta["revue"] = datetime.date.fromtimestamp(source.stat().st_mtime).isoformat()   # dernière modification
     for key in ("niveau", "objectif", "prerequis"):    # propriétés Obsidian facultatives, affichées si présentes
         if props.get(key):
             meta[key] = str(props[key])
+    if revision_section(text):                         # questions d'entretien : page de révision de la rubrique
+        meta["revision"] = revision_page(dom, cat)
     if isinstance(props.get("termes"), dict):          # fiche notion : termes du glossaire (terme: définition)
         meta["terms"] = {str(k): str(v) for k, v in props["termes"].items()}
     split = is_split(text, title)
@@ -921,6 +921,112 @@ def build(vault, rel, tree, title=None, to=None, index=None):
     for path, content, head in pages:
         out[path] = front(head) + shield.show(finish_links(content, path, anchors)).strip() + "\n"
     return out, conv.images, notes
+
+
+# ------------------------------------------------------------------ espace Révision
+
+def revision_section(text):
+    """Annexe « Questions types d'entretien » d'une note (titre compris), ou None."""
+    heads = outline(text)
+    lines = text.split("\n")
+    for k, (i, level, title) in enumerate(heads):
+        if REVISION_TITLE.match(title):
+            end = next((j for j, lv, _ in heads[k + 1:] if lv <= level), len(lines))
+            return "\n".join(lines[i:end]).strip("\n")
+    return None
+
+
+def revision_page(dom, cat):
+    return f"{REVISION}/{cat}.md" if cat else f"{REVISION}/{dom}.md"
+
+
+def category_label(tree, dom, cat):
+    for d in tree:
+        for c in d.get("categories", []) if d["id"] == dom else []:
+            if c["id"] == cat:
+                return re.sub(r"^\W+", "", c["label"]).strip(), re.sub(r"^\W+", "", d["label"]).strip()
+    return None, None
+
+
+def revision_sources(vault, tree, index):
+    """{(domaine, catégorie) ou (None, sujet): [(note du coffre, titre, page du cours ou None, texte)]}
+    — annexes des cours, puis notes autonomes du dossier Révision/ (propriété « rubrique »)."""
+    groups = {}
+    for note in vault_notes(vault):
+        rel = note.relative_to(vault).as_posix()
+        text = read_note(note)
+        if is_revision(vault, rel):
+            rubric = str(read_props(note).get("rubrique") or "")
+            key = tuple(rubric.split("/", 1)) if "/" in rubric else (None, note.stem)
+            groups.setdefault(key, []).append((rel, note.stem, None, text))
+            continue
+        section = revision_section(text)
+        if not section:
+            continue
+        try:
+            dom, cat, title = resolve(vault, rel, tree)
+        except ValueError:
+            continue
+        course = note_target(dom, cat, title, is_split(text, title))
+        groups.setdefault((dom, cat), []).insert(0, (rel, title, course, section))
+    return groups
+
+
+def revision_body(vault, rel, text, tree, index, path, depth):
+    """Questions d'une source, converties comme une note ; leur titre de tête disparaît (la page en a un)."""
+    found = [label for label, pattern in BLOCKING for _ in pattern.finditer(text)]
+    if found:
+        raise ValueError(f"{rel} : révision refusée (dépôt public) : {', '.join(found)}")
+    text = LAB_IP.sub(lambda m: f"{LAB_IP_TO[m.group(1)]}.{m.group(2)}", text)
+    shield = Shield()
+    conv = Converter(vault, tree, index)
+    lines = conv.convert(text, vault / rel, shield).split("\n")
+    first = next((i for i, l in enumerate(lines) if l.strip()), None)
+    if first is not None and HEADING.match(lines[first]):
+        lines = lines[first + 1:]
+    body = "\n".join(close_gaps(rebase(lines, top=depth))).strip("\n")
+    return shield.show(finish_links(body, path, {})), conv.images
+
+
+def write_revisions(vault, tree, index):
+    """Pages de l'espace Révision (une par rubrique, plus une par note autonome sans rubrique) ;
+    les pages devenues sans source sont supprimées. Renvoie [(page, remarques)]."""
+    folder = DOCS / REVISION
+    old = set(folder.glob("*.md")) if folder.exists() else set()
+    written, report = [], []
+    for (dom, cat), sources in sorted(revision_sources(vault, tree, index).items(), key=lambda kv: str(kv[0])):
+        label, domain = category_label(tree, dom, cat) if dom else (None, None)
+        title = f"Révision — {label}" if label else sources[0][1]
+        path = revision_page(dom, cat) if dom else f"{REVISION}/{slug(cat)}.md"
+        many = len(sources) > 1
+        parts, images = [], []
+        for rel, name, course, text in sources:
+            name = re.sub(r"\s*[—–-]\s*questions de r[ée]vision$", "", name)     # « Threat hunting — questions de révision »
+            body, imgs = revision_body(vault, rel, text, tree, index, path, 3 if many else 2)
+            images += imgs
+            origin = (f"*D'après le cours [{name}]({posixpath.relpath(course, posixpath.dirname(path))})*"
+                      if course else "")
+            parts.append((f"## {name}\n\n" if many else "") + (origin + "\n\n" if origin else "") + body)
+        meta = {"title": title, "revision": f"{dom}/{cat}" if dom else "transverse",
+                "domaine": domain or "", "sources": [s[0] for s in sources]}
+        target = DOCS / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((front(meta) + "\n\n".join(parts).strip() + "\n").encode("utf-8"))
+        for image, name in images:
+            dest = DOCS / ASSETS / name
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(image, dest)
+        written.append(target)
+        report.append((path, f"{len(sources)} source(s)"))
+    found = gitleaks(written)
+    if found:
+        for f in written:
+            f.unlink()
+        raise ValueError("gitleaks refuse les pages de révision :\n    " + "\n    ".join(found))
+    for f in old - set(written):
+        f.unlink()
+        report.append((f.relative_to(DOCS).as_posix(), "retirée"))
+    return report
 
 
 def published():
@@ -1010,6 +1116,9 @@ def main(argv=None):
     if args.list:
         for note in vault_notes(vault):
             rel = note.relative_to(vault).as_posix()
+            if is_revision(vault, rel):
+                print(f"R  {rel}  ->  espace Révision")
+                continue
             try:
                 dom, cat, title = resolve(vault, rel, tree)
             except ValueError as exc:
@@ -1018,18 +1127,19 @@ def main(argv=None):
             mark = "●" if rel in existing else "○"
             cut = " · découpée" if is_split(read_note(note), title) else ""
             print(f"{mark}  {rel}  ->  {dom}/{cat} · {title}{cut}")
-        print("\n● publiée · ○ à publier · ? --title / --to nécessaires")
+        print("\n● publiée · ○ à publier · R révision · ? --title / --to nécessaires")
         return 0
     if (args.title or args.to) and len(args.notes) != 1:
         ap.error("--title et --to s'utilisent avec une seule note")
     if args.all and args.notes:
         ap.error("--all ou une liste de notes, pas les deux")
     todo = [n.relative_to(vault).as_posix() for n in vault_notes(vault)] if args.all else args.notes
+    todo = [rel for rel in todo if not is_revision(vault, rel)]      # publiées dans l'espace Révision
     index = build_index(vault, tree)
     code = 0
     if args.all:                  # d'abord : une note fusionnée peut reprendre le titre (et les pages) d'une archivée
         for src, files in existing.items():
-            if not (vault / src).is_file() or src in EXCLUDED:
+            if not (vault / src).is_file() or is_revision(vault, src):
                 remove_pages(files)
                 print(f"RETIRÉE : {src} (note absente du coffre ou exclue)")
     for rel in todo:
@@ -1045,6 +1155,12 @@ def main(argv=None):
             if image.name not in used:                   # image qu'aucune page n'utilise plus
                 image.unlink()
                 print(f"IMAGE RETIRÉE : {image.name}")
+    try:
+        for page, note in write_revisions(vault, tree, index):
+            print(f"RÉVISION : docs/{page}  [{note}]")
+    except ValueError as exc:
+        print(f"NON PUBLIÉE : {exc}", file=sys.stderr)
+        code = 1
     if todo:
         print("Relire les pages (mkdocs serve), puis committer les fichiers nommés.")
     return code
