@@ -42,21 +42,30 @@ Puis ouvrir http://127.0.0.1:8002. Après une modification de `hooks/portal.py`,
 ## Importer des notes dans la Bibliothèque
 
 ```powershell
-.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --list        # état note -> page
-.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes --all         # routine : tout mettre à jour
-.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes Cyber/01_CTI/CTI.md   # une note
-.\.venv\Scripts\python -m unittest discover -s tests                                   # tests du convertisseur
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes-v2 --list      # état note -> page
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes-v2 --all       # routine : tout mettre à jour
+.\.venv\Scripts\python scripts/import_notes.py --vault ..\CyberSec-notes-v2 "Cyber/02 OSINT/OSINT — synthèse.md"   # une note
+.\.venv\Scripts\python -m unittest discover -s tests                                     # tests du convertisseur
 ```
 
-Formats (règle automatique, ou propriété Obsidian `format:`) : **cours** (≥ 3 chapitres, parties ou
-plus de 120 000 caractères), **synthèse** (le reste, ou « synthèse » dans le titre ; marquée 📝 dans le menu,
-reliée aux cours de même sujet de sa rubrique), **fiche** (rubrique 📌 Notions, dossier `Cyber/00_Notions`).
-Une fiche déclare ses termes (`termes: {SPF: définition…}`) : ils entrent au glossaire et leur infobulle,
-sur tout le site, mène à la fiche.
+Le coffre suit l'arborescence du site : `Domaine/NN Rubrique[/Sous-rubrique]/Titre.md` (dossiers nommés comme
+les libellés de `data/bibliotheque.yml`, sans emoji, précédés de leur numéro d'ordre ; « : » s'écrit « - »
+dans un nom de fichier). La rubrique et le titre d'une note viennent donc de son emplacement et de son nom ;
+une note posée dans un dossier de rubrique est publiée sans rien déclarer. `_archives/` n'est jamais publié.
+
+Formats (propriété Obsidian `format:`, sinon règle automatique) : **cours** (≥ 3 chapitres, parties ou
+plus de 120 000 caractères), **synthèse** (le reste, ou « synthèse » dans le titre ; « X — synthèse » se range
+sous le cours « X… » de sa rubrique, entrée « En synthèse »), **fiche** (rubrique Fiches notions),
+**aide-mémoire** (« aide-mémoire » ou « cheat sheet » dans le titre), **ressources**, **révision**.
+Autres propriétés lues : `provenance` (badge, ex. HTB Academy), `niveau`, `objectif`, `prerequis`.
+Une fiche déclare ses termes (`termes: {SPF: définition…}`, valeurs entre guillemets si elles contiennent
+« : ») : ils entrent au glossaire et leur infobulle, sur tout le site, mène à la fiche. Les glossaires des
+cours (sections « Glossaire ») alimentent aussi le glossaire, sans infobulle.
+Espace Révision : l'annexe « Questions types d'entretien » d'un cours et les notes du dossier `Révision/`
+(propriété `rubrique: cyber/detection`) donnent une page par rubrique dans `docs/library/revision/`.
+Non publiés : mini-quiz, registre de cohérence, en-tête de maintenance, journal des modifications.
 Dans `data/bibliotheque.yml`, une rubrique liste ses notes (`notes:`) ou les répartit en sous-rubriques
-(`groups:` → `label` + `notes`, ex. « Outils & solutions ») ; l'adresse des pages ne dépend pas des sous-rubriques.
-La rubrique d'une note vient de son dossier du coffre (`FOLDERS`), ou de `PLACES` quand le site la range
-ailleurs (ex. VirusTotal dans Outils) ; `EXCLUDED` liste les documents du coffre à ne jamais publier.
+(`groups:` → `label` + `notes`) ; `mots:` relie la rubrique aux analyses et dossiers de la veille.
 `--all` (ré)importe chaque note rangée du coffre et retire les pages dont la note a disparu ; ensuite
 `mkdocs build --strict`, puis commit des fichiers nommés (`git add docs/library/…`, jamais `git add .`).
 
