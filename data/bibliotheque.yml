@@ -104,7 +104,7 @@
       description: Administrer, dépanner et investiguer un système Linux.
       debut: Administration Linux
       mots: [Linux]
-      notes: [Administration Linux, Linux — prises de notes, Gestion système Linux — aide-mémoire, Linux — commandes et investigation (aide-mémoire)]
+      notes: [Administration Linux, Linux — prises de notes]
     - id: windows
       label: 🪟 Windows
       description: Comprendre Windows de l'intérieur et l'administrer en ligne de commande.

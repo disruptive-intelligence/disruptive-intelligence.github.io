@@ -1,0 +1,65 @@
+---
+incident:
+statut: ouvert
+analyste:
+---
+# Enquête initiale — INC-AAAA-NNN
+
+## 1. Informations générales
+
+| Champ | Valeur |
+|---|---|
+| Date et heure du signalement (UTC) | |
+| Signalé par (nom, rôle, contact) | |
+| Méthode de détection (utilisateur · outil de sécurité · threat hunting · notification externe) | |
+| Type d'incident présumé (phishing · malware · compte compromis · fuite de données · indisponibilité · accès non autorisé) | |
+| Analyste en charge | |
+
+## 2. Contexte de l'alerte
+
+- Système correspondant à l'IP :
+- Fuseau horaire de l'horodatage :
+- Utilisateur légitime ?
+- Maintenance planifiée ?
+- Source habituelle ?
+- MFA validé ?
+- Activité associée :
+
+## 3. Systèmes impactés
+
+| Hostname | IP | OS | Localisation | Propriétaire | Fonction métier | Criticité | État actuel | Utilisateurs ayant accédé |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
+
+## 4. Activité observée
+
+- Actions effectuées :
+- Comptes impliqués :
+- Connexions :
+- Changements réalisés :
+- Activité encore en cours : [ ] oui → confinement urgent · [ ] non → préserver et investiguer
+
+## 5. Malware (si impliqué)
+
+| Détecté le (UTC) | Famille / type | Système | Fichier (chemin) | SHA-256 | Indicateurs réseau | Autres artefacts |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
+## 6. Contexte métier et priorité
+
+- Impact technique :
+- Criticité des actifs :
+- Impact métier :
+- Priorité retenue (P1 · P2 · P3 · P4) et justification :
+
+## 7. Premières décisions
+
+| Heure (UTC) | Décision | Prise par | Raison |
+|---|---|---|---|
+| | | | |
+
+## 8. Chronologie initiale
+
+| Date et heure (UTC) | Source | Événement | Système |
+|---|---|---|---|
+| | | | |

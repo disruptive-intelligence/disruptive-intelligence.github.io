@@ -27,7 +27,7 @@ theme:
     text: Inter
     code: JetBrains Mono
   features:
-    - navigation.tabs         # onglets en haut : Pentest / Bibliothèque / Veille
+    - navigation.tabs         # onglets en haut : Veille, Analyses, Dossiers, Cheat sheets, Bibliothèque
     - navigation.tabs.sticky  # requis : sinon Material ajoute une 2e barre d'onglets
     - navigation.prune        # menu : seule la partie visible est écrite dans chaque page (Bibliothèque : 400+ pages)
     - navigation.sections     # grandes parties = en-têtes (style HackTricks)
@@ -74,6 +74,7 @@ extra_javascript:
   - javascripts/glossary-tooltips.js   # définitions du glossaire au survol
   - javascripts/veille-tools.js        # Explorer, Pile de lecture, barre de lecture
   - javascripts/nav-lazy.js            # flèche du menu : déroule sur place sans changer de page
+  - javascripts/cheatsheets.js         # cheat sheets : filtre des besoins
 
 plugins:
   - search:
@@ -109,37 +110,73 @@ markdown_extensions:
 
 nav:
   - 🏠 Accueil: index.md    # généré ; Veille, Analyses et Dossiers sont insérés juste après
-  - ⚔️ Pentest:
-    - 🚀 Démarrage:
-        - start/index.md
-        - Checklist avant engagement: start/checklist.md
-        - Conventions: start/conventions.md
-    - 🧭 Méthodologies générales:
-        - Méthodologie pentest:
-            - methodology/index.md
-            - 1. Reconnaissance passive: methodology/01-passive-recon.md
-            - 2. Reconnaissance active: methodology/02-active-recon.md
-            - 3. Énumération: methodology/03-enumeration.md
-            - 4. Accès initial: methodology/04-initial-access.md
-            - 5. Élévation de privilèges: methodology/05-privesc.md
-            - 6. Mouvement latéral: methodology/06-lateral-movement.md
-            - 7. Post-exploitation: methodology/07-post-exploitation.md
-        - Pentest réseau: methodology/network.md
-    - 🌐 Services réseau:
-        - services/index.md
-        - 88 - Kerberos: services/kerberos.md
-        - 139,445 - SMB: services/smb.md
-    - 🕸️ Pentest web:
-        - Méthodologie web: web/methodology.md
-    - 🏰 Active Directory:
-        - active-directory/index.md
-        - Énumération: active-directory/enumeration.md
-    - 🔓 Élévation de privilèges:
-        - privesc/index.md
-        - Linux: privesc/linux.md
-        - Windows: privesc/windows.md
-    - 🧰 Outils:
-        - tools/index.md
-        - Nmap: tools/nmap.md
+  - 📋 Cheat sheets:
+    - cheatsheets/index.md
+    - 🔎 Que veux-tu faire ?: cheatsheets/besoins.md
+    - Conventions: cheatsheets/conventions.md
+    - 🐧 Linux:
+        - cheatsheets/linux/index.md
+        - Fondamentaux:
+            - cheatsheets/linux/fondamentaux/index.md
+            - Système et arborescence: cheatsheets/linux/fondamentaux/systeme.md
+            - Fichiers et recherche: cheatsheets/linux/fondamentaux/fichiers-recherche.md
+            - Texte et filtres: cheatsheets/linux/fondamentaux/texte-filtres.md
+            - Processus et services: cheatsheets/linux/fondamentaux/processus.md
+            - Réseau: cheatsheets/linux/fondamentaux/reseau.md
+            - Logs et journaux: cheatsheets/linux/fondamentaux/logs.md
+            - Droits et identités: cheatsheets/linux/fondamentaux/droits.md
+        - Administration:
+            - cheatsheets/linux/administration/index.md
+            - Utilisateurs et groupes: cheatsheets/linux/administration/utilisateurs.md
+            - Paquets et logiciels: cheatsheets/linux/administration/paquets.md
+            - Services et démarrage: cheatsheets/linux/administration/services.md
+            - Réseau et résolution de noms: cheatsheets/linux/administration/reseau.md
+            - Tâches planifiées: cheatsheets/linux/administration/taches.md
+            - Disques, archives et transferts: cheatsheets/linux/administration/disques.md
+    - 🧬 Forensic:
+        - cheatsheets/forensic/index.md
+        - Linux:
+            - cheatsheets/forensic/linux/index.md
+            - Triage à chaud: cheatsheets/forensic/linux/triage-a-chaud.md
+    - 🚨 Réponse à incident:
+        - cheatsheets/reponse-incident/index.md
+        - Fiches réflexes:
+            - cheatsheets/reponse-incident/fiches-reflexes/index.md
+            - Enquête initiale (triage): cheatsheets/reponse-incident/fiches-reflexes/enquete-initiale.md
+        - Modèles vierges:
+            - cheatsheets/reponse-incident/modeles/index.md
+            - Enquête initiale: cheatsheets/reponse-incident/modeles/enquete-initiale.md
+    - ⚔️ Pentest & CTF:
+        - 🚀 Démarrage:
+            - start/index.md
+            - Checklist avant engagement: start/checklist.md
+            - Conventions: start/conventions.md
+        - 🧭 Méthodologies générales:
+            - Méthodologie pentest:
+                - methodology/index.md
+                - 1. Reconnaissance passive: methodology/01-passive-recon.md
+                - 2. Reconnaissance active: methodology/02-active-recon.md
+                - 3. Énumération: methodology/03-enumeration.md
+                - 4. Accès initial: methodology/04-initial-access.md
+                - 5. Élévation de privilèges: methodology/05-privesc.md
+                - 6. Mouvement latéral: methodology/06-lateral-movement.md
+                - 7. Post-exploitation: methodology/07-post-exploitation.md
+            - Pentest réseau: methodology/network.md
+        - 🌐 Services réseau:
+            - services/index.md
+            - 88 - Kerberos: services/kerberos.md
+            - 139,445 - SMB: services/smb.md
+        - 🕸️ Pentest web:
+            - Méthodologie web: web/methodology.md
+        - 🏰 Active Directory:
+            - active-directory/index.md
+            - Énumération: active-directory/enumeration.md
+        - 🔓 Élévation de privilèges:
+            - privesc/index.md
+            - Linux: privesc/linux.md
+            - Windows: privesc/windows.md
+        - 🧰 Outils:
+            - tools/index.md
+            - Nmap: tools/nmap.md
   - 📚 Bibliothèque:
       - library/index.md

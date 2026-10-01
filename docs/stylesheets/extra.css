@@ -940,3 +940,25 @@ body[data-md-color-scheme="default"]::after {
 .md-nav--primary .md-nav__item--pruned.kw-open > a.md-nav__link .md-nav__icon { transform: rotate(90deg); }
 .md-nav--primary .md-nav__item--pruned.kw-lazy:not(.kw-open) > nav.md-nav { display: none; }
 .md-nav--primary .md-nav__item--pruned.kw-loading > a.md-nav__link .md-nav__icon { opacity: .4; }
+
+/* Cheat sheets : besoins (### ) en entrées compactes, commande / exemples titrés, méta en gris */
+.md-typeset .kw-cs-entry { margin: 0 0 1.4rem; }
+.md-typeset .kw-cs-entry > h3, .md-typeset h3 + .kw-cs-repris { margin-top: .4rem; }
+.md-typeset .kw-cs-entry .highlight, .md-typeset .kw-cs-entry .highlight + .highlight { margin: .35rem 0; }
+.md-typeset .highlight .filename { font-size: .62rem; padding: .25rem .9rem; font-weight: 700; letter-spacing: .02em; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-cs-meta { font-size: .7rem; color: var(--md-default-fg-color--light); margin: .3rem 0 0; }
+.md-typeset .kw-cs-top { font-size: .72rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-cs-repris { display: inline-block; font-size: .64rem; font-weight: 600; padding: .05rem .55rem; margin: 0 0 .2rem;
+  border-radius: 1em; border: 1px solid var(--kw-line); background: var(--kw-soft); color: var(--md-default-fg-color--light); }
+.md-typeset .kw-cs-repris a { color: inherit; }
+.md-typeset input.kw-cs-search { width: 100%; max-width: 32rem; margin: .4rem 0 1rem; padding: .5rem .8rem; font: inherit; font-size: .8rem;
+  color: var(--md-default-fg-color); background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 8px; }
+.md-typeset input.kw-cs-search:focus { outline: none; border-color: var(--kw-link); }
+.md-typeset .kw-cs-needgroup h2 { font-size: 1rem; margin: 1.4rem 0 .4rem; }
+.md-typeset .kw-cs-needgroup ul { margin-top: 0; }
+.md-typeset .kw-cs-needgroup li { margin: .1rem 0; }
+.md-typeset .task-list-item { margin: .15rem 0; }
+/* Boutons du thème (md-button) aux couleurs du site : visibles en sombre comme en clair */
+.md-typeset .md-button { color: var(--kw-link); border-color: currentColor; border-radius: 8px; font-size: .72rem; padding: .45em 1.1em; }
+.md-typeset .md-button--primary { color: var(--md-default-bg-color); background: var(--kw-link); border-color: var(--kw-link); }
+.md-typeset .md-button:hover, .md-typeset .md-button:focus { color: var(--md-default-bg-color); background: var(--kw-link); border-color: var(--kw-link); }

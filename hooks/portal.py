@@ -621,9 +621,9 @@ def page_home(items, themes, glossary):
         f'<a class="kw-chip" href="{href(src, GLOSSARY_SRC)}#{term_anchor(t["term"])}">{esc(t["term"])}</a>'
         for t in recent)
 
-    wiki = [("⚔️ Pentest", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
-            ("⚔️ Pentest", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
-            ("⚔️ Pentest", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
+    wiki = [("📋 Cheat sheets", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
+            ("📋 Cheat sheets", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
+            ("📋 Cheat sheets", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
             ("📚 Bibliothèque", "Notes de cours", "Cyber et IT : synthèses pour apprendre et réviser.", "library/index.md")]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
@@ -1608,6 +1608,171 @@ def pages_parcours():
     return out
 
 
+# ---------------------------------------------------------------- cheat sheets
+
+CS_DIR = "cheatsheets"
+CS_NEEDS = f"{CS_DIR}/besoins.md"
+CS_TAB = "📋 Cheat sheets"
+REPRISE = re.compile(r"^!\[\[([^\]#]+)#([^\]]+)\]\]\s*$", re.M)
+MD_LINK = re.compile(r"\]\(([^)\s]+)\)")
+
+
+def cs_pages(docs_dir):
+    """{src: (titre, texte, méta)} des pages de l'onglet Cheat sheets."""
+    out = {}
+    for f in sorted((docs_dir / CS_DIR).rglob("*.md")) if (docs_dir / CS_DIR).exists() else []:
+        body, meta = get_data(f.read_text(encoding="utf-8"))
+        src = f.relative_to(docs_dir).as_posix()
+        h1 = re.search(r"^# (.+)$", body, re.M)
+        out[src] = (str(meta.get("title") or (h1.group(1) if h1 else f.stem)), body, meta)
+    return out
+
+
+def cs_entries(body):
+    """[(groupe H2, besoin H3)] d'une fiche, hors blocs de code."""
+    out, group, fence = [], "", False
+    for line in body.split("\n"):
+        if line.lstrip().startswith("```"):
+            fence = not fence
+        if fence:
+            continue
+        m = HEADING.match(line)
+        if m and len(m.group(1)) == 2:
+            group = m.group(2)
+        elif m and len(m.group(1)) == 3:
+            out.append((group, m.group(2)))
+    return out
+
+
+def cs_trail(src, pages):
+    """« Linux › Fondamentaux › Processus et services » d'après les pages d'index des dossiers parents."""
+    parts, path = [], posixpath.dirname(src)
+    while path and path != CS_DIR:
+        idx = f"{path}/index.md"
+        if idx in pages and idx != src:
+            parts.insert(0, pages[idx][0])
+        path = posixpath.dirname(path)
+    return parts + ([pages[src][0]] if not src.endswith("/index.md") else [])
+
+
+def nav_srcs(nav):
+    """Pages de la navigation, dans l'ordre du menu."""
+    out = []
+    for e in nav or []:
+        if isinstance(e, str):
+            out.append(e)
+        elif isinstance(e, dict):
+            for v in e.values():
+                out += nav_srcs(v) if isinstance(v, list) else ([v] if isinstance(v, str) else [])
+    return out
+
+
+def page_cs_needs(pages, order):
+    """« Que veux-tu faire ? » : tous les besoins de toutes les fiches, avec un filtre."""
+    from markdown.extensions.toc import slugify as toc_slugify
+    known = [s for s in order if s in pages] + [s for s in pages if s not in order]
+    body = ""
+    for src in known:
+        title, text, meta = pages[src]
+        items = [(g, n) for g, n in cs_entries(text)]
+        lines = []
+        if meta.get("besoin"):
+            lines.append(f'- [{esc(meta["besoin"])}]({posixpath.relpath(src, CS_DIR)})')
+        lines += [f'- [{esc(n)}]({posixpath.relpath(src, CS_DIR)}#{toc_slugify(n, "-")})'
+                  + (f' <span class="kw-note-meta">{esc(g)}</span>' if g else "") for g, n in items]
+        if lines:
+            body += f'\n<div class="kw-cs-needgroup" markdown>\n\n## {" › ".join(cs_trail(src, pages))}\n\n' + "\n".join(lines) + "\n\n</div>\n"
+    total = body.count("\n- [")
+    return CS_NEEDS, f"""---
+hide:
+  - toc
+---
+# 🔎 Que veux-tu faire ?
+
+Tous les besoins de toutes les cheat sheets ({total}). Tape un mot : `pid`, `hosts`, `port`, `cron`, `incident`…
+
+<input class="kw-cs-search" type="search" placeholder="Filtrer les besoins…" aria-label="Filtrer les besoins" data-scope=".kw-cs-needgroup">
+{body}"""
+
+
+def expand_reprises(markdown, src, docs_dir):
+    """`![[cheatsheets/…/fiche#Besoin]]` sur une ligne seule : l'entrée de la fiche d'origine, reprise
+    telle quelle (liens recalculés), avec « Repris de … »."""
+    from markdown.extensions.toc import slugify as toc_slugify
+    here = posixpath.dirname(src)
+
+    def one(m):
+        target = m.group(1).strip()
+        target = target if target.endswith(".md") else target + ".md"
+        title = m.group(2).strip()
+        path = Path(docs_dir) / target
+        if not path.exists():
+            raise PluginError(f"{src} : reprise introuvable « {m.group(0).strip()} »")
+        body, meta = get_data(path.read_text(encoding="utf-8"))
+        lines, start = body.split("\n"), None
+        for i, line in enumerate(lines):
+            h = HEADING.match(line)
+            if start is None and h and len(h.group(1)) == 3 and h.group(2) == title:
+                start = i
+            elif start is not None and h and len(h.group(1)) <= 3:
+                lines = lines[start:i]
+                break
+        else:
+            lines = lines[start:] if start is not None else None
+        if not lines:
+            raise PluginError(f"{src} : besoin « {title} » absent de {target}")
+        there = posixpath.dirname(target)
+
+        def relink(lk):
+            dest = lk.group(1)
+            if re.match(r"^[a-z]+:", dest):
+                return lk.group(0)
+            path_, _, frag = dest.partition("#")
+            full = target if not path_ else posixpath.normpath(posixpath.join(there, path_))
+            return f"]({posixpath.relpath(full, here)}{'#' + frag if frag else ''})"
+
+        block = MD_LINK.sub(relink, "\n".join(lines).strip())
+        head, _, rest = block.partition("\n")
+        origin = " › ".join(cs_trail(target, STATE.get("cs_pages", {}))) or str(meta.get("title") or "")
+        return (f"{head}\n\nRepris de [{origin}]({posixpath.relpath(target, here)}#{toc_slugify(title, '-')})\n"
+                f"{{ .kw-cs-repris }}\n{rest}")
+
+    return REPRISE.sub(one, markdown)
+
+
+def decorate_cheatsheet(markdown, page, config):
+    src = page.file.src_uri
+    markdown = expand_reprises(markdown, src, config.docs_dir)
+    model = page.meta.get("modele")
+    if model:
+        path = Path(config.docs_dir) / posixpath.dirname(src) / str(model)
+        text = re.sub(r"\A---\n.*?\n---\n", "", path.read_text(encoding="utf-8"), flags=re.S)
+        text = re.sub(r"^(#{1,5}) ", r"#\1 ", text, flags=re.M)          # sous le titre de la page
+        name = re.sub(r"\.txt$", ".md", str(model))
+        markdown += (f'\n\n[Télécharger le modèle ({name})]({model}){{ .md-button .md-button--primary download="{name}" }}\n\n'
+                     f"## Aperçu du modèle\n\n{text}")
+    return markdown
+
+
+def cheatsheet_links(pages):
+    """Cours de la Bibliothèque -> cheat sheets qui s'y rattachent (méta « cours » des fiches) ;
+    au-delà de trois fiches pour un cours, un lien vers leur rubrique commune."""
+    by_course = {}
+    for src, (title, _, meta) in pages.items():
+        for c in meta.get("cours") or []:
+            by_course.setdefault(str(c), []).append((title, src))
+    out = {}
+    for course, sheets in by_course.items():
+        if len(sheets) > 3:
+            common = posixpath.commonpath([posixpath.dirname(s) for _, s in sheets])
+            while f"{common}/index.md" not in pages and "/" in common:
+                common = posixpath.dirname(common)
+            idx = f"{common}/index.md"
+            sheets = [(f"cheat sheets {pages[idx][0]}", idx)] if idx in pages else sheets[:3]
+        out[course] = sheets
+    return out
+
+
 # ---------------------------------------------------------------- révision
 
 REVISION_DIR = "library/revision"
@@ -2080,6 +2245,10 @@ def on_config(config):
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages += pages_parcours()
+    STATE["cs_pages"] = cs_pages(docs_dir)
+    STATE["cs_links"] = cheatsheet_links(STATE["cs_pages"])
+    cs_tab = next((e[CS_TAB] for e in (config.nav or []) if isinstance(e, dict) and CS_TAB in e), [])
+    pages.append(page_cs_needs(STATE["cs_pages"], nav_srcs(cs_tab)))
     if STATE["revisions"]:
         pages.append(page_revision_index())
     pages.append(glossary_data(glossary))
@@ -2130,6 +2299,8 @@ def on_page_markdown(markdown, page, config, files):
         return decorate_document(markdown, page)
     if src.startswith("library/") and page.meta.get("source"):
         return decorate_note(markdown, page)
+    if src.startswith(CS_DIR + "/"):
+        return decorate_cheatsheet(markdown, page, config)
     if src.startswith(REVISION_DIR + "/") and page.meta.get("revision"):
         return decorate_revision(markdown, page)
     return markdown
@@ -2180,6 +2351,9 @@ def decorate_note(markdown, page):
             line += " · " + ", ".join(esc(t) for t in note["terms"])
         if meta.get("revision"):
             line += f" · [📝 questions de révision]({rel(str(meta['revision']))})"
+        memo = STATE.get("cs_links", {}).get(here)
+        if memo:
+            line += " · 📋 mémo terrain : " + ", ".join(f"[{esc(t)}]({rel(s)})" for t, s in memo)
         head += f'<br><span class="kw-muted">{line}</span>'
         about = [f"**{label} :** {esc(meta[key])}" for key, label in
                  (("niveau", "Niveau"), ("objectif", "Objectif"), ("prerequis", "Prérequis")) if meta.get(key)]

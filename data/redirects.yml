@@ -44,4 +44,7 @@ library/it/culture/index.html: library/it/prospective/index.md
 library/it/culture/prospective-systemes-technologiques-vol-1/index.html: library/it/prospective/systemes-technologiques-vol-1/index.md
 library/it/culture/prospective-systemes-technologiques-vol-2/index.html: library/it/prospective/frontieres-technologiques-vol-2/index.md
 library/it/culture/questions-d-entretien-cyber-sysadmin/index.html: library/revision/questions-d-entretien-cyber-sysadmin.md
-library/it/linux/workflow-linux-aide-memoire/index.html: library/it/linux/linux-commandes-et-investigation-aide-memoire.md
+# Cheat sheets (1er octobre 2026) : aide-mémoires Linux de la Bibliothèque repris dans l'onglet
+library/it/linux/gestion-systeme-linux-aide-memoire/index.html: cheatsheets/linux/administration/index.md
+library/it/linux/linux-commandes-et-investigation-aide-memoire/index.html: cheatsheets/linux/index.md
+library/it/linux/workflow-linux-aide-memoire/index.html: cheatsheets/linux/index.md
