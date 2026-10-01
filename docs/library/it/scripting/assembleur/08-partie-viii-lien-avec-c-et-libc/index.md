@@ -1,6 +1,6 @@
 ---
-title: Partie VIII — Lien avec C ET libc
-source: IT/Culture/Assembleur.md
+title: Partie VIII — Lien avec C et libc
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

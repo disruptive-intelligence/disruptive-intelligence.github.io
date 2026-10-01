@@ -1,11 +1,11 @@
 ---
 title: Chapitre 10 — Construire sa continuité numérique personnelle
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - 'Partie II — Fondations : appareils, comptes ET continuité'
+- - 'Partie II — Fondations : appareils, comptes et continuité'
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: MFA
-source: Cyber/00_Notions/Fiche_MFA.md
+source: Cyber/12 Fiches notions/MFA.md
 format: fiche
 revue: '2026-10-01'
 terms:

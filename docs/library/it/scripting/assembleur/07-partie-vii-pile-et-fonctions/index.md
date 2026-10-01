@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Pile ET fonctions
-source: IT/Culture/Assembleur.md
+title: Partie VII — Pile et fonctions
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

@@ -1,6 +1,6 @@
 ---
-title: PARTIE II — Premiers PAS AVEC docker
-source: IT/10_virtualization-containers/Docker.md
+title: PARTIE II — Premiers pas avec Docker
+source: IT/08 Conteneurs & automatisation/Docker.md
 note: Docker
 up:
 - - Docker

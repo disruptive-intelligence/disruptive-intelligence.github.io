@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Passer à L’échelle
-source: Cyber/02_OSINT/Python_Scraping.md
+title: Partie IV — Passer à l’échelle
+source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
 note: Python pour l'OSINT et le scraping
 up:
 - - Python pour l'OSINT et le scraping

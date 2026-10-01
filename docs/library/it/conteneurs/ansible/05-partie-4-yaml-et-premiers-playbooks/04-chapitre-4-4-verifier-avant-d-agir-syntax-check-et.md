@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 4.4 — Vérifier avant d''agir : --syntax-check et --check'
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

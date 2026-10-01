@@ -1,6 +1,6 @@
 ---
 title: 'Ch.3 — Cas d’usage de l’IA en entreprise : cartographie et criticité'
-source: Cyber/05_Cyberdefense/IA_Secu.md
+source: Cyber/09 IA & sécurité/IA et sécurité.md
 note: IA et sécurité
 up:
 - - IA et sécurité

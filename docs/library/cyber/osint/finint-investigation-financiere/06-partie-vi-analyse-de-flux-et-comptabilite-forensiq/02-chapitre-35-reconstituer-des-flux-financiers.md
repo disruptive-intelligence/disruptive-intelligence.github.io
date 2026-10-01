@@ -1,11 +1,11 @@
 ---
 title: Chapitre 35 — Reconstituer des flux financiers
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière
   - ../index.md
-- - Partie VI — Analyse DE flux et comptabilité forensique
+- - Partie VI — Analyse de flux et comptabilité forensique
   - index.md
 ---
 

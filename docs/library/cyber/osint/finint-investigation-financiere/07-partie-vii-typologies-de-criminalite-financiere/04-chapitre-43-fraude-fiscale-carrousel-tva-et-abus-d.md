@@ -1,11 +1,11 @@
 ---
 title: Chapitre 43 — Fraude fiscale, carrousel TVA et abus de biens sociaux
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière
   - ../index.md
-- - Partie VII — Typologies DE criminalité financière
+- - Partie VII — Typologies de criminalité financière
   - index.md
 ---
 

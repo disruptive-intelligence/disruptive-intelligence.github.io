@@ -1,6 +1,6 @@
 ---
 title: Système de détection d'intrusion — IDS
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité
@@ -22,7 +22,7 @@ IPS → Detect + Block/Prevent
 ```
 
 ### Types d'IDS
-![IDS](../../../assets/htb-solutions-de-securite-ids-type.png){ width="600" }
+![IDS](../../../assets/solutions-de-securite-ids-type.png){ width="600" }
 
 |Type|Principe|
 |---|---|
@@ -86,7 +86,7 @@ Analyste / SIEM
 
 - L'emplacement de l'équipement IDS dans le réseau peut varier en fonction de son type.
 
-![IDS](../../../assets/htb-solutions-de-securite-ids-position.png){ width="600" }
+![IDS](../../../assets/solutions-de-securite-ids-position.png){ width="600" }
 #### NIDS
 
 - Le NIDS doit être placé là où il peut **observer le trafic intéressant**.
@@ -152,7 +152,7 @@ IPS → Detect + Prevent/Block
 ```
 
 ### Types d’IPS
-![IPS](../../../assets/htb-solutions-de-securite-ips-type.png){ width="600" }
+![IPS](../../../assets/solutions-de-securite-ips-type.png){ width="600" }
 
 |Type|Principe|
 |---|---|
@@ -164,7 +164,7 @@ IPS → Detect + Prevent/Block
 
 - La position dépend de son type et de la zone à protéger.
 
-![IPS](../../../assets/htb-solutions-de-securite-ips-position.png){ width="600" }
+![IPS](../../../assets/solutions-de-securite-ips-position.png){ width="600" }
 #### NIPS
 
 - Un NIPS doit pouvoir **agir directement sur le trafic** qu’il surveille.

@@ -1,11 +1,11 @@
 ---
 title: Chapitre 12 — lea et modes d'adressage
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie IV — Mémoire, adresses ET chaînes
+- - Partie IV — Mémoire, adresses et chaînes
   - index.md
 ---
 

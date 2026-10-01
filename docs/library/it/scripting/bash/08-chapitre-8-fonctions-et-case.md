@@ -1,6 +1,6 @@
 ---
 title: Chapitre 8 — Fonctions et case
-source: IT/05_Scripting_Langage-Prog/Bash.md
+source: IT/07 Scripting & programmation/Bash.md
 note: Bash
 up:
 - - Bash

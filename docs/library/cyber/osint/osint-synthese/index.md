@@ -1,13 +1,13 @@
 ---
 title: OSINT — synthèse
-source: Cyber/02_OSINT/OSINT_Synthese.md
+source: Cyber/02 OSINT/OSINT — synthèse.md
 format: synthese
-revue: '2026-05-10'
+revue: '2026-10-01'
 ---
 
 *Investiguer • Collecter • Analyser • Documenter*
 
-**Cours complet — 30 chapitres • 7 parties • 7 annexes**
+**Synthèse — 30 chapitres • 7 parties • 7 annexes**
 
 *Investigation numérique • SOCMINT • GEOINT • IMINT • DARKINT • FININT • Crypto • Vérification • Rapport*
 
@@ -25,11 +25,11 @@ revue: '2026-05-10'
 
 ## Sommaire
 
-- [Partie I — Fondations ET posture de L'investigateur](01-partie-i-fondations-et-posture-de-l-investigateur.md)
-- [Partie II — Investigation sur les personnes ET les réseaux sociaux](02-partie-ii-investigation-sur-les-personnes-et-les-r.md)
-- [Partie III — Sources techniques, données exposées ET dark web](03-partie-iii-sources-techniques-donnees-exposees-et.md)
-- [Partie IV — IMINT, GEOINT ET vérification visuelle](04-partie-iv-imint-geoint-et-verification-visuelle.md)
-- [Partie V — Crypto, finance, CTI ET analyse](05-partie-v-crypto-finance-cti-et-analyse.md)
-- [Partie VI — Du renseignement à L'action](06-partie-vi-du-renseignement-a-l-action.md)
-- [Partie VII — Cas de synthèse ET référence](07-partie-vii-cas-de-synthese-et-reference.md)
+- [Partie I — Fondations et posture de l'investigateur](01-partie-i-fondations-et-posture-de-l-investigateur.md)
+- [Partie II — Investigation sur les personnes et les réseaux sociaux](02-partie-ii-investigation-sur-les-personnes-et-les-r.md)
+- [Partie III — Sources techniques, données exposées et dark web](03-partie-iii-sources-techniques-donnees-exposees-et.md)
+- [Partie IV — IMINT, GEOINT et vérification visuelle](04-partie-iv-imint-geoint-et-verification-visuelle.md)
+- [Partie V — Crypto, finance, CTI et analyse](05-partie-v-crypto-finance-cti-et-analyse.md)
+- [Partie VI — Du renseignement à l'action](06-partie-vi-du-renseignement-a-l-action.md)
+- [Partie VII — Cas de synthèse et référence](07-partie-vii-cas-de-synthese-et-reference.md)
 - [Annexes](08-annexes.md)

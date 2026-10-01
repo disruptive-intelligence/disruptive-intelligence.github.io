@@ -1,6 +1,6 @@
 ---
 title: OPSEC & privacy
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 format: cours
 revue: '2026-06-01'
 ---

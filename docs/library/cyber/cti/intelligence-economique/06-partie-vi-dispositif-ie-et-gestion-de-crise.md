@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Dispositif IE ET gestion de crise
-source: Cyber/01_CTI/IE.md
+title: Partie VI — Dispositif IE et gestion de crise
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique

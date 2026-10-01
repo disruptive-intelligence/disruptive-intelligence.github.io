@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Études de cas ET synthèse (ch.32-34)
-source: Cyber/Red_Teaming.md
+title: Partie VII — Études de cas et synthèse (ch.32-34)
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 note: Red teaming analytique
 up:
 - - Red teaming analytique
@@ -12,9 +12,7 @@ up:
 ---
 
 
-## Chapitre 32 — Cas complet
-
-red teaming d'une stratégie de défense face à une campagne APT
+## Chapitre 32 — Cas complet : red teaming d'une stratégie de défense face à une campagne APT
 
 ### Synopsis
 
@@ -31,9 +29,7 @@ red teaming d'une stratégie de défense face à une campagne APT
 ---
 
 
-## Chapitre 33 — Cas complet
-
-wargame de crise ransomware avec cellule de crise exécutive
+## Chapitre 33 — Cas complet : wargame de crise ransomware avec cellule de crise exécutive
 
 ### Synopsis
 
@@ -50,9 +46,7 @@ Format « prêt à jouer » : scénario complet, tous les injects, branches cond
 ---
 
 
-## Chapitre 34 — Cas complet
-
-tabletop hybride multi-acteurs — attaque hybride sur infrastructure critique
+## Chapitre 34 — Cas complet : tabletop hybride multi-acteurs — attaque hybride sur infrastructure critique
 
 ### Synopsis
 

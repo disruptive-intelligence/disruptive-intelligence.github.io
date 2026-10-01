@@ -1,6 +1,6 @@
 ---
 title: Pare-feu — Firewall
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité
@@ -21,7 +21,7 @@ Traffic → Firewall Rules → Allow / Deny
 
 ## Types de pare-feu
 
-![FW](../../../assets/htb-solutions-de-securite-fw-type.png){ width="600" }
+![FW](../../../assets/solutions-de-securite-fw-type.png){ width="600" }
 
 | Type                                           | Principe                                                                                                                                                                                               |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -117,7 +117,7 @@ ACTION=ALLOW
 ```
 
 ## Positionnement
-![FW](../../../assets/htb-solutions-de-securite-fw-position.png){ width="600" }
+![FW](../../../assets/solutions-de-securite-fw-position.png){ width="600" }
 ### Firewall périmétrique
 
 - Typiquement placé entre le réseau interne et Internet :

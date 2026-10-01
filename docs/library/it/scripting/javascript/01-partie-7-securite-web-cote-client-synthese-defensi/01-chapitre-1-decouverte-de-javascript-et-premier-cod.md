@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1 — Découverte de JavaScript et premier code
-source: IT/05_Scripting_Langage-Prog/JavaScript.md
+source: IT/07 Scripting & programmation/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

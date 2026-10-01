@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Automatisation ET industrialisation
-source: IT/02_Windows/Powershell.md
+title: Partie VII — Automatisation et industrialisation
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

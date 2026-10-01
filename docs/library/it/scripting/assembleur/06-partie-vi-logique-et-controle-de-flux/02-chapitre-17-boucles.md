@@ -1,11 +1,11 @@
 ---
 title: Chapitre 17 — Boucles
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie VI — Logique ET contrôle de flux
+- - Partie VI — Logique et contrôle de flux
   - index.md
 ---
 

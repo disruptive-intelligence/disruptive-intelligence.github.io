@@ -1,6 +1,6 @@
 ---
 title: OSINT — ressources
-source: Cyber/02_OSINT/OSINT_ressources.md
+source: Cyber/02 OSINT/OSINT — ressources.md
 format: ressources
 revue: '2026-05-25'
 ---

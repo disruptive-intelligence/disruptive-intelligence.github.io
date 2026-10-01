@@ -1,6 +1,6 @@
 ---
-title: Partie V — Stress-tester L'organisation (ch.23-27)
-source: Cyber/Red_Teaming.md
+title: Partie V — Stress-tester l'organisation (ch.23-27)
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 note: Red teaming analytique
 up:
 - - Red teaming analytique

@@ -1,6 +1,6 @@
 ---
-title: Partie III — Calculer ET regrouper
-source: IT/Culture/SQL.md
+title: Partie III — Calculer et regrouper
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

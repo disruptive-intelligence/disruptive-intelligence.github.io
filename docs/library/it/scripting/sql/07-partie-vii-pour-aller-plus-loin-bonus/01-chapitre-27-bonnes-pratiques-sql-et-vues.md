@@ -1,6 +1,6 @@
 ---
 title: Chapitre 27 — Bonnes pratiques SQL et vues
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

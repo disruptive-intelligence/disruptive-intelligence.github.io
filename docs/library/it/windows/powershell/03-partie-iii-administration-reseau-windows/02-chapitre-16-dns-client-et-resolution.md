@@ -1,11 +1,11 @@
 ---
 title: Chapitre 16 — DNS client et résolution
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie III — Administration réseau windows
+- - Partie III — Administration réseau Windows
   - index.md
 ---
 

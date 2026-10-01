@@ -1,11 +1,11 @@
 ---
 title: Chapitre 6 — Le système bancaire et la circulation de l’argent
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière
   - ../index.md
-- - Partie II — Le système financier pour L’enquêteur
+- - Partie II — Le système financier pour l’enquêteur
   - index.md
 ---
 

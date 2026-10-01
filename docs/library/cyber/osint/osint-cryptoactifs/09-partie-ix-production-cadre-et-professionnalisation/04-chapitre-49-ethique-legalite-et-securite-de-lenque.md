@@ -1,11 +1,11 @@
 ---
 title: Chapitre 49 — Éthique, légalité et sécurité de l’enquêteur
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs
   - ../index.md
-- - Partie IX — Production, cadre ET professionnalisation
+- - Partie IX — Production, cadre et professionnalisation
   - index.md
 ---
 

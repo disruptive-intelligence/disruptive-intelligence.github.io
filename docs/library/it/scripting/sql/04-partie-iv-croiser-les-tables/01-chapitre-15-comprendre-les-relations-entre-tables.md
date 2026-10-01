@@ -1,6 +1,6 @@
 ---
 title: Chapitre 15 — Comprendre les relations entre tables
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

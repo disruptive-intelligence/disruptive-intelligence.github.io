@@ -1,6 +1,6 @@
 ---
 title: Chapitre 18 — Jointures sur plusieurs tables
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

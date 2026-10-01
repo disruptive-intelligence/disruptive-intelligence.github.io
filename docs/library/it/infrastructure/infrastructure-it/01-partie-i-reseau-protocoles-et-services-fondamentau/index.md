@@ -1,6 +1,6 @@
 ---
-title: Partie I — Réseau, protocoles ET services fondamentaux
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie I — Réseau, protocoles et services fondamentaux
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

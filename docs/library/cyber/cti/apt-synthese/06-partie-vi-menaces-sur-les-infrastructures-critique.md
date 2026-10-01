@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Menaces sur les infrastructures critiques ET L'OT
-source: Cyber/01_CTI/APT_Synthese.md
+title: Partie VI — Menaces sur les infrastructures critiques et l'OT
+source: Cyber/01 CTI & renseignement/Menace cyber/APT — synthèse.md
 note: APT — synthèse
 up:
 - - APT — synthèse

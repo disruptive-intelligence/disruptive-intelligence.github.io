@@ -1,6 +1,6 @@
 ---
 title: Surface d'attaque
-source: Cyber/00_Notions/Fiche_Surface_d_attaque.md
+source: Cyber/12 Fiches notions/Surface d'attaque.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -49,11 +49,11 @@ Le hardening est la réduction de la surface d'attaque par la configuration séc
 
 - **ASM — Attack Surface Management** consiste à identifier, évaluer, réduire et surveiller en continu les éléments exposés pouvant être exploités par un attaquant.
 
-*↳ [HTB — Attack Surface Management](../cyberdefense/attack-surface-management/index.md)*
+*↳ [HTB — Attack Surface Management](../vulnerabilites/gestion-de-la-surface-d-attaque-asm/index.md)*
 
 **EASM** (*External Attack Surface Management*) est la sous-catégorie qui se concentre sur l'exposition externe (Internet-facing).
 
-*↳ [Vulnerability management & intelligence](../cyberdefense/vulnerability-management-intelligence/index.md) (chapitre 29)*
+*↳ [Vulnerability management & intelligence](../vulnerabilites/vulnerability-management-intelligence/index.md) (chapitre 29)*
 
 ## À retenir
 

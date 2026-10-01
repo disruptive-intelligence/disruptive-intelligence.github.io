@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 37 — Cas 2 : paiement ransomware BTC à un affilié RaaS'
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

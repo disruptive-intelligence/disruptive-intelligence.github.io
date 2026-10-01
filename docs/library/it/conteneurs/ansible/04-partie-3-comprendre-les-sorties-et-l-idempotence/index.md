@@ -1,6 +1,6 @@
 ---
-title: Partie 3 — Comprendre les sorties et L'idempotence
-source: IT/10_virtualization-containers/Ansible.md
+title: Partie 3 — Comprendre les sorties et l'idempotence
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,11 +1,11 @@
 ---
 title: Chapitre 19 — Fonctions avec call et ret
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie VII — Pile ET fonctions
+- - Partie VII — Pile et fonctions
   - index.md
 ---
 

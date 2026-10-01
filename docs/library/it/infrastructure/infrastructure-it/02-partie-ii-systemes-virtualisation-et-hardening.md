@@ -1,6 +1,6 @@
 ---
-title: Partie II — Systèmes, virtualisation ET hardening
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie II — Systèmes, virtualisation et hardening
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

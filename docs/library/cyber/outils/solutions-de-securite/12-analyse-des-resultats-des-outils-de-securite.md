@@ -1,6 +1,6 @@
 ---
 title: Analyse des résultats des outils de sécurité
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité

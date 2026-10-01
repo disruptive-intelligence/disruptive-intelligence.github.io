@@ -1,11 +1,11 @@
 ---
 title: Chapitre 35 — Sécurité de l'exécution et durcissement
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie VIII — Powershell pour LA cybersécurité
+- - Partie VIII — PowerShell pour la cybersécurité
   - index.md
 ---
 

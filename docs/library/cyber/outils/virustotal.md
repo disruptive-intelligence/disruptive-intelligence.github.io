@@ -1,6 +1,6 @@
 ---
 title: VirusTotal
-source: Cyber/99_Concepts/VirusTotal.md
+source: Cyber/10 Outils & solutions/Analyse & qualification d'IOC/VirusTotal.md
 format: synthese
 revue: '2026-08-10'
 ---

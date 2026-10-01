@@ -1,6 +1,6 @@
 ---
 title: Ansible
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 format: cours
 revue: '2026-06-24'
 ---
@@ -128,7 +128,7 @@ Ne te juge pas si un chapitre demande deux lectures. **La régularité compte pl
     - [Chapitre 2.3 — Le ping et les commandes ad hoc](03-partie-2-inventaire-et-premieres-commandes/03-chapitre-2-3-le-ping-et-les-commandes-ad-hoc.md)
     - [Chapitre 2.4 — command et shell](03-partie-2-inventaire-et-premieres-commandes/04-chapitre-2-4-command-et-shell.md)
     - [Chapitre 2.5 — Lire les sorties : ok, changed, failed, skipped, unreachable](03-partie-2-inventaire-et-premieres-commandes/05-chapitre-2-5-lire-les-sorties-ok-changed-failed-sk.md)
-- [Partie 3 — Comprendre les sorties et L'idempotence](04-partie-3-comprendre-les-sorties-et-l-idempotence/index.md)
+- [Partie 3 — Comprendre les sorties et l'idempotence](04-partie-3-comprendre-les-sorties-et-l-idempotence/index.md)
     - [Chapitre 3.1 — ok vs changed](04-partie-3-comprendre-les-sorties-et-l-idempotence/01-chapitre-3-1-ok-vs-changed.md)
     - [Chapitre 3.2 — Voir l'idempotence en relançant](04-partie-3-comprendre-les-sorties-et-l-idempotence/02-chapitre-3-2-voir-l-idempotence-en-relancant.md)
     - [Chapitre 3.3 — Modules dédiés vs command/shell](04-partie-3-comprendre-les-sorties-et-l-idempotence/03-chapitre-3-3-modules-dedies-vs-command-shell.md)
@@ -137,7 +137,7 @@ Ne te juge pas si un chapitre demande deux lectures. **La régularité compte pl
     - [Chapitre 4.2 — Anatomie d'un playbook](05-partie-4-yaml-et-premiers-playbooks/02-chapitre-4-2-anatomie-d-un-playbook.md)
     - [Chapitre 4.3 — become : les droits root](05-partie-4-yaml-et-premiers-playbooks/03-chapitre-4-3-become-les-droits-root.md)
     - [Chapitre 4.4 — Vérifier avant d'agir : --syntax-check et --check](05-partie-4-yaml-et-premiers-playbooks/04-chapitre-4-4-verifier-avant-d-agir-syntax-check-et.md)
-- [Partie 5 — Modules essentiels d'administration linux](06-partie-5-modules-essentiels-d-administration-linux.md)
+- [Partie 5 — Modules essentiels d'administration Linux](06-partie-5-modules-essentiels-d-administration-linux.md)
 - [Partie 6 — Variables, facts, conditions et boucles](07-partie-6-variables-facts-conditions-et-boucles.md)
 - [Partie 7 — Templates et handlers](08-partie-7-templates-et-handlers/index.md)
     - [Chapitre 7.1 — Les templates Jinja2 (template)](08-partie-7-templates-et-handlers/01-chapitre-7-1-les-templates-jinja2-template.md)
@@ -145,7 +145,7 @@ Ne te juge pas si un chapitre demande deux lectures. **La régularité compte pl
     - [Chapitre 7.3 — Les handlers (notify)](08-partie-7-templates-et-handlers/03-chapitre-7-3-les-handlers-notify.md)
 - [Partie 8 — Bonnes pratiques débutant](09-partie-8-bonnes-pratiques-debutant.md)
 - [Partie 9 — Ansible vault et secrets](10-partie-9-ansible-vault-et-secrets.md)
-- [Partie 10 — Organiser un projet ansible](11-partie-10-organiser-un-projet-ansible.md)
+- [Partie 10 — Organiser un projet Ansible](11-partie-10-organiser-un-projet-ansible.md)
 - [Partie 11 — Roles simples](12-partie-11-roles-simples/index.md)
     - [Chapitre 11.1 — Pourquoi les roles existent](12-partie-11-roles-simples/01-chapitre-11-1-pourquoi-les-roles-existent.md)
     - [Chapitre 11.2 — La structure d'un role](12-partie-11-roles-simples/02-chapitre-11-2-la-structure-d-un-role.md)

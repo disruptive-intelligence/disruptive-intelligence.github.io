@@ -1,6 +1,6 @@
 ---
 title: Dark Web
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 format: cours
 revue: '2026-04-27'
 ---
@@ -43,7 +43,7 @@ Les épisodes DARKSTREAM jalonnent le cours aux moments où le concept enseigné
 
 ## Sommaire
 
-- [Partie I — Fondations : COMPRENDRE LE DARK WEB](01-partie-i-fondations-comprendre-le-dark-web/index.md)
+- [Partie I — Fondations : COMPRENDRE le DARK WEB](01-partie-i-fondations-comprendre-le-dark-web/index.md)
     - [Chapitre 1 — Internet, web visible, deep web, dark web](01-partie-i-fondations-comprendre-le-dark-web/01-chapitre-1-internet-web-visible-deep-web-dark-web.md)
     - [Chapitre 2 — Histoire et évolution des darknets](01-partie-i-fondations-comprendre-le-dark-web/02-chapitre-2-histoire-et-evolution-des-darknets.md)
     - [Chapitre 3 — Pourquoi le dark web existe](01-partie-i-fondations-comprendre-le-dark-web/03-chapitre-3-pourquoi-le-dark-web-existe.md)
@@ -90,7 +90,7 @@ Les épisodes DARKSTREAM jalonnent le cours aux moments où le concept enseigné
     - [Chapitre 38 — Hacktivisme, zones grises et usages légitimes](07-partie-vii-cas-d-usage-tendances-et-prospective/03-chapitre-38-hacktivisme-zones-grises-et-usages-leg.md)
     - [Chapitre 39 — IA et dark web : menaces émergentes et défensives](07-partie-vii-cas-d-usage-tendances-et-prospective/04-chapitre-39-ia-et-dark-web-menaces-emergentes-et-d.md)
     - [Chapitre 40 — Forces de l'ordre, disruption et coopération internationale](07-partie-vii-cas-d-usage-tendances-et-prospective/05-chapitre-40-forces-de-l-ordre-disruption-et-cooper.md)
-- [Partie VIII — Études DE cas et synthèse](08-partie-viii-etudes-de-cas-et-synthese/index.md)
+- [Partie VIII — Études de cas et synthèse](08-partie-viii-etudes-de-cas-et-synthese/index.md)
     - [Chapitre 41 — Cas DARKSTREAM complet — investigation d'une vente de données industrielles](08-partie-viii-etudes-de-cas-et-synthese/01-chapitre-41-cas-darkstream-complet-investigation-d.md)
     - [Chapitre 42 — Cas surveillance d'un leak site ransomware](08-partie-viii-etudes-de-cas-et-synthese/02-chapitre-42-cas-surveillance-d-un-leak-site-ransom.md)
     - [Chapitre 43 — Cas traque d'un Initial Access Broker](08-partie-viii-etudes-de-cas-et-synthese/03-chapitre-43-cas-traque-d-un-initial-access-broker.md)

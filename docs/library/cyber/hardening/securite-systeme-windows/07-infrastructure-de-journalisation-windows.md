@@ -1,6 +1,6 @@
 ---
 title: Infrastructure de journalisation Windows
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows
@@ -241,7 +241,7 @@ Successful Logon after failures
 → possible compromise
 ```
 
-![W Event](../../../assets/htb-windows-system-security-w-event.png){ width="600" }
+![W Event](../../../assets/securite-systeme-windows-w-event.png){ width="600" }
 #### Event IDs utiles
 Quelques événements Windows souvent surveillés :
 
@@ -275,7 +275,7 @@ Quelques événements Windows souvent surveillés :
 	- paramètres ;
 	- certaines sorties.
 
-![W Event P](../../../assets/htb-windows-system-security-w-event-p.png){ width="600" }
+![W Event P](../../../assets/securite-systeme-windows-w-event-p.png){ width="600" }
 #### Logs PowerShell importants
 Complément utile :
 
@@ -328,7 +328,7 @@ RDP Login
 → suspicious
 ```
 
-![W Event RDP](../../../assets/htb-windows-system-security-w-event-rdp.png){ width="600" }
+![W Event RDP](../../../assets/securite-systeme-windows-w-event-rdp.png){ width="600" }
 #### Sources utiles pour RDP
 
 - On peut notamment retrouver des événements sous :

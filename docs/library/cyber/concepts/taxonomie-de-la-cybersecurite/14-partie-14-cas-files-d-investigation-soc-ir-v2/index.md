@@ -1,6 +1,6 @@
 ---
 title: Partie 14 — Cas filés d'investigation SOC/IR (V2)
-source: Cyber/Taxonomie_Cyber.md
+source: Cyber/11 Concepts/Taxonomie de la cybersécurité.md
 note: Taxonomie de la cybersécurité
 up:
 - - Taxonomie de la cybersécurité

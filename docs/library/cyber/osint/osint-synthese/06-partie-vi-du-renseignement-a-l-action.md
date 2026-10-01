@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Du renseignement à L'action
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie VI — Du renseignement à l'action
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

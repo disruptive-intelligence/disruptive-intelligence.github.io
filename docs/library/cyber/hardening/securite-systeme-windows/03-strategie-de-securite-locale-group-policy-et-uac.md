@@ -1,6 +1,6 @@
 ---
 title: Stratégie de sécurité locale, Group Policy et UAC
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows
@@ -49,7 +49,7 @@ Account Policies
 
 - Une mauvaise configuration peut réduire la sécurité ou provoquer des dysfonctionnements, donc les changements doivent être contrôlés.
 
-![W Secpol](../../../assets/htb-windows-system-security-w-secpol.png){ width="500" }
+![W Secpol](../../../assets/securite-systeme-windows-w-secpol.png){ width="500" }
 ## Stratégie de groupe (gpedit.msc)
 
 - Une **Group Policy** permet d’appliquer des configurations aux :
@@ -183,7 +183,7 @@ Cela réduit notamment le risque qu’une application réalise silencieusement c
 
 > **UAC ≠ sandbox / antivirus** : il s’agit principalement d’un mécanisme de **séparation et d’élévation de privilèges**.
 
-![W UAC](../../../assets/htb-windows-system-security-w-uac.png){ width="600" }
+![W UAC](../../../assets/securite-systeme-windows-w-uac.png){ width="600" }
 ### Niveaux UAC
 Windows propose quatre niveaux principaux.
 #### Always Notify

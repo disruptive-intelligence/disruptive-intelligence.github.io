@@ -1,6 +1,6 @@
 ---
 title: Intelligence économique
-source: Cyber/01_CTI/IE.md
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 format: cours
 revue: '2026-04-08'
 ---
@@ -33,20 +33,20 @@ revue: '2026-04-08'
 
 ## Sommaire
 
-- [Partie I — Fondations : comprendre L'IE](01-partie-i-fondations-comprendre-l-ie/index.md)
+- [Partie I — Fondations : comprendre l'IE](01-partie-i-fondations-comprendre-l-ie/index.md)
     - [Chapitre 1 — Qu'est-ce que l'intelligence économique](01-partie-i-fondations-comprendre-l-ie/01-chapitre-1-qu-est-ce-que-l-intelligence-economique.md)
     - [Chapitre 2 — Géopolitique et guerre économique](01-partie-i-fondations-comprendre-l-ie/02-chapitre-2-geopolitique-et-guerre-economique.md)
     - [Chapitre 3 — Cadre juridique et éthique](01-partie-i-fondations-comprendre-l-ie/03-chapitre-3-cadre-juridique-et-ethique.md)
     - [Chapitre 4 — La doctrine française et les modèles internationaux](01-partie-i-fondations-comprendre-l-ie/04-chapitre-4-la-doctrine-francaise-et-les-modeles-in.md)
-- [Partie II — Veille, collecte ET analyse](02-partie-ii-veille-collecte-et-analyse/index.md)
+- [Partie II — Veille, collecte et analyse](02-partie-ii-veille-collecte-et-analyse/index.md)
     - [Chapitre 5 — Le cycle du renseignement appliqué à l'IE](02-partie-ii-veille-collecte-et-analyse/01-chapitre-5-le-cycle-du-renseignement-applique-a-l.md)
     - [Chapitre 6 — Concevoir un dispositif de veille stratégique](02-partie-ii-veille-collecte-et-analyse/02-chapitre-6-concevoir-un-dispositif-de-veille-strat.md)
     - [Chapitre 7 — OSINT pour l'IE : workflows spécifiques](02-partie-ii-veille-collecte-et-analyse/03-chapitre-7-osint-pour-l-ie-workflows-specifiques.md)
     - [Chapitre 8 — HUMINT d'entreprise : le renseignement humain légal](02-partie-ii-veille-collecte-et-analyse/04-chapitre-8-humint-d-entreprise-le-renseignement-hu.md)
     - [Chapitre 9 — Analyse, production de renseignement et restitution au dirigeant](02-partie-ii-veille-collecte-et-analyse/05-chapitre-9-analyse-production-de-renseignement-et.md)
 - [Partie III — Protection du patrimoine](03-partie-iii-protection-du-patrimoine.md)
-- [Partie IV — Due diligence ET investigation économique](04-partie-iv-due-diligence-et-investigation-economiqu.md)
-- [Partie V — Influence ET guerre informationnelle](05-partie-v-influence-et-guerre-informationnelle.md)
-- [Partie VI — Dispositif IE ET gestion de crise](06-partie-vi-dispositif-ie-et-gestion-de-crise.md)
+- [Partie IV — Due diligence et investigation économique](04-partie-iv-due-diligence-et-investigation-economiqu.md)
+- [Partie V — Influence et guerre informationnelle](05-partie-v-influence-et-guerre-informationnelle.md)
+- [Partie VI — Dispositif IE et gestion de crise](06-partie-vi-dispositif-ie-et-gestion-de-crise.md)
 - [Partie VII — Études de cas](07-partie-vii-etudes-de-cas.md)
 - [Annexes](08-annexes.md)

@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Synthèse
-source: IT/10_virtualization-containers/Containers_Docker_K8s.md
+source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes
@@ -10,9 +10,7 @@ up:
 -----
 
 
-## Chapitre 29 — Cas de synthèse
-
-audit de sécurité d’un environnement containerisé
+## Chapitre 29 — Cas de synthèse : audit de sécurité d’un environnement containerisé
 
 ### L’exercice
 

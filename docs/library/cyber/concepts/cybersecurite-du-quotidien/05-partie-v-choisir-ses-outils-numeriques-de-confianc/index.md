@@ -1,6 +1,6 @@
 ---
-title: Partie V — Choisir ses outils numériques DE confiance
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: Partie V — Choisir ses outils numériques de confiance
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

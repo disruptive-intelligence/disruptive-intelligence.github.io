@@ -1,6 +1,6 @@
 ---
-title: Partie IX — Lecture de binaires ET reverse débutant
-source: IT/Culture/Assembleur.md
+title: Partie IX — Lecture de binaires et reverse débutant
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

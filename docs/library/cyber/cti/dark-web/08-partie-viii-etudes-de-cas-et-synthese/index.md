@@ -1,6 +1,6 @@
 ---
-title: Partie VIII — Études DE cas et synthèse
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+title: Partie VIII — Études de cas et synthèse
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 note: Dark Web
 up:
 - - Dark Web

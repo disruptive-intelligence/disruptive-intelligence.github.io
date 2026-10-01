@@ -1,6 +1,6 @@
 ---
 title: Identités et contrôle d'accès
-source: Cyber/04_Hardening/HTB_Identités et contrôle d'accès.md
+source: Cyber/05 Hardening/Identités et contrôle d'accès.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'
@@ -15,7 +15,7 @@ revue: '2026-09-30'
 - **Authorization** ;
 - **Accounting / Audit**.
 
-![IAM](../../assets/htb-identites-et-controle-d-acces-iam.png){ width="550" }
+![IAM](../../assets/identites-et-controle-d-acces-iam.png){ width="550" }
 #### Identification
 
 - Consiste à **déclarer ou établir une identité**.
@@ -216,7 +216,7 @@ Access Rights
 → Access Decision
 ```
 
-![IAM](../../assets/htb-identites-et-controle-d-acces-iam-access.png){ width="550" }
+![IAM](../../assets/identites-et-controle-d-acces-iam-access.png){ width="550" }
 ### Cycle de vie - Access Provisioning Lifecycle
 
 - L’**Access Provisioning Lifecycle** correspond à la gestion des accès pendant tout le cycle de vie d’un utilisateur dans l’organisation.
@@ -332,7 +332,7 @@ Something You Have
 Something You Are
 ```
 
-![IAM](../../assets/htb-identites-et-controle-d-acces-iam-3.png){ width="600" }
+![IAM](../../assets/identites-et-controle-d-acces-iam-3.png){ width="600" }
 #### Something You Know
 
 - Information connue de l’utilisateur.
@@ -504,7 +504,7 @@ Alice
     - appliquer le Least Privilege ;
     - réduire les permissions attribuées individuellement.
 
-![RBAC](../../assets/htb-identites-et-controle-d-acces-rbac.png){ width="550" }
+![RBAC](../../assets/identites-et-controle-d-acces-rbac.png){ width="550" }
 #### Définition des rôles
 
 - Identifier les fonctions présentes dans l’organisation.
@@ -611,7 +611,7 @@ Exemples d’attributs :
 - device security status ;
 - resource sensitivity.
 
-![ABAC](../../assets/htb-identites-et-controle-d-acces-abac.png){ width="550" }
+![ABAC](../../assets/identites-et-controle-d-acces-abac.png){ width="550" }
 #### Exemple ABAC
 Policy :
 

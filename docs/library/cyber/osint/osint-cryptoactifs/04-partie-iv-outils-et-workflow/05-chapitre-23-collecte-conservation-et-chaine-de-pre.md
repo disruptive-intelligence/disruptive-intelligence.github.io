@@ -1,11 +1,11 @@
 ---
 title: Chapitre 23 — Collecte, conservation et chaîne de preuve crypto
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs
   - ../index.md
-- - Partie IV — Outils ET workflow
+- - Partie IV — Outils et workflow
   - index.md
 ---
 

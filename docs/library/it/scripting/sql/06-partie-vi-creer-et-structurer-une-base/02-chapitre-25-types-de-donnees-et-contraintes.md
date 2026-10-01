@@ -1,11 +1,11 @@
 ---
 title: Chapitre 25 — Types de données et contraintes
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL
   - ../index.md
-- - Partie VI — Créer ET structurer une base
+- - Partie VI — Créer et structurer une base
   - index.md
 ---
 

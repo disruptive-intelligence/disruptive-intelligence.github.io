@@ -1,11 +1,11 @@
 ---
 title: Chapitre 7 — Mots de passe, gestionnaire, passkeys, MFA et SIM swap
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - 'Partie II — Fondations : appareils, comptes ET continuité'
+- - 'Partie II — Fondations : appareils, comptes et continuité'
   - index.md
 ---
 

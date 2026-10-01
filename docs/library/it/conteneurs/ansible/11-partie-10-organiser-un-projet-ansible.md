@@ -1,6 +1,6 @@
 ---
-title: Partie 10 — Organiser un projet ansible
-source: IT/10_virtualization-containers/Ansible.md
+title: Partie 10 — Organiser un projet Ansible
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

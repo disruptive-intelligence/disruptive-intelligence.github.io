@@ -1,11 +1,11 @@
 ---
 title: Chapitre 22 — Du C vers l'assembleur
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie VIII — Lien avec C ET libc
+- - Partie VIII — Lien avec C et libc
   - index.md
 ---
 

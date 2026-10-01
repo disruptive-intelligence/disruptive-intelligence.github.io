@@ -1,8 +1,9 @@
 ---
 title: Infrastructure IT
-source: IT/03_Networking/Infrastructure_IT.md
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 format: cours
 revue: '2026-04-08'
+revision: library/revision/infrastructure.md
 ---
 
 *Comprendre ce qu'on attaque et ce qu'on défend*
@@ -33,19 +34,17 @@ revue: '2026-04-08'
 
 ## Sommaire
 
-- [Partie I — Réseau, protocoles ET services fondamentaux](01-partie-i-reseau-protocoles-et-services-fondamentau/index.md)
+- [Partie I — Réseau, protocoles et services fondamentaux](01-partie-i-reseau-protocoles-et-services-fondamentau/index.md)
     - [Chapitre 1 — Modèle client-serveur, TCP/IP et protocoles fondamentaux](01-partie-i-reseau-protocoles-et-services-fondamentau/01-chapitre-1-modele-client-serveur-tcp-ip-et-protoco.md)
     - [Chapitre 2 — Architecture réseau d'entreprise](01-partie-i-reseau-protocoles-et-services-fondamentau/02-chapitre-2-architecture-reseau-d-entreprise.md)
     - [Chapitre 3 — Sécurité réseau : firewalls, segmentation et détection](01-partie-i-reseau-protocoles-et-services-fondamentau/03-chapitre-3-securite-reseau-firewalls-segmentation.md)
     - [Chapitre 4 — Sécurité du Wi-Fi et des accès distants](01-partie-i-reseau-protocoles-et-services-fondamentau/04-chapitre-4-securite-du-wi-fi-et-des-acces-distants.md)
     - [Chapitre 5 — Bastion, PAM et Zero Trust](01-partie-i-reseau-protocoles-et-services-fondamentau/05-chapitre-5-bastion-pam-et-zero-trust.md)
     - [Chapitre 6 — Services d'infrastructure vitaux](01-partie-i-reseau-protocoles-et-services-fondamentau/06-chapitre-6-services-d-infrastructure-vitaux.md)
-- [Partie II — Systèmes, virtualisation ET hardening](02-partie-ii-systemes-virtualisation-et-hardening.md)
-- [Partie III — Données, stockage, messagerie ET transferts](03-partie-iii-donnees-stockage-messagerie-et-transfer.md)
-- [Partie IV — Applications, web ET apis](04-partie-iv-applications-web-et-apis.md)
-- [Partie V — Identité ET authentification](05-partie-v-identite-et-authentification.md)
-- [Partie VI — Cloud, containers ET architectures modernes](06-partie-vi-cloud-containers-et-architectures-modern.md)
-- [Partie VII — Opérations, monitoring ET cas de synthèse](07-partie-vii-operations-monitoring-et-cas-de-synthes.md)
+- [Partie II — Systèmes, virtualisation et hardening](02-partie-ii-systemes-virtualisation-et-hardening.md)
+- [Partie III — Données, stockage, messagerie et transferts](03-partie-iii-donnees-stockage-messagerie-et-transfer.md)
+- [Partie IV — Applications, web et API](04-partie-iv-applications-web-et-api.md)
+- [Partie V — Identité et authentification](05-partie-v-identite-et-authentification.md)
+- [Partie VI — Cloud, containers et architectures modernes](06-partie-vi-cloud-containers-et-architectures-modern.md)
+- [Partie VII — Opérations, monitoring et cas de synthèse](07-partie-vii-operations-monitoring-et-cas-de-synthes.md)
 - [Annexes](08-annexes.md)
-- [Questions essentielles](09-questions-essentielles.md)
-- [Réponses flash](10-reponses-flash.md)

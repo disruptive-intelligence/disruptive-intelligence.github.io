@@ -1,6 +1,6 @@
 ---
-title: Partie IX — Production, cadre ET professionnalisation
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+title: Partie IX — Production, cadre et professionnalisation
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 6 — Russie : les groupes APT en détail'
-source: Cyber/01_CTI/APT_Synthese.md
+source: Cyber/01 CTI & renseignement/Menace cyber/APT — synthèse.md
 note: APT — synthèse
 up:
 - - APT — synthèse

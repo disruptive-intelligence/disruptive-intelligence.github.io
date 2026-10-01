@@ -1,11 +1,11 @@
 ---
 title: Chapitre 22 — Classer la sensibilité avant de choisir l'outil
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - Partie V — Choisir ses outils numériques DE confiance
+- - Partie V — Choisir ses outils numériques de confiance
   - index.md
 ---
 

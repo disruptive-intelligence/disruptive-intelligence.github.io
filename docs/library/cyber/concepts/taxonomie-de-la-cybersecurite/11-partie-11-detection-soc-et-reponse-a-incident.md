@@ -1,6 +1,6 @@
 ---
 title: Partie 11 — Détection, SOC et réponse à incident
-source: Cyber/Taxonomie_Cyber.md
+source: Cyber/11 Concepts/Taxonomie de la cybersécurité.md
 note: Taxonomie de la cybersécurité
 up:
 - - Taxonomie de la cybersécurité

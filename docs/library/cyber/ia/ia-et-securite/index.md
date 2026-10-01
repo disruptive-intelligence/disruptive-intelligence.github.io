@@ -1,6 +1,6 @@
 ---
 title: IA et sécurité
-source: Cyber/05_Cyberdefense/IA_Secu.md
+source: Cyber/09 IA & sécurité/IA et sécurité.md
 format: cours
 revue: '2026-04-15'
 ---
@@ -50,9 +50,9 @@ revue: '2026-04-15'
     - [Ch.20 — AI Act : classification, obligations et mise en conformité](05-partie-v-conformite-et-cadre-juridique/02-ch-20-ai-act-classification-obligations-et-mise-en.md)
     - [Ch.21 — Propriété intellectuelle, secret des affaires, contrats fournisseurs et articulation NIS2/DORA/HDS](05-partie-v-conformite-et-cadre-juridique/03-ch-21-propriete-intellectuelle-secret-des-affaires.md)
 - [Partie VI — Cas de synthèse](06-partie-vi-cas-de-synthese/index.md)
-    - [Ch.22 — Cas complet](06-partie-vi-cas-de-synthese/01-ch-22-cas-complet.md)
+    - [Ch.22 — Cas complet : déploiement et sécurisation d’un assistant RAG (NovaSanté)](06-partie-vi-cas-de-synthese/01-ch-22-cas-complet-deploiement-et-securisation-dun.md)
     - [Ch.23 — Cas complet : sécurisation d’un agent IA help desk](06-partie-vi-cas-de-synthese/02-ch-23-cas-complet-securisation-dun-agent-ia-help-d.md)
-    - [Ch.24 — Cas complet](06-partie-vi-cas-de-synthese/03-ch-24-cas-complet.md)
+    - [Ch.24 — Cas complet : gestion du shadow AI et déploiement d’une alternative interne](06-partie-vi-cas-de-synthese/03-ch-24-cas-complet-gestion-du-shadow-ai-et-deploiem.md)
     - [Ch.25 — Cas complet : réponse à incident IA](06-partie-vi-cas-de-synthese/04-ch-25-cas-complet-reponse-a-incident-ia.md)
 - [Partie VII — Organisation, déploiement et perspectives](07-partie-vii-organisation-deploiement-et-perspective.md)
 - [Annexes](08-annexes/index.md)

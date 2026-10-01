@@ -1,6 +1,6 @@
 ---
-title: Partie I — Fondations ET posture de L'investigateur
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie I — Fondations et posture de l'investigateur
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

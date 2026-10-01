@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Incident response, hybrid identity ET synthèse
-source: IT/04_Active-Directory/Active_Directory.md
+title: Partie VII — Incident response, hybrid identity et synthèse
+source: IT/03 Active Directory/Active Directory.md
 note: Active Directory
 up:
 - - Active Directory

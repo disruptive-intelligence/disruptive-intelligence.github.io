@@ -1,6 +1,6 @@
 ---
 title: Chapitre 12 — Chiffrement complet du disque
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

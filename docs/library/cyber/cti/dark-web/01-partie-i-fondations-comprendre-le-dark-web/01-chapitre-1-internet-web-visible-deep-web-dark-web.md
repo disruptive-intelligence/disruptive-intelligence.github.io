@@ -1,11 +1,11 @@
 ---
 title: Chapitre 1 — Internet, web visible, deep web, dark web
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 note: Dark Web
 up:
 - - Dark Web
   - ../index.md
-- - 'Partie I — Fondations : COMPRENDRE LE DARK WEB'
+- - 'Partie I — Fondations : COMPRENDRE le DARK WEB'
   - index.md
 ---
 

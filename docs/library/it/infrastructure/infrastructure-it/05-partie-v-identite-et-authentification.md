@@ -1,6 +1,6 @@
 ---
-title: Partie V — Identité ET authentification
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie V — Identité et authentification
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

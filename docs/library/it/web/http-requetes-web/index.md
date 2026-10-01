@@ -1,6 +1,6 @@
 ---
 title: HTTP & requêtes web
-source: IT/Fiche_Web-Requests.md
+source: IT/05 Web & applications/HTTP & requêtes web.md
 format: synthese
 revue: '2026-09-30'
 ---

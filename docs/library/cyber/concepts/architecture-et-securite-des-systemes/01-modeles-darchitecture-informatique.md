@@ -1,6 +1,6 @@
 ---
 title: Modèles d’Architecture Informatique
-source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
 note: Architecture et sécurité des systèmes
 up:
 - - Architecture et sécurité des systèmes
@@ -47,7 +47,7 @@ CPU
 - **ALU** → opérations arithmétiques et logiques.
 - **CU** → contrôle et coordination de l’exécution.
 
-![CPU](../../../assets/htb-architecture-et-securite-des-systemes-cpu.png){ width="600" }
+![CPU](../../../assets/architecture-et-securite-des-systemes-cpu.png){ width="600" }
 #### Memory
 
 - Dans l’architecture Von Neumann :
@@ -92,7 +92,7 @@ Address Bus → où ?
 ```
 
 
-![Bus](../../../assets/htb-architecture-et-securite-des-systemes-bus.png){ width="600" }
+![Bus](../../../assets/architecture-et-securite-des-systemes-bus.png){ width="600" }
 #### Input / Output Devices
 
 - Permettent au système de communiquer avec l’extérieur :
@@ -108,7 +108,7 @@ Address Bus → où ?
 - L'architecture Harvard a favorisé le développement d'un modèle plus rapide et plus efficace grâce à ses améliorations par rapport à l'architecture de Von Neumann.
 - La principale différence avec Von Neumann est la **séparation entre mémoire des instructions et mémoire des données**. Les grandes différences sont : 
 
-![Archi Harvard](../../../assets/htb-architecture-et-securite-des-systemes-harvard.png){ width="600" }
+![Archi Harvard](../../../assets/architecture-et-securite-des-systemes-harvard.png){ width="600" }
 #### Memory Management
 
 - L'architecture Harvard propose une structure dans laquelle les données et les instructions sont stockées dans des mémoires physiques séparées.
@@ -239,7 +239,7 @@ RISC
 - Les **Protection Rings** séparent le code selon son niveau de privilège.
 - Plus le numéro est proche de `0`, plus les privilèges sont élevés.
 
-![Archi Ring](../../../assets/htb-architecture-et-securite-des-systemes-ring.png){ width="600" }
+![Archi Ring](../../../assets/architecture-et-securite-des-systemes-ring.png){ width="600" }
 #### Ring 0
 
 - Niveau le plus privilégié.

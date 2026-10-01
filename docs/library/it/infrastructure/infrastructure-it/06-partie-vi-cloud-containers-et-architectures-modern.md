@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Cloud, containers ET architectures modernes
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie VI — Cloud, containers et architectures modernes
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

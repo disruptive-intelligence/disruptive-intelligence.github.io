@@ -1,6 +1,6 @@
 ---
 title: Chapitre 31 — Skills Assessment — Évaluation finale
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

@@ -1,6 +1,6 @@
 ---
 title: Partie I — Fondations (ch.1-4)
-source: Cyber/Red_Teaming.md
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 note: Red teaming analytique
 up:
 - - Red teaming analytique

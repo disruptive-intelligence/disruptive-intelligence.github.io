@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 8 — Conditions multiples : AND, OR, NOT'
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

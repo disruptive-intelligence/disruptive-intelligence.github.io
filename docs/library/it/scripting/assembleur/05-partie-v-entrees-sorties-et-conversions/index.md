@@ -1,6 +1,6 @@
 ---
-title: Partie V — Entrées, sorties ET conversions
-source: IT/Culture/Assembleur.md
+title: Partie V — Entrées, sorties et conversions
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

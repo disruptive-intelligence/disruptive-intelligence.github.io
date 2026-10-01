@@ -1,6 +1,6 @@
 ---
 title: Annexes
-source: IT/02_Windows/Windows.md
+source: IT/02 Windows/Windows en profondeur.md
 note: Windows en profondeur
 up:
 - - Windows en profondeur
@@ -10,9 +10,9 @@ up:
 ---
 
 
-#### Annexe A — Cheat Sheet Windows
+## Annexe A — Cheat Sheet Windows
 
-##### Triage rapide PowerShell
+### Triage rapide PowerShell
 
 ```powershell
 # Processus
@@ -45,7 +45,7 @@ driverquery /v /fo csv | ConvertFrom-Csv | Sort Status
 ```
 
 
-##### Commandes CMD essentielles
+### Commandes CMD essentielles
 
 ```
 netstat -anob                    # Connexions avec PID et binaire
@@ -61,7 +61,7 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe B — Matrice Artefact / Ce qu'il prouve / Outil
+## Annexe B — Matrice Artefact / Ce qu'il prouve / Outil
 
 | Artefact | Localisation | Ce qu'il prouve | Outil | Rétention |
 |----------|-------------|----------------|-------|-----------|
@@ -85,7 +85,7 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe C — Event IDs de référence
+## Annexe C — Event IDs de référence
 
 | Event ID | Source | Description | Pertinence sécurité |
 |----------|--------|-------------|-------------------|
@@ -104,7 +104,7 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe D — Sysmon Event IDs
+## Annexe D — Sysmon Event IDs
 
 | Event ID | Description | Usage détection |
 |----------|-------------|----------------|
@@ -123,7 +123,7 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe E — LOLBins : binaires détournables et détection
+## Annexe E — LOLBins : binaires détournables et détection
 
 | LOLBin | Usage légitime | Usage offensif | Command line suspecte | Détection |
 |--------|---------------|---------------|----------------------|-----------|
@@ -140,7 +140,7 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe F — Mapping de la bibliothèque
+## Annexe F — Mapping de la bibliothèque
 
 | Thématique | Cours principal | Cours complémentaires |
 |-----------|----------------|----------------------|
@@ -155,9 +155,9 @@ systeminfo                       # Info système
 ---
 
 
-#### Annexe G — Glossaire, ressources et lab
+## Annexe G — Glossaire, ressources et lab
 
-##### Glossaire (sélection)
+### Glossaire (sélection)
 
 | Terme | Définition |
 |-------|-----------|
@@ -183,7 +183,7 @@ systeminfo                       # Info système
 | **VBS** | Virtualization-Based Security — isolation via hyperviseur |
 | **WDAC** | Windows Defender Application Control — contrôle d'exécution kernel |
 
-##### Ressources
+### Ressources
 
 | Ressource | Type | Focus |
 |-----------|------|-------|
@@ -200,13 +200,10 @@ systeminfo                       # Info système
 | lolbas-project.github.io | Référence | Catalogue complet des LOLBins |
 | SwiftOnSecurity/sysmon-config | Config | Baseline Sysmon communautaire |
 
-##### Lab
+### Lab
 
 Infrastructure minimale : 1 VM Windows 11 Pro (ou Enterprise si disponible), Sysmon installé avec config SwiftOnSecurity, outils Sysinternals (Process Explorer, Process Monitor, Autoruns, TCPView), suite Eric Zimmerman, KAPE, Volatility 3, Python 3. Optionnel : Flare VM (distribution Windows pré-configurée pour l'analyse de malwares — outils de reverse, debuggers, sandbox).
 
 ---
 
 ---
-
-
-## Annexe — Questions types d'entretien et réponses types

@@ -1,6 +1,6 @@
 ---
-title: Partie VIII — Powershell pour LA cybersécurité
-source: IT/02_Windows/Powershell.md
+title: Partie VIII — PowerShell pour la cybersécurité
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

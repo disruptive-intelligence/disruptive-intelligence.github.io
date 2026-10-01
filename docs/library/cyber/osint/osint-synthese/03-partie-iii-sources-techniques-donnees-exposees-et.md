@@ -1,6 +1,6 @@
 ---
-title: Partie III — Sources techniques, données exposées ET dark web
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie III — Sources techniques, données exposées et dark web
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

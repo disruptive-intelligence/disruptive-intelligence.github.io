@@ -1,6 +1,6 @@
 ---
 title: Chapitre 2 — Se repérer dans l'arborescence
-source: IT/01_Linux/Admin_Linux.md
+source: IT/01 Linux/Administration Linux.md
 note: Administration Linux
 up:
 - - Administration Linux

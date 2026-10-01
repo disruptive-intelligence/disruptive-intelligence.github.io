@@ -1,8 +1,9 @@
 ---
 title: Linux — prises de notes
-source: IT/01_Linux/Notion_Linux.md
+source: IT/01 Linux/Linux — prises de notes.md
 format: synthese
 revue: '2026-09-30'
+revision: library/revision/linux.md
 ---
 
 ## Sommaire
@@ -14,4 +15,3 @@ revue: '2026-09-30'
 - [Réseau et services](05-reseau-et-services.md)
 - [Système : sauvegarde, disques, pare-feu et shell](06-systeme-sauvegarde-disques-pare-feu-et-shell.md)
 - [Check-lists](07-check-lists.md)
-- [Annexe — Questions types d'entretien et réponses types](08-annexe-questions-types-d-entretien-et-reponses-typ.md)

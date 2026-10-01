@@ -1,6 +1,6 @@
 ---
 title: Chapitre 9 — Le routeur
-source: IT/Architecture_SI.md
+source: IT/06 Infrastructure & architecture/Architecture des systèmes d'information.md
 note: Architecture des systèmes d'information
 up:
 - - Architecture des systèmes d'information

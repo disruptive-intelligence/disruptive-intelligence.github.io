@@ -1,6 +1,6 @@
 ---
 title: Windows — fiche cyber
-source: IT/02_Windows/Fiche_Windows.md
+source: IT/02 Windows/Windows — fiche cyber.md
 format: synthese
 revue: '2026-09-30'
 ---

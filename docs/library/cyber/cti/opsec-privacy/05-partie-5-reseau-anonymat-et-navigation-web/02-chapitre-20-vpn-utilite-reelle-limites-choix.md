@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 20 — VPN : utilité réelle, limites, choix'
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

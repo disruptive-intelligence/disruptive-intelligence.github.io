@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Opérations, monitoring ET cas de synthèse
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie VII — Opérations, monitoring et cas de synthèse
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT
@@ -23,9 +23,7 @@ Les **NMS** (Network Monitoring Systems) : Nagios (historique, stable), Zabbix (
 ---
 
 
-## Chapitre 30 — Cas complet
-
-audit d'infrastructure et plan de hardening
+## Chapitre 30 — Cas complet : audit d'infrastructure et plan de hardening
 
 Synthèse du fil rouge BACKBONE — l'audit complet de CargoPlex avec les livrables concrets d'un audit professionnel.
 
@@ -48,9 +46,7 @@ Synthèse du fil rouge BACKBONE — l'audit complet de CargoPlex avec les livrab
 ---
 
 
-## Chapitre 31 — Cas complet
-
-investigation d'un incident sur une infrastructure hybride
+## Chapitre 31 — Cas complet : investigation d'un incident sur une infrastructure hybride
 
 Un affilié ransomware cible une infrastructure similaire à CargoPlex. **Vecteur d'accès** : exploitation d'une vulnérabilité Fortinet non patchée sur le VPN (CVE publiée 3 semaines avant, patch disponible mais non déployé — SLA critique 48h non respecté). **Mouvement latéral** : l'attaquant compromet un poste d'administration (pas de bastion, RDP direct depuis le VPN), dump les credentials avec Mimikatz (pas de Credential Guard), et utilise pass-the-hash pour se déplacer latéralement dans le flat network. **Escalade** : accès au vCenter avec le mot de passe par défaut (réseau de management non isolé), puis accès aux interfaces iLO (credentials par défaut). **Impact** : l'attaquant chiffre les VMs directement au niveau du datastore ESXi (variante Linux du ransomware — plus rapide et plus dévastateur que de chiffrer chaque VM individuellement). Les sauvegardes sur le NAS joint au domaine sont chiffrées en même temps.
 

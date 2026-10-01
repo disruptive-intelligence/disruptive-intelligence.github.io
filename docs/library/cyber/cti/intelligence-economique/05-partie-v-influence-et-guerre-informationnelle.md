@@ -1,6 +1,6 @@
 ---
-title: Partie V — Influence ET guerre informationnelle
-source: Cyber/01_CTI/IE.md
+title: Partie V — Influence et guerre informationnelle
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique

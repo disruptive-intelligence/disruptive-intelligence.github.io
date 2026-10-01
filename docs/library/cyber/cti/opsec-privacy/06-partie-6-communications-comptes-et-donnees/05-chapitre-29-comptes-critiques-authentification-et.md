@@ -1,6 +1,6 @@
 ---
 title: Chapitre 29 — Comptes critiques, authentification et secrets
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

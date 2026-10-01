@@ -1,11 +1,11 @@
 ---
 title: Chapitre 23 — Les facteurs macro
-source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Cartographie des écosystèmes cybercriminels.md
 note: Cartographie des écosystèmes cybercriminels
 up:
 - - Cartographie des écosystèmes cybercriminels
   - ../index.md
-- - Partie V — Géopolitique, zones grises ET disruption
+- - Partie V — Géopolitique, zones grises et disruption
   - index.md
 ---
 

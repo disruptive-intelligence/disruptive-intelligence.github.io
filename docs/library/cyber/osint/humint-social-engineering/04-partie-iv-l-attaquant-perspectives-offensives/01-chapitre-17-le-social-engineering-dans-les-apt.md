@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — Le social engineering dans les APT
-source: Cyber/HUMINT_Social_Engineering.md
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering

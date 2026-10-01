@@ -1,6 +1,6 @@
 ---
 title: Serveur mandataire — Proxy Server
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité
@@ -51,7 +51,7 @@ Server
 | **SOCKS Proxy**           | Proxy générique pour différents types de trafic TCP, et selon version UDP. Empêche les composants réseau externes d'obtenir des informations sur le client.                                          |
 | **HTTP Proxy**            | Proxy spécialisé dans HTTP/HTTPS                                                                                                                                                                     |
 ## Fonctionnement
-![Proxy](../../../assets/htb-solutions-de-securite-proxy.png){ width="600" }
+![Proxy](../../../assets/solutions-de-securite-proxy.png){ width="600" }
 
 ```
 Client Request

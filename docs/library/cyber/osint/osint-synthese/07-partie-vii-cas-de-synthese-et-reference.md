@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Cas de synthèse ET référence
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie VII — Cas de synthèse et référence
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse
@@ -35,9 +35,7 @@ Un compte pseudonyme « insider_leak42 » publie des informations confidentielle
 ---
 
 
-## Chapitre 29 — Cas complet
-
-vérification d'une campagne de désinformation
+## Chapitre 29 — Cas complet : vérification d'une campagne de désinformation
 
 Un réseau de faux comptes sur X et Telegram diffuse de fausses informations sur une entreprise cotée (impact sur le cours). Détection (12 comptes créés le même jour, photos AI-generated — aucune source en recherche inversée), analyse réseau (retweets mutuels, timing identique ±5 min), analyse infrastructure (3 domaines enregistrés le même jour, même registrar, même serveur — Whois + reverse IP), attribution (email dans le Whois historique lié à un concurrent), documentation (timeline, graphe, preuves cotées B2 — source fiable + info probablement vraie). Le cas illustre la convergence SOCMINT + OSINT technique + IMINT + analyse de réseau.
 

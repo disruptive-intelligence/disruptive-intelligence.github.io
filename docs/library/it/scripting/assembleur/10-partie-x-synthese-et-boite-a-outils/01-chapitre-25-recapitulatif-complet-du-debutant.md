@@ -1,11 +1,11 @@
 ---
 title: Chapitre 25 — Récapitulatif complet du débutant
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie X — Synthèse ET boîte à outils
+- - Partie X — Synthèse et boîte à outils
   - index.md
 ---
 

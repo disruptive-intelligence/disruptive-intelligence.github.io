@@ -1,11 +1,11 @@
 ---
 title: Chapitre 24 — Reverse engineering débutant avec GDB
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie IX — Lecture de binaires ET reverse débutant
+- - Partie IX — Lecture de binaires et reverse débutant
   - index.md
 ---
 

@@ -1,11 +1,11 @@
 ---
 title: Chapitre 9 — Objets techniques
-source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Cartographie des écosystèmes cybercriminels.md
 note: Cartographie des écosystèmes cybercriminels
 up:
 - - Cartographie des écosystèmes cybercriminels
   - ../index.md
-- - Partie II — Les entités de L'écosystème
+- - Partie II — Les entités de l'écosystème
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Hardening, cas de synthèse et référence
-source: IT/02_Windows/Windows.md
+source: IT/02 Windows/Windows en profondeur.md
 note: Windows en profondeur
 up:
 - - Windows en profondeur
@@ -27,9 +27,7 @@ up:
 ---
 
 
-## Chapitre 28 — Cas complet
-
-investigation malware fileless (synthèse SHADOW)
+## Chapitre 28 — Cas complet : investigation malware fileless (synthèse SHADOW)
 
 Synthèse du fil rouge. L'investigation complète de Léa sur l'incident Valtec Industries.
 

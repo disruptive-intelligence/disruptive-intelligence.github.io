@@ -1,6 +1,6 @@
 ---
 title: Architecture des systèmes d'information
-source: IT/Architecture_SI.md
+source: IT/06 Infrastructure & architecture/Architecture des systèmes d'information.md
 format: cours
 revue: '2026-08-09'
 ---
@@ -188,4 +188,3 @@ Certaines explications de topologie doivent tendre vers 30 % de texte et 70 % de
 - [Cas B — Le service qui tombe](12-cas-b-le-service-qui-tombe.md)
 - [Cas C — Concevoir sous contrainte réelle](13-cas-c-concevoir-sous-contrainte-reelle.md)
 - [ANNEXES](14-annexes.md)
-- [Journal des modifications](15-journal-des-modifications.md)

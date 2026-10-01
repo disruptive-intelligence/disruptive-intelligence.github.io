@@ -1,6 +1,6 @@
 ---
-title: Partie III — Données, stockage, messagerie ET transferts
-source: IT/03_Networking/Infrastructure_IT.md
+title: Partie III — Données, stockage, messagerie et transferts
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

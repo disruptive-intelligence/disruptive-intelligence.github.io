@@ -1,6 +1,6 @@
 ---
 title: Ch.4 — Modèle de menaces d’un système IA
-source: Cyber/05_Cyberdefense/IA_Secu.md
+source: Cyber/09 IA & sécurité/IA et sécurité.md
 note: IA et sécurité
 up:
 - - IA et sécurité

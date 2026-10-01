@@ -1,11 +1,11 @@
 ---
 title: Chapitre 33 — Données de santé numériques
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - Partie VI — VIE privée, images, documents ET surexposition
+- - Partie VI — VIE privée, images, documents et surexposition
   - index.md
 ---
 

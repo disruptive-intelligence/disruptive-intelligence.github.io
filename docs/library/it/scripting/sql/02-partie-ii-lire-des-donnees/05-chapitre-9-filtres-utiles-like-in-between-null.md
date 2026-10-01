@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 9 — Filtres utiles : LIKE, IN, BETWEEN, NULL'
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

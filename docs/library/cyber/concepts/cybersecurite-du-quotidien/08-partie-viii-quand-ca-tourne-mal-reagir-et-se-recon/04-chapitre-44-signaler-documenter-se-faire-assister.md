@@ -1,11 +1,11 @@
 ---
 title: Chapitre 44 — Signaler, documenter, se faire assister
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - 'Partie VIII — QUAND ça tourne mal : réagir ET se reconstruire'
+- - 'Partie VIII — Quand ça tourne mal : réagir et se reconstruire'
   - index.md
 ---
 

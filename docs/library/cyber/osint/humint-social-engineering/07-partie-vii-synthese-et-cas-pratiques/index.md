@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Synthèse ET cas pratiques
-source: Cyber/HUMINT_Social_Engineering.md
+title: Partie VII — Synthèse et cas pratiques
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering
@@ -11,5 +11,5 @@ up:
 
 ## Dans cette partie
 
-- [Chapitre 29 — Cas de synthèse](01-chapitre-29-cas-de-synthese.md)
+- [Chapitre 29 — Cas de synthèse : opération de social engineering multi-vecteurs](01-chapitre-29-cas-de-synthese-operation-de-social-en.md)
 - [Chapitre 30 — Le métier d'expert en social engineering](02-chapitre-30-le-metier-d-expert-en-social-engineeri.md)

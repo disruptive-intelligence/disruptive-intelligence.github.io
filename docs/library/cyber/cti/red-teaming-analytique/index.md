@@ -1,6 +1,6 @@
 ---
 title: Red teaming analytique
-source: Cyber/Red_Teaming.md
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 format: cours
 revue: '2026-04-16'
 ---
@@ -46,10 +46,10 @@ Les trois dernières parties (VI-VII) installent cette capacité dans la durée 
 ## Sommaire
 
 - [Partie I — Fondations (ch.1-4)](01-partie-i-fondations-ch-1-4.md)
-- [Partie II — Penser comme L'adversaire](02-partie-ii-penser-comme-l-adversaire.md)
+- [Partie II — Penser comme l'adversaire](02-partie-ii-penser-comme-l-adversaire.md)
 - [Partie III — Techniques analytiques structurées (ch.10-15)](03-partie-iii-techniques-analytiques-structurees-ch-1.md)
-- [Partie IV — Concevoir ET conduire les exercices adversariaux (ch.16-22)](04-partie-iv-concevoir-et-conduire-les-exercices-adve.md)
-- [Partie V — Stress-tester L'organisation (ch.23-27)](05-partie-v-stress-tester-l-organisation-ch-23-27.md)
-- [Partie VI — Programme, anti-patterns ET culture (ch.28-31)](06-partie-vi-programme-anti-patterns-et-culture-ch-28.md)
-- [Partie VII — Études de cas ET synthèse (ch.32-34)](07-partie-vii-etudes-de-cas-et-synthese-ch-32-34.md)
+- [Partie IV — Concevoir et conduire les exercices adversariaux (ch.16-22)](04-partie-iv-concevoir-et-conduire-les-exercices-adve.md)
+- [Partie V — Stress-tester l'organisation (ch.23-27)](05-partie-v-stress-tester-l-organisation-ch-23-27.md)
+- [Partie VI — Programme, anti-patterns et culture (ch.28-31)](06-partie-vi-programme-anti-patterns-et-culture-ch-28.md)
+- [Partie VII — Études de cas et synthèse (ch.32-34)](07-partie-vii-etudes-de-cas-et-synthese-ch-32-34.md)
 - [Annexes](08-annexes.md)

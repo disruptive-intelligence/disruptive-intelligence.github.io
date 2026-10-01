@@ -1,11 +1,11 @@
 ---
 title: Chapitre 42 — Cas surveillance d'un leak site ransomware
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 note: Dark Web
 up:
 - - Dark Web
   - ../index.md
-- - Partie VIII — Études DE cas et synthèse
+- - Partie VIII — Études de cas et synthèse
   - index.md
 ---
 

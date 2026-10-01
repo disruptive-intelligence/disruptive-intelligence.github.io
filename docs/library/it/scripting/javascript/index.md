@@ -1,6 +1,6 @@
 ---
 title: JavaScript
-source: IT/05_Scripting_Langage-Prog/JavaScript.md
+source: IT/07 Scripting & programmation/JavaScript.md
 format: cours
 revue: '2026-06-14'
 ---

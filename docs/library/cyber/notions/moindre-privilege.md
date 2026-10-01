@@ -1,6 +1,6 @@
 ---
 title: Moindre privilège
-source: Cyber/00_Notions/Fiche_Moindre_privilege.md
+source: Cyber/12 Fiches notions/Moindre privilège.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -21,7 +21,7 @@ terms:
 
 C'est le principe qui consiste à donner à chaque utilisateur, application ou processus uniquement les droits strictement nécessaires pour accomplir sa tâche, rien de plus. Un développeur n'a pas besoin d'être admin du domaine. Un compte de service n'a pas besoin d'accéder à toutes les bases de données. L'idée c'est de réduire la surface d'attaque : si un compte est compromis, l'attaquant n'a accès qu'à un périmètre limité. C'est un pilier de la sécurité qui s'applique partout — RBAC dans Kubernetes, IAM dans le cloud, GPO dans AD.
 
-*↳ [Questions d'entretien](../../it/culture/questions-d-entretien-cyber-sysadmin/index.md) (réponse type)*
+*↳ Questions d'entretien (réponse type)*
 
 ## Exemples
 
@@ -45,7 +45,7 @@ C'est le principe qui consiste à donner à chaque utilisateur, application ou p
 
 Les principes de gouvernance IAM : moindre privilège (ne donner que les droits nécessaires à la fonction), séparation des devoirs (l'approbateur n'est pas l'exécutant), besoin d'en connaître (l'accès à une information est conditionné par la nécessité fonctionnelle).
 
-*↳ [GRC](../cyberdefense/gouvernance-risques-et-conformite-grc/index.md)*
+*↳ [GRC](../gouvernance/gouvernance-risques-et-conformite-grc/index.md)*
 
 ## Erreur fréquente
 

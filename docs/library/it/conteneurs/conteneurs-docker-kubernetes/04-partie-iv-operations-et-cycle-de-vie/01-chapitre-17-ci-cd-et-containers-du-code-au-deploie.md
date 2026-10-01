@@ -1,11 +1,11 @@
 ---
 title: 'Chapitre 17 — CI/CD et containers : du code au déploiement'
-source: IT/10_virtualization-containers/Containers_Docker_K8s.md
+source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes
   - ../index.md
-- - Partie IV — Opérations ET cycle de vie
+- - Partie IV — Opérations et cycle de vie
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: PDU, headers, payload & encapsulation
-source: IT/03_Networking/PDU_Headers_Payload_Encapsulation.md
+source: IT/04 Réseau/PDU, headers, payload & encapsulation.md
 format: synthese
 revue: '2026-04-15'
 ---

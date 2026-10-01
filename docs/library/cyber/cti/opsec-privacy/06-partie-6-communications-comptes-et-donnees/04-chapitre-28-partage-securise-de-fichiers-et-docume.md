@@ -1,6 +1,6 @@
 ---
 title: Chapitre 28 — Partage sécurisé de fichiers et documents
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

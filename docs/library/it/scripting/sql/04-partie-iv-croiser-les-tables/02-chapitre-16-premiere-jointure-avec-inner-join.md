@@ -1,6 +1,6 @@
 ---
 title: Chapitre 16 — Première jointure avec INNER JOIN
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

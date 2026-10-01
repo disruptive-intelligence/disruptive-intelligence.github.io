@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Cartographie de l’empreinte et grands modèles d’exposition
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

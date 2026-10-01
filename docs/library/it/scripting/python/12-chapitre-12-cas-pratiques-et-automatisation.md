@@ -1,6 +1,6 @@
 ---
 title: Chapitre 12 — Cas pratiques et automatisation
-source: IT/05_Scripting_Langage-Prog/Python.md
+source: IT/07 Scripting & programmation/Python.md
 note: Python
 up:
 - - Python

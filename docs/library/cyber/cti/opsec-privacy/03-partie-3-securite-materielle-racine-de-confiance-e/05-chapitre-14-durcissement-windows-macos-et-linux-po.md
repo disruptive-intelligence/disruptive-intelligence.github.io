@@ -1,6 +1,6 @@
 ---
 title: Chapitre 14 — Durcissement Windows, macOS et Linux pour le quotidien
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Cas pratiques déroulés
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs
@@ -21,4 +21,4 @@ up:
 - [Chapitre 37 — Cas 2 : paiement ransomware BTC à un affilié RaaS](02-chapitre-37-cas-2-paiement-ransomware-btc-a-un-aff.md)
 - [Chapitre 38 — Cas 3 : wallet drain Ethereum par approval phishing](03-chapitre-38-cas-3-wallet-drain-ethereum-par-approv.md)
 - [Chapitre 39 — Cas 4 : flux multi-chaînes avec bridge et stablecoins](04-chapitre-39-cas-4-flux-multi-chaines-avec-bridge-e.md)
-- [Chapitre 40 — Cas 5](05-chapitre-40-cas-5.md)
+- [Chapitre 40 — Cas 5 : enquête Monero — quand la blockchain ne suffit pas](05-chapitre-40-cas-5-enquete-monero-quand-la-blockcha.md)

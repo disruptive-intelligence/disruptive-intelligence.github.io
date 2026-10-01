@@ -1,6 +1,6 @@
 ---
 title: CPU et Types d’Exécution
-source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
 note: Architecture et sécurité des systèmes
 up:
 - - Architecture et sécurité des systèmes
@@ -23,7 +23,7 @@ CPU
 ```
 
 
-![Archi CPU](../../../assets/htb-architecture-et-securite-des-systemes-cpu-archi.png){ width="300" }
+![Archi CPU](../../../assets/architecture-et-securite-des-systemes-cpu-archi.png){ width="300" }
 
 > ⚠️ Un **CPU** et un **microprocesseur** sont souvent assimilés dans les PC modernes, mais ce ne sont pas strictement des synonymes : un microprocesseur est une implémentation du CPU sur un circuit intégré.
 ### ALU — Arithmetic Logic Unit / Unité Arithmétique et Logique
@@ -89,7 +89,7 @@ Multithreading
 ```
 
 ### Multiprocessing — Multitraitement
-![Multiprocessing](../../../assets/htb-architecture-et-securite-des-systemes-multiprocessing.png){ width="500" }
+![Multiprocessing](../../../assets/architecture-et-securite-des-systemes-multiprocessing.png){ width="500" }
 
 - Utilisation de **plusieurs processeurs ou plusieurs unités de traitement** (coeurs) pour exécuter plusieurs travaux.
 - Permet une véritable exécution parallèle si plusieurs CPU/cores sont disponibles.
@@ -215,7 +215,7 @@ Garder le CPU occupé
 
 > ⚠️ La différence avec le multitasking n’est pas simplement « mainframe vs PC » ou « application spécifique vs OS courant ». Le **multiprogramming** vise surtout à maximiser l’utilisation du CPU, tandis que le **multitasking** ajoute généralement une logique de partage du temps et de réactivité pour plusieurs tâches.
 ### Multithreading
-![thread](../../../assets/htb-architecture-et-securite-des-systemes-thread.png){ width="500" }
+![thread](../../../assets/architecture-et-securite-des-systemes-thread.png){ width="500" }
 
 - Le multithreading, au-delà de l'exécution parallèle de multiples processus ou tâches, est le concept d'exécuter en parallèle plusieurs opérations au sein d'une même tâche.
 - Un **processus** peut contenir plusieurs **threads**.

@@ -1,6 +1,6 @@
 ---
 title: Annexes
-source: Cyber/02_OSINT/OSINT_Synthese.md
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

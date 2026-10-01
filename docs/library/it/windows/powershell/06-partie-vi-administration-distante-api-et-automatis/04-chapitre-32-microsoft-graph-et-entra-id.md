@@ -1,11 +1,11 @@
 ---
 title: Chapitre 32 — Microsoft Graph et Entra ID
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie VI — Administration distante, API ET automatisation
+- - Partie VI — Administration distante, API et automatisation
   - index.md
 ---
 

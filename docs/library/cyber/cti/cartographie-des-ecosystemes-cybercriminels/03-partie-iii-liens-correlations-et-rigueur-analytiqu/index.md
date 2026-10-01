@@ -1,6 +1,6 @@
 ---
-title: Partie III — Liens, corrélations ET rigueur analytique
-source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
+title: Partie III — Liens, corrélations et rigueur analytique
+source: Cyber/01 CTI & renseignement/Menace cyber/Cartographie des écosystèmes cybercriminels.md
 note: Cartographie des écosystèmes cybercriminels
 up:
 - - Cartographie des écosystèmes cybercriminels

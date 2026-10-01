@@ -1,6 +1,6 @@
 ---
 title: Chapitre 5 — Anatomie d'un fichier .asm
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Pour aller plus loin — 🔴 Bonus
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

@@ -1,6 +1,6 @@
 ---
-title: 'Partie I — Fondations : comprendre L''IE'
-source: Cyber/01_CTI/IE.md
+title: 'Partie I — Fondations : comprendre l''IE'
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique

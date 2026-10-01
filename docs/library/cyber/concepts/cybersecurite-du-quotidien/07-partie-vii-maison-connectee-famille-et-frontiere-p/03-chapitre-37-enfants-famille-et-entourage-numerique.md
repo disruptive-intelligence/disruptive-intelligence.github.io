@@ -1,11 +1,11 @@
 ---
 title: Chapitre 37 — Enfants, famille et entourage numérique
-source: Cyber/Cybersecurite_du_Quotidien.md
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien
   - ../index.md
-- - Partie VII — Maison connectée, famille ET frontière pro/perso
+- - Partie VII — Maison connectée, famille et frontière pro/perso
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: SPF, DKIM, DMARC
-source: Cyber/00_Notions/Fiche_SPF_DKIM_DMARC.md
+source: Cyber/12 Fiches notions/SPF, DKIM, DMARC.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -68,7 +68,7 @@ p=reject
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md) (Protection des e-mails)*
+*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md) (Protection des e-mails)*
 
 Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (contournable), DKIM seul ne suffit pas (pas de politique de rejet), DMARC orchestre les deux et fournit du reporting.
 
@@ -95,7 +95,7 @@ cornpany.com
 ```
 
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md)*
+*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md)*
 
 ## Déployer
 
@@ -116,7 +116,7 @@ Monitor
 
 -> Un mauvais déploiement peut bloquer des messages légitimes.
 
-*↳ [HTB — Réponse à incidents](../cyberdefense/reponse-a-incident-synthese/index.md)*
+*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md)*
 
 ⚠️ **Erreur fréquente** — DMARC en mode permissif (« none ») jamais durci, donc sans effet.
 
@@ -130,7 +130,7 @@ dig _dmarc.technovert.fr TXT
 ```
 
 
-*↳ [OSINT Mastery](../osint/osint-mastery/index.md) (enregistrements DNS)*
+*↳ [OSINT Mastery](../osint/osint-cours-complet/index.md) (enregistrements DNS)*
 
 - **Vérification du sender** : analyser les en-têtes complets (Received, Authentication-Results).
 

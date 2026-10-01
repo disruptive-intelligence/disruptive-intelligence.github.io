@@ -1,6 +1,6 @@
 ---
-title: Partie I — Comprendre L’écosystème crypto SANS fantasme
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+title: Partie I — Comprendre l’écosystème crypto sans fantasme
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

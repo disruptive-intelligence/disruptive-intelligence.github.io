@@ -1,6 +1,6 @@
 ---
-title: Partie I — Comprendre LA machine
-source: IT/Culture/Assembleur.md
+title: Partie I — Comprendre la machine
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

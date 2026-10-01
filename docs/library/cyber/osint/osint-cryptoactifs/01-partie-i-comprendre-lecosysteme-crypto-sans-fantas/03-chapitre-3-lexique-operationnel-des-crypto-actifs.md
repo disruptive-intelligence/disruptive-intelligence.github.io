@@ -1,11 +1,11 @@
 ---
 title: Chapitre 3 — Lexique opérationnel des crypto-actifs
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs
   - ../index.md
-- - Partie I — Comprendre L’écosystème crypto SANS fantasme
+- - Partie I — Comprendre l’écosystème crypto sans fantasme
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Docker
-source: IT/10_virtualization-containers/Docker.md
+source: IT/08 Conteneurs & automatisation/Docker.md
 format: cours
 revue: '2026-06-14'
 ---
@@ -356,7 +356,7 @@ Ne te juge pas. **La patience compte plus que la vitesse.**
     - [Chapitre 1 — Pourquoi la containerisation existe](01-partie-i-comprendre-la-containerisation/01-chapitre-1-pourquoi-la-containerisation-existe.md)
     - [Chapitre 2 — VM vs conteneur, image vs conteneur, processus](01-partie-i-comprendre-la-containerisation/02-chapitre-2-vm-vs-conteneur-image-vs-conteneur-proc.md)
     - [Chapitre 3 — Sous le capot : namespaces et cgroups (en clair)](01-partie-i-comprendre-la-containerisation/03-chapitre-3-sous-le-capot-namespaces-et-cgroups-en.md)
-- [PARTIE II — Premiers PAS AVEC docker](02-partie-ii-premiers-pas-avec-docker/index.md)
+- [PARTIE II — Premiers pas avec Docker](02-partie-ii-premiers-pas-avec-docker/index.md)
     - [Chapitre 4 — Installer Docker et comprendre son architecture](02-partie-ii-premiers-pas-avec-docker/01-chapitre-4-installer-docker-et-comprendre-son-arch.md)
     - [Chapitre 5 — docker run : lancer son premier conteneur](02-partie-ii-premiers-pas-avec-docker/02-chapitre-5-docker-run-lancer-son-premier-conteneur.md)
     - [Chapitre 6 — Le cycle de vie d'un conteneur](02-partie-ii-premiers-pas-avec-docker/03-chapitre-6-le-cycle-de-vie-d-un-conteneur.md)

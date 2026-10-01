@@ -1,6 +1,6 @@
 ---
 title: Chapitre 38 — Maintenance opérationnelle, réponse à incident et architectures par profil
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

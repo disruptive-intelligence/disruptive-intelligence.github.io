@@ -1,6 +1,6 @@
 ---
 title: Rémanence des et assainissement des données
-source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
 note: Architecture et sécurité des systèmes
 up:
 - - Architecture et sécurité des systèmes
@@ -103,7 +103,7 @@ Compléments utiles :
 	- le support peut devenir inutilisable.
 
 > Le degaussing **ne fonctionne pas sur SSD/Flash**, car ces supports ne stockent pas les données magnétiquement.
-![demagnetiseur](../../../assets/htb-architecture-et-securite-des-systemes-demagnetiseur.png){ width="300" }
+![demagnetiseur](../../../assets/architecture-et-securite-des-systemes-demagnetiseur.png){ width="300" }
 ## Destruction physique
 
 - Pour les données très sensibles ou lorsque le support est inutilisable, la destruction physique peut être nécessaire.
@@ -120,7 +120,7 @@ Compléments utiles :
 	- EPROM / EEPROM ;
 	- supports optiques.
 
-![destroy](../../../assets/htb-architecture-et-securite-des-systemes-destroy.png){ width="300" }
+![destroy](../../../assets/architecture-et-securite-des-systemes-destroy.png){ width="300" }
 ### ROM / EPROM / EEPROM
 
 - **ROM** → données souvent fixes ou difficilement modifiables.
@@ -133,7 +133,7 @@ Le cours souligne que, pour certains supports où l’effacement fiable est diff
 - Les CD/DVD et autres supports optiques ont des capacités d'effacement limitées selon leur type.
 - Pour des données critiques, la destruction physique est souvent privilégiée. 
 
-![destroy_cd](../../../assets/htb-architecture-et-securite-des-systemes-destroy-cd.png){ width="300" }
+![destroy_cd](../../../assets/architecture-et-securite-des-systemes-destroy-cd.png){ width="300" }
 ## NIST & Sanitization
 Pour choisir une méthode d’assainissement, il faut tenir compte :
 
@@ -171,7 +171,7 @@ Destroy Encryption Key
 
 → très rapide, à condition que le chiffrement et la gestion des clés soient correctement implémentés.
 ## Papier
-![shred_secure](../../../assets/htb-architecture-et-securite-des-systemes-shred-secure.png){ width="400" }
+![shred_secure](../../../assets/architecture-et-securite-des-systemes-shred-secure.png){ width="400" }
 
 ## Comparaison des méthodes
 

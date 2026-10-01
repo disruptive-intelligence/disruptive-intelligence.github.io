@@ -1,6 +1,6 @@
 ---
 title: Chapitre 18 — LocalStorage et SessionStorage
-source: IT/05_Scripting_Langage-Prog/JavaScript.md
+source: IT/07 Scripting & programmation/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

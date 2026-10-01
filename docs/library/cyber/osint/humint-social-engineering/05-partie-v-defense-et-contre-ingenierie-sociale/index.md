@@ -1,6 +1,6 @@
 ---
-title: Partie V — Défense ET contre-ingénierie sociale
-source: Cyber/HUMINT_Social_Engineering.md
+title: Partie V — Défense et contre-ingénierie sociale
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering

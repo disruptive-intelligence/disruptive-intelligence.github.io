@@ -1,6 +1,6 @@
 ---
 title: Ch.6 — Fuite de données et exfiltration via l’IA
-source: Cyber/05_Cyberdefense/IA_Secu.md
+source: Cyber/09 IA & sécurité/IA et sécurité.md
 note: IA et sécurité
 up:
 - - IA et sécurité

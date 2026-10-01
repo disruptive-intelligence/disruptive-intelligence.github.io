@@ -1,6 +1,6 @@
 ---
 title: Sécurité Active Directory
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows
@@ -186,7 +186,7 @@ Admin Account compromised
 - Dans un domaine, elles peuvent être déployées via GPO sur les endpoints et serveurs.
 - Chemin cité : « Configuration de l'ordinateur -> Stratégies -> Paramètres Windows -> Paramètres de sécurité -> Configuration avancée de la stratégie d'audit »
 
-![W Audit](../../../assets/htb-windows-system-security-w-audit.png){ width="550" }
+![W Audit](../../../assets/securite-systeme-windows-w-audit.png){ width="550" }
 
 | Catégorie              | Sous-catégorie                  | Audit             |
 | ---------------------- | ------------------------------- | ----------------- |
@@ -348,7 +348,7 @@ Avantages :
 > ⚠️ **Nuance hors cours :** une lockout policy protège surtout contre les attaques nécessitant des essais de password. Elle n’empêche pas directement un **Pass-the-Hash**, puisque celui-ci réutilise un hash NTLM déjà compromis plutôt que de deviner le mot de passe.
 
 → peut réduire l’efficacité du brute force online, mais les seuils doivent être configurés pour éviter de faciliter un **DoS par verrouillage de comptes**.
-![W Lockout](../../../assets/htb-windows-system-security-w-lockout.png){ width="550" }
+![W Lockout](../../../assets/securite-systeme-windows-w-lockout.png){ width="550" }
 #### Étapes de création d'une stratégie de mot de passe dans Active Directory
 
 - Ouvrez les Outils d'administration Active Directory et sélectionnez Gestion des stratégies de groupe.
@@ -359,7 +359,7 @@ Avantages :
 - Spécifiez le nombre minimum de fois que les utilisateurs doivent se souvenir de leurs mots de passe précédents. Cela empêche la réutilisation d'anciens mots de passe.
 - Définissez des limites de temps ou le verrouillage des comptes à la suite de tentatives de saisie de mots de passe incorrects.
 
-![W Length](../../../assets/htb-windows-system-security-w-length.png){ width="550" }
+![W Length](../../../assets/securite-systeme-windows-w-length.png){ width="550" }
 
 ## SAW — Secure Admin Workstation
 
@@ -529,9 +529,9 @@ Administrators
 
 -> doit recevoir une attention particulière.
 #### Tableau user
-![W Act User](../../../assets/htb-windows-system-security-w-act-user.png){ width="400" }
+![W Act User](../../../assets/securite-systeme-windows-w-act-user.png){ width="400" }
 #### Tableau group
-![W Act Group](../../../assets/htb-windows-system-security-w-act-group.png){ width="400" }
+![W Act Group](../../../assets/securite-systeme-windows-w-act-group.png){ width="400" }
 ### Contrôle de l'appartenance au groupe d'admin. locaux
 
 - Un membre du groupe local **Administrators** possède des privilèges élevés sur la machine.
@@ -549,7 +549,7 @@ Local Administrators
 ```
 
 Les utilisateurs standards ne devraient pas disposer de droits admin locaux sans nécessité métier.
-![W Local Admin](../../../assets/htb-windows-system-security-w-local-admin.png){ width="550" }
+![W Local Admin](../../../assets/securite-systeme-windows-w-local-admin.png){ width="550" }
 #### Risque des Local Admin Rights
 
 - Une compromission d’un compte administrateur local peut permettre à l’attaquant de :
@@ -699,9 +699,9 @@ DNSSEC aide notamment à limiter certains scénarios de :
 - DNS spoofing ;
 - DNS cache poisoning.
 
-![W DNSEC](../../../assets/htb-windows-system-security-w-dnsec.png){ width="400" }
-![W DNSEC](../../../assets/htb-windows-system-security-w-dnsec-2.png){ width="400" }
-![W DNSEC](../../../assets/htb-windows-system-security-w-dnsec-3.png){ width="400" }
+![W DNSEC](../../../assets/securite-systeme-windows-w-dnsec.png){ width="400" }
+![W DNSEC](../../../assets/securite-systeme-windows-w-dnsec-2.png){ width="400" }
+![W DNSEC](../../../assets/securite-systeme-windows-w-dnsec-3.png){ width="400" }
 #### Limites de DNSSEC
 
 - DNSSEC peut être complexe à mettre en œuvre et à gérer, et utiliser plus de ressources système. Par conséquent, une mise en œuvre de DNSSEC doit être soigneusement planifiée et gérée.
@@ -740,7 +740,7 @@ La surveillance permet de détecter :
 - activités administratives anormales ;
 - comportements pouvant indiquer un détournement DNS.
 
-![W DNS Sur](../../../assets/htb-windows-system-security-w-dns-sur.png){ width="400" }
+![W DNS Sur](../../../assets/securite-systeme-windows-w-dns-sur.png){ width="400" }
 #### DNS Hijacking
 
 - Le **DNS Hijacking** consiste à détourner le mécanisme de résolution DNS afin de rediriger les utilisateurs vers une destination contrôlée par l’attaquant.

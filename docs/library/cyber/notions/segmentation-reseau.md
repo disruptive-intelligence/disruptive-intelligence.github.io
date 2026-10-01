@@ -1,6 +1,6 @@
 ---
 title: Segmentation réseau
-source: Cyber/00_Notions/Fiche_Segmentation_reseau.md
+source: Cyber/12 Fiches notions/Segmentation réseau.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -37,7 +37,7 @@ Un VLAN (Virtual LAN) segmente logiquement un réseau physique en plusieurs doma
 
 Un VLAN est un mécanisme technique de segmentation réseau au niveau 2. Une DMZ est un concept d'architecture : c'est une zone réseau tampon entre Internet et le réseau interne, qui héberge les services exposés (reverse proxy, bastion, serveurs web publics). En pratique, une DMZ est souvent implémentée avec des VLANs et des firewalls.
 
-*↳ [Questions d'entretien](../../it/culture/questions-d-entretien-cyber-sysadmin/index.md) (réponses types)*
+*↳ Questions d'entretien (réponses types)*
 
 ## Exemple
 

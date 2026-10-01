@@ -1,11 +1,11 @@
 ---
 title: Chapitre 18 — La pile avec push, pop et rsp
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie VII — Pile ET fonctions
+- - Partie VII — Pile et fonctions
   - index.md
 ---
 

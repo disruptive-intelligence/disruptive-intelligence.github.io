@@ -1,6 +1,6 @@
 ---
 title: Chapitre 12 — Cas pratiques et automatisation
-source: IT/05_Scripting_Langage-Prog/Bash.md
+source: IT/07 Scripting & programmation/Bash.md
 note: Bash
 up:
 - - Bash

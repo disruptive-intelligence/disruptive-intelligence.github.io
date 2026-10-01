@@ -1,11 +1,11 @@
 ---
 title: Chapitre 30 — Le métier d'expert en social engineering
-source: Cyber/HUMINT_Social_Engineering.md
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering
   - ../index.md
-- - Partie VII — Synthèse ET cas pratiques
+- - Partie VII — Synthèse et cas pratiques
   - index.md
 ---
 

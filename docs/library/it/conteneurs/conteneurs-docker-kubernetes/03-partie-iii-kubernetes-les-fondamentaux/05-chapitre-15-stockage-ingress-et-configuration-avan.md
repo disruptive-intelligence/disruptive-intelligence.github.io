@@ -1,6 +1,6 @@
 ---
 title: Chapitre 15 — Stockage, Ingress et configuration avancée
-source: IT/10_virtualization-containers/Containers_Docker_K8s.md
+source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes

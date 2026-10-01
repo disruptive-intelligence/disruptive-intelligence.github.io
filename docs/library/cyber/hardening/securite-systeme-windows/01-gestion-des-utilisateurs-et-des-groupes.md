@@ -1,6 +1,6 @@
 ---
 title: Gestion des utilisateurs et des groupes
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows
@@ -54,16 +54,16 @@ Administrator
 - Sous Windows Server :
 	- L'écran Démarrer -> Gestion de l'ordinateur -> Utilisateurs et groupes locaux -> Utilisateurs s'ouvre :
 
-![W User](../../../assets/htb-windows-system-security-w-gestion-user.png){ width="600" }
+![W User](../../../assets/securite-systeme-windows-w-gestion-user.png){ width="600" }
 
 - Les principaux users par défaut fournis avec Windows Server sont : 
 
-![W Account](../../../assets/htb-windows-system-security-w-user-account.png){ width="600" }
+![W Account](../../../assets/securite-systeme-windows-w-user-account.png){ width="600" }
 
 - Pour créer un nouvel user local puis de le supprimer.
 
-![W Create](../../../assets/htb-windows-system-security-w-user-create.png){ width="500" }
-![W Delete](../../../assets/htb-windows-system-security-w-user-delete.png){ width="500" }
+![W Create](../../../assets/securite-systeme-windows-w-user-create.png){ width="500" }
+![W Delete](../../../assets/securite-systeme-windows-w-user-delete.png){ width="500" }
 
 > Les **Local Users and Groups** concernent les comptes stockés localement sur une machine, pas les comptes Active Directory du domaine.
 ### Permissions et autorisations des utilisateurs
@@ -180,9 +180,9 @@ Backup Operators
 ```
 
 ##### Créer groupe local
-![W Local](../../../assets/htb-windows-system-security-w-user-local.png){ width="600" }
+![W Local](../../../assets/securite-systeme-windows-w-user-local.png){ width="600" }
 ##### Groupes locaux par défaut fournis avec Windows Server
-![W Group Local](../../../assets/htb-windows-system-security-w-group-locaux.png){ width="400" }
+![W Group Local](../../../assets/securite-systeme-windows-w-group-locaux.png){ width="400" }
 #### Groupes de domaine Active Directory
 
 - Gérés dans **Active Directory**.
@@ -197,8 +197,8 @@ AD User
 ```
 
 ##### Groupes fournis avec le rôle AD de Windows Server
-![W Group AD1](../../../assets/htb-windows-system-security-w-group-ad1.png){ width="400" }
-![W Group AD2](../../../assets/htb-windows-system-security-w-group-ad2.png){ width="400" }
+![W Group AD1](../../../assets/securite-systeme-windows-w-group-ad1.png){ width="400" }
+![W Group AD2](../../../assets/securite-systeme-windows-w-group-ad2.png){ width="400" }
 ##### Types de groupes Active Directory
 
 - Domain Local

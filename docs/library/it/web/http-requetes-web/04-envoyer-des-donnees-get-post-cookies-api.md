@@ -1,6 +1,6 @@
 ---
 title: 'Envoyer des données : GET, POST, cookies, API'
-source: IT/Fiche_Web-Requests.md
+source: IT/05 Web & applications/HTTP & requêtes web.md
 note: HTTP & requêtes web
 up:
 - - HTTP & requêtes web

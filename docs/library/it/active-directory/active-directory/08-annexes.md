@@ -1,6 +1,6 @@
 ---
 title: Annexes
-source: IT/04_Active-Directory/Active_Directory.md
+source: IT/03 Active Directory/Active Directory.md
 note: Active Directory
 up:
 - - Active Directory
@@ -10,9 +10,9 @@ up:
 ---
 
 
-#### Annexe A — Cheat Sheet AD
+## Annexe A — Cheat Sheet AD
 
-##### Commandes PowerShell AD essentielles
+### Commandes PowerShell AD essentielles
 
 ```powershell
 # --- UTILISATEURS ---
@@ -54,7 +54,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ```
 
 
-##### Requêtes LDAP courantes
+### Requêtes LDAP courantes
 
 ```
 # Tous les utilisateurs avec adminCount=1
@@ -77,7 +77,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe B — Matrice Attaque / Détection / Remédiation
+## Annexe B — Matrice Attaque / Détection / Remédiation
 
 | Technique | Event IDs | Outils offensifs | Signal de détection | Faux positifs | Remédiation |
 |-----------|-----------|-----------------|---------------------|---------------|-------------|
@@ -99,7 +99,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe C — Event IDs critiques AD
+## Annexe C — Event IDs critiques AD
 
 | Event ID | Source | Description | Pertinence sécurité |
 |----------|--------|-------------|-------------------|
@@ -125,7 +125,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe D — Lab AD : monter son environnement de test
+## Annexe D — Lab AD : monter son environnement de test
 
 **Infrastructure minimale** : 1 VM Windows Server 2022 (DC01 — DC + DNS + AD CS), 1 VM Windows Server 2022 (SRV01 — serveur membre), 1 VM Windows 10/11 (PC01 — poste joint au domaine), 1 VM Kali Linux (attaquant). Total : ~16 Go RAM, 100 Go disque. Hyperviseur : VirtualBox, VMware Workstation, ou Proxmox.
 
@@ -136,7 +136,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe E — MITRE ATT&CK mapping AD
+## Annexe E — MITRE ATT&CK mapping AD
 
 | Tactique | Techniques AD clés | Sub-techniques |
 |----------|-------------------|---------------|
@@ -156,7 +156,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe F — Mapping de la bibliothèque
+## Annexe F — Mapping de la bibliothèque
 
 | Thématique | Cours principal | Cours complémentaires |
 |-----------|----------------|----------------------|
@@ -172,9 +172,9 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 
-#### Annexe G — Glossaire et ressources
+## Annexe G — Glossaire et ressources
 
-##### Glossaire (sélection)
+### Glossaire (sélection)
 
 | Terme | Définition |
 |-------|-----------|
@@ -216,7 +216,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 | **TGT / TGS** | Ticket Granting Ticket / Ticket Granting Service |
 | **Trust** | Relation de confiance entre domaines/forêts |
 
-##### Ressources
+### Ressources
 
 | Ressource | Type | Focus |
 |-----------|------|-------|
@@ -229,7 +229,7 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 | PingCastle | Outil | Audit de maturité AD |
 | BloodHound CE | Outil | Analyse de chemins d'attaque |
 
-##### Formations
+### Formations
 
 | Formation | Organisme | Focus |
 |-----------|----------|-------|
@@ -243,6 +243,3 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 ---
 
 ---
-
-
-## Annexe — Questions types d'entretien et réponses types

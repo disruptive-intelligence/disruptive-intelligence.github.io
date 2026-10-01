@@ -1,6 +1,6 @@
 ---
 title: Architecture et sécurité des systèmes
-source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

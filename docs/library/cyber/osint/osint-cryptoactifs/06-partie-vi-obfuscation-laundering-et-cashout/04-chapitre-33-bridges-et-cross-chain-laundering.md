@@ -1,11 +1,11 @@
 ---
 title: Chapitre 33 — Bridges et cross-chain laundering
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs
   - ../index.md
-- - Partie VI — Obfuscation, laundering ET cashout
+- - Partie VI — Obfuscation, laundering et cashout
   - index.md
 ---
 

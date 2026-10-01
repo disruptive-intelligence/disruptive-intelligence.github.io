@@ -1,11 +1,11 @@
 ---
 title: 'Chapitre 7 — OSINT pour l''IE : workflows spécifiques'
-source: Cyber/01_CTI/IE.md
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique
   - ../index.md
-- - Partie II — Veille, collecte ET analyse
+- - Partie II — Veille, collecte et analyse
   - index.md
 ---
 

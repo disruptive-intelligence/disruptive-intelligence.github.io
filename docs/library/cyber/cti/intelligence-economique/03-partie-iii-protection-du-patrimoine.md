@@ -1,6 +1,6 @@
 ---
 title: Partie III — Protection du patrimoine
-source: Cyber/01_CTI/IE.md
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique

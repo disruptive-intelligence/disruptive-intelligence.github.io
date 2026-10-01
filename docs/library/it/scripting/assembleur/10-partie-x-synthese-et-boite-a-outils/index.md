@@ -1,6 +1,6 @@
 ---
-title: Partie X — Synthèse ET boîte à outils
-source: IT/Culture/Assembleur.md
+title: Partie X — Synthèse et boîte à outils
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

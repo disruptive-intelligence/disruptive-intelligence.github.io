@@ -1,6 +1,6 @@
 ---
 title: Partie 5 — Écrans et affichage
-source: IT/Culture/Materiel_informatique-connectique-andco.md
+source: IT/06 Infrastructure & architecture/Matériel informatique & connectique.md
 note: Matériel informatique & connectique
 up:
 - - Matériel informatique & connectique

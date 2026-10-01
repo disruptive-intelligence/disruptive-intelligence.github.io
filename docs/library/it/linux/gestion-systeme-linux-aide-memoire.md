@@ -1,6 +1,6 @@
 ---
 title: Gestion système Linux — aide-mémoire
-source: IT/01_Linux/CS_GestionSystem.md
+source: IT/01 Linux/Gestion système Linux — aide-mémoire.md
 format: aide-memoire
 revue: '2026-04-13'
 ---

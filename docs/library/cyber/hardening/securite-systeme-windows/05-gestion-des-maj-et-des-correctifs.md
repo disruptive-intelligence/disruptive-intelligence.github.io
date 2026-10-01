@@ -1,6 +1,6 @@
 ---
 title: Gestion des MAJ et des correctifs
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows

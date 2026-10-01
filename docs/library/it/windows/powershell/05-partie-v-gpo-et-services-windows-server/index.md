@@ -1,6 +1,6 @@
 ---
-title: Partie V — GPO ET services windows server
-source: IT/02_Windows/Powershell.md
+title: Partie V — GPO et services Windows server
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

@@ -1,6 +1,6 @@
 ---
 title: HUMINT & social engineering
-source: Cyber/HUMINT_Social_Engineering.md
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 format: cours
 revue: '2026-04-08'
 ---
@@ -41,7 +41,7 @@ revue: '2026-04-08'
     - [Chapitre 18 — L'ingénierie sociale dans la fraude et la criminalité organisée](04-partie-iv-l-attaquant-perspectives-offensives/02-chapitre-18-l-ingenierie-sociale-dans-la-fraude-et.md)
     - [Chapitre 19 — Red team social engineering](04-partie-iv-l-attaquant-perspectives-offensives/03-chapitre-19-red-team-social-engineering.md)
     - [Chapitre 20 — Capstone Partie IV](04-partie-iv-l-attaquant-perspectives-offensives/04-chapitre-20-capstone-partie-iv.md)
-- [Partie V — Défense ET contre-ingénierie sociale](05-partie-v-defense-et-contre-ingenierie-sociale/index.md)
+- [Partie V — Défense et contre-ingénierie sociale](05-partie-v-defense-et-contre-ingenierie-sociale/index.md)
     - [Chapitre 21 — Sensibilisation : au-delà du e-learning annuel](05-partie-v-defense-et-contre-ingenierie-sociale/01-chapitre-21-sensibilisation-au-dela-du-e-learning.md)
     - [Chapitre 22 — Contre-élicitation et protection des informations](05-partie-v-defense-et-contre-ingenierie-sociale/02-chapitre-22-contre-elicitation-et-protection-des-i.md)
     - [Chapitre 23 — Défense technique contre le social engineering](05-partie-v-defense-et-contre-ingenierie-sociale/03-chapitre-23-defense-technique-contre-le-social-eng.md)
@@ -51,8 +51,8 @@ revue: '2026-04-08'
     - [Chapitre 26 — Social engineering et IA : la révolution en cours](06-partie-vi-dimensions-avancees/01-chapitre-26-social-engineering-et-ia-la-revolution.md)
     - [Chapitre 27 — Sécurité physique avancée : au-delà du badge](06-partie-vi-dimensions-avancees/02-chapitre-27-securite-physique-avancee-au-dela-du-b.md)
     - [Chapitre 28 — Élicitation, investigation et contre-ingérence](06-partie-vi-dimensions-avancees/03-chapitre-28-elicitation-investigation-et-contre-in.md)
-- [Partie VII — Synthèse ET cas pratiques](07-partie-vii-synthese-et-cas-pratiques/index.md)
-    - [Chapitre 29 — Cas de synthèse](07-partie-vii-synthese-et-cas-pratiques/01-chapitre-29-cas-de-synthese.md)
+- [Partie VII — Synthèse et cas pratiques](07-partie-vii-synthese-et-cas-pratiques/index.md)
+    - [Chapitre 29 — Cas de synthèse : opération de social engineering multi-vecteurs](07-partie-vii-synthese-et-cas-pratiques/01-chapitre-29-cas-de-synthese-operation-de-social-en.md)
     - [Chapitre 30 — Le métier d'expert en social engineering](07-partie-vii-synthese-et-cas-pratiques/02-chapitre-30-le-metier-d-expert-en-social-engineeri.md)
 - [Annexes](08-annexes/index.md)
     - [Annexe A — Glossaire (80+ termes)](08-annexes/01-annexe-a-glossaire-80-termes.md)

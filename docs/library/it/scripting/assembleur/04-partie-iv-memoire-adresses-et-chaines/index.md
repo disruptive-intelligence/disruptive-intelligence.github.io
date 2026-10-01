@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Mémoire, adresses ET chaînes
-source: IT/Culture/Assembleur.md
+title: Partie IV — Mémoire, adresses et chaînes
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

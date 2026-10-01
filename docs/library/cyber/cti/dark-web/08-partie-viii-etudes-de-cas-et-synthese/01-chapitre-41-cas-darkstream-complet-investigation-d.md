@@ -1,11 +1,11 @@
 ---
 title: Chapitre 41 — Cas DARKSTREAM complet — investigation d'une vente de données industrielles
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 note: Dark Web
 up:
 - - Dark Web
   - ../index.md
-- - Partie VIII — Études DE cas et synthèse
+- - Partie VIII — Études de cas et synthèse
   - index.md
 ---
 

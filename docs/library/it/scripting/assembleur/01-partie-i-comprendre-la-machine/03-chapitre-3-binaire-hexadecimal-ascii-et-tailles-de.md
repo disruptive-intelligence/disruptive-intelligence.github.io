@@ -1,11 +1,11 @@
 ---
 title: Chapitre 3 — Binaire, hexadécimal, ASCII et tailles de données
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie I — Comprendre LA machine
+- - Partie I — Comprendre la machine
   - index.md
 ---
 

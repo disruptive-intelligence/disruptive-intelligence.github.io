@@ -1,6 +1,6 @@
 ---
 title: Déboguer et écrire scripts propres
-source: IT/05_Scripting_Langage-Prog/Notion_Bash.md
+source: IT/07 Scripting & programmation/Bash — prises de notes.md
 note: Bash — prises de notes
 up:
 - - Bash — prises de notes

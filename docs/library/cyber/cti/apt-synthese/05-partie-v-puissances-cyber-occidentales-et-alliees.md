@@ -1,6 +1,6 @@
 ---
-title: Partie V — Puissances cyber occidentales ET alliées
-source: Cyber/01_CTI/APT_Synthese.md
+title: Partie V — Puissances cyber occidentales et alliées
+source: Cyber/01 CTI & renseignement/Menace cyber/APT — synthèse.md
 note: APT — synthèse
 up:
 - - APT — synthèse

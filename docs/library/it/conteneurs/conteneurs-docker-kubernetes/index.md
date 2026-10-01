@@ -1,8 +1,9 @@
 ---
 title: Conteneurs — Docker & Kubernetes
-source: IT/10_virtualization-containers/Containers_Docker_K8s.md
+source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
 format: cours
 revue: '2026-04-15'
+revision: library/revision/conteneurs.md
 ---
 
 *De zéro à la maîtrise — Comprendre, déployer et sécuriser*
@@ -144,7 +145,7 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
 
 **PARTIE VII — SYNTHÈSE (Ch.29-30)**
 
-29. [Cas de synthèse : audit de sécurité d’un environnement containerisé](07-partie-vii-synthese.md#chapitre-29-cas-de-synthese)
+29. [Cas de synthèse : audit de sécurité d’un environnement containerisé](07-partie-vii-synthese.md#chapitre-29-cas-de-synthese-audit-de-securite-dun-environnement-containerise)
 30. [Le métier et les perspectives](07-partie-vii-synthese.md#chapitre-30-le-metier-et-les-perspectives)
 
 **ANNEXES**
@@ -175,7 +176,7 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
     - [Chapitre 3 — Installer Docker et premiers containers](01-partie-i-fondations/03-chapitre-3-installer-docker-et-premiers-containers.md)
     - [Chapitre 4 — Images Docker : comprendre, chercher, utiliser](01-partie-i-fondations/04-chapitre-4-images-docker-comprendre-chercher-utili.md)
     - [Chapitre 5 — Réseau, volumes et persistance](01-partie-i-fondations/05-chapitre-5-reseau-volumes-et-persistance.md)
-- [Partie II — Construire ET composer](02-partie-ii-construire-et-composer/index.md)
+- [Partie II — Construire et composer](02-partie-ii-construire-et-composer/index.md)
     - [Chapitre 6 — Écrire un Dockerfile : de zéro à l’image](02-partie-ii-construire-et-composer/01-chapitre-6-ecrire-un-dockerfile-de-zero-a-limage.md)
     - [Chapitre 7 — Optimiser et durcir ses images](02-partie-ii-construire-et-composer/02-chapitre-7-optimiser-et-durcir-ses-images.md)
     - [Chapitre 8 — Docker Compose : orchestrer plusieurs containers](02-partie-ii-construire-et-composer/03-chapitre-8-docker-compose-orchestrer-plusieurs-con.md)
@@ -188,7 +189,7 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
     - [Chapitre 14 — Déployer sur Kubernetes : kubectl et les manifests](03-partie-iii-kubernetes-les-fondamentaux/04-chapitre-14-deployer-sur-kubernetes-kubectl-et-les.md)
     - [Chapitre 15 — Stockage, Ingress et configuration avancée](03-partie-iii-kubernetes-les-fondamentaux/05-chapitre-15-stockage-ingress-et-configuration-avan.md)
     - [Chapitre 16 — Capstone Partie III](03-partie-iii-kubernetes-les-fondamentaux/06-chapitre-16-capstone-partie-iii.md)
-- [Partie IV — Opérations ET cycle de vie](04-partie-iv-operations-et-cycle-de-vie/index.md)
+- [Partie IV — Opérations et cycle de vie](04-partie-iv-operations-et-cycle-de-vie/index.md)
     - [Chapitre 17 — CI/CD et containers : du code au déploiement](04-partie-iv-operations-et-cycle-de-vie/01-chapitre-17-ci-cd-et-containers-du-code-au-deploie.md)
     - [Chapitre 18 — Monitoring, logs et observabilité](04-partie-iv-operations-et-cycle-de-vie/02-chapitre-18-monitoring-logs-et-observabilite.md)
     - [Chapitre 19 — Troubleshooting containers et Kubernetes](04-partie-iv-operations-et-cycle-de-vie/03-chapitre-19-troubleshooting-containers-et-kubernet.md)
@@ -199,7 +200,6 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
     - [Chapitre 24 — Sécuriser le réseau : segmentation et chiffrement](05-partie-v-securite-des-containers/04-chapitre-24-securiser-le-reseau-segmentation-et-ch.md)
     - [Chapitre 25 — Sécuriser Kubernetes : RBAC, Secrets et API Server](05-partie-v-securite-des-containers/05-chapitre-25-securiser-kubernetes-rbac-secrets-et-a.md)
     - [Chapitre 26 — Détection et réponse aux incidents dans les containers](05-partie-v-securite-des-containers/06-chapitre-26-detection-et-reponse-aux-incidents-dan.md)
-- [Partie VI — Architectures ET patterns avancés](06-partie-vi-architectures-et-patterns-avances.md)
+- [Partie VI — Architectures et patterns avancés](06-partie-vi-architectures-et-patterns-avances.md)
 - [Partie VII — Synthèse](07-partie-vii-synthese.md)
-- [Annexes](08-annexes/index.md)
-    - [Annexe — Questions types d'entretien et réponses types](08-annexes/01-annexe-questions-types-d-entretien-et-reponses-typ.md)
+- [Annexes](08-annexes.md)

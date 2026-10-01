@@ -1,8 +1,9 @@
 ---
 title: Windows en profondeur
-source: IT/02_Windows/Windows.md
+source: IT/02 Windows/Windows en profondeur.md
 format: cours
 revue: '2026-04-08'
+revision: library/revision/windows.md
 ---
 
 *Architecture • Internals • Sécurité • Investigation*
@@ -35,6 +36,3 @@ revue: '2026-04-08'
 - [Partie VI — Event logs, artefacts et forensic](06-partie-vi-event-logs-artefacts-et-forensic.md)
 - [Partie VII — Hardening, cas de synthèse et référence](07-partie-vii-hardening-cas-de-synthese-et-reference.md)
 - [Annexes](08-annexes.md)
-- [Questions essentielles](09-questions-essentielles.md)
-- [Questions complémentaires](10-questions-complementaires.md)
-- [Réponses flash](11-reponses-flash.md)

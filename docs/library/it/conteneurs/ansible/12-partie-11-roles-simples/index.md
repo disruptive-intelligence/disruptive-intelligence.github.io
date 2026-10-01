@@ -1,6 +1,6 @@
 ---
 title: Partie 11 — Roles simples
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

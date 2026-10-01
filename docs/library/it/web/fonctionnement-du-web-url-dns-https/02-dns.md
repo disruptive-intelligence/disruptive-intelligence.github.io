@@ -1,6 +1,6 @@
 ---
 title: DNS
-source: IT/Culture/Fiche_How-The-Web-Works.md
+source: IT/05 Web & applications/Fonctionnement du web - URL, DNS, HTTPS.md
 note: 'Fonctionnement du web : URL, DNS, HTTPS'
 up:
 - - 'Fonctionnement du web : URL, DNS, HTTPS'

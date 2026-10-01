@@ -1,6 +1,6 @@
 ---
-title: Partie II — Penser comme L'adversaire
-source: Cyber/Red_Teaming.md
+title: Partie II — Penser comme l'adversaire
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 note: Red teaming analytique
 up:
 - - Red teaming analytique

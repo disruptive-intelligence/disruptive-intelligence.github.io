@@ -1,6 +1,6 @@
 ---
 title: Administration Linux
-source: IT/01_Linux/Admin_Linux.md
+source: IT/01 Linux/Administration Linux.md
 format: cours
 revue: '2026-06-08'
 ---

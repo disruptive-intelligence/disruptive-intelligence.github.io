@@ -1,6 +1,6 @@
 ---
 title: PARTIE 3 — Qui a le droit de quoi
-source: IT/01_Linux/Admin_Linux.md
+source: IT/01 Linux/Administration Linux.md
 note: Administration Linux
 up:
 - - Administration Linux

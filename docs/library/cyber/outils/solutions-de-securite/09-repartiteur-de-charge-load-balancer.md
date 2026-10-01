@@ -1,6 +1,6 @@
 ---
 title: Répartiteur de charge — Load Balancer
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité
@@ -55,7 +55,7 @@ Avec Load Balancer
 |**Least Connections**|Choisit le serveur ayant le moins de connexions actives|
 |**IP Hash**|Utilise notamment l’IP client pour déterminer le serveur cible|
 
-![Load Balancer](../../../assets/htb-solutions-de-securite-loadbalancer.png){ width="600" }
+![Load Balancer](../../../assets/solutions-de-securite-loadbalancer.png){ width="600" }
 ## Health Checks
 
 - Complément important :

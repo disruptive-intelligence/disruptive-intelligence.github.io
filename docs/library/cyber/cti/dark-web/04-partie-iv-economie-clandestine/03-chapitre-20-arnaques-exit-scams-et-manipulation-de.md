@@ -1,6 +1,6 @@
 ---
 title: Chapitre 20 — Arnaques, exit scams et manipulation de la confiance
-source: Cyber/01_CTI/Dark_Web_vFULL.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Dark Web.md
 note: Dark Web
 up:
 - - Dark Web

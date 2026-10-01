@@ -1,6 +1,6 @@
 ---
 title: Zero Trust
-source: Cyber/00_Notions/Fiche_Zero_Trust.md
+source: Cyber/12 Fiches notions/Zero Trust.md
 format: fiche
 revue: '2026-10-01'
 terms:

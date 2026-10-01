@@ -1,6 +1,6 @@
 ---
 title: Chapitre 7.1 — Les templates Jinja2 (template)
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

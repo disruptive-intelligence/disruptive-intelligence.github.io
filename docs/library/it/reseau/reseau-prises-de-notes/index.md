@@ -1,12 +1,17 @@
 ---
 title: Réseau — prises de notes
-source: IT/03_Networking/networking_notion.md
+source: IT/04 Réseau/Réseau — prises de notes.md
 format: synthese
-revue: '2026-04-08'
+revue: '2026-10-01'
+revision: library/revision/reseau.md
 ---
 
 ## Sommaire
 
-- [Networking](01-networking.md)
-- [Annexe — Questions types d'entretien et réponses types](02-annexe-questions-types-d-entretien-et-reponses-typ/index.md)
-    - [Questions essentielles](02-annexe-questions-types-d-entretien-et-reponses-typ/01-questions-essentielles.md)
+- [Concepts [OSI, TCP/IP, UDP, Encapsulation]](01-concepts-osi-tcp-ip-udp-encapsulation.md)
+- [Réseautage [DHCP, ARP, ICMP, Routing, NAT]](02-reseautage-dhcp-arp-icmp-routing-nat.md)
+- [TCP/IP Protocoles [DNS, WHOIS, HTTP, FTP, SMTP, POP3, IMAP]](03-tcp-ip-protocoles-dns-whois-http-ftp-smtp-pop3-ima.md)
+- [Protocoles réseau sécurisés [TLS, HTTPS, SSH, PGP]](04-protocoles-reseau-securises-tls-https-ssh-pgp.md)
+- [Composants [VPN, Firewall, IDS…]](05-composants-vpn-firewall-ids.md)
+- [Entretien](06-entretien.md)
+- [Bases de données (courant en audit)](07-bases-de-donnees-courant-en-audit.md)

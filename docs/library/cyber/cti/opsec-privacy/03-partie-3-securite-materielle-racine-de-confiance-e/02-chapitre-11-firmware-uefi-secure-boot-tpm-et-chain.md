@@ -1,6 +1,6 @@
 ---
 title: Chapitre 11 — Firmware, UEFI, Secure Boot, TPM et chaîne de démarrage
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

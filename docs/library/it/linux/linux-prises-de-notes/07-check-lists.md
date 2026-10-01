@@ -1,6 +1,6 @@
 ---
 title: Check-lists
-source: IT/01_Linux/Notion_Linux.md
+source: IT/01 Linux/Linux — prises de notes.md
 note: Linux — prises de notes
 up:
 - - Linux — prises de notes

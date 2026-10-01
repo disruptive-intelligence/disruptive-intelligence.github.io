@@ -1,6 +1,6 @@
 ---
-title: Partie III — Registres, calculs ET observation
-source: IT/Culture/Assembleur.md
+title: Partie III — Registres, calculs et observation
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

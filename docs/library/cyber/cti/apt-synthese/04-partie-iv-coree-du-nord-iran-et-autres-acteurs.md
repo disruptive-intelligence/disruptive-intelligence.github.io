@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Corée du nord, iran ET autres acteurs
-source: Cyber/01_CTI/APT_Synthese.md
+title: Partie IV — Corée du Nord, Iran et autres acteurs
+source: Cyber/01 CTI & renseignement/Menace cyber/APT — synthèse.md
 note: APT — synthèse
 up:
 - - APT — synthèse

@@ -1,6 +1,6 @@
 ---
 title: Sécurité système Windows
-source: IT/02_Windows/HTB_Windows System Sécurity.md
+source: Cyber/05 Hardening/Sécurité système Windows.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-17'

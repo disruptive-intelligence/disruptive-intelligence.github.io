@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Communications, arnaques ET ingénierie sociale
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: Partie IV — Communications, arnaques et ingénierie sociale
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

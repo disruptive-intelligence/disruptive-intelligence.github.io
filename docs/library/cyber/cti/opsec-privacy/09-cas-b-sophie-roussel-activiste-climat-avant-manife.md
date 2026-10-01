@@ -1,6 +1,6 @@
 ---
 title: 'Cas B — Sophie Roussel : activiste climat avant manifestation'
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

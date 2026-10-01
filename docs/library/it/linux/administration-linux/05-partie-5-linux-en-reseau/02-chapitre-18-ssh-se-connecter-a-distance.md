@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 18 — SSH : se connecter à distance'
-source: IT/01_Linux/Admin_Linux.md
+source: IT/01 Linux/Administration Linux.md
 note: Administration Linux
 up:
 - - Administration Linux

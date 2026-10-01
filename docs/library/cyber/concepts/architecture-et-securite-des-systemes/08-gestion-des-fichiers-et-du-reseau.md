@@ -1,6 +1,6 @@
 ---
 title: Gestion des fichiers et du réseau
-source: Cyber/04_Hardening/HTB_Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
 note: Architecture et sécurité des systèmes
 up:
 - - Architecture et sécurité des systèmes
@@ -157,14 +157,14 @@ Physical Disk
 ```
 
 
-![File activity](../../../assets/htb-architecture-et-securite-des-systemes-file-activity.png){ width="600" }
+![File activity](../../../assets/architecture-et-securite-des-systemes-file-activity.png){ width="600" }
 
 ### Gestion du réseau — Network Management
 
 - L’OS fournit les mécanismes permettant au système de **communiquer sur le réseau**.
 - Il permet notamment de configurer, surveiller et sécuriser les interfaces et services réseau.
 
-![Resolv conf](../../../assets/htb-architecture-et-securite-des-systemes-resolv-conf.png){ width="600" }
+![Resolv conf](../../../assets/architecture-et-securite-des-systemes-resolv-conf.png){ width="600" }
 #### Gestion du réseau - Network Configuration
 
 - Configuration possible au niveau d’un hôte :

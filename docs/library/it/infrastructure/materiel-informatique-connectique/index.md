@@ -1,6 +1,6 @@
 ---
 title: Matériel informatique & connectique
-source: IT/Culture/Materiel_informatique-connectique-andco.md
+source: IT/06 Infrastructure & architecture/Matériel informatique & connectique.md
 format: cours
 revue: '2026-06-09'
 ---

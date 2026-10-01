@@ -1,6 +1,6 @@
 ---
-title: Partie VI — VIE privée, images, documents ET surexposition
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: Partie VI — VIE privée, images, documents et surexposition
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

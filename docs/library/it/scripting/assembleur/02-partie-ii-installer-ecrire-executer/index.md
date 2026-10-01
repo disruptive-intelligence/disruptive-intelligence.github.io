@@ -1,6 +1,6 @@
 ---
 title: Partie II — Installer, écrire, exécuter
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

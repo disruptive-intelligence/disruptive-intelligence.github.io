@@ -1,6 +1,6 @@
 ---
 title: Chapitre 11.3 — Créer et utiliser un role simple
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,6 +1,6 @@
 ---
 title: PowerShell
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 format: cours
 revue: '2026-08-21'
 ---
@@ -202,7 +202,7 @@ Reviens ici dès qu'un terme te semble flou.
 
 ## Sommaire
 
-- [Partie I — Fondamentaux powershell pour administrer windows](01-partie-i-fondamentaux-powershell-pour-administrer/index.md)
+- [Partie I — Fondamentaux PowerShell pour administrer Windows](01-partie-i-fondamentaux-powershell-pour-administrer/index.md)
     - [Chapitre 1 — PowerShell dans l'écosystème Windows](01-partie-i-fondamentaux-powershell-pour-administrer/01-chapitre-1-powershell-dans-l-ecosysteme-windows.md)
     - [Chapitre 2 — Variables, types et informations système](01-partie-i-fondamentaux-powershell-pour-administrer/02-chapitre-2-variables-types-et-informations-systeme.md)
     - [Chapitre 3 — Paramètres et scripts administrables](01-partie-i-fondamentaux-powershell-pour-administrer/03-chapitre-3-parametres-et-scripts-administrables.md)
@@ -211,14 +211,14 @@ Reviens ici dès qu'un terme te semble flou.
     - [Chapitre 6 — Collections, hashtables et boucles](01-partie-i-fondamentaux-powershell-pour-administrer/06-chapitre-6-collections-hashtables-et-boucles.md)
     - [Chapitre 7 — Fonctions et scripts structurés](01-partie-i-fondamentaux-powershell-pour-administrer/07-chapitre-7-fonctions-et-scripts-structures.md)
     - [Chapitre 8 — Gestion des erreurs et débogage](01-partie-i-fondamentaux-powershell-pour-administrer/08-chapitre-8-gestion-des-erreurs-et-debogage.md)
-- [Partie II — Administration windows locale](02-partie-ii-administration-windows-locale/index.md)
+- [Partie II — Administration Windows locale](02-partie-ii-administration-windows-locale/index.md)
     - [Chapitre 9 — Fichiers, dossiers et permissions NTFS](02-partie-ii-administration-windows-locale/01-chapitre-9-fichiers-dossiers-et-permissions-ntfs.md)
     - [Chapitre 10 — Utilisateurs et groupes locaux](02-partie-ii-administration-windows-locale/02-chapitre-10-utilisateurs-et-groupes-locaux.md)
     - [Chapitre 11 — Processus et services](02-partie-ii-administration-windows-locale/03-chapitre-11-processus-et-services.md)
     - [Chapitre 12 — Le registre Windows](02-partie-ii-administration-windows-locale/04-chapitre-12-le-registre-windows.md)
     - [Chapitre 13 — Tâches planifiées](02-partie-ii-administration-windows-locale/05-chapitre-13-taches-planifiees.md)
     - [Chapitre 14 — Disques, volumes et stockage](02-partie-ii-administration-windows-locale/06-chapitre-14-disques-volumes-et-stockage.md)
-- [Partie III — Administration réseau windows](03-partie-iii-administration-reseau-windows/index.md)
+- [Partie III — Administration réseau Windows](03-partie-iii-administration-reseau-windows/index.md)
     - [Chapitre 15 — Interfaces et configuration IP](03-partie-iii-administration-reseau-windows/01-chapitre-15-interfaces-et-configuration-ip.md)
     - [Chapitre 16 — DNS client et résolution](03-partie-iii-administration-reseau-windows/02-chapitre-16-dns-client-et-resolution.md)
     - [Chapitre 17 — Routage et connexions](03-partie-iii-administration-reseau-windows/03-chapitre-17-routage-et-connexions.md)
@@ -230,19 +230,19 @@ Reviens ici dès qu'un terme te semble flou.
     - [Chapitre 22 — Ordinateurs et unités d'organisation](04-partie-iv-administration-active-directory/04-chapitre-22-ordinateurs-et-unites-d-organisation.md)
     - [Chapitre 23 — Recherche et filtrage AD](04-partie-iv-administration-active-directory/05-chapitre-23-recherche-et-filtrage-ad.md)
     - [Chapitre 24 — Administration en masse avec CSV](04-partie-iv-administration-active-directory/06-chapitre-24-administration-en-masse-avec-csv.md)
-- [Partie V — GPO ET services windows server](05-partie-v-gpo-et-services-windows-server/index.md)
+- [Partie V — GPO et services Windows server](05-partie-v-gpo-et-services-windows-server/index.md)
     - [Chapitre 25 — Group Policy (GPO)](05-partie-v-gpo-et-services-windows-server/01-chapitre-25-group-policy-gpo.md)
     - [Chapitre 26 — DNS Server](05-partie-v-gpo-et-services-windows-server/02-chapitre-26-dns-server.md)
     - [Chapitre 27 — DHCP Server](05-partie-v-gpo-et-services-windows-server/03-chapitre-27-dhcp-server.md)
     - [Chapitre 28 — File Server et partages SMB](05-partie-v-gpo-et-services-windows-server/04-chapitre-28-file-server-et-partages-smb.md)
-- [Partie VI — Administration distante, API ET automatisation](06-partie-vi-administration-distante-api-et-automatis/index.md)
+- [Partie VI — Administration distante, API et automatisation](06-partie-vi-administration-distante-api-et-automatis/index.md)
     - [Chapitre 29 — PowerShell Remoting](06-partie-vi-administration-distante-api-et-automatis/01-chapitre-29-powershell-remoting.md)
     - [Chapitre 30 — Authentification, autorisation et tokens](06-partie-vi-administration-distante-api-et-automatis/02-chapitre-30-authentification-autorisation-et-token.md)
     - [Chapitre 31 — API REST avec PowerShell](06-partie-vi-administration-distante-api-et-automatis/03-chapitre-31-api-rest-avec-powershell.md)
     - [Chapitre 32 — Microsoft Graph et Entra ID](06-partie-vi-administration-distante-api-et-automatis/04-chapitre-32-microsoft-graph-et-entra-id.md)
-- [Partie VII — Automatisation ET industrialisation](07-partie-vii-automatisation-et-industrialisation/index.md)
+- [Partie VII — Automatisation et industrialisation](07-partie-vii-automatisation-et-industrialisation/index.md)
     - [Chapitre 33 — Industrialiser ses scripts](07-partie-vii-automatisation-et-industrialisation/01-chapitre-33-industrialiser-ses-scripts.md)
-- [Partie VIII — Powershell pour LA cybersécurité](08-partie-viii-powershell-pour-la-cybersecurite/index.md)
+- [Partie VIII — PowerShell pour la cybersécurité](08-partie-viii-powershell-pour-la-cybersecurite/index.md)
     - [Chapitre 34 — Diagnostic, logs et triage](08-partie-viii-powershell-pour-la-cybersecurite/01-chapitre-34-diagnostic-logs-et-triage.md)
     - [Chapitre 35 — Sécurité de l'exécution et durcissement](08-partie-viii-powershell-pour-la-cybersecurite/02-chapitre-35-securite-de-l-execution-et-durcissemen.md)
 - [Annexes](09-annexes.md)

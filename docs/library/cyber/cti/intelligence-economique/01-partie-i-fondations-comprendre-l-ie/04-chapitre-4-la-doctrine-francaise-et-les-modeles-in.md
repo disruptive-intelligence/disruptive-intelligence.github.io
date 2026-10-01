@@ -1,11 +1,11 @@
 ---
 title: Chapitre 4 — La doctrine française et les modèles internationaux
-source: Cyber/01_CTI/IE.md
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique
   - ../index.md
-- - 'Partie I — Fondations : comprendre L''IE'
+- - 'Partie I — Fondations : comprendre l''IE'
   - index.md
 ---
 

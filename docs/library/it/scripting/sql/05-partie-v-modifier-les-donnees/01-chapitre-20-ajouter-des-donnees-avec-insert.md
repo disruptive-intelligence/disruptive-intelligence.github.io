@@ -1,6 +1,6 @@
 ---
 title: Chapitre 20 — Ajouter des données avec INSERT
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

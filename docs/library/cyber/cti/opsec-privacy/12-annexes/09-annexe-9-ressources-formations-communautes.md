@@ -1,6 +1,6 @@
 ---
 title: Annexe 9 — Ressources, formations, communautés
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

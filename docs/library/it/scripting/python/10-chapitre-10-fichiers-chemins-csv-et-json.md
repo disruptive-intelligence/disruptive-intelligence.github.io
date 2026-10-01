@@ -1,6 +1,6 @@
 ---
 title: Chapitre 10 — Fichiers, chemins, CSV et JSON
-source: IT/05_Scripting_Langage-Prog/Python.md
+source: IT/07 Scripting & programmation/Python.md
 note: Python
 up:
 - - Python

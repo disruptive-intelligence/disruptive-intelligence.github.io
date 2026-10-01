@@ -1,6 +1,6 @@
 ---
 title: Défense en profondeur
-source: Cyber/00_Notions/Fiche_Defense_en_profondeur.md
+source: Cyber/12 Fiches notions/Défense en profondeur.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -21,7 +21,7 @@ terms:
 
 C'est le fait de superposer plusieurs couches de sécurité plutôt que de compter sur un seul mécanisme. Si une couche est contournée, la suivante prend le relais. Par exemple : un firewall périmétrique + une segmentation réseau + un EDR sur les postes + du MFA sur les comptes + du chiffrement des données au repos. Aucune mesure seule ne suffit — un attaquant qui contourne le firewall sera détecté par l'EDR, et même s'il contourne l'EDR, les données chiffrées limitent l'impact.
 
-*↳ [Questions d'entretien](../../it/culture/questions-d-entretien-cyber-sysadmin/index.md) (réponse type)*
+*↳ Questions d'entretien (réponse type)*
 
 **Defense in depth** : multiples couches de défense indépendantes, de manière à ce qu’une défaillance à une couche soit compensée par les suivantes. Couches typiques : sécurité périmétrique, endpoint, identity, cloud/SaaS, réseau interne, applicatif, données, détection/réponse. Un attaquant qui franchit une couche doit en franchir d’autres avant d’atteindre les données critiques.
 
@@ -35,7 +35,7 @@ C'est le fait de superposer plusieurs couches de sécurité plutôt que de compt
 
 La stratégie de défense en profondeur : code sécurisé (fondation) → tests automatisés (vérification) → WAF (filet) → monitoring et alerting (détection) → incident response (réaction). Si une couche échoue, la suivante rattrape.
 
-*↳ [AppSec](../hardening/appsec/index.md)*
+*↳ [AppSec](../hardening/securite-applicative-appsec/index.md)*
 
 **Défense en profondeur** : ne jamais miser sur une seule barrière. Si ton mot de passe est ta seule défense, sa compromission est totale. Si tu as un mot de passe fort + MFA matériel + alertes de connexion + sessions audités + procédure de récupération hors-ligne, la compromission de l’un ne renverse pas tout.
 

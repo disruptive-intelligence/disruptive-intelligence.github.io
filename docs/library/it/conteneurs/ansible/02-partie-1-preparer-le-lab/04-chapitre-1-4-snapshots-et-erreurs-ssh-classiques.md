@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1.4 — Snapshots et erreurs SSH classiques
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

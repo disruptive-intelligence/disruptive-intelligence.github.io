@@ -1,11 +1,11 @@
 ---
 title: Chapitre 13 — Lire au clavier avec read
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie V — Entrées, sorties ET conversions
+- - Partie V — Entrées, sorties et conversions
   - index.md
 ---
 

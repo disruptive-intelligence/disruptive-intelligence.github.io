@@ -1,6 +1,6 @@
 ---
 title: Annexes
-source: IT/03_Networking/Infrastructure_IT.md
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT
@@ -10,7 +10,7 @@ up:
 ---
 
 
-#### Annexe A — Cheat sheet : protocoles et ports
+## Annexe A — Cheat sheet : protocoles et ports
 
 | Protocole | Port | Chiffré | Usage | Risque principal |
 |-----------|------|---------|-------|-----------------|
@@ -45,7 +45,7 @@ up:
 ---
 
 
-#### Annexe B — Architecture type d'une entreprise
+## Annexe B — Architecture type d'une entreprise
 
 ```
                             INTERNET
@@ -88,7 +88,7 @@ up:
 ---
 
 
-#### Annexe C — CIS Benchmarks : contrôles prioritaires par système
+## Annexe C — CIS Benchmarks : contrôles prioritaires par système
 
 **Windows Server (top 10) :** désactiver SMBv1, désactiver LLMNR/NBT-NS, configurer audit policy avancée, déployer LAPS, activer Credential Guard, configurer AppLocker/WDAC, restreindre PowerShell (CLM), activer Windows Firewall sur tous les profils, désactiver les comptes invité/administrateur par défaut, configurer le verrouillage de compte.
 
@@ -101,7 +101,7 @@ up:
 ---
 
 
-#### Annexe D — OWASP Top 10 résumé
+## Annexe D — OWASP Top 10 résumé
 
 | # | Vulnérabilité | Description | Défense en 1 ligne |
 |---|--------------|-------------|-------------------|
@@ -119,7 +119,7 @@ up:
 ---
 
 
-#### Annexe E — Logs essentiels par technologie
+## Annexe E — Logs essentiels par technologie
 
 | Technologie | Source de logs | Quoi surveiller | Normal | Suspect |
 |------------|---------------|----------------|--------|---------|
@@ -137,7 +137,7 @@ up:
 ---
 
 
-#### Annexe F — Mapping de la bibliothèque
+## Annexe F — Mapping de la bibliothèque
 
 | Thématique | Cours principal | Cours complémentaires |
 |-----------|----------------|----------------------|
@@ -156,9 +156,9 @@ up:
 ---
 
 
-#### Annexe G — Glossaire et ressources
+## Annexe G — Glossaire et ressources
 
-##### Glossaire (sélection)
+### Glossaire (sélection)
 
 | Terme | Définition |
 |-------|-----------|
@@ -201,7 +201,7 @@ up:
 | **WAF** | Web Application Firewall |
 | **WORM** | Write Once Read Many — sauvegarde immuable |
 
-##### Ressources
+### Ressources
 
 | Ressource | Type | Focus |
 |-----------|------|-------|
@@ -214,7 +214,7 @@ up:
 | Shodan | Outil | Moteur de recherche de services exposés |
 | Nmap | Outil | Scanner de ports et de services |
 
-##### Formations
+### Formations
 
 | Formation | Organisme | Focus |
 |-----------|----------|-------|
@@ -228,6 +228,3 @@ up:
 ---
 
 ---
-
-
-## Annexe — Questions types d'entretien et réponses types

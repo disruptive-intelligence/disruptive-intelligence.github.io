@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 29 — Sécurité et SQL injection : aperçu défensif'
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

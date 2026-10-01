@@ -1,6 +1,6 @@
 ---
 title: Partie 3 — Sécurité matérielle, racine de confiance et isolation
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

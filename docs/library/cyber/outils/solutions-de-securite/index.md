@@ -1,6 +1,6 @@
 ---
 title: Solutions de sécurité
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

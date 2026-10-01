@@ -1,6 +1,6 @@
 ---
-title: Partie V — Crypto, finance, CTI ET analyse
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie V — Crypto, finance, CTI et analyse
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

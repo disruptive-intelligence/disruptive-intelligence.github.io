@@ -1,13 +1,13 @@
 ---
 title: APT — synthèse
-source: Cyber/01_CTI/APT_Synthese.md
+source: Cyber/01 CTI & renseignement/Menace cyber/APT — synthèse.md
 format: synthese
-revue: '2026-05-21'
+revue: '2026-10-01'
 ---
 
 *Advanced Persistent Threats — Acteurs étatiques, campagnes et géopolitique cyber*
 
-**Cours complet — 32 chapitres • 8 parties • 7 annexes**
+**Synthèse — 32 chapitres • 8 parties • 7 annexes**
 
 *Russie • Chine • DPRK • Iran • Puissances occidentales • OT/ICS • Attribution • Défense APT-ready*
 
@@ -39,9 +39,9 @@ revue: '2026-05-21'
     - [Chapitre 6 — Russie : les groupes APT en détail](02-partie-ii-russie/02-chapitre-6-russie-les-groupes-apt-en-detail.md)
     - [Chapitre 7 — Russie : campagnes de référence et influence](02-partie-ii-russie/03-chapitre-7-russie-campagnes-de-reference-et-influe.md)
 - [Partie III — Chine](03-partie-iii-chine.md)
-- [Partie IV — Corée du nord, iran ET autres acteurs](04-partie-iv-coree-du-nord-iran-et-autres-acteurs.md)
-- [Partie V — Puissances cyber occidentales ET alliées](05-partie-v-puissances-cyber-occidentales-et-alliees.md)
-- [Partie VI — Menaces sur les infrastructures critiques ET L'OT](06-partie-vi-menaces-sur-les-infrastructures-critique.md)
-- [Partie VII — Géopolitique, attribution ET prospective](07-partie-vii-geopolitique-attribution-et-prospective.md)
+- [Partie IV — Corée du Nord, Iran et autres acteurs](04-partie-iv-coree-du-nord-iran-et-autres-acteurs.md)
+- [Partie V — Puissances cyber occidentales et alliées](05-partie-v-puissances-cyber-occidentales-et-alliees.md)
+- [Partie VI — Menaces sur les infrastructures critiques et l'OT](06-partie-vi-menaces-sur-les-infrastructures-critique.md)
+- [Partie VII — Géopolitique, attribution et prospective](07-partie-vii-geopolitique-attribution-et-prospective.md)
 - [Partie VIII — Études de cas intégrées](08-partie-viii-etudes-de-cas-integrees.md)
 - [Annexes](09-annexes.md)

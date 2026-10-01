@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — LEFT JOIN et données sans correspondance
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

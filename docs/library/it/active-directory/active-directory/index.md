@@ -1,8 +1,9 @@
 ---
 title: Active Directory
-source: IT/04_Active-Directory/Active_Directory.md
+source: IT/03 Active Directory/Active Directory.md
 format: cours
 revue: '2026-09-11'
+revision: library/revision/active-directory.md
 ---
 
 *Comprendre • Attaquer • Défendre • Répondre*
@@ -33,12 +34,9 @@ revue: '2026-09-11'
     - [Chapitre 3 — Objets, attributs et structure LDAP](01-partie-i-fondations/03-chapitre-3-objets-attributs-et-structure-ldap.md)
     - [Chapitre 4 — Autorisations, ACL et modèle de sécurité](01-partie-i-fondations/04-chapitre-4-autorisations-acl-et-modele-de-securite.md)
 - [Partie II — Authentification](02-partie-ii-authentification.md)
-- [Partie III — Administration ET contrôle](03-partie-iii-administration-et-controle.md)
+- [Partie III — Administration et contrôle](03-partie-iii-administration-et-controle.md)
 - [Partie IV — Attaques AD](04-partie-iv-attaques-ad.md)
 - [Partie V — Détection](05-partie-v-detection.md)
 - [Partie VI — Hardening](06-partie-vi-hardening.md)
-- [Partie VII — Incident response, hybrid identity ET synthèse](07-partie-vii-incident-response-hybrid-identity-et-sy.md)
+- [Partie VII — Incident response, hybrid identity et synthèse](07-partie-vii-incident-response-hybrid-identity-et-sy.md)
 - [Annexes](08-annexes.md)
-- [Questions essentielles](09-questions-essentielles.md)
-- [Questions complémentaires](10-questions-complementaires.md)
-- [Réponses flash](11-reponses-flash.md)

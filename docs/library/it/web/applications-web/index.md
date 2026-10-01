@@ -1,6 +1,6 @@
 ---
 title: Applications web
-source: IT/Culture/Fiche_WebApp.md
+source: IT/05 Web & applications/Applications web.md
 format: synthese
 revue: '2026-09-30'
 ---

@@ -1,11 +1,11 @@
 ---
 title: Chapitre 9 — GDB pour observer les registres
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie III — Registres, calculs ET observation
+- - Partie III — Registres, calculs et observation
   - index.md
 ---
 

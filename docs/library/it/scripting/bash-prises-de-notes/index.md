@@ -1,6 +1,6 @@
 ---
 title: Bash — prises de notes
-source: IT/05_Scripting_Langage-Prog/Notion_Bash.md
+source: IT/07 Scripting & programmation/Bash — prises de notes.md
 format: synthese
 revue: '2026-05-10'
 ---

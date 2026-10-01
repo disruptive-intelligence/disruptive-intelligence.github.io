@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Concevoir ET conduire les exercices adversariaux (ch.16-22)
-source: Cyber/Red_Teaming.md
+title: Partie IV — Concevoir et conduire les exercices adversariaux (ch.16-22)
+source: Cyber/01 CTI & renseignement/Méthodes d'analyse/Red teaming analytique.md
 note: Red teaming analytique
 up:
 - - Red teaming analytique

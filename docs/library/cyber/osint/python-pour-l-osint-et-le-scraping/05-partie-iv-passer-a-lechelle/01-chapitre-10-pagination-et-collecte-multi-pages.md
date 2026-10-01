@@ -1,11 +1,11 @@
 ---
 title: Chapitre 10 — Pagination et collecte multi-pages
-source: Cyber/02_OSINT/Python_Scraping.md
+source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
 note: Python pour l'OSINT et le scraping
 up:
 - - Python pour l'OSINT et le scraping
   - ../index.md
-- - Partie IV — Passer à L’échelle
+- - Partie IV — Passer à l’échelle
   - index.md
 ---
 

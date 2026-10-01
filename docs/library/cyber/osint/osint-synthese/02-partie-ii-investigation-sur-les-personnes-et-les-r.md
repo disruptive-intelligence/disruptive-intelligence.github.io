@@ -1,6 +1,6 @@
 ---
-title: Partie II — Investigation sur les personnes ET les réseaux sociaux
-source: Cyber/02_OSINT/OSINT_Synthese.md
+title: Partie II — Investigation sur les personnes et les réseaux sociaux
+source: Cyber/02 OSINT/OSINT — synthèse.md
 note: OSINT — synthèse
 up:
 - - OSINT — synthèse

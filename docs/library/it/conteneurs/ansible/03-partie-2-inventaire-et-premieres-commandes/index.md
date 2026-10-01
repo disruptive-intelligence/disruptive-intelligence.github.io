@@ -1,6 +1,6 @@
 ---
 title: Partie 2 — Inventaire et premières commandes
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

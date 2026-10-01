@@ -1,6 +1,6 @@
 ---
 title: Triade CIA
-source: Cyber/00_Notions/Fiche_Triade_CIA.md
+source: Cyber/12 Fiches notions/Triade CIA.md
 format: fiche
 revue: '2026-10-01'
 terms:
@@ -30,11 +30,11 @@ terms:
 
 **Disponibilité prioritaire.** En IT, la triade CIA priorise souvent la confidentialité. En OT, c'est l'inverse : la disponibilité prime, puis l'intégrité, puis la confidentialité. Un arrêt de production a un coût immédiat (et parfois un risque safety) qui dépasse souvent le risque d'une vulnérabilité.
 
-*↳ [Vulnerability management & intelligence](../cyberdefense/vulnerability-management-intelligence/index.md)*
+*↳ [Vulnerability management & intelligence](../vulnerabilites/vulnerability-management-intelligence/index.md)*
 
 Un incident c'est une alerte confirmée qui compromet effectivement la confidentialité, l'intégrité ou la disponibilité.
 
-*↳ [Réponse à incident](../cyberdefense/reponse-a-incident/index.md) (réponse type)*
+*↳ [Réponse à incident](../detection/reponse-a-incident/index.md) (réponse type)*
 
 ## Authentification, autorisation, traçabilité
 

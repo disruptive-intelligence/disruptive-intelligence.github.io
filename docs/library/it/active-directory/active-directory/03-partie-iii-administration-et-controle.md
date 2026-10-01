@@ -1,6 +1,6 @@
 ---
-title: Partie III — Administration ET contrôle
-source: IT/04_Active-Directory/Active_Directory.md
+title: Partie III — Administration et contrôle
+source: IT/03 Active Directory/Active Directory.md
 note: Active Directory
 up:
 - - Active Directory

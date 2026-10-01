@@ -1,6 +1,6 @@
 ---
 title: OSINT & cryptoactifs
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 format: cours
 revue: '2026-05-10'
 ---
@@ -150,7 +150,7 @@ Les épisodes MIXSHADOW jalonnent le cours aux moments où le concept enseigné 
 
 ## Sommaire
 
-- [Partie I — Comprendre L’écosystème crypto SANS fantasme](01-partie-i-comprendre-lecosysteme-crypto-sans-fantas/index.md)
+- [Partie I — Comprendre l’écosystème crypto sans fantasme](01-partie-i-comprendre-lecosysteme-crypto-sans-fantas/index.md)
     - [Chapitre 1 — Pourquoi l’OSINT crypto est devenu central](01-partie-i-comprendre-lecosysteme-crypto-sans-fantas/01-chapitre-1-pourquoi-losint-crypto-est-devenu-centr.md)
     - [Chapitre 2 — Ce que l’enquête crypto permet vraiment (et ne permet pas)](01-partie-i-comprendre-lecosysteme-crypto-sans-fantas/02-chapitre-2-ce-que-lenquete-crypto-permet-vraiment.md)
     - [Chapitre 3 — Lexique opérationnel des crypto-actifs](01-partie-i-comprendre-lecosysteme-crypto-sans-fantas/03-chapitre-3-lexique-operationnel-des-crypto-actifs.md)
@@ -171,7 +171,7 @@ Les épisodes MIXSHADOW jalonnent le cours aux moments où le concept enseigné 
     - [Chapitre 16 — Temporalité et chronologie d’enquête](03-partie-iii-methodologie-denquete/05-chapitre-16-temporalite-et-chronologie-denquete.md)
     - [Chapitre 17 — Clustering : heuristiques, promesses et limites](03-partie-iii-methodologie-denquete/06-chapitre-17-clustering-heuristiques-promesses-et-l.md)
     - [Chapitre 18 — Attribution : adresse → service → personne](03-partie-iii-methodologie-denquete/07-chapitre-18-attribution-adresse-service-personne.md)
-- [Partie IV — Outils ET workflow](04-partie-iv-outils-et-workflow/index.md)
+- [Partie IV — Outils et workflow](04-partie-iv-outils-et-workflow/index.md)
     - [Chapitre 19 — Outils gratuits et explorateurs avancés](04-partie-iv-outils-et-workflow/01-chapitre-19-outils-gratuits-et-explorateurs-avance.md)
     - [Chapitre 20 — Outils professionnels : Chainalysis, TRM Labs, Elliptic](04-partie-iv-outils-et-workflow/02-chapitre-20-outils-professionnels-chainalysis-trm.md)
     - [Chapitre 21 — Outils de visualisation](04-partie-iv-outils-et-workflow/03-chapitre-21-outils-de-visualisation.md)
@@ -184,7 +184,7 @@ Les épisodes MIXSHADOW jalonnent le cours aux moments où le concept enseigné 
     - [Chapitre 27 — Hacks DeFi et compromission de wallets](05-partie-v-typologies-dabus-crypto/03-chapitre-27-hacks-defi-et-compromission-de-wallets.md)
     - [Chapitre 28 — Fraudes NFT, tokens frauduleux et rug pulls](05-partie-v-typologies-dabus-crypto/04-chapitre-28-fraudes-nft-tokens-frauduleux-et-rug-p.md)
     - [Chapitre 29 — Acteurs étatiques](05-partie-v-typologies-dabus-crypto/05-chapitre-29-acteurs-etatiques.md)
-- [Partie VI — Obfuscation, laundering ET cashout](06-partie-vi-obfuscation-laundering-et-cashout/index.md)
+- [Partie VI — Obfuscation, laundering et cashout](06-partie-vi-obfuscation-laundering-et-cashout/index.md)
     - [Chapitre 30 — Le cashout : où l’on quitte l’on-chain](06-partie-vi-obfuscation-laundering-et-cashout/01-chapitre-30-le-cashout-ou-lon-quitte-lon-chain.md)
     - [Chapitre 31 — Mixers et tumblers](06-partie-vi-obfuscation-laundering-et-cashout/02-chapitre-31-mixers-et-tumblers.md)
     - [Chapitre 32 — CoinJoin : Wasabi, Samourai](06-partie-vi-obfuscation-laundering-et-cashout/03-chapitre-32-coinjoin-wasabi-samourai.md)
@@ -196,14 +196,14 @@ Les épisodes MIXSHADOW jalonnent le cours aux moments où le concept enseigné 
     - [Chapitre 37 — Cas 2 : paiement ransomware BTC à un affilié RaaS](07-partie-vii-cas-pratiques-deroules/02-chapitre-37-cas-2-paiement-ransomware-btc-a-un-aff.md)
     - [Chapitre 38 — Cas 3 : wallet drain Ethereum par approval phishing](07-partie-vii-cas-pratiques-deroules/03-chapitre-38-cas-3-wallet-drain-ethereum-par-approv.md)
     - [Chapitre 39 — Cas 4 : flux multi-chaînes avec bridge et stablecoins](07-partie-vii-cas-pratiques-deroules/04-chapitre-39-cas-4-flux-multi-chaines-avec-bridge-e.md)
-    - [Chapitre 40 — Cas 5](07-partie-vii-cas-pratiques-deroules/05-chapitre-40-cas-5.md)
+    - [Chapitre 40 — Cas 5 : enquête Monero — quand la blockchain ne suffit pas](07-partie-vii-cas-pratiques-deroules/05-chapitre-40-cas-5-enquete-monero-quand-la-blockcha.md)
 - [Partie VIII — Cas historiques emblématiques](08-partie-viii-cas-historiques-emblematiques/index.md)
     - [Chapitre 41 — Bitfinex 2016 → saisie 3,6 Mrd USD 2022](08-partie-viii-cas-historiques-emblematiques/01-chapitre-41-bitfinex-2016-saisie-3-6-mrd-usd-2022.md)
     - [Chapitre 42 — Colonial Pipeline 2021 — récupération FBI](08-partie-viii-cas-historiques-emblematiques/02-chapitre-42-colonial-pipeline-2021-recuperation-fb.md)
     - [Chapitre 43 — Ronin / Lazarus 2022 — 625 M USD](08-partie-viii-cas-historiques-emblematiques/03-chapitre-43-ronin-lazarus-2022-625-m-usd.md)
     - [Chapitre 44 — Tornado Cash — sanctions OFAC et procès](08-partie-viii-cas-historiques-emblematiques/04-chapitre-44-tornado-cash-sanctions-ofac-et-proces.md)
     - [Chapitre 45 — Synthèse MIXSHADOW](08-partie-viii-cas-historiques-emblematiques/05-chapitre-45-synthese-mixshadow.md)
-- [Partie IX — Production, cadre ET professionnalisation](09-partie-ix-production-cadre-et-professionnalisation/index.md)
+- [Partie IX — Production, cadre et professionnalisation](09-partie-ix-production-cadre-et-professionnalisation/index.md)
     - [Chapitre 46 — Produire un rapport OSINT crypto](09-partie-ix-production-cadre-et-professionnalisation/01-chapitre-46-produire-un-rapport-osint-crypto.md)
     - [Chapitre 47 — Échelle de confiance et formulation analytique](09-partie-ix-production-cadre-et-professionnalisation/02-chapitre-47-echelle-de-confiance-et-formulation-an.md)
     - [Chapitre 48 — Coopération avec VASP, autorités et compliance](09-partie-ix-production-cadre-et-professionnalisation/03-chapitre-48-cooperation-avec-vasp-autorites-et-com.md)

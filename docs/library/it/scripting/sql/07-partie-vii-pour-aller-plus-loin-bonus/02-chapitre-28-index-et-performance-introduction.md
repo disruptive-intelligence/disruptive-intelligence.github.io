@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 28 — Index et performance : introduction'
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

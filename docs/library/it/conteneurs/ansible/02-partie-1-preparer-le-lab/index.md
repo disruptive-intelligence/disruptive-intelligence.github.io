@@ -1,6 +1,6 @@
 ---
 title: Partie 1 — Préparer le lab
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

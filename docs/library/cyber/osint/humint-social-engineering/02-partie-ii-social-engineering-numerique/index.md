@@ -1,6 +1,6 @@
 ---
 title: Partie II — Social engineering numérique
-source: Cyber/HUMINT_Social_Engineering.md
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering

@@ -1,6 +1,6 @@
 ---
 title: 'Fonctionnement du web : URL, DNS, HTTPS'
-source: IT/Culture/Fiche_How-The-Web-Works.md
+source: IT/05 Web & applications/Fonctionnement du web - URL, DNS, HTTPS.md
 format: synthese
 revue: '2026-09-30'
 ---

@@ -1,6 +1,6 @@
 ---
 title: Python pour l'OSINT et le scraping
-source: Cyber/02_OSINT/Python_Scraping.md
+source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
 format: cours
 revue: '2026-05-20'
 ---
@@ -200,7 +200,7 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - [Partie III — Structurer et nettoyer les données](04-partie-iii-structurer-et-nettoyer-les-donnees/index.md)
     - [Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)](04-partie-iii-structurer-et-nettoyer-les-donnees/01-chapitre-8-stocker-les-resultats-csv-json-jsonl.md)
     - [Chapitre 9 — Nettoyer, normaliser, enrichir](04-partie-iii-structurer-et-nettoyer-les-donnees/02-chapitre-9-nettoyer-normaliser-enrichir.md)
-- [Partie IV — Passer à L’échelle](05-partie-iv-passer-a-lechelle/index.md)
+- [Partie IV — Passer à l’échelle](05-partie-iv-passer-a-lechelle/index.md)
     - [Chapitre 10 — Pagination et collecte multi-pages](05-partie-iv-passer-a-lechelle/01-chapitre-10-pagination-et-collecte-multi-pages.md)
     - [Chapitre 11 — Utiliser des APIs publiques](05-partie-iv-passer-a-lechelle/02-chapitre-11-utiliser-des-apis-publiques.md)
     - [Chapitre 12 — Bonnes pratiques professionnelles](05-partie-iv-passer-a-lechelle/03-chapitre-12-bonnes-pratiques-professionnelles.md)

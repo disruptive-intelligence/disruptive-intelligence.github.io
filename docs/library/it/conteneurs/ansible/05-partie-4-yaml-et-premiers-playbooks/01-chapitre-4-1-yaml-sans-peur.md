@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4.1 — YAML sans peur
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

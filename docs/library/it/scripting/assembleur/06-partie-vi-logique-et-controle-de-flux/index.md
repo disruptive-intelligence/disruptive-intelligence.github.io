@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Logique ET contrôle de flux
-source: IT/Culture/Assembleur.md
+title: Partie VI — Logique et contrôle de flux
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

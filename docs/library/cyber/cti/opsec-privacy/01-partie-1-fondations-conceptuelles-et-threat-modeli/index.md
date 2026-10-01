@@ -1,6 +1,6 @@
 ---
 title: Partie 1 — Fondations conceptuelles et threat modeling
-source: Cyber/OPSEC_Privacy.md
+source: Cyber/01 CTI & renseignement/OPSEC/OPSEC & privacy.md
 note: OPSEC & privacy
 up:
 - - OPSEC & privacy

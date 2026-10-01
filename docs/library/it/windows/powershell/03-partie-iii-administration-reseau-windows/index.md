@@ -1,6 +1,6 @@
 ---
-title: Partie III — Administration réseau windows
-source: IT/02_Windows/Powershell.md
+title: Partie III — Administration réseau Windows
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

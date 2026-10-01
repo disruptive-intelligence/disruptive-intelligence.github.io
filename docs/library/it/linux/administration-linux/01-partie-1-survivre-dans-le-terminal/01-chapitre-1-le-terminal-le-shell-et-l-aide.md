@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1 — Le terminal, le shell et l'aide
-source: IT/01_Linux/Admin_Linux.md
+source: IT/01 Linux/Administration Linux.md
 note: Administration Linux
 up:
 - - Administration Linux

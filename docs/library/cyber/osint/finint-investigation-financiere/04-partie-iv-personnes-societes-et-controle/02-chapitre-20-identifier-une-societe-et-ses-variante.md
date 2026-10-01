@@ -1,6 +1,6 @@
 ---
 title: Chapitre 20 — Identifier une société et ses variantes internationales
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

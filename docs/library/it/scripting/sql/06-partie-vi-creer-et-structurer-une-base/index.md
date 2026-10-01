@@ -1,6 +1,6 @@
 ---
-title: Partie VI — Créer ET structurer une base
-source: IT/Culture/SQL.md
+title: Partie VI — Créer et structurer une base
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

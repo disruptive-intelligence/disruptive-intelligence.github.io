@@ -1,11 +1,11 @@
 ---
 title: 'Chapitre 5 — docker run : lancer son premier conteneur'
-source: IT/10_virtualization-containers/Docker.md
+source: IT/08 Conteneurs & automatisation/Docker.md
 note: Docker
 up:
 - - Docker
   - ../index.md
-- - PARTIE II — Premiers PAS AVEC docker
+- - PARTIE II — Premiers pas avec Docker
   - index.md
 ---
 

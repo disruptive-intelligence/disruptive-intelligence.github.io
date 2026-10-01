@@ -1,11 +1,11 @@
 ---
 title: Chapitre 22 — Contre-élicitation et protection des informations
-source: Cyber/HUMINT_Social_Engineering.md
+source: Cyber/02 OSINT/HUMINT & social engineering.md
 note: HUMINT & social engineering
 up:
 - - HUMINT & social engineering
   - ../index.md
-- - Partie V — Défense ET contre-ingénierie sociale
+- - Partie V — Défense et contre-ingénierie sociale
   - index.md
 ---
 

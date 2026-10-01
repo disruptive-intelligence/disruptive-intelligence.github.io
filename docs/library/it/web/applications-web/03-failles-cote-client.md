@@ -1,6 +1,6 @@
 ---
 title: Failles côté client
-source: IT/Culture/Fiche_WebApp.md
+source: IT/05 Web & applications/Applications web.md
 note: Applications web
 up:
 - - Applications web

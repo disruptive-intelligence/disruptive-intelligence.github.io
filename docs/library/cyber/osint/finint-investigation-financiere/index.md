@@ -1,6 +1,6 @@
 ---
 title: FININT — investigation financière
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 format: cours
 revue: '2026-05-25'
 ---
@@ -524,7 +524,7 @@ Pas de dénouement spectaculaire : le FININT, dans la réalité, produit du rens
     - [Chapitre 3 — Ce que le FININT ne permet pas](01-partie-i-comprendre-le-renseignement-financier/03-chapitre-3-ce-que-le-finint-ne-permet-pas.md)
     - [Chapitre 4 — Renseignement, soupçon, preuve et judiciarisation](01-partie-i-comprendre-le-renseignement-financier/04-chapitre-4-renseignement-soupcon-preuve-et-judicia.md)
     - [Chapitre 5 — FININT, OSINT financier, AML, CTI et OSINT Crypto](01-partie-i-comprendre-le-renseignement-financier/05-chapitre-5-finint-osint-financier-aml-cti-et-osint.md)
-- [Partie II — Le système financier pour L’enquêteur](02-partie-ii-le-systeme-financier-pour-lenqueteur/index.md)
+- [Partie II — Le système financier pour l’enquêteur](02-partie-ii-le-systeme-financier-pour-lenqueteur/index.md)
     - [Chapitre 6 — Le système bancaire et la circulation de l’argent](02-partie-ii-le-systeme-financier-pour-lenqueteur/01-chapitre-6-le-systeme-bancaire-et-la-circulation-d.md)
     - [Chapitre 7 — Rails de paiement : SWIFT, SEPA, TARGET2, Fedwire, ACH](02-partie-ii-le-systeme-financier-pour-lenqueteur/02-chapitre-7-rails-de-paiement-swift-sepa-target2-fe.md)
     - [Chapitre 8 — PSP, EME, néobanques et fintechs](02-partie-ii-le-systeme-financier-pour-lenqueteur/03-chapitre-8-psp-eme-neobanques-et-fintechs.md)
@@ -556,14 +556,14 @@ Pas de dénouement spectaculaire : le FININT, dans la réalité, produit du rens
     - [Chapitre 31 — Graphes relationnels FININT](05-partie-v-cartographier-les-reseaux-financiers/05-chapitre-31-graphes-relationnels-finint.md)
     - [Chapitre 32 — Distinguer lien faible, lien fort et contrôle réel](05-partie-v-cartographier-les-reseaux-financiers/06-chapitre-32-distinguer-lien-faible-lien-fort-et-co.md)
     - [Chapitre 33 — Échelle de confiance WEP et hypothèses calibrées](05-partie-v-cartographier-les-reseaux-financiers/07-chapitre-33-echelle-de-confiance-wep-et-hypotheses.md)
-- [Partie VI — Analyse DE flux et comptabilité forensique](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/index.md)
+- [Partie VI — Analyse de flux et comptabilité forensique](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/index.md)
     - [Chapitre 34 — Lire un relevé bancaire](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/01-chapitre-34-lire-un-releve-bancaire.md)
     - [Chapitre 35 — Reconstituer des flux financiers](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/02-chapitre-35-reconstituer-des-flux-financiers.md)
     - [Chapitre 36 — Lire un bilan et un compte de résultat](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/03-chapitre-36-lire-un-bilan-et-un-compte-de-resultat.md)
     - [Chapitre 37 — Détecter anomalies comptables et signaux faibles](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/04-chapitre-37-detecter-anomalies-comptables-et-signa.md)
     - [Chapitre 38 — Factures, marges, marchandises et cohérence économique](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/05-chapitre-38-factures-marges-marchandises-et-cohere.md)
     - [Chapitre 39 — Reconstitution patrimoniale et train de vie](06-partie-vi-analyse-de-flux-et-comptabilite-forensiq/06-chapitre-39-reconstitution-patrimoniale-et-train-d.md)
-- [Partie VII — Typologies DE criminalité financière](07-partie-vii-typologies-de-criminalite-financiere/index.md)
+- [Partie VII — Typologies de criminalité financière](07-partie-vii-typologies-de-criminalite-financiere/index.md)
     - [Chapitre 40 — Blanchiment : placement, empilement, intégration](07-partie-vii-typologies-de-criminalite-financiere/01-chapitre-40-blanchiment-placement-empilement-integ.md)
     - [Chapitre 41 — Trade-Based Money Laundering (TBML)](07-partie-vii-typologies-de-criminalite-financiere/02-chapitre-41-trade-based-money-laundering-tbml.md)
     - [Chapitre 42 — Corruption, commissions occultes et PEP](07-partie-vii-typologies-de-criminalite-financiere/03-chapitre-42-corruption-commissions-occultes-et-pep.md)

@@ -1,6 +1,6 @@
 ---
-title: 'Partie II — Fondations : appareils, comptes ET continuité'
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: 'Partie II — Fondations : appareils, comptes et continuité'
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

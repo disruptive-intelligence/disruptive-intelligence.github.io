@@ -1,6 +1,6 @@
 ---
-title: Partie VII — Maison connectée, famille ET frontière pro/perso
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: Partie VII — Maison connectée, famille et frontière pro/perso
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

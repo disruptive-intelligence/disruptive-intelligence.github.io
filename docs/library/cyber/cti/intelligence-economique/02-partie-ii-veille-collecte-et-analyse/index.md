@@ -1,6 +1,6 @@
 ---
-title: Partie II — Veille, collecte ET analyse
-source: Cyber/01_CTI/IE.md
+title: Partie II — Veille, collecte et analyse
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique

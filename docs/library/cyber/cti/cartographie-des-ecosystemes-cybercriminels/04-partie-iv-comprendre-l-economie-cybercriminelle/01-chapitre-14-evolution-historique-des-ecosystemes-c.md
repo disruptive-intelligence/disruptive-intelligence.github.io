@@ -1,11 +1,11 @@
 ---
 title: Chapitre 14 — Évolution historique des écosystèmes cybercriminels
-source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
+source: Cyber/01 CTI & renseignement/Menace cyber/Cartographie des écosystèmes cybercriminels.md
 note: Cartographie des écosystèmes cybercriminels
 up:
 - - Cartographie des écosystèmes cybercriminels
   - ../index.md
-- - Partie IV — Comprendre L'économie cybercriminelle
+- - Partie IV — Comprendre l'économie cybercriminelle
   - index.md
 ---
 

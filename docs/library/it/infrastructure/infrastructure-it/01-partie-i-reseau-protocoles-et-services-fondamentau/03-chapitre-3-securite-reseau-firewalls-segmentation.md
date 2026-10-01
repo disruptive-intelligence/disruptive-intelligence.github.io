@@ -1,11 +1,11 @@
 ---
 title: 'Chapitre 3 — Sécurité réseau : firewalls, segmentation et détection'
-source: IT/03_Networking/Infrastructure_IT.md
+source: IT/06 Infrastructure & architecture/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT
   - ../index.md
-- - Partie I — Réseau, protocoles ET services fondamentaux
+- - Partie I — Réseau, protocoles et services fondamentaux
   - index.md
 ---
 

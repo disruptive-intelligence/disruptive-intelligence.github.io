@@ -1,6 +1,6 @@
 ---
-title: Partie V — Géopolitique, zones grises ET disruption
-source: Cyber/01_CTI/Cartographie_Ecosystemes_Cybercriminels.md
+title: Partie V — Géopolitique, zones grises et disruption
+source: Cyber/01 CTI & renseignement/Menace cyber/Cartographie des écosystèmes cybercriminels.md
 note: Cartographie des écosystèmes cybercriminels
 up:
 - - Cartographie des écosystèmes cybercriminels

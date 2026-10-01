@@ -1,11 +1,11 @@
 ---
 title: Chapitre 3.1 — ok vs changed
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible
   - ../index.md
-- - Partie 3 — Comprendre les sorties et L'idempotence
+- - Partie 3 — Comprendre les sorties et l'idempotence
   - index.md
 ---
 

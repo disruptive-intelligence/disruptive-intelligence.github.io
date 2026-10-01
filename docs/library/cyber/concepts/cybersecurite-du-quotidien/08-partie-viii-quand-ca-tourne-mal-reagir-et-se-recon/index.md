@@ -1,6 +1,6 @@
 ---
-title: 'Partie VIII — QUAND ça tourne mal : réagir ET se reconstruire'
-source: Cyber/Cybersecurite_du_Quotidien.md
+title: 'Partie VIII — Quand ça tourne mal : réagir et se reconstruire'
+source: Cyber/11 Concepts/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

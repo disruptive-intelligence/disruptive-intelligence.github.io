@@ -1,6 +1,6 @@
 ---
 title: Pare-feu d'application web — WAF
-source: Cyber/04_Hardening/HTB_Solutions de sécurité.md
+source: Cyber/10 Outils & solutions/Solutions de sécurité/Solutions de sécurité.md
 note: Solutions de sécurité
 up:
 - - Solutions de sécurité
@@ -28,7 +28,7 @@ Web Application
 |**Host-based WAF**|Logiciel installé directement sur le serveur ; très personnalisable mais consomme ses ressources|
 |**Cloud-based WAF**|WAF fourni comme service cloud ; déploiement et maintenance simplifiés|
 ## Fonctionnement
-![WAF](../../../assets/htb-solutions-de-securite-waf.png){ width="600" }
+![WAF](../../../assets/solutions-de-securite-waf.png){ width="600" }
 
 - Le WAF intercepte les requêtes HTTP/HTTPS avant qu'elles n'atteignent l'application.
 - Ces requêtes, qui appartiennent au protocole HTTP, sont soit autorisées, soit bloquées conformément aux règles.

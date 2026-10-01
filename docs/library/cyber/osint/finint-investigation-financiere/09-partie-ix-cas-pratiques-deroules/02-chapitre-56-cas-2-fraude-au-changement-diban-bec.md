@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 56 — Cas 2 : Fraude au changement d’IBAN / BEC'
-source: Cyber/02_OSINT/FININT_Investigation_Financiere_vFULL.md
+source: Cyber/02 OSINT/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 2.5 — Lire les sorties : ok, changed, failed, skipped, unreachable'
-source: IT/10_virtualization-containers/Ansible.md
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

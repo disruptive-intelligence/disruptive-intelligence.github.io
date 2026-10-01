@@ -1,6 +1,6 @@
 ---
 title: Kubernetes
-source: IT/10_virtualization-containers/Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Kubernetes.md
 format: cours
 revue: '2026-06-13'
 ---
@@ -335,7 +335,7 @@ Ne te juge pas. **La patience compte plus que la vitesse.**
 
 ## Sommaire
 
-- [PARTIE I — Comprendre pourquoi kubernetes existe](01-partie-i-comprendre-pourquoi-kubernetes-existe/index.md)
+- [PARTIE I — Comprendre pourquoi Kubernetes existe](01-partie-i-comprendre-pourquoi-kubernetes-existe/index.md)
     - [Chapitre 1 — Le problème que Kubernetes résout](01-partie-i-comprendre-pourquoi-kubernetes-existe/01-chapitre-1-le-probleme-que-kubernetes-resout.md)
     - [Chapitre 2 — Rappel minimal sur les conteneurs](01-partie-i-comprendre-pourquoi-kubernetes-existe/02-chapitre-2-rappel-minimal-sur-les-conteneurs.md)
     - [Chapitre 3 — Docker vs Kubernetes : la bascule](01-partie-i-comprendre-pourquoi-kubernetes-existe/03-chapitre-3-docker-vs-kubernetes-la-bascule.md)

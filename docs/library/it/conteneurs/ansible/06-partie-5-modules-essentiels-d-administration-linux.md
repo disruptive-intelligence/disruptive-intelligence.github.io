@@ -1,6 +1,6 @@
 ---
-title: Partie 5 — Modules essentiels d'administration linux
-source: IT/10_virtualization-containers/Ansible.md
+title: Partie 5 — Modules essentiels d'administration Linux
+source: IT/08 Conteneurs & automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

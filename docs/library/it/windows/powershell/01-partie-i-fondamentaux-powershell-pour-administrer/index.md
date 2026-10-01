@@ -1,6 +1,6 @@
 ---
-title: Partie I — Fondamentaux powershell pour administrer windows
-source: IT/02_Windows/Powershell.md
+title: Partie I — Fondamentaux PowerShell pour administrer Windows
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

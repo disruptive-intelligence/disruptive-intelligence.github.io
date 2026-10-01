@@ -1,6 +1,6 @@
 ---
 title: Partie IV — Administration active directory
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

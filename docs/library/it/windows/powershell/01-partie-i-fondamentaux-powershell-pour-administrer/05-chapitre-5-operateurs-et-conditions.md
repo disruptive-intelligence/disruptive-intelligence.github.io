@@ -1,11 +1,11 @@
 ---
 title: Chapitre 5 — Opérateurs et conditions
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie I — Fondamentaux powershell pour administrer windows
+- - Partie I — Fondamentaux PowerShell pour administrer Windows
   - index.md
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: Partie II — Administration windows locale
-source: IT/02_Windows/Powershell.md
+title: Partie II — Administration Windows locale
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

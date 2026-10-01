@@ -1,11 +1,11 @@
 ---
 title: Chapitre 7 — Déplacer des données avec mov
-source: IT/Culture/Assembleur.md
+source: IT/07 Scripting & programmation/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur
   - ../index.md
-- - Partie III — Registres, calculs ET observation
+- - Partie III — Registres, calculs et observation
   - index.md
 ---
 

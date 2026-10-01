@@ -1,11 +1,11 @@
 ---
 title: Chapitre 11 — Processus et services
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie II — Administration windows locale
+- - Partie II — Administration Windows locale
   - index.md
 ---
 

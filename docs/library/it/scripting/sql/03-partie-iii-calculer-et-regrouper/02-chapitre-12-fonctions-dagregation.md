@@ -1,11 +1,11 @@
 ---
 title: Chapitre 12 — Fonctions d’agrégation
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL
   - ../index.md
-- - Partie III — Calculer ET regrouper
+- - Partie III — Calculer et regrouper
   - index.md
 ---
 

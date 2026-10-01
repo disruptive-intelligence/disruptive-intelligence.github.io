@@ -1,6 +1,6 @@
 ---
 title: Chapitre 7 — Le modèle UTXO en profondeur
-source: Cyber/02_OSINT/OSINT_Crypto_vFULL.md
+source: Cyber/02 OSINT/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

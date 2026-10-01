@@ -1,6 +1,6 @@
 ---
 title: Partie II — Lire des données
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 note: SQL
 up:
 - - SQL

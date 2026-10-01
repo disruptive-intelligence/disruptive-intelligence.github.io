@@ -1,11 +1,11 @@
 ---
 title: Chapitre 33 — Industrialiser ses scripts
-source: IT/02_Windows/Powershell.md
+source: IT/02 Windows/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell
   - ../index.md
-- - Partie VII — Automatisation ET industrialisation
+- - Partie VII — Automatisation et industrialisation
   - index.md
 ---
 

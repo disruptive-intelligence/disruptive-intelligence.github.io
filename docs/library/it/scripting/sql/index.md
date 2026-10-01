@@ -1,6 +1,6 @@
 ---
 title: SQL
-source: IT/Culture/SQL.md
+source: IT/07 Scripting & programmation/SQL.md
 format: cours
 revue: '2026-05-10'
 ---
@@ -205,7 +205,7 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
     - [Chapitre 8 — Conditions multiples : AND, OR, NOT](02-partie-ii-lire-des-donnees/04-chapitre-8-conditions-multiples-and-or-not.md)
     - [Chapitre 9 — Filtres utiles : LIKE, IN, BETWEEN, NULL](02-partie-ii-lire-des-donnees/05-chapitre-9-filtres-utiles-like-in-between-null.md)
     - [Chapitre 10 — Trier, limiter et paginer](02-partie-ii-lire-des-donnees/06-chapitre-10-trier-limiter-et-paginer.md)
-- [Partie III — Calculer ET regrouper](03-partie-iii-calculer-et-regrouper/index.md)
+- [Partie III — Calculer et regrouper](03-partie-iii-calculer-et-regrouper/index.md)
     - [Chapitre 11 — Fonctions et calculs simples](03-partie-iii-calculer-et-regrouper/01-chapitre-11-fonctions-et-calculs-simples.md)
     - [Chapitre 12 — Fonctions d’agrégation](03-partie-iii-calculer-et-regrouper/02-chapitre-12-fonctions-dagregation.md)
     - [Chapitre 13 — Regrouper avec GROUP BY](03-partie-iii-calculer-et-regrouper/03-chapitre-13-regrouper-avec-group-by.md)
@@ -221,7 +221,7 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
     - [Chapitre 21 — Modifier avec UPDATE](05-partie-v-modifier-les-donnees/02-chapitre-21-modifier-avec-update.md)
     - [Chapitre 22 — Supprimer avec DELETE](05-partie-v-modifier-les-donnees/03-chapitre-22-supprimer-avec-delete.md)
     - [Chapitre 23 — Transactions : BEGIN, COMMIT, ROLLBACK](05-partie-v-modifier-les-donnees/04-chapitre-23-transactions-begin-commit-rollback.md)
-- [Partie VI — Créer ET structurer une base](06-partie-vi-creer-et-structurer-une-base/index.md)
+- [Partie VI — Créer et structurer une base](06-partie-vi-creer-et-structurer-une-base/index.md)
     - [Chapitre 24 — Créer une table avec CREATE TABLE](06-partie-vi-creer-et-structurer-une-base/01-chapitre-24-creer-une-table-avec-create-table.md)
     - [Chapitre 25 — Types de données et contraintes](06-partie-vi-creer-et-structurer-une-base/02-chapitre-25-types-de-donnees-et-contraintes.md)
     - [Chapitre 26 — Modélisation simple](06-partie-vi-creer-et-structurer-une-base/03-chapitre-26-modelisation-simple.md)

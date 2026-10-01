@@ -1,6 +1,6 @@
 ---
-title: Partie IV — Due diligence ET investigation économique
-source: Cyber/01_CTI/IE.md
+title: Partie IV — Due diligence et investigation économique
+source: Cyber/01 CTI & renseignement/Influence & intelligence économique/Intelligence économique.md
 note: Intelligence économique
 up:
 - - Intelligence économique
