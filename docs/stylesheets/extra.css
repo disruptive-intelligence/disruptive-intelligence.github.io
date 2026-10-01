@@ -934,3 +934,9 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-format--ressources, .md-typeset .kw-format--revision { color: var(--kw-sub); }
 .md-typeset .kw-notes .kw-format { margin-left: .4rem; }
 .kw-anchor { scroll-margin-top: 4.5rem; }
+
+/* Menu : entrée repliée déroulée sur place par javascripts/nav-lazy.js (flèche tournée, clic facile) */
+.md-nav--primary .md-nav__item--pruned > a.md-nav__link .md-nav__icon { padding: 0 .15rem 0 .4rem; cursor: pointer; transition: transform .2s; }
+.md-nav--primary .md-nav__item--pruned.kw-open > a.md-nav__link .md-nav__icon { transform: rotate(90deg); }
+.md-nav--primary .md-nav__item--pruned.kw-lazy:not(.kw-open) > nav.md-nav { display: none; }
+.md-nav--primary .md-nav__item--pruned.kw-loading > a.md-nav__link .md-nav__icon { opacity: .4; }

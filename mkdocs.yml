@@ -72,6 +72,7 @@ extra_javascript:
   - javascripts/sidebar-toggle.js
   - javascripts/glossary-tooltips.js   # définitions du glossaire au survol
   - javascripts/veille-tools.js        # Explorer, Pile de lecture, barre de lecture
+  - javascripts/nav-lazy.js            # flèche du menu : déroule sur place sans changer de page
 
 plugins:
   - search:
