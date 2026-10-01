@@ -915,8 +915,6 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-note-meta a { color: var(--md-default-fg-color--light); text-decoration: underline dotted; }
 .md-typeset .kw-note-meta a:hover { color: var(--kw-link); }
 .md-typeset a.kw-more-link--inline { display: inline-block; float: none; margin: .2rem 0 .4rem; }
-.md-typeset a.kw-libcard__item { font-size: .72rem; line-height: 1.35; color: var(--md-default-fg-color--light); }
-.md-typeset a.kw-libcard__item:hover { color: var(--kw-link); }
 .md-typeset .kw-format { display: inline-block; font-size: .58rem; font-weight: 800; letter-spacing: .02em;
   padding: .02rem .45rem; margin-right: .3rem; border-radius: 1em; border: 1px solid currentColor; }
 .md-typeset .kw-format--cours { color: var(--kw-strong); }

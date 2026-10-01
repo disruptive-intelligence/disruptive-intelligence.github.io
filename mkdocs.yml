@@ -44,7 +44,8 @@ theme:
     - content.tabs.link       # onglets Linux/Windows synchronisés
 
 # Pages de fils et de semaines générées hors du menu (leurs index y figurent) : la barre
-# latérale reste courte quel que soit le nombre de fils ou de semaines.
+# latérale reste courte quel que soit le nombre de fils ou de semaines. Parcours : hors du menu de la
+# Bibliothèque, accessibles depuis sa page d'accueil.
 # Liens du menu vers les prochains jalons de l'agenda (/veille/agenda/#j-…) : voulus.
 validation:
   nav:
@@ -53,6 +54,7 @@ validation:
 not_in_nav: |
   /veille/fils/*.md
   /veille/semaines/*.md
+  /library/parcours/*.md
 
 # Génère l'accueil, la veille, les analyses, les dossiers et les ressources
 hooks:

@@ -8,7 +8,8 @@
 # Une note IMPORTÉE est un fichier Markdown déposé dans docs/library/<domaine>/<catégorie>/ : elle apparaît
 # dans le menu et sur la page de la catégorie. Une note listée ici et pas encore importée s'affiche « à importer ».
 # Par catégorie : description (une phrase de périmètre), debut (note conseillée pour commencer) et mots
-# (mots-clés qui relient la rubrique aux analyses et dossiers de la veille). glossaire: true = rangée sous
+# (mots-clés qui relient la rubrique aux analyses et dossiers de la veille). liens (rubrique ou sous-rubrique) :
+# notes rangées ailleurs, rappelées ici dans le menu et sur la page. glossaire: true = rangée sous
 # « Glossaire & notions ». Une synthèse « X — synthèse » est rangée sous le cours « X… » de sa rubrique.
 # Titres : sujet clair d'abord, angle ensuite ; la provenance (HTB, L2I) est un badge, pas le titre.
 
@@ -24,9 +25,9 @@
         - label: 🧭 Menace cyber
           notes: [CTI — les fondamentaux, Cyber Threat Intelligence — analyser et réduire l'incertitude, APT — menaces persistantes avancées, APT — synthèse, Panorama de la cybermenace — état de l'art, Cartographie des écosystèmes cybercriminels, Dark Web]
         - label: 🧪 Méthodes d'analyse
-          notes: [Red teaming analytique]
+          notes: [Modèles d'analyse de la menace, Red teaming analytique]
         - label: 📣 Influence & intelligence économique
-          notes: [Guerre informationnelle et opérations d'influence, Intelligence économique]
+          notes: [Guerre informationnelle et opérations d'influence (L2I), Intelligence économique]
         - label: 🕶️ OPSEC
           notes: [OPSEC & privacy]
     - id: osint
@@ -34,7 +35,7 @@
       description: Rechercher, recouper et exploiter l'information ouverte, y compris financière et humaine.
       debut: OSINT — synthèse
       mots: [OSINT, SOCMINT, HUMINT, FININT, sources ouvertes, réseaux sociaux, ingénierie sociale, cryptoactifs, blockchain]
-      notes: [OSINT — cours complet, OSINT — synthèse, FININT — investigation financière, OSINT & cryptoactifs, HUMINT & social engineering, Python pour l'OSINT et le scraping, OSINT — ressources]
+      notes: [OSINT — cours complet, OSINT — synthèse, FININT — investigation financière, OSINT & cryptoactifs, HUMINT & social engineering, Python pour l'OSINT et le scraping]
     - id: cryptographie
       label: 🔐 Cryptographie
       description: Les bases du chiffrement et de ses usages.
@@ -55,13 +56,15 @@
       description: Détecter, investiguer et répondre aux incidents, avec les modèles qui structurent l'analyse d'une attaque.
       debut: Analyste SOC
       mots: [SOC, supervision, réponse à incident, incident de sécurité, threat hunting, MITRE, ATT&CK, kill chain, EDR, SIEM]
-      notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse, Modèles d'analyse de la menace]
+      notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse]
+      liens: [Modèles d'analyse de la menace]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
       debut: Vulnerability management & intelligence
       mots: [vulnérabilité, vulnérabilités, CVE, correctif, correctifs, patch, zero-day, faille, failles, surface d'attaque]
       notes: [Vulnerability management & intelligence, Maintien en condition de sécurité (MCS), Gestion de la surface d'attaque (ASM)]
+      liens: ["CVE, CWE, CVSS, EPSS, KEV"]
     - id: gouvernance
       label: 🏛️ Gouvernance & résilience
       description: Piloter la sécurité — risques, conformité, sécurité de l'entreprise, sauvegarde et reprise.

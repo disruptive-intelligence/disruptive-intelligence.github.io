@@ -51,4 +51,4 @@ La **corrélation TTP** est plus nuancée : les mêmes techniques ATT&CK sont ob
 
 ## Voir aussi
 
-[Modèles d'analyse de la menace (Pyramid of Pain)](../detection/modeles-d-analyse-de-la-menace/index.md) · [MITRE ATT&CK](../detection/modeles-d-analyse-de-la-menace/index.md) · [Défense en profondeur](defense-en-profondeur.md)
+[Modèles d'analyse de la menace (Pyramid of Pain)](../cti/modeles-d-analyse-de-la-menace/index.md) · [MITRE ATT&CK](../cti/modeles-d-analyse-de-la-menace/index.md) · [Défense en profondeur](defense-en-profondeur.md)

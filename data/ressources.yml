@@ -196,8 +196,40 @@
     - nom: i2 Analyst's Notebook
       type: Outil
       pourquoi: Logiciel d'analyse et de visualisation d'enquête (IBM)
+    - nom: CREA Troyes — Tutoriels OSINT
+      url: https://blog.crea-troyes.fr/liste-des-tutoriels/
+      type: Blog
+      pourquoi: "Priorité : site très complet regroupant de nombreux tutoriels OSINT, à explorer en premier"
+    - nom: Bellingcat Toolkit — Other Platforms
+      url: https://bellingcat.gitbook.io/toolkit/categories/social-media/other-platforms
+      type: Guide
+      pourquoi: Outils pour investiguer des plateformes sociales moins classiques ou alternatives
+    - nom: Bellingcat Toolkit — Hunchly
+      url: https://bellingcat.gitbook.io/toolkit/more/all-tools/hunchly
+      type: Outil
+      pourquoi: Capturer, documenter et organiser les traces web d'une enquête OSINT
+    - nom: Tesseract OCR
+      url: https://github.com/tesseract-ocr/tesseract
+      type: Outil
+      pourquoi: Moteur OCR open source pour extraire le texte d'images, de scans ou de documents
+    - nom: OSINT Industries — OSINT on Telegram
+      url: https://www.osint.industries/post/osint-on-telegram-find-phone-numbers-emails-and-user-details
+      type: Article
+      pourquoi: Méthodes d'OSINT appliquées à Telegram (identifiants, numéros, e-mails)
+    - nom: Shodan — Tutoriel étape par étape
+      url: https://www.brainstormi.startupcolleges.fr/2026/01/16/shodan-tutoriel-etape-par-etape-pour-scanner-les-appareils-connectes/
+      type: Article
+      pourquoi: Introduction à Shodan pour rechercher et analyser des équipements exposés sur Internet
+    - nom: OpenSanctions — Entité nord-coréenne
+      url: https://www.opensanctions.org/entities/NK-KV4LMHi8oPLvBmDLpyP4DW/
+      type: Base de données
+      pourquoi: S'entraîner à l'analyse d'entités sanctionnées et de structures liées à des États
   - nom: Formations
     liens:
+    - nom: University of London — Cyber Crime
+      url: https://www.london.ac.uk/study/courses/moocs/cyber-crime
+      type: Cours
+      pourquoi: MOOC sur la cybercriminalité, pour la culture cybercrime et investigation numérique
     - nom: MOOC OSINT FR
       url: https://mooc.osintfr.com/course/view.php?id=4
       type: Cours
@@ -350,6 +382,10 @@
   rubriques:
   - nom: Guides
     liens:
+    - nom: DCSA — OPSEC Awareness
+      url: https://securityawareness.dcsa.mil/opsec/index.htm
+      type: Guide
+      pourquoi: Sensibilisation à l'OPSEC, protection des informations sensibles en contexte d'enquête
     - nom: EFF — Surveillance Self-Defense
       url: https://ssd.eff.org/
       type: Guide

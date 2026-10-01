@@ -595,27 +595,6 @@ def essentiel_block(it, from_src):
             f'{short_month(it["date"])} <a href="{href(from_src, it["src"])}">lire le brief →</a></p><ul>{lis}</ul></div>')
 
 
-def library_home(src):
-    """Accueil : notion du jour (une fiche, change chaque jour), notes récemment mises à jour, révision."""
-    library = STATE.get("library", [])
-    fiches = [n for d in library for c in d["categories"] if c.get("glossaire") for n in c["notes"] if n["imported"]]
-    notes = [n for d in library for c in d["categories"] if not c.get("glossaire") for n in c["notes"]
-             if n["imported"] and n.get("revue")]
-    cards = ""
-    if fiches:
-        f = fiches[date.today().toordinal() % len(fiches)]
-        term, definition = next(iter((f.get("terms") or {f["title"]: ""}).items()))
-        cards += (f'<a class="kw-card" href="{href(src, f["src"])}"><span class="kw-ed__label">Notion du jour</span>'
-                  f'<span class="kw-card__title">{esc(f["title"])}</span>'
-                  f'<span class="kw-card__text">{esc(definition)}</span></a>')
-    recent = sorted(notes, key=lambda n: n["revue"], reverse=True)[:4]
-    if recent:
-        cards += ('<div class="kw-card kw-libcard"><span class="kw-ed__label">Récemment mis à jour</span>' + "".join(
-            f'<a class="kw-libcard__item" href="{href(src, n["src"])}">{esc(n["title"])}</a>' for n in recent) + "</div>")
-    cards += revision_card(src)
-    return f'<div class="kw-libgrid">{cards}</div>' if cards else ""
-
-
 def page_home(items, themes, glossary):
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
@@ -645,7 +624,7 @@ def page_home(items, themes, glossary):
     wiki = [("⚔️ Pentest", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
             ("⚔️ Pentest", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
             ("⚔️ Pentest", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
-            ("📚 Bibliothèque", "Cours et fiches", "Cyber et IT : cours complets, synthèses, fiches notions et révision.", "library/index.md")]
+            ("📚 Bibliothèque", "Notes de cours", "Cyber et IT : synthèses pour apprendre et réviser.", "library/index.md")]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
@@ -667,14 +646,6 @@ hide:
 
 <div class="kw-une">{une}</div>
 {essentiel_block(briefs[0], src) if briefs else ""}
-
-## 🎓 Apprendre
-
-<a class="kw-more-link" href="library/">Toute la Bibliothèque →</a>
-
-{parcours_cards(src)}
-
-{library_home(src)}
 
 ## 📡 Veille récente
 
@@ -1205,19 +1176,30 @@ def library_nav(library):
             cats.append({cat["label"]: [cat["src"]] + category_nav(cat)})
         nav.append({dom["label"]: cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": [note_nav(n) for n in fiches]}] if fiches else [])
-    paths = [{"🎓 Parcours": [PARCOURS_SRC] + [{p["titre"]: p["src"]} for p in STATE.get("parcours", [])]}]
-    return ((paths if STATE.get("parcours") else []) + nav + revision_nav()
-            + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}])
+    # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
+    return nav + revision_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
 
 
 def category_nav(cat):
-    """Notes d'une catégorie ; celles d'une sous-rubrique (group) sous une entrée dépliable.
-    Une synthèse rangée sous son cours (paire) n'a pas d'entrée à elle."""
+    """Notes d'une catégorie ; celles d'une sous-rubrique (group) sous une entrée dépliable qui ouvre la page
+    de la sous-rubrique (sans page, ouvrir la sous-rubrique ouvrirait sa première note). Une synthèse rangée
+    sous son cours (paire) n'a pas d'entrée à elle ; les notes d'autres rubriques (liens) sont rappelées."""
     items = []
     for label, notes in grouped([n for n in cat["notes"] if not n.get("paired")]):
         entries = [note_nav(n) for n in notes]
-        items += [{label: entries}] if label else entries
-    return items
+        if label:
+            entries += [link_nav(n) for n in cat["links"].get(label, [])]
+        items += [{label: [group_src(cat, label)] + entries}] if label else entries
+    return items + [link_nav(n) for n in cat["links"].get(None, [])]
+
+
+def group_src(cat, label):
+    return f"{posixpath.dirname(cat['src'])}/sous-rubriques/{slug(label)}/index.md"
+
+
+def link_nav(note):
+    """Note rangée dans une autre rubrique : lien vers sa page (une page ne figure qu'une fois au menu)."""
+    return {nav_title(note): "/" + url_of(note["src"])}
 
 
 def grouped(notes):
@@ -1371,7 +1353,24 @@ def load_library(docs_dir, tree):
                          "glossaire": bool(cat.get("glossaire")), "mots": [str(w) for w in cat.get("mots") or []],
                          "revision": revision if (docs_dir / revision).exists() else None})
         out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
+    attach_links(out, tree or [])
     return out
+
+
+def attach_links(library, tree):
+    """« liens » de data/bibliotheque.yml (rubrique ou sous-rubrique) : notes rangées ailleurs, rappelées ici."""
+    by_title = {}
+    for dom in library:
+        for cat in dom["categories"]:
+            for n in cat["notes"]:
+                if n["imported"]:
+                    by_title[n["title"]] = dict(n, home=cat["label"])
+    for dom, ydom in zip(library, tree):
+        for cat, ycat in zip(dom["categories"], ydom.get("categories", [])):
+            links = {None: [by_title[t] for t in ycat.get("liens") or [] if t in by_title]}
+            for g in ycat.get("groups") or []:
+                links[g["label"]] = [by_title[t] for t in g.get("liens") or [] if t in by_title]
+            cat["links"] = links
 
 
 WORDS_PER_MINUTE = 230
@@ -1439,7 +1438,8 @@ def starting_note(cat):
 
 
 def note_line(n, src):
-    """Ligne d'une note dans une page de rubrique : titre, format et durée en gris, synthèse liée."""
+    """Ligne d'une note dans une page de rubrique : titre, format et durée en gris, synthèse liée ;
+    pour une note rappelée depuis une autre rubrique, sa rubrique d'origine."""
     if not n["imported"]:
         return (f'<li class="is-todo"><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a>'
                 '<span class="kw-note-meta">à importer</span></li>')
@@ -1448,6 +1448,9 @@ def note_line(n, src):
     pair = n.get("pair")
     if pair:
         meta += f' · <a href="{href(src, pair["src"])}">en synthèse</a> ({duration(pair.get("minutes"))})'
+    if n.get("home"):
+        home = re.sub(r"^\W+", "", n["home"])
+        meta += f" · rangée dans {esc(home)}"
     return (f'<li class="is-done"><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a>'
             f'<span class="kw-note-meta">{meta}</span></li>')
 
@@ -1473,6 +1476,15 @@ def veille_block(cat, src):
     return f'\n## Dans la veille\n\n<ul class="kw-notes kw-notes--veille">{lines}</ul>\n'
 
 
+def page_group(dom, cat, label, notes):
+    """Page d'une sous-rubrique : ses notes (celles rappelées d'ailleurs comprises)."""
+    src = group_src(cat, label)
+    body = (f"# {label}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']} · "
+            f"[{cat['label']}]({posixpath.relpath(cat['src'], posixpath.dirname(src))})</span>\n\n"
+            + '<ul class="kw-notes">' + "".join(note_line(n, src) for n in notes) + "</ul>\n")
+    return src, body
+
+
 def pages_library(library):
     out = []
     for dom in library:
@@ -1486,10 +1498,16 @@ def pages_library(library):
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
                 for label, notes in grouped(listed):
-                    body += (f"## {label}\n\n" if label else "") + (
-                        '<ul class="kw-notes">' + "".join(note_line(n, src) for n in notes) + "</ul>\n\n")
+                    notes = notes + cat["links"].get(label, []) if label else notes
+                    title = f"## [{label}]({posixpath.relpath(group_src(cat, label), posixpath.dirname(src))})\n\n" if label else ""
+                    body += title + ('<ul class="kw-notes">' + "".join(note_line(n, src) for n in notes) + "</ul>\n\n")
+                    if label:
+                        out.append(page_group(dom, cat, label, notes))
             else:
                 body += "Pas encore de cours dans cette rubrique.\n\n"
+            if cat["links"].get(None):
+                body += ("## Voir aussi\n\n" + '<ul class="kw-notes">'
+                         + "".join(note_line(n, src) for n in cat["links"][None]) + "</ul>\n\n")
             if cat.get("revision"):
                 body += (f'<a class="kw-more-link kw-more-link--inline" href="{href(src, cat["revision"])}">'
                          "📝 Réviser : questions d'entretien de la rubrique →</a>\n\n")
