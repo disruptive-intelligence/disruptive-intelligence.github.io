@@ -42,6 +42,7 @@ theme:
     - content.code.copy       # bouton copier sur les blocs de code
     - content.code.annotate   # annotations (1) dans le code
     - content.tabs.link       # onglets Linux/Windows synchronisés
+    - content.footnote.tooltips  # notes de bas de page (sources des fiches) lisibles au survol
 
 # Pages de fils et de semaines générées hors du menu (leurs index y figurent) : la barre
 # latérale reste courte quel que soit le nombre de fils ou de semaines. Parcours : hors du menu de la
@@ -99,6 +100,7 @@ markdown_extensions:
   - tables
   - def_list                  # listes de définitions (glossaire)
   - attr_list
+  - footnotes                 # appels [^1] + section Sources des fiches notions
   - md_in_html
   - pymdownx.keys
   - pymdownx.emoji:

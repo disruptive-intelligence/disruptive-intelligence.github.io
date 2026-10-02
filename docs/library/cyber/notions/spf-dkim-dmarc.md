@@ -2,14 +2,14 @@
 title: SPF, DKIM, DMARC
 source: Cyber/12 Fiches notions/SPF, DKIM, DMARC.md
 format: fiche
-revue: '2026-10-01'
+revue: '2026-10-02'
 terms:
   SPF: Enregistrement TXT DNS qui liste les serveurs autorisés à envoyer des mails pour un domaine.
   DKIM: Signature cryptographique du mail par le serveur d'envoi ; le destinataire la vérifie avec la clé publique publiée dans le DNS.
   DMARC: Politique qui dit quoi faire si SPF ou DKIM échoue (none, quarantine, reject), avec du reporting.
 ---
 
-> Fiche notion assemblée à partir de mes notes (sources sous chaque bloc).
+> Fiche notion assemblée à partir de mes notes (sources en fin de fiche).
 
 ## En bref
 
@@ -17,9 +17,7 @@ Mécanismes d'*authentification de l'expéditeur* d'e-mail.
 
 - **SPF** : déclare quels serveurs peuvent envoyer pour un domaine.
 - **DKIM** : signe les messages (intégrité + origine).
-- **DMARC** : politique combinant SPF/DKIM et reporting (que faire des messages non authentifiés).
-
-*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
+- **DMARC** : politique combinant SPF/DKIM et reporting (que faire des messages non authentifiés).[^1]
 
 ## Comment ça fonctionne
 
@@ -54,7 +52,7 @@ Domain Alignment
 
 - Définit la politique à appliquer lorsque les contrôles échouent.
 
-Politiques principales :
+Politiques principales :[^2]
 
 ```
 p=none
@@ -68,25 +66,17 @@ p=reject
 ```
 
 
-*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md) (Protection des e-mails)*
-
-Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (contournable), DKIM seul ne suffit pas (pas de politique de rejet), DMARC orchestre les deux et fournit du reporting.
-
-*↳ [Infrastructure IT](../../it/infrastructure/infrastructure-it/index.md)*
+Les trois sont complémentaires et indispensables : SPF seul ne suffit pas (contournable), DKIM seul ne suffit pas (pas de politique de rejet), DMARC orchestre les deux et fournit du reporting.[^3]
 
 ## Pourquoi c'est important en cyber
 
-**Contre quoi.** Usurpation de domaine (spoofing), phishing/BEC par usurpation directe.
-
-*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
+**Contre quoi.** Usurpation de domaine (spoofing), phishing/BEC par usurpation directe.[^1]
 
 Le spoofing d'adresse exploite l'absence ou la mauvaise configuration de SPF/DKIM/DMARC pour envoyer un email qui affiche une adresse légitime dans le champ « From ».
 
-En configuration stricte (DMARC p=reject), ces protocoles bloquent le spoofing direct du domaine. Mais ils ne protègent pas contre le typosquatting, les domaines lookalike, le compromission d'email légitime ou le display name spoofing. La protection email est une défense en profondeur, pas une solution unique.
+En configuration stricte (DMARC p=reject), ces protocoles bloquent le spoofing direct du domaine. Mais ils ne protègent pas contre le typosquatting, les domaines lookalike, le compromission d'email légitime ou le display name spoofing. La protection email est une défense en profondeur, pas une solution unique.[^4]
 
-*↳ [HUMINT & social engineering](../osint/humint-social-engineering/index.md)*
-
-> DMARC ne bloque pas **tout le phishing**. Il protège surtout contre le spoofing du domaine ; un attaquant peut toujours utiliser un domaine ressemblant au domaine légitime.
+> DMARC ne bloque pas **tout le phishing**. Il protège surtout contre le spoofing du domaine ; un attaquant peut toujours utiliser un domaine ressemblant au domaine légitime.[^5]
 
 ```
 company.com
@@ -94,8 +84,6 @@ vs
 cornpany.com
 ```
 
-
-*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md)*
 
 ## Déployer
 
@@ -114,15 +102,13 @@ Monitor
 ```
 
 
--> Un mauvais déploiement peut bloquer des messages légitimes.
+-> Un mauvais déploiement peut bloquer des messages légitimes.[^5]
 
-*↳ [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md)*
-
-⚠️ **Erreur fréquente** — DMARC en mode permissif (« none ») jamais durci, donc sans effet.
-
-*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
+⚠️ **Erreur fréquente** — DMARC en mode permissif (« none ») jamais durci, donc sans effet.[^1]
 
 ## Vérifier
+
+Contrôler les enregistrements publiés :[^6]
 
 ```bash
 dig technovert.fr MX
@@ -130,11 +116,7 @@ dig _dmarc.technovert.fr TXT
 ```
 
 
-*↳ [OSINT Mastery](../osint/osint-cours-complet/index.md) (enregistrements DNS)*
-
-- **Vérification du sender** : analyser les en-têtes complets (Received, Authentication-Results).
-
-*↳ [OPSEC & privacy](../cti/opsec-privacy/index.md)*
+- **Vérification du sender** : analyser les en-têtes complets (Received, Authentication-Results).[^7]
 
 - Complément pertinent côté SOC :
 	- sender / recipient ;
@@ -146,16 +128,21 @@ dig _dmarc.technovert.fr TXT
 	- fichier joint ;
 	- hash ;
 	- action : `Delivered / Blocked / Quarantined` ;
-	- résultats SPF / DKIM / DMARC.
-
-*↳ [HTB — Solutions de sécurité](../outils/solutions-de-securite/index.md)*
+	- résultats SPF / DKIM / DMARC.[^8]
 
 ## À retenir
 
-- **SPF/DKIM/DMARC** → SPF = serveurs autorisés. DKIM = signature. DMARC = politique. Les trois ensemble.
+- **SPF/DKIM/DMARC** → SPF = serveurs autorisés. DKIM = signature. DMARC = politique. Les trois ensemble.[^3]
 
-*↳ [Infrastructure IT](../../it/infrastructure/infrastructure-it/index.md)*
+🎯 **À retenir** — SPF+DKIM+DMARC (en mode actif) empêchent l'usurpation directe du domaine : socle anti-phishing/BEC.[^1]
 
-🎯 **À retenir** — SPF+DKIM+DMARC (en mode actif) empêchent l'usurpation directe du domaine : socle anti-phishing/BEC.
+## Sources
 
-*↳ [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md) (chapitre 294)*
+[^1]: [Taxonomie cyber](../concepts/taxonomie-de-la-cybersecurite/index.md), chapitre 294.
+[^2]: [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md), Protection des e-mails.
+[^3]: [Infrastructure IT](../../it/infrastructure/infrastructure-it/index.md).
+[^4]: [HUMINT & social engineering](../osint/humint-social-engineering/index.md).
+[^5]: [HTB — Réponse à incidents](../detection/reponse-a-incident-synthese/index.md).
+[^6]: [OSINT Mastery](../osint/osint-cours-complet/index.md), enregistrements DNS.
+[^7]: [OPSEC & privacy](../cti/opsec-privacy/index.md).
+[^8]: [HTB — Solutions de sécurité](../outils/solutions-de-securite/index.md).
