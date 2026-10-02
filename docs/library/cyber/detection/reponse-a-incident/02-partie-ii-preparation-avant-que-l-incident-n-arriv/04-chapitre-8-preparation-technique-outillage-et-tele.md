@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 8 — Préparation technique : outillage et télémétrie'
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

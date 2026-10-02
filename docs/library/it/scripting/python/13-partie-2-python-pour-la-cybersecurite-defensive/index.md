@@ -1,6 +1,6 @@
 ---
 title: Partie 2 — Python pour la cybersécurité défensive
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

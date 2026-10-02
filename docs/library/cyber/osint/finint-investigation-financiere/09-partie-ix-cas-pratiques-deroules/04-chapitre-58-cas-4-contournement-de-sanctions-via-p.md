@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 58 — Cas 4 : Contournement de sanctions via pays tiers'
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

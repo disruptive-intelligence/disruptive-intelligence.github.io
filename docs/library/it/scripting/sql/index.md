@@ -1,6 +1,6 @@
 ---
 title: SQL
-source: IT/07 Scripting & programmation/SQL.md
+source: IT/07 Scripting & programmation/Langages/SQL.md
 format: cours
 revue: '2026-05-10'
 ---

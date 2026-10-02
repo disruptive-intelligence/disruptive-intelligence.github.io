@@ -1,6 +1,6 @@
 ---
 title: Partie II — Vulnérabilités web en profondeur
-source: Cyber/05 Hardening/Sécurité applicative (AppSec).md
+source: Cyber/05 Hardening/Applications/Sécurité applicative (AppSec).md
 note: Sécurité applicative (AppSec)
 up:
 - - Sécurité applicative (AppSec)

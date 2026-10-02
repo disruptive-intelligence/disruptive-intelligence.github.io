@@ -1,6 +1,6 @@
 ---
 title: Chapitre 40 — Quand l'attaque personnelle devient un problème d'entreprise
-source: Cyber/11 Concepts/Cybersécurité du quotidien.md
+source: Cyber/11 Concepts/Au quotidien/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

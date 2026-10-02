@@ -1,6 +1,6 @@
 ---
 title: Chapitre 3.1 — ok vs changed
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

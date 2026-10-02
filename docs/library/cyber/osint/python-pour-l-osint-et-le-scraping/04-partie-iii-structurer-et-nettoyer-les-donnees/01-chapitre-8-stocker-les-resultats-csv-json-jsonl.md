@@ -1,6 +1,6 @@
 ---
 title: Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)
-source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
+source: Cyber/02 OSINT/Méthode & enquête/Python pour l'OSINT et le scraping.md
 note: Python pour l'OSINT et le scraping
 up:
 - - Python pour l'OSINT et le scraping

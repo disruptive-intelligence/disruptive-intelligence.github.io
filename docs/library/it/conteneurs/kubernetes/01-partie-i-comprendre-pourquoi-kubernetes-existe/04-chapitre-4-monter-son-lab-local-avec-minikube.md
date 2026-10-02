@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Monter son lab local avec Minikube
-source: IT/08 Conteneurs & automatisation/Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Kubernetes.md
 note: Kubernetes
 up:
 - - Kubernetes

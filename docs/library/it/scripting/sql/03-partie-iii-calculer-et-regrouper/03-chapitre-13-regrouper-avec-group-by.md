@@ -1,6 +1,6 @@
 ---
 title: Chapitre 13 — Regrouper avec GROUP BY
-source: IT/07 Scripting & programmation/SQL.md
+source: IT/07 Scripting & programmation/Langages/SQL.md
 note: SQL
 up:
 - - SQL

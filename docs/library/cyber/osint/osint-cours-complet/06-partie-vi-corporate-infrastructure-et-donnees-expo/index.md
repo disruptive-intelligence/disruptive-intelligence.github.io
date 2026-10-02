@@ -1,6 +1,6 @@
 ---
 title: PARTIE VI — Corporate, infrastructure et données exposées
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 note: OSINT — cours complet
 up:
 - - OSINT — cours complet

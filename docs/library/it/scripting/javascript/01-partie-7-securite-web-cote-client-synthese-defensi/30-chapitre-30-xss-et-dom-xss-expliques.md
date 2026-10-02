@@ -1,6 +1,6 @@
 ---
 title: Chapitre 30 — XSS et DOM XSS expliqués
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

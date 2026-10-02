@@ -1,6 +1,6 @@
 ---
 title: Chapitre 24 — Reverse engineering débutant avec GDB
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

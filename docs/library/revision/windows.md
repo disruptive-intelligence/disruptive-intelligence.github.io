@@ -3,7 +3,7 @@ title: Révision — Windows
 revision: it/windows
 domaine: IT
 sources:
-- IT/02 Windows/Windows en profondeur.md
+- IT/02 Windows/Comprendre Windows/Windows en profondeur.md
 ---
 
 *D'après le cours [Windows en profondeur](../it/windows/windows-en-profondeur/index.md)*

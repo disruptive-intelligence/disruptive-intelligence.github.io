@@ -3,7 +3,7 @@ title: Révision — Infrastructure & architecture
 revision: it/infrastructure
 domaine: IT
 sources:
-- IT/06 Infrastructure & architecture/Infrastructure IT.md
+- IT/06 Infrastructure & architecture/Infrastructure & SI/Infrastructure IT.md
 ---
 
 *D'après le cours [Infrastructure IT](../it/infrastructure/infrastructure-it/index.md)*

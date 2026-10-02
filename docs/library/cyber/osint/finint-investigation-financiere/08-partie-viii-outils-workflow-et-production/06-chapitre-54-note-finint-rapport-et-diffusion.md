@@ -1,6 +1,6 @@
 ---
 title: Chapitre 54 — Note FININT, rapport et diffusion
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

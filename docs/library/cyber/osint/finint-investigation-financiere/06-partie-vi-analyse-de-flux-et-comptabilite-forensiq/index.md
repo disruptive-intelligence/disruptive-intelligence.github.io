@@ -1,6 +1,6 @@
 ---
 title: Partie VI — Analyse de flux et comptabilité forensique
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

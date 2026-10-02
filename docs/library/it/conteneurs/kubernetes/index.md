@@ -1,6 +1,6 @@
 ---
 title: Kubernetes
-source: IT/08 Conteneurs & automatisation/Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Kubernetes.md
 format: cours
 revue: '2026-06-13'
 ---

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 19 — Cookies et les limites de JavaScript
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

@@ -1,6 +1,6 @@
 ---
 title: Partie 2 — Grands principes défensifs
-source: Cyber/11 Concepts/Taxonomie de la cybersécurité.md
+source: Cyber/11 Concepts/Cartes & familles/Taxonomie de la cybersécurité.md
 note: Taxonomie de la cybersécurité
 up:
 - - Taxonomie de la cybersécurité

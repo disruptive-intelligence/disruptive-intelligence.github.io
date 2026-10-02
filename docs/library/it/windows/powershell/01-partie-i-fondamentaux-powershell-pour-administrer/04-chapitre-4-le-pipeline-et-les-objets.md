@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Le pipeline et les objets
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

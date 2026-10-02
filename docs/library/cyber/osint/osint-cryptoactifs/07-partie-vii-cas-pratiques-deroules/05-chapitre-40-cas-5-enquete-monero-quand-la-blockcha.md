@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 40 — Cas 5 : enquête Monero — quand la blockchain ne suffit pas'
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

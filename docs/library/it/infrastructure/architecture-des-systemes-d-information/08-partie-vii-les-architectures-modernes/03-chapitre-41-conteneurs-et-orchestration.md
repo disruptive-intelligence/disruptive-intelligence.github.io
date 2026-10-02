@@ -1,6 +1,6 @@
 ---
 title: Chapitre 41 — Conteneurs et orchestration
-source: IT/06 Infrastructure & architecture/Architecture des systèmes d'information.md
+source: IT/06 Infrastructure & architecture/Infrastructure & SI/Architecture des systèmes d'information.md
 note: Architecture des systèmes d'information
 up:
 - - Architecture des systèmes d'information

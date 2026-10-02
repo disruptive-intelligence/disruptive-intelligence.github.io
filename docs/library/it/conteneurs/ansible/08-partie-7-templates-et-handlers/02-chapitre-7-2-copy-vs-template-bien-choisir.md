@@ -1,6 +1,6 @@
 ---
 title: Chapitre 7.2 — copy vs template (bien choisir)
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

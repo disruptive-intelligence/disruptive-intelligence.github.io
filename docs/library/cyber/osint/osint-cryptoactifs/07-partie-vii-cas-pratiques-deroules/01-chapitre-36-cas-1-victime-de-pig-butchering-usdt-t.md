@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 36 — Cas 1 : victime de pig butchering USDT Tron'
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

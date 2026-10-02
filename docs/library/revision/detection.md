@@ -3,7 +3,7 @@ title: Révision — Détection & réponse
 revision: cyber/detection
 domaine: Cyber
 sources:
-- Cyber/06 Détection & réponse/Réponse à incident.md
+- Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 - Révision/Threat hunting — questions de révision.md
 ---
 

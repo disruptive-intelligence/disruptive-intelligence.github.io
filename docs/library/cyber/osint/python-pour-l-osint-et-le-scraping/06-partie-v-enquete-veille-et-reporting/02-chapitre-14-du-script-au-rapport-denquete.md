@@ -1,6 +1,6 @@
 ---
 title: Chapitre 14 — Du script au rapport d’enquête
-source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
+source: Cyber/02 OSINT/Méthode & enquête/Python pour l'OSINT et le scraping.md
 note: Python pour l'OSINT et le scraping
 up:
 - - Python pour l'OSINT et le scraping

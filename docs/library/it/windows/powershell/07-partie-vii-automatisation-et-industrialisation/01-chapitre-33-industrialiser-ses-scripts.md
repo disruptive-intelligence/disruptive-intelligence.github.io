@@ -1,6 +1,6 @@
 ---
 title: Chapitre 33 — Industrialiser ses scripts
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

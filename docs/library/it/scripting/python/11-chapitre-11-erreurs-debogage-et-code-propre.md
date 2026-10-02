@@ -1,6 +1,6 @@
 ---
 title: Chapitre 11 — Erreurs, débogage et code propre
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

@@ -1,6 +1,6 @@
 ---
 title: Docker
-source: IT/08 Conteneurs & automatisation/Docker.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Docker.md
 format: cours
 revue: '2026-06-14'
 ---

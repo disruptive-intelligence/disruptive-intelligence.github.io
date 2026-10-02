@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 3 — Docker vs Kubernetes : la bascule'
-source: IT/08 Conteneurs & automatisation/Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Kubernetes.md
 note: Kubernetes
 up:
 - - Kubernetes

@@ -3,7 +3,7 @@ title: Révision — Hardening
 revision: cyber/hardening
 domaine: Cyber
 sources:
-- Cyber/05 Hardening/Sécurité applicative (AppSec).md
+- Cyber/05 Hardening/Applications/Sécurité applicative (AppSec).md
 ---
 
 *D'après le cours [Sécurité applicative (AppSec)](../cyber/hardening/securite-applicative-appsec/index.md)*

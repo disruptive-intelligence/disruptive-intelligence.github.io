@@ -1,6 +1,6 @@
 ---
 title: OSINT — cours complet
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 format: cours
 revue: '2026-05-16'
 ---

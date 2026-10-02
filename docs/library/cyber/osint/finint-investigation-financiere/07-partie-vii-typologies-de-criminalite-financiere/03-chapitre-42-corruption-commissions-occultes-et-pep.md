@@ -1,6 +1,6 @@
 ---
 title: Chapitre 42 — Corruption, commissions occultes et PEP
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

@@ -1,6 +1,6 @@
 ---
 title: Partie 8 — Bonnes pratiques débutant
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,6 +1,6 @@
 ---
 title: Partie V — Tests, CI/CD et pipeline DevSecOps
-source: Cyber/05 Hardening/Sécurité applicative (AppSec).md
+source: Cyber/05 Hardening/Applications/Sécurité applicative (AppSec).md
 note: Sécurité applicative (AppSec)
 up:
 - - Sécurité applicative (AppSec)

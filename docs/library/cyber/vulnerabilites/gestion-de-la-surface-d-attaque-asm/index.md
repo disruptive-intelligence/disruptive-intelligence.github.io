@@ -1,6 +1,6 @@
 ---
 title: Gestion de la surface d'attaque (ASM)
-source: Cyber/07 Vulnérabilités & MCS/Gestion de la surface d'attaque (ASM).md
+source: Cyber/07 Vulnérabilités & MCS/Connaître & prioriser/Gestion de la surface d'attaque (ASM).md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

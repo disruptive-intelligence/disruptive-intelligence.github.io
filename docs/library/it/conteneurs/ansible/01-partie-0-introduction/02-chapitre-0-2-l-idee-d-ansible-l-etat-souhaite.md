@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 0.2 — L''idée d''Ansible : l''état souhaité'
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

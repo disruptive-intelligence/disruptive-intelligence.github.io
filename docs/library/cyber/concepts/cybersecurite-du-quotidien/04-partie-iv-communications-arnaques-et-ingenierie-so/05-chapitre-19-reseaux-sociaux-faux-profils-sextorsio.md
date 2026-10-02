@@ -1,6 +1,6 @@
 ---
 title: Chapitre 19 — Réseaux sociaux, faux profils, sextorsion et arnaques relationnelles
-source: Cyber/11 Concepts/Cybersécurité du quotidien.md
+source: Cyber/11 Concepts/Au quotidien/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

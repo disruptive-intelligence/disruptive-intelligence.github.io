@@ -1,6 +1,6 @@
 ---
 title: Chapitre 28 — Fraudes NFT, tokens frauduleux et rug pulls
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

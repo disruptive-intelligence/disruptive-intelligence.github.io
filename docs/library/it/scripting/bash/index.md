@@ -1,6 +1,6 @@
 ---
 title: Bash
-source: IT/07 Scripting & programmation/Bash.md
+source: IT/07 Scripting & programmation/Shell/Bash.md
 format: cours
 revue: '2026-05-10'
 ---

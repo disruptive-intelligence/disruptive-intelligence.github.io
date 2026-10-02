@@ -1,6 +1,6 @@
 ---
 title: OSINT & cryptoactifs
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 format: cours
 revue: '2026-05-10'
 ---

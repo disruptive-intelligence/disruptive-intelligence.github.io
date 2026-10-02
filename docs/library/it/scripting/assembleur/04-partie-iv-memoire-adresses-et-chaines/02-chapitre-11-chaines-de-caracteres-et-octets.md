@@ -1,6 +1,6 @@
 ---
 title: Chapitre 11 — Chaînes de caractères et octets
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

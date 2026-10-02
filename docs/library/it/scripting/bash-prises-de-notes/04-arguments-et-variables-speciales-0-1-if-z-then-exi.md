@@ -1,6 +1,6 @@
 ---
 title: Arguments et variables spéciales [$0, $1, if -z …; then … exit 1 fi]
-source: IT/07 Scripting & programmation/Bash — prises de notes.md
+source: IT/07 Scripting & programmation/Shell/Bash — prises de notes.md
 note: Bash — prises de notes
 up:
 - - Bash — prises de notes

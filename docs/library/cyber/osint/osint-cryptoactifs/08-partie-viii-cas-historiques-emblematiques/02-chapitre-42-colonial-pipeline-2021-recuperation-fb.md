@@ -1,6 +1,6 @@
 ---
 title: Chapitre 42 — Colonial Pipeline 2021 — récupération FBI
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

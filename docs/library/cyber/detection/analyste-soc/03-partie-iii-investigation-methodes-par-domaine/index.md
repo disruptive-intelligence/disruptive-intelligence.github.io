@@ -1,6 +1,6 @@
 ---
 title: 'Partie III — Investigation : méthodes par domaine'
-source: Cyber/06 Détection & réponse/Analyste SOC.md
+source: Cyber/06 Détection & réponse/Détection & SOC/Analyste SOC.md
 note: Analyste SOC
 up:
 - - Analyste SOC

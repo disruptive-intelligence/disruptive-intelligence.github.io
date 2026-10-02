@@ -1,6 +1,6 @@
 ---
 title: Chapitre 32 — Le réflexe fondamental
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 0.3 — L'idempotence en une image
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,6 +1,6 @@
 ---
 title: Réponse à incident — synthèse
-source: Cyber/06 Détection & réponse/Réponse à incident — synthèse.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident — synthèse.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-10-01'

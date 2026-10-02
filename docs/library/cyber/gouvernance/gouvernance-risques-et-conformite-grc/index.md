@@ -1,6 +1,6 @@
 ---
 title: Gouvernance, risques et conformité (GRC)
-source: Cyber/08 Gouvernance & résilience/Gouvernance, risques et conformité (GRC).md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Gouvernance, risques et conformité (GRC).md
 format: cours
 revue: '2026-10-01'
 ---

@@ -1,6 +1,6 @@
 ---
 title: Architecture des systèmes d'information
-source: IT/06 Infrastructure & architecture/Architecture des systèmes d'information.md
+source: IT/06 Infrastructure & architecture/Infrastructure & SI/Architecture des systèmes d'information.md
 format: cours
 revue: '2026-08-09'
 ---

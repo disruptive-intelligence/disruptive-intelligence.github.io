@@ -1,6 +1,6 @@
 ---
 title: Chapitre 8 — Éthique, déontologie et responsabilité de l'analyste
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 note: OSINT — cours complet
 up:
 - - OSINT — cours complet

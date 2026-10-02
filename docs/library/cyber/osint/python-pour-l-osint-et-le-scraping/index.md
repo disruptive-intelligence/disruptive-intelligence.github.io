@@ -1,6 +1,6 @@
 ---
 title: Python pour l'OSINT et le scraping
-source: Cyber/02 OSINT/Python pour l'OSINT et le scraping.md
+source: Cyber/02 OSINT/Méthode & enquête/Python pour l'OSINT et le scraping.md
 format: cours
 revue: '2026-05-20'
 ---

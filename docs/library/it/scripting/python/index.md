@@ -1,6 +1,6 @@
 ---
 title: Python
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 format: cours
 revue: '2026-06-14'
 ---

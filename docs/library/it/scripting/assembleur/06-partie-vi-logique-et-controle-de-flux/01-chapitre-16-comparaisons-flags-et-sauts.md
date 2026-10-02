@@ -1,6 +1,6 @@
 ---
 title: Chapitre 16 — Comparaisons, flags et sauts
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 12 — Le registre Windows
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

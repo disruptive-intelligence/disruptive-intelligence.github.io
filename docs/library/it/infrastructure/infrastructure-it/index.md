@@ -1,6 +1,6 @@
 ---
 title: Infrastructure IT
-source: IT/06 Infrastructure & architecture/Infrastructure IT.md
+source: IT/06 Infrastructure & architecture/Infrastructure & SI/Infrastructure IT.md
 format: cours
 revue: '2026-04-08'
 revision: library/revision/infrastructure.md

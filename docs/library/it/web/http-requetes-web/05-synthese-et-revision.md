@@ -1,6 +1,6 @@
 ---
 title: Synthèse et révision
-source: IT/05 Web & applications/HTTP & requêtes web.md
+source: IT/05 Web & applications/Le web/HTTP & requêtes web.md
 note: HTTP & requêtes web
 up:
 - - HTTP & requêtes web

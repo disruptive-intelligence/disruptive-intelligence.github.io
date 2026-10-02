@@ -1,6 +1,6 @@
 ---
 title: Chapitre 3.2 — Voir l'idempotence en relançant
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

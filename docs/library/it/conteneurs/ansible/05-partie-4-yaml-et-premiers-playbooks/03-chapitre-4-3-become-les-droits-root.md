@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 4.3 — become : les droits root'
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

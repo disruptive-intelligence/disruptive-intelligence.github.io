@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1.1 — Control node et machines cibles
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

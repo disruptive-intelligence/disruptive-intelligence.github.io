@@ -1,6 +1,6 @@
 ---
 title: Partie V — Labs, évaluation et synthèse
-source: IT/02 Windows/Ligne de commande Windows.md
+source: IT/02 Windows/Ligne de commande/Ligne de commande Windows.md
 note: Ligne de commande Windows
 up:
 - - Ligne de commande Windows

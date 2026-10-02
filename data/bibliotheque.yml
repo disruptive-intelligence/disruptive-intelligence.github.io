@@ -7,6 +7,7 @@
 #
 # Une note IMPORTÉE est un fichier Markdown déposé dans docs/library/<domaine>/<catégorie>/ : elle apparaît
 # dans le menu et sur la page de la catégorie. Une note listée ici et pas encore importée s'affiche « à importer ».
+# Sous-rubrique (groups) : label, description (une phrase), notes, liens.
 # Par catégorie : description (une phrase de périmètre), debut (note conseillée pour commencer) et mots
 # (mots-clés qui relient la rubrique aux analyses et dossiers de la veille). liens (rubrique ou sous-rubrique) :
 # notes rangées ailleurs, rappelées ici dans le menu et sur la page. glossaire: true = rangée sous
@@ -23,19 +24,32 @@
       mots: [CTI, renseignement, APT, ransomware, cybercriminalité, cybercriminel, dark web, attribution, espionnage, influence, désinformation, ingérence, intelligence économique, guerre cognitive, guerre informationnelle, OPSEC]
       groups:
         - label: 🧭 Menace cyber
+          description: "Qui attaque, comment et pourquoi : les acteurs, leurs écosystèmes et l'état de la menace."
           notes: [CTI — les fondamentaux, Cyber Threat Intelligence — analyser et réduire l'incertitude, APT — menaces persistantes avancées, APT — synthèse, Panorama de la cybermenace — état de l'art, Cartographie des écosystèmes cybercriminels, Dark Web]
         - label: 🧪 Méthodes d'analyse
+          description: "Les modèles et techniques qui structurent l'analyse et la mettent à l'épreuve."
           notes: [Modèles d'analyse de la menace, Red teaming analytique]
         - label: 📣 Influence & intelligence économique
+          description: "La guerre de l'information et la protection de l'entreprise."
           notes: [Guerre informationnelle et opérations d'influence (L2I), Intelligence économique]
         - label: 🕶️ OPSEC
+          description: "Protéger l'enquêteur, ses identités et ses communications."
           notes: [OPSEC & privacy]
     - id: osint
       label: 🔍 OSINT
       description: Rechercher, recouper et exploiter l'information ouverte, y compris financière et humaine.
       debut: OSINT — synthèse
       mots: [OSINT, SOCMINT, HUMINT, FININT, sources ouvertes, réseaux sociaux, ingénierie sociale, cryptoactifs, blockchain]
-      notes: [OSINT — cours complet, OSINT — synthèse, FININT — investigation financière, OSINT & cryptoactifs, HUMINT & social engineering, Python pour l'OSINT et le scraping]
+      groups:
+        - label: 🧭 Méthode & enquête
+          description: "La démarche d'enquête en sources ouvertes, et l'outillage pour l'automatiser."
+          notes: [OSINT — cours complet, OSINT — synthèse, Python pour l'OSINT et le scraping]
+        - label: 💰 Finance & cryptoactifs
+          description: "Suivre l'argent, des sociétés écrans aux blockchains."
+          notes: [FININT — investigation financière, OSINT & cryptoactifs]
+        - label: 🧠 Facteur humain
+          description: "Le renseignement humain et l'ingénierie sociale."
+          notes: [HUMINT & social engineering]
     - id: cryptographie
       label: 🔐 Cryptographie
       description: Les bases du chiffrement et de ses usages.
@@ -50,27 +64,55 @@
       label: 🧱 Hardening
       description: Réduire la surface d'attaque des systèmes, des identités et des applications.
       mots: [hardening, durcissement, MFA, authentification, identifiants, contrôle d'accès, sécurité applicative]
-      notes: [Sécurité système Windows, Identités et contrôle d'accès, Sécurité applicative (AppSec)]
+      groups:
+        - label: 🖥️ Systèmes
+          description: "Durcir les postes et serveurs."
+          notes: [Sécurité système Windows]
+        - label: 🔑 Identités & accès
+          description: "Qui peut accéder à quoi, et comment le prouver."
+          notes: [Identités et contrôle d'accès]
+        - label: 🧩 Applications
+          description: "Sécuriser le code, les API et la chaîne de livraison."
+          notes: [Sécurité applicative (AppSec)]
     - id: detection
       label: 🛰️ Détection & réponse
       description: Détecter, investiguer et répondre aux incidents, avec les modèles qui structurent l'analyse d'une attaque.
       debut: Analyste SOC
       mots: [SOC, supervision, réponse à incident, incident de sécurité, threat hunting, MITRE, ATT&CK, kill chain, EDR, SIEM]
-      notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse]
-      liens: [Modèles d'analyse de la menace, "MTTD, MTTC, MTTR", "Analyse des journaux d'événements Windows (Event Logs)"]
+      groups:
+        - label: 🛰️ Détection & SOC
+          description: "Voir les attaques : journaux, détection, investigation, threat hunting."
+          notes: [Analyste SOC]
+          liens: ["Analyse des journaux d'événements Windows (Event Logs)", Modèles d'analyse de la menace]
+        - label: 🚨 Réponse à incident
+          description: "Contenir, éradiquer, rétablir, puis en tirer les leçons."
+          notes: [Réponse à incident, Réponse à incident — synthèse]
+          liens: ["MTTD, MTTC, MTTR"]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
       debut: Vulnerability management & intelligence
       mots: [vulnérabilité, vulnérabilités, CVE, correctif, correctifs, patch, zero-day, faille, failles, surface d'attaque]
-      notes: [Vulnerability management & intelligence, Maintien en condition de sécurité (MCS), Gestion de la surface d'attaque (ASM)]
-      liens: ["CVE, CWE, CVSS, EPSS, KEV"]
+      groups:
+        - label: 🔎 Connaître & prioriser
+          description: "Savoir ce qui est exposé et quelles vulnérabilités traiter d'abord."
+          notes: [Vulnerability management & intelligence, Gestion de la surface d'attaque (ASM)]
+          liens: ["CVE, CWE, CVSS, EPSS, KEV"]
+        - label: 🛠️ Maintenir dans la durée
+          description: "Garder un système sûr au fil des correctifs et des années."
+          notes: [Maintien en condition de sécurité (MCS)]
     - id: gouvernance
       label: 🏛️ Gouvernance & résilience
       description: Piloter la sécurité — risques, conformité, sécurité de l'entreprise, sauvegarde et reprise.
       debut: "Gouvernance, risques et conformité (GRC)"
       mots: [gouvernance cyber, conformité, NIS2, RGPD, DORA, AI Act, gestion des risques, sauvegarde, résilience, continuité d'activité]
-      notes: ["Gouvernance, risques et conformité (GRC)", Sécurité IT en entreprise, Sauvegardes et reprise d'activité]
+      groups:
+        - label: 🏛️ Gouvernance & conformité
+          description: "Piloter la sécurité : risques, réglementation, politiques d'entreprise."
+          notes: ["Gouvernance, risques et conformité (GRC)", Sécurité IT en entreprise]
+        - label: 💾 Résilience
+          description: "Sauvegarder, restaurer et reprendre l'activité."
+          notes: [Sauvegardes et reprise d'activité]
     - id: ia
       label: 🤖 IA & sécurité
       description: Les menaces propres à l'IA, la sécurisation de ses déploiements et le travail avec des agents.
@@ -82,14 +124,25 @@
       # Sous-rubriques : à compléter au fil des notes (ex. « 📡 Scan & découverte », « 🕸️ Analyse web »)
       groups:
         - label: 🔎 Analyse & qualification d'IOC
+          description: "Vérifier un fichier, une URL ou une IP suspecte."
           notes: [VirusTotal]
         - label: 🛡️ Solutions de sécurité
+          description: "Les grandes briques de défense et leur rôle."
           notes: [Solutions de sécurité]
     - id: concepts
       label: 💡 Concepts
       description: Les fondamentaux — vocabulaire, familles d'attaques, fonctionnement des systèmes.
       debut: Menaces, attaques et malwares
-      notes: [Taxonomie de la cybersécurité, "Menaces, attaques et malwares", Architecture et sécurité des systèmes, Cybersécurité du quotidien, VPN]
+      groups:
+        - label: 🗺️ Cartes & familles
+          description: "Le vocabulaire et la carte d'ensemble des attaques et des défenses."
+          notes: [Taxonomie de la cybersécurité, "Menaces, attaques et malwares"]
+        - label: ⚙️ Sous le capot
+          description: "Comment fonctionnent les systèmes qu'on protège."
+          notes: [Architecture et sécurité des systèmes, VPN]
+        - label: 🏠 Au quotidien
+          description: "Appliquer la sécurité à ses propres appareils et comptes."
+          notes: [Cybersécurité du quotidien]
     - id: notions
       label: 📌 Fiches notions
       description: Une notion par page — l'essentiel, des exemples, où l'approfondir.
@@ -110,7 +163,16 @@
       description: Comprendre Windows de l'intérieur et l'administrer en ligne de commande.
       debut: Windows en profondeur
       mots: [Windows, PowerShell]
-      notes: [Windows en profondeur, Ligne de commande Windows, PowerShell, Windows — fiche cyber, "Analyse des journaux d'événements Windows (Event Logs)", CMD — aide-mémoire]
+      groups:
+        - label: 🧠 Comprendre Windows
+          description: "L'architecture et le modèle de sécurité de Windows."
+          notes: [Windows en profondeur, Windows — fiche cyber]
+        - label: ⌨️ Ligne de commande
+          description: "CMD et PowerShell pour administrer et investiguer."
+          notes: [Ligne de commande Windows, PowerShell, CMD — aide-mémoire]
+        - label: 🔍 Journaux & investigation
+          description: "Ce que Windows enregistre, et comment le lire."
+          notes: ["Analyse des journaux d'événements Windows (Event Logs)"]
     - id: active-directory
       label: 🏰 Active Directory
       description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.
@@ -126,24 +188,51 @@
       description: Du fonctionnement du web aux applications et à leurs failles.
       debut: "Fonctionnement du web : URL, DNS, HTTPS"
       mots: [navigateur, HTTP, HTTPS, application web, applications web, site web]
-      notes: ["Fonctionnement du web : URL, DNS, HTTPS", HTTP & requêtes web, Applications web]
+      groups:
+        - label: 🌐 Le web
+          description: "URL, DNS, HTTP et HTTPS : ce qui se passe sous un clic."
+          notes: ["Fonctionnement du web : URL, DNS, HTTPS", HTTP & requêtes web]
+        - label: 🧩 Applications web
+          description: "Comment une application web est construite, et où elle casse."
+          notes: [Applications web]
     - id: infrastructure
       label: 🏗️ Infrastructure & architecture
       description: Lire et concevoir une infrastructure, du matériel jusqu'à l'architecture du SI.
       mots: [datacenter, datacenters, centre de données, centres de données, cloud, infrastructure informatique]
-      notes: [Infrastructure IT, Architecture des systèmes d'information, Matériel informatique & connectique]
+      groups:
+        - label: 🏗️ Infrastructure & SI
+          description: "Lire et concevoir l'infrastructure d'un système d'information."
+          notes: [Infrastructure IT, Architecture des systèmes d'information]
+        - label: 🔌 Matériel
+          description: "Composants, serveurs et connectiques."
+          notes: [Matériel informatique & connectique]
     - id: scripting
       label: ⌨️ Scripting & programmation
       description: Automatiser et programmer — Bash, Python, JavaScript, SQL, assembleur.
       debut: Bash
       mots: [Python, JavaScript, programmation, langage de programmation]
-      notes: [Bash, Bash — prises de notes, Python, JavaScript, SQL, Assembleur]
+      groups:
+        - label: 🐚 Shell
+          description: "Bash, du premier script à l'automatisation."
+          notes: [Bash, Bash — prises de notes]
+        - label: 🐍 Langages
+          description: "Python, JavaScript et SQL."
+          notes: [Python, JavaScript, SQL]
+        - label: ⚙️ Bas niveau
+          description: "Registres, mémoire et lecture de binaires."
+          notes: [Assembleur]
     - id: conteneurs
       label: 📦 Conteneurs & automatisation
       description: Conteneuriser avec Docker, orchestrer avec Kubernetes, automatiser avec Ansible.
       debut: Docker
       mots: [conteneur, conteneurs, Docker, Kubernetes, DevOps]
-      notes: [Docker, Kubernetes, Conteneurs — Docker & Kubernetes, Ansible]
+      groups:
+        - label: 📦 Conteneurs
+          description: "Docker puis Kubernetes."
+          notes: [Docker, Kubernetes, Conteneurs — Docker & Kubernetes]
+        - label: 🤖 Automatisation
+          description: "Administrer un parc avec Ansible."
+          notes: [Ansible]
     - id: prospective
       label: 🔭 Technologies & prospective
       description: Lire une technologie, ses conditions de diffusion et les frontières technologiques émergentes.

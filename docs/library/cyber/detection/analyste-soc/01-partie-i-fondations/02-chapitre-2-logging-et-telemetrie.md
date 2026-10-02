@@ -1,6 +1,6 @@
 ---
 title: Chapitre 2 — Logging et télémétrie
-source: Cyber/06 Détection & réponse/Analyste SOC.md
+source: Cyber/06 Détection & réponse/Détection & SOC/Analyste SOC.md
 note: Analyste SOC
 up:
 - - Analyste SOC

@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 3 — Sécurité réseau : firewalls, segmentation et détection'
-source: IT/06 Infrastructure & architecture/Infrastructure IT.md
+source: IT/06 Infrastructure & architecture/Infrastructure & SI/Infrastructure IT.md
 note: Infrastructure IT
 up:
 - - Infrastructure IT

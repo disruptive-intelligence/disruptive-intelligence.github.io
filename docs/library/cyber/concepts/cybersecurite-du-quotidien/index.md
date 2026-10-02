@@ -1,6 +1,6 @@
 ---
 title: Cybersécurité du quotidien
-source: Cyber/11 Concepts/Cybersécurité du quotidien.md
+source: Cyber/11 Concepts/Au quotidien/Cybersécurité du quotidien.md
 format: cours
 revue: '2026-04-27'
 ---

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 21 — Appeler la libc depuis l'assembleur
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

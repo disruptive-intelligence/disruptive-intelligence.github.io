@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — JSON avancé pour APIs CTI/SIEM
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

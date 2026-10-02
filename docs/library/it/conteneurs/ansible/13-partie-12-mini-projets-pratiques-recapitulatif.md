@@ -1,6 +1,6 @@
 ---
 title: Partie 12 — Mini-projets pratiques (récapitulatif)
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

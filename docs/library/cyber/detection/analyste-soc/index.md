@@ -1,6 +1,6 @@
 ---
 title: Analyste SOC
-source: Cyber/06 Détection & réponse/Analyste SOC.md
+source: Cyber/06 Détection & réponse/Détection & SOC/Analyste SOC.md
 format: cours
 revue: '2026-10-01'
 ---

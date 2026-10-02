@@ -1,6 +1,6 @@
 ---
 title: Chapitre 19 — Comprendre Active Directory
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

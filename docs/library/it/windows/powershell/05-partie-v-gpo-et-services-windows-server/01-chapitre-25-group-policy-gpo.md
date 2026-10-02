@@ -1,6 +1,6 @@
 ---
 title: Chapitre 25 — Group Policy (GPO)
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

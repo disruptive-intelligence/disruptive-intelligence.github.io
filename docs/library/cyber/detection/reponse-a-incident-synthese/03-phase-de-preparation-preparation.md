@@ -1,6 +1,6 @@
 ---
 title: Phase de préparation — Preparation
-source: Cyber/06 Détection & réponse/Réponse à incident — synthèse.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident — synthèse.md
 note: Réponse à incident — synthèse
 up:
 - - Réponse à incident — synthèse

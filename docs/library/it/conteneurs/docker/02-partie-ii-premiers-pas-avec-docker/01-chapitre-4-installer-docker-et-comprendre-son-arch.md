@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Installer Docker et comprendre son architecture
-source: IT/08 Conteneurs & automatisation/Docker.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Docker.md
 note: Docker
 up:
 - - Docker

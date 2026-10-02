@@ -1,6 +1,6 @@
 ---
 title: Chapitre 13 — Les objets Kubernetes essentiels
-source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes

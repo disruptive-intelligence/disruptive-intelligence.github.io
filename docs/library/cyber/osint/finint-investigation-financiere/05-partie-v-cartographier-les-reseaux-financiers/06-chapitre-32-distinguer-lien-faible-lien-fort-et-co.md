@@ -1,6 +1,6 @@
 ---
 title: Chapitre 32 — Distinguer lien faible, lien fort et contrôle réel
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

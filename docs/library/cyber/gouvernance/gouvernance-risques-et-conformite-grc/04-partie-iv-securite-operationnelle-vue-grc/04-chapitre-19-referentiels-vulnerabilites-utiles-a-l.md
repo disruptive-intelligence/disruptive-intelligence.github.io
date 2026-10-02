@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 19 — Référentiels vulnérabilités utiles à la gouvernance : CVE, CWE, CVSS, EPSS, KEV'
-source: Cyber/08 Gouvernance & résilience/Gouvernance, risques et conformité (GRC).md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Gouvernance, risques et conformité (GRC).md
 note: Gouvernance, risques et conformité (GRC)
 up:
 - - Gouvernance, risques et conformité (GRC)

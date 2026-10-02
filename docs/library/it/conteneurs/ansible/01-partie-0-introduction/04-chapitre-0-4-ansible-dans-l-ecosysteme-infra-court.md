@@ -1,6 +1,6 @@
 ---
 title: Chapitre 0.4 — Ansible dans l'écosystème infra (court)
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1 — Pourquoi le FININT est central aujourd’hui
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 32 — Microsoft Graph et Entra ID
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

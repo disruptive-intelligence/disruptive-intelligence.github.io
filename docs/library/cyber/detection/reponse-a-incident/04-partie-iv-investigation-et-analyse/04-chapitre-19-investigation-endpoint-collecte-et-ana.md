@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 19 — Investigation endpoint : collecte et analyse concrète'
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

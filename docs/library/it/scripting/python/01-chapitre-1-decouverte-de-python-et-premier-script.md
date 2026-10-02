@@ -1,6 +1,6 @@
 ---
 title: Chapitre 1 — Découverte de Python et premier script
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

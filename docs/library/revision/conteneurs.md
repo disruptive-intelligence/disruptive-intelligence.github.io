@@ -3,7 +3,7 @@ title: Révision — Conteneurs & automatisation
 revision: it/conteneurs
 domaine: IT
 sources:
-- IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+- IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 ---
 
 *D'après le cours [Conteneurs — Docker & Kubernetes](../it/conteneurs/conteneurs-docker-kubernetes/index.md)*

@@ -1,6 +1,6 @@
 ---
 title: Sécurité IT en entreprise
-source: Cyber/08 Gouvernance & résilience/Sécurité IT en entreprise.md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Sécurité IT en entreprise.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4.2 — Anatomie d'un playbook
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

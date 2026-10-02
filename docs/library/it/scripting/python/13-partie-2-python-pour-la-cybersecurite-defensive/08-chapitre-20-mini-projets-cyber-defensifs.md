@@ -1,6 +1,6 @@
 ---
 title: Chapitre 20 — Mini-projets cyber défensifs
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

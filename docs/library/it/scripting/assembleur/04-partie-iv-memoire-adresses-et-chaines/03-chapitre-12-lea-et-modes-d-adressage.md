@@ -1,6 +1,6 @@
 ---
 title: Chapitre 12 — lea et modes d'adressage
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

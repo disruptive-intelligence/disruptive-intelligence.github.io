@@ -1,6 +1,6 @@
 ---
 title: Partie IV — Supply chain, IA et sécurité cloud-native
-source: Cyber/05 Hardening/Sécurité applicative (AppSec).md
+source: Cyber/05 Hardening/Applications/Sécurité applicative (AppSec).md
 note: Sécurité applicative (AppSec)
 up:
 - - Sécurité applicative (AppSec)

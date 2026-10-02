@@ -1,6 +1,6 @@
 ---
 title: Annexes
-source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes

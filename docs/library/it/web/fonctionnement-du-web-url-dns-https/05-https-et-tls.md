@@ -1,6 +1,6 @@
 ---
 title: HTTPS et TLS
-source: IT/05 Web & applications/Fonctionnement du web - URL, DNS, HTTPS.md
+source: IT/05 Web & applications/Le web/Fonctionnement du web - URL, DNS, HTTPS.md
 note: 'Fonctionnement du web : URL, DNS, HTTPS'
 up:
 - - 'Fonctionnement du web : URL, DNS, HTTPS'

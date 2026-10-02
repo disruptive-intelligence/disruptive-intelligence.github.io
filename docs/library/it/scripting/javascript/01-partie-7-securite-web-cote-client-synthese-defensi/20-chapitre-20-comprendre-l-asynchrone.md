@@ -1,6 +1,6 @@
 ---
 title: Chapitre 20 — Comprendre l'asynchrone
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

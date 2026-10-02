@@ -1,6 +1,6 @@
 ---
 title: Chapitre 16 — Requêtes HTTP et APIs CTI avec requests
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

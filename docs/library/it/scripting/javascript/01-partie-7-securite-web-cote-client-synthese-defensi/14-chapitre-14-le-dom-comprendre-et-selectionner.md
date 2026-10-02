@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 14 — Le DOM : comprendre et sélectionner'
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

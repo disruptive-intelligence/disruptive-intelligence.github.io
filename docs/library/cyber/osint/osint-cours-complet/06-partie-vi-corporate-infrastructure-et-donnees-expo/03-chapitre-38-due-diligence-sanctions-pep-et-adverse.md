@@ -1,6 +1,6 @@
 ---
 title: Chapitre 38 — Due diligence, sanctions, PEP et adverse media
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 note: OSINT — cours complet
 up:
 - - OSINT — cours complet

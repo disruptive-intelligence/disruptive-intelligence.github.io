@@ -1,6 +1,6 @@
 ---
 title: Chapitre 15 — Modifier le DOM en sécurité (textContent vs innerHTML)
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

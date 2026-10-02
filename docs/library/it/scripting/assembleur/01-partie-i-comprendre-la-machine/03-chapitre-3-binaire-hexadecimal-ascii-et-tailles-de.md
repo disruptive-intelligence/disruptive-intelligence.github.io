@@ -1,6 +1,6 @@
 ---
 title: Chapitre 3 — Binaire, hexadécimal, ASCII et tailles de données
-source: IT/07 Scripting & programmation/Assembleur.md
+source: IT/07 Scripting & programmation/Bas niveau/Assembleur.md
 note: Assembleur
 up:
 - - Assembleur

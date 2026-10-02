@@ -1,6 +1,6 @@
 ---
 title: Conteneurs — Docker & Kubernetes
-source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 format: cours
 revue: '2026-04-15'
 revision: library/revision/conteneurs.md

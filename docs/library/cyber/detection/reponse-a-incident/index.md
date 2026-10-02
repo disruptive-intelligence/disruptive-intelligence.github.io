@@ -1,6 +1,6 @@
 ---
 title: Réponse à incident
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 format: cours
 revue: '2026-09-30'
 revision: library/revision/detection.md

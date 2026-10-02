@@ -1,6 +1,6 @@
 ---
 title: Modèles d’Architecture Informatique
-source: Cyber/11 Concepts/Architecture et sécurité des systèmes.md
+source: Cyber/11 Concepts/Sous le capot/Architecture et sécurité des systèmes.md
 note: Architecture et sécurité des systèmes
 up:
 - - Architecture et sécurité des systèmes

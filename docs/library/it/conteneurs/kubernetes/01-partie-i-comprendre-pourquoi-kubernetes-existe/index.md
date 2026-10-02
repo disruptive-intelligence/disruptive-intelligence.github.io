@@ -1,6 +1,6 @@
 ---
 title: PARTIE I — Comprendre pourquoi Kubernetes existe
-source: IT/08 Conteneurs & automatisation/Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Kubernetes.md
 note: Kubernetes
 up:
 - - Kubernetes

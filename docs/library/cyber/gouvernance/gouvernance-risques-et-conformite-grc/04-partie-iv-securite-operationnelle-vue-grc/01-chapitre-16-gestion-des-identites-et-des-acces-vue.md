@@ -1,6 +1,6 @@
 ---
 title: Chapitre 16 — Gestion des identités et des accès vue GRC
-source: Cyber/08 Gouvernance & résilience/Gouvernance, risques et conformité (GRC).md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Gouvernance, risques et conformité (GRC).md
 note: Gouvernance, risques et conformité (GRC)
 up:
 - - Gouvernance, risques et conformité (GRC)

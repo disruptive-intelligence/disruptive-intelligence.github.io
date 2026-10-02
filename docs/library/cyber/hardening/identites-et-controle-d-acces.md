@@ -1,6 +1,6 @@
 ---
 title: Identités et contrôle d'accès
-source: Cyber/05 Hardening/Identités et contrôle d'accès.md
+source: Cyber/05 Hardening/Identités & accès/Identités et contrôle d'accès.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

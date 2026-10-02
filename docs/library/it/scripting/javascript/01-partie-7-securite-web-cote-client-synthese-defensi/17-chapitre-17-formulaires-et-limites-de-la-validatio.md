@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — Formulaires et limites de la validation côté client
-source: IT/07 Scripting & programmation/JavaScript.md
+source: IT/07 Scripting & programmation/Langages/JavaScript.md
 note: JavaScript
 up:
 - - JavaScript

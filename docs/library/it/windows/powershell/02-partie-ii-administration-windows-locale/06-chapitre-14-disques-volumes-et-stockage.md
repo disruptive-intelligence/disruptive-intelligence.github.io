@@ -1,6 +1,6 @@
 ---
 title: Chapitre 14 — Disques, volumes et stockage
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

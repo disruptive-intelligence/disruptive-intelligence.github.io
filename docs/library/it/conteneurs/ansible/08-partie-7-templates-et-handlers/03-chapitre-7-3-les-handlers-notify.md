@@ -1,6 +1,6 @@
 ---
 title: Chapitre 7.3 — Les handlers (notify)
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

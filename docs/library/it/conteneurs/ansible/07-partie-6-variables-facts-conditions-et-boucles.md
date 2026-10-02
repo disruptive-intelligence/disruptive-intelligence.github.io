@@ -1,6 +1,6 @@
 ---
 title: Partie 6 — Variables, facts, conditions et boucles
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

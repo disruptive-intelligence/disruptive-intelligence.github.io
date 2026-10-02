@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Installer et explorer l’environnement de lab
-source: IT/07 Scripting & programmation/SQL.md
+source: IT/07 Scripting & programmation/Langages/SQL.md
 note: SQL
 up:
 - - SQL

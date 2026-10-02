@@ -1165,17 +1165,18 @@ def build_nav(items, themes, threads=None):
 def library_nav(library):
     """Onglet Bibliothèque : un en-tête par domaine (Cyber, IT), une entrée dépliable (») par catégorie
     avec ses notes, puis la Révision, la recherche et le Glossaire."""
-    nav, fiches = [], []
+    nav, fiches, fiches_src = [], [], []
     for dom in library:
         cats = []
         for cat in dom["categories"]:
-            if cat.get("glossaire"):                  # fiches notions : rangées sous le Glossaire
+            if cat.get("glossaire"):                  # fiches notions : rangées sous le Glossaire, avec leur page
                 fiches += [n for n in cat["notes"] if n["imported"]]
+                fiches_src = fiches_src or [cat["src"]]
                 continue
             # toujours une section (même vide) : une page index.md isolée deviendrait l'accueil du domaine
             cats.append({cat["label"]: [cat["src"]] + category_nav(cat)})
         nav.append({dom["label"]: [dom_src(dom)] + cats})
-    glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": [note_nav(n) for n in fiches]}] if fiches else [])
+    glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": fiches_src + [note_nav(n) for n in fiches]}] if fiches else [])
     # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
     return nav + revision_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
 
@@ -1352,6 +1353,7 @@ def load_library(docs_dir, tree):
             revision = f"{REVISION_DIR}/{cat['id']}.md"
             cats.append({"id": cat["id"], "label": cat["label"], "src": f"{base}/index.md", "notes": notes,
                          "description": cat.get("description", ""), "debut": cat.get("debut"),
+                         "group_desc": {g["label"]: str(g.get("description") or "") for g in cat.get("groups") or []},
                          "glossaire": bool(cat.get("glossaire")), "mots": [str(w) for w in cat.get("mots") or []],
                          "revision": revision if (docs_dir / revision).exists() else None})
         out.append({"id": dom["id"], "label": dom["label"], "categories": cats})
@@ -1481,8 +1483,10 @@ def veille_block(cat, src):
 def page_group(dom, cat, label, notes):
     """Page d'une sous-rubrique : ses notes (celles rappelées d'ailleurs comprises)."""
     src = group_src(cat, label)
+    desc = cat["group_desc"].get(label, "")
     body = (f"# {label}\n\n<span class=\"kw-muted\">Bibliothèque · {dom['label']} · "
             f"[{cat['label']}]({posixpath.relpath(cat['src'], posixpath.dirname(src))})</span>\n\n"
+            + (f'<p class="kw-dom-lead">{esc(desc)}</p>\n\n' if desc else "")
             + '<div class="kw-chapter__grid kw-chapter__grid--solo">' + "".join(note_item(n, src) for n in notes) + "</div>\n")
     return src, body
 
@@ -1630,7 +1634,7 @@ def pages_library(library):
                     notes = notes + cat["links"].get(label, []) if label else notes
                     if label:
                         title = f"[{esc(label)}]({posixpath.relpath(group_src(cat, label), posixpath.dirname(src))})"
-                        body += chapter(i, title, "", lib_stats(notes), notes, src)
+                        body += chapter(i, title, cat["group_desc"].get(label, ""), lib_stats(notes), notes, src)
                         out.append(page_group(dom, cat, label, notes))
                     else:
                         body += '<div class="kw-chapter__grid kw-chapter__grid--solo">' + "".join(note_item(n, src) for n in notes) + "</div>\n\n"
@@ -1666,32 +1670,99 @@ def library_card(cat, src):
             + "</div>")
 
 
+WEEKDAYS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+
+
+def section_bar(label, anchor=None):
+    """Titre de section façon journal : filet de couleur, libellé en capitales, trait jusqu'au bord."""
+    ident = f' id="{anchor}"' if anchor else ""
+    return f'\n<div class="kw-bar"{ident}><span>{esc(label)}</span></div>\n'
+
+
 def page_library_index(library, themes, glossary_count):
+    """Accueil de la Bibliothèque : bandeau (date, compteurs, recherche, rubriques), note à la une et dernières
+    mises à jour, parcours en cartes à étapes, un bloc par domaine avec ses rubriques numérotées, outils."""
     src = "library/index.md"
-    doms = "".join(f"\n## [{dom['label']}]({posixpath.relpath(dom_src(dom), 'library')})\n\n<div class=\"kw-libgrid\">"
-                   + "".join(library_card(c, src) for c in dom["categories"] if not c.get("glossaire"))
-                   + "</div>\n" for dom in library)
+    all_notes = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"]]
+    hours = round(sum(n.get("minutes") or 0 for n in all_notes) / 60)
+    today = date.today()
+    cat_of = {n["src"]: c for d in library for c in d["categories"] for n in c["notes"]}
+    recent = sorted((n for n in all_notes if n.get("revue")), key=lambda n: (n["revue"], n.get("minutes") or 0), reverse=True)
+    resume = lambda n: n.get("resume") or STATE.get("resumes", {}).get(n["title"], "")
+    nav = " ".join(f'<a href="{href(src, dom_src(d))}">{esc(bare(d["label"]))}</a>' for d in library) + (
+        f' <a href="#parcours">Parcours</a> <a href="{href(src, GLOSSARY_SRC)}">Glossaire</a>'
+        + (f' <a href="{href(src, REVISION_INDEX)}">Révision</a>' if STATE.get("revisions") else "")
+        + f' <a href="{href(src, "cheatsheets/index.md")}">Cheat sheets</a>')
+    masthead = (
+        '<div class="kw-mast">'
+        f'<div class="kw-mast__top"><span>{WEEKDAYS[today.weekday()].capitalize()} {fr_date(today)}</span>'
+        f'<span class="kw-mast__count">{len(all_notes)} notes en ligne · {hours} h de lecture</span></div>'
+        '<h1 class="kw-mast__title">📚 Bibliothèque</h1>'
+        '<p class="kw-mast__lead">Le savoir de référence : mes cours, synthèses et fiches, repris d\'Obsidian au fil de '
+        "l'eau. La veille raconte ce qui <b>se passe</b> ; la Bibliothèque garde ce qui <b>dure</b>.</p>"
+        f'<form class="kw-mast__search" action="{href(src, LIBRARY_SEARCH_SRC)}" method="get">'
+        '<input type="search" name="mots" placeholder="Chercher dans le texte de toutes les notes : kerberoasting, nmap -sV, Lazarus…" '
+        'aria-label="Chercher dans les notes"><button type="submit">Rechercher</button></form>'
+        f'<nav class="kw-mast__nav">{nav}</nav></div>')
+    une = ""
+    if recent:
+        f0, rest = recent[0], recent[1:5]
+        cat = cat_of.get(f0["src"])
+        une = (section_bar("À la une")
+               + '<div class="kw-une">'
+               f'<a class="kw-une__main" href="{href(src, f0["src"])}"><span class="kw-tuto__tag">{esc(bare(cat["label"])) if cat else ""} · '
+               f'{note_tag(f0)}</span><span class="kw-une__title">{esc(nav_title(f0))}</span>'
+               f'<span class="kw-une__text">{esc(resume(f0))}</span>'
+               f'<span class="kw-une__meta">Mis à jour le {fr_date(date.fromisoformat(f0["revue"]))} · Lire →</span></a>'
+               '<div class="kw-une__side"><span class="kw-une__label">Récemment mis à jour</span>'
+               + "".join(f'<a class="kw-une__item" href="{href(src, n["src"])}"><span class="kw-une__date">'
+                         f'{fr_date(date.fromisoformat(n["revue"]))}</span><span>{esc(nav_title(n))}</span></a>' for n in rest)
+               + "</div></div>\n")
+    colors = ["#ed4d5a", "#8f9bff", "#e0b12a", "#4fc3a1", "#c77dff", "#5ab0ff"]
+    paths = "".join(
+        f'<div class="kw-course" style="--kw-course: {colors[i % len(colors)]}">'
+        f'<span class="kw-course__tag">Parcours · {len(p["etapes"])} étapes</span>'
+        f'<a class="kw-course__title" href="{href(src, p["src"])}">{esc(p["titre"])}</a>'
+        f'<span class="kw-course__text">{esc(p["description"])}</span><ol class="kw-course__steps">'
+        + "".join(f'<li><a href="{href(src, s["note"]["src"])}">{esc(s["note"]["title"])}</a></li>' for s in p["etapes"][:9])
+        + "</ol>"
+        + (f'<span class="kw-course__more">+ {len(p["etapes"]) - 9} étape{"s" if len(p["etapes"]) > 10 else ""}</span>'
+           if len(p["etapes"]) > 9 else "")
+        + f'<a class="kw-course__cta" href="{href(src, p["etapes"][0]["note"]["src"])}">Commencer →</a></div>'
+        for i, p in enumerate(p for p in STATE.get("parcours", []) if p["etapes"]))
+    doms = ""
+    for d in library:
+        cats = [c for c in d["categories"] if not c.get("glossaire")]
+        notes = [n for c in cats for n in c["notes"]]
+        rubs = "".join(
+            f'<a class="kw-domblock__rub" href="{href(src, c["src"])}"><span class="kw-domblock__num">{i:02d}</span>'
+            f'<span class="kw-domblock__name">{esc(c["label"])}</span>'
+            f'<span class="kw-domblock__desc">{esc(c.get("description", ""))}</span>'
+            f'<span class="kw-tuto__tag">{format_counts(c["notes"]) or "à venir"}</span></a>'
+            for i, c in enumerate(cats, 1))
+        doms += (section_bar(bare(d["label"]), anchor=d["id"])
+                 + '<div class="kw-domblock"><div class="kw-domblock__intro">'
+                 f'<a class="kw-domblock__title" href="{href(src, dom_src(d))}">{esc(d["label"])}</a>'
+                 f'<p>{esc(DOMAIN_LEAD.get(d["id"], ""))}</p><span class="kw-dom-stats">{lib_stats(notes)}</span>'
+                 f'<a class="kw-domblock__cta" href="{href(src, dom_src(d))}">Explorer {esc(bare(d["label"]))} →</a></div>'
+                 f'<div class="kw-domblock__rubs">{rubs}</div></div>\n')
     fiches = [n for d in library for c in d["categories"] if c.get("glossaire") for n in c["notes"] if n["imported"]]
-    published = sum(n["imported"] for d in library for c in d["categories"] for n in c["notes"])
     return src, f"""---
+title: Bibliothèque
 hide:
   - toc
 ---
-# 📚 Bibliothèque
-
-Le **savoir de référence** : mes cours, synthèses et fiches, repris d'Obsidian au fil de l'eau.
-Veille, Analyses et Dossiers racontent ce qui **se passe** ; la Bibliothèque garde ce qui **dure**.
-
-## 🎓 Parcours
-
-{parcours_cards(src)}
-
+{masthead}
+{une}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
+<div class="kw-courses">{paths}</div>
+{doms}{section_bar("Les outils")}
 <div class="kw-libgrid">
-<a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {published} notes publiées : un mot, une commande, un acteur.</span></a>
+<a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {len(all_notes)} notes publiées : un mot, une commande, un acteur.</span></a>
 <a class="kw-card" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">📖 Glossaire & notions</span><span class="kw-card__text">{glossary_count} définitions de A à Z et {len(fiches)} fiches notions pour aller à l'essentiel.</span></a>
 {revision_card(src)}
+<a class="kw-card" href="{href(src, "cheatsheets/index.md")}"><span class="kw-card__title">📋 Cheat sheets</span><span class="kw-card__text">La commande et un exemple qui marche, quand on est sur le poste.</span></a>
 </div>
-{doms}
+
 <span class="kw-muted">Les liens externes sélectionnés (outils, sites, lectures) sont rangés à part, dans l'onglet [🧭 Ressources]({posixpath.relpath(RESSOURCES_SRC, "library")}).</span>
 """
 

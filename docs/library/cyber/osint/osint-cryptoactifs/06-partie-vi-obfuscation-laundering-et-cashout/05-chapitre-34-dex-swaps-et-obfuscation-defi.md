@@ -1,6 +1,6 @@
 ---
 title: Chapitre 34 — DEX, swaps et obfuscation DeFi
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

@@ -1,6 +1,6 @@
 ---
 title: Infrastructure de journalisation Windows
-source: Cyber/05 Hardening/Sécurité système Windows.md
+source: Cyber/05 Hardening/Systèmes/Sécurité système Windows.md
 note: Sécurité système Windows
 up:
 - - Sécurité système Windows

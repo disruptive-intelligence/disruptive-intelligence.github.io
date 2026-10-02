@@ -1,6 +1,6 @@
 ---
 title: Sauvegardes et reprise d'activité
-source: Cyber/08 Gouvernance & résilience/Sauvegardes et reprise d'activité.md
+source: Cyber/08 Gouvernance & résilience/Résilience/Sauvegardes et reprise d'activité.md
 format: synthese
 provenance: HTB Academy
 revue: '2026-09-30'

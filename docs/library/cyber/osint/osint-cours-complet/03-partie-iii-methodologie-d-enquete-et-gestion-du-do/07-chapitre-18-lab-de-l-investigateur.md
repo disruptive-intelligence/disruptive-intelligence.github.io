@@ -1,6 +1,6 @@
 ---
 title: Chapitre 18 — Lab de l'investigateur
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 note: OSINT — cours complet
 up:
 - - OSINT — cours complet

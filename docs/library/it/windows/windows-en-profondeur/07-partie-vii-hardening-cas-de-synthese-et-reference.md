@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Hardening, cas de synthèse et référence
-source: IT/02 Windows/Windows en profondeur.md
+source: IT/02 Windows/Comprendre Windows/Windows en profondeur.md
 note: Windows en profondeur
 up:
 - - Windows en profondeur

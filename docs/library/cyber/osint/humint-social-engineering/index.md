@@ -1,6 +1,6 @@
 ---
 title: HUMINT & social engineering
-source: Cyber/02 OSINT/HUMINT & social engineering.md
+source: Cyber/02 OSINT/Facteur humain/HUMINT & social engineering.md
 format: cours
 revue: '2026-04-08'
 ---

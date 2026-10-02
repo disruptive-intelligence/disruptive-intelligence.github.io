@@ -1,6 +1,6 @@
 ---
 title: Chapitre 5 — Socle processus
-source: Cyber/07 Vulnérabilités & MCS/Maintien en condition de sécurité (MCS).md
+source: Cyber/07 Vulnérabilités & MCS/Maintenir dans la durée/Maintien en condition de sécurité (MCS).md
 note: Maintien en condition de sécurité (MCS)
 up:
 - - Maintien en condition de sécurité (MCS)

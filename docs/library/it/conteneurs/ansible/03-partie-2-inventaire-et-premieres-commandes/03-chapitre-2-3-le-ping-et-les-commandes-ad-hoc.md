@@ -1,6 +1,6 @@
 ---
 title: Chapitre 2.3 — Le ping et les commandes ad hoc
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 26 — Détection et réponse aux incidents dans les containers
-source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes

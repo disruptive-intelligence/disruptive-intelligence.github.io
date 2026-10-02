@@ -1,6 +1,6 @@
 ---
 title: Chapitre 23 — Collecte, conservation et chaîne de preuve crypto
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

@@ -1,6 +1,6 @@
 ---
 title: Conditions, comparaisons et tests [if, elif, else…]
-source: IT/07 Scripting & programmation/Bash — prises de notes.md
+source: IT/07 Scripting & programmation/Shell/Bash — prises de notes.md
 note: Bash — prises de notes
 up:
 - - Bash — prises de notes

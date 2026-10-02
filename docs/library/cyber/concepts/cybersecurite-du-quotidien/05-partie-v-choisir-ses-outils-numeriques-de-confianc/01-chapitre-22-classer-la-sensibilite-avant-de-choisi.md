@@ -1,6 +1,6 @@
 ---
 title: Chapitre 22 — Classer la sensibilité avant de choisir l'outil
-source: Cyber/11 Concepts/Cybersécurité du quotidien.md
+source: Cyber/11 Concepts/Au quotidien/Cybersécurité du quotidien.md
 note: Cybersécurité du quotidien
 up:
 - - Cybersécurité du quotidien

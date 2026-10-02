@@ -1,6 +1,6 @@
 ---
 title: FININT — investigation financière
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 format: cours
 revue: '2026-05-25'
 ---

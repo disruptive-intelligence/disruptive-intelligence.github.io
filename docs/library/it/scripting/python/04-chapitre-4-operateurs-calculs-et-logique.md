@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Opérateurs, calculs et logique
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 13 — Qualification, catégorisation et évaluation de gravité
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

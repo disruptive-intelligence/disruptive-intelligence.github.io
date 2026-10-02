@@ -1,6 +1,6 @@
 ---
 title: Maintien en condition de sécurité (MCS)
-source: Cyber/07 Vulnérabilités & MCS/Maintien en condition de sécurité (MCS).md
+source: Cyber/07 Vulnérabilités & MCS/Maintenir dans la durée/Maintien en condition de sécurité (MCS).md
 format: cours
 revue: '2026-08-08'
 ---

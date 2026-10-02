@@ -1,6 +1,6 @@
 ---
 title: Chapitre 2 — Variables, types, affichage et saisie utilisateur
-source: IT/07 Scripting & programmation/Python.md
+source: IT/07 Scripting & programmation/Langages/Python.md
 note: Python
 up:
 - - Python

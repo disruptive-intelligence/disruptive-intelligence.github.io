@@ -1,6 +1,6 @@
 ---
 title: CMD — aide-mémoire
-source: IT/02 Windows/CMD — aide-mémoire.md
+source: IT/02 Windows/Ligne de commande/CMD — aide-mémoire.md
 format: aide-memoire
 revue: '2026-04-13'
 ---

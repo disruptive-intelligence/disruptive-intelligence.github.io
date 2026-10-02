@@ -1,6 +1,6 @@
 ---
 title: Les 5 étapes d’une stratégie de Gestion de la Surface d’Attaque — ASM
-source: Cyber/07 Vulnérabilités & MCS/Gestion de la surface d'attaque (ASM).md
+source: Cyber/07 Vulnérabilités & MCS/Connaître & prioriser/Gestion de la surface d'attaque (ASM).md
 note: Gestion de la surface d'attaque (ASM)
 up:
 - - Gestion de la surface d'attaque (ASM)

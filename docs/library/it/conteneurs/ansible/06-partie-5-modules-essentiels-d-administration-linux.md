@@ -1,6 +1,6 @@
 ---
 title: Partie 5 — Modules essentiels d'administration Linux
-source: IT/08 Conteneurs & automatisation/Ansible.md
+source: IT/08 Conteneurs & automatisation/Automatisation/Ansible.md
 note: Ansible
 up:
 - - Ansible

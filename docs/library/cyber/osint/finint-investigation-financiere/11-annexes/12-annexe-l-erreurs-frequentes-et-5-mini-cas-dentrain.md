@@ -1,6 +1,6 @@
 ---
 title: Annexe L — Erreurs fréquentes et 5 mini-cas d’entraînement
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

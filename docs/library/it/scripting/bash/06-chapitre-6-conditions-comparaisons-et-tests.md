@@ -1,6 +1,6 @@
 ---
 title: Chapitre 6 — Conditions, comparaisons et tests
-source: IT/07 Scripting & programmation/Bash.md
+source: IT/07 Scripting & programmation/Shell/Bash.md
 note: Bash
 up:
 - - Bash

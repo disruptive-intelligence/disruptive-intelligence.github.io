@@ -1,6 +1,6 @@
 ---
 title: Taxonomie de la cybersécurité
-source: Cyber/11 Concepts/Taxonomie de la cybersécurité.md
+source: Cyber/11 Concepts/Cartes & familles/Taxonomie de la cybersécurité.md
 format: cours
 revue: '2026-06-10'
 ---

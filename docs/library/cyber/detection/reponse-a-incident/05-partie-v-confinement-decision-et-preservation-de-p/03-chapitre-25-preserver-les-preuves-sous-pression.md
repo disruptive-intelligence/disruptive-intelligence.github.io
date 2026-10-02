@@ -1,6 +1,6 @@
 ---
 title: Chapitre 25 — Préserver les preuves sous pression
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — Construction de timeline multi-sources
-source: Cyber/06 Détection & réponse/Analyste SOC.md
+source: Cyber/06 Détection & réponse/Détection & SOC/Analyste SOC.md
 note: Analyste SOC
 up:
 - - Analyste SOC

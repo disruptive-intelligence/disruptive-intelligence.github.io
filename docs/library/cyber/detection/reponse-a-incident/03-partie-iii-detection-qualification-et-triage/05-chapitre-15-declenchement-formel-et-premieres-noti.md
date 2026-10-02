@@ -1,6 +1,6 @@
 ---
 title: Chapitre 15 — Déclenchement formel et premières notifications
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

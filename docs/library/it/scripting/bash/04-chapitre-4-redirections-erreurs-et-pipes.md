@@ -1,6 +1,6 @@
 ---
 title: Chapitre 4 — Redirections, erreurs et pipes
-source: IT/07 Scripting & programmation/Bash.md
+source: IT/07 Scripting & programmation/Shell/Bash.md
 note: Bash
 up:
 - - Bash

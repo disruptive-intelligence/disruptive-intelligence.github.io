@@ -90,3 +90,16 @@
 "Ansible": "Automatiser l'administration : inventaire, playbooks, modules, templates et vault."
 "Systèmes technologiques (vol. 1)": "Une méthode pour lire une technologie et ses conditions de diffusion."
 "Frontières technologiques (vol. 2)": "L'atlas des technologies émergentes, leurs convergences et leur veille."
+
+# Cyber — Fiches notions
+"CVE, CWE, CVSS, EPSS, KEV": "Identifier, classer, noter et prioriser une vulnérabilité : les cinq référentiels à connaître."
+"Défense en profondeur": "Superposer des protections indépendantes pour qu'aucune défaillance ne suffise."
+"MTTD, MTTC, MTTR": "Les délais qui mesurent la réponse à incident : détecter, contenir, rétablir."
+"IOC, IOA, TTP": "Indices de compromission, d'attaque et modes opératoires : du plus fragile au plus durable."
+"MFA": "L'authentification à plusieurs facteurs, ses méthodes et ses contournements."
+"Moindre privilège": "Ne donner que les droits strictement nécessaires, et pas plus longtemps que nécessaire."
+"Segmentation réseau": "Cloisonner le réseau pour limiter la propagation d'une attaque."
+"SPF, DKIM, DMARC": "Les trois mécanismes qui authentifient l'expéditeur d'un e-mail."
+"Surface d'attaque": "Tout ce par quoi un attaquant peut entrer, et comment la réduire."
+"Triade CIA": "Confidentialité, intégrité, disponibilité : ce que la sécurité protège."
+"Zero Trust": "Ne jamais faire confiance par défaut, vérifier chaque accès."

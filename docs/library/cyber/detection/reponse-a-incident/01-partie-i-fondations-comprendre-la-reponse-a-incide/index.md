@@ -1,6 +1,6 @@
 ---
 title: 'Partie I — Fondations : comprendre la réponse à incident'
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

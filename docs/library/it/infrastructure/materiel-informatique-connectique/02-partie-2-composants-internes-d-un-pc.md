@@ -1,6 +1,6 @@
 ---
 title: Partie 2 — Composants internes d'un PC
-source: IT/06 Infrastructure & architecture/Matériel informatique & connectique.md
+source: IT/06 Infrastructure & architecture/Matériel/Matériel informatique & connectique.md
 note: Matériel informatique & connectique
 up:
 - - Matériel informatique & connectique

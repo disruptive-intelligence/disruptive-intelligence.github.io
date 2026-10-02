@@ -1,6 +1,6 @@
 ---
 title: Chapitre 24 — Workflow complet d’une enquête crypto
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

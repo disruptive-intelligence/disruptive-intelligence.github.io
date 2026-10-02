@@ -1,6 +1,6 @@
 ---
 title: OSINT — synthèse
-source: Cyber/02 OSINT/OSINT — synthèse.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — synthèse.md
 format: synthese
 revue: '2026-10-01'
 ---

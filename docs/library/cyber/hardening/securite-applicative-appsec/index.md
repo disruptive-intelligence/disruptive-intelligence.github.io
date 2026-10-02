@@ -1,6 +1,6 @@
 ---
 title: Sécurité applicative (AppSec)
-source: Cyber/05 Hardening/Sécurité applicative (AppSec).md
+source: Cyber/05 Hardening/Applications/Sécurité applicative (AppSec).md
 format: cours
 revue: '2026-04-08'
 revision: library/revision/hardening.md

@@ -1,6 +1,6 @@
 ---
 title: Partie 9 — Réseau physique et télécom
-source: IT/06 Infrastructure & architecture/Matériel informatique & connectique.md
+source: IT/06 Infrastructure & architecture/Matériel/Matériel informatique & connectique.md
 note: Matériel informatique & connectique
 up:
 - - Matériel informatique & connectique

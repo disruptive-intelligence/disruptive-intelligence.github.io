@@ -1,6 +1,6 @@
 ---
 title: Sécurité des sauvegardes & Disaster Recovery
-source: Cyber/08 Gouvernance & résilience/Sauvegardes et reprise d'activité.md
+source: Cyber/08 Gouvernance & résilience/Résilience/Sauvegardes et reprise d'activité.md
 note: Sauvegardes et reprise d'activité
 up:
 - - Sauvegardes et reprise d'activité

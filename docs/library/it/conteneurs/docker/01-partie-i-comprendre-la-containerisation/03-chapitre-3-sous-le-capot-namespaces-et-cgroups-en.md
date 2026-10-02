@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 3 — Sous le capot : namespaces et cgroups (en clair)'
-source: IT/08 Conteneurs & automatisation/Docker.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Docker.md
 note: Docker
 up:
 - - Docker

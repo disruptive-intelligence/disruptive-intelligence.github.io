@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 25 — Scams retail : romance scam et pig butchering'
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

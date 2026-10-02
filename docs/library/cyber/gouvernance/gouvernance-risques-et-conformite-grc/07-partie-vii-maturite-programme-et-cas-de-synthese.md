@@ -1,6 +1,6 @@
 ---
 title: Partie VII — Maturité, programme et cas de synthèse
-source: Cyber/08 Gouvernance & résilience/Gouvernance, risques et conformité (GRC).md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Gouvernance, risques et conformité (GRC).md
 note: Gouvernance, risques et conformité (GRC)
 up:
 - - Gouvernance, risques et conformité (GRC)

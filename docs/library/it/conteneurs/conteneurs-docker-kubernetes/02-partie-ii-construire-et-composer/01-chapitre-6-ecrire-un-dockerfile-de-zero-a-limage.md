@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 6 — Écrire un Dockerfile : de zéro à l’image'
-source: IT/08 Conteneurs & automatisation/Conteneurs — Docker & Kubernetes.md
+source: IT/08 Conteneurs & automatisation/Conteneurs/Conteneurs — Docker & Kubernetes.md
 note: Conteneurs — Docker & Kubernetes
 up:
 - - Conteneurs — Docker & Kubernetes

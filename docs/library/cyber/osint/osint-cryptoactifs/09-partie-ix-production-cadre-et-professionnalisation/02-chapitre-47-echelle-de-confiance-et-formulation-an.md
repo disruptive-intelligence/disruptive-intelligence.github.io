@@ -1,6 +1,6 @@
 ---
 title: Chapitre 47 — Échelle de confiance et formulation analytique
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

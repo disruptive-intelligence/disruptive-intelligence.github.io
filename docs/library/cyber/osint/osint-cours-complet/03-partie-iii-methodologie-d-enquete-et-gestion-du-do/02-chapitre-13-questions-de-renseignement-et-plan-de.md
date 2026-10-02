@@ -1,6 +1,6 @@
 ---
 title: Chapitre 13 — Questions de renseignement et plan de collecte
-source: Cyber/02 OSINT/OSINT — cours complet.md
+source: Cyber/02 OSINT/Méthode & enquête/OSINT — cours complet.md
 note: OSINT — cours complet
 up:
 - - OSINT — cours complet

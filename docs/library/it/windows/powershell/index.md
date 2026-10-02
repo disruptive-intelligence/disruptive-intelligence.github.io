@@ -1,6 +1,6 @@
 ---
 title: PowerShell
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 format: cours
 revue: '2026-08-21'
 ---

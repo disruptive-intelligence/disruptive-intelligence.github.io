@@ -1,6 +1,6 @@
 ---
 title: Chapitre 24 — Administration en masse avec CSV
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

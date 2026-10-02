@@ -1,6 +1,6 @@
 ---
 title: Chapitre 34 — Diagnostic, logs et triage
-source: IT/02 Windows/PowerShell.md
+source: IT/02 Windows/Ligne de commande/PowerShell.md
 note: PowerShell
 up:
 - - PowerShell

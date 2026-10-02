@@ -1,6 +1,6 @@
 ---
 title: Chapitre 25 — Types de données et contraintes
-source: IT/07 Scripting & programmation/SQL.md
+source: IT/07 Scripting & programmation/Langages/SQL.md
 note: SQL
 up:
 - - SQL

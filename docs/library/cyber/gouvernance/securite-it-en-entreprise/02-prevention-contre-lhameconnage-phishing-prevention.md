@@ -1,6 +1,6 @@
 ---
 title: Prévention contre l’hameçonnage — Phishing Prevention
-source: Cyber/08 Gouvernance & résilience/Sécurité IT en entreprise.md
+source: Cyber/08 Gouvernance & résilience/Gouvernance & conformité/Sécurité IT en entreprise.md
 note: Sécurité IT en entreprise
 up:
 - - Sécurité IT en entreprise

@@ -1,6 +1,6 @@
 ---
 title: Chapitre 23 — Stratégies de confinement et arbitrages
-source: Cyber/06 Détection & réponse/Réponse à incident.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident.md
 note: Réponse à incident
 up:
 - - Réponse à incident

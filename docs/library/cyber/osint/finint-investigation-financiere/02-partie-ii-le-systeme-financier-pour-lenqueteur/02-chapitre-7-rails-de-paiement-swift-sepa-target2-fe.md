@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 7 — Rails de paiement : SWIFT, SEPA, TARGET2, Fedwire, ACH'
-source: Cyber/02 OSINT/FININT — investigation financière.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/FININT — investigation financière.md
 note: FININT — investigation financière
 up:
 - - FININT — investigation financière

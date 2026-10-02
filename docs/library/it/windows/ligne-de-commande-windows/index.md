@@ -1,6 +1,6 @@
 ---
 title: Ligne de commande Windows
-source: IT/02 Windows/Ligne de commande Windows.md
+source: IT/02 Windows/Ligne de commande/Ligne de commande Windows.md
 format: cours
 revue: '2026-05-10'
 ---

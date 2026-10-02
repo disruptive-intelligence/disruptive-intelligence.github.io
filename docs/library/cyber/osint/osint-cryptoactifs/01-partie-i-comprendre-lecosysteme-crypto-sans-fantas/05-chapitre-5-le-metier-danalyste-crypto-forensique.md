@@ -1,6 +1,6 @@
 ---
 title: Chapitre 5 — Le métier d’analyste crypto-forensique
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

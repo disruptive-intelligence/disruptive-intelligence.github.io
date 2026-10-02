@@ -1,6 +1,6 @@
 ---
 title: Chapitre 41 — Bitfinex 2016 → saisie 3,6 Mrd USD 2022
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

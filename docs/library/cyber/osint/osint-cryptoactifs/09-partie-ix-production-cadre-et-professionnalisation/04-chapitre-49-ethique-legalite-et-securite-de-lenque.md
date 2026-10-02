@@ -1,6 +1,6 @@
 ---
 title: Chapitre 49 — Éthique, légalité et sécurité de l’enquêteur
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 13 — Point de départ d’une enquête : typologie d’indices'
-source: Cyber/02 OSINT/OSINT & cryptoactifs.md
+source: Cyber/02 OSINT/Finance & cryptoactifs/OSINT & cryptoactifs.md
 note: OSINT & cryptoactifs
 up:
 - - OSINT & cryptoactifs

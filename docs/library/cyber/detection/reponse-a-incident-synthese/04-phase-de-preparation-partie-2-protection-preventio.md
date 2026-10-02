@@ -1,6 +1,6 @@
 ---
 title: 'Phase de préparation — Partie 2 : Protection & prévention'
-source: Cyber/06 Détection & réponse/Réponse à incident — synthèse.md
+source: Cyber/06 Détection & réponse/Réponse à incident/Réponse à incident — synthèse.md
 note: Réponse à incident — synthèse
 up:
 - - Réponse à incident — synthèse
