@@ -137,16 +137,20 @@ nav:
             - Disques, archives et transferts: cheatsheets/linux/administration/disques.md
         - Commandes clés:
             - cheatsheets/linux/commandes/index.md
-            - find: cheatsheets/linux/commandes/find.md
-            - grep: cheatsheets/linux/commandes/grep.md
-            - awk: cheatsheets/linux/commandes/awk.md
-            - sed: cheatsheets/linux/commandes/sed.md
-            - tar: cheatsheets/linux/commandes/tar.md
-            - ps: cheatsheets/linux/commandes/ps.md
-            - systemctl: cheatsheets/linux/commandes/systemctl.md
-            - journalctl: cheatsheets/linux/commandes/journalctl.md
-            - ss: cheatsheets/linux/commandes/ss.md
-            - ip: cheatsheets/linux/commandes/ip.md
+            - Fichiers et archives:
+                - find: cheatsheets/linux/commandes/find.md
+                - tar: cheatsheets/linux/commandes/tar.md
+            - Texte et filtres:
+                - grep: cheatsheets/linux/commandes/grep.md
+                - awk: cheatsheets/linux/commandes/awk.md
+                - sed: cheatsheets/linux/commandes/sed.md
+            - Processus, services et journaux:
+                - ps: cheatsheets/linux/commandes/ps.md
+                - systemctl: cheatsheets/linux/commandes/systemctl.md
+                - journalctl: cheatsheets/linux/commandes/journalctl.md
+            - Réseau:
+                - ss: cheatsheets/linux/commandes/ss.md
+                - ip: cheatsheets/linux/commandes/ip.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md
         - Linux:

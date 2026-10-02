@@ -41,3 +41,42 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 - Le programme se met entre **guillemets simples** : entre guillemets doubles, le shell remplace `$1` avant awk.
 - Par défaut, plusieurs espaces de suite comptent pour un seul séparateur (`cut -d' '`, lui, compte chaque espace).
 - `print $1, $2` sépare par un espace ; `print $1 $2` colle les deux champs.
+
+## Exemples
+
+??? example kw-cs-more "Afficher des colonnes"
+    ```bash
+    awk '{print $1}' access.log                 # 1re colonne (l'IP du client)
+    awk '{print $NF}' fichier                   # dernière colonne
+    awk -F: '{print $1, $7}' /etc/passwd        # nom et shell
+    awk -F: '{print $1 " -> " $6}' /etc/passwd  # nom et dossier, avec un séparateur choisi
+    awk -F, '{print $2}' export.csv             # 2e colonne d'un CSV simple
+    awk '{print NR ": " $0}' fichier            # numérote les lignes
+    ```
+
+??? example kw-cs-more "Filtrer des lignes"
+    ```bash
+    awk -F: '$3 == 0 {print $1}' /etc/passwd                      # comptes d'UID 0
+    awk -F: '$3 >= 1000 && $7 ~ /bash/ {print $1}' /etc/passwd     # comptes humains avec bash
+    awk '$9 == 404 {print $7}' access.log                          # URL en 404 (journal nginx/apache)
+    awk '$9 >= 500' access.log                                     # requêtes en erreur serveur
+    awk '/Failed password/ {print $(NF-3)}' /var/log/auth.log      # IP des échecs SSH (4e champ depuis la fin)
+    awk 'NR > 1' export.csv                                        # tout sauf l'en-tête
+    awk 'length($0) > 200' fichier                                 # lignes de plus de 200 caractères
+    ```
+
+??? example kw-cs-more "Compter et additionner"
+    ```bash
+    awk '{n[$1]++} END {for (ip in n) print n[ip], ip}' access.log | sort -rn | head   # requêtes par IP
+    awk '{s += $10} END {print s/1024/1024 " Mo"}' access.log      # volume envoyé
+    awk '{s += $2} END {print s/NR}' mesures.txt                   # moyenne de la 2e colonne
+    df -h | awk 'NR > 1 && $5+0 > 80 {print $6, $5}'               # partitions remplies à plus de 80 %
+    ```
+
+??? example kw-cs-more "Avec d'autres commandes"
+    ```bash
+    ps aux | awk '$3 > 50 {print $2, $11}'                 # PID et programme à plus de 50 % de CPU
+    ip -4 -o addr show | awk '{print $2, $4}'               # interface et adresse
+    last | awk '{print $1}' | sort | uniq -c | sort -rn     # connexions par utilisateur
+    cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}'   # comptes qui ont un shell, et lequel
+    ```

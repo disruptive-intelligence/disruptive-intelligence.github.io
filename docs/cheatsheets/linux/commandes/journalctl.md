@@ -44,3 +44,45 @@ Pour comprendre : [Administration Linux, ch. 15](../../../library/it/linux/admin
 - Sans `sudo` (ni groupe `adm` ou `systemd-journal`), on ne voit que ses propres journaux.
 - Sur certaines distributions le journal est **volatil** (en mémoire, perdu au redémarrage) : il devient persistant si `/var/log/journal` existe.
 - Pour comparer avec d'autres sources (SIEM, autre machine), afficher en UTC : `--utc`.
+
+## Exemples
+
+??? example kw-cs-more "Lire"
+    ```bash
+    journalctl -e                       # ouvrir à la fin
+    journalctl -n 50 --no-pager         # les 50 dernières lignes
+    journalctl -r                       # plus récent d'abord
+    journalctl -f                       # en direct
+    journalctl -u nginx -u php8.3-fpm   # deux services ensemble
+    journalctl -k                       # le noyau
+    ```
+
+??? example kw-cs-more "Par période"
+    ```bash
+    journalctl --since today
+    journalctl --since yesterday --until today
+    journalctl --since "2026-10-01 08:00" --until "2026-10-01 12:00"
+    journalctl --since "30 min ago"
+    journalctl -b -1                    # le démarrage précédent
+    journalctl --list-boots             # la liste des démarrages
+    ```
+
+??? example kw-cs-more "Par gravité ou par source"
+    ```bash
+    journalctl -p err -b                # erreurs depuis le démarrage
+    journalctl -p warning..err          # une plage de gravité
+    journalctl _PID=1234                # un processus
+    journalctl _UID=1000                # tout ce qui vient de l'utilisateur 1000
+    journalctl _COMM=sshd -g "Failed"   # sshd, messages qui contiennent Failed
+    journalctl /usr/sbin/sshd           # par binaire
+    ```
+
+??? example kw-cs-more "Investigation et export"
+    ```bash
+    journalctl _COMM=sudo --since today --no-pager          # usage de sudo aujourd'hui
+    journalctl -u ssh -g "Accepted" --since "7 days ago"    # connexions SSH réussies sur 7 jours
+    journalctl -u ssh -o json --since today > ssh.json      # export JSON (SIEM, jq)
+    journalctl --utc -o short-iso --since today > journal-utc.log
+    journalctl --disk-usage                                 # place occupée
+    sudo journalctl --vacuum-size=500M                      # réduire à 500 Mo
+    ```

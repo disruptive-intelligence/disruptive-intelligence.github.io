@@ -40,3 +40,41 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 - Sans `-i`, **rien n'est modifié** : sed affiche seulement le résultat — pratique pour vérifier avant.
 - `-i` sans suffixe est irréversible : toujours `-i.bak` sur un fichier de configuration.
 - Les `/` d'un chemin cassent `s/…/…/` : les échapper (`\/`) ou changer de séparateur (`s#…#…#`).
+
+## Exemples
+
+??? example kw-cs-more "Remplacer"
+    ```bash
+    sed 's/http:/https:/' fichier          # 1re occurrence de chaque ligne
+    sed 's/http:/https:/g' fichier         # toutes les occurrences
+    sed 's/erreur/ERREUR/gI' fichier       # sans casse (GNU)
+    sed '3s/foo/bar/' fichier              # seulement à la ligne 3
+    sed '/^Listen/s/80/8080/' ports.conf   # seulement sur les lignes qui commencent par Listen
+    sed 's#/var/www#/srv/www#g' site.conf  # des chemins : autre séparateur
+    ```
+
+??? example kw-cs-more "Supprimer, extraire"
+    ```bash
+    sed '/^#/d' fichier                     # sans les commentaires
+    sed '/^\s*$/d' fichier                  # sans les lignes vides ou blanches
+    sed '1d' export.csv                     # sans la 1re ligne (en-tête)
+    sed -n '5,10p' fichier                  # lignes 5 à 10
+    sed -n '/BEGIN/,/END/p' fichier         # de la ligne BEGIN à la ligne END
+    sed -n '$p' fichier                     # la dernière ligne
+    ```
+
+??? example kw-cs-more "Modifier un fichier"
+    ```bash
+    sudo sed -i.bak 's/^#Port 22/Port 2222/' /etc/ssh/sshd_config   # décommente et change le port, copie .bak
+    sudo sed -i '/intranet.local/d' /etc/hosts                         # retire une ligne
+    sed -i '1i # Fichier généré automatiquement' config.ini            # ajoute une ligne au début
+    sed -i '$a derniere_ligne' fichier                                 # ajoute une ligne à la fin
+    sed -i 's/\r$//' script.sh                                         # retire les fins de ligne Windows (CRLF)
+    ```
+
+??? example kw-cs-more "Groupes et regex étendues"
+    ```bash
+    sed -E 's/([0-9]{1,3}\.){3}[0-9]{1,3}/x.x.x.x/g' access.log   # masque les adresses IP
+    sed -E 's/^([^:]+):.*/\1/' /etc/passwd                        # garde ce qui précède le premier « : »
+    sed -E 's/(.*)@(.*)/\2 \1/' emails.txt                        # domaine, puis utilisateur
+    ```

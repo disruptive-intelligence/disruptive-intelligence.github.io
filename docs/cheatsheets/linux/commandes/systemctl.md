@@ -42,3 +42,44 @@ Pour comprendre : [Administration Linux, ch. 14](../../../library/it/linux/admin
 - `enable` ne démarre pas (sauf `--now`) ; `start` n'active pas au démarrage.
 - Après avoir modifié un `.service` ou un `.timer` : `daemon-reload`, sinon systemd garde l'ancienne version.
 - Lire `status` : **Loaded** (fichier d'unité, `enabled`/`disabled`), **Active** (`running`, `exited`, `failed` et depuis quand), **Main PID**.
+
+## Exemples
+
+??? example kw-cs-more "Voir l'état"
+    ```bash
+    systemctl status nginx --no-pager -l         # état complet, lignes non tronquées
+    systemctl is-active nginx                    # active, inactive ou failed
+    systemctl --failed                           # services en échec
+    systemctl list-units --type=service --state=running
+    systemctl list-unit-files --state=enabled    # ce qui démarre avec la machine
+    systemctl list-dependencies nginx            # ce dont le service dépend
+    ```
+
+??? example kw-cs-more "Piloter"
+    ```bash
+    sudo systemctl restart nginx
+    sudo systemctl reload nginx || sudo systemctl restart nginx   # relire, sinon redémarrer
+    sudo systemctl enable --now fail2ban         # activer et démarrer
+    sudo systemctl disable --now cups            # désactiver et arrêter
+    sudo systemctl mask --now bluetooth          # interdire complètement
+    sudo systemctl reboot
+    ```
+
+??? example kw-cs-more "Inspecter et modifier"
+    ```bash
+    systemctl cat ssh                            # fichier d'unité et surcharges
+    systemctl show nginx -p ExecStart -p User -p MainPID
+    sudo systemctl edit nginx                    # surcharge propre (override.conf)
+    sudo systemctl edit --full nginx             # copie complète, modifiable
+    sudo systemctl daemon-reload                 # après toute modification
+    systemd-analyze blame | head                 # les services les plus lents au démarrage
+    ```
+
+??? example kw-cs-more "Investigation : persistance"
+    ```bash
+    systemctl list-unit-files --type=service --state=enabled --no-pager   # tout ce qui démarre
+    sudo find /etc/systemd/system -name "*.service" -newermt "2026-09-25" -ls   # unités créées récemment
+    grep -r "ExecStart" /etc/systemd/system/*.service                          # ce que lance chaque service ajouté
+    systemctl list-timers --all                  # minuteries
+    systemctl --user list-units --type=service   # services de l'utilisateur courant
+    ```

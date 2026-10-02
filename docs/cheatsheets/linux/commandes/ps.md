@@ -40,3 +40,33 @@ Pour comprendre : [Administration Linux, ch. 13](../../../library/it/linux/admin
 - Colonne **STAT** : `R` en cours, `S` endormi, `D` bloqué sur le disque, `Z` zombie, `T` stoppé ; `s` chef de session, `+` premier plan, `l` multi-thread.
 - **VSZ** / **RSS** : mémoire réservée / réellement occupée, en Ko. Un nom `[entre crochets]` est un thread du noyau.
 - `ps aux | grep x` se trouve lui-même : `pgrep -a x`. Et `ps` est une photo : `top` pour suivre.
+
+## Exemples
+
+??? example kw-cs-more "Lister"
+    ```bash
+    ps aux                                    # tout, format utilisateur
+    ps -ef                                    # tout, avec le PPID
+    ps auxf                                   # en arbre
+    ps -u www-data -o pid,etime,cmd           # les processus d'un utilisateur
+    ps -C sshd -o pid,ppid,cmd                # par nom de programme
+    ps -p 1234 -o pid,ppid,user,lstart,cmd    # un PID : parent, heure exacte de démarrage
+    ```
+
+??? example kw-cs-more "Trier et repérer"
+    ```bash
+    ps aux --sort=-%cpu | head -6                 # les 5 plus gourmands en processeur
+    ps aux --sort=-%mem | head -6                 # en mémoire
+    ps -eo pid,etime,cmd --sort=etime | head      # les derniers lancés
+    ps -eo pid,stat,cmd | awk '$2 ~ /Z/'          # les zombies
+    ps -eo user= | sort | uniq -c | sort -rn      # nombre de processus par utilisateur
+    ```
+
+??? example kw-cs-more "Investigation"
+    ```bash
+    ps -eo pid,ppid,user,cmd | grep -E "[n]c |ncat|socat|/tmp/|/dev/shm"   # suspects classiques
+    ps -o pid,ppid,cmd --ppid 1234                # les enfants de 1234
+    ps -eo pid,user,cmd | awk '$2 == "www-data" && $3 ~ /sh$/'   # un shell lancé par le serveur web
+    ls -l /proc/*/exe 2>/dev/null | grep deleted  # processus dont le binaire a été supprimé du disque
+    ps -eo pid,lstart,cmd | grep "[c]ron"         # depuis quand cron tourne
+    ```

@@ -40,3 +40,35 @@ Pour comprendre : [Administration Linux, ch. 17](../../../library/it/linux/admin
 - Ce que fait `ip` est **perdu au redémarrage** : NetworkManager (`nmcli`) ou netplan pour le rendre persistant.
 - Couper l'interface par laquelle on est connecté en SSH, c'est perdre la main sur la machine.
 - Correspondances : `ifconfig` → `ip a` · `route -n` → `ip route` · `arp -a` → `ip neigh`.
+
+## Exemples
+
+??? example kw-cs-more "Voir"
+    ```bash
+    ip -br a                    # adresses, en bref
+    ip -br link                 # interfaces et MAC, en bref
+    ip -4 a show eth0           # IPv4 d'une interface
+    ip route                    # routes IPv4
+    ip -6 route                 # routes IPv6
+    ip neigh                    # voisins (table ARP)
+    ip -s link show eth0        # compteurs de paquets et d'erreurs
+    ```
+
+??? example kw-cs-more "Modifier (jusqu'au redémarrage)"
+    ```bash
+    sudo ip addr add 192.168.1.51/24 dev eth0
+    sudo ip addr del 192.168.1.51/24 dev eth0
+    sudo ip link set eth1 up
+    sudo ip route add 10.20.0.0/16 via 192.168.1.254   # une route vers un autre réseau
+    sudo ip route replace default via 192.168.1.1      # changer la passerelle
+    sudo ip neigh flush dev eth0                       # vider le cache ARP
+    ```
+
+??? example kw-cs-more "Diagnostiquer"
+    ```bash
+    ip route get 8.8.8.8                           # quelle sortie pour joindre 8.8.8.8
+    ip -br a | grep -v DOWN                        # interfaces actives
+    ip -j a | jq -r '.[].addr_info[].local'        # toutes les adresses, via JSON
+    ip monitor                                     # changements réseau en direct
+    ip netns list                                  # espaces de noms réseau (conteneurs)
+    ```

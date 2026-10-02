@@ -41,3 +41,42 @@ Pour comprendre : [Administration Linux, ch. 22](../../../library/it/linux/admin
 - `f` est suivi du nom de l'archive : `-czf archive.tar.gz`, jamais `-cfz archive.tar.gz`.
 - tar retire le `/` initial des chemins : à l'extraction, `etc/hosts` arrive dans le dossier courant (ou `-C`), pas dans `/etc`.
 - Archive d'origine inconnue : la **lister** (`-t`) avant de l'extraire, elle peut écraser des fichiers existants.
+
+## Exemples
+
+??? example kw-cs-more "Créer"
+    ```bash
+    tar -czf sauvegarde.tar.gz dossier/                  # gzip
+    tar -cJf sauvegarde.tar.xz dossier/                  # xz : plus compact, plus lent
+    tar -czf etc-$(date +%F).tar.gz /etc                 # nom daté : etc-2026-10-02.tar.gz
+    tar -czpf conf.tar.gz /etc/nginx /etc/ssh            # plusieurs dossiers, droits conservés
+    tar -czf site.tar.gz --exclude='*.log' --exclude='cache' /var/www/site
+    tar -czf - /home/alice | ssh alice@192.168.1.20 "cat > alice.tar.gz"   # archive envoyée directement sur une autre machine
+    ```
+
+??? example kw-cs-more "Lister et vérifier"
+    ```bash
+    tar -tzf sauvegarde.tar.gz                       # le contenu
+    tar -tvzf sauvegarde.tar.gz | head               # avec droits, tailles, dates
+    tar -tzf sauvegarde.tar.gz | grep "nginx.conf"   # un fichier est-il dedans ?
+    gzip -t sauvegarde.tar.gz && echo OK             # l'archive est-elle intègre ?
+    ```
+
+??? example kw-cs-more "Extraire"
+    ```bash
+    tar -xzf sauvegarde.tar.gz                        # dans le dossier courant
+    tar -xzf sauvegarde.tar.gz -C /tmp/restau         # ailleurs
+    tar -xzf sauvegarde.tar.gz etc/ssh/sshd_config    # un seul fichier
+    tar -xf archive.tar.xz                            # tar reconnaît seul la compression à l'extraction
+    tar -xzf projet.tar.gz --strip-components=1       # sans le premier niveau de dossier
+    ```
+
+??? example kw-cs-more "Autres formats"
+    ```bash
+    gzip journal.log ; gunzip journal.log.gz       # compresser, décompresser un seul fichier
+    zcat journal.log.gz | less                    # lire sans décompresser
+    zip -r projet.zip projet/                     # créer un .zip
+    unzip -l projet.zip                           # le lister
+    unzip projet.zip -d /tmp/projet               # l'extraire ailleurs
+    7z x archive.7z                               # 7-Zip (paquet p7zip-full)
+    ```
