@@ -861,6 +861,8 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         meta["format"] = kind
     if props.get("provenance"):                        # badge : HTB Academy, L2I…
         meta["provenance"] = str(props["provenance"])
+    if props.get("resume"):                            # une phrase : pages de domaine et de rubrique
+        meta["resume"] = str(props["resume"]).strip()
     if str(props.get("statut") or "").strip().lower() in ("en cours", "brouillon"):   # note encore en rédaction
         meta["statut"] = "en cours"
     meta["revue"] = datetime.date.fromtimestamp(source.stat().st_mtime).isoformat()   # dernière modification

@@ -1,0 +1,92 @@
+# Une phrase par note de la Bibliothèque (titre exact → ce qu'on y apprend), affichée sous le titre sur les
+# pages de domaine et de rubrique. Une propriété « resume » dans la note Obsidian prend le dessus.
+# Courte (une ligne), concrète, sans « Ce cours… ».
+
+# Cyber — CTI & renseignement
+"CTI — les fondamentaux": "Le cycle du renseignement, l'analyse, le profilage d'acteur et la production, des bases au programme CTI."
+"Cyber Threat Intelligence — analyser et réduire l'incertitude": "Le métier d'analyste, du besoin au produit diffusé, avec trois cas déroulés de bout en bout."
+"APT — menaces persistantes avancées": "Les acteurs étatiques pays par pays (Russie, Chine, Corée du Nord, Iran…), l'OT et l'attribution."
+"APT — synthèse": "L'essentiel du cours APT : acteurs, modes opératoires, géopolitique et études de cas."
+"Panorama de la cybermenace — état de l'art": "Acteurs étatiques, industrie cybercriminelle, vecteurs émergents et cadres de réponse."
+"Cartographie des écosystèmes cybercriminels": "Cartographier entités, liens et économie du cybercrime, avec rigueur et contre-analyse."
+"Dark Web": "Infrastructures, économie clandestine et investigation encadrée sur le dark web."
+"Modèles d'analyse de la menace": "Pyramid of Pain, Kill Chain, UKC, modèle Diamant et MITRE ATT&CK pour structurer l'analyse."
+"Red teaming analytique": "Penser comme l'adversaire, techniques structurées et exercices pour stress-tester une organisation."
+"Guerre informationnelle et opérations d'influence (L2I)": "Modes opératoires, détection, contre-influence et IA générative dans la guerre de l'information."
+"Intelligence économique": "Veille, protection du patrimoine, due diligence et influence au service de l'entreprise."
+"OPSEC & privacy": "Threat modeling, compartimentation, isolation et communications sûres, illustrés par quatre profils."
+
+# Cyber — OSINT
+"OSINT — cours complet": "Méthode d'enquête, personnes, entreprises, image, géolocalisation et vérification en sources ouvertes."
+"OSINT — synthèse": "Le parcours OSINT condensé, de la posture de l'enquêteur à la production du renseignement."
+"FININT — investigation financière": "Suivre l'argent : sources financières, sociétés écrans, analyse de flux et typologies de fraude."
+"OSINT & cryptoactifs": "Lire une blockchain, tracer des fonds et reconnaître blanchiment et cashout."
+"HUMINT & social engineering": "L'ingénierie sociale numérique et physique, côté attaquant puis côté défense."
+"Python pour l'OSINT et le scraping": "Collecter, nettoyer et automatiser une enquête avec Python, jusqu'à un projet complet."
+
+# Cyber — Forensic, Hardening
+"Investigation numérique (forensic)": "Acquérir les preuves, analyser disque, mémoire et réseau, puis produire un rapport recevable."
+"Sécurité système Windows": "Comptes, GPO, UAC, authentification, correctifs, antivirus et journalisation sous Windows."
+"Identités et contrôle d'accès": "IAAA, facteurs d'authentification, cycle de vie des accès, RBAC et ABAC."
+"Sécurité applicative (AppSec)": "Vulnérabilités web, API, supply chain, DevSecOps et protection en production."
+
+# Cyber — Détection & réponse
+"Analyste SOC": "Détecter, investiguer par domaine, dérouler des use cases et chasser la menace."
+"Réponse à incident": "Préparer, qualifier, investiguer, confiner, éradiquer et capitaliser — avec la gestion de crise."
+"Réponse à incident — synthèse": "Les phases NIST de la réponse à incident, en version courte et pratique."
+
+# Cyber — Vulnérabilités & MCS
+"Vulnerability management & intelligence": "Sources, scoring, exploitabilité réelle et priorisation des vulnérabilités en entreprise."
+"Maintien en condition de sécurité (MCS)": "Tenir un système sûr dans la durée : correctifs, configuration, obsolescence et industrialisation."
+"Gestion de la surface d'attaque (ASM)": "Les surfaces d'attaque, la démarche ASM en cinq étapes et ses outils."
+
+# Cyber — Gouvernance & résilience
+"Gouvernance, risques et conformité (GRC)": "Gouvernance, analyse de risques, réglementation (NIS2, DORA…), tiers et continuité."
+"Sécurité IT en entreprise": "Inventaire, phishing, navigation, correctifs, analyse de risque et protection des données."
+"Sauvegardes et reprise d'activité": "Types de sauvegarde, restauration, sécurité des sauvegardes et reprise après sinistre."
+
+# Cyber — IA, outils, concepts
+"IA et sécurité": "Les menaces propres à l'IA, la sécurisation de ses déploiements et l'IA offensive et défensive."
+"Travailler avec un agent de code": "AGENTS.md, hiérarchie des instructions et pièges comme l'injection de prompt indirecte."
+"VirusTotal": "Lire un score VirusTotal sans se tromper : résultats anciens, hash ou URL, faux positifs."
+"Solutions de sécurité": "IDS, pare-feu, EDR, sandbox, DLP, WAF, proxy : à quoi sert chaque brique."
+"Taxonomie de la cybersécurité": "La carte complète de la cyber : principes, surfaces, vulnérabilités, attaques et défense."
+"Menaces, attaques et malwares": "Ingénierie sociale, attaques réseau et mots de passe, familles de malwares et parades."
+"Architecture et sécurité des systèmes": "CPU, systèmes d'exploitation, mémoire, matériel et sécurité physique."
+"Cybersécurité du quotidien": "Protéger ses appareils, comptes, communications et vie privée au quotidien."
+"VPN": "Ce qu'un VPN protège vraiment, et ce qu'il ne protège pas."
+
+# IT — Linux, Windows, Active Directory
+"Administration Linux": "Du terminal à l'automatisation : fichiers, droits, processus, réseau, entretien et diagnostic."
+"Linux — prises de notes": "Mes notes Linux : système, investigation, fichiers et flux, réseau, disques et check-lists."
+"Windows en profondeur": "Architecture, processus, credentials, sécurité, journaux et artefacts de Windows."
+"Ligne de commande Windows": "CMD de A à Z : fichiers, texte, administration, diagnostic et automatisation."
+"PowerShell": "Administrer Windows, le réseau et l'Active Directory, puis automatiser et défendre avec PowerShell."
+"Windows — fiche cyber": "Les points de Windows qui comptent en sécurité : permissions, services, identités, registre."
+"Analyse des journaux d'événements Windows (Event Logs)": "Lire, filtrer et interpréter les journaux Windows : Event IDs, logons, détection."
+"CMD — aide-mémoire": "Les commandes CMD les plus utiles, rangées par usage."
+"Active Directory": "Fonctionnement, authentification, attaques, détection et durcissement de l'annuaire."
+
+# IT — Réseau, web
+"Réseau — prises de notes": "OSI, TCP/IP, protocoles courants et sécurisés, composants réseau."
+"PDU, headers, payload & encapsulation": "Ce que chaque couche ajoute à un paquet, en un schéma."
+"Fonctionnement du web : URL, DNS, HTTPS": "Ce qui se passe entre la saisie d'une URL et l'affichage de la page."
+"HTTP & requêtes web": "Lire et forger des requêtes HTTP avec cURL et les DevTools."
+"Applications web": "Architecture d'une application web, failles côté client et serveur, méthode d'audit."
+
+# IT — Infrastructure, scripting, conteneurs, prospective
+"Infrastructure IT": "Réseau, systèmes, stockage, identité, cloud et exploitation d'une infrastructure."
+"Architecture des systèmes d'information": "Lire puis concevoir une architecture : composants, zones, flux et vue cyber."
+"Matériel informatique & connectique": "Composants, serveurs, écrans, connectiques, réseau physique et énergie."
+"Bash": "Écrire ses scripts Bash pas à pas : variables, conditions, boucles, fonctions et fichiers."
+"Bash — prises de notes": "Mes notes Bash, de la variable au script complet."
+"Python": "Python pas à pas : types, conditions, boucles, fonctions, fichiers et scripts utiles."
+"JavaScript": "La sécurité côté client et une synthèse du langage."
+"SQL": "Interroger, croiser, modifier et structurer une base de données."
+"Assembleur": "Registres, mémoire, pile et fonctions, jusqu'à la lecture de binaires."
+"Docker": "Comprendre la conteneurisation et faire ses premiers pas avec Docker."
+"Kubernetes": "Pourquoi Kubernetes existe et ce qu'il orchestre."
+"Conteneurs — Docker & Kubernetes": "Construire, orchestrer, exploiter et sécuriser des conteneurs."
+"Ansible": "Automatiser l'administration : inventaire, playbooks, modules, templates et vault."
+"Systèmes technologiques (vol. 1)": "Une méthode pour lire une technologie et ses conditions de diffusion."
+"Frontières technologiques (vol. 2)": "L'atlas des technologies émergentes, leurs convergences et leur veille."

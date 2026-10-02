@@ -1,8 +1,9 @@
 # Parcours d'apprentissage de la Bibliothèque (pages « 🎓 Parcours » et accueil).
 # Une étape = le titre exact d'une note publiée (data/bibliotheque.yml) + une phrase « pourquoi ».
-# Une étape dont la note n'est pas (encore) publiée est ignorée.
+# Une étape dont la note n'est pas (encore) publiée est ignorée. domaine : cyber | it (page du domaine).
 
 - id: debuter
+  domaine: cyber
   titre: Débuter en cybersécurité
   description: Les notions de base, les grandes familles d'attaques et les principes défensifs qui reviennent partout.
   etapes:
@@ -26,6 +27,7 @@
       pourquoi: La carte complète, à consulter quand une notion revient.
 
 - id: analyste-soc
+  domaine: cyber
   titre: Devenir analyste SOC
   description: Connaître les systèmes surveillés, savoir ce qu'on cherche, puis détecter, investiguer et répondre.
   etapes:
@@ -49,6 +51,7 @@
       pourquoi: Aller jusqu'à la preuve sur disque et en mémoire.
 
 - id: osint
+  domaine: cyber
   titre: Apprendre l'OSINT
   description: La méthode d'enquête en sources ouvertes, la protection de l'enquêteur et les terrains spécialisés.
   etapes:
@@ -68,6 +71,7 @@
       pourquoi: Enquêter sur la blockchain.
 
 - id: conteneurs
+  domaine: it
   titre: Conteneurs, de Docker à Kubernetes
   description: Conteneuriser une application, l'orchestrer, puis tout reprendre en profondeur, sécurité comprise.
   etapes:
