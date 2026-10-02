@@ -1709,9 +1709,11 @@ def expand_reprises(markdown, src, docs_dir):
         if not path.exists():
             raise PluginError(f"{src} : reprise introuvable « {m.group(0).strip()} »")
         body, meta = get_data(path.read_text(encoding="utf-8"))
-        lines, start = body.split("\n"), None
+        lines, start, fence = body.split("\n"), None, False
         for i, line in enumerate(lines):
-            h = HEADING.match(line)
+            if line.lstrip().startswith("```"):
+                fence = not fence
+            h = None if fence else HEADING.match(line)
             if start is None and h and len(h.group(1)) == 3 and h.group(2) == title:
                 start = i
             elif start is not None and h and len(h.group(1)) <= 3:

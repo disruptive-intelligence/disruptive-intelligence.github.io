@@ -16,15 +16,25 @@ Les incontournables : `adduser` · `usermod -aG` · `passwd` · `usermod -L` · 
 ### Créer un utilisateur
 
 ```bash title="Commande"
-sudo adduser <utilisateur>
+sudo adduser <utilisateur>   # interactif (Debian, Ubuntu)
+sudo useradd -m <utilisateur>   # non interactif, toutes distributions
 ```
 
 ```bash title="Exemple"
-sudo adduser alice   # interactif : mot de passe, nom complet…
+sudo adduser alice
 ```
 
+??? example "Sortie"
+    ```text
+    info: Adding user `alice' ...
+    info: Adding new group `alice' (1001) ...
+    info: Adding new user `alice' (1001) with group `alice (1001)' ...
+    info: Creating home directory `/home/alice' ...
+    New password:
+    ```
+
 ```bash title="Exemple 2"
-sudo useradd -m -s /bin/bash -G sudo alice   # non interactif : dossier, shell et groupe sudo
+sudo useradd -m -s /bin/bash -G sudo alice   # dossier, shell bash, groupe sudo
 ```
 
 Pour comprendre : [Administration Linux, ch. 10](../../../library/it/linux/administration-linux/03-partie-3-qui-a-le-droit-de-quoi/02-chapitre-10-propriete-utilisateurs-et-groupes.md)
@@ -33,7 +43,8 @@ Pour comprendre : [Administration Linux, ch. 10](../../../library/it/linux/admin
 ### Changer un mot de passe
 
 ```bash title="Commande"
-sudo passwd <utilisateur>
+sudo passwd <utilisateur>   # nouveau mot de passe
+sudo chage -l <utilisateur>   # dates d'expiration
 ```
 
 ```bash title="Exemple"
@@ -41,14 +52,21 @@ sudo passwd alice
 ```
 
 ```bash title="Exemple 2"
-sudo chage -l alice   # dates d'expiration du mot de passe
+sudo chage -l alice
 ```
+
+??? example "Sortie"
+    ```text
+    Last password change					: Oct 01, 2026
+    Password expires					: never
+    Account expires						: never
+    ```
 
 ### Verrouiller ou déverrouiller un compte
 
 ```bash title="Commande"
-sudo usermod -L <utilisateur>
-sudo usermod -U <utilisateur>
+sudo usermod -L <utilisateur>   # verrouiller
+sudo usermod -U <utilisateur>   # déverrouiller
 ```
 
 ```bash title="Exemple"
@@ -62,18 +80,18 @@ sudo usermod -s /usr/sbin/nologin alice   # interdit aussi la connexion par clé
 ### Changer d'utilisateur
 
 ```bash title="Commande"
-su - <utilisateur>
-sudo -iu <utilisateur>
+su - <utilisateur>        # demande le mot de passe de cet utilisateur
+sudo -iu <utilisateur>    # demande le mien (droits sudo)
 ```
 
 ```bash title="Exemple"
-sudo -iu www-data   # shell de connexion en tant que www-data
+sudo -iu www-data
 ```
 
 ### Supprimer un utilisateur
 
 ```bash title="Commande"
-sudo deluser --remove-home <utilisateur>
+sudo deluser --remove-home <utilisateur>   # userdel -r sur RHEL
 ```
 
 ```bash title="Exemple"
@@ -88,7 +106,7 @@ sudo deluser --remove-home alice
 ### Ajouter un utilisateur à un groupe
 
 ```bash title="Commande"
-sudo usermod -aG <groupe> <utilisateur>
+sudo usermod -aG <groupe> <utilisateur>   # -a : ajoute (sans -a : remplace)
 ```
 
 ```bash title="Exemple"
@@ -111,7 +129,7 @@ sudo groupadd projet-x
 ### Donner un droit sudo précis
 
 ```bash title="Commande"
-sudo visudo -f /etc/sudoers.d/<fichier>
+sudo visudo -f /etc/sudoers.d/<fichier>   # éditeur qui vérifie la syntaxe
 ```
 
 ```bash title="Exemple"

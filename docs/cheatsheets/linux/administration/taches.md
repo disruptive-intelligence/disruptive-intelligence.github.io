@@ -16,13 +16,19 @@ Les incontournables : `crontab -l` · `crontab -e` · `/etc/cron.*` · `systemct
 ### Lister les tâches cron d'un utilisateur
 
 ```bash title="Commande"
-crontab -l
-sudo crontab -l -u <utilisateur>
+crontab -l                           # les miennes
+sudo crontab -l -u <utilisateur>     # celles d'un autre
 ```
 
 ```bash title="Exemple"
 sudo crontab -l -u www-data
 ```
+
+??? example "Sortie"
+    ```text
+    # m h  dom mon dow   command
+    */5 * * * * /usr/bin/php /var/www/site/cron.php > /dev/null 2>&1
+    ```
 
 Pour comprendre : [Administration Linux, ch. 16](../../../library/it/linux/administration-linux/04-partie-4-la-machine-vivante/04-chapitre-16-taches-planifiees.md)
 { .kw-cs-meta }
@@ -30,7 +36,7 @@ Pour comprendre : [Administration Linux, ch. 16](../../../library/it/linux/admin
 ### Ajouter une tâche cron
 
 ```bash title="Commande"
-crontab -e
+crontab -e   # une ligne = minute heure jour mois jour_semaine commande
 ```
 
 ```bash title="Exemple"
@@ -44,30 +50,44 @@ crontab -e
 ### Voir toutes les tâches planifiées du système
 
 ```bash title="Commande"
-ls -la /etc/cron.*
-cat /etc/crontab
+ls -la /etc/cron.*    # dossiers cron du système
+cat /etc/crontab      # crontab système
 ```
 
 ```bash title="Exemple"
-sudo grep -R . /etc/cron* /var/spool/cron 2>/dev/null   # tout le contenu, fichier par fichier
+sudo grep -R . /etc/cron* /var/spool/cron 2>/dev/null | grep -v '#'
 ```
+
+??? example "Sortie"
+    ```text
+    /etc/cron.d/certbot:0 */12 * * * root test -x /usr/bin/certbot && certbot -q renew
+    /etc/crontab:17 *	* * *	root	cd / && run-parts --report /etc/cron.hourly
+    /var/spool/cron/crontabs/www-data:*/5 * * * * /usr/bin/php /var/www/site/cron.php
+    ```
 
 ## systemd et at
 
 ### Lister les timers systemd
 
 ```bash title="Commande"
-systemctl list-timers --all
+systemctl list-timers --all   # NEXT, LEFT, LAST, PASSED, UNIT
 ```
 
 ```bash title="Exemple"
-systemctl list-timers --all --no-pager
+systemctl list-timers --no-pager | head -3
 ```
+
+??? example "Sortie"
+    ```text
+    NEXT                        LEFT        LAST                        PASSED     UNIT                ACTIVATES
+    Thu 2026-10-02 10:39:00 UTC 18min       Thu 2026-10-02 10:09:00 UTC 11min ago  phpsessionclean.timer phpsessionclean.service
+    Fri 2026-10-03 00:00:00 UTC 13h         Thu 2026-10-02 00:00:00 UTC 10h ago    logrotate.timer     logrotate.service
+    ```
 
 ### Créer un timer systemd
 
 ```bash title="Commande"
-sudo nano /etc/systemd/system/<nom>.timer
+sudo nano /etc/systemd/system/<nom>.timer   # lance <nom>.service, du même nom
 ```
 
 ```ini title="Exemple"
@@ -81,7 +101,6 @@ WantedBy=timers.target
 
 ```bash title="Exemple 2"
 sudo systemctl daemon-reload && sudo systemctl enable --now sauvegarde.timer
-# le timer lance sauvegarde.service, du même nom
 ```
 
 Ensuite : [créer un service pour un script](services.md#creer-un-service-pour-un-script)
@@ -90,15 +109,21 @@ Ensuite : [créer un service pour un script](services.md#creer-un-service-pour-u
 ### Programmer une commande une seule fois
 
 ```bash title="Commande"
-echo "<commande>" | at <heure>
+echo "<commande>" | at <heure>   # atq : tâches en attente, atrm : en supprimer
 ```
 
 ```bash title="Exemple"
 echo "/opt/scripts/rapport.sh" | at 18:00
 ```
 
+??? example "Sortie"
+    ```text
+    warning: commands will be executed using /bin/sh
+    job 3 at Thu Oct  2 18:00:00 2026
+    ```
+
 ```bash title="Exemple 2"
-atq   # tâches en attente
+atq
 ```
 
 ## Repères : lire une ligne cron

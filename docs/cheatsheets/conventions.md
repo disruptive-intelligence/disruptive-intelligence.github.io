@@ -10,11 +10,13 @@ de la commande : c'est ce qu'on cherche quand on est sur le poste.
 
 Sous chaque besoin :
 
-1. **Commande** — la forme neutre, à adapter.
+1. **Commande** — la forme neutre, à adapter ; un commentaire `#` dit ce que fait chaque ligne.
 2. **Exemple** — une version concrète qui fonctionne telle quelle.
-3. **Exemple 2** — quand la commande est complexe : une variante, un filtre, un cas réel.
-4. **Attention** — seulement si c'est risqué (droits root, destructif, bruyant).
-5. **Ensuite** — l'étape logique suivante ; **Pour comprendre** — le chapitre du cours dans la Bibliothèque.
+3. **Sortie** — à déplier : ce que l'exemple affiche (une seule fois par besoin ; absente pour une commande
+   interactive ou qui n'affiche rien).
+4. **Exemple 2** — quand la commande est complexe : une variante, un filtre, un cas réel.
+5. **Attention** — seulement si c'est risqué (droits root, destructif, bruyant).
+6. **Ensuite** — l'étape logique suivante ; **Pour comprendre** — le chapitre du cours dans la Bibliothèque.
 
 ## Paramètres
 

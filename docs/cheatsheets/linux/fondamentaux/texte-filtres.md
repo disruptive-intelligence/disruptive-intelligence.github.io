@@ -16,12 +16,20 @@ Les incontournables : `cut` · `sort | uniq -c` · `sed` · `grep -v` · `awk` �
 ### Extraire une colonne
 
 ```bash title="Commande"
-cut -d'<séparateur>' -f<N> <fichier>
+cut -d'<séparateur>' -f<N> <fichier>   # -d séparateur, -f numéro du champ
 ```
 
 ```bash title="Exemple"
-cut -d: -f1 /etc/passwd   # noms des comptes
+cut -d: -f1 /etc/passwd | head -4
 ```
+
+??? example "Sortie"
+    ```text
+    root
+    daemon
+    bin
+    sys
+    ```
 
 ```bash title="Exemple 2"
 awk -F: '$3 >= 1000 {print $1, $6}' /etc/passwd   # comptes « humains » et leur dossier
@@ -33,56 +41,89 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 ### Extraire avec une expression régulière
 
 ```bash title="Commande"
-grep -oE '<regex>' <fichier>
+grep -oE '<regex>' <fichier>   # -o : seulement la correspondance, -E : regex étendue
 ```
 
 ```bash title="Exemple"
-grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' /var/log/auth.log | sort -u   # toutes les IP citées
+grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' /var/log/auth.log | sort -u
 ```
+
+??? example "Sortie"
+    ```text
+    192.168.1.23
+    192.168.1.40
+    203.0.113.7
+    ```
 
 ### Exclure des lignes (commentaires, lignes vides)
 
 ```bash title="Commande"
-grep -v '<motif>' <fichier>
+grep -v '<motif>' <fichier>   # -v : inverse la sélection
 ```
 
 ```bash title="Exemple"
-grep -vE '^\s*(#|$)' /etc/ssh/sshd_config   # la configuration réellement active
+grep -vE '^\s*(#|$)' /etc/ssh/sshd_config
 ```
+
+??? example "Sortie"
+    ```text
+    Include /etc/ssh/sshd_config.d/*.conf
+    KbdInteractiveAuthentication no
+    UsePAM yes
+    X11Forwarding yes
+    Subsystem sftp /usr/lib/openssh/sftp-server
+    ```
 
 ## Compter et trier
 
 ### Trier et compter les occurrences
 
 ```bash title="Commande"
-<commande> | sort | uniq -c | sort -rn
+<commande> | sort | uniq -c | sort -rn   # uniq ne regroupe que des lignes voisines : sort d'abord
 ```
 
 ```bash title="Exemple"
-cut -d' ' -f1 /var/log/nginx/access.log | sort | uniq -c | sort -rn | head   # IP les plus actives
+cut -d' ' -f1 /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -3
 ```
+
+??? example "Sortie"
+    ```text
+       4821 203.0.113.7
+        312 192.168.1.23
+         41 192.168.1.40
+    ```
 
 ### Compter des lignes
 
 ```bash title="Commande"
-wc -l <fichier>
+wc -l <fichier>   # -w mots, -c octets
 ```
 
 ```bash title="Exemple"
-grep -c "Failed password" /var/log/auth.log   # nombre de lignes qui correspondent
+grep -c "Failed password" /var/log/auth.log
 ```
+
+??? example "Sortie"
+    ```text
+    137
+    ```
 
 ## Transformer
 
 ### Remplacer du texte
 
 ```bash title="Commande"
-sed 's/<ancien>/<nouveau>/g' <fichier>
+sed 's/<ancien>/<nouveau>/g' <fichier>   # affiche le résultat sans modifier le fichier
 ```
 
 ```bash title="Exemple"
-sed 's/http:/https:/g' liens.txt   # affiche le résultat, ne modifie rien
+echo "http://intranet.local/rapport" | sed 's/http:/https:/g'
 ```
+
+??? example "Sortie"
+    ```text
+    https://intranet.local/rapport
+    ```
 
 ```bash title="Exemple 2"
 sudo sed -i.bak 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
@@ -95,38 +136,52 @@ sudo sed -i.bak 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_confi
 ### Changer un séparateur ou la casse
 
 ```bash title="Commande"
-tr '<de>' '<vers>'
+tr '<de>' '<vers>'   # tr -d '<car>' : supprime le caractère
 ```
 
 ```bash title="Exemple"
-tr ':' '\t' < /etc/passwd
+head -2 /etc/passwd | tr ':' ' '
 ```
 
+??? example "Sortie"
+    ```text
+    root x 0 0 root /root /bin/bash
+    daemon x 1 1 daemon /usr/sbin /usr/sbin/nologin
+    ```
+
 ```bash title="Exemple 2"
-tr 'A-Z' 'a-z' < liste.txt
+tr 'A-Z' 'a-z' < liste.txt   # tout en minuscules
 ```
 
 ### Afficher en tableau aligné
 
 ```bash title="Commande"
-column -t -s'<séparateur>'
+column -t -s'<séparateur>'   # -t : tableau, -s : séparateur d'entrée
 ```
 
 ```bash title="Exemple"
-column -t -s: /etc/passwd | less -S
+head -3 /etc/passwd | column -t -s:
 ```
+
+??? example "Sortie"
+    ```text
+    root    x  0  0  root    /root      /bin/bash
+    daemon  x  1  1  daemon  /usr/sbin  /usr/sbin/nologin
+    bin     x  2  2  bin     /bin       /usr/sbin/nologin
+    ```
 
 ## Enchaîner et enregistrer
 
 ### Envoyer la sortie dans un fichier
 
 ```bash title="Commande"
-<commande> > <fichier>    # écrase
+<commande> > <fichier>    # remplace le contenu du fichier
 <commande> >> <fichier>   # ajoute à la fin
+<commande> 2>/dev/null    # jette les messages d'erreur
 ```
 
 ```bash title="Exemple"
-find / -perm -4000 2>/dev/null > suid.txt   # résultats dans le fichier, erreurs jetées
+find / -perm -4000 2>/dev/null > suid.txt
 ```
 
 Pour comprendre : [Administration Linux, ch. 7](../../../library/it/linux/administration-linux/02-partie-2-manipuler-le-systeme-de-fichiers/03-chapitre-7-liens-redirections-et-tuyaux.md)
@@ -135,13 +190,19 @@ Pour comprendre : [Administration Linux, ch. 7](../../../library/it/linux/admini
 ### Voir la sortie et l'enregistrer en même temps
 
 ```bash title="Commande"
-<commande> | tee <fichier>
+<commande> | tee <fichier>   # -a : ajoute au lieu de remplacer
 ```
 
 ```bash title="Exemple"
 sudo ss -tunap | tee connexions.txt
 ```
 
+??? example "Sortie"
+    ```text
+    Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+    tcp   ESTAB  0      0      192.168.1.50:22     192.168.1.23:51544 users:(("sshd",pid=5123,fd=4))
+    ```
+
 ```bash title="Exemple 2"
-sudo ss -tunap | tee -a journal-intervention.txt   # -a : ajoute au fichier
+sudo ss -tunap | tee -a journal-intervention.txt
 ```
