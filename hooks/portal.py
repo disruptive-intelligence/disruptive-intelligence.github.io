@@ -1706,7 +1706,7 @@ def page_library_index(library, themes, glossary_count):
         f'<nav class="kw-mast__nav">{nav}</nav></div>')
     une = ""
     if recent:
-        f0, rest = recent[0], recent[1:5]
+        f0, rest = recent[0], recent[1:4]
         cat = cat_of.get(f0["src"])
         une = (section_bar("À la une")
                + '<div class="kw-une">'
@@ -1753,9 +1753,9 @@ hide:
   - toc
 ---
 {masthead}
-{une}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
+{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
 <div class="kw-courses">{paths}</div>
-{doms}{section_bar("Les outils")}
+{section_bar("Les outils")}
 <div class="kw-libgrid">
 <a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {len(all_notes)} notes publiées : un mot, une commande, un acteur.</span></a>
 <a class="kw-card" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">📖 Glossaire & notions</span><span class="kw-card__text">{glossary_count} définitions de A à Z et {len(fiches)} fiches notions pour aller à l'essentiel.</span></a>
