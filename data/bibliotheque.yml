@@ -57,7 +57,7 @@
       debut: Analyste SOC
       mots: [SOC, supervision, réponse à incident, incident de sécurité, threat hunting, MITRE, ATT&CK, kill chain, EDR, SIEM]
       notes: [Analyste SOC, Réponse à incident, Réponse à incident — synthèse]
-      liens: [Modèles d'analyse de la menace, "MTTD, MTTC, MTTR"]
+      liens: [Modèles d'analyse de la menace, "MTTD, MTTC, MTTR", "Analyse des journaux d'événements Windows (Event Logs)"]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
@@ -110,7 +110,7 @@
       description: Comprendre Windows de l'intérieur et l'administrer en ligne de commande.
       debut: Windows en profondeur
       mots: [Windows, PowerShell]
-      notes: [Windows en profondeur, Ligne de commande Windows, PowerShell, Windows — fiche cyber, CMD — aide-mémoire]
+      notes: [Windows en profondeur, Ligne de commande Windows, PowerShell, Windows — fiche cyber, "Analyse des journaux d'événements Windows (Event Logs)", CMD — aide-mémoire]
     - id: active-directory
       label: 🏰 Active Directory
       description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.

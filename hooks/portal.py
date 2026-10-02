@@ -1667,19 +1667,99 @@ def nav_srcs(nav):
     return out
 
 
-def page_cs_needs(pages, order):
-    """« Que veux-tu faire ? » : tous les besoins de toutes les fiches, avec un filtre."""
+CS_COMMANDS = f"{CS_DIR}/commandes.md"
+CS_EQUIV = f"{CS_DIR}/linux-windows.md"
+CS_CODE = re.compile(r'^```(\w+)\s+title="(Commande|Exemple|Exemple 2)"\s*$')
+CMD_SPLIT = re.compile(r"\|\||\||&&|;|\$\(|`|-exec\s|\bxargs\s")
+CMD_NAME = re.compile(r"^[a-z][a-z0-9._-]*$")
+
+
+def cs_entry_commands(body, known=()):
+    """[(groupe, besoin, commandes de la forme neutre, commandes vues seulement dans les exemples)] :
+    le premier mot de chaque segment de ligne (sudo écarté), dans les blocs bash « Commande » et
+    « Exemple » de chaque besoin. Hors forme neutre, seuls les noms connus (data/commandes.yml) comptent :
+    une ligne de configuration dans un exemple ne devient pas une commande."""
+    out, group, need, block, fence = [], "", None, None, False
+    for line in body.split("\n"):
+        if line.lstrip().startswith("```"):
+            m = CS_CODE.match(line.strip()) if not fence else None
+            block = (m.group(2) if m.group(1) == "bash" else None) if m else None
+            fence = not fence
+            continue
+        if fence:
+            if block and need is not None and not line.lstrip().startswith("#"):
+                code = re.sub(r"\s#\s.*$", "", line)
+                for seg in CMD_SPLIT.split(code):
+                    words = [w for w in seg.strip().lstrip("(!").split() if not re.match(r"^\w+=", w)]
+                    if words and words[0] == "sudo" and len(words) > 1 and not words[1].startswith("-"):
+                        words = words[1:]
+                    name = words[0] if words else ""
+                    if CMD_NAME.match(name):
+                        (out[-1][2] if block == "Commande" else out[-1][3]).append(name)
+            continue
+        m = HEADING.match(line)
+        if m and len(m.group(1)) == 2:
+            group, need = m.group(2), None
+        elif m and len(m.group(1)) == 3:
+            need = m.group(2)
+            out.append((group, need, [], []))
+    res = []
+    for g, n, prim, sec in out:
+        prim = list(dict.fromkeys(prim))
+        sec = [c for c in dict.fromkeys(sec) if c not in prim and c in known]
+        res.append((g, n, prim, sec))
+    return res
+
+
+def cs_command_index(pages, order, known):
+    """{commande: {"main": [(besoin, src)], "also": [(besoin, src)]}} sur les fiches de l'onglet,
+    dans l'ordre du menu ; les fiches commande (méta « commande ») n'y participent pas."""
+    srcs = [s for s in order if s in pages] + [s for s in pages if s not in order]
+    index = {}
+    for src in srcs:
+        if pages[src][2].get("commande"):
+            continue
+        for _, need, prim, sec in cs_entry_commands(pages[src][1], known):
+            for key, names in (("main", prim), ("also", sec)):
+                for name in names:
+                    index.setdefault(name, {"main": [], "also": []})[key].append((need, src))
+    return index
+
+
+def cs_command_fiches(pages):
+    """{commande: src} des fiches commande (méta « commande »)."""
+    return {str(m["commande"]): src for src, (_, _, m) in pages.items() if m.get("commande")}
+
+
+def win_cmds(info, key):
+    """Équivalent(s) Windows d'une commande (data/commandes.yml : texte ou liste), en code."""
+    v = info.get(key)
+    return [f"`{x}`" for x in (v if isinstance(v, list) else [v] if v else [])]
+
+
+def cs_need_link(need, src, base):
     from markdown.extensions.toc import slugify as toc_slugify
-    known = [s for s in order if s in pages] + [s for s in pages if s not in order]
+    return f"[{esc(need)}]({posixpath.relpath(src, posixpath.dirname(base))}#{toc_slugify(need, '-')})"
+
+
+def page_cs_needs(pages, order, known=()):
+    """« Que veux-tu faire ? » : tous les besoins de toutes les fiches, avec un filtre (qui trouve aussi
+    une commande : chaque besoin porte ses commandes)."""
+    known_srcs = [s for s in order if s in pages] + [s for s in pages if s not in order]
     body = ""
-    for src in known:
+    for src in known_srcs:
         title, text, meta = pages[src]
-        items = [(g, n) for g, n in cs_entries(text)]
+        if meta.get("commande"):
+            continue
         lines = []
         if meta.get("besoin"):
             lines.append(f'- [{esc(meta["besoin"])}]({posixpath.relpath(src, CS_DIR)})')
-        lines += [f'- [{esc(n)}]({posixpath.relpath(src, CS_DIR)}#{toc_slugify(n, "-")})'
-                  + (f' <span class="kw-note-meta">{esc(g)}</span>' if g else "") for g, n in items]
+        for g, n, prim, sec in cs_entry_commands(text, known):
+            chips = " ".join(f"<code>{esc(c)}</code>" for c in prim)
+            lines.append(f"- {cs_need_link(n, src, CS_NEEDS)}"
+                         + (f' <span class="kw-note-meta">{esc(g)}</span>' if g else "")
+                         + (f' <span class="kw-cs-cmds">{chips}</span>' if chips else "")
+                         + (f' <span class="kw-cs-hidden">{esc(" ".join(sec))}</span>' if sec else ""))
         if lines:
             body += f'\n<div class="kw-cs-needgroup" markdown>\n\n## {" › ".join(cs_trail(src, pages))}\n\n' + "\n".join(lines) + "\n\n</div>\n"
     total = body.count("\n- [")
@@ -1689,10 +1769,122 @@ hide:
 ---
 # 🔎 Que veux-tu faire ?
 
-Tous les besoins de toutes les cheat sheets ({total}). Tape un mot : `pid`, `hosts`, `port`, `cron`, `incident`…
+Tous les besoins de toutes les cheat sheets ({total}). Tape un mot ou une commande : `pid`, `hosts`, `port`,
+`cron`, `tail`, `ss`… Pour partir d'une commande : [🔤 Par commande](commandes.md).
 
-<input class="kw-cs-search" type="search" placeholder="Filtrer les besoins…" aria-label="Filtrer les besoins" data-scope=".kw-cs-needgroup">
+<input class="kw-cs-search" type="search" placeholder="Filtrer les besoins ou les commandes…" aria-label="Filtrer les besoins" data-scope=".kw-cs-needgroup">
 {body}"""
+
+
+def page_cs_commands(pages, order, data):
+    """« Par commande » : chaque commande des fiches, de A à Z — ce qu'elle fait, les besoins où elle sert
+    (forme neutre, puis exemples), sa fiche détaillée et son équivalent Windows."""
+    index = cs_command_index(pages, order, data)
+    fiches = cs_command_fiches(pages)
+    here = CS_COMMANDS
+    body, letters = "", []
+    for name in sorted(index, key=lambda n: n.lower()):
+        letter = name[0].upper()
+        if letter not in letters:
+            letters.append(letter)
+            body += f"\n## {letter}\n"
+        info = data.get(name) or {}
+        uses = index[name]
+        head = f"**`{name}`**"
+        if info.get("fait"):
+            head += f" — {esc(info['fait'])}"
+        if name in fiches:
+            head += f" · [fiche détaillée]({posixpath.relpath(fiches[name], CS_DIR)})"
+        lines = [f"- {cs_need_link(n, s, here)} <span class=\"kw-note-meta\">{esc(pages[s][0])}</span>"
+                 for n, s in uses["main"]]
+        if uses["also"]:
+            lines.append('- <span class="kw-muted">en exemple :</span> '
+                         + " · ".join(cs_need_link(n, s, here) for n, s in uses["also"]))
+        win = win_cmds(info, "cmd") + win_cmds(info, "powershell")
+        if win:
+            lines.append(f'- <span class="kw-muted">Windows :</span> {" · ".join(win)}')
+        body += (f'\n<div class="kw-cs-cmd" id="cmd-{slug(name)}" markdown>\n\n{head}\n{{ .kw-cs-cmdname }}\n\n'
+                 + "\n".join(lines) + "\n\n</div>\n")
+    nav = " ".join(f"[{l}](#{l.lower()})" for l in letters)
+    return here, f"""---
+hide:
+  - toc
+---
+# 🔤 Par commande
+
+Les {len(index)} commandes des cheat sheets, de A à Z : ce qu'elles font, les besoins où elles servent,
+leur équivalent Windows. Tape une commande ou un mot : `tail`, `ss`, `journal`… Pour partir d'un besoin :
+[🔎 Que veux-tu faire ?](besoins.md).
+
+<input class="kw-cs-search" type="search" placeholder="Filtrer les commandes…" aria-label="Filtrer les commandes" data-scope=".kw-cs-cmd">
+
+{nav}
+{{ .kw-cs-letters }}
+{body}"""
+
+
+def page_cs_equivalents(pages, order, data):
+    """« Linux ↔ Windows » : pour chaque fiche Linux, ses commandes et leurs équivalents CMD et PowerShell
+    (data/commandes.yml)."""
+    index = cs_command_index(pages, order, data)
+    fiches = cs_command_fiches(pages)
+    srcs = [s for s in order if s in pages and s.startswith(f"{CS_DIR}/linux/") and not pages[s][2].get("commande")]
+    first = {}
+    for name, uses in index.items():
+        for _, src in uses["main"] + uses["also"]:
+            if src in srcs:
+                first.setdefault(name, src)
+                break
+    body = ""
+    for src in srcs:
+        names = sorted((n for n, s in first.items()
+                        if s == src and ((data.get(n) or {}).get("cmd") or (data.get(n) or {}).get("powershell"))),
+                       key=str.lower)
+        if not names:
+            continue
+        rows = []
+        for n in names:
+            info = data[n]
+            linux = f"[`{esc(n)}`]({posixpath.relpath(fiches[n], CS_DIR)})" if n in fiches else f"`{esc(n)}`"
+            rows.append(f"| {linux} | {esc(info.get('fait', ''))} | "
+                        + " | ".join("<br>".join(win_cmds(info, k)) or "—" for k in ("cmd", "powershell")) + " |")
+        body += (f"\n## [{esc(pages[src][0])}]({posixpath.relpath(src, CS_DIR)})\n\n"
+                 "| Linux | Ce qu'elle fait | CMD | PowerShell |\n|---|---|---|---|\n" + "\n".join(rows) + "\n")
+    return CS_EQUIV, f"""---
+title: Linux ↔ Windows
+---
+# 🔁 Linux ↔ Windows
+
+La commande Linux que je connais, et son équivalent sous Windows : en invite de commandes (CMD) et en
+PowerShell. Rangé comme les fiches Linux. Les commandes CMD (`ping`, `ipconfig`, `netstat`…) marchent
+aussi dans PowerShell ; « — » : pas d'équivalent direct.
+
+!!! tip "Lire ce tableau"
+    Les équivalents rendent le même service, pas forcément avec les mêmes options ni la même sortie.
+    PowerShell renvoie des objets : on filtre avec `Where-Object` et on choisit les colonnes avec
+    `Select-Object`, là où Linux enchaîne `grep`, `cut` et `awk`.
+{body}"""
+
+
+def decorate_command_fiche(markdown, page, config):
+    """Fiche commande : les besoins où elle sert et son équivalent Windows, ajoutés à la fin."""
+    name = str(page.meta["commande"])
+    pages = STATE.get("cs_pages", {})
+    data = STATE.get("commands", {})
+    uses = STATE.get("cs_index", {}).get(name, {"main": [], "also": []})
+    src = page.file.src_uri
+    out = ""
+    if uses["main"] or uses["also"]:
+        out += "\n\n## Où elle sert dans les cheat sheets\n\n" + "\n".join(
+            f"- {cs_need_link(n, s, src)} <span class=\"kw-note-meta\">{esc(pages[s][0])}</span>" for n, s in uses["main"])
+        if uses["also"]:
+            out += "\n- <span class=\"kw-muted\">en exemple :</span> " + " · ".join(cs_need_link(n, s, src) for n, s in uses["also"])
+    info = data.get(name) or {}
+    win = [(label, win_cmds(info, k)) for k, label in (("cmd", "CMD"), ("powershell", "PowerShell")) if info.get(k)]
+    if win:
+        out += "\n\n## Sous Windows\n\n" + "\n".join(f"- {label} : {' · '.join(v)}" for label, v in win)
+        out += f"\n\nTous les équivalents : [Linux ↔ Windows]({posixpath.relpath(CS_EQUIV, posixpath.dirname(src))})."
+    return markdown + out
 
 
 def expand_reprises(markdown, src, docs_dir):
@@ -2250,7 +2442,13 @@ def on_config(config):
     STATE["cs_pages"] = cs_pages(docs_dir)
     STATE["cs_links"] = cheatsheet_links(STATE["cs_pages"])
     cs_tab = next((e[CS_TAB] for e in (config.nav or []) if isinstance(e, dict) and CS_TAB in e), [])
-    pages.append(page_cs_needs(STATE["cs_pages"], nav_srcs(cs_tab)))
+    commands = load_yaml(root / "data" / "commandes.yml", {}) or {}
+    STATE["commands"] = commands
+    cs_order = nav_srcs(cs_tab)
+    STATE["cs_index"] = cs_command_index(STATE["cs_pages"], cs_order, commands)
+    pages += [page_cs_needs(STATE["cs_pages"], cs_order, commands),
+              page_cs_commands(STATE["cs_pages"], cs_order, commands),
+              page_cs_equivalents(STATE["cs_pages"], cs_order, commands)]
     if STATE["revisions"]:
         pages.append(page_revision_index())
     pages.append(glossary_data(glossary))
@@ -2302,6 +2500,8 @@ def on_page_markdown(markdown, page, config, files):
     if src.startswith("library/") and page.meta.get("source"):
         return decorate_note(markdown, page)
     if src.startswith(CS_DIR + "/"):
+        if page.meta.get("commande"):
+            markdown = decorate_command_fiche(markdown, page, config)
         return decorate_cheatsheet(markdown, page, config)
     if src.startswith(REVISION_DIR + "/") and page.meta.get("revision"):
         return decorate_revision(markdown, page)
@@ -2336,6 +2536,8 @@ def decorate_note(markdown, page):
         bits = [f'<span class="kw-format kw-format--{kind}">{FORMAT_LABEL[kind]}</span>'] if kind in FORMAT_LABEL else []
         if meta.get("provenance"):
             bits.append(f'<span class="kw-format kw-format--source">{esc(meta["provenance"])}</span>')
+        if meta.get("statut") == "en cours":
+            bits.append('<span class="kw-format kw-format--wip">✍️ en cours de rédaction</span>')
         line = " ".join(bits)
         if meta.get("revue"):
             line += f" mis à jour le {fr_date(date.fromisoformat(str(meta['revue'])))}"

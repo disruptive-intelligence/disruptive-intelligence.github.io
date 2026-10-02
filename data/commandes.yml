@@ -1,0 +1,416 @@
+# Commandes des cheat sheets : ce qu'elles font (une ligne) et leurs équivalents Windows.
+# Alimente les pages « 🔤 Par commande » et « 🔁 Linux ↔ Windows », le filtre de « Que veux-tu faire ? »
+# et les fiches commande (cheatsheets/linux/commandes/). Une commande trouvée dans une forme neutre
+# (bloc « Commande ») apparaît même absente d'ici ; dans les exemples, seules celles listées ici comptent.
+#
+# commande:
+#   fait: ce qu'elle fait, en une ligne
+#   cmd: équivalent en invite de commandes (texte ou liste) — marche aussi dans PowerShell
+#   powershell: équivalent PowerShell (texte ou liste)
+
+adduser:
+  fait: Crée un compte utilisateur, son dossier et son groupe (Debian, Ubuntu).
+  cmd: net user <nom> * /add
+  powershell: New-LocalUser <nom>
+apt:
+  fait: Installe, met à jour et supprime des paquets (Debian, Ubuntu, Kali).
+  cmd: [winget install <paquet>, winget upgrade --all]
+at:
+  fait: Programme une commande une seule fois, à une heure donnée.
+  cmd: schtasks /create /sc once /st 18:00 /tn <nom> /tr <commande>
+  powershell: Register-ScheduledTask
+atq:
+  fait: Liste les tâches programmées avec at.
+  cmd: schtasks /query
+  powershell: Get-ScheduledTask
+awk:
+  fait: Découpe chaque ligne en champs et les filtre ou les réarrange.
+  powershell: ForEach-Object { ($_ -split ':')[0] }
+cat:
+  fait: Affiche le contenu d'un fichier.
+  cmd: type <fichier>
+  powershell: Get-Content <fichier>
+cd:
+  fait: Change de dossier courant.
+  cmd: cd <dossier>
+  powershell: Set-Location <dossier>
+chage:
+  fait: Affiche ou règle l'expiration du mot de passe d'un compte.
+  cmd: net user <nom>
+  powershell: Get-LocalUser <nom> | Select-Object PasswordExpires
+chmod:
+  fait: Change les droits d'un fichier (lecture, écriture, exécution).
+  cmd: icacls <fichier> /grant <utilisateur>:R
+  powershell: Set-Acl
+chown:
+  fait: Change le propriétaire et le groupe d'un fichier.
+  cmd: icacls <fichier> /setowner <utilisateur>
+  powershell: Set-Acl
+column:
+  fait: Aligne du texte en colonnes.
+  powershell: Format-Table
+command:
+  fait: Indique quel programme sera lancé pour un nom.
+  cmd: where <programme>
+  powershell: Get-Command <programme>
+cp:
+  fait: Copie des fichiers ou des dossiers.
+  cmd: robocopy <source> <destination> /E
+  powershell: Copy-Item <source> <destination> -Recurse
+crontab:
+  fait: Liste ou modifie les tâches planifiées d'un utilisateur.
+  cmd: schtasks /query /fo LIST /v
+  powershell: Get-ScheduledTask
+curl:
+  fait: Interroge une URL (requête HTTP) ou télécharge un fichier.
+  cmd: curl.exe -I <url>
+  powershell: Invoke-WebRequest <url> -Method Head
+cut:
+  fait: Garde une colonne de chaque ligne, selon un séparateur.
+  powershell: ($ligne -split ':')[0]
+date:
+  fait: Affiche la date et l'heure (-u en UTC).
+  cmd: echo %date% %time%
+  powershell: (Get-Date).ToUniversalTime()
+deluser:
+  fait: Supprime un compte utilisateur (et son dossier avec --remove-home).
+  cmd: net user <nom> /delete
+  powershell: Remove-LocalUser <nom>
+df:
+  fait: Affiche l'espace utilisé et libre de chaque partition.
+  cmd: "fsutil volume diskfree C:"
+  powershell: Get-Volume
+diff:
+  fait: Montre les différences entre deux fichiers.
+  cmd: fc <fichier_a> <fichier_b>
+  powershell: Compare-Object (Get-Content <a>) (Get-Content <b>)
+dig:
+  fait: Interroge le DNS sur un nom.
+  cmd: nslookup <nom>
+  powershell: Resolve-DnsName <nom>
+dmesg:
+  fait: Affiche les messages du noyau (matériel, disques, mémoire).
+  powershell: Get-WinEvent -LogName System -MaxEvents 50
+dpkg:
+  fait: Interroge les paquets installés et les fichiers qu'ils ont posés.
+  cmd: winget list
+  powershell: Get-Package
+du:
+  fait: Mesure la place occupée par des fichiers ou des dossiers.
+  cmd: dir /s <dossier>
+  powershell: (Get-ChildItem <dossier> -Recurse -File | Measure-Object Length -Sum).Sum
+echo:
+  fait: Affiche un texte (souvent pour l'envoyer à une autre commande).
+  cmd: echo <texte>
+  powershell: Write-Output <texte>
+fdisk:
+  fait: Liste ou modifie les partitions d'un disque.
+  cmd: diskpart
+  powershell: Get-Partition
+fg:
+  fait: Ramène au premier plan une tâche lancée en arrière-plan.
+  powershell: Receive-Job <id> -Wait
+file:
+  fait: Devine la nature d'un fichier d'après son contenu.
+  powershell: Format-Hex <fichier> | Select-Object -First 1
+find:
+  fait: Cherche des fichiers selon leur nom, type, taille, date, propriétaire, droits — et agit dessus.
+  cmd: dir /s /b <dossier>\<motif>
+  powershell: Get-ChildItem <dossier> -Recurse -Filter <motif>
+free:
+  fait: Affiche la mémoire vive utilisée et libre.
+  powershell: Get-CimInstance Win32_OperatingSystem | Select-Object FreePhysicalMemory, TotalVisibleMemorySize
+getcap:
+  fait: Liste les capabilities (morceaux de pouvoirs root) des binaires.
+  cmd: whoami /priv
+getent:
+  fait: Interroge les bases du système (comptes, groupes, noms d'hôte), comme le font les applications.
+  cmd: [net user, net localgroup <groupe>]
+  powershell: [Get-LocalUser, Get-LocalGroupMember <groupe>]
+getfacl:
+  fait: Affiche les droits fins (ACL) d'un fichier.
+  cmd: icacls <fichier>
+  powershell: Get-Acl <fichier> | Format-List
+git:
+  fait: Récupère et versionne du code (git clone pour télécharger un dépôt).
+  cmd: git clone <url>
+grep:
+  fait: Affiche les lignes qui contiennent un motif, dans un fichier ou tout un dossier.
+  cmd: findstr /s /i "<motif>" <fichiers>
+  powershell: Select-String -Pattern "<motif>" -Path <fichiers>
+groupadd:
+  fait: Crée un groupe.
+  cmd: net localgroup <groupe> /add
+  powershell: New-LocalGroup <groupe>
+head:
+  fait: Affiche les premières lignes d'un fichier.
+  powershell: Get-Content <fichier> -TotalCount <N>
+hostname:
+  fait: Affiche le nom de la machine.
+  cmd: hostname
+  powershell: $env:COMPUTERNAME
+hostnamectl:
+  fait: Affiche ou change le nom d'hôte, avec l'OS et le noyau.
+  cmd: systeminfo
+  powershell: [Get-ComputerInfo, Rename-Computer <nom>]
+htop:
+  fait: Tableau de bord interactif des processus (plus lisible que top).
+  cmd: taskmgr
+id:
+  fait: Affiche mon identité (UID) et mes groupes.
+  cmd: whoami /all
+ip:
+  fait: Affiche et règle les adresses, les routes et les voisins réseau.
+  cmd: [ipconfig /all, route print, arp -a]
+  powershell: [Get-NetIPAddress, Get-NetRoute, Get-NetNeighbor]
+iptables:
+  fait: Affiche ou modifie les règles du pare-feu (ancienne interface).
+  cmd: netsh advfirewall firewall show rule name=all
+  powershell: Get-NetFirewallRule
+jobs:
+  fait: Liste les tâches lancées en arrière-plan dans le terminal.
+  powershell: Get-Job
+journalctl:
+  fait: Lit les journaux de systemd (services, système, noyau).
+  cmd: wevtutil qe System /c:20 /rd:true /f:text
+  powershell: Get-WinEvent -LogName System -MaxEvents 20
+kill:
+  fait: Envoie un signal à un processus, d'ordinaire pour l'arrêter.
+  cmd: taskkill /PID <PID> /F
+  powershell: Stop-Process -Id <PID> -Force
+last:
+  fait: Liste les dernières connexions et redémarrages.
+  powershell: Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624} -MaxEvents 20
+lastb:
+  fait: Liste les dernières tentatives de connexion échouées.
+  powershell: Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 20
+less:
+  fait: Lit un fichier page par page, avec recherche.
+  cmd: more <fichier>
+  powershell: Get-Content <fichier> | Out-Host -Paging
+ln:
+  fait: Crée un lien (raccourci) vers un fichier.
+  cmd: mklink <lien> <cible>
+  powershell: New-Item -ItemType SymbolicLink -Path <lien> -Target <cible>
+locate:
+  fait: Cherche un nom de fichier dans un index du disque (instantané).
+  cmd: where /r C:\ <motif>
+ls:
+  fait: Liste le contenu d'un dossier.
+  cmd: dir /a <dossier>
+  powershell: Get-ChildItem <dossier> -Force
+lsblk:
+  fait: Liste les disques et leurs partitions.
+  cmd: diskpart
+  powershell: Get-Disk | Get-Partition
+lscpu:
+  fait: Décrit le processeur.
+  cmd: echo %PROCESSOR_IDENTIFIER%
+  powershell: Get-CimInstance Win32_Processor
+lsof:
+  fait: Liste les fichiers et connexions ouverts par les processus.
+  cmd: handle.exe -p <PID>
+  powershell: Get-NetTCPConnection -OwningProcess <PID>
+lspci:
+  fait: Liste les cartes branchées sur le bus PCI.
+  powershell: Get-PnpDevice -PresentOnly
+lsusb:
+  fait: Liste les périphériques USB.
+  powershell: Get-PnpDevice -PresentOnly -Class USB
+mkdir:
+  fait: Crée un dossier (-p avec ses parents).
+  cmd: mkdir <dossier>
+  powershell: New-Item -ItemType Directory <dossier>
+mount:
+  fait: Rattache un disque ou une partition à un dossier.
+  cmd: mountvol
+  powershell: Add-PartitionAccessPath
+mv:
+  fait: Déplace ou renomme un fichier.
+  cmd: move <source> <destination>
+  powershell: Move-Item <source> <destination>
+nano:
+  fait: Éditeur de texte simple, dans le terminal.
+  cmd: notepad <fichier>
+nc:
+  fait: Ouvre une connexion TCP ou UDP brute (tester un port, transférer).
+  powershell: Test-NetConnection <hôte> -Port <port>
+nft:
+  fait: Affiche ou modifie les règles du pare-feu nftables.
+  cmd: netsh advfirewall firewall show rule name=all
+  powershell: Get-NetFirewallRule
+nmcli:
+  fait: Configure le réseau géré par NetworkManager (adresse fixe, DNS, passerelle).
+  cmd: netsh interface ip set address "<interface>" static <IP> <masque> <passerelle>
+  powershell: New-NetIPAddress -InterfaceAlias <interface> -IPAddress <IP> -PrefixLength 24 -DefaultGateway <passerelle>
+nohup:
+  fait: Lance une commande qui survit à la déconnexion.
+  cmd: start /b <commande>
+  powershell: Start-Process <commande> -WindowStyle Hidden
+passwd:
+  fait: Change un mot de passe.
+  cmd: net user <nom> *
+  powershell: Set-LocalUser <nom> -Password (Read-Host -AsSecureString)
+pgrep:
+  fait: Trouve le PID des processus d'après leur nom.
+  cmd: tasklist /fi "imagename eq <nom>.exe"
+  powershell: Get-Process <nom>
+ping:
+  fait: Vérifie qu'une machine répond et mesure le temps de réponse.
+  cmd: ping -n <N> <hôte>
+  powershell: Test-Connection <hôte> -Count <N>
+pipx:
+  fait: Installe un outil Python dans son propre environnement.
+pkill:
+  fait: Arrête des processus d'après leur nom.
+  cmd: taskkill /IM <nom>.exe
+  powershell: Stop-Process -Name <nom>
+ps:
+  fait: Liste les processus (PID, utilisateur, ressources, commande).
+  cmd: tasklist /v
+  powershell: Get-Process
+pstree:
+  fait: Affiche les processus en arbre parent → enfants.
+  powershell: Get-CimInstance Win32_Process | Select-Object ProcessId, ParentProcessId, Name
+pwd:
+  fait: Affiche le dossier courant.
+  cmd: cd
+  powershell: Get-Location
+python3:
+  fait: Lance Python (un script, un module avec -m).
+  cmd: py -3
+readlink:
+  fait: Affiche la cible d'un lien symbolique.
+  powershell: (Get-Item <lien>).Target
+resolvectl:
+  fait: Affiche ou change le DNS utilisé par chaque interface.
+  cmd: ipconfig /all
+  powershell: [Get-DnsClientServerAddress, Set-DnsClientServerAddress -InterfaceAlias <interface> -ServerAddresses <IP>]
+rm:
+  fait: Supprime des fichiers (-r des dossiers), sans corbeille.
+  cmd: [del <fichier>, rmdir /s <dossier>]
+  powershell: Remove-Item <chemin> -Recurse
+rsync:
+  fait: Synchronise des dossiers, localement ou par SSH, en reprenant là où il s'est arrêté.
+  cmd: robocopy <source> <destination> /E /Z
+scp:
+  fait: Copie des fichiers vers ou depuis une autre machine par SSH.
+  cmd: scp <fichier> <utilisateur>@<hôte>:<chemin>
+sed:
+  fait: Remplace ou supprime du texte, ligne par ligne.
+  powershell: (Get-Content <fichier>) -replace '<ancien>', '<nouveau>'
+setfacl:
+  fait: Ajoute ou retire des droits fins (ACL) sur un fichier.
+  cmd: icacls <fichier> /grant <utilisateur>:(RX)
+  powershell: Set-Acl
+sha256sum:
+  fait: Calcule l'empreinte SHA-256 d'un fichier.
+  cmd: certutil -hashfile <fichier> SHA256
+  powershell: Get-FileHash <fichier>
+sleep:
+  fait: Attend un nombre de secondes.
+  cmd: timeout /t <secondes>
+  powershell: Start-Sleep <secondes>
+sort:
+  fait: Trie des lignes (-n nombres, -h tailles, -r inverse, -u sans doublons).
+  cmd: sort <fichier>
+  powershell: Sort-Object
+ss:
+  fait: Liste les ports en écoute et les connexions réseau, avec leur processus.
+  cmd: netstat -ano
+  powershell: [Get-NetTCPConnection, Get-NetUDPEndpoint]
+stat:
+  fait: Affiche le détail d'un fichier (droits, propriétaire, dates).
+  powershell: Get-Item <fichier> | Format-List *
+su:
+  fait: Ouvre une session sous l'identité d'un autre utilisateur.
+  cmd: runas /user:<utilisateur> cmd
+  powershell: Start-Process powershell -Credential <utilisateur>
+sudo:
+  fait: Lance une commande avec les droits d'un autre utilisateur, root par défaut.
+  cmd: runas /user:Administrator <commande>
+  powershell: Start-Process <commande> -Verb RunAs
+systemctl:
+  fait: Pilote les services systemd (état, démarrage, arrêt, activation).
+  cmd: [sc query <service>, net start <service>]
+  powershell: [Get-Service <service>, Restart-Service <service>]
+tail:
+  fait: Affiche les dernières lignes d'un fichier, ou le suit en direct (-f).
+  powershell: Get-Content <fichier> -Tail <N> -Wait
+tar:
+  fait: Crée, liste ou extrait une archive (.tar.gz).
+  cmd: tar -czf <archive>.tar.gz <dossier>
+  powershell: Compress-Archive -Path <dossier> -DestinationPath <archive>.zip
+tcpdump:
+  fait: Capture le trafic réseau d'une interface.
+  cmd: pktmon start --capture
+tee:
+  fait: Affiche la sortie et l'écrit en même temps dans un fichier.
+  powershell: Tee-Object -FilePath <fichier>
+timedatectl:
+  fait: Affiche l'heure, le fuseau et la synchronisation NTP.
+  cmd: w32tm /query /status
+  powershell: Get-TimeZone
+top:
+  fait: Suit les processus en temps réel.
+  cmd: taskmgr
+  powershell: Get-Process | Sort-Object CPU -Descending | Select-Object -First 10
+tr:
+  fait: Remplace ou supprime des caractères un par un.
+  powershell: $texte -replace ':', ' '
+traceroute:
+  fait: Montre le chemin réseau vers une machine, saut par saut.
+  cmd: tracert <hôte>
+  powershell: Test-NetConnection <hôte> -TraceRoute
+tree:
+  fait: Dessine l'arborescence d'un dossier.
+  cmd: tree /f <dossier>
+type:
+  fait: Dit ce qu'est un nom de commande (binaire, alias, fonction).
+  cmd: where <programme>
+  powershell: Get-Command <programme> -All
+ufw:
+  fait: Pare-feu simplifié d'Ubuntu (ouvrir un port, voir les règles).
+  cmd: netsh advfirewall firewall add rule name=<nom> dir=in action=allow protocol=TCP localport=<port>
+  powershell: New-NetFirewallRule -DisplayName <nom> -Direction Inbound -Protocol TCP -LocalPort <port> -Action Allow
+umount:
+  fait: Détache un disque monté.
+  cmd: "mountvol <lettre>: /d"
+  powershell: Remove-PartitionAccessPath
+uname:
+  fait: Affiche la version du noyau et l'architecture.
+  cmd: ver
+  powershell: Get-ComputerInfo -Property OsName, OsVersion, OsArchitecture
+uniq:
+  fait: Regroupe les lignes identiques voisines (-c les compte).
+  powershell: Group-Object | Sort-Object Count -Descending
+uptime:
+  fait: Indique depuis quand la machine tourne et sa charge.
+  powershell: (Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+useradd:
+  fait: Crée un compte utilisateur (non interactif, toutes distributions).
+  cmd: net user <nom> * /add
+  powershell: New-LocalUser <nom>
+usermod:
+  fait: Modifie un compte (groupes, shell, verrouillage).
+  cmd: net localgroup <groupe> <utilisateur> /add
+  powershell: Add-LocalGroupMember -Group <groupe> -Member <utilisateur>
+visudo:
+  fait: Modifie les droits sudo en vérifiant la syntaxe.
+w:
+  fait: Montre qui est connecté, depuis où et ce qu'il fait.
+  cmd: query user
+wc:
+  fait: Compte les lignes (-l), les mots ou les octets.
+  cmd: find /c /v "" <fichier>
+  powershell: (Get-Content <fichier>).Count
+wget:
+  fait: Télécharge un fichier.
+  cmd: curl.exe -O <url>
+  powershell: Invoke-WebRequest <url> -OutFile <fichier>
+zgrep:
+  fait: Cherche un motif dans des fichiers compressés (.gz).
+zip:
+  fait: Crée une archive .zip.
+  cmd: tar -a -cf <archive>.zip <dossier>
+  powershell: Compress-Archive -Path <dossier> -DestinationPath <archive>.zip

@@ -5,6 +5,18 @@
     return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   }
 
+  function cmdName(card) {
+    return norm((card.querySelector("code") || card).textContent);
+  }
+
+  function liCmds(li, withExamples) {                // commandes d'un besoin : forme neutre (+ exemples)
+    var out = [];
+    li.querySelectorAll(withExamples ? ".kw-cs-cmds code, .kw-cs-hidden" : ".kw-cs-cmds code").forEach(function (c) {
+      out = out.concat(norm(c.textContent).split(/\s+/));
+    });
+    return out;
+  }
+
   function wrapEntries(article) {
     var entries = [];
     article.querySelectorAll(":scope > h3").forEach(function (h3) {
@@ -39,18 +51,41 @@
     var article = document.querySelector("article.md-content__inner");
     if (!article || location.pathname.indexOf("/cheatsheets/") < 0) return;
     var search = article.querySelector("input.kw-cs-search[data-scope]");
-    if (search) {                                                         // page « Que veux-tu faire ? »
+    if (search) {                                       // pages « Que veux-tu faire ? » et « Par commande »
       var groups = article.querySelectorAll(search.dataset.scope);
       search.addEventListener("input", function () {
         var q = norm(search.value.trim());
+        var byName = q && Array.prototype.some.call(groups, function (g) {     // « ss » : la commande ss,
+          return !g.querySelector("h2") && cmdName(g).indexOf(q) === 0;         // pas tout ce qui contient « ss »
+        });
+        var items = article.querySelectorAll(search.dataset.scope + " li");
+        var uses = function (withExamples) {               // « tail » : les besoins dont la forme neutre
+          return Array.prototype.some.call(items, function (li) {   // l'utilise ; à défaut, ses exemples (awk)
+            return liCmds(li, withExamples).indexOf(q) >= 0;
+          });
+        };
+        var byCmd = q && (uses(false) ? "neutre" : uses(true) ? "exemples" : "");
         groups.forEach(function (g) {
+          var title = g.querySelector("h2");
+          if (!title) {                                 // une commande : par son nom, sinon par tout son texte
+            g.hidden = q && (byName ? cmdName(g).indexOf(q) !== 0 : norm(g.textContent).indexOf(q) < 0);
+            return;
+          }
           var shown = 0;
           g.querySelectorAll("li").forEach(function (li) {
-            li.hidden = q && norm(li.textContent + " " + g.querySelector("h2").textContent).indexOf(q) < 0;
+            li.hidden = q && (byCmd ? liCmds(li, byCmd === "exemples").indexOf(q) < 0
+                                    : norm(li.textContent + " " + title.textContent).indexOf(q) < 0);
             if (!li.hidden) shown++;
           });
           g.hidden = shown === 0;
         });
+        article.querySelectorAll(":scope > h2").forEach(function (h2) {     // lettre sans commande visible
+          var node = h2.nextElementSibling, any = false;
+          while (node && node.tagName !== "H2") { if (node.matches(search.dataset.scope) && !node.hidden) any = true; node = node.nextElementSibling; }
+          h2.hidden = !any;
+        });
+        var letters = article.querySelector(".kw-cs-letters");
+        if (letters) letters.hidden = !!q;
       });
       search.focus();
       return;

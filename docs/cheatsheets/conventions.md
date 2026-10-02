@@ -18,6 +18,17 @@ Sous chaque besoin :
 5. **Attention** — seulement si c'est risqué (droits root, destructif, bruyant).
 6. **Ensuite** — l'étape logique suivante ; **Pour comprendre** — le chapitre du cours dans la Bibliothèque.
 
+## Trouver une commande
+
+- **Par besoin** : [Que veux-tu faire ?](besoins.md) liste tous les besoins ; chacun affiche ses
+  commandes, et taper une commande (`tail`, `ss`) montre les besoins qui l'utilisent.
+- **Par commande** : [Par commande](commandes.md), de A à Z — ce qu'elle fait, où elle sert, son
+  équivalent Windows. Les plus riches ont une [fiche détaillée](linux/commandes/index.md) : options utiles,
+  commandes décodées, pièges.
+- **Depuis Windows** : [Linux ↔ Windows](linux-windows.md), la même commande en CMD et en PowerShell.
+- Les descriptions et équivalents Windows se tiennent dans `data/commandes.yml` ; les listes se font
+  toutes seules à partir des fiches.
+
 ## Paramètres
 
 - `<PID>`, `<fichier>`, `<utilisateur>` : à remplacer à la main.

@@ -930,6 +930,7 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset a.kw-libcard__title:hover { color: var(--kw-link); }
 .md-typeset a.kw-libcard__start { margin-top: auto; padding-top: .3rem; font-size: .66rem; font-weight: 600; color: var(--kw-link); }
 .md-typeset .kw-format--source { color: var(--md-default-fg-color--light); }
+.md-typeset .kw-format--wip { color: var(--md-accent-fg-color); border-style: dashed; }
 .md-typeset .kw-format--aide-memoire, .md-typeset .kw-format--atelier,
 .md-typeset .kw-format--ressources, .md-typeset .kw-format--revision { color: var(--kw-sub); }
 .md-typeset .kw-notes .kw-format { margin-left: .4rem; }
@@ -957,6 +958,15 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-cs-needgroup h2 { font-size: 1rem; margin: 1.4rem 0 .4rem; }
 .md-typeset .kw-cs-needgroup ul { margin-top: 0; }
 .md-typeset .kw-cs-needgroup li { margin: .1rem 0; }
+.md-typeset .kw-cs-cmds { margin-left: .3rem; }
+.md-typeset .kw-cs-cmds code { font-size: .68em; padding: 0 .3em; margin-right: .15rem; color: var(--kw-sub); }
+.md-typeset .kw-cs-hidden { display: none; }
+.md-typeset .kw-cs-letters { font-size: .78rem; font-weight: 700; word-spacing: .35rem; margin: 0 0 .6rem; }
+.md-typeset h2 + .kw-cs-cmd, .md-typeset .kw-cs-cmd { margin: 0 0 .9rem; padding: .55rem .9rem; border: 1px solid var(--kw-line); border-radius: 8px; background: var(--kw-panel); }
+.md-typeset .kw-cs-cmd ul { margin: .2rem 0 0; }
+.md-typeset .kw-cs-cmd li { margin: .05rem 0; font-size: .74rem; }
+.md-typeset .kw-cs-cmdname { margin: 0; font-size: .78rem; }
+.md-typeset .kw-cs-cmdname code { font-size: .95em; color: var(--kw-link); }
 .md-typeset .task-list-item { margin: .15rem 0; }
 /* Boutons du thème (md-button) aux couleurs du site : visibles en sombre comme en clair */
 .md-typeset .md-button { color: var(--kw-link); border-color: currentColor; border-radius: 8px; font-size: .72rem; padding: .45em 1.1em; }

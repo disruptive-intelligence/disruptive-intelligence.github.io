@@ -25,3 +25,10 @@ Modifier le système.
 - [Réseau et résolution de noms](administration/reseau.md) — Ajouter un nom dans /etc/hosts, changer de DNS, d'adresse ou de passerelle, rendre la configuration persistante, ouvrir un port.
 - [Tâches planifiées](administration/taches.md) — Lister et créer des tâches cron, lire une ligne cron, créer un timer systemd, programmer une commande unique.
 - [Disques, archives et transferts](administration/disques.md) — Espace disque, partitions et montages ; archives ; copier des fichiers vers une autre machine.
+
+## [Commandes clés](commandes/index.md)
+
+Les commandes aux options innombrables, décodées : [`find`](commandes/find.md), [`grep`](commandes/grep.md),
+[`awk`](commandes/awk.md), [`sed`](commandes/sed.md), [`tar`](commandes/tar.md), [`ps`](commandes/ps.md),
+[`systemctl`](commandes/systemctl.md), [`journalctl`](commandes/journalctl.md), [`ss`](commandes/ss.md),
+[`ip`](commandes/ip.md).

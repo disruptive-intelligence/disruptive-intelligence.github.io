@@ -6,12 +6,16 @@ title: "Cheat sheets"
 Je suis sur un poste et je dois faire quelque chose **maintenant** : la commande, un exemple qui marche,
 et l'étape suivante. Les cours complets restent dans la [Bibliothèque](../library/index.md).
 
-[Que veux-tu faire ?](besoins.md){ .md-button .md-button--primary } [Conventions](conventions.md){ .md-button }
+[🔎 Que veux-tu faire ?](besoins.md){ .md-button .md-button--primary } [🔤 Par commande](commandes.md){ .md-button } [🔁 Linux ↔ Windows](linux-windows.md){ .md-button }
+
+Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la commande** (« à quoi sert
+`tail` ? »). Les [conventions](conventions.md) expliquent comment se lit une fiche.
 
 ## Par système
 
-- [Linux](linux/index.md) — [fondamentaux](linux/fondamentaux/index.md) (observer) et
-  [administration](linux/administration/index.md) (modifier).
+- [Linux](linux/index.md) — [fondamentaux](linux/fondamentaux/index.md) (observer),
+  [administration](linux/administration/index.md) (modifier) et
+  [commandes clés](linux/commandes/index.md) (`find`, `grep`, `awk`, `sed`… décodées).
 - Windows — à venir.
 
 ## Par métier

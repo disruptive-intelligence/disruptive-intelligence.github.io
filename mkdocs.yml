@@ -113,6 +113,8 @@ nav:
   - 📋 Cheat sheets:
     - cheatsheets/index.md
     - 🔎 Que veux-tu faire ?: cheatsheets/besoins.md
+    - 🔤 Par commande: cheatsheets/commandes.md
+    - 🔁 Linux ↔ Windows: cheatsheets/linux-windows.md
     - Conventions: cheatsheets/conventions.md
     - 🐧 Linux:
         - cheatsheets/linux/index.md
@@ -133,6 +135,18 @@ nav:
             - Réseau et résolution de noms: cheatsheets/linux/administration/reseau.md
             - Tâches planifiées: cheatsheets/linux/administration/taches.md
             - Disques, archives et transferts: cheatsheets/linux/administration/disques.md
+        - Commandes clés:
+            - cheatsheets/linux/commandes/index.md
+            - find: cheatsheets/linux/commandes/find.md
+            - grep: cheatsheets/linux/commandes/grep.md
+            - awk: cheatsheets/linux/commandes/awk.md
+            - sed: cheatsheets/linux/commandes/sed.md
+            - tar: cheatsheets/linux/commandes/tar.md
+            - ps: cheatsheets/linux/commandes/ps.md
+            - systemctl: cheatsheets/linux/commandes/systemctl.md
+            - journalctl: cheatsheets/linux/commandes/journalctl.md
+            - ss: cheatsheets/linux/commandes/ss.md
+            - ip: cheatsheets/linux/commandes/ip.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md
         - Linux:

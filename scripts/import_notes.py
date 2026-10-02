@@ -861,6 +861,8 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         meta["format"] = kind
     if props.get("provenance"):                        # badge : HTB Academy, L2I…
         meta["provenance"] = str(props["provenance"])
+    if str(props.get("statut") or "").strip().lower() in ("en cours", "brouillon"):   # note encore en rédaction
+        meta["statut"] = "en cours"
     meta["revue"] = datetime.date.fromtimestamp(source.stat().st_mtime).isoformat()   # dernière modification
     for key in ("niveau", "objectif", "prerequis"):    # propriétés Obsidian facultatives, affichées si présentes
         if props.get(key):
