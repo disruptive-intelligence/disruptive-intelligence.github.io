@@ -106,6 +106,16 @@ def summary_of(body, n=230):
     return t if len(t) <= n else t[:n].rsplit(" ", 1)[0] + " …"
 
 
+def essentials_of(body, n=3):
+    """Les premiers points de « Cinq éléments essentiels à retenir », sans balisage."""
+    m = re.search(r"^## Cinq éléments essentiels[^\n]*\n(.*?)(?=^## |\Z)", body, re.M | re.S)
+    if not m:
+        return []
+    points = re.findall(r"^\d+\.\s+(.+)$", m.group(1), re.M)
+    clean = [re.sub(r"\*\*?|\[[^\]]*\]\s*", "", p).strip() for p in points]
+    return [p if len(p) <= 200 else p[:200].rsplit(" ", 1)[0] + " …" for p in clean[:n]]
+
+
 def section_key(heading):
     h = heading.lower()
     if "cyber" in h and "tech &" not in h:
@@ -165,6 +175,10 @@ def load_content(docs_dir):
                 it["essentiel"] = [l.strip()[2:] for l in ess.group(1).splitlines()] if ess else []
             else:
                 it["summary"] = summary_of(body)
+                it["organization"] = str(meta.get("organization") or "")
+                it["minutes"] = reading_minutes(body)
+                it["essentials"] = essentials_of(body)
+                it["cites"] = sorted(set(re.findall(r"analyses/([a-z0-9-]+)\.md", body)))   # dossier -> analyses
             items[kind].append(it)
     for lst in items.values():
         lst.sort(key=lambda x: x["date"], reverse=True)
@@ -480,24 +494,163 @@ Les éditions du **Morning Intelligence Brief** : les événements retenus, leur
 """
 
 
+THEME_LEAD = {
+    "ia": "Modèles, agents et course à la frontière : capacités, risques, sécurité et gouvernance de l'IA.",
+    "cyber": "Incidents, menaces, renseignement et défense : ce que disent les rapports et la recherche.",
+    "tech": "Les technologies qui changent l'équation : semi-conducteurs, quantique, spatial, infrastructures.",
+    "geo-ie": "Rapports de force, influence et intelligence économique.",
+}
+
+
+def plural(n, word):
+    return f"{n} {word}{'s' if n > 1 else ''}"
+
+
+def analysis_who(it):
+    """L'auteur, sinon l'organisation émettrice, réduite à son sigle quand il est donné entre parenthèses :
+    « Agence nationale … (ANSSI) — CERT-FR » -> « ANSSI — CERT-FR »."""
+    who = str(it.get("author") or it.get("organization") or "")
+    return re.sub(r"^[^()]*\(([^)]+)\)\s*", r"\1 ", who).strip()
+
+
+def analysis_item(it, src):
+    """Une analyse dans une grille : titre, thèse, auteur · date · durée ; data-search pour le filtre."""
+    thesis = it["summary"] if len(it["summary"]) <= 170 else it["summary"][:170].rsplit(" ", 1)[0] + " …"
+    search = " ".join([clean_title(it["title"]), it["summary"], analysis_who(it), it.get("organization", ""),
+                       THEMES.get(it["theme"], "")] + it["tags"]).lower()
+    tag = meta_line(analysis_who(it), f'{it["date"].day} {short_month(it["date"])} {it["date"].year}',
+                    f'{it["minutes"]} min')
+    return (f'<div class="kw-tuto" data-search="{esc(search)}">'
+            f'<a class="kw-tuto__title" href="{href(src, it["src"])}">{esc(clean_title(it["title"]))}</a>'
+            f'<span class="kw-tuto__text">{esc(thesis)}</span><span class="kw-tuto__tag">{tag}</span></div>')
+
+
+def analysis_chapter(num, key, lst, src, link=True):
+    label = THEMES[key]
+    title = f"[{esc(label)}]({posixpath.relpath(f'analyses/theme-{key}/index.md', posixpath.dirname(src))})" if link else esc(label)
+    minutes = sum(it["minutes"] for it in lst)
+    meta = plural(len(lst), "analyse") + (f" · {duration(minutes)} de lecture" if minutes else "")
+    head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{num:02d}</span>\n\n## {title}\n\n'
+            f'<p class="kw-chapter__text">{esc(THEME_LEAD.get(key, ""))}</p>\n<span class="kw-chapter__meta">{meta}</span>\n</header>\n')
+    grid = ('<div class="kw-chapter__grid">' + "".join(analysis_item(it, src) for it in lst) + "</div>\n" if lst
+            else '<div class="kw-chapter__grid"><span class="kw-muted">Aucune analyse pour l\'instant : le thème est '
+                 "suivi dans la veille.</span></div>\n")
+    return f'\n<article class="kw-chapter" markdown>\n{head}{grid}</article>\n'
+
+
+def tag_chips(analyses, limit=12):
+    """Les sujets les plus fréquents ; un clic remplit le filtre de la page."""
+    counts = collections.Counter(t for it in analyses for t in it["tags"])
+    top = [t for t, _ in counts.most_common(limit)]
+    return ('<div class="kw-subjects">' + "".join(
+        f'<button type="button" class="kw-chip" data-filter="{esc(t.lower())}">{esc(t)}'
+        f'<span class="kw-count">{counts[t]}</span></button>' for t in top) + "</div>") if top else ""
+
+
+def analyses_filter(placeholder):
+    return (f'<input class="kw-cs-search kw-an-filter" type="search" placeholder="{esc(placeholder)}" '
+            'aria-label="Filtrer les analyses">')
+
+
 def pages_analyses(items):
-    out, body = [], ""
+    out, src = [], "analyses/index.md"
+    analyses = items["analysis"]
+    minutes = sum(it["minutes"] for it in analyses)
+    used = [k for k in THEMES if any(it["theme"] == k for it in analyses)]
+    last = analyses[0] if analyses else None
+    # une page par thème
     for key, label in THEMES.items():
-        lst = [it for it in items["analysis"] if it["theme"] == key]
+        lst = [it for it in analyses if it["theme"] == key]
         if not lst:
-            body += f"\n## {label}\n\n<span class=\"kw-muted\">Aucune analyse pour l'instant.</span>\n"
             continue
         tsrc = f"analyses/theme-{key}/index.md"
-        grid = "".join(analysis_card(it, tsrc) for it in lst)
-        out.append((tsrc, f"---\nhide:\n  - toc\n---\n# {label}\n\n"
-                          f"<span class=\"kw-muted\">{len(lst)} analyse{'s' if len(lst) > 1 else ''}</span>\n\n"
-                          f'<div class="kw-cards">{grid}</div>\n'))
-        body += (f"\n## {label} <span class=\"kw-muted\">· {len(lst)}</span>\n\n"
-                 f'<a class="kw-more-link" href="{href("analyses/index.md", tsrc)}">Tout voir →</a>\n\n'
-                 + carousel(analysis_card(it, "analyses/index.md") for it in lst) + "\n")
-    out.append(("analyses/index.md", "# 🔎 Analyses\n\nUne lecture approfondie des rapports, articles et publications : "
-                                     "thèse, arguments, limites et intérêt pour la veille.\n" + body))
+        out.append((tsrc, f"""---
+title: "{bare(label)}"
+hide:
+  - toc
+---
+<div class="kw-dom-hero kw-dom-hero--cat" markdown>
+<span class="kw-eyebrow">[Analyses](../index.md)</span>
+
+# {label}
+
+<p class="kw-dom-lead">{esc(THEME_LEAD.get(key, ""))}</p>
+<span class="kw-dom-stats">{plural(len(lst), "analyse")} · {duration(sum(it["minutes"] for it in lst))} de lecture · dernière le {fr_date(lst[0]["date"])}</span>
+</div>
+
+{analyses_filter("Filtrer : un mot, un auteur, un sujet…")}
+{tag_chips(lst, 12)}
+
+<div class="kw-chapter__grid kw-chapter__grid--solo kw-an-list">{"".join(analysis_item(it, tsrc) for it in lst)}</div>
+"""))
+    # accueil des analyses
+    nav = " ".join(f'<a href="#{slug(bare(THEMES[k]))}">{esc(bare(THEMES[k]))}</a>' for k in THEMES) + (
+        f' <a href="#dossiers">Dossiers</a>' if items["dossier"] else "")
+    une = ""
+    if last:
+        ess = "".join(f"<li>{esc(p)}</li>" for p in last.get("essentials") or [])
+        une = (section_bar("À la une")
+               + '<div class="kw-une">'
+               f'<a class="kw-une__main" href="{href(src, last["src"])}"><span class="kw-tuto__tag">{esc(bare(THEMES.get(last["theme"], "")))} · '
+               f'{esc(analysis_who(last))} · {last["minutes"]} min</span><span class="kw-une__title">{esc(clean_title(last["title"]))}</span>'
+               f'<span class="kw-une__text">{esc(last["summary"])}</span>'
+               + (f'<ol class="kw-une__points">{ess}</ol>' if ess else "")
+               + f'<span class="kw-une__meta">Analyse du {fr_date(last["date"])} · Lire →</span></a>'
+               '<div class="kw-une__side"><span class="kw-une__label">Analyses précédentes</span>'
+               + "".join(f'<a class="kw-une__item" href="{href(src, it["src"])}"><span class="kw-une__date">'
+                         f'{fr_date(it["date"])} · {esc(bare(THEMES.get(it["theme"], "")))}</span>'
+                         f'<span>{esc(clean_title(it["title"]))}</span></a>' for it in analyses[1:5])
+               + "</div></div>\n")
+    chapters = "".join(analysis_chapter(i, key, [it for it in analyses if it["theme"] == key], src, key in used)
+                       for i, key in enumerate(THEMES, 1))
+    dossiers = ""
+    if items["dossier"]:
+        by_slug = {Path(it["src"]).stem: it for it in analyses}
+        cards = ""
+        for d in items["dossier"]:
+            cited = [by_slug[s] for s in d.get("cites", []) if s in by_slug]
+            cards += (f'<a class="kw-card kw-dossier" href="{href(src, d["src"])}"><span class="kw-card__meta">'
+                      f'{meta_line(themes_label(d), fr_date(d["date"]))}</span><span class="kw-card__title">{esc(d["title"])}</span>'
+                      f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span>'
+                      + (f'<span class="kw-dossier__cites">{plural(len(cited), "analyse")} croisée{"s" if len(cited) > 1 else ""} : '
+                         + " · ".join(esc(clean_title(c["title"])) for c in cited) + "</span>" if cited else "")
+                      + "</a>")
+        dossiers = section_bar("Les dossiers", anchor="dossiers") + (
+            '<p class="kw-muted">Un dossier croise plusieurs analyses pour mettre un sujet en perspective.</p>\n'
+            f'<div class="kw-libgrid">{cards}</div>\n')
+    out.append((src, f"""---
+title: Analyses
+hide:
+  - toc
+---
+<div class="kw-mast">
+<div class="kw-mast__top"><span>{plural(len(analyses), "analyse")} · {duration(minutes)} de lecture</span><span class="kw-mast__count">{"Dernière le " + fr_date(last["date"]) if last else ""}</span></div>
+<h1 class="kw-mast__title">🔎 Analyses</h1>
+<p class="kw-mast__lead">La lecture critique des rapports, articles et publications qui comptent : la thèse, les arguments, les limites, et ce qu'il faut en retenir pour la veille.</p>
+<div class="kw-mast__search">{analyses_filter("Filtrer les analyses : un mot, un auteur, un sujet (DGFiP, AGI, ANSSI…)")}</div>
+<nav class="kw-mast__nav">{nav}</nav>
+</div>
+{une}{section_bar("Explorer par sujet")}{tag_chips(analyses)}
+{section_bar("Par thème")}
+<div class="kw-an-list" markdown>
+{chapters}
+</div>
+{dossiers}"""))
     return out
+
+
+def related_analyses(src, items, limit=3):
+    """Analyses proches : le plus de tags en commun, puis le même thème, les plus récentes d'abord."""
+    me = next((it for it in items["analysis"] if it["src"] == src), None)
+    if not me:
+        return [], []
+    mine = {t.lower() for t in me["tags"]}
+    scored = sorted(((len(mine & {t.lower() for t in it["tags"]}) * 2 + (it["theme"] == me["theme"]), it["date"], it)
+                     for it in items["analysis"] if it is not me), key=lambda x: (x[0], x[1]), reverse=True)
+    near = [it for score, _, it in scored if score > 0][:limit]
+    stem = Path(src).stem
+    dossiers = [d for d in items["dossier"] if stem in d.get("cites", [])]
+    return near, dossiers
 
 
 def page_dossiers(items):
@@ -1100,7 +1253,19 @@ def decorate_document(markdown, page):
         head = head.replace("</div>\n", f'<span class="kw-doc-head__links">{links}</span></div>\n', 1)
     markdown = re.sub(r"^# (?:Analyse\s*—\s*)?(.+)$", lambda m: f"# {m.group(1)}\n\n{head}", markdown, count=1, flags=re.M)
     markdown = fold_section(markdown, "Métadonnées", "info", "Fiche technique du document")
-    return fold_section(markdown, "Sources de synthèse", "note", "Sources de synthèse")
+    markdown = fold_section(markdown, "Sources de synthèse", "note", "Sources de synthèse")
+    if kind == "analysis" and STATE.get("items"):
+        here = page.file.src_uri
+        near, dossiers = related_analyses(here, STATE["items"])
+        if near or dossiers:
+            markdown += "\n\n## À lire aussi\n\n"
+            if dossiers:
+                markdown += "Dans le dossier : " + " · ".join(f"[{esc(d['title'])}]({posixpath.relpath(d['src'], posixpath.dirname(here))})"
+                                                       for d in dossiers) + "\n{ .kw-cs-meta }\n\n"
+            if near:
+                markdown += ('<div class="kw-chapter__grid kw-chapter__grid--solo">'
+                             + "".join(analysis_item(it, here) for it in near) + "</div>\n")
+    return markdown
 
 
 # ---------------------------------------------------------------- navigation

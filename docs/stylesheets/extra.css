@@ -1138,3 +1138,15 @@ body[data-md-color-scheme="default"]::after {
   .md-typeset .kw-domblock__rubs { grid-template-columns: 1fr; }
   .md-typeset h1.kw-mast__title { font-size: 1.8rem; }
 }
+
+/* Analyses : sujets en pastilles (remplissent le filtre), points essentiels de la une, dossiers croisés. */
+.md-typeset .kw-subjects { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .4rem; }
+.md-typeset .kw-subjects button.kw-chip { font: inherit; font-size: .66rem; cursor: pointer; display: inline-flex; align-items: center; gap: .35rem;
+  padding: .2rem .65rem; color: var(--md-default-fg-color--light); background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 1em; }
+.md-typeset .kw-subjects button.kw-chip:hover, .md-typeset .kw-subjects button.kw-chip.is-active { color: var(--kw-link); border-color: var(--kw-link); }
+.md-typeset .kw-subjects .kw-count { font-size: .58rem; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-mast__search input.kw-an-filter { max-width: none; margin: 0; }
+.md-typeset ol.kw-une__points { margin: .3rem 0 0 1.1rem; padding: 0; font-size: .7rem; color: var(--md-default-fg-color--light); }
+.md-typeset ol.kw-une__points li { margin: .15rem 0; }
+.md-typeset .kw-dossier__cites { font-size: .64rem; color: var(--kw-sub); padding-top: .35rem; border-top: 1px solid var(--kw-line); }
+.md-typeset .kw-an-list .kw-tuto[hidden], .md-typeset .kw-an-list .kw-chapter[hidden] { display: none; }

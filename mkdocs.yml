@@ -75,6 +75,7 @@ extra_javascript:
   - javascripts/veille-tools.js        # Explorer, Pile de lecture, barre de lecture
   - javascripts/nav-lazy.js            # flèche du menu : déroule sur place sans changer de page
   - javascripts/cheatsheets.js         # cheat sheets : filtre des besoins
+  - javascripts/analyses.js            # analyses : filtre et sujets
 
 plugins:
   - search:
