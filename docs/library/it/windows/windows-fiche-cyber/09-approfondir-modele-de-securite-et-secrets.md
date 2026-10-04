@@ -1,5 +1,5 @@
 ---
-title: Modèle de sécurité et secrets
+title: 'Approfondir : modèle de sécurité et secrets'
 source: IT/02 Windows/Comprendre Windows/Windows — fiche cyber.md
 note: Windows — fiche cyber
 up:
@@ -16,15 +16,10 @@ Un **security principal** est une entité à laquelle Windows peut attribuer des
 Exemples :
 
 - utilisateur ;
-    
 - groupe ;
-    
 - ordinateur ;
-    
 - service ;
-    
 - domaine.
-    
 
 Chaque security principal possède un identifiant unique : le **SID**.
 
@@ -107,17 +102,11 @@ Lorsqu’un utilisateur s’authentifie, Windows crée un **access token**.
 Ce token contient notamment :
 
 - SID de l’utilisateur ;
-    
 - SID des groupes ;
-    
 - privilèges ;
-    
 - niveau d’intégrité ;
-    
 - type de logon ;
-    
 - éventuels restricted SIDs.
-    
 
 Ensuite, les processus lancés par l’utilisateur héritent généralement de ce token.
 
@@ -209,23 +198,14 @@ Mandatory Label\High Mandatory Level
 Dans Windows, beaucoup d’objets peuvent avoir des permissions :
 
 - fichier ;
-    
 - dossier ;
-    
 - clé de registre ;
-    
 - service ;
-    
 - tâche planifiée ;
-    
 - processus ;
-    
 - thread ;
-    
 - imprimante ;
-    
 - partage réseau.
-    
 
 Ces objets possèdent un **Security Descriptor**.
 
@@ -238,13 +218,9 @@ Un **Security Descriptor** décrit la sécurité d’un objet.
 Il contient notamment :
 
 - **Owner** : propriétaire ;
-    
 - **Primary Group** : groupe principal ;
-    
 - **DACL** : qui a le droit de faire quoi ;
-    
 - **SACL** : quoi auditer/journaliser.
-    
 
 ---
 
@@ -310,15 +286,10 @@ La **SAM** est la base locale des comptes Windows.
 Elle contient notamment :
 
 - comptes utilisateurs locaux ;
-    
 - groupes locaux ;
-    
 - SID ;
-    
 - informations nécessaires à l’authentification locale ;
-    
 - secrets comme les hashes de mots de passe.
-    
 
 Sur disque, la ruche SAM est ici :
 
@@ -350,9 +321,7 @@ SAM + SYSTEM
 Pourquoi ?
 
 - `SAM` contient les comptes et hashes.
-    
 - `SYSTEM` contient notamment des éléments nécessaires au déchiffrement local.
-    
 
 Ruches intéressantes :
 
@@ -384,11 +353,8 @@ Note : il n’est généralement pas possible de copier directement `C:\Windows\
 Sur une machine jointe à un domaine :
 
 - les comptes locaux restent dans la SAM locale ;
-    
 - les comptes de domaine sont stockés côté Active Directory ;
-    
 - la base AD principale est `NTDS.dit` sur les contrôleurs de domaine.
-    
 
 À retenir :
 

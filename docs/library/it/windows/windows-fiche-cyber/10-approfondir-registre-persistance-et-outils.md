@@ -1,5 +1,5 @@
 ---
-title: Registre, persistance et outils
+title: 'Approfondir : registre, persistance et outils'
 source: IT/02 Windows/Comprendre Windows/Windows — fiche cyber.md
 note: Windows — fiche cyber
 up:
@@ -16,19 +16,12 @@ Le **registre Windows** est une base de données hiérarchique qui stocke la con
 Il contient :
 
 - paramètres système ;
-    
 - configuration logicielle ;
-    
 - services ;
-    
 - pilotes ;
-    
 - profils utilisateurs ;
-    
 - paramètres de sécurité ;
-    
 - mécanismes de démarrage automatique.
-    
 
 Ouvrir l’éditeur de registre :
 
@@ -147,13 +140,9 @@ reg query HKLM\SYSTEM\CurrentControlSet\Services\wuauserv
 La **persistance** désigne les mécanismes permettant à un programme ou à un attaquant de survivre à :
 
 - un redémarrage ;
-    
 - une déconnexion ;
-    
 - une reconnexion utilisateur ;
-    
 - un arrêt temporaire du processus.
-    
 
 ---
 
@@ -206,17 +195,11 @@ Get-CimInstance Win32_Service | Select-Object Name, State, StartMode, StartName,
 Points suspects :
 
 - service récemment créé ;
-    
 - nom imitant un service Windows ;
-    
 - chemin dans `Temp`, `AppData`, `Public` ;
-    
 - service en `Automatic` ;
-    
 - binaire non signé ;
-    
 - compte d’exécution très privilégié.
-    
 
 ---
 
@@ -241,17 +224,11 @@ Get-ScheduledTask
 Points à regarder :
 
 - déclencheur ;
-    
 - action exécutée ;
-    
 - compte utilisé ;
-    
 - chemin du binaire ;
-    
 - date de création/modification ;
-    
 - tâche cachée ou nom trompeur.
-    
 
 ---
 
@@ -280,27 +257,16 @@ C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
 Il permet de voir :
 
 - Run Keys ;
-    
 - services ;
-    
 - drivers ;
-    
 - tâches planifiées ;
-    
 - DLL chargées automatiquement ;
-    
 - extensions shell ;
-    
 - AppInit ;
-    
 - Winlogon ;
-    
 - WMI ;
-    
 - codecs ;
-    
 - composants navigateur.
-    
 
 Outil recommandé :
 
@@ -318,19 +284,12 @@ autoruns.exe
 Le **Task Manager** permet d’observer rapidement :
 
 - processus ;
-    
 - performance CPU/RAM/disque/réseau ;
-    
 - utilisateurs connectés ;
-    
 - applications au démarrage ;
-    
 - services ;
-    
 - PID ;
-    
 - consommation des ressources.
-    
 
 Raccourcis :
 
@@ -348,13 +307,9 @@ taskmgr
 Resource Monitor donne plus de détails sur :
 
 - CPU ;
-    
 - mémoire ;
-    
 - disque ;
-    
 - réseau.
-    
 
 Lancement :
 
@@ -392,21 +347,13 @@ Exemple :
 Utile pour voir :
 
 - hiérarchie parent/enfant ;
-    
 - chemin du binaire ;
-    
 - utilisateur ;
-    
 - niveau d’intégrité ;
-    
 - DLL chargées ;
-    
 - handles ;
-    
 - signature ;
-    
 - services hébergés par `svchost.exe`.
-    
 
 Outil :
 
@@ -422,13 +369,9 @@ procexp.exe
 `Procmon` permet de surveiller en temps réel :
 
 - accès fichiers ;
-    
 - accès registre ;
-    
 - activité réseau ;
-    
 - création de processus/threads.
-    
 
 Outil :
 

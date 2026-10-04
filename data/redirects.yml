@@ -48,3 +48,9 @@ library/it/culture/questions-d-entretien-cyber-sysadmin/index.html: library/revi
 library/it/linux/gestion-systeme-linux-aide-memoire/index.html: cheatsheets/linux/administration/index.md
 library/it/linux/linux-commandes-et-investigation-aide-memoire/index.html: cheatsheets/linux/index.md
 library/it/linux/workflow-linux-aide-memoire/index.html: cheatsheets/linux/index.md
+# Bibliothèque (4 octobre 2026) : notes renommées
+library/it/reseau/reseau-prises-de-notes/index.html: library/it/reseau/reseau/index.md
+library/it/windows/windows-fiche-cyber/08-processus-et-services/index.html: library/it/windows/windows-fiche-cyber/08-approfondir-processus-et-services.md
+library/it/windows/windows-fiche-cyber/09-modele-de-securite-et-secrets/index.html: library/it/windows/windows-fiche-cyber/09-approfondir-modele-de-securite-et-secrets.md
+library/it/windows/windows-fiche-cyber/10-registre-persistance-et-outils/index.html: library/it/windows/windows-fiche-cyber/10-approfondir-registre-persistance-et-outils.md
+library/it/windows/windows-fiche-cyber/11-uac-et-protections/index.html: library/it/windows/windows-fiche-cyber/11-approfondir-uac-et-protections.md

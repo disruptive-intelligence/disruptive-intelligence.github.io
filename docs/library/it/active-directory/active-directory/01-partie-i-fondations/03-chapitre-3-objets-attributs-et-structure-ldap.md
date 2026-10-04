@@ -24,6 +24,10 @@ Par défaut, les nouveaux ordinateurs arrivent dans le conteneur `Computers` et 
 
 ![Ranger les ordinateurs dans des OU dédiées plutôt que dans le conteneur Computers](../../../../assets/active-directory-ad-gestion-27.png)
 
+Une OU créée depuis la console est **protégée contre la suppression accidentelle**. Pour la supprimer : *Affichage → Fonctionnalités avancées* dans ADUC, décocher la case dans l'onglet *Objet* de ses propriétés, puis supprimer. En PowerShell : `Set-ADOrganizationalUnit <DN de l'OU> -ProtectedFromAccidentalDeletion $false`.
+
+![Onglet Objet d'une OU : la case « Protéger l'objet des suppressions accidentelles »](../../../../assets/active-directory-ad-gestion-22.png)
+
 ## 3.2 Le SID : l'identité réelle d'un objet
 
 Windows ne raisonne jamais sur un nom mais sur un **SID** (*Security Identifier*), unique et attribué à la création. Renommer un compte ne change rien à ses droits ; supprimer puis recréer un compte du même nom crée une nouvelle identité.

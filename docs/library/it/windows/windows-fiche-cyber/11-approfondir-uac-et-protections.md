@@ -1,5 +1,5 @@
 ---
-title: UAC et protections
+title: 'Approfondir : UAC et protections'
 source: IT/02 Windows/Comprendre Windows/Windows — fiche cyber.md
 note: Windows — fiche cyber
 up:
@@ -18,15 +18,10 @@ Il vise à empêcher qu’un programme réalise des actions administrateur sans 
 Exemples d’actions déclenchant potentiellement l’UAC :
 
 - installation d’un logiciel ;
-    
 - modification système ;
-    
 - écriture dans certains dossiers protégés ;
-    
 - modification de clés registre sensibles ;
-    
 - lancement d’un outil en administrateur.
-    
 
 ---
 
@@ -37,9 +32,7 @@ Un utilisateur membre du groupe Administrators ne travaille pas forcément en pe
 En pratique, il peut avoir :
 
 - un token filtré, utilisé par défaut ;
-    
 - un token élevé, utilisé après validation UAC.
-    
 
 Schéma :
 
@@ -74,19 +67,12 @@ Windows Defender Antivirus est l’antivirus intégré de Windows.
 Fonctionnalités importantes :
 
 - protection temps réel ;
-    
 - protection cloud ;
-    
 - soumission automatique d’échantillons ;
-    
 - Tamper Protection ;
-    
 - exclusions ;
-    
 - Controlled Folder Access ;
-    
 - protection contre certains comportements malveillants.
-    
 
 Commandes utiles :
 
@@ -121,15 +107,10 @@ Objectif : empêcher des processus non autorisés d’ouvrir ou de manipuler LSA
 Il peut créer des règles sur :
 
 - exécutables ;
-    
 - scripts ;
-    
 - fichiers MSI ;
-    
 - DLL ;
-    
 - applications packagées.
-    
 
 Types de règles :
 

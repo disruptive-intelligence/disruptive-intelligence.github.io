@@ -1,10 +1,34 @@
 ---
-title: Processus et services
+title: 'Approfondir : processus et services'
 source: IT/02 Windows/Comprendre Windows/Windows — fiche cyber.md
 note: Windows — fiche cyber
 up:
 - - Windows — fiche cyber
   - index.md
+---
+
+> Objectif : comprendre les mécanismes Windows utiles en cybersécurité : processus, services, LSASS, tokens, SID, ACL, registre, permissions de services, persistance et protections natives.
+
+---
+
+## 0. Vue d’ensemble
+
+Windows exécute des programmes sous forme de **processus**. Chaque processus tourne dans un contexte précis : utilisateur, privilèges, espace mémoire, fichiers ouverts, DLL chargées, connexions réseau, etc.
+
+Les **services Windows** sont des processus particuliers : ils sont conçus pour tourner longtemps, souvent en arrière-plan, parfois dès le démarrage de la machine et sans session utilisateur ouverte.
+
+Côté sécurité, Windows s’appuie sur plusieurs notions centrales :
+
+- **SID** : identifiant unique d’un utilisateur, groupe, machine ou service.
+- **Access token** : “badge” attaché aux processus pour représenter les droits de l’utilisateur.
+- **ACL / ACE / DACL / SACL** : règles d’accès appliquées aux objets sécurisables.
+- **LSASS** : processus critique chargé de l’authentification et de la politique de sécurité locale.
+- **Registre** : base de configuration de Windows, souvent utilisée pour les services, la sécurité et la persistance.
+
+> Idée clé : pour comprendre Windows en cyber, il faut comprendre la chaîne suivante :
+>
+> **Utilisateur → authentification → token → processus → accès aux objets → DACL → autorisation ou refus**.
+
 ---
 
 ## 1. Programmes, processus et threads
@@ -29,9 +53,7 @@ Un **processus** est donc une instance d’un programme en cours d’exécution.
 Exemple :
 
 - `notepad.exe` sur disque = programme.
-    
 - `notepad.exe` lancé en mémoire = processus.
-    
 
 Un même programme peut avoir plusieurs processus en même temps. Exemple : plusieurs fenêtres Chrome peuvent correspondre à plusieurs processus `chrome.exe`.
 
@@ -63,11 +85,8 @@ Un processus peut contenir un ou plusieurs threads.
 Résumé simple :
 
 - **Programme** = fichier sur disque.
-    
 - **Processus** = programme en cours d’exécution.
-    
 - **Thread** = fil d’exécution à l’intérieur du processus.
-    
 
 Exemple mental :
 
@@ -94,9 +113,7 @@ explorer.exe → cmd.exe → powershell.exe
 Ici :
 
 - `explorer.exe` lance `cmd.exe` ;
-    
 - `cmd.exe` lance `powershell.exe`.
-    
 
 Cette relation parent/enfant est très importante en analyse SOC et forensic.
 
@@ -145,21 +162,13 @@ wmic process get processid,parentprocessid,executablepath,commandline
 Comprendre les processus permet de :
 
 - repérer un processus suspect ;
-    
 - analyser une chaîne parent/enfant ;
-    
 - identifier un faux processus système ;
-    
 - voir quel utilisateur a lancé quoi ;
-    
 - comprendre les privilèges associés à un processus ;
-    
 - repérer des processus qui communiquent sur le réseau ;
-    
 - détecter une exécution anormale, par exemple `powershell.exe` lancé par Word ;
-    
 - comprendre les attaques sur LSASS ou les abus de services.
-    
 
 ---
 
@@ -192,17 +201,11 @@ Solution : Windows utilise `svchost.exe` comme processus hôte pour charger et e
 Exemples de services pouvant être hébergés via `svchost.exe` :
 
 - Windows Update ;
-    
 - pare-feu Windows ;
-    
 - Plug and Play ;
-    
 - services réseau ;
-    
 - RPC ;
-    
 - DCOM.
-    
 
 Voir les services associés à chaque `svchost.exe` :
 
@@ -235,17 +238,11 @@ svchosts.exe
 Points à vérifier :
 
 - chemin du binaire ;
-    
 - signature numérique ;
-    
 - processus parent ;
-    
 - compte utilisateur ;
-    
 - connexions réseau ;
-    
 - services hébergés.
-    
 
 Un vrai `svchost.exe` se trouve normalement ici :
 
@@ -267,17 +264,11 @@ C’est un processus critique de Windows chargé d’appliquer la politique de s
 Il intervient notamment dans :
 
 - l’authentification des utilisateurs ;
-    
 - la vérification des identifiants ;
-    
 - la création ou la gestion des access tokens ;
-    
 - les changements de mots de passe ;
-    
 - la journalisation des événements de connexion/déconnexion ;
-    
 - la gestion de certains secrets d’authentification.
-    
 
 ---
 
@@ -286,15 +277,10 @@ Il intervient notamment dans :
 Quand un utilisateur se connecte :
 
 1. l’utilisateur saisit ses identifiants ;
-    
 2. Windows transmet la demande au sous-système de sécurité ;
-    
 3. LSASS vérifie l’identité ;
-    
 4. si l’authentification réussit, Windows crée un access token ;
-    
 5. ce token est attaché aux processus de l’utilisateur.
-    
 
 Schéma simplifié :
 
@@ -320,15 +306,10 @@ LSASS peut contenir en mémoire des informations sensibles liées à l’authent
 Selon la version de Windows, la configuration et les protections activées, on peut y trouver :
 
 - hashes NTLM ;
-    
 - tickets Kerberos ;
-    
 - secrets liés au SSO ;
-    
 - informations de session ;
-    
 - parfois mots de passe en clair sur anciens systèmes ou configurations faibles.
-    
 
 C’est pourquoi LSASS est une cible majeure pour le vol d’identifiants.
 
@@ -354,15 +335,10 @@ Les événements liés aux connexions sont journalisés dans le journal **Securi
 Protections utiles :
 
 - **Credential Guard** : isole certains secrets d’authentification via Virtualization-Based Security.
-    
 - **LSA Protection / RunAsPPL** : limite l’accès non autorisé à LSASS.
-    
 - **Defender / EDR** : surveille les tentatives de dump ou d’accès suspect à LSASS.
-    
 - **Réduction des privilèges admin** : moins d’utilisateurs capables d’interagir avec LSASS.
-    
 - **Désactivation de WDigest** sur anciens systèmes.
-    
 
 Commandes utiles :
 
@@ -383,34 +359,21 @@ Un **service Windows** est un composant conçu pour exécuter une tâche en arri
 Un service peut :
 
 - démarrer automatiquement au boot ;
-    
 - tourner sans utilisateur connecté ;
-    
 - continuer à fonctionner après la déconnexion d’un utilisateur ;
-    
 - exécuter des fonctions système critiques ;
-    
 - être lancé sous un compte spécifique.
-    
 
 Exemples de fonctions gérées par des services :
 
 - réseau ;
-    
 - mises à jour Windows ;
-    
 - diagnostic système ;
-    
 - journalisation ;
-    
 - authentification ;
-    
 - impression ;
-    
 - antivirus ;
-    
 - supervision.
-    
 
 ---
 
@@ -421,19 +384,12 @@ Les services sont gérés par le **Service Control Manager** ou **SCM**.
 Le SCM permet de :
 
 - lister les services ;
-    
 - démarrer un service ;
-    
 - arrêter un service ;
-    
 - modifier la configuration d’un service ;
-    
 - gérer les dépendances ;
-    
 - définir le compte d’exécution ;
-    
 - définir le mode de démarrage.
-    
 
 Le processus associé au SCM est :
 
@@ -456,21 +412,13 @@ services.msc
 Permet de voir :
 
 - nom du service ;
-    
 - description ;
-    
 - état ;
-    
 - type de démarrage ;
-    
 - chemin de l’exécutable ;
-    
 - compte d’exécution ;
-    
 - dépendances ;
-    
 - options de récupération.
-    
 
 #### Ligne de commande CMD
 
@@ -549,30 +497,19 @@ Un service n’a pas toujours besoin de tourner en `LocalSystem`.
 Les services sont sensibles car :
 
 - ils tournent souvent avec des privilèges élevés ;
-    
 - ils peuvent démarrer automatiquement ;
-    
 - ils peuvent être modifiés par des administrateurs ;
-    
 - ils peuvent utiliser des comptes de service ;
-    
 - leur mauvaise configuration peut causer une panne ou une élévation de privilèges.
-    
 
 Bonnes pratiques :
 
 - utiliser des comptes de service dédiés ;
-    
 - éviter `LocalSystem` si inutile ;
-    
 - contrôler les permissions sur le service ;
-    
 - contrôler les permissions sur le dossier du binaire ;
-    
 - vérifier les actions de récupération ;
-    
 - documenter les comptes de service.
-    
 
 ---
 
@@ -658,17 +595,11 @@ Exemple simplifié :
 Une mauvaise permission peut permettre à un utilisateur non privilégié de :
 
 - démarrer un service ;
-    
 - arrêter un service ;
-    
 - modifier le chemin du binaire ;
-    
 - modifier le compte d’exécution ;
-    
 - remplacer le programme lancé ;
-    
 - obtenir une élévation de privilèges si le service tourne en `LocalSystem`.
-    
 
 Droit particulièrement sensible :
 

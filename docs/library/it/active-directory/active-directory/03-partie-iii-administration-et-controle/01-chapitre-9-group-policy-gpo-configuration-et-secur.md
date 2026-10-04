@@ -20,6 +20,8 @@ Une GPO a deux moitiés :
 | **GPC** (*Group Policy Container*) | Objet `groupPolicyContainer` dans l'annuaire | Métadonnées, version, liens |
 | **GPT** (*Group Policy Template*) | `\\meridian.local\SYSVOL\meridian.local\Policies\{GUID}` | Les paramètres eux-mêmes (fichiers) |
 
+Sur chaque DC, SYSVOL est le dossier `C:\Windows\SYSVOL\sysvol\`, partagé sur le réseau et répliqué entre contrôleurs.
+
 Chaque GPO contient une **configuration ordinateur** (appliquée au démarrage puis périodiquement) et une **configuration utilisateur** (appliquée à l'ouverture de session).
 
 ## 9.2 Créer, lier, cibler
@@ -36,7 +38,24 @@ Le ciblage se règle à trois niveaux :
 | **Filtrage de sécurité** | Restreint l'application à certains groupes (par défaut : *Authenticated Users*) |
 | **Filtre WMI** | Condition sur la machine (version de Windows, type de poste…) |
 
+L'onglet *Étendue* (*Scope*) d'une GPO réunit les trois : ses liens, son filtrage de sécurité et son filtre WMI.
+
+![GPMC, onglet Étendue de la Default Domain Policy : liée au domaine, appliquée aux Authenticated Users, sans filtre WMI](../../../../assets/active-directory-ad-gpo-02.png)
+
 ![Lier une GPO existante à une OU](../../../../assets/active-directory-ad-gpo-07.png)
+
+**Deux exemples courants.** Le lien suit la moitié de la GPO qui est utilisée : un paramètre *utilisateur* s'applique aux comptes rangés dans l'OU liée, un paramètre *ordinateur* aux machines.
+
+| Besoin | Paramètre | Lien |
+|---|---|---|
+| Interdire le Panneau de configuration aux utilisateurs hors IT | Configuration utilisateur › Modèles d'administration › Panneau de configuration › *Interdire l'accès au Panneau de configuration et à l'application Paramètres du PC* | Les OU des services métiers, pas celle de l'IT |
+| Verrouiller la session après 5 minutes d'inactivité | Configuration ordinateur › Paramètres Windows › Paramètres de sécurité › Stratégies locales › Options de sécurité › *Ouverture de session interactive : limite d'inactivité de l'ordinateur* = 300 secondes | La racine du domaine, pour tous les postes et serveurs |
+
+![Paramètre utilisateur activé : interdire l'accès au Panneau de configuration](../../../../assets/active-directory-ad-gpo-06.png)
+
+![Paramètre ordinateur : limite d'inactivité fixée à 300 secondes](../../../../assets/active-directory-ad-gpo-09.png)
+
+Après `gpupdate /force` sur le poste (ou au prochain rafraîchissement), un utilisateur de l'OU qui ouvre le Panneau de configuration reçoit un message « opération annulée en raison de restrictions » : la GPO s'applique.
 
 ## 9.3 Ordre d'application : LSDOU
 

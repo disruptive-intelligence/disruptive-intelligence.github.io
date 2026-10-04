@@ -14,27 +14,16 @@ up:
 À vérifier :
 
 - nom du processus ;
-    
 - PID / PPID ;
-    
 - processus parent ;
-    
 - chemin du binaire ;
-    
 - ligne de commande ;
-    
 - utilisateur ;
-    
 - niveau d’intégrité ;
-    
 - signature ;
-    
 - DLL chargées ;
-    
 - connexions réseau ;
-    
 - date de création/modification du fichier.
-    
 
 Commandes/outils :
 
@@ -67,27 +56,16 @@ Sigcheck
 À vérifier :
 
 - nom du service ;
-    
 - display name ;
-    
 - état ;
-    
 - mode de démarrage ;
-    
 - compte d’exécution ;
-    
 - chemin du binaire ;
-    
 - permissions du service ;
-    
 - permissions du dossier ;
-    
 - signature du binaire ;
-    
 - date de création/modification ;
-    
 - recovery actions.
-    
 
 Commandes :
 
@@ -110,25 +88,15 @@ Get-Acl "C:\chemin\du\dossier"
 À vérifier :
 
 - Run Keys ;
-    
 - RunOnce ;
-    
 - services ;
-    
 - tâches planifiées ;
-    
 - Startup folders ;
-    
 - WMI persistence ;
-    
 - drivers ;
-    
 - extensions shell ;
-    
 - Winlogon ;
-    
 - AppInit DLLs.
-    
 
 Commandes :
 
@@ -311,29 +279,17 @@ Get-MpPreference
 ## 18. Erreurs fréquentes à éviter
 
 - Confondre **programme** et **processus**.
-    
 - Confondre **processus** et **service**.
-    
 - Dire que tous les `svchost.exe` sont suspects : il y en a beaucoup de légitimes.
-    
 - Oublier de vérifier le **chemin réel** du binaire.
-    
 - Se fier uniquement au nom du processus.
-    
 - Oublier le **compte d’exécution** d’un service.
-    
 - Regarder seulement les permissions du service, mais pas celles du dossier contenant le binaire.
-    
 - Croire qu’être administrateur signifie toujours avoir un token élevé.
-    
 - Confondre **DACL** et **SACL**.
-    
 - Oublier que les Run Keys peuvent exister en `HKCU` et `HKLM`.
-    
 - Ne pas vérifier les tâches planifiées dans une analyse de persistance.
-    
 - Négliger les signatures numériques des binaires.
-    
 
 ---
 
@@ -342,56 +298,32 @@ Get-MpPreference
 ### Questions
 
 1. Quelle est la différence entre un programme et un processus ?
-    
 2. Pourquoi faut-il regarder le PPID d’un processus suspect ?
-    
 3. À quoi sert `svchost.exe` ?
-    
 4. Pourquoi LSASS est-il une cible importante pour un attaquant ?
-    
 5. Quelle commande permet de voir le SID de l’utilisateur courant ?
-    
 6. Que contient un access token ?
-    
 7. Quelle est la différence entre DACL et SACL ?
-    
 8. Où sont stockés les services dans le registre ?
-    
 9. Pourquoi un service en `LocalSystem` avec un dossier modifiable est dangereux ?
-    
 10. Quelles clés registre vérifier pour une persistance simple ?
-    
 11. Quelle commande permet de lister les services avec leur chemin de binaire ?
-    
 12. Pourquoi UAC peut bloquer une action même si l’utilisateur est administrateur ?
-    
 
 ### Réponses attendues
 
 1. Un programme est un fichier sur disque ; un processus est une instance en cours d’exécution.
-    
 2. Le PPID permet de comprendre quel processus l’a lancé et de détecter des chaînes suspectes.
-    
 3. `svchost.exe` héberge des services Windows fournis sous forme de DLL.
-    
 4. LSASS peut contenir des secrets d’authentification comme hashes NTLM ou tickets Kerberos.
-    
 5. `whoami /user`.
-    
 6. SID utilisateur, SID des groupes, privilèges, niveau d’intégrité, informations de session.
-    
 7. DACL = autorisations/refus ; SACL = audit/journalisation.
-    
 8. `HKLM\SYSTEM\CurrentControlSet\Services\<ServiceName>`.
-    
 9. Un attaquant pourrait remplacer le binaire et le faire exécuter avec des privilèges élevés.
-    
 10. `HKCU/HKLM\Software\Microsoft\Windows\CurrentVersion\Run` et `RunOnce`.
-    
 11. `Get-CimInstance Win32_Service | Select Name,State,StartMode,StartName,PathName`.
-    
 12. Parce qu’un admin utilise souvent un token filtré tant qu’il n’a pas validé l’élévation UAC.
-    
 
 ---
 

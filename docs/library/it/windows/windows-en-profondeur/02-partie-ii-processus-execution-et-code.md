@@ -156,11 +156,24 @@ Fil rouge : Léa analyse le payload téléchargé par la macro Word — une DLL 
 
 *Les techniques que les malwares modernes utilisent pour exécuter du code dans un autre processus et échapper à la détection.*
 
+### 9.1 Les familles d'injection
+
 Le **Process Injection classique** : OpenProcess → VirtualAllocEx → WriteProcessMemory → CreateRemoteThread — l'attaquant alloue de la mémoire dans un processus légitime, y écrit du shellcode, et crée un thread pour l'exécuter. Le code malveillant s'exécute dans le contexte du processus cible (svchost.exe, explorer.exe) et hérite de sa réputation. Le **DLL Injection** (charger une DLL malveillante via CreateRemoteThread + LoadLibrary, SetWindowsHookEx, ou QueueUserAPC). Le **Process Hollowing** (créer un processus légitime en état suspendu, vider sa mémoire via NtUnmapViewOfSection, remplacer par du code malveillant via WriteProcessMemory, puis reprendre le thread — le processus semble légitime dans le Task Manager mais exécute du code malveillant). Le **Reflective DLL Loading** (charger une DLL en mémoire sans écrire de fichier sur disque et sans appeler LoadLibrary — la DLL se mappe elle-même via son propre loader ; aucun fichier .dll sur le disque → très discret).
+
+### 9.2 Échapper à la surveillance
 
 Le **PPID Spoofing** (CreateProcess avec PPID forgé — Ch.6). Les **syscalls directs** (appeler directement les fonctions kernel — NtAllocateVirtualMemory au lieu de VirtualAllocEx — pour contourner les hooks EDR en user mode ; les EDR hook les fonctions ntdll.dll en user mode → les syscalls directs sautent par-dessus ces hooks).
 
-La **détection** : Sysmon Event 8 (CreateRemoteThread — processus source → processus cible), Event 10 (ProcessAccess — accès à la mémoire d'un autre processus), Event 25 (ProcessTampering — image file hollowing), ETW Microsoft-Windows-Threat-Intelligence provider. Les EDR hook les fonctions user mode pour détecter ces techniques — les syscalls directs et le BYOVD (Ch.20) contournent ces défenses.
+### 9.3 La détection
+
+| Source | Ce qu'elle montre |
+|---|---|
+| Sysmon 8 (*CreateRemoteThread*) | Un processus crée un thread dans un autre : source → cible |
+| Sysmon 10 (*ProcessAccess*) | Un processus ouvre la mémoire d'un autre, avec les droits demandés |
+| Sysmon 25 (*ProcessTampering*) | L'image en mémoire ne correspond plus au fichier sur disque |
+| ETW *Microsoft-Windows-Threat-Intelligence* | Les opérations mémoire entre processus, consommées par les EDR |
+
+Les EDR hook les fonctions user mode pour détecter ces techniques — les syscalls directs et le BYOVD (Ch.20) contournent ces défenses.
 
 Fil rouge : le malware de Valtec utilise du Process Hollowing — un processus svchost.exe avec un PID suspect s'exécute avec services.exe comme parent (PPID Spoofing) mais son image en mémoire ne correspond pas à son image sur disque.
 

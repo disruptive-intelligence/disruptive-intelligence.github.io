@@ -228,7 +228,18 @@ Code exécuté uniquement en mémoire — jamais écrit sur le disque : PowerShe
 
 *Pour les attaques par phishing initial (le vecteur n°1), cette chaîne est le bloc défensif central de Windows.*
 
-Le **Mark of the Web (MotW)** : quand un fichier est téléchargé depuis Internet ou reçu par email, Windows écrit un ADS Zone.Identifier contenant la source (ZoneId=3 = Internet). Ce marquage déclenche toute la chaîne suivante. **SmartScreen** : quand un fichier avec MotW est exécuté, SmartScreen vérifie la réputation du fichier (hash) et de l'URL source auprès de Microsoft → fichier inconnu ou malveillant = avertissement ou blocage. **Office Protected View** : quand un document Office avec MotW est ouvert, il s'ouvre en mode lecture seule (sandbox) — les macros ne s'exécutent PAS tant que l'utilisateur ne clique pas « Activer la modification ». **Macro restrictions** (GPO : bloquer les macros dans les documents provenant d'Internet — la mesure la plus efficace contre le phishing avec macro ; depuis 2022, Microsoft bloque par défaut les macros VBA dans les documents avec MotW). **ASR** (Attack Surface Reduction rules — Defender) : règles qui bloquent des comportements spécifiques même si le code s'exécute (bloquer les processus enfants de Office, bloquer les appels Win32 depuis les macros, bloquer l'exécution de scripts obfusqués, bloquer le téléchargement de contenu exécutable).
+```text
+Téléchargement → MotW → SmartScreen → Protected View → blocage des macros → règles ASR
+```
+
+
+| Maillon | Ce qu'il fait |
+|---|---|
+| **Mark of the Web (MotW)** | Au téléchargement ou à la réception par e-mail, Windows écrit un ADS `Zone.Identifier` avec la provenance (`ZoneId=3` = Internet). C'est ce marquage qui déclenche toute la suite. |
+| **SmartScreen** | À l'exécution d'un fichier marqué, vérifie la réputation du fichier (hash) et de l'URL d'origine : inconnu ou malveillant → avertissement ou blocage. |
+| **Office Protected View** | Un document marqué s'ouvre en lecture seule, dans un bac à sable : ses macros ne tournent pas tant que l'utilisateur n'a pas cliqué « Activer la modification ». |
+| **Blocage des macros** | GPO qui bloque les macros des documents venus d'Internet, la mesure la plus efficace contre l'hameçonnage par macro. Depuis 2022, Microsoft bloque par défaut les macros VBA des documents marqués. |
+| **Règles ASR** (*Attack Surface Reduction*, Defender) | Bloquent des comportements même si le code s'exécute : processus enfants d'Office, appels Win32 depuis une macro, scripts obfusqués, téléchargement de contenu exécutable. |
 
 Les attaquants contournent la chaîne en **supprimant le MotW** (archives .zip/.rar qui ne préservent pas le MotW dans certaines versions, images disque .iso/.img qui ne marquent pas les fichiers extraits, contournements de SmartScreen — CVE-2023-36025, CVE-2024-21412). Chaque contournement de MotW est une CVE critique car il casse toute la chaîne de protection.
 

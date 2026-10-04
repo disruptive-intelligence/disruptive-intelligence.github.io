@@ -38,9 +38,16 @@ Compte domaine  → NTDS.dit (sur les DC)
 
 > **Dump SAM vs dump LSASS — à bien distinguer.** La SAM concerne les comptes **locaux stockés sur disque** (hashes au repos). LSASS est un **processus actif** qui contient les secrets des **sessions en cours** (tickets, clés). Sources, contenus et protections sont donc différents.
 
-### 11.2 Toutes les sources, en détail
+### 11.2 Les autres sources de secrets
 
-Le **SAM** (Security Account Manager — hashes NTLM des comptes locaux, chiffré avec la boot key stockée dans SYSTEM ; SAM sans SYSTEM = coffre sans clé). Le **NTDS.dit** (base AD sur les DC — hashes de TOUS les comptes du domaine — renvoi cours AD). La **mémoire lsass.exe** (le processus d'authentification — contient en mémoire les tickets Kerberos, hashes NTLM, et parfois mots de passe en clair si WDigest activé ; c'est ce que Mimikatz extrait via sekurlsa::logonpasswords). Les **LSA Secrets** (HKLM\SECURITY\Policy\Secrets — mots de passe des comptes de service en clair, clés de chiffrement, mot de passe machine). Le **DPAPI** (Data Protection API — chiffre les secrets utilisateur : mots de passe Chrome/Edge, credentials WiFi, Vault ; la master key est dérivée du mot de passe de l'utilisateur ; la domain backup key sur les DC déchiffre TOUTES les master keys du domaine). Les **DCC2** (Domain Cached Credentials — hash dérivé du MdP domaine, mis en cache pour le login offline — par défaut les 10 derniers logons ; crackable avec hashcat -m 2100, plus lent que NTLM mais faisable). Les **GPP** (Group Policy Preferences — cpassword chiffré avec une clé publiée par Microsoft → déchiffrement trivial ; corrigé MS14-025 mais les GPP historiques restent souvent).
+Au-delà de SAM, NTDS.dit et LSASS (tableau ci-dessus), quatre sources reviennent dans toutes les investigations :
+
+| Source | Où | Ce qu'elle contient | Point d'attention |
+|---|---|---|---|
+| **LSA Secrets** | `HKLM\SECURITY\Policy\Secrets` | Mots de passe des comptes de service, mot de passe du compte machine, clés de chiffrement | Lisibles par SYSTEM : un service qui tourne sous un compte de domaine y laisse son mot de passe |
+| **DPAPI** (*Data Protection API*) | Master keys dans `%APPDATA%\Microsoft\Protect\` | Secrets chiffrés pour l'utilisateur : mots de passe des navigateurs, Wi-Fi, Credential Manager | La master key dérive du mot de passe de l'utilisateur ; la clé de sauvegarde du domaine, sur les DC, ouvre toutes les master keys du domaine |
+| **DCC2** (*Domain Cached Credentials*) | `HKLM\SECURITY\Cache` | Une empreinte des derniers comptes de domaine connectés (10 par défaut), pour ouvrir une session sans DC | Plus lente à casser qu'un hash NTLM mais pas impossible ; réduire le nombre en cache sur les serveurs |
+| **GPP** (*Group Policy Preferences*) | `SYSVOL` | Anciens mots de passe (`cpassword`) chiffrés avec une clé publiée par Microsoft | Corrigé par MS14-025, mais les anciens fichiers restent souvent dans SYSVOL : les chercher et les supprimer |
 
 ---
 
@@ -49,9 +56,22 @@ Le **SAM** (Security Account Manager — hashes NTLM des comptes locaux, chiffr�
 
 techniques SAM/SYSTEM/LSASS et détection
 
+### 12.1 Les sources visées et leurs traces
+
 L'extraction **SAM + SYSTEM** : reg save (commande native — admin local, Event 4688 command line), Volume Shadow Copy (plus discrète), backup wbadmin (offline), accès physique/Live USB (hors OS), Mimikatz lsadump::sam (détecté par EDR/AV). L'extraction **NTDS.dit** : ntdsutil, VSS, DCSync (renvoi cours AD). Le **dump mémoire LSASS** — 7 techniques avec traces et détection : Task Manager (Sysmon 10, fichier .dmp), comsvcs.dll (LoLBin — rundll32 comsvcs.dll,MiniDump, Sysmon 10 + 4688), procdump (Sysmon 10), Mimikatz sekurlsa::logonpasswords (signature AV, behavior EDR), nanodump/dumpert (contournement EDR — plus difficile à détecter), duplication de handle (subtil), et SSP injection (DLL chargée dans lsass — Sysmon 7). Ce qu'on trouve dans un dump LSASS : hashes NTLM (toujours sauf Credential Guard), tickets Kerberos (si session domaine), MdP en clair (si WDigest activé — UseLogonCredential=1), clés DPAPI master keys. Les LSA Secrets (secretsdump, Mimikatz lsadump::secrets — mots de passe de services en clair). Le DPAPI (master key déchiffrée avec le hash NTLM → accès Chrome/WiFi/Vault). Les DCC2 (secretsdump, Mimikatz lsadump::cache).
 
-La **détection** : Sysmon 10 sur lsass.exe (processus source inhabituel), 4688/Sysmon 1 command line reg save sur hives sensibles, 7036+4688 VSS suspecte, Sysmon 7 DLL chargée dans lsass, Sysmon 13 modification registre SSP, Event 4662 pour DCSync.
+### 12.2 La détection
+
+| Source | Ce qu'elle révèle |
+|---|---|
+| Sysmon 10 sur `lsass.exe` | Un processus inhabituel ouvre la mémoire de LSASS |
+| 4688 / Sysmon 1 | Une ligne de commande `reg save` visant SAM, SYSTEM ou SECURITY |
+| 7036 + 4688 | Un cliché instantané (VSS) créé hors des sauvegardes prévues |
+| Sysmon 7 | Une DLL inattendue chargée dans LSASS |
+| Sysmon 13 | Une modification de la liste des SSP dans le registre |
+| 4662 | Une réplication d'annuaire demandée par une machine qui n'est pas un DC (DCSync, cours AD) |
+
+Les protections qui ferment ces sources sont au chapitre suivant.
 
 ---
 

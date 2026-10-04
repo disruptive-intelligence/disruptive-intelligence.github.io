@@ -7,7 +7,7 @@ up:
   - index.md
 ---
 
-### Synthèse mentale
+## Synthèse mentale
 
 Tout le modèle de sécurité Windows tient dans une chaîne :
 
@@ -17,7 +17,7 @@ Tout le reste s'y rattache : les **services** s'exécutent avec un compte (souve
 
 ---
 
-### Commandes à connaître par cœur
+## Commandes à connaître par cœur
 
 ```cmd
 systeminfo                            # Cartographie de la cible
@@ -42,7 +42,7 @@ Get-WmiObject -Class Win32_OperatingSystem | select Version,BuildNumber
 
 ---
 
-### Erreurs fréquentes à éviter
+## Erreurs fréquentes à éviter
 
 - Croire que **System32 = 32 bits** → c'est **64 bits** (SysWOW64 = 32 bits).
 - Confondre **NTFS permissions** et **Share permissions** → les deux s'appliquent, la plus restrictive gagne.
@@ -55,13 +55,13 @@ Get-WmiObject -Class Win32_OperatingSystem | select Version,BuildNumber
 
 ---
 
-### Résumé ultra-court pour entretien
+## Résumé ultra-court pour entretien
 
 > Windows fonde sa sécurité sur les **SID** (identifiants uniques), les **access tokens** (qui portent SID, groupes et privilèges d'une session) et les **ACL/DACL** (qui décident, par comparaison avec le token, l'accès à chaque objet). L'authentification passe par **LSASS**, qui vérifie l'identité contre la **SAM** locale (ou Active Directory en domaine) et garde des identifiants en mémoire — ce qui en fait une cible de vol. Les **services** tournent souvent en **LocalSystem** : leurs mauvaises permissions sont un vecteur d'élévation vers SYSTEM. La **persistance** se cache dans le **registre** (clés Run/RunOnce) ou dans des services. **SMB** (port 445) gère les partages, avec des partages administratifs (`C$`, `ADMIN$`) actifs par défaut. L'**UAC** ralentit l'abus de privilèges mais n'est pas une barrière absolue.
 
 ---
 
-### Mini quiz
+## Mini quiz
 
 1. Quelle commande donne une vue d'ensemble du système (OS, build, patchs) ?
 2. System32 contient-il les binaires 32 ou 64 bits ?
@@ -78,35 +78,3 @@ Get-WmiObject -Class Win32_OperatingSystem | select Version,BuildNumber
 13. Quelle est la différence entre une session interactive et non-interactive ?
 14. L'UAC est-il une barrière de sécurité infranchissable ? Pourquoi ?
 15. Où sont stockés physiquement les fichiers du registre machine ?
-
-
-## Windows — Processus, Services et Sécurité
-
-> Objectif : comprendre les mécanismes Windows utiles en cybersécurité : processus, services, LSASS, tokens, SID, ACL, registre, permissions de services, persistance et protections natives.
-
----
-
-### 0. Vue d’ensemble
-
-Windows exécute des programmes sous forme de **processus**. Chaque processus tourne dans un contexte précis : utilisateur, privilèges, espace mémoire, fichiers ouverts, DLL chargées, connexions réseau, etc.
-
-Les **services Windows** sont des processus particuliers : ils sont conçus pour tourner longtemps, souvent en arrière-plan, parfois dès le démarrage de la machine et sans session utilisateur ouverte.
-
-Côté sécurité, Windows s’appuie sur plusieurs notions centrales :
-
-- **SID** : identifiant unique d’un utilisateur, groupe, machine ou service.
-    
-- **Access token** : “badge” attaché aux processus pour représenter les droits de l’utilisateur.
-    
-- **ACL / ACE / DACL / SACL** : règles d’accès appliquées aux objets sécurisables.
-    
-- **LSASS** : processus critique chargé de l’authentification et de la politique de sécurité locale.
-    
-- **Registre** : base de configuration de Windows, souvent utilisée pour les services, la sécurité et la persistance.
-    
-
-> Idée clé : pour comprendre Windows en cyber, il faut comprendre la chaîne suivante :
-> 
-> **Utilisateur → authentification → token → processus → accès aux objets → DACL → autorisation ou refus**.
-
----

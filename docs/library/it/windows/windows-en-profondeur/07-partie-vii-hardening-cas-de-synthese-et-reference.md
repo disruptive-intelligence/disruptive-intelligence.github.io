@@ -77,23 +77,72 @@ Synthèse du fil rouge. L'investigation complète de Léa sur l'incident Valtec 
 
 **Phase 5 — Mouvement latéral :** dump lsass via comsvcs.dll (Sysmon 10 — accès lsass par rundll32 + comsvcs.dll en command line — un LOLBin classique). Credentials de l'admin IT récupérées (pas de Credential Guard — la mesure P1 n°9 aurait bloqué). WMI vers SRV-FILE01 (Event 4624 type 3 + 4688 wmiprvse.exe). PsExec vers SRV-APP02 (Event 7045 — PSEXESVC). DCSync depuis SRV-APP02 (Event 4662 — droits de réplication depuis non-DC → alerte critique).
 
-**Timeline :** 09:12 email → 09:15 macro → 09:15 DLL téléchargée (certutil) → 09:16 process hollowing svchost → 09:17 C2 → 09:18 persistence (×3) → 09:25 dump lsass → 09:30 WMI latéral → 09:35 PsExec → 09:42 DCSync. **30 minutes du phishing au Domain Admin.**
+**Timeline :**
 
-**IOCs et recommandations :** hash DLL, IP C2, domaine DNS, clés de registre, noms de scheduled tasks. Recommandations priorisées : P0 — bloquer macros Internet (GPO), centraliser les logs AD CS ; P1 — Credential Guard, LAPS, ASR rules Office ; P2 — WDAC, HVCI. Le MotW bypass via archive .zip est le vecteur critique — recommandation : configurer la politique d'archivage pour propager le MotW (fonctionnalité Windows 11 22H2+).
+```text
+09:12  e-mail reçu
+09:15  macro exécutée, DLL téléchargée (certutil)
+09:16  process hollowing dans svchost
+09:17  premier contact avec le C2
+09:18  trois persistances posées
+09:25  accès à la mémoire de lsass
+09:30  WMI vers SRV-FILE01
+09:35  PsExec vers SRV-APP02
+09:42  DCSync
+```
+
+
+**30 minutes du phishing au Domain Admin.**
+
+**IOCs :** hash de la DLL, IP du C2, domaine DNS, clés de registre, noms des tâches planifiées.
+
+**Recommandations priorisées :**
+
+| Priorité | Mesures |
+|---|---|
+| P0 | Bloquer les macros des documents venus d'Internet (GPO), centraliser les journaux AD CS |
+| P1 | Credential Guard, LAPS, règles ASR pour Office |
+| P2 | WDAC, HVCI |
+
+Le vecteur critique est la perte du MotW dans l'archive .zip : configurer l'archivage pour qu'il propage le MotW aux fichiers extraits (Windows 11 22H2 et suivants).
 
 ---
 
 
 ## Chapitre 29 — Cas complet : analyse d'un ransomware pré-détonation
 
-Un fichier suspect intercepté par l'email gateway. Léa analyse en sandbox. **Analyse statique** (PE : entropy élevée = packing UPX, imports suspects — CryptEncrypt, FindFirstFileW, GetLogicalDriveStrings → probable ransomware, strings : note de rançon en anglais, extensions ciblées .docx .xlsx .pdf .pst, commande vssadmin delete shadows). **Analyse dynamique** en sandbox (dépackage UPX → imports réels visibles, exécution : création de mutex GlobalRansomLock, énumération des drives, chiffrement AES-256 fichier par fichier avec renommage en .locked, suppression des shadow copies via vssadmin, dépose de la note de rançon README_UNLOCK.txt dans chaque dossier). **Artefacts générés** : Sysmon 1 (process creation avec vssadmin delete shadows en child), Sysmon 11 (création de README_UNLOCK.txt dans de multiples dossiers — pattern détectable), Sysmon 13 (modification du registre — désactivation de la restauration système), Event 7045 (service créé pour la persistence). Le cas enseigne l'analyse PE (Ch.8), les mécanismes d'exécution (Ch.7), et comment construire des règles de détection avant la détonation.
+Un fichier suspect intercepté par la passerelle de messagerie. Léa l'analyse en sandbox.
+
+**Analyse statique (Ch.8).** Le PE a une entropie élevée (packing UPX) et des imports suspects — CryptEncrypt, FindFirstFileW, GetLogicalDriveStrings — qui orientent vers un ransomware. Les chaînes contiennent une note de rançon en anglais, les extensions ciblées (.docx, .xlsx, .pdf, .pst) et la commande `vssadmin delete shadows`.
+
+**Analyse dynamique.** Une fois dépacké, les vrais imports apparaissent. À l'exécution : création du mutex `GlobalRansomLock`, énumération des lecteurs, chiffrement AES-256 fichier par fichier avec renommage en `.locked`, suppression des clichés instantanés, dépôt de `README_UNLOCK.txt` dans chaque dossier.
+
+**Artefacts générés** — de quoi écrire les règles de détection avant la détonation :
+
+| Source | Trace |
+|---|---|
+| Sysmon 1 | `vssadmin delete shadows` lancé en processus enfant |
+| Sysmon 11 | `README_UNLOCK.txt` créé dans de nombreux dossiers en peu de temps |
+| Sysmon 13 | Registre modifié : restauration système désactivée |
+| 7045 | Service créé pour la persistance |
 
 ---
 
 
 ## Chapitre 30 — Cas complet : investigation mémoire avec Volatility
 
-Un dump mémoire (RAM) réalisé sur une machine suspecte. Léa utilise **Volatility 3** : **windows.pslist** (lister les processus — un svchost.exe avec un PPID suspect, PID 8240, parent services.exe mais image path anormal), **windows.psscan** (scan des structures EPROCESS en mémoire — détecte les processus cachés/unlinkés par un rootkit — un processus invisible dans pslist mais présent dans psscan = rootkit), **windows.netscan** (connexions réseau — une connexion vers l'IP C2 depuis le PID 8240, confirmant le svchost creux), **windows.malfind** (sections mémoire RWX dans le svchost — code injecté détecté, signature de shellcode), **windows.cmdline** (commandes des processus — le svchost n'a pas d'argument -k attendu), **windows.hashdump** (hashes SAM), **windows.lsadump** (tickets Kerberos en mémoire). Le cas enseigne l'analyse mémoire comme compétence forensic complémentaire à l'analyse disque.
+Un dump de la mémoire vive d'une machine suspecte. Léa l'analyse avec **Volatility 3** :
+
+| Plugin | Ce qu'il montre | Ce que Léa y trouve |
+|---|---|---|
+| `windows.pslist` | Les processus, d'après la liste tenue par le noyau | Un `svchost.exe` (PID 8240) dont le parent est bien `services.exe`, mais au chemin d'image anormal |
+| `windows.psscan` | Les structures EPROCESS retrouvées en balayant la mémoire | Un processus présent ici mais absent de `pslist` a été masqué : signe de rootkit |
+| `windows.netscan` | Les connexions réseau | Le PID 8240 parle à l'IP du C2 : le svchost est bien creux |
+| `windows.malfind` | Les zones mémoire exécutables et inscriptibles (RWX) suspectes | Du code injecté dans ce svchost |
+| `windows.cmdline` | La ligne de commande de chaque processus | Le svchost n'a pas l'argument `-k` attendu |
+| `windows.hashdump`, `windows.lsadump` | Les hashes de la SAM et les secrets LSA présents en mémoire | Les comptes exposés, donc les mots de passe à changer |
+
+L'analyse mémoire complète l'analyse disque : elle voit ce qui n'a jamais été écrit sur le disque.
 
 ---
 
