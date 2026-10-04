@@ -2,7 +2,7 @@
 title: Active Directory
 source: IT/03 Active Directory/Active Directory.md
 format: cours
-revue: '2026-09-11'
+revue: '2026-10-04'
 revision: library/revision/active-directory.md
 ---
 
@@ -33,8 +33,17 @@ revision: library/revision/active-directory.md
     - [Chapitre 2 — Architecture et composants](01-partie-i-fondations/02-chapitre-2-architecture-et-composants.md)
     - [Chapitre 3 — Objets, attributs et structure LDAP](01-partie-i-fondations/03-chapitre-3-objets-attributs-et-structure-ldap.md)
     - [Chapitre 4 — Autorisations, ACL et modèle de sécurité](01-partie-i-fondations/04-chapitre-4-autorisations-acl-et-modele-de-securite.md)
-- [Partie II — Authentification](02-partie-ii-authentification.md)
-- [Partie III — Administration et contrôle](03-partie-iii-administration-et-controle.md)
+- [Partie II — Authentification](02-partie-ii-authentification/index.md)
+    - [Avant les protocoles : LSASS et l'ouverture de session](02-partie-ii-authentification/01-avant-les-protocoles-lsass-et-l-ouverture-de-sessi.md)
+    - [Chapitre 5 — NTLM : le protocole hérité qui refuse de disparaître](02-partie-ii-authentification/02-chapitre-5-ntlm-le-protocole-herite-qui-refuse-de.md)
+    - [Chapitre 6 — Kerberos : le flux complet et les subtilités](02-partie-ii-authentification/03-chapitre-6-kerberos-le-flux-complet-et-les-subtili.md)
+    - [Chapitre 7 — Où sont stockés les secrets et comment ils sont volés](02-partie-ii-authentification/04-chapitre-7-ou-sont-stockes-les-secrets-et-comment.md)
+    - [Chapitre 8 — AD CS : PKI interne, certificats et surface d'attaque](02-partie-ii-authentification/05-chapitre-8-ad-cs-pki-interne-certificats-et-surfac.md)
+- [Partie III — Administration et contrôle](03-partie-iii-administration-et-controle/index.md)
+    - [Chapitre 9 — Group Policy (GPO) : configuration et sécurité](03-partie-iii-administration-et-controle/01-chapitre-9-group-policy-gpo-configuration-et-secur.md)
+    - [Chapitre 10 — Outils d'administration et requêtage](03-partie-iii-administration-et-controle/02-chapitre-10-outils-d-administration-et-requetage.md)
+    - [Chapitre 11 — Tiering model et séparation des privilèges](03-partie-iii-administration-et-controle/03-chapitre-11-tiering-model-et-separation-des-privil.md)
+    - [Chapitre 12 — Journalisation et audit AD](03-partie-iii-administration-et-controle/04-chapitre-12-journalisation-et-audit-ad.md)
 - [Partie IV — Attaques AD](04-partie-iv-attaques-ad.md)
 - [Partie V — Détection](05-partie-v-detection.md)
 - [Partie VI — Hardening](06-partie-vi-hardening.md)

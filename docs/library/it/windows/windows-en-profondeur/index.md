@@ -2,7 +2,7 @@
 title: Windows en profondeur
 source: IT/02 Windows/Comprendre Windows/Windows en profondeur.md
 format: cours
-revue: '2026-04-08'
+revue: '2026-10-04'
 revision: library/revision/windows.md
 ---
 
@@ -28,11 +28,20 @@ revision: library/revision/windows.md
 
 ## Sommaire
 
-- [Partie I — Architecture fondamentale](01-partie-i-architecture-fondamentale.md)
+- [Partie I — Architecture fondamentale](01-partie-i-architecture-fondamentale/index.md)
+    - [Chapitre 1 — Vue d'ensemble de Windows](01-partie-i-architecture-fondamentale/01-chapitre-1-vue-d-ensemble-de-windows.md)
+    - [Chapitre 2 — Le processus de démarrage](01-partie-i-architecture-fondamentale/02-chapitre-2-le-processus-de-demarrage.md)
+    - [Chapitre 3 — Noyau, mémoire et pilotes](01-partie-i-architecture-fondamentale/03-chapitre-3-noyau-memoire-et-pilotes.md)
+    - [Chapitre 4 — Le système de fichiers NTFS](01-partie-i-architecture-fondamentale/04-chapitre-4-le-systeme-de-fichiers-ntfs.md)
+    - [Chapitre 5 — Registre Windows, ruches et persistance](01-partie-i-architecture-fondamentale/05-chapitre-5-registre-windows-ruches-et-persistance.md)
 - [Partie II — Processus, exécution et code](02-partie-ii-processus-execution-et-code.md)
 - [Partie III — Credentials et authentification](03-partie-iii-credentials-et-authentification.md)
 - [Partie IV — Réseau et communication](04-partie-iv-reseau-et-communication.md)
-- [Partie V — Modèle de sécurité et protections](05-partie-v-modele-de-securite-et-protections.md)
+- [Partie V — Modèle de sécurité et protections](05-partie-v-modele-de-securite-et-protections/index.md)
+    - [Chapitre 17 — Modèle de sécurité, intégrité et mitigations mémoire](05-partie-v-modele-de-securite-et-protections/01-chapitre-17-modele-de-securite-integrite-et-mitiga.md)
+    - [Chapitre 18 — Authentification locale et domaine](05-partie-v-modele-de-securite-et-protections/02-chapitre-18-authentification-locale-et-domaine.md)
+    - [Chapitre 19 — Privilèges, élévation et contrôle d'exécution](05-partie-v-modele-de-securite-et-protections/03-chapitre-19-privileges-elevation-et-controle-d-exe.md)
+    - [Chapitre 20 — Détection moderne : AMSI, ETW, EDR et BYOVD](05-partie-v-modele-de-securite-et-protections/04-chapitre-20-detection-moderne-amsi-etw-edr-et-byov.md)
 - [Partie VI — Event logs, artefacts et forensic](06-partie-vi-event-logs-artefacts-et-forensic.md)
 - [Partie VII — Hardening, cas de synthèse et référence](07-partie-vii-hardening-cas-de-synthese-et-reference.md)
 - [Annexes](08-annexes.md)

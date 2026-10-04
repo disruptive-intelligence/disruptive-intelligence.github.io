@@ -12,17 +12,53 @@ up:
 
 ## Chapitre 27 — Hardening Windows : P0 / P1 / P2
 
-### 27.1 P0 — Actions immédiates (semaine 1)
+*Durcir, c'est réduire la surface d'attaque sans casser les usages. On procède par vagues : d'abord la visibilité et les protocoles inutiles, puis la protection des identifiants, enfin le contrôle de l'exécution. Chaque mesure passe par un pilote avant le déploiement général, et les baselines de référence (Microsoft Security Baselines, guides de l'ANSSI, CIS Benchmarks) servent de point de départ.*
 
-(1) Activer le command line logging (GPO Audit Process Creation + Include command line — sans ça, les Event 4688 sont aveugles). (2) Déployer Sysmon avec la config SwiftOnSecurity. (3) Centraliser les logs (WEF ou agent SIEM — les logs locaux sont effacés par l'attaquant). (4) Désactiver LLMNR + NBT-NS (GPO — bloque le poisoning Responder). (5) Désactiver SMBv1 (GPO — bloque EternalBlue). (6) Bloquer les macros Office dans les documents provenant d'Internet (GPO — la mesure anti-phishing la plus efficace). (7) Activer Script Block Logging PowerShell (GPO — la détection PowerShell n°1).
+### 27.1 P0 — Actions immédiates (première semaine)
 
-### 27.2 P1 — Actions sous 3 mois
+| # | Mesure | Comment | Pourquoi |
+|---|---|---|---|
+| 1 | Ligne de commande dans les créations de processus | GPO *Audit Process Creation* + *Include command line* | Sans elle, 4688 ne dit pas ce qui a été exécuté |
+| 2 | Sysmon | Configuration de référence, déployée par GPO ou Intune | Télémétrie riche (Ch.22) |
+| 3 | Centralisation des journaux | WEF ou agent SIEM | Un journal local s'efface |
+| 4 | LLMNR et NBT-NS désactivés | GPO *Turn off multicast name resolution* ; NetBIOS désactivé sur les interfaces | Supprime la résolution de noms par diffusion |
+| 5 | SMBv1 désactivé | Fonctionnalité Windows / GPO | Protocole obsolète et vulnérable |
+| 6 | Macros des documents venus d'Internet bloquées | GPO Office | Premier vecteur d'accès par hameçonnage |
+| 7 | Script Block Logging PowerShell | GPO | Visibilité sur PowerShell (Ch.10) |
 
-(8) Déployer LAPS (mot de passe admin local unique par machine). (9) Activer Credential Guard sur les machines compatibles (Enterprise, VBS capable). (10) Activer RunAsPPL sur lsass (GPO — protection contre le dump mémoire). (11) Activer SMB signing obligatoire (GPO — bloque le relay NTLM). (12) Configurer les ASR rules (Defender — bloquer les processus enfants de Office, bloquer les appels Win32 depuis macros). (13) Activer BitLocker sur tout le parc (protection offline). (14) Désactiver les protocoles legacy (WDigest — vérifier UseLogonCredential=0, NTLMv1 — désactiver).
+### 27.2 P1 — Sous trois mois
 
-### 27.3 P2 — Actions à moyen terme (6 mois)
+| # | Mesure | Pourquoi |
+|---|---|---|
+| 8 | Windows LAPS | Mot de passe administrateur local unique par machine |
+| 9 | Credential Guard (matériel compatible) | Isole les secrets d'authentification de LSASS |
+| 10 | LSA Protection (*RunAsPPL*) | LSASS en processus protégé |
+| 11 | Signature SMB obligatoire | Empêche la réutilisation d'authentifications NTLM vers SMB |
+| 12 | Règles ASR de Defender | Bloque des comportements typiques (enfants des applications Office, scripts obfusqués…) |
+| 13 | BitLocker sur tout le parc | Protège les données et les ruches en cas de vol ou d'accès hors ligne |
+| 14 | Protocoles anciens retirés | WDigest désactivé (vérifier `UseLogonCredential = 0`), NTLMv1 et LM refusés |
 
-(15) Configurer AppLocker ou WDAC (contrôle d'exécution — seuls les binaires autorisés s'exécutent). (16) Activer HVCI (blocage des drivers non signés — protection BYOVD partielle). (17) Déployer la Microsoft Vulnerable Driver Blocklist. (18) Activer Transcription Logging PowerShell (complément au Script Block). (19) Configurer les restrictions de contenu exécutable téléchargeable (GPO + SmartScreen). (20) Auditer et supprimer les points de persistence inutiles (Autoruns — services, tâches, clés Run non nécessaires). (21) Mettre en place le monitoring des LOLBins (règles SIEM sur certutil, mshta, rundll32, regsvr32, bitsadmin avec command lines suspectes).
+### 27.3 P2 — À six mois
+
+| # | Mesure | Pourquoi |
+|---|---|---|
+| 15 | AppLocker ou WDAC, d'abord en mode audit | Seuls les programmes autorisés s'exécutent |
+| 16 | HVCI (intégrité du code noyau) | Bloque les pilotes non conformes |
+| 17 | Liste de blocage des pilotes vulnérables de Microsoft | Ferme l'usage de pilotes signés mais vulnérables |
+| 18 | Transcription PowerShell | Complète le Script Block Logging |
+| 19 | SmartScreen et propagation du Mark of the Web | Préserve la chaîne de protection des fichiers téléchargés (Ch.26) |
+| 20 | Revue des points de persistance (Autoruns) | Supprimer services, tâches et clés Run inutiles |
+| 21 | Règles SIEM sur les binaires système détournables | Surveiller les usages inhabituels de certutil, mshta, rundll32, regsvr32… |
+
+### 27.4 Durcir sans casser
+
+```text
+Inventorier → choisir une baseline → tester sur un groupe pilote (mode audit quand il existe)
+→ déployer par vagues → mesurer (conformité, incidents) → documenter les exceptions
+```
+
+
+Une exception n'est acceptable que si elle est **justifiée, limitée dans le temps, compensée** (surveillance renforcée, segmentation) et **revue** régulièrement.
 
 ---
 
@@ -66,12 +102,56 @@ Un dump mémoire (RAM) réalisé sur une machine suspecte. Léa utilise **Volati
 
 la référence de détection
 
-*Ce chapitre est une référence — l'arbre de processus normal est le fondement de la détection basée sur le comportement.*
+*Ce chapitre est une fiche de référence : savoir à quoi ressemble un système sain est la condition pour repérer l'anomalie.*
 
-L'arbre complet avec, pour chaque processus : le parent attendu, le chemin attendu, le nombre d'instances attendu, l'utilisateur attendu, les arguments attendus, et les anomalies qui signalent une compromission.
+### 31.1 L'arbre
 
-**System** (PID 4, pas de parent, kernel mode, toujours présent — anomalie : PID ≠ 4). **smss.exe** (parent : System, chemin : %SystemRoot%\System32, 1 instance enfant de System — anomalie : parent ≠ System, chemin ≠ System32, instances multiples enfants de System). **csrss.exe** (parent : smss.exe devenu orphelin car smss se termine, chemin : System32, 2+ instances — anomalie : parent visible autre que smss orphelin). **wininit.exe** (parent : smss.exe orphelin, chemin : System32, 1 instance — anomalie : parent ≠ smss orphelin, instances multiples). **services.exe** (parent : wininit.exe, chemin : System32, 1 instance, utilisateur : SYSTEM — anomalie : parent ≠ wininit.exe, instances multiples, utilisateur ≠ SYSTEM). **svchost.exe** (parent : services.exe, chemin : System32, multiples instances, utilisateur : SYSTEM/LOCAL SERVICE/NETWORK SERVICE, **arguments : -k [nom_groupe]** — anomalies critiques : parent ≠ services.exe, chemin ≠ System32, pas d'argument -k, argument -k inhabituel, utilisateur ≠ SYSTEM/LOCAL/NETWORK SERVICE). **lsass.exe** (parent : wininit.exe, chemin : System32, **1 seule instance**, utilisateur : SYSTEM — anomalies critiques : parent ≠ wininit.exe, chemin ≠ System32, **2 instances = la seconde est probablement malveillante**, utilisateur ≠ SYSTEM). **winlogon.exe** (parent : smss.exe orphelin, chemin : System32, 1+ instances par session — anomalie : chemin ≠ System32). **explorer.exe** (parent : userinit.exe devenu orphelin, chemin : %SystemRoot%, 1 instance par session utilisateur — anomalie : parent autre que userinit orphelin, instances multiples pour un même utilisateur).
+```text
+System (PID 4)
+└── smss.exe                         ← une instance « maître », enfant de System
+    ├── csrss.exe        (session 0)  ← le smss enfant se termine : parent orphelin
+    ├── wininit.exe      (session 0)
+    │   ├── services.exe
+    │   │   └── svchost.exe -k <groupe>   (nombreuses instances)
+    │   │       └── … services hébergés
+    │   └── lsass.exe                 ← UNE seule instance
+    ├── csrss.exe        (session 1+)
+    └── winlogon.exe     (session 1+)
+        └── userinit.exe → explorer.exe   ← userinit se termine : explorer orphelin
+                              └── applications de l'utilisateur
+```
 
-Les **cas courants de faux positifs** : Windows Update peut lancer des processus avec des parentés inhabituelles, les outils de management (SCCM, Intune) peuvent créer des processus enfants de services atypiques, et certains logiciels tiers légitimes ont des arbres de processus non standard → la baseline de l'environnement est indispensable pour réduire les faux positifs.
+
+### 31.2 La fiche par processus
+
+| Processus | Parent attendu | Chemin | Instances | Compte | Anomalies typiques |
+|---|---|---|---|---|---|
+| **System** | — | (noyau) | 1 | SYSTEM | PID différent de 4 |
+| **smss.exe** | System | `System32` | 1 maître (+ enfants éphémères) | SYSTEM | Autre parent, instances persistantes multiples |
+| **csrss.exe** | smss.exe (orphelin) | `System32` | 2 et plus (une par session) | SYSTEM | Parent visible, autre chemin |
+| **wininit.exe** | smss.exe (orphelin) | `System32` | 1 | SYSTEM | Plusieurs instances |
+| **services.exe** | wininit.exe | `System32` | 1 | SYSTEM | Autre parent, autre compte |
+| **svchost.exe** | services.exe | `System32` (ou `SysWOW64`) | Nombreuses | SYSTEM, LOCAL SERVICE, NETWORK SERVICE | Parent ≠ services.exe, pas d'argument `-k`, compte utilisateur, faute dans le nom (`scvhost`) |
+| **lsass.exe** | wininit.exe | `System32` | **1** | SYSTEM | Deuxième instance, autre parent, autre chemin, processus enfants |
+| **winlogon.exe** | smss.exe (orphelin) | `System32` | 1 par session | SYSTEM | Autre chemin |
+| **explorer.exe** | userinit.exe (orphelin) | `C:\Windows` | 1 par utilisateur connecté | L'utilisateur | Autre parent, plusieurs instances pour un même utilisateur |
+
+### 31.3 Les quatre vérifications
+
+Pour tout processus critique : **parent**, **chemin**, **nombre d'instances**, **compte**. On y ajoute la **signature** du binaire et la **ligne de commande**. Une seule incohérence justifie un examen ; c'est leur combinaison qui qualifie la suspicion.
+
+**Chaînes parent → enfant suspectes à connaître :**
+
+```text
+winword.exe / excel.exe / outlook.exe → powershell.exe, cmd.exe, wscript.exe, mshta.exe, rundll32.exe
+navigateur → rundll32.exe, regsvr32.exe
+services.exe → cmd.exe /c … (service créé pour lancer une commande)
+wmiprvse.exe → powershell.exe (exécution via WMI)
+```
+
+
+### 31.4 Faux positifs
+
+Windows Update, les outils de gestion (SCCM, Intune), les installeurs et certains logiciels métier produisent des parentés inhabituelles. La **baseline de l'environnement** — ce qui est normal ici — est indispensable pour que les règles de détection restent utiles.
 
 ---

@@ -113,6 +113,8 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 | 4768 | Security | TGT request | Sans pré-auth = AS-REP Roasting |
 | 4769 | Security | TGS request | RC4 en volume = Kerberoasting |
 | 4771 | Security | Kerberos pre-auth failed | Volume = spraying |
+| 4776 | Security | Validation NTLM | Repli hors de Kerberos, source inhabituelle |
+| 4670 | Security | Permissions d'un objet modifiées | Objets Tier 0 |
 | 4887 | Security | Certificate enrollment | SAN inhabituel = ESC1 abuse |
 | 5136 | Security | Directory object modified | AdminSDHolder, GPO, ACL, msDS-KeyCredentialLink |
 | 5137 | Security | Directory object created | Objet nTDSDSA = DCShadow |
@@ -181,6 +183,14 @@ Get-ADDomainControllerPasswordReplicationPolicy -Identity RODC-GVA
 | **ACE** | Access Control Entry — entrée de contrôle d'accès |
 | **ACL** | Access Control List — liste de contrôle d'accès (DACL/SACL) |
 | **AdminSDHolder** | Objet dont les ACL sont propagées aux comptes privilégiés |
+| **AGDLP** | Imbrication recommandée : comptes → groupes globaux → groupes domaine local → permissions |
+| **Entra Connect** | Outil de synchronisation AD ↔ Entra ID (PHS, PTA, fédération) — Tier 0 |
+| **LSASS** | Processus qui exécute la LSA : authentification, jetons, cache des tickets |
+| **PIM** | Privileged Identity Management — rôles cloud activés à la demande |
+| **Protected Users** | Groupe qui retire NTLM, RC4, la délégation et le cache aux comptes privilégiés |
+| **SDDL** | Format texte d'un security descriptor (`O:…G:…D:(A;;…;;;AU)`) |
+| **Security descriptor** | Owner, Primary Group, DACL et SACL d'un objet |
+| **Tiering** | Séparation Tier 0 (identité) / Tier 1 (serveurs) / Tier 2 (postes) |
 | **AS-REP** | Authentication Service Reply — réponse du KDC avec le TGT |
 | **BloodHound** | Outil d'analyse de chemins d'attaque AD par graphe |
 | **Credential Guard** | Isolation de lsass via Hyper-V contre Mimikatz |

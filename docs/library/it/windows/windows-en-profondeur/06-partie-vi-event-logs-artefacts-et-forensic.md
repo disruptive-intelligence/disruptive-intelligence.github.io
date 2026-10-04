@@ -12,45 +12,204 @@ up:
 
 ## Chapitre 21 — Event Logs Windows
 
-L'architecture Event Logs (EVTX — format XML binaire, C:\Windows\System32\winevt\Logs). Les journaux principaux : Security, System, Application, PowerShell (Microsoft-Windows-PowerShell/Operational), Sysmon (Microsoft-Windows-Sysmon/Operational). Les **Event IDs critiques** : 4624 (logon succès — types 2 interactif/3 réseau/7 unlock/10 RDP), 4625 (échec), 4648 (explicit credentials), 4672 (special privileges), 4688 (process creation — avec command line si audit configuré), 4698 (scheduled task créée), 4720 (account created), 7045 (service installé), 1102 (audit log cleared — effacement de logs = alerte).
+### 21.1 Architecture
 
-L'**Advanced Audit Policy** (les catégories à activer : Account Logon, Logon/Logoff, Object Access, Process Tracking avec command line, Detailed Tracking). Le **command line logging** (GPO : Audit Process Creation + Include command line in process creation events — indispensable pour voir les arguments des processus — sans command line, l'Event 4688 ne montre que le nom de l'exe, pas ce qu'il fait). Les limites : la taille par défaut des journaux est insuffisante (les logs anciens sont écrasés), un attaquant peut effacer les logs (Event 1102 signale l'effacement → centraliser vers le SIEM).
+Les journaux sont stockés au format **EVTX** (XML binaire) dans `C:\Windows\System32\winevt\Logs`. On les lit avec l'Observateur d'événements (`eventvwr.msc`), `Get-WinEvent` ou, en investigation, EvtxECmd.
+
+| Journal | Contenu |
+|---|---|
+| **Security** | Authentifications, comptes, privilèges, création de processus (si l'audit est activé) |
+| **System** | Services, pilotes, démarrages et arrêts |
+| **Application** | Événements des applications |
+| **Microsoft-Windows-PowerShell/Operational** | Script Block (4104), modules (4103) |
+| **Microsoft-Windows-Sysmon/Operational** | Télémétrie Sysmon (Ch.22) |
+| **Microsoft-Windows-TaskScheduler/Operational**, **TerminalServices-***, **Windows Defender/Operational** | Tâches planifiées, RDP, détections antivirus |
+
+### 21.2 Les événements de référence
+
+| Event ID | Journal | Signification |
+|---|---|---|
+| 4624 / 4625 | Security | Ouverture de session réussie / échouée |
+| 4634 / 4647 | Security | Fermeture de session |
+| 4648 | Security | Ouverture de session avec identifiants explicites |
+| 4672 | Security | Privilèges spéciaux attribués (session administrateur) |
+| 4688 | Security | Création de processus (avec ligne de commande si activée) |
+| 4697 / 7045 | Security / System | Service installé |
+| 4698 | Security | Tâche planifiée créée |
+| 4720 / 4732 | Security | Compte créé / ajout à un groupe local |
+| 1102 | Security | Journal de sécurité effacé |
+| 4104 | PowerShell | Bloc de script exécuté |
+
+**Les types d'ouverture de session (4624, champ *Logon Type*) :**
+
+| Type | Signification | Exemple |
+|---|---|---|
+| 2 | Interactif | Clavier, console |
+| 3 | Réseau | Accès à un partage SMB |
+| 4 | Batch | Tâche planifiée |
+| 5 | Service | Démarrage d'un service |
+| 7 | Déverrouillage | Retour sur une session verrouillée |
+| 8 | Réseau en clair | Authentification HTTP basique |
+| 9 | Nouveaux identifiants | `runas /netonly` |
+| 10 | Interactif à distance | RDP |
+| 11 | Identifiants mis en cache | Ouverture hors connexion |
+
+### 21.3 Configurer correctement
+
+- **Advanced Audit Policy** par GPO : Logon/Logoff, Account Logon, Account Management, Detailed Tracking (création de processus), Policy Change, Object Access selon les besoins ;
+- **ligne de commande dans 4688** : GPO *Include command line in process creation events* — sans elle, on sait qu'un programme a été lancé, pas ce qu'il a fait ;
+- **taille des journaux** : les valeurs par défaut font écraser les événements en quelques heures sur un serveur actif ; augmenter (Security à plusieurs centaines de Mo ou plus) ;
+- **centralisation** : WEF ou agent SIEM — un journal local peut être effacé (1102 le signale, mais trop tard).
+
+```powershell
+# Dernières ouvertures de session échouées
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 20
+
+# Créations de processus de la dernière heure
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4688; StartTime=(Get-Date).AddHours(-1)}
+```
+
 
 ---
 
 
 ## Chapitre 22 — Sysmon et télémétrie avancée
 
-**Sysmon** (System Monitor — outil Sysinternals qui génère une télémétrie riche). Les Event IDs essentiels : **1** (Process Creation — hash, command line, parent, user — le plus utilisé), **3** (Network Connection — processus + IP + port destination), **7** (Image Loaded — DLL chargée), **8** (CreateRemoteThread — injection de code), **10** (Process Access — accès mémoire d'un autre processus → lsass.exe), **11** (File Created), **12/13/14** (Registry events), **19/20/21** (WMI events — persistence), **22** (DNS Query — domaines résolus par processus), **25** (Process Tampering — image hollowing).
+### 22.1 Ce qu'apporte Sysmon
 
-La **configuration** (fichier XML — détermine ce qui est loggé ; **SwiftOnSecurity/sysmon-config** est la baseline communautaire de référence ; la configuration doit être adaptée — trop de bruit = logs inutiles, pas assez = angles morts). Le déploiement (GPO ou SCCM/Intune, Sysmon est un driver minifilter → résistant à la désinstallation sans droits admin, mais contournable par BYOVD — Ch.20). La complémentarité avec les Event Logs natifs (Sysmon Event 1 est plus riche que Event 4688 — il inclut le hash du processus, le parent, et la command line nativement).
+**Sysmon** (Sysinternals) est un service et un pilote qui enrichissent la journalisation native : il ajoute le hash des binaires, le processus parent, les connexions réseau par processus, les chargements de DLL, les requêtes DNS… Son événement 1 est bien plus riche que le 4688 natif.
+
+| Event ID | Événement | Usage |
+|---|---|---|
+| **1** | Création de processus (hash, ligne de commande, parent, utilisateur) | L'événement le plus utilisé |
+| **3** | Connexion réseau | Processus → IP:port |
+| **6** | Pilote chargé | Pilotes signés mais vulnérables |
+| **7** | Image (DLL) chargée | Chargements anormaux |
+| **8** | Thread distant créé | Interactions entre processus |
+| **10** | Accès à un processus | Accès à `lsass.exe` |
+| **11** | Fichier créé | Dépôts dans `%TEMP%`, `ProgramData` |
+| **12 / 13 / 14** | Registre : création, modification, renommage | Persistance |
+| **15** | Flux alternatif créé | ADS, Mark of the Web |
+| **19 / 20 / 21** | Abonnements WMI | Persistance WMI |
+| **22** | Requête DNS | Domaines contactés par processus |
+| **23 / 26** | Fichier supprimé | Nettoyage de traces |
+| **25** | Altération de processus | Image en mémoire différente du disque |
+
+### 22.2 La configuration
+
+Sysmon ne journalise que ce que sa configuration XML demande. Deux bases communautaires servent de point de départ : **SwiftOnSecurity/sysmon-config** (équilibrée) et **olafhartong/sysmon-modular** (modulaire). Une configuration trop large noie le SIEM, trop étroite crée des angles morts : on l'ajuste à l'environnement.
+
+```text
+sysmon64.exe -accepteula -i config.xml   # installation
+sysmon64.exe -c config.xml               # mise à jour de la configuration
+```
+
+
+### 22.3 Déploiement et limites
+
+Déploiement par GPO, SCCM ou Intune ; journal `Microsoft-Windows-Sysmon/Operational` collecté vers le SIEM. Sysmon tourne avec des privilèges élevés mais un administrateur de la machine peut l'arrêter ou le désinstaller : la disparition soudaine de ses événements est elle-même un signal à surveiller. Sysmon observe, il ne bloque pas : il complète un EDR, il ne le remplace pas.
 
 ---
 
 
-## Chapitre 23 — Artefacts forensic : exécution et persistence
+## Chapitre 23 — Artefacts forensic : exécution et persistance
 
-Les artefacts d'**exécution** — chacun répond à « ce programme a-t-il été exécuté ? » : **Prefetch** (C:\Windows\Prefetch — timestamps création=1ère exéc/modification=dernière, run count, fichiers accédés — PECmd ; 128 fichiers max sur Win10/11), **Amcache** (Amcache.hve — chemin, hash SHA-1, éditeur, version, timestamp — AmcacheParser), **ShimCache/AppCompatCache** (registre SYSTEM — chemin, taille, timestamp modification — sur Win10+, présence ≠ exécution certaine — AppCompatCacheParser), **BAM/DAM** (registre SYSTEM — chemin exe + timestamp par utilisateur, ~7 jours — Win10 1709+), **UserAssist** (HKCU — programmes lancés via Explorer, encodé ROT13, run count, timestamps), **SRUM** (SRUDB.dat — utilisation CPU, réseau, énergie par application, 30-60 jours).
+### 23.1 « Ce programme a-t-il été exécuté ? »
 
-Les artefacts de **persistence** : registre (Run, RunOnce, Services, Winlogon, AppInit_DLLs, IFEO, COM CLSID), fichiers (Scheduled Tasks dans C:\Windows\System32\Tasks, Startup folders), WMI (Event Subscriptions — FilterToConsumerBindings), BITS (transferts persistants). **Autoruns** (Sysinternals) = l'outil n°1 pour le triage de persistence — il liste TOUS ces mécanismes en un clic.
+Aucun artefact ne répond seul : on les croise.
+
+| Artefact | Emplacement | Ce qu'il apporte | Outil | Limite |
+|---|---|---|---|---|
+| **Prefetch** | `C:\Windows\Prefetch\*.pf` | Première et dernières exécutions (jusqu'à 8), nombre d'exécutions, fichiers chargés | PECmd | Désactivé sur certains serveurs ; 1 024 fichiers max |
+| **Amcache** | `C:\Windows\AppCompat\Programs\Amcache.hve` | Chemin, SHA-1, éditeur, date | AmcacheParser | Présence ≠ exécution certaine |
+| **ShimCache** (AppCompatCache) | Ruche SYSTEM | Chemin, date de modification du fichier | AppCompatCacheParser | Depuis Windows 10, prouve la présence, pas l'exécution |
+| **BAM / DAM** | Ruche SYSTEM | Dernière exécution par utilisateur | RECmd | Quelques jours de rétention |
+| **UserAssist** | `NTUSER.DAT` | Programmes lancés depuis l'Explorateur, compteur, dates (noms encodés en ROT13) | RECmd, Registry Explorer | Lancements via l'interface seulement |
+| **SRUM** | `C:\Windows\System32\sru\SRUDB.dat` | Consommation CPU et réseau par application, sur 30 à 60 jours | SrumECmd | Agrégé par heure |
+| **4688 / Sysmon 1** | Journaux | Ligne de commande, parent, utilisateur | EvtxECmd | Seulement si activés |
+
+### 23.2 Les emplacements de persistance
+
+| Famille | Où regarder | Événement associé |
+|---|---|---|
+| Registre | Run / RunOnce (HKLM, HKCU), Winlogon, IFEO, AppInit_DLLs, CLSID COM | Sysmon 12/13 |
+| Services | `HKLM\SYSTEM\CurrentControlSet\Services` | 7045, 4697 |
+| Tâches planifiées | `C:\Windows\System32\Tasks`, journal TaskScheduler | 4698 |
+| Dossiers de démarrage | `…\Start Menu\Programs\Startup` (utilisateur et commun) | Sysmon 11 |
+| WMI | Abonnements filtre / consommateur | Sysmon 19/20/21 |
+| BITS | Travaux de transfert persistants | Journal BITS-Client |
+
+**Autoruns** (Sysinternals) liste tous ces emplacements d'un coup ; l'option de masquage des entrées signées Microsoft et la vérification VirusTotal accélèrent le tri.
 
 ---
 
 
 ## Chapitre 24 — Artefacts forensic : fichiers, réseau et mémoire
 
-Les artefacts **fichiers** : **$MFT** (tous les fichiers existants et récemment supprimés, timestamps, taille — MFTECmd), **$UsnJrnl** (journal des modifications — MFTECmd), **LNK** (raccourcis — fichiers accédés, chemins, timestamps, volume serial — LECmd), **Jump Lists** (fichiers récents par application — JLECmd), **Shellbags** (dossiers navigués dans Explorer, même supprimés — ShellBagsExplorer), **Recycle Bin** ($I = métadonnées, $R = contenu — RBCmd), **Zone.Identifier** (ADS — Mark of the Web, source de téléchargement — Streams, Get-Content -Stream).
+### 24.1 Fichiers et navigation
 
-Les artefacts **réseau** : DNS cache (volatil — ipconfig /displaydns), SRUM données réseau, NetworkList/Profiles (historique des réseaux WiFi). Les artefacts **navigateur** (Chrome/Edge/Firefox — History, Downloads, Cookies, Cache — bases SQLite — Hindsight pour Chrome). Les artefacts **mémoire** (dump RAM — processus cachés, connexions actives, credentials en mémoire, code injecté, commandes — WinPMem, DumpIt pour la capture ; Volatility 3 pour l'analyse — Ch.30).
+| Artefact | Emplacement | Ce qu'il prouve | Outil |
+|---|---|---|---|
+| **$MFT** | Racine du volume NTFS | Tous les fichiers, y compris supprimés récemment, avec horodatages | MFTECmd |
+| **$UsnJrnl:$J** | `$Extend` | Créations, renommages, suppressions | MFTECmd |
+| **LNK** | `%APPDATA%\Microsoft\Windows\Recent` | Fichiers ouverts, chemin d'origine, volume, dates | LECmd |
+| **Jump Lists** | `…\Recent\AutomaticDestinations` | Fichiers récents par application | JLECmd |
+| **Shellbags** | `NTUSER.DAT`, `UsrClass.dat` | Dossiers parcourus, même supprimés ou sur clé USB | ShellBags Explorer |
+| **Corbeille** | `C:\$Recycle.Bin\<SID>` | `$I` = métadonnées, `$R` = contenu | RBCmd |
+| **Zone.Identifier** | ADS du fichier | Origine du téléchargement (Mark of the Web) | `Get-Content -Stream Zone.Identifier` |
+| **Navigateurs** | Bases SQLite des profils | Historique, téléchargements | Hindsight, outils dédiés |
+
+### 24.2 Réseau
+
+Cache DNS (`ipconfig /displaydns`, volatil), connexions actives (`Get-NetTCPConnection`, `netstat -anob`), profils réseau et Wi-Fi connus (registre `NetworkList`), consommation réseau par application (SRUM), journaux du pare-feu Windows s'ils sont activés.
+
+### 24.3 Mémoire
+
+La mémoire vive contient ce que le disque ignore : processus en cours (y compris dissimulés), connexions, commandes, code chargé uniquement en mémoire. On la capture **avant** d'éteindre (WinPMem, DumpIt, Magnet RAM Capture) et on l'analyse avec **Volatility 3** (Ch.30). `pagefile.sys` et `hiberfil.sys` en contiennent aussi des fragments.
 
 ---
 
 
 ## Chapitre 25 — Investigation Windows : méthodologie structurée
 
-Les 5 étapes : (1) **Préservation** (image disque bit-à-bit — FTK Imager, dump mémoire si machine allumée — WinPMem/DumpIt, hash d'intégrité SHA-256, chaîne de custody — ne jamais travailler sur l'original), (2) **Triage rapide** (les 10 premières minutes — Autoruns, Process Explorer, netstat, Get-ScheduledTask, services récents 7045 — la machine est-elle compromise et par quoi ?), (3) **Timeline** (fusionner Event Logs + Prefetch + Amcache + $UsnJrnl + ShimCache + LNK → Timeline Explorer — Eric Zimmerman), (4) **Analyse en profondeur** (suivre chaque piste de la timeline — d'où vient le fichier ? qui l'a exécuté ? quelles connexions ? quelle persistence ?), (5) **Conclusion et rapport** (IOCs, timeline, impact, vecteur initial, actions correctives).
+### 25.1 Les cinq étapes
 
-Live forensics vs dead forensics (live = accès mémoire mais altère l'état ; dead = intégrité préservée mais pas de données volatiles ; bonne pratique : dump mémoire d'abord, image disque ensuite). Les outils : **KAPE** (collecte + parsing automatisé — triage rapide en minutes), **Velociraptor** (agent + serveur — triage à distance sur tout le parc, requêtes VQL), **Autopsy** (plateforme forensic complète — investigation disques).
+```text
+1. Préserver   → mémoire d'abord (volatile), puis image disque ; hash SHA-256 ; chaîne de conservation
+2. Trier       → la machine est-elle compromise, et par quoi ? (les 10-30 premières minutes)
+3. Chronologie → fusionner journaux, Prefetch, Amcache, $MFT/$UsnJrnl, LNK, registre
+4. Approfondir → suivre chaque piste : origine du fichier, exécution, connexions, persistance, latéralisation
+5. Conclure    → indicateurs, chronologie, vecteur initial, impact, recommandations
+```
+
+
+### 25.2 Le triage rapide
+
+| Question | Où regarder |
+|---|---|
+| Quels processus sont anormaux ? | Arbre de processus, chemins, signatures (Process Explorer, Ch.31) |
+| Avec qui la machine parle-t-elle ? | Connexions actives, cache DNS, Sysmon 3/22 |
+| Qu'est-ce qui survit au redémarrage ? | Autoruns, services récents (7045), tâches (4698) |
+| Qui s'est connecté, comment ? | 4624 (types 3 et 10), 4648, 4672 |
+| Qu'est-ce qui a été exécuté récemment ? | Prefetch, 4688 / Sysmon 1, PowerShell 4104 |
+
+### 25.3 Analyse à chaud ou à froid
+
+| | À chaud (*live*) | À froid (*dead*) |
+|---|---|---|
+| Avantage | Accès à la mémoire et à l'état courant | Intégrité préservée, analyse reproductible |
+| Inconvénient | Chaque commande modifie le système | Données volatiles perdues |
+| Bonne pratique | Capturer la mémoire en premier | Travailler sur une copie, jamais sur l'original |
+
+### 25.4 Les outils
+
+| Outil | Usage |
+|---|---|
+| **KAPE** | Collecte ciblée des artefacts et traitement automatisé, en quelques minutes |
+| **Velociraptor** | Agent et serveur : collecte et chasse sur tout le parc (requêtes VQL) |
+| **Suite Eric Zimmerman** | Parsers d'artefacts (PECmd, MFTECmd, EvtxECmd, RECmd…) et Timeline Explorer |
+| **Autopsy** | Plateforme d'analyse de disques |
+| **Volatility 3** | Analyse mémoire |
 
 ---
 
