@@ -3,56 +3,66 @@ title: Révision — Réseau
 revision: it/reseau
 domaine: IT
 sources:
-- IT/04 Réseau/Réseau — prises de notes.md
+- IT/04 Réseau/Réseau.md
 ---
 
-*D'après le cours [Réseau — prises de notes](../it/reseau/reseau-prises-de-notes/index.md)*
+*D'après le cours [Réseau](../it/reseau/reseau/index.md)*
 
 ## Questions essentielles
 
 - **Question :** Expliquez la différence entre TCP et UDP.
-  - **Réponse type :** TCP est orienté connexion : il établit une session (three-way handshake), garantit la livraison des données dans l'ordre, et retransmet en cas de perte. C'est fiable mais plus lent. UDP est sans connexion : il envoie les données sans vérification, sans garantie d'ordre ni de livraison. C'est plus rapide et utilisé quand la vitesse prime sur la fiabilité — DNS, streaming, VoIP.
+  - **Réponse type :** TCP est orienté connexion : il établit une session (three-way handshake), garantit la livraison des données dans l'ordre et retransmet en cas de perte. C'est fiable mais plus lent. UDP est sans connexion : il envoie sans vérification, sans garantie d'ordre ni de livraison. Il est plus rapide et utilisé quand la vitesse prime : DNS, streaming, VoIP.
 
-- **Question :** À quoi servent les couches du modèle OSI les plus importantes en pratique ?
-  - **Réponse type :** En pratique, on travaille surtout avec la couche 2 (liaison — adresses MAC, switches), la couche 3 (réseau — adresses IP, routage), la couche 4 (transport — TCP/UDP, ports) et la couche 7 (application — HTTP, DNS, SMTP). La couche 2 gère la communication locale sur un segment, la couche 3 le routage entre réseaux, la couche 4 identifie les applications via les ports, et la couche 7 c'est le protocole applicatif.
+- **Question :** À quoi servent en pratique les couches du modèle OSI ?
+  - **Réponse type :** On travaille surtout avec la couche 2 (adresses MAC, switchs, communication sur un segment), la couche 3 (adresses IP, routage entre réseaux), la couche 4 (TCP/UDP et ports, qui identifient l'application) et la couche 7 (protocoles applicatifs : HTTP, DNS, SMTP). Le découpage en couches isole les responsabilités : on change de support physique sans toucher à HTTP.
 
 - **Question :** Comment fonctionne le DNS ?
-  - **Réponse type :** Le DNS traduit un nom de domaine en adresse IP. Quand un client veut joindre un site, il interroge son serveur DNS récursif. Si celui-ci n'a pas la réponse en cache, il remonte la hiérarchie : serveur racine, puis serveur TLD (.com, .fr), puis serveur autoritaire du domaine. La réponse est mise en cache avec un TTL. Le DNS utilise le port 53, principalement en UDP.
+  - **Réponse type :** Le DNS traduit un nom en adresse IP. Le client regarde son cache et le fichier hosts, puis interroge son résolveur récursif. Sans réponse en cache, celui-ci remonte la hiérarchie : serveur racine, serveur du TLD, puis serveur faisant autorité du domaine. La réponse est mise en cache pour la durée de son TTL. Port 53, surtout en UDP.
 
 - **Question :** Quelle est la différence entre une adresse MAC et une adresse IP ?
-  - **Réponse type :** L'adresse MAC est une adresse physique de 48 bits, unique par interface réseau, qui sert à la communication sur un segment local (couche 2). L'adresse IP est une adresse logique (32 bits en IPv4) qui permet le routage entre réseaux (couche 3). Le switch utilise les MAC pour aiguiller les trames localement, le routeur utilise les IP pour router les paquets entre réseaux.
+  - **Réponse type :** La MAC est une adresse physique de 48 bits, propre à une interface, utilisée sur le segment local (couche 2). L'IP est une adresse logique qui permet le routage entre réseaux (couche 3). La MAC change à chaque saut, puisque chaque routeur réécrit la trame ; l'IP reste la même de bout en bout, sauf NAT.
+
+- **Question :** Que se passe-t-il quand un poste envoie un paquet vers une IP hors de son réseau ?
+  - **Réponse type :** Il fait un ET logique entre l'IP de destination et son masque : le résultat diffère de son réseau, la destination est distante. Il consulte sa table de routage, trouve la passerelle par défaut, obtient sa MAC par ARP, puis encapsule le paquet — avec l'IP de destination finale — dans une trame adressée à la MAC de la passerelle. Chaque routeur décapsule, consulte sa table et réencapsule pour le saut suivant.
 
 - **Question :** Qu'est-ce qu'un VLAN et à quoi ça sert ?
-  - **Réponse type :** Un VLAN (Virtual LAN) segmente logiquement un réseau physique en plusieurs domaines de broadcast distincts. Ça permet d'isoler les flux — par exemple séparer les postes utilisateurs, les serveurs et les imprimantes — sans avoir besoin de matériel dédié. C'est une mesure de sécurité de base en entreprise pour limiter la propagation latérale.
+  - **Réponse type :** Un VLAN segmente logiquement un réseau physique en plusieurs domaines de diffusion isolés. On sépare ainsi postes, serveurs, imprimantes et invités sans matériel dédié. C'est une mesure de sécurité de base : une machine compromise ne voit que son segment, ce qui limite la propagation latérale.
 
 ## Questions complémentaires
 
 - **Question :** Expliquez le three-way handshake TCP.
-  - **Réponse type :** C'est le mécanisme d'établissement d'une connexion TCP en trois étapes : le client envoie un SYN, le serveur répond SYN-ACK, et le client confirme avec un ACK. À ce stade la connexion est établie et les données peuvent circuler. Ce handshake permet aux deux parties de synchroniser leurs numéros de séquence.
+  - **Réponse type :** Le client envoie un SYN avec son numéro de séquence initial, le serveur répond SYN-ACK avec le sien, le client confirme par un ACK. Les deux côtés ont synchronisé leurs numéros de séquence et la connexion est établie.
 
-- **Question :** Quels sont les ports à connaître absolument en sécurité ?
-  - **Réponse type :** Les incontournables : 22 (SSH), 53 (DNS), 80/443 (HTTP/HTTPS), 88 (Kerberos), 135 (RPC), 389/636 (LDAP/LDAPS), 445 (SMB), 3389 (RDP), 5985/5986 (WinRM). En environnement AD, les ports Kerberos, LDAP et SMB sont critiques. Savoir associer un port à un service aide beaucoup en analyse de flux ou en pentest.
+- **Question :** Comment fonctionne HTTPS ?
+  - **Réponse type :** C'est HTTP dans TLS. Lors du handshake, client et serveur négocient la version et les algorithmes, le serveur présente son certificat que le client vérifie (CA de confiance, nom, validité), puis ils dérivent une clé de session symétrique, aujourd'hui par un échange Diffie-Hellman éphémère. Tout le reste est chiffré avec cette clé, beaucoup plus rapide que l'asymétrique.
 
-- **Question :** Qu'est-ce qu'ARP et quel risque de sécurité y est associé ?
-  - **Réponse type :** ARP traduit une adresse IP en adresse MAC sur un réseau local. Le risque c'est l'ARP spoofing : un attaquant envoie de fausses réponses ARP pour associer son adresse MAC à l'IP d'une autre machine — typiquement la gateway. Ça lui permet de se positionner en man-in-the-middle et d'intercepter ou modifier le trafic.
+- **Question :** Différence entre VPN IPsec et VPN SSL/TLS ?
+  - **Réponse type :** IPsec opère au niveau IP : il chiffre les paquets via ESP après une négociation IKE sur UDP 500, avec plusieurs flux. C'est le standard du site à site. Le VPN TLS encapsule le trafic dans une session TLS sur TCP 443, comme du HTTPS : il passe presque partout et convient à l'accès distant, avec une authentification en deux temps.
+
+- **Question :** Qu'est-ce qu'ARP et quel risque y est associé ?
+  - **Réponse type :** ARP traduit une IP en adresse MAC sur le réseau local, par une requête en broadcast. Il ne vérifie pas les réponses : une machine peut se faire passer pour une autre, typiquement la passerelle, et intercepter le trafic. On s'en protège par l'inspection ARP sur les switchs et la segmentation.
+
+- **Question :** Quels ports faut-il connaître absolument ?
+  - **Réponse type :** 22 SSH, 53 DNS, 80/443 HTTP(S), 88 Kerberos, 135 RPC, 389/636 LDAP(S), 445 SMB, 3389 RDP, 5985/5986 WinRM, plus les ports de messagerie (25, 587, 993). Associer un port à un service fait gagner beaucoup de temps en analyse de flux.
 
 ## Questions les plus probables en entretien
 
 1. TCP vs UDP ?
-2. Modèle OSI : couches clés en pratique ?
-3. Comment fonctionne DNS ?
+2. Les couches OSI utiles en pratique ?
+3. Comment fonctionne le DNS ?
 4. MAC vs IP ?
-5. Ports essentiels à connaître ?
-6. C'est quoi un VLAN ?
+5. Paquet vers une IP hors du réseau local ?
+6. Qu'est-ce qu'un VLAN ?
+7. Comment fonctionne HTTPS ?
 
 ## Réponses flash
 
-- **TCP vs UDP** → TCP = connexion, fiable, ordonné, handshake. UDP = sans connexion, rapide, pas de garantie.
-- **OSI pratique** → L2 (MAC/switch), L3 (IP/routage), L4 (ports/TCP-UDP), L7 (HTTP/DNS).
-- **DNS** → Nom → IP. Port 53/UDP. Récursif → racine → TLD → autoritaire. Cache + TTL.
-- **MAC vs IP** → MAC = physique, locale (L2). IP = logique, routable (L3).
-- **Ports clés** → 22 SSH, 53 DNS, 80/443 HTTP(S), 88 Kerberos, 389 LDAP, 445 SMB, 3389 RDP.
-- **VLAN** → Segmentation logique du réseau, isolation des domaines de broadcast.
-- **ARP** → IP → MAC en local. Risque = ARP spoofing → MITM.
-
----
+- **TCP vs UDP** → TCP = connexion, fiable, ordonné, handshake. UDP = sans connexion, rapide, sans garantie.
+- **OSI pratique** → L2 (MAC/switch), L3 (IP/routage), L4 (ports TCP/UDP), L7 (HTTP/DNS).
+- **DNS** → Nom → IP. Port 53. Cache → résolveur → racine → TLD → faisant autorité. TTL.
+- **MAC vs IP** → MAC = physique, locale, change à chaque saut. IP = logique, routable, de bout en bout.
+- **Hors réseau** → ET logique → table de routage → ARP de la passerelle → trame vers la passerelle.
+- **VLAN** → Segmentation logique, domaines de diffusion isolés.
+- **HTTPS** → HTTP + TLS : certificat vérifié, clé de session (ECDHE), chiffrement symétrique.
+- **ARP** → IP → MAC en local. Risque : usurpation et interception.
+- **Ports clés** → 22, 53, 80/443, 88, 389, 445, 3389.

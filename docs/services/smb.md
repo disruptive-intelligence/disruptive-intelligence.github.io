@@ -9,7 +9,7 @@ tags:
     Pour comprendre le fonctionnement avant la pratique :
 
     - [Windows — fiche cyber](../library/it/windows/windows-fiche-cyber/index.md)
-    - [Réseau — prises de notes](../library/it/reseau/reseau-prises-de-notes/index.md)
+    - [Réseau, ch. 13 (FTP, SMB, VoIP)](../library/it/reseau/reseau/03-partie-iii-services-et-protocoles-applicatifs/04-chapitre-13-transfert-partage-et-voix-ftp-smb-voip.md)
 
 !!! abstract "En bref"
     _À compléter : description courte du protocole et intérêt en pentest._

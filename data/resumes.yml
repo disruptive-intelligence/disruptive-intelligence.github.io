@@ -68,7 +68,7 @@
 "Active Directory": "Fonctionnement, authentification, attaques, détection et durcissement de l'annuaire."
 
 # IT — Réseau, web
-"Réseau — prises de notes": "OSI, TCP/IP, protocoles courants et sécurisés, composants réseau."
+"Réseau": "Le cours réseau : modèles OSI et TCP/IP, encapsulation, adressage et sous-réseaux, ARP, DHCP, NAT et routage, DNS, HTTP et messagerie, TLS, SSH, VPN, pare-feu, IDS et Wi-Fi."
 "PDU, headers, payload & encapsulation": "Ce que chaque couche ajoute à un paquet, en un schéma."
 "Fonctionnement du web : URL, DNS, HTTPS": "Ce qui se passe entre la saisie d'une URL et l'affichage de la page."
 "HTTP & requêtes web": "Lire et forger des requêtes HTTP avec cURL et les DevTools."

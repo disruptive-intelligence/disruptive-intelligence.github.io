@@ -184,7 +184,7 @@
       label: 🌐 Réseau
       description: Modèle OSI, protocoles, adressage et encapsulation.
       mots: [réseau, réseaux, DNS, routage, 5G, 2G, télécoms]
-      notes: [Réseau — prises de notes, "PDU, headers, payload & encapsulation"]
+      notes: [Réseau, "PDU, headers, payload & encapsulation"]
     - id: web
       label: 🕸️ Web & applications
       description: Du fonctionnement du web aux applications et à leurs failles.
