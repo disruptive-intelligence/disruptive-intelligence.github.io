@@ -2,6 +2,7 @@
 title: Analyse — We Must Pace the Frontier
 date: 2026-09-12
 kind: analysis
+document_type: essai
 theme: ia
 slug: we-must-pace-the-frontier
 events:

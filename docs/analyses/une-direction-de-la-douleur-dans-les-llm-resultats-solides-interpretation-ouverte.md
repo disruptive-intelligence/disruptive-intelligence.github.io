@@ -2,6 +2,7 @@
 title: "Analyse — Une direction de la « douleur » dans les LLM : résultats solides, interprétation ouverte"
 date: 2026-09-30
 kind: analysis
+document_type: preprint
 theme: ia
 slug: une-direction-de-la-douleur-dans-les-llm-resultats-solides-interpretation-ouverte
 author: "Valen Tagliabue, Leonard Dung, Cameron Berg"

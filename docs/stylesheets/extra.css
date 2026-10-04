@@ -1150,3 +1150,5 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset ol.kw-une__points li { margin: .15rem 0; }
 .md-typeset .kw-dossier__cites { font-size: .64rem; color: var(--kw-sub); padding-top: .35rem; border-top: 1px solid var(--kw-line); }
 .md-typeset .kw-an-list .kw-tuto[hidden], .md-typeset .kw-an-list .kw-chapter[hidden] { display: none; }
+.md-typeset .kw-an-label { margin: .5rem 0 .3rem; font-size: .56rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-types button.kw-chip { color: var(--md-default-fg-color); font-weight: 600; }

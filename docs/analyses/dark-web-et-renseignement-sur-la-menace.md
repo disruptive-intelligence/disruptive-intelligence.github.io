@@ -2,6 +2,7 @@
 title: "Analyse — Dark web et renseignement sur la menace : un panorama utile, des preuves fragiles"
 date: 2026-09-29
 kind: analysis
+document_type: preprint
 theme: cyber
 slug: dark-web-et-renseignement-sur-la-menace
 author: "Abdullah Abid Ali"

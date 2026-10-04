@@ -2,6 +2,7 @@
 title: "Analyse — Criminologie et cybersécurité : le continuum crime-sécurité, une idée juste à rendre à ses auteurs"
 date: 2026-09-29
 kind: analysis
+document_type: recherche
 theme: cyber
 slug: criminologie-et-cybersecurite-continuum-crime-securite
 author: "Fosu Bora"

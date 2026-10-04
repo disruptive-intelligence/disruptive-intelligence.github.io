@@ -2,6 +2,7 @@
 title: "Analyse — IA, enquête pénale et vie privée : un comparatif Inde-UE qui manque sa cible"
 date: 2026-09-29
 kind: analysis
+document_type: recherche
 theme: ia
 slug: ia-enquete-penale-et-vie-privee-inde-union-europeenne
 author: "Saloni Mishra, Yamini Atreya, Sumit Dalal"

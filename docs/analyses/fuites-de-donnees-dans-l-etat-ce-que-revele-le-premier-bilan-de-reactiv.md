@@ -2,6 +2,7 @@
 title: "Analyse — Fuites de données dans l’État : ce que révèle le premier bilan de REACTIV"
 date: 2026-09-30
 kind: analysis
+document_type: rapport
 theme: cyber
 slug: fuites-de-donnees-dans-l-etat-ce-que-revele-le-premier-bilan-de-reactiv
 organization: "Agence nationale de la sécurité des systèmes d’information (ANSSI) — CERT-FR"

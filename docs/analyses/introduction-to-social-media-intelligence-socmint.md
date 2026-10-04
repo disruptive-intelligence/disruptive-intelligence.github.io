@@ -2,6 +2,7 @@
 title: "Analyse — SOCMINT : ce que l'IA change au renseignement sur les réseaux sociaux"
 date: 2026-09-29
 kind: analysis
+document_type: preprint
 theme: cyber
 slug: introduction-to-social-media-intelligence-socmint
 author: "K. Saalbach"

@@ -176,6 +176,7 @@ def load_content(docs_dir):
             else:
                 it["summary"] = summary_of(body)
                 it["organization"] = str(meta.get("organization") or "")
+                it["doc_type"] = str(meta.get("document_type") or "")
                 it["minutes"] = reading_minutes(body)
                 it["essentials"] = essentials_of(body)
                 it["cites"] = sorted(set(re.findall(r"analyses/([a-z0-9-]+)\.md", body)))   # dossier -> analyses
@@ -513,14 +514,40 @@ def analysis_who(it):
     return re.sub(r"^[^()]*\(([^)]+)\)\s*", r"\1 ", who).strip()
 
 
+# Nature du document analysé (champ facultatif « document_type ») : aide à le lire avec le bon recul.
+DOC_TYPES = {
+    "rapport": ("Rapport", "Rapports", "Document d'une institution ou d'une entreprise : constats, retours d'expérience, positions."),
+    "guide": ("Guide", "Guides", "Recommandations et bonnes pratiques à appliquer."),
+    "recherche": ("Article de recherche", "Articles de recherche", "Publié dans une revue ou une conférence."),
+    "preprint": ("Prépublication", "Prépublications", "Working paper ou preprint, sans relecture par les pairs annoncée."),
+    "essai": ("Essai", "Essais", "Tribune ou essai d'auteur : une thèse argumentée, pas une étude."),
+}
+
+
+def doc_type_label(it):
+    t = it.get("doc_type") or ""
+    return DOC_TYPES[t][0] if t in DOC_TYPES else t
+
+
+def type_chips(analyses):
+    """Une pastille par nature de document présente ; elle filtre la liste (combinée au filtre texte)."""
+    counts = collections.Counter(it.get("doc_type") for it in analyses if it.get("doc_type"))
+    if not counts:
+        return ""
+    return ('<div class="kw-subjects kw-types">' + "".join(
+        f'<button type="button" class="kw-chip" data-type="{esc(t)}" title="{esc(DOC_TYPES.get(t, ("", "", ""))[2])}">'
+        f'{esc(DOC_TYPES[t][1] if counts[t] > 1 and t in DOC_TYPES else doc_type_label({"doc_type": t}))}'
+        f'<span class="kw-count">{counts[t]}</span></button>' for t in DOC_TYPES if counts[t]) + "</div>")
+
+
 def analysis_item(it, src):
     """Une analyse dans une grille : titre, thèse, auteur · date · durée ; data-search pour le filtre."""
     thesis = it["summary"] if len(it["summary"]) <= 170 else it["summary"][:170].rsplit(" ", 1)[0] + " …"
     search = " ".join([clean_title(it["title"]), it["summary"], analysis_who(it), it.get("organization", ""),
                        THEMES.get(it["theme"], "")] + it["tags"]).lower()
-    tag = meta_line(analysis_who(it), f'{it["date"].day} {short_month(it["date"])} {it["date"].year}',
+    tag = meta_line(doc_type_label(it), analysis_who(it), f'{it["date"].day} {short_month(it["date"])} {it["date"].year}',
                     f'{it["minutes"]} min')
-    return (f'<div class="kw-tuto" data-search="{esc(search)}">'
+    return (f'<div class="kw-tuto" data-search="{esc(search)}" data-type="{esc(it.get("doc_type", ""))}">'
             f'<a class="kw-tuto__title" href="{href(src, it["src"])}">{esc(clean_title(it["title"]))}</a>'
             f'<span class="kw-tuto__text">{esc(thesis)}</span><span class="kw-tuto__tag">{tag}</span></div>')
 
@@ -579,7 +606,7 @@ hide:
 </div>
 
 {analyses_filter("Filtrer : un mot, un auteur, un sujet…")}
-{tag_chips(lst, 12)}
+{type_chips(lst)}{tag_chips(lst, 12)}
 
 <div class="kw-chapter__grid kw-chapter__grid--solo kw-an-list">{"".join(analysis_item(it, tsrc) for it in lst)}</div>
 """))
@@ -592,7 +619,7 @@ hide:
         une = (section_bar("À la une")
                + '<div class="kw-une">'
                f'<a class="kw-une__main" href="{href(src, last["src"])}"><span class="kw-tuto__tag">{esc(bare(THEMES.get(last["theme"], "")))} · '
-               f'{esc(analysis_who(last))} · {last["minutes"]} min</span><span class="kw-une__title">{esc(clean_title(last["title"]))}</span>'
+               f'{meta_line(doc_type_label(last), analysis_who(last))} · {last["minutes"]} min</span><span class="kw-une__title">{esc(clean_title(last["title"]))}</span>'
                f'<span class="kw-une__text">{esc(last["summary"])}</span>'
                + (f'<ol class="kw-une__points">{ess}</ol>' if ess else "")
                + f'<span class="kw-une__meta">Analyse du {fr_date(last["date"])} · Lire →</span></a>'
@@ -630,7 +657,7 @@ hide:
 <div class="kw-mast__search">{analyses_filter("Filtrer les analyses : un mot, un auteur, un sujet (DGFiP, AGI, ANSSI…)")}</div>
 <nav class="kw-mast__nav">{nav}</nav>
 </div>
-{une}{section_bar("Explorer par sujet")}{tag_chips(analyses)}
+{une}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
 {section_bar("Par thème")}
 <div class="kw-an-list" markdown>
 {chapters}
@@ -1216,7 +1243,8 @@ def decorate_document(markdown, page):
     d = meta.get("date")
     d = d if isinstance(d, date) else date.fromisoformat(str(d))
     if kind == "analysis":
-        label = "Analyse · " + THEMES.get(meta.get("theme"), "")
+        label = "Analyse · " + THEMES.get(meta.get("theme"), "") + (
+            f" · {doc_type_label({'doc_type': str(meta['document_type'])})}" if meta.get("document_type") else "")
         who = meta_line(meta.get("author"), meta.get("organization"))
     else:
         label = "Dossier · " + " · ".join(THEMES[t] for t in meta.get("themes") or [] if t in THEMES)

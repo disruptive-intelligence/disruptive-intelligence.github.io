@@ -2,6 +2,7 @@
 title: "Analyse — Piratage de la DGFiP : identifiants volés, réseau ouvert, supervision aveugle"
 date: 2026-09-29
 kind: analysis
+document_type: rapport
 theme: cyber
 slug: piratage-de-la-dgfip-identifiants-voles-reseau-ouvert-supervision-aveugle
 organization: "Agence nationale de la sécurité des systèmes d’information (ANSSI)"
