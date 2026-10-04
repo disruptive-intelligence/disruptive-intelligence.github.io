@@ -1237,11 +1237,11 @@ body[data-md-color-scheme="default"]::after {
   background: var(--md-code-bg-color); box-shadow: none; }
 .md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .md-clipboard { color: #8d8484; }
 
-/* Images des notes (schémas, captures d'écran) : taille raisonnable et centrées au lieu de toute la largeur du
+/* Images des notes (schémas, captures d'écran) : taille raisonnable, alignées à gauche, au lieu de toute la largeur du
    texte ; un clic ouvre l'image en grand (javascripts/images-zoom.js). Fond clair : les schémas à fond
    transparent restent lisibles en thème sombre. Une largeur posée dans la note ({ width="…" }) reste prioritaire. */
 .md-typeset p > img:not(.twemoji):not(.emojione) {
-  display: block; margin: 1.1rem auto; max-width: min(100%, 28rem); max-height: 19rem; width: auto; height: auto;
+  display: block; margin: 1.1rem 0; max-width: min(100%, 28rem); max-height: 19rem; width: auto; height: auto;
   object-fit: contain; padding: .3rem; border-radius: 8px; border: 1px solid var(--kw-line, rgba(0, 0, 0, .12));
   background: #fff; cursor: zoom-in;
 }
