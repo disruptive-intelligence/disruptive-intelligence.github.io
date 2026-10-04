@@ -404,7 +404,7 @@ def edition_card(it, from_src, featured=False):
     d, n = it["date"], 3 if featured else 2
     heads = "".join(f"<li>{esc(h)}</li>" for h in it["headlines"][:n])
     more = len(it["headlines"]) - n
-    label = "À la une" if featured else JOURS[d.weekday()].capitalize()
+    label = "Dernière édition" if featured else JOURS[d.weekday()].capitalize()
     return (f'<a class="kw-ed{" kw-ed--featured" if featured else ""}" href="{href(from_src, it["src"])}">'
             f'<span class="kw-ed__label">{label}</span>'
             f'<span class="kw-ed__date">{d.day} {short_month(d)}</span>'
@@ -595,6 +595,7 @@ def pages_analyses(items):
 title: "{bare(label)}"
 hide:
   - toc
+  - footer
 ---
 <div class="kw-dom-hero kw-dom-hero--cat" markdown>
 <span class="kw-eyebrow">[Analyses](../index.md)</span>
@@ -630,25 +631,14 @@ hide:
                + "</div></div>\n")
     chapters = "".join(analysis_chapter(i, key, [it for it in analyses if it["theme"] == key], src, key in used)
                        for i, key in enumerate(THEMES, 1))
-    dossiers = ""
-    if items["dossier"]:
-        by_slug = {Path(it["src"]).stem: it for it in analyses}
-        cards = ""
-        for d in items["dossier"]:
-            cited = [by_slug[s] for s in d.get("cites", []) if s in by_slug]
-            cards += (f'<a class="kw-card kw-dossier" href="{href(src, d["src"])}"><span class="kw-card__meta">'
-                      f'{meta_line(themes_label(d), fr_date(d["date"]))}</span><span class="kw-card__title">{esc(d["title"])}</span>'
-                      f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span>'
-                      + (f'<span class="kw-dossier__cites">{plural(len(cited), "analyse")} croisée{"s" if len(cited) > 1 else ""} : '
-                         + " · ".join(esc(clean_title(c["title"])) for c in cited) + "</span>" if cited else "")
-                      + "</a>")
-        dossiers = section_bar("Les dossiers", anchor="dossiers") + (
-            '<p class="kw-muted">Un dossier croise plusieurs analyses pour mettre un sujet en perspective.</p>\n'
-            f'<div class="kw-libgrid">{cards}</div>\n')
+    dossiers = section_bar("Les dossiers", anchor="dossiers", more=("Tous les dossiers →", href(src, "dossiers/index.md")))
+    dossiers += dossier_cards(items, src) if items["dossier"] else (
+        '<p class="kw-muted">Pas encore de dossier : un dossier croise plusieurs analyses pour mettre un sujet en perspective.</p>\n')
     out.append((src, f"""---
 title: Analyses
 hide:
   - toc
+  - footer
 ---
 <div class="kw-mast">
 <div class="kw-mast__top"><span>{plural(len(analyses), "analyse")} · {duration(minutes)} de lecture</span><span class="kw-mast__count">{"Dernière le " + fr_date(last["date"]) if last else ""}</span></div>
@@ -657,12 +647,12 @@ hide:
 <div class="kw-mast__search">{analyses_filter("Filtrer les analyses : un mot, un auteur, un sujet (DGFiP, AGI, ANSSI…)")}</div>
 <nav class="kw-mast__nav">{nav}</nav>
 </div>
-{une}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
+{une}{dossiers}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
 {section_bar("Par thème")}
 <div class="kw-an-list" markdown>
 {chapters}
 </div>
-{dossiers}"""))
+"""))
     return out
 
 
@@ -680,14 +670,46 @@ def related_analyses(src, items, limit=3):
     return near, dossiers
 
 
+def dossier_cards(items, src):
+    """Dossiers en cartes larges : thèmes, date, phrase, puis les analyses croisées, numérotées et cliquables."""
+    by_slug = {Path(it["src"]).stem: it for it in items["analysis"]}
+    out = ""
+    for d in items["dossier"]:
+        cited = [by_slug[s] for s in d.get("cites", []) if s in by_slug]
+        steps = "".join(f'<li><a href="{href(src, c["src"])}">{esc(clean_title(c["title"]))}</a>'
+                        f'<span class="kw-note-meta">{esc(doc_type_label(c) or analysis_who(c))}</span></li>' for c in cited)
+        out += (f'<div class="kw-dossier-card"><div class="kw-dossier-card__head">'
+                f'<span class="kw-ed__label">Dossier · {esc(themes_label(d))}</span>'
+                f'<a class="kw-dossier-card__title" href="{href(src, d["src"])}">{esc(d["title"])}</a>'
+                f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span>'
+                f'<span class="kw-dom-stats">{fr_date(d["date"])} · {d.get("minutes", 0)} min de lecture'
+                + (f" · croise {plural(len(cited), 'analyse')}" if cited else "") + "</span>"
+                f'<a class="kw-domblock__cta" href="{href(src, d["src"])}">Lire le dossier →</a></div>'
+                + (f'<div class="kw-dossier-card__cites"><span class="kw-une__label">Les analyses croisées</span>'
+                   f'<ol class="kw-course__steps">{steps}</ol></div>' if cited else "") + "</div>")
+    return f'<div class="kw-dossiers">{out}</div>\n'
+
+
 def page_dossiers(items):
-    body = ""
-    for key, label in THEMES.items():
-        lst = [it for it in items["dossier"] if key in it["themes"]]   # un dossier apparaît sous chacun de ses thèmes
-        body += f"\n## {label}\n\n"
-        body += "".join(f"- [{it['title']}]({posixpath.relpath(it['src'], 'dossiers')}) — {fr_date(it['date'])}\n"
-                        for it in lst) if lst else "<span class=\"kw-muted\">Aucun dossier pour l'instant.</span>\n"
-    return "dossiers/index.md", "# 🗂️ Dossiers & synthèses\n\nCroiser les analyses pour mettre les enjeux en perspective.\n" + body
+    """Page des dossiers : chaque dossier en carte large avec les analyses qu'il croise."""
+    src = "dossiers/index.md"
+    body = dossier_cards(items, src) if items["dossier"] else '<p class="kw-muted">Pas encore de dossier.</p>'
+    return src, f"""---
+title: Dossiers
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero kw-dom-hero--cat" markdown>
+<span class="kw-eyebrow">[Analyses & dossiers](../analyses/index.md)</span>
+
+# 🗂️ Dossiers
+
+<p class="kw-dom-lead">Un dossier croise plusieurs analyses pour mettre un sujet en perspective : ce qui converge, ce qui diverge, ce qu'il faut suivre.</p>
+<span class="kw-dom-stats">{plural(len(items["dossier"]), "dossier")}</span>
+</div>
+
+{body}"""
 
 
 def pages_ressources(themes):
@@ -775,24 +797,151 @@ def essentiel_block(it, from_src):
             f'{short_month(it["date"])} <a href="{href(from_src, it["src"])}">lire le brief →</a></p><ul>{lis}</ul></div>')
 
 
+NEWS_SRC = "nouveautes.md"
+NEWS_DAYS = 42                  # « Quoi de neuf » : six semaines
+
+
+def git_changes(root, paths, days):
+    """{fichier: (date du dernier changement, ajouté dans la période ?)} d'après l'historique Git ; vide si
+    l'historique n'est pas disponible (le build ne doit jamais échouer pour ça)."""
+    import subprocess
+    try:
+        out = subprocess.run(["git", "log", f"--since={days}.days", "--name-status", "--format=%x00%cs", "--", *paths],
+                             cwd=root, capture_output=True, text=True, encoding="utf-8", timeout=60).stdout
+    except (OSError, subprocess.SubprocessError):
+        return {}
+    changes, day = {}, None
+    for line in out.splitlines():
+        if line.startswith("\x00"):
+            day = date.fromisoformat(line[1:].strip())
+            continue
+        parts = line.split("\t")
+        if len(parts) < 2 or day is None:
+            continue
+        status, path = parts[0][0], parts[-1]
+        last, added = changes.get(path, (day, False))
+        changes[path] = (max(last, day), added or status == "A")
+    return changes
+
+
+def compute_news(items, library, root, docs_dir):
+    """Ce qui a changé sur le site ces dernières semaines : [(date, genre, titre, src, détail)], du plus récent
+    au plus ancien. Analyses et dossiers : leur date ; notes : leur date de révision, ou leur arrivée dans
+    l'historique ; cheat sheets : l'historique Git ; veille : une ligne par semaine."""
+    since = date.today() - timedelta(days=NEWS_DAYS)
+    news = []
+    for kind, label in (("analysis", "Nouvelle analyse"), ("dossier", "Nouveau dossier")):
+        for it in items[kind]:
+            if it["date"] >= since:
+                news.append((it["date"], label, clean_title(it["title"]), it["src"], it.get("summary", "")))
+    git = git_changes(root, ["docs/library", "docs/cheatsheets"], NEWS_DAYS)
+    for d in library:
+        for c in d["categories"]:
+            for n in c["notes"]:
+                if not n["imported"]:
+                    continue
+                path = f"docs/{n['src']}"
+                when, added = git.get(path, (None, False))
+                revue = date.fromisoformat(n["revue"]) if n.get("revue") else None
+                if added and when:
+                    news.append((when, "Nouvelle note", n["title"], n["src"], bare(c["label"])))
+                elif revue and revue >= since:
+                    news.append((revue, "Note mise à jour", n["title"], n["src"], bare(c["label"])))
+    pages = cs_pages(docs_dir)
+    for path, (when, added) in git.items():
+        src = path[len("docs/"):]
+        if src.startswith(CS_DIR + "/") and src in pages and not src.endswith("/index.md"):
+            news.append((when, "Nouvelle fiche" if added else "Fiche enrichie", pages[src][0], src,
+                         " › ".join(cs_trail(src, pages)[:-1])))
+    weeks = {}
+    for it in items["veille"]:
+        if it["date"] >= since:
+            weeks.setdefault(iso_week(it["date"]), []).append(it)
+    for week, lst in weeks.items():
+        news.append((max(it["date"] for it in lst), "Veille", f"{plural(len(lst), 'édition')} du Morning Brief",
+                     f"{WEEKS_DIR}/{week}.md", ""))
+    return sorted(news, key=lambda n: (n[0], n[1] != "Veille"), reverse=True)
+
+
+def news_line(n, src):
+    when, label, title, target, detail = n
+    return (f'<li class="kw-news__item"><span class="kw-news__date">{when.day} {short_month(when)}</span>'
+            f'<span class="kw-news__kind kw-news__kind--{slug(label)}">{esc(label)}</span>'
+            f'<a href="{href(src, target)}">{esc(title)}</a>'
+            + (f'<span class="kw-note-meta">{esc(detail)}</span>' if detail and label not in ("Nouvelle analyse", "Nouveau dossier") else "")
+            + "</li>")
+
+
+def page_news(news):
+    """« Quoi de neuf » : les changements des six dernières semaines, semaine par semaine."""
+    src, body = NEWS_SRC, ""
+    weeks = {}
+    for n in news:
+        monday = n[0] - timedelta(days=n[0].weekday())
+        weeks.setdefault(monday, []).append(n)
+    for monday, lst in sorted(weeks.items(), reverse=True):
+        counts = collections.Counter(n[1] for n in lst if n[1] != "Veille")
+        summary = " · ".join(f"{v} {k.lower()}" for k, v in counts.most_common())
+        body += (section_bar(f"Semaine du {week_span(monday)}") + (f'<p class="kw-muted">{esc(summary)}</p>' if summary else "")
+                 + '<ul class="kw-news">' + "".join(news_line(n, src) for n in lst) + "</ul>\n")
+    return src, f"""---
+title: Quoi de neuf
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero" markdown>
+<span class="kw-eyebrow">Disruptive Intelligence</span>
+
+# 🆕 Quoi de neuf
+
+<p class="kw-dom-lead">Ce qui a changé sur le site ces six dernières semaines : analyses, dossiers, notes de la Bibliothèque, cheat sheets et éditions de la veille.</p>
+<span class="kw-dom-stats">{plural(len([n for n in news if n[1] != "Veille"]), "nouveauté")} · <a href="nouveautes.xml">flux RSS</a></span>
+</div>
+{body or '<p class="kw-muted">Rien de neuf ces dernières semaines.</p>'}"""
+
+
+def write_news_feed(config):
+    news = [n for n in STATE.get("news", []) if n[1] != "Veille"]
+    if not config.site_url:
+        return
+    site = config.site_url.rstrip("/") + "/"
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>',
+           '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>',
+           f"<title>Disruptive Intelligence — Quoi de neuf</title><link>{site}{url_of(NEWS_SRC)}</link>"
+           "<description>Nouvelles analyses, notes, fiches et dossiers.</description>",
+           f'<language>fr</language><atom:link href="{site}nouveautes.xml" rel="self" type="application/rss+xml"/>']
+    for when, label, title, target, detail in news[:FEED_SIZE]:
+        link = site + url_of(target)
+        xml.append(f"<item><title>{esc(f'{label} — {title}')}</title><link>{link}</link>"
+                   f'<guid isPermaLink="false">{esc(link)}#{when.isoformat()}</guid><pubDate>{rfc822(when)}</pubDate>'
+                   f"<description>{esc(detail)}</description></item>")
+    xml.append("</channel></rss>")
+    (Path(config.site_dir) / "nouveautes.xml").write_text("\n".join(xml), encoding="utf-8")
+
+
 def page_home(items, themes, glossary):
+    """Accueil : bandeau (date, compteurs, rubriques), à la une (brief du jour, dernière analyse, dossier),
+    l'essentiel, puis veille, analyses, quoi de neuf, ressources, glossaire, Bibliothèque et cheat sheets."""
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
-    une = ""
-    if briefs:
-        une += edition_card(briefs[0], src, True)
+    today = date.today()
+    notes = [n for d in STATE.get("library", []) for c in d["categories"] for n in c["notes"] if n["imported"]]
+    side = ""
     if analyses:
         a = analyses[0]
-        une += (f'<a class="kw-card" href="{href(src, a["src"])}"><span class="kw-ed__label">Dernière analyse</span>'
-                f'<span class="kw-card__meta">{meta_line(a["author"], THEMES.get(a["theme"], ""))}</span>'
-                f'<span class="kw-card__title">{esc(clean_title(a["title"]))}</span>'
-                f'<span class="kw-card__text">{esc(a["summary"])}</span></a>')
+        side += (f'<a class="kw-card kw-home-side" href="{href(src, a["src"])}"><span class="kw-ed__label">Dernière analyse</span>'
+                 f'<span class="kw-card__meta">{meta_line(doc_type_label(a), analysis_who(a), THEMES.get(a["theme"], ""))}</span>'
+                 f'<span class="kw-card__title">{esc(clean_title(a["title"]))}</span>'
+                 f'<span class="kw-card__text">{esc(a["summary"])}</span></a>')
     if dossiers:
         d = dossiers[0]
-        une += (f'<a class="kw-card" href="{href(src, d["src"])}"><span class="kw-ed__label">Dernier dossier</span>'
-                f'<span class="kw-card__meta">{meta_line(themes_label(d), fr_date(d["date"]))}</span>'
-                f'<span class="kw-card__title">{esc(d["title"])}</span>'
-                f'<span class="kw-card__text">Croiser les analyses pour mettre les enjeux en perspective.</span></a>')
+        side += (f'<a class="kw-card kw-home-side kw-home-side--dossier" href="{href(src, d["src"])}"><span class="kw-ed__label">Dossier</span>'
+                 f'<span class="kw-card__meta">{meta_line(themes_label(d), fr_date(d["date"]))}</span>'
+                 f'<span class="kw-card__title">{esc(d["title"])}</span>'
+                 f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span></a>')
+    une = (f'<div class="kw-home-une">{edition_card(briefs[0], src, True) if briefs else ""}'
+           f'<div class="kw-home-une__side">{side}</div></div>')
 
     total = sum(len(r.get("liens") or []) for t in themes for r in t["rubriques"])
     # Glossaire : les termes les plus récents (ordre des briefs), en pastilles vers la lettre du glossaire
@@ -800,57 +949,45 @@ def page_home(items, themes, glossary):
     chips = "".join(
         f'<a class="kw-chip" href="{href(src, GLOSSARY_SRC)}#{term_anchor(t["term"])}">{esc(t["term"])}</a>'
         for t in recent)
-
-    wiki = [("📋 Cheat sheets", "Checklist avant engagement", "Préparer l'environnement, définir les variables, lancer la méthodologie.", "start/checklist.md"),
-            ("📋 Cheat sheets", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md"),
-            ("📋 Cheat sheets", "Services réseau", "Une fiche par service, nommée avec ses ports.", "services/index.md"),
-            ("📚 Bibliothèque", "Notes de cours", "Cyber et IT : synthèses pour apprendre et réviser.", "library/index.md")]
+    news = [n for n in STATE.get("news", []) if n[1] != "Veille"][:6]
+    commands = len(STATE.get("cs_index", {}))
+    wiki = [("📚 Bibliothèque", "Cours, synthèses et fiches", f"{len(notes)} notes en Cyber et IT, des parcours et un espace de révision.", "library/index.md"),
+            ("📋 Cheat sheets", "Que veux-tu faire ?", "La commande et un exemple qui marche, rangés par besoin.", "cheatsheets/besoins.md"),
+            ("📋 Cheat sheets", "Par commande", f"{commands or 'Les'} commandes de A à Z, avec leur équivalent Windows.", "cheatsheets/commandes.md"),
+            ("⚔️ Pentest & CTF", "Méthodologie", "Les 7 phases et le tableau port → fiche.", "methodology/index.md")]
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
+    nav = (f'<a href="{href(src, "veille/index.md")}">Veille</a> <a href="{href(src, "analyses/index.md")}">Analyses & dossiers</a> '
+           f'<a href="{href(src, "cheatsheets/index.md")}">Cheat sheets</a> <a href="{href(src, "library/index.md")}">Bibliothèque</a> '
+           f'<a href="{href(src, RESSOURCES_SRC)}">Ressources</a> <a href="{href(src, NEWS_SRC)}">Quoi de neuf</a>')
+    counts = " · ".join([plural(len(briefs), "édition"), plural(len(analyses), "analyse"), plural(len(notes), "note")]
+                        + ([f"{commands} commandes"] if commands else []))
 
     return src, f"""---
 hide:
   - navigation
   - toc
+  - footer
 ---
-<div class="kw-hero" markdown>
-
-# Disruptive Intelligence
-
-<p class="kw-hero__tagline"><strong>Tech · IA · Cyber · Géopolitique</strong> — veille quotidienne, analyses et base de connaissances.</p>
-
+<div class="kw-mast">
+<div class="kw-mast__top"><span>{JOURS[today.weekday()].capitalize()} {fr_date(today)}</span><span class="kw-mast__count">{counts}</span></div>
+<h1 class="kw-mast__title">Disruptive Intelligence</h1>
+<p class="kw-mast__lead"><b>Tech · IA · Cyber · Géopolitique</b> — la veille du jour, les analyses qui la prolongent et une base de connaissances pour durer.</p>
+<nav class="kw-mast__nav">{nav}</nav>
 </div>
-
-## À la une
-
-<div class="kw-une">{une}</div>
+{section_bar("À la une")}{une}
 {essentiel_block(briefs[0], src) if briefs else ""}
-
-## 📡 Veille récente
-
-<a class="kw-more-link" href="veille/">Toutes les éditions →</a>
-
+{section_bar("Veille récente", more=("Toutes les éditions →", "veille/"))}
 <div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}{all_editions_card(src)}</div>
-
-## 🔎 Analyses récentes
-
-<a class="kw-more-link" href="analyses/">Toutes les analyses →</a>
-
+{section_bar("Analyses récentes", more=("Analyses & dossiers →", "analyses/"))}
 {carousel(analysis_card(it, src, with_theme=True) for it in analyses[:6])}
-
-## 🧭 Ressources <span class="kw-muted">· {total}</span>
-
+{section_bar("Quoi de neuf", more=("Tout voir →", "nouveautes/")) + '<ul class="kw-news kw-news--home">' + "".join(news_line(n, src) for n in news) + "</ul>" if news else ""}
+{section_bar(f"Ressources · {total}", more=("Toutes les ressources →", "veille/ressources/"))}
 {resources_carousel(themes, src)}
-
-## 📖 Glossaire & notions <span class="kw-muted">· {len(glossary)}</span>
-
-<a class="kw-more-link" href="{href(src, GLOSSARY_SRC)}">Définitions et fiches notions →</a>
-
+{section_bar(f"Glossaire & notions · {len(glossary)}", more=("Définitions et fiches notions →", href(src, GLOSSARY_SRC)))}
 <div class="kw-chips">{chips}</div>
-
-## 📚 Le wiki
-
+{section_bar("Bibliothèque & cheat sheets")}
 <div class="kw-wiki">{wiki_cards}</div>
 """
 
@@ -1346,13 +1483,9 @@ def build_nav(items, themes, threads=None):
             analyses.append({label: [f"analyses/theme-{key}/index.md"]
                              + [{clean_title(it["title"]): it["src"]} for it in lst]})
 
-    dossiers = ["dossiers/index.md"]
-    for key, label in THEMES.items():
-        lst = [it for it in items["dossier"] if key in it["themes"]]
-        if lst:
-            dossiers.append({label: [{it["title"]: it["src"]} for it in lst]})
-
-    return [{"📡 Veille": veille}, {"🔎 Analyses": analyses}, {"🗂️ Dossiers": dossiers}]
+    # Dossiers : dans l'onglet Analyses, en tête (moins fréquents, mais mis en avant)
+    analyses.insert(1, {"🗂️ Dossiers": ["dossiers/index.md"] + [{it["title"]: it["src"]} for it in items["dossier"]]})
+    return [{"📡 Veille": veille}, {"🔎 Analyses": analyses}]
 
 
 def library_nav(library):
@@ -1768,6 +1901,7 @@ def page_domain(dom, library):
 title: "{bare(dom['label'])}"
 hide:
   - toc
+  - footer
 ---
 <div class="kw-dom-hero" markdown>
 <span class="kw-eyebrow">Bibliothèque</span>
@@ -1813,7 +1947,7 @@ def pages_library(library):
             src = cat["src"]
             update = last_update(cat["notes"])
             stats = lib_stats(cat["notes"])
-            body = (f'---\ntitle: "{bare(cat["label"])}"\n---\n<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n'
+            body = (f'---\ntitle: "{bare(cat["label"])}"\nhide:\n  - footer\n---\n<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n'
                     f'<span class="kw-eyebrow">[Bibliothèque · {esc(bare(dom["label"]))}]'
                     f'({posixpath.relpath(dom_src(dom), posixpath.dirname(src))})</span>\n\n# {cat["label"]}\n\n')
             if cat.get("description"):
@@ -1866,10 +2000,12 @@ def library_card(cat, src):
 WEEKDAYS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 
-def section_bar(label, anchor=None):
-    """Titre de section façon journal : filet de couleur, libellé en capitales, trait jusqu'au bord."""
+def section_bar(label, anchor=None, more=None):
+    """Titre de section façon journal : filet de couleur, libellé en capitales, trait jusqu'au bord ;
+    more = (texte, adresse) : lien « Tout voir → » au bout du trait."""
     ident = f' id="{anchor}"' if anchor else ""
-    return f'\n<div class="kw-bar"{ident}><span>{esc(label)}</span></div>\n'
+    link = f'<a class="kw-bar__more" href="{more[1]}">{esc(more[0])}</a>' if more else ""
+    return f'\n<div class="kw-bar"{ident}><span>{esc(label)}</span>{link}</div>\n'
 
 
 def page_library_index(library, themes, glossary_count):
@@ -1894,7 +2030,7 @@ def page_library_index(library, themes, glossary_count):
         '<p class="kw-mast__lead">Le savoir de référence : mes cours, synthèses et fiches, repris d\'Obsidian au fil de '
         "l'eau. La veille raconte ce qui <b>se passe</b> ; la Bibliothèque garde ce qui <b>dure</b>.</p>"
         f'<form class="kw-mast__search" action="{href(src, LIBRARY_SEARCH_SRC)}" method="get">'
-        '<input type="search" name="mots" placeholder="Chercher dans le texte de toutes les notes : kerberoasting, nmap -sV, Lazarus…" '
+        '<input type="search" name="mots" placeholder="Chercher dans toutes les notes…" title="Par exemple : kerberoasting, nmap -sV, Lazarus" '
         'aria-label="Chercher dans les notes"><button type="submit">Rechercher</button></form>'
         f'<nav class="kw-mast__nav">{nav}</nav></div>')
     une = ""
@@ -1944,6 +2080,7 @@ def page_library_index(library, themes, glossary_count):
 title: Bibliothèque
 hide:
   - toc
+  - footer
 ---
 {masthead}
 {une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
@@ -2808,6 +2945,7 @@ def write_feeds(config):
                "Morning Intelligence Brief, analyses et dossiers : Tech · IA · Cyber · Géopolitique.", everything, config)
     write_feed("veille/feed.xml", "Disruptive Intelligence — Morning Intelligence Brief",
                "La veille quotidienne, une édition par jour.", [it for it in everything if it["kind"] == "veille"], config)
+    write_news_feed(config)
 
 
 # ---------------------------------------------------------------- hooks MkDocs
@@ -2842,7 +2980,8 @@ def on_config(config):
     STATE["resumes"] = {str(k): str(v) for k, v in (load_yaml(root / "data" / "resumes.yml", {}) or {}).items()}
     STATE["parcours"] = load_parcours(root, library)
 
-    pages = [page_home(items, themes, glossary), page_veille(items, sources), page_dossiers(items)]
+    STATE["news"] = compute_news(items, library, root, docs_dir)
+    pages = [page_veille(items, sources), page_dossiers(items), page_news(STATE["news"])]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages += pages_parcours()
@@ -2856,6 +2995,7 @@ def on_config(config):
     pages += [page_cs_needs(STATE["cs_pages"], cs_order, commands),
               page_cs_commands(STATE["cs_pages"], cs_order, commands),
               page_cs_equivalents(STATE["cs_pages"], cs_order, commands)]
+    pages.append(page_home(items, themes, glossary))
     if STATE["revisions"]:
         pages.append(page_revision_index())
     pages.append(glossary_data(glossary))

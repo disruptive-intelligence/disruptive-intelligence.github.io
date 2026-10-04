@@ -27,7 +27,7 @@ theme:
     text: Inter
     code: JetBrains Mono
   features:
-    - navigation.tabs         # onglets en haut : Veille, Analyses, Dossiers, Cheat sheets, Bibliothèque
+    - navigation.tabs         # onglets en haut : Veille, Analyses (et dossiers), Cheat sheets, Bibliothèque
     - navigation.tabs.sticky  # requis : sinon Material ajoute une 2e barre d'onglets
     - navigation.prune        # menu : seule la partie visible est écrite dans chaque page (Bibliothèque : 400+ pages)
     - navigation.sections     # grandes parties = en-têtes (style HackTricks)
@@ -110,7 +110,9 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
-  - 🏠 Accueil: index.md    # généré ; Veille, Analyses et Dossiers sont insérés juste après
+  - 🏠 Accueil:              # généré ; Veille et Analyses (avec les Dossiers) sont insérés juste après
+      - index.md
+      - 🆕 Quoi de neuf: nouveautes.md
   - 📋 Cheat sheets:
     - cheatsheets/index.md
     - 🔎 Que veux-tu faire ?: cheatsheets/besoins.md
