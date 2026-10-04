@@ -261,3 +261,36 @@ sc.exe sdshow wuauserv
 
 Pour comprendre : [Windows en profondeur, ch. 17 (lire le SDDL)](../../../library/it/windows/windows-en-profondeur/05-partie-v-modele-de-securite-et-protections/01-chapitre-17-modele-de-securite-integrite-et-mitiga.md)
 { .kw-cs-meta }
+
+### Repérer un service mal configuré
+
+```powershell title="Commande"
+# Chemin du binaire avec des espaces mais sans guillemets
+Get-CimInstance Win32_Service |
+    Where-Object { $_.PathName -notmatch '^"' -and ($_.PathName -split '\.exe')[0] -match ' ' } |
+    Select-Object Name, StartName, PathName
+# Qui peut écrire dans le dossier du binaire
+icacls "<dossier du binaire>"
+```
+
+```powershell title="Exemple"
+Get-CimInstance Win32_Service |
+    Where-Object { $_.PathName -notmatch '^"' -and ($_.PathName -split '\.exe')[0] -match ' ' } |
+    Select-Object Name, StartName, PathName
+```
+
+??? example "Sortie"
+    ```text
+    Name     StartName   PathName
+    ----     ---------   --------
+    MonAgent LocalSystem C:\Program Files\Mon Agent\agent.exe
+    ```
+
+```bat title="Exemple 2"
+icacls "C:\Program Files\Mon Agent"   :: Users ou Authenticated Users en (M), (W) ou (F) : à corriger
+```
+
+Sans guillemets, Windows essaie `C:\Program.exe`, puis `C:\Program Files\Mon.exe`, avant le vrai binaire ; et un dossier modifiable par tous permet de remplacer ce que le service lance avec son compte. Correction : mettre le chemin entre guillemets dans la valeur `ImagePath` de `HKLM\SYSTEM\CurrentControlSet\Services\<service>`, et réserver l'écriture du dossier aux administrateurs.
+
+Pour comprendre : [Windows en profondeur, ch. 7 (services)](../../../library/it/windows/windows-en-profondeur/02-partie-ii-processus-execution-et-code.md)
+{ .kw-cs-meta }

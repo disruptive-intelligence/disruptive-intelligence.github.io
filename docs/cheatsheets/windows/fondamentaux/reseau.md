@@ -229,6 +229,34 @@ net view \\srv-fs01.meridian.local
 Pour comprendre : [Windows en profondeur, ch. 15 (SMB)](../../../library/it/windows/windows-en-profondeur/index.md)
 { .kw-cs-meta }
 
+### Voir qui a accès à un partage
+
+```powershell title="Commande"
+Get-SmbShareAccess -Name "<partage>"   # droits du partage (accès par le réseau)
+icacls "<dossier partagé>"             # droits NTFS (accès au disque)
+```
+
+```powershell title="Exemple"
+Get-SmbShareAccess -Name Compta
+```
+
+??? example "Sortie"
+    ```text
+    Name   ScopeName AccountName        AccessControlType AccessRight
+    ----   --------- -----------        ----------------- -----------
+    Compta *         Everyone           Allow             Read
+    Compta *         MERIDIAN\GG-Compta Allow             Change
+    ```
+
+```bat title="Exemple 2"
+icacls D:\Partages\Compta
+```
+
+Par le réseau, les deux s'appliquent et **le plus restrictif l'emporte** : partage en contrôle total et NTFS en lecture donnent une lecture seule. Les partages terminés par `$` (`C$`, `ADMIN$`) n'apparaissent pas dans la liste des partages mais restent accessibles aux administrateurs.
+
+Pour comprendre : [Windows en profondeur, ch. 15 (permissions de partage et NTFS)](../../../library/it/windows/windows-en-profondeur/04-partie-iv-reseau-et-communication.md)
+{ .kw-cs-meta }
+
 ### Voir le profil et l'état du pare-feu
 
 ```powershell title="Commande"

@@ -7,9 +7,9 @@ cours:
 
 # Active Directory au quotidien
 
-Trouver un compte et son état, déverrouiller, réinitialiser, gérer les groupes ; diagnostiquer les GPO, Kerberos et les contrôleurs de domaine ; contrôles d'hygiène.
+Trouver un compte et son état, déverrouiller, réinitialiser, créer, gérer les groupes ; ranger les objets dans les OU, lire un mot de passe LAPS, créer un gMSA ; diagnostiquer les GPO, Kerberos et les contrôleurs de domaine ; contrôles d'hygiène.
 
-Les incontournables : `Get-ADUser` · `Search-ADAccount` · `Get-ADGroupMember` · `gpresult` · `klist` · `nltest` · `dcdiag`
+Les incontournables : `Get-ADUser` · `Get-ADComputer` · `Search-ADAccount` · `Get-ADGroupMember` · `gpresult` · `klist` · `nltest` · `dcdiag`
 { .kw-cs-top }
 
 Les cmdlets `*-AD*` demandent le module ActiveDirectory (RSAT sur un poste d'administration, présent sur les DC).
@@ -88,6 +88,22 @@ Disable-ADAccount -Identity j.petit
 Get-ADUser j.petit | Select-Object SamAccountName, Enabled
 ```
 
+### Créer un compte
+
+```powershell title="Commande"
+New-ADUser -Name "<Prénom Nom>" -SamAccountName <identifiant> -UserPrincipalName <identifiant>@<domaine> `
+    -Path "<DN de l'OU>" -AccountPassword (Read-Host -AsSecureString "Mot de passe initial") `
+    -Enabled $true -ChangePasswordAtLogon $true
+```
+
+```powershell title="Exemple"
+New-ADUser -Name "Sarah Benali" -GivenName Sarah -Surname Benali -SamAccountName s.benali `
+    -UserPrincipalName s.benali@meridian.local -Path "OU=Utilisateurs,OU=Lyon,DC=meridian,DC=local" `
+    -AccountPassword (Read-Host -AsSecureString "Mot de passe initial") -Enabled $true -ChangePasswordAtLogon $true
+```
+
+Le mot de passe est saisi au clavier, jamais écrit dans la commande. Sans `-Path`, le compte arrive dans le conteneur `Users`, où aucune GPO d'OU ne s'applique.
+
 ## Groupes
 
 ### Voir les membres d'un groupe, imbrications comprises
@@ -132,6 +148,104 @@ Add-ADGroupMember -Identity "GG-Compta" -Members j.petit
 ```
 
 L'utilisateur doit rouvrir sa session (nouveau jeton) pour que le changement s'applique.
+
+## OU et ordinateurs
+
+### Voir l'OU d'un objet et l'y déplacer
+
+```powershell title="Commande"
+Get-ADComputer <machine> | Select-Object DistinguishedName                  # l'OU se lit dans le DN
+Move-ADObject -Identity "<DN de l'objet>" -TargetPath "<DN de l'OU>"
+```
+
+```powershell title="Exemple"
+Get-ADComputer PC-COMPTA-07 | Select-Object DistinguishedName
+Get-ADComputer PC-COMPTA-07 | Move-ADObject -TargetPath "OU=Postes,OU=Lyon,DC=meridian,DC=local"
+```
+
+??? example "Sortie"
+    ```text
+    DistinguishedName
+    -----------------
+    CN=PC-COMPTA-07,CN=Computers,DC=meridian,DC=local
+    ```
+
+```bat title="Exemple 2"
+redircmp "OU=Postes,OU=Lyon,DC=meridian,DC=local"   :: les machines jointes ensuite arrivent dans cette OU
+```
+
+`CN=Computers` et `CN=Users` sont des conteneurs, pas des OU : on ne peut pas y lier de GPO.
+
+Pour comprendre : [Active Directory, ch. 3 (objets et OU)](../../../library/it/active-directory/active-directory/01-partie-i-fondations/03-chapitre-3-objets-attributs-et-structure-ldap.md)
+{ .kw-cs-meta }
+
+### Supprimer une OU protégée
+
+```powershell title="Commande"
+Get-ADObject -SearchBase "<DN de l'OU>" -Filter * | Select-Object Name, ObjectClass   # ce qu'elle contient
+Set-ADOrganizationalUnit -Identity "<DN de l'OU>" -ProtectedFromAccidentalDeletion $false
+Remove-ADOrganizationalUnit -Identity "<DN de l'OU>" -Recursive
+```
+
+```powershell title="Exemple"
+Set-ADOrganizationalUnit -Identity "OU=Stagiaires,OU=Lyon,DC=meridian,DC=local" -ProtectedFromAccidentalDeletion $false
+Remove-ADOrganizationalUnit -Identity "OU=Stagiaires,OU=Lyon,DC=meridian,DC=local" -Recursive -Confirm:$false
+```
+
+!!! warning "Attention"
+    `-Recursive` supprime aussi tout ce que l'OU contient (comptes, machines, sous-OU). Sans la corbeille AD, la restauration passe par une sauvegarde.
+
+### Lister les ordinateurs du domaine et leur système
+
+```powershell title="Commande"
+Get-ADComputer -Filter * -Properties OperatingSystem, LastLogonDate | Select-Object Name, OperatingSystem, LastLogonDate
+```
+
+```powershell title="Exemple"
+Get-ADComputer -Filter 'OperatingSystem -like "*Server*"' -Properties OperatingSystem, LastLogonDate |
+    Sort-Object Name | Select-Object Name, OperatingSystem, LastLogonDate
+```
+
+??? example "Sortie"
+    ```text
+    Name     OperatingSystem              LastLogonDate
+    ----     ---------------              -------------
+    DC01-LYO Windows Server 2022 Standard 03/10/2026 22:14:05
+    DC02-LYO Windows Server 2022 Standard 03/10/2026 21:58:40
+    SRV-FS01 Windows Server 2019 Standard 03/10/2026 19:02:11
+    ```
+
+```powershell title="Exemple 2"
+Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00 -ComputersOnly | Select-Object Name, LastLogonDate   # machines disparues
+```
+
+### Lire le mot de passe LAPS d'un poste
+
+```powershell title="Commande"
+Get-LapsADPassword -Identity <machine> -AsPlainText              # Windows LAPS
+Set-LapsADPasswordExpirationTime -Identity <machine>             # le faire renouveler après usage
+```
+
+```powershell title="Exemple"
+Get-LapsADPassword -Identity PC-COMPTA-07 -AsPlainText | Select-Object ComputerName, Account, Password, ExpirationTimestamp
+```
+
+??? example "Sortie"
+    ```text
+    ComputerName        : PC-COMPTA-07
+    Account             : Administrator
+    Password            : ••••••••••••••••
+    ExpirationTimestamp : 02/11/2026 09:30:12
+    ```
+
+```powershell title="Exemple 2"
+Get-ADComputer PC-COMPTA-07 -Properties ms-Mcs-AdmPwd | Select-Object Name, ms-Mcs-AdmPwd   # ancien LAPS
+```
+
+Seuls les groupes délégués peuvent lire ce mot de passe : la liste de ces groupes fait partie de l'audit des droits.
+
+Pour comprendre : [Active Directory, ch. 11 (LAPS)](../../../library/it/active-directory/active-directory/03-partie-iii-administration-et-controle/03-chapitre-11-tiering-model-et-separation-des-privil.md)
+{ .kw-cs-meta }
 
 ## GPO
 
@@ -190,6 +304,32 @@ Get-GPO -All | Sort-Object ModificationTime -Descending | Select-Object -First 3
     RDP policy                   02/06/2026 14:31:09
     ```
 
+## Comptes de service
+
+### Créer un compte de service géré (gMSA)
+
+```powershell title="Commande"
+Add-KdsRootKey -EffectiveImmediately        # une seule fois par forêt ; utilisable après réplication (jusqu'à 10 h)
+New-ADServiceAccount -Name <gmsa> -DNSHostName <gmsa>.<domaine> -PrincipalsAllowedToRetrieveManagedPassword "<groupe de serveurs>"
+Install-ADServiceAccount -Identity <gmsa>   # sur chaque serveur du groupe
+Test-ADServiceAccount -Identity <gmsa>      # True : le serveur sait récupérer le mot de passe
+```
+
+```powershell title="Exemple"
+New-ADServiceAccount -Name gmsa-sql -DNSHostName gmsa-sql.meridian.local -PrincipalsAllowedToRetrieveManagedPassword "GS-Serveurs-SQL"
+Test-ADServiceAccount -Identity gmsa-sql    # sur SQL01, après Install-ADServiceAccount
+```
+
+??? example "Sortie"
+    ```text
+    True
+    ```
+
+Dans le service, le compte s'écrit `MERIDIAN\gmsa-sql$`, mot de passe laissé vide : AD le génère (240 octets) et le renouvelle tous les 30 jours. Le serveur doit être membre du groupe autorisé (redémarrage après l'ajout).
+
+Pour comprendre : [Active Directory, ch. 3 (gMSA)](../../../library/it/active-directory/active-directory/01-partie-i-fondations/03-chapitre-3-objets-attributs-et-structure-ldap.md)
+{ .kw-cs-meta }
+
 ## Kerberos et contrôleurs de domaine
 
 ### Voir et purger ses tickets Kerberos
@@ -238,6 +378,33 @@ setspn -L svc_sql
             MSSQLSvc/sql01.meridian.local
     ```
 
+### Trouver les contrôleurs de domaine et leurs rôles
+
+```powershell title="Commande"
+Get-ADDomainController -Filter * | Select-Object Name, Site, IPv4Address, IsGlobalCatalog, OperationMasterRoles
+```
+
+```powershell title="Exemple"
+Get-ADDomainController -Filter * | Select-Object Name, Site, IsGlobalCatalog, OperationMasterRoles
+```
+
+??? example "Sortie"
+    ```text
+    Name     Site IsGlobalCatalog OperationMasterRoles
+    ----     ---- --------------- --------------------
+    DC01-LYO Lyon            True {SchemaMaster, DomainNamingMaster, PDCEmulator, RIDMaster, InfrastructureMaster}
+    DC02-LYO Lyon            True {}
+    ```
+
+```bat title="Exemple 2"
+nltest /dclist:meridian.local
+```
+
+Les postes, eux, trouvent les DC dans le DNS (enregistrements SRV) : voir [résoudre un nom](../fondamentaux/reseau.md#resoudre-un-nom).
+
+Pour comprendre : [Active Directory, ch. 2 (FSMO, Global Catalog)](../../../library/it/active-directory/active-directory/01-partie-i-fondations/02-chapitre-2-architecture-et-composants.md)
+{ .kw-cs-meta }
+
 ### Vérifier la santé des contrôleurs de domaine
 
 ```bat title="Commande"
@@ -282,6 +449,19 @@ Get-ADUser -Filter 'adminCount -eq 1' -Properties adminCount, LastLogonDate | Se
 ```
 
 `adminCount = 1` reste sur les anciens membres des groupes protégés : les comptes qui ne sont plus privilégiés doivent être nettoyés (Ch.4 du cours).
+
+### Inventorier les comptes utilisateurs qui portent un SPN
+
+```powershell title="Commande"
+Get-ADUser -Filter 'servicePrincipalName -like "*"' -Properties servicePrincipalName, PasswordLastSet, adminCount |
+    Where-Object SamAccountName -ne 'krbtgt' |
+    Select-Object SamAccountName, PasswordLastSet, adminCount, @{n='SPN';e={$_.servicePrincipalName -join ', '}}
+```
+
+Chaque compte de la liste doit avoir un mot de passe long et renouvelé, aucun privilège superflu (`adminCount` à 1 = à revoir en priorité), ou devenir un gMSA. Un SPN qui ne sert plus se retire avec `setspn -D <SPN> <compte>`.
+
+Ensuite : [créer un gMSA](#creer-un-compte-de-service-gere-gmsa) — Pour comprendre : [Active Directory, ch. 3 (attributs critiques)](../../../library/it/active-directory/active-directory/01-partie-i-fondations/03-chapitre-3-objets-attributs-et-structure-ldap.md)
+{ .kw-cs-meta }
 
 ### Vérifier l'âge du mot de passe de krbtgt
 

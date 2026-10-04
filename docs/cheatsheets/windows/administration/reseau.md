@@ -6,9 +6,9 @@ cours:
 
 # Réseau et pare-feu
 
-Changer d'adresse IP ou de DNS, ajouter un nom dans le fichier hosts, ouvrir ou fermer un port dans le pare-feu, désactiver les protocoles de résolution de secours.
+Changer d'adresse IP ou de DNS, ajouter un nom dans le fichier hosts, ouvrir ou fermer un port dans le pare-feu, désactiver les protocoles de résolution de secours, ouvrir une session de bureau à distance.
 
-Les incontournables : `New-NetIPAddress` · `Set-DnsClientServerAddress` · `New-NetFirewallRule` · `netsh`
+Les incontournables : `New-NetIPAddress` · `Set-DnsClientServerAddress` · `New-NetFirewallRule` · `netsh` · `mstsc`
 { .kw-cs-top }
 
 ## Adressage et noms
@@ -132,3 +132,25 @@ Set-SmbServerConfiguration -EnableSMB1Protocol $false -RequireSecuritySignature 
 ```powershell title="Exemple"
 Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
 ```
+
+## Bureau à distance
+
+### Ouvrir une session de bureau à distance (RDP)
+
+```bat title="Commande"
+mstsc /v:<machine>
+```
+
+```bat title="Exemple"
+mstsc /v:srv-fs01.meridian.local
+```
+
+```bash title="Exemple 2"
+# Depuis Linux : fenêtre ajustable, presse-papiers partagé, dossier /tmp monté dans la session
+xfreerdp /v:srv-fs01.meridian.local /u:'MERIDIAN\m.laurent' /dynamic-resolution +clipboard /drive:partage,/tmp
+```
+
+Sans `/p:`, xfreerdp demande le mot de passe : il ne reste pas dans l'historique du shell. Les ouvertures de session RDP laissent un événement 4624 de type 10 sur la machine cible.
+
+Pour comprendre : [Analyse des journaux d'événements, RDP](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md)
+{ .kw-cs-meta }

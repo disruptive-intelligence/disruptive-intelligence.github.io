@@ -99,6 +99,25 @@ nltest /dsgetdc:meridian.local   :: quel contrôleur de domaine le poste utilise
 Ensuite : [fiche Active Directory](../administration/active-directory.md)
 { .kw-cs-meta }
 
+### Voir le numéro de série et le BIOS
+
+```powershell title="Commande"
+Get-CimInstance Win32_BIOS | Select-Object Manufacturer, SerialNumber, SMBIOSBIOSVersion, ReleaseDate
+```
+
+```powershell title="Exemple"
+Get-CimInstance Win32_BIOS | Select-Object Manufacturer, SerialNumber, SMBIOSBIOSVersion
+```
+
+??? example "Sortie"
+    ```text
+    Manufacturer SerialNumber SMBIOSBIOSVersion
+    ------------ ------------ -----------------
+    Dell Inc.    7HX2Q93      1.18.0
+    ```
+
+Le numéro de série identifie le poste dans l'inventaire et auprès du constructeur, par exemple pour une fiche d'incident. `Get-CimInstance` remplace `Get-WmiObject`, qui marche encore mais n'existe plus dans PowerShell 7.
+
 ### Voir les correctifs installés
 
 ```powershell title="Commande"
