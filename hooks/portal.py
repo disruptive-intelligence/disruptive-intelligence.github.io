@@ -647,12 +647,12 @@ hide:
 <div class="kw-mast__search">{analyses_filter("Filtrer les analyses : un mot, un auteur, un sujet (DGFiP, AGI, ANSSI…)")}</div>
 <nav class="kw-mast__nav">{nav}</nav>
 </div>
-{une}{dossiers}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
+{une}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
 {section_bar("Par thème")}
 <div class="kw-an-list" markdown>
 {chapters}
 </div>
-"""))
+{dossiers}"""))
     return out
 
 
@@ -973,8 +973,7 @@ def page_home(items, themes, glossary):
                  f'<span class="kw-card__meta">{meta_line(themes_label(d), fr_date(d["date"]))}</span>'
                  f'<span class="kw-card__title">{esc(d["title"])}</span>'
                  f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span></a>')
-    une = (f'<div class="kw-home-une">{edition_card(briefs[0], src, True) if briefs else ""}'
-           f'<div class="kw-home-une__side">{side}</div></div>')
+    une = f'<div class="kw-home-une">{edition_card(briefs[0], src, True) if briefs else ""}{side}</div>'
 
     total = sum(len(r.get("liens") or []) for t in themes for r in t["rubriques"])
     # Glossaire : les termes les plus récents (ordre des briefs), en pastilles vers la lettre du glossaire
@@ -995,9 +994,6 @@ def page_home(items, themes, glossary):
     wiki_cards = "".join(f'<a class="kw-card" href="{href(src, s)}"><span class="kw-ed__label">{a}</span>'
                          f'<span class="kw-card__title">{b}</span><span class="kw-card__text">{c}</span></a>'
                          for a, b, c, s in wiki)
-    nav = (f'<a href="{href(src, "veille/index.md")}">Veille</a> <a href="{href(src, "analyses/index.md")}">Analyses & dossiers</a> '
-           f'<a href="{href(src, "cheatsheets/index.md")}">Cheat sheets</a> <a href="{href(src, "library/index.md")}">Bibliothèque</a> '
-           f'<a href="{href(src, RESSOURCES_SRC)}">Ressources</a> <a href="{href(src, NEWS_SRC)}">Quoi de neuf</a>')
     counts = " · ".join([plural(len(briefs), "édition"), plural(len(analyses), "analyse"), plural(len(notes), "note")]
                         + ([f"{commands} commandes"] if commands else []))
 
@@ -1012,7 +1008,6 @@ hide:
 <div class="kw-mast__top"><span>{JOURS[today.weekday()].capitalize()} {fr_date(today)}</span><span class="kw-mast__count">{counts}</span></div>
 <h1 class="kw-mast__title">Disruptive Intelligence</h1>
 <p class="kw-mast__lead"><b>Tech · IA · Cyber · Géopolitique</b> — la veille du jour, les analyses qui la prolongent et une base de connaissances pour durer.</p>
-<nav class="kw-mast__nav">{nav}</nav>
 </div>
 {section_bar("À la une")}{une}
 {essentiel_block(briefs[0], src) if briefs else ""}
@@ -1521,8 +1516,8 @@ def build_nav(items, themes, threads=None):
             analyses.append({label: [f"analyses/theme-{key}/index.md"]
                              + [{clean_title(it["title"]): it["src"]} for it in lst]})
 
-    # Dossiers : dans l'onglet Analyses, en tête (moins fréquents, mais mis en avant)
-    analyses.insert(1, {"🗂️ Dossiers": ["dossiers/index.md"] + [{it["title"]: it["src"]} for it in items["dossier"]]})
+    # Dossiers : dans l'onglet Analyses, après les thèmes (moins fréquents que les analyses)
+    analyses.append({"🗂️ Dossiers": ["dossiers/index.md"] + [{it["title"]: it["src"]} for it in items["dossier"]]})
     return [{"📡 Veille": veille}, {"🔎 Analyses": analyses}]
 
 
