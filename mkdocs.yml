@@ -159,6 +159,9 @@ nav:
         - Linux:
             - cheatsheets/forensic/linux/index.md
             - Triage à chaud: cheatsheets/forensic/linux/triage-a-chaud.md
+        - Windows:
+            - cheatsheets/forensic/windows/index.md
+            - Artefacts Windows: cheatsheets/forensic/windows/artefacts.md
     - 🚨 Réponse à incident:
         - cheatsheets/reponse-incident/index.md
         - Fiches réflexes:

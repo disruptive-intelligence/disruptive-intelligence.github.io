@@ -10,3 +10,8 @@ les empreintes, chercher la persistance, lire les traces.
 ## [Linux](linux/index.md)
 
 - [Triage à chaud](linux/triage-a-chaud.md)
+
+## [Windows](windows/index.md)
+
+- [Artefacts Windows](windows/artefacts.md) — exécution, fichiers ouverts, USB, suppressions, connexions,
+  persistance : où chercher et avec quoi lire.

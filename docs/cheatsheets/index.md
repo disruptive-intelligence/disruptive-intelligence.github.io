@@ -20,6 +20,6 @@ Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la c
 
 ## Par métier
 
-- [Forensic](forensic/index.md) — procédures d'investigation : [triage à chaud Linux](forensic/linux/triage-a-chaud.md).
+- [Forensic](forensic/index.md) — procédures d'investigation : [triage à chaud Linux](forensic/linux/triage-a-chaud.md), [artefacts Windows](forensic/windows/artefacts.md).
 - [Réponse à incident](reponse-incident/index.md) — fiches réflexes et modèles vierges.
 - [Pentest & CTF](../start/index.md) — méthodologie, services par port, élévation de privilèges, outils.

@@ -1213,3 +1213,26 @@ body[data-md-color-scheme="default"]::after {
   .md-typeset .kw-mast__strip { justify-content: center; text-align: center; }
   .md-typeset .kw-mast__tagline { order: -1; flex-basis: 100%; }
 }
+
+/* Cheat sheets : blocs de commandes sur fond noir, façon terminal (dans les deux thèmes). La portée se fait
+   par la présence d'éléments propres aux cheat sheets dans la page. */
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) {
+  --md-code-bg-color: #0b0909;
+  --md-code-fg-color: #e9e4e4;
+  --md-code-hl-comment-color: #8d8484;
+  --md-code-hl-keyword-color: #8f9bff;
+  --md-code-hl-function-color: #c39bff;
+  --md-code-hl-string-color: #6fd3a8;
+  --md-code-hl-number-color: #ffb36b;
+  --md-code-hl-constant-color: #ff8a8a;
+  --md-code-hl-name-color: #e9e4e4;
+  --md-code-hl-operator-color: #d6c7c7;
+  --md-code-hl-punctuation-color: #b8aeae;
+  --md-code-hl-variable-color: #f7c97a;
+  --md-code-hl-special-color: #ed4d5a;
+  --md-code-hl-generic-color: #b8aeae;
+}
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset pre > code { border: 1px solid #241d1d; }
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .kw-cs-entry > .highlight:not(:first-of-type) pre > code {
+  background: var(--md-code-bg-color); box-shadow: none; }
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .md-clipboard { color: #8d8484; }
