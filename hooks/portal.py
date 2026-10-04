@@ -806,7 +806,7 @@ def git_changes(root, paths, days):
     l'historique n'est pas disponible (le build ne doit jamais échouer pour ça)."""
     import subprocess
     try:
-        out = subprocess.run(["git", "log", f"--since={days}.days", "--name-status", "--format=%x00%cs", "--", *paths],
+        out = subprocess.run(["git", "log", "-M", f"--since={days}.days", "--name-status", "--format=%x00%cs", "--", *paths],
                              cwd=root, capture_output=True, text=True, encoding="utf-8", timeout=60).stdout
     except (OSError, subprocess.SubprocessError):
         return {}
@@ -860,7 +860,36 @@ def compute_news(items, library, root, docs_dir):
     for week, lst in weeks.items():
         news.append((max(it["date"] for it in lst), "Veille", f"{plural(len(lst), 'édition')} du Morning Brief",
                      f"{WEEKS_DIR}/{week}.md", ""))
-    return sorted(news, key=lambda n: (n[0], n[1] != "Veille"), reverse=True)
+    return sorted(group_news(news), key=lambda n: (n[0], n[1] != "Veille"), reverse=True)
+
+
+NEWS_PLURAL = {"Nouvelle analyse": "nouvelles analyses", "Nouveau dossier": "nouveaux dossiers",
+               "Nouvelle note": "nouvelles notes", "Note mise à jour": "notes mises à jour",
+               "Nouvelle fiche": "nouvelles fiches", "Fiche enrichie": "fiches enrichies", "Veille": "veille"}
+
+
+def news_count(n, label):
+    return f"{n} {NEWS_PLURAL.get(label, label.lower()) if n > 1 else label.lower()}"
+
+
+def group_news(news, limit=3):
+    """Plus de trois notes ou fiches du même genre, le même jour, dans la même rubrique : une seule ligne
+    qui renvoie à la rubrique (« 11 notes mises à jour — Fiches notions »)."""
+    groups = {}
+    for n in news:
+        groups.setdefault((n[0], n[1], n[4]) if n[1] in ("Nouvelle note", "Note mise à jour", "Nouvelle fiche", "Fiche enrichie")
+                          else id(n), []).append(n)
+    out = []
+    for key, lst in groups.items():
+        if len(lst) <= limit:
+            out += lst
+            continue
+        when, label, detail = key
+        first = lst[0][3]
+        parent = posixpath.dirname(posixpath.dirname(first) if first.endswith("/index.md") else first)
+        out.append((when, label, f"{news_count(len(lst), label).capitalize()} — {detail}", f"{parent}/index.md",
+                    ", ".join(n[2] for n in lst[:4]) + (" …" if len(lst) > 4 else "")))
+    return out
 
 
 def news_line(n, src):
@@ -880,8 +909,12 @@ def page_news(news):
         monday = n[0] - timedelta(days=n[0].weekday())
         weeks.setdefault(monday, []).append(n)
     for monday, lst in sorted(weeks.items(), reverse=True):
-        counts = collections.Counter(n[1] for n in lst if n[1] != "Veille")
-        summary = " · ".join(f"{v} {k.lower()}" for k, v in counts.most_common())
+        counts = collections.Counter()
+        for n in lst:
+            if n[1] != "Veille":
+                m = re.match(r"^(\d+) ", n[2])                    # ligne regroupée : « 11 notes mises à jour — … »
+                counts[n[1]] += int(m.group(1)) if m and " — " in n[2] else 1
+        summary = " · ".join(news_count(v, k) for k, v in counts.most_common())
         body += (section_bar(f"Semaine du {week_span(monday)}") + (f'<p class="kw-muted">{esc(summary)}</p>' if summary else "")
                  + '<ul class="kw-news">' + "".join(news_line(n, src) for n in lst) + "</ul>\n")
     return src, f"""---
@@ -949,7 +982,11 @@ def page_home(items, themes, glossary):
     chips = "".join(
         f'<a class="kw-chip" href="{href(src, GLOSSARY_SRC)}#{term_anchor(t["term"])}">{esc(t["term"])}</a>'
         for t in recent)
-    news = [n for n in STATE.get("news", []) if n[1] != "Veille"][:6]
+    news, per_kind = [], collections.Counter()               # aperçu varié : deux lignes au plus par genre
+    for n in STATE.get("news", []):
+        if n[1] != "Veille" and per_kind[n[1]] < 2 and len(news) < 6:
+            news.append(n)
+            per_kind[n[1]] += 1
     commands = len(STATE.get("cs_index", {}))
     wiki = [("📚 Bibliothèque", "Cours, synthèses et fiches", f"{len(notes)} notes en Cyber et IT, des parcours et un espace de révision.", "library/index.md"),
             ("📋 Cheat sheets", "Que veux-tu faire ?", "La commande et un exemple qui marche, rangés par besoin.", "cheatsheets/besoins.md"),
@@ -965,6 +1002,7 @@ def page_home(items, themes, glossary):
                         + ([f"{commands} commandes"] if commands else []))
 
     return src, f"""---
+title: Accueil
 hide:
   - navigation
   - toc
