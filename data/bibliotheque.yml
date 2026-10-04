@@ -29,12 +29,13 @@
         - label: 🧪 Méthodes d'analyse
           description: "Les modèles et techniques qui structurent l'analyse et la mettent à l'épreuve."
           notes: [Modèles d'analyse de la menace, Red teaming analytique]
+          liens: [Threat modeling]
         - label: 📣 Influence & intelligence économique
           description: "La guerre de l'information et la protection de l'entreprise."
           notes: [Guerre informationnelle et opérations d'influence (L2I), Intelligence économique]
         - label: 🕶️ OPSEC
           description: "Protéger l'enquêteur, ses identités et ses communications."
-          notes: [OPSEC & privacy]
+          notes: [OPSEC & privacy, OPSEC & privacy — synthèse]
     - id: osint
       label: 🔍 OSINT
       description: Rechercher, recouper et exploiter l'information ouverte, y compris financière et humaine.
@@ -74,6 +75,7 @@
         - label: 🧩 Applications
           description: "Sécuriser le code, les API et la chaîne de livraison."
           notes: [Sécurité applicative (AppSec)]
+          liens: [Threat modeling]
     - id: detection
       label: 🛰️ Détection & réponse
       description: Détecter, investiguer et répondre aux incidents, avec les modèles qui structurent l'analyse d'une attaque.
@@ -147,7 +149,7 @@
       label: 📌 Fiches notions
       description: Une notion par page — l'essentiel, des exemples, où l'approfondir.
       glossaire: true
-      notes: ["CVE, CWE, CVSS, EPSS, KEV", Défense en profondeur, "MTTD, MTTC, MTTR", "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Triade CIA, Zero Trust]
+      notes: ["CVE, CWE, CVSS, EPSS, KEV", Défense en profondeur, "MTTD, MTTC, MTTR", "IOC, IOA, TTP", MFA, Moindre privilège, Segmentation réseau, "SPF, DKIM, DMARC", Surface d'attaque, Threat modeling, Triade CIA, Zero Trust]
 
 - id: it
   label: 💻 IT
