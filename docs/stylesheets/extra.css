@@ -1159,6 +1159,7 @@ body[data-md-color-scheme="default"]::after {
 
 /* Accueil du site : à la une compacte, trois cartes côte à côte (brief du jour, dernière analyse, dossier) */
 .md-typeset .kw-home-une { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 1rem; align-items: start; }
+.md-typeset .kw-home-une > .kw-card { align-self: end; }   /* calées sur le bas du brief, au-dessus de l'essentiel */
 .md-typeset .kw-home-une > .kw-ed, .md-typeset .kw-home-une > .kw-card { margin: 0; padding: .8rem 1rem; }
 .md-typeset .kw-home-une .kw-ed__date { font-size: 1.3rem; margin: .1rem 0 .3rem; }
 .md-typeset .kw-home-une .kw-ed__heads { font-size: .7rem; margin: 0; }

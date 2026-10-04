@@ -955,7 +955,7 @@ def write_news_feed(config):
 
 def page_home(items, themes, glossary):
     """Accueil : bandeau (date, compteurs, rubriques), à la une (brief du jour, dernière analyse, dossier),
-    l'essentiel, puis veille, analyses, quoi de neuf, ressources, glossaire, Bibliothèque et cheat sheets."""
+    l'essentiel, puis veille, analyses, ressources, glossaire, Bibliothèque et cheat sheets, et quoi de neuf tout en bas."""
     src = "index.md"
     briefs, analyses, dossiers = items["veille"], items["analysis"], items["dossier"]
     today = date.today()
@@ -1015,13 +1015,13 @@ hide:
 <div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}{all_editions_card(src)}</div>
 {section_bar("Analyses récentes", more=("Analyses & dossiers →", "analyses/"))}
 {carousel(analysis_card(it, src, with_theme=True) for it in analyses[:6])}
-{section_bar("Quoi de neuf", more=("Tout voir →", "nouveautes/")) + '<ul class="kw-news kw-news--home">' + "".join(news_line(n, src) for n in news) + "</ul>" if news else ""}
 {section_bar(f"Ressources · {total}", more=("Toutes les ressources →", "veille/ressources/"))}
 {resources_carousel(themes, src)}
 {section_bar(f"Glossaire & notions · {len(glossary)}", more=("Définitions et fiches notions →", href(src, GLOSSARY_SRC)))}
 <div class="kw-chips">{chips}</div>
 {section_bar("Bibliothèque & cheat sheets")}
 <div class="kw-wiki">{wiki_cards}</div>
+{section_bar("Quoi de neuf", more=("Tout voir →", "nouveautes/")) + '<ul class="kw-news kw-news--home">' + "".join(news_line(n, src) for n in news) + "</ul>" if news else ""}
 """
 
 
