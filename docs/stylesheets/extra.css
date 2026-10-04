@@ -1236,3 +1236,17 @@ body[data-md-color-scheme="default"]::after {
 .md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .kw-cs-entry > .highlight:not(:first-of-type) pre > code {
   background: var(--md-code-bg-color); box-shadow: none; }
 .md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .md-clipboard { color: #8d8484; }
+
+/* Images des notes (schémas, captures d'écran) : taille raisonnable et centrées au lieu de toute la largeur du
+   texte ; un clic ouvre l'image en grand (javascripts/images-zoom.js). Fond clair : les schémas à fond
+   transparent restent lisibles en thème sombre. Une largeur posée dans la note ({ width="…" }) reste prioritaire. */
+.md-typeset p > img:not(.twemoji):not(.emojione) {
+  display: block; margin: 1.1rem auto; max-width: min(100%, 28rem); max-height: 19rem; width: auto; height: auto;
+  object-fit: contain; padding: .3rem; border-radius: 8px; border: 1px solid var(--kw-line, rgba(0, 0, 0, .12));
+  background: #fff; cursor: zoom-in;
+}
+.md-typeset p > img[width] { max-height: none; }
+.kw-zoom { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 2rem;
+  background: rgba(10, 8, 8, .88); cursor: zoom-out; }
+.kw-zoom img { max-width: 100%; max-height: 100%; border-radius: 8px; background: #fff; padding: .4rem; box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
+.kw-zoom figcaption { position: absolute; bottom: .8rem; left: 0; right: 0; text-align: center; font-size: .7rem; color: #ddd; padding: 0 1rem; }

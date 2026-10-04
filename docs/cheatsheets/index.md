@@ -16,7 +16,8 @@ Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la c
 - [Linux](linux/index.md) — [fondamentaux](linux/fondamentaux/index.md) (observer),
   [administration](linux/administration/index.md) (modifier) et
   [commandes clés](linux/commandes/index.md) (`find`, `grep`, `awk`, `sed`… décodées).
-- Windows — à venir.
+- [Windows](windows/index.md) — [fondamentaux](windows/fondamentaux/index.md) (observer : processus, journaux, droits, registre)
+  et [administration](windows/administration/index.md) (modifier, y compris Active Directory au quotidien).
 
 ## Par métier
 

@@ -2,7 +2,7 @@
 title: "Artefacts Windows"
 cours:
   - library/cyber/forensic/investigation-numerique-forensic/index.md
-  - library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs.md
+  - library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/index.md
 besoin: "Retrouver ce qui s'est passé sur un poste Windows (artefacts)"
 ---
 # Artefacts Windows
@@ -285,7 +285,7 @@ Get-ChildItem C:\vss1\Users\alice\Documents -Recurse | Where-Object Name -like "
   `TerminalServices-RemoteConnectionManager` (1149) et `TerminalServices-LocalSessionManager` (21, 24, 25).
 - **Ce qu'il dit :** qui, quand, depuis quelle adresse, avec quel type de connexion (2 locale, 3 réseau,
   10 RDP).
-- **Pour aller plus loin :** la note [Analyse des journaux d'événements Windows](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs.md).
+- **Pour aller plus loin :** la note [Analyse des journaux d'événements Windows](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/index.md).
 
 ```powershell title="Commande"
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624,4625} -MaxEvents 50 | Format-Table TimeCreated, Id, Message -Wrap

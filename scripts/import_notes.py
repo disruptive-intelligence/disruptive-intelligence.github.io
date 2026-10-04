@@ -377,10 +377,17 @@ class Converter:
         return self.index.get(key)
 
     def convert(self, text, source, shield):
+        def width_of(label):
+            """« légende|400 » (largeur Obsidian) -> (« légende », '{ width="400" }')."""
+            text, _, size = label.rpartition("|")
+            return (text.strip(), f'{{ width="{size.strip()}" }}') if text and size.strip().isdigit() else (label, "")
+
         def embed(m):
-            target = m.group(1).split("|")[0].strip()
+            target, _, size = m.group(1).partition("|")
+            target = target.strip()
             found = self.find(target) if Path(target).suffix.lower() in IMAGE_EXT else None
-            return f"![{found.stem}]({self.asset(source, found)})" if found else f"*{target}*"
+            width = f'{{ width="{size.strip()}" }}' if size.strip().isdigit() else ""
+            return f"![{found.stem}]({self.asset(source, found)}){width}" if found else f"*{target}*"
 
         def wikilink(m):
             target, _, alias = m.group(1).partition("|")
@@ -402,7 +409,8 @@ class Converter:
             if not found.is_file():
                 found = self.find(path)
             if found and found.suffix.lower() in IMAGE_EXT:
-                return f"![{label}]({self.asset(source, found)})"
+                label, width = width_of(label)
+                return f"![{label}]({self.asset(source, found)}){width}"
             if found and found.suffix.lower() == ".md":
                 page = self.note_link(found.name)
                 if page:

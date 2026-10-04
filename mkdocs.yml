@@ -76,6 +76,7 @@ extra_javascript:
   - javascripts/nav-lazy.js            # flèche du menu : déroule sur place sans changer de page
   - javascripts/cheatsheets.js         # cheat sheets : filtre des besoins
   - javascripts/analyses.js            # analyses : filtre et sujets
+  - javascripts/images-zoom.js         # images des notes : agrandissement au clic
 
 plugins:
   - search:
@@ -154,6 +155,26 @@ nav:
             - Réseau:
                 - ss: cheatsheets/linux/commandes/ss.md
                 - ip: cheatsheets/linux/commandes/ip.md
+    - 🪟 Windows:
+        - cheatsheets/windows/index.md
+        - Fondamentaux:
+            - cheatsheets/windows/fondamentaux/index.md
+            - Système et arborescence: cheatsheets/windows/fondamentaux/systeme.md
+            - Fichiers et recherche: cheatsheets/windows/fondamentaux/fichiers-recherche.md
+            - Processus et services: cheatsheets/windows/fondamentaux/processus.md
+            - Réseau: cheatsheets/windows/fondamentaux/reseau.md
+            - Journaux et événements: cheatsheets/windows/fondamentaux/logs.md
+            - Droits et identités: cheatsheets/windows/fondamentaux/droits.md
+            - Registre: cheatsheets/windows/fondamentaux/registre.md
+        - Administration:
+            - cheatsheets/windows/administration/index.md
+            - Utilisateurs et groupes: cheatsheets/windows/administration/utilisateurs.md
+            - Services et démarrage: cheatsheets/windows/administration/services.md
+            - Tâches planifiées: cheatsheets/windows/administration/taches.md
+            - Réseau et pare-feu: cheatsheets/windows/administration/reseau.md
+            - Logiciels et mises à jour: cheatsheets/windows/administration/logiciels.md
+            - Disques, archives et transferts: cheatsheets/windows/administration/disques.md
+            - Active Directory au quotidien: cheatsheets/windows/administration/active-directory.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md
         - Linux:
