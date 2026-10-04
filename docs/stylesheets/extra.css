@@ -1202,3 +1202,14 @@ body[data-md-color-scheme="default"]::after {
 @media screen and (max-width: 44.984375em) {
   .md-typeset h1 { margin-bottom: .55em; }
 }
+
+/* Accueil : bandeau en une ligne (date · présentation · compteurs) ; le nom du site est déjà en haut à gauche */
+.md-typeset .kw-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
+.md-typeset .kw-mast__strip { display: flex; align-items: baseline; justify-content: space-between; gap: .4rem 1.4rem; flex-wrap: wrap;
+  padding: .5rem 0 .7rem; font-size: .66rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-mast__tagline { flex: 1; text-align: center; font-size: .74rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-mast__tagline b { color: var(--md-default-fg-color); }
+@media screen and (max-width: 60em) {
+  .md-typeset .kw-mast__strip { justify-content: center; text-align: center; }
+  .md-typeset .kw-mast__tagline { order: -1; flex-basis: 100%; }
+}

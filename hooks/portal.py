@@ -1005,9 +1005,10 @@ hide:
   - footer
 ---
 <div class="kw-mast">
-<div class="kw-mast__top"><span>{JOURS[today.weekday()].capitalize()} {fr_date(today)}</span><span class="kw-mast__count">{counts}</span></div>
-<h1 class="kw-mast__title">Disruptive Intelligence</h1>
-<p class="kw-mast__lead"><b>Tech · IA · Cyber · Géopolitique</b> — la veille du jour, les analyses qui la prolongent et une base de connaissances pour durer.</p>
+<h1 class="kw-sr-only">Disruptive Intelligence</h1>
+<div class="kw-mast__strip"><span>{JOURS[today.weekday()].capitalize()} {fr_date(today)}</span>
+<span class="kw-mast__tagline"><b>Tech · IA · Cyber · Géopolitique</b> — la veille du jour, les analyses qui la prolongent et une base de connaissances pour durer.</span>
+<span class="kw-mast__count">{counts}</span></div>
 </div>
 {section_bar("À la une")}{une}
 {essentiel_block(briefs[0], src) if briefs else ""}
