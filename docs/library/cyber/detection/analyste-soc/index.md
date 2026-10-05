@@ -2,7 +2,7 @@
 title: Analyste SOC
 source: Cyber/06 Détection & réponse/Détection & SOC/Analyste SOC.md
 format: cours
-revue: '2026-10-01'
+revue: '2026-10-05'
 ---
 
 *Détecter • Investiguer • Répondre • Construire*

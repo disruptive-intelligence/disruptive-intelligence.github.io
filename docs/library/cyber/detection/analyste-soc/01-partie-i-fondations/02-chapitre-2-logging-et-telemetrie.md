@@ -19,23 +19,139 @@ La qualité de la détection est directement proportionnelle à la qualité et �
 
 Le Security Log est la source primaire pour l'authentification et l'audit de sécurité.
 
-**Event ID 4624 (Successful Logon) :** chaque authentification réussie, avec le type de logon. Les types critiques pour le SOC : Type 2 (Interactive — login physique), Type 3 (Network — accès à un partage, PsExec, WMI), Type 7 (Unlock — déverrouillage de session), Type 10 (RemoteInteractive — RDP). Le 4624 contient le nom du compte, le domaine, l'IP source (pour les logons réseau), et le processus d'authentification (NTLM vs Kerberos). Un 4624 Type 3 depuis un poste de travail lambda vers un serveur critique à 3h du matin est un signal de mouvement latéral. FP courant : les comptes de service qui s'authentifient massivement en Type 3 — à baseliner.
+| Event ID | Journal | En une ligne |
+|---|---|---|
+| **4624** | Security | Authentification réussie (+ type de logon) |
+| **4625** | Security | Échec d'authentification (+ sub-status) |
+| **4648** | Security | Logon avec credentials explicites |
+| **4672** | Security | Privilèges administratifs attribués au logon |
+| **4688** | Security | Création de processus (+ ligne de commande si GPO) |
+| **7045** | System | Service installé |
+| **4769** | Security (DC) | Ticket de service Kerberos (RC4 = Kerberoasting) |
+| **4698** | Security | Tâche planifiée créée |
+| **1102** | Security | Security Log effacé |
 
-**Event ID 4625 (Failed Logon) :** chaque échec d'authentification. Une rafale de 4625 avec des comptes variés depuis une même source est un password spraying. Le sous-status code précise la raison (0xC0000064 = compte inexistant, 0xC000006A = mot de passe incorrect, 0xC0000234 = compte verrouillé). FP courant : les applications mal configurées qui tentent de s'authentifier en boucle avec des credentials expirés.
+### Event ID 4624 — Successful Logon
 
-**Event ID 4648 (Logon with Explicit Credentials) :** un processus s'authentifie avec des credentials différentes de celles de la session (runas, PsExec avec -u, pass-the-hash). Signal de mouvement latéral ou d'utilisation de credentials volées.
+```text
+Security
+→ 4624
+→ Successful Logon
+```
 
-**Event ID 4672 (Special Privileges Assigned) :** attribution de privilèges administratifs lors d'un logon. Un 4672 pour un compte utilisateur standard est suspect.
 
-**Event ID 4688 (Process Creation) :** création de processus avec (si la GPO est activée — et elle DOIT l'être) la ligne de commande complète. C'est l'Event ID le plus riche pour la détection d'exécution suspecte. Sans l'activation du command line logging (GPO « Include command line in process creation events »), le 4688 est beaucoup moins utile — c'est la première recommandation de « forensic readiness » pour le SOC.
+- Chaque authentification réussie, avec le **type de logon**.
+- Types critiques pour le SOC :
+    - **Type 2** (Interactive) : login physique ;
+    - **Type 3** (Network) : accès à un partage, PsExec, WMI ;
+    - **Type 7** (Unlock) : déverrouillage de session ;
+    - **Type 10** (RemoteInteractive) : RDP.
+- Contient : nom du compte, domaine, IP source (pour les logons réseau), processus d'authentification (NTLM vs Kerberos).
+- Signal de mouvement latéral : un 4624 Type 3 depuis un poste de travail lambda vers un serveur critique à 3 h du matin.
+- **FP courant** : les comptes de service qui s'authentifient massivement en Type 3 — à baseliner.
 
-**Event ID 7045 (Service Installed) :** installation d'un nouveau service. PsExec crée le service PSEXESVC. Les malwares installent des services pour la persistence. Un 7045 avec un nom de service inhabituel ou un chemin d'exécutable dans un répertoire temporaire mérite investigation.
+### Event ID 4625 — Failed Logon
 
-**Event ID 4769 (Kerberos Service Ticket Requested) :** avec encryption type 0x17 (RC4), c'est la signature du Kerberoasting. Un volume élevé de 4769 RC4 depuis une seule machine est un signal critique.
+```text
+Security
+→ 4625
+→ Failed Logon
+```
 
-**Event ID 4698 (Scheduled Task Created) :** création d'une tâche planifiée — mécanisme de persistence courant.
 
-**Event ID 1102 (Security Log Cleared) :** effacement du Security Log — l'acte de nettoyage produit ironiquement son propre événement. Signal d'anti-forensics.
+- Chaque échec d'authentification.
+- Rafale de 4625 avec des comptes variés depuis une même source → **password spraying**.
+- Le **sub-status code** précise la raison :
+    - `0xC0000064` : compte inexistant ;
+    - `0xC000006A` : mot de passe incorrect ;
+    - `0xC0000234` : compte verrouillé.
+- **FP courant** : applications mal configurées qui tentent de s'authentifier en boucle avec des credentials expirés.
+
+### Event ID 4648 — Logon with Explicit Credentials
+
+```text
+Security
+→ 4648
+→ Logon with Explicit Credentials
+```
+
+
+- Un processus s'authentifie avec des credentials **différentes de celles de la session** : `runas`, PsExec avec `-u`, pass-the-hash.
+- Signal de mouvement latéral ou d'utilisation de credentials volées.
+
+### Event ID 4672 — Special Privileges Assigned
+
+```text
+Security
+→ 4672
+→ Special Privileges Assigned
+```
+
+
+- Attribution de privilèges administratifs lors d'un logon.
+- Un 4672 pour un **compte utilisateur standard** est suspect.
+
+### Event ID 4688 — Process Creation
+
+```text
+Security
+→ 4688
+→ Process Creation
+```
+
+
+- Création de processus avec la **ligne de commande complète** — si la GPO est activée, et elle **DOIT** l'être.
+- L'Event ID le plus riche pour la détection d'exécution suspecte.
+- Sans le command line logging (GPO « Include command line in process creation events »), le 4688 est beaucoup moins utile.
+- C'est la première recommandation de « forensic readiness » pour le SOC.
+
+### Event ID 7045 — Service Installed
+
+```text
+System
+→ 7045
+→ Service Installed
+```
+
+
+- Installation d'un nouveau service.
+- PsExec crée le service **PSEXESVC** ; les malwares installent des services pour la persistence.
+- Mérite investigation : nom de service inhabituel, chemin d'exécutable dans un répertoire temporaire.
+
+### Event ID 4769 — Kerberos Service Ticket Requested
+
+```text
+Security (DC)
+→ 4769
+→ Kerberos Service Ticket Requested
+```
+
+
+- Avec **encryption type `0x17` (RC4)** : signature du **Kerberoasting**.
+- Volume élevé de 4769 RC4 depuis une seule machine → signal critique.
+
+### Event ID 4698 — Scheduled Task Created
+
+```text
+Security
+→ 4698
+→ Scheduled Task Created
+```
+
+
+- Création d'une tâche planifiée : mécanisme de persistence courant.
+
+### Event ID 1102 — Security Log Cleared
+
+```text
+Security
+→ 1102
+→ Security Log Cleared
+```
+
+
+- Effacement du Security Log : l'acte de nettoyage produit ironiquement son propre événement.
+- Signal d'**anti-forensics**.
 
 ## 2.3 Sysmon — le game changer de la télémétrie
 

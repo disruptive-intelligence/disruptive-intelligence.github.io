@@ -2,7 +2,7 @@
 title: Investigation numérique (forensic)
 source: Cyber/04 Forensic/Investigation numérique (forensic).md
 format: cours
-revue: '2026-04-08'
+revue: '2026-10-05'
 revision: library/revision/forensic.md
 ---
 
