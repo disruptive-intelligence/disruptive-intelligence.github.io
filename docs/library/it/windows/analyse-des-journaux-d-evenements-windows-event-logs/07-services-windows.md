@@ -76,6 +76,8 @@ Attacker
 ```
 
 
+![Creation du service WindowsUpdateCritical avec sc create](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-01.png)
+
 #### Modification d’un service existant
 
 ```text
@@ -150,6 +152,10 @@ Event ID :
 → A service was installed in the system
 ```
 
+
+![Filtre du journal System sur Event ID 7045](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-02.png)
+
+![Evenement 7045 avec nom du service, binaire et compte LocalSystem](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-03.png)
 
 ### Informations intéressantes
 
@@ -238,6 +244,8 @@ File System Driver
 > ⚠️ Le cours laisse entendre qu’il permet de savoir si le service a été « installé par l’utilisateur ou par le système ». Ce n’est pas son rôle. Il indique principalement le type d’exécution du service/driver, pas son créateur.
 
 Un attaquant peut très bien créer un service Windows classique (`ServiceType = Win32OwnProcess`) avec des privilèges administrateur.
+
+![Evenement 7045 d'un pilote en mode noyau (kernel mode driver)](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-04.png)
 
 ### Contexte d’exécution
 
