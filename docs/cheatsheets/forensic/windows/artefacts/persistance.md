@@ -10,7 +10,7 @@ cours:
 
 Ce qui se relance tout seul au démarrage ou à l'ouverture de session — et les traces laissées par les mécanismes déjà supprimés.
 
-Les incontournables : `autorunsc` · `Get-ScheduledTask` · `7045` · `4698` · `TaskScheduler/Operational`
+Les incontournables : `autorunsc` · `Get-ScheduledTask` · `7045` · `4698` · `TaskScheduler/Operational` · `4720` · `4732`
 { .kw-cs-top }
 
 ## Démarrage automatique
@@ -18,7 +18,8 @@ Les incontournables : `autorunsc` · `Get-ScheduledTask` · `7045` · `4698` · 
 ### Lister ce qui se relance tout seul
 
 - **Où :** clés `Run` et `RunOnce` (machine et utilisateur), services (`SYSTEM\CurrentControlSet\Services`,
-  événement 7045 à l'installation), tâches planifiées (`C:\Windows\System32\Tasks`), abonnements WMI.
+  événement 7045 à l'installation), tâches planifiées (`C:\Windows\System32\Tasks`), abonnements WMI, comptes créés
+  ou ajoutés à un groupe d'administration (4720, 4732).
 - **Limites :** chaque mécanisme se lit séparément ; Autoruns (Sysinternals) les rassemble.
 
 ```powershell title="Commande"
@@ -36,3 +37,5 @@ autorunsc64.exe -accepteula -a * -c -h -s -m > autoruns.csv   # tout, en CSV, av
 ![[cheatsheets/windows/fondamentaux/logs#Retrouver les services installés ou modifiés]]
 
 ![[cheatsheets/windows/fondamentaux/logs#Retracer la vie d'une tâche planifiée]]
+
+![[cheatsheets/windows/fondamentaux/logs#Retracer la création d'un compte et ses privilèges]]

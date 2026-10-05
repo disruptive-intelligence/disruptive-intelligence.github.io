@@ -7,7 +7,7 @@ cours:
 
 # Journaux et événements
 
-Lire les journaux Windows, filtrer par identifiant et par période, retrouver les ouvertures de session, les processus lancés, les services et tâches créés, les scripts PowerShell ; exporter pour analyse.
+Lire les journaux Windows, filtrer par identifiant et par période, retrouver les ouvertures de session, les processus lancés, les services, tâches et comptes créés, les scripts PowerShell ; exporter pour analyse.
 
 Les incontournables : `Get-WinEvent -FilterHashtable` · `wevtutil` · `eventvwr.msc` · `auditpol /get` · `Get-WinEvent -Path`
 { .kw-cs-top }
@@ -361,6 +361,48 @@ Une tâche supprimée a disparu du système, pas des journaux. Le 4698 donne l'a
 Pour comprendre : [Journaux des tâches planifiées : 4698, 106, 200/201, 4702, 4699 et chronologie d'une tâche malveillante](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md) — Voir aussi : [lister les tâches et ce qu'elles lancent](../administration/taches.md#lister-les-taches-et-ce-quelles-lancent)
 { .kw-cs-meta }
 
+## Comptes et groupes
+
+### Retracer la création d'un compte et ses privilèges
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720,4722,4725,4726,4738}        # compte créé, activé, désactivé, supprimé, modifié
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4732,4728,4756,4733,4729,4757}   # ajouté à / retiré d'un groupe local, global, universel
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720,4732} -MaxEvents 10 |
+    Select-Object TimeCreated, Id, @{n='Auteur';e={$_.Properties[$(if ($_.Id -eq 4720) {4} else {6})].Value}},
+                  @{n='Compte ou groupe';e={$_.Properties[$(if ($_.Id -eq 4720) {0} else {2})].Value}}   # 4720 : compte créé ; 4732 : groupe
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated            Id Auteur Compte ou groupe
+    -----------            -- ------ ----------------
+    02/10/2026 14:03:11  4732 alice  Administrateurs
+    02/10/2026 14:02:47  4720 alice  backupsvc
+    ```
+
+```powershell title="Exemple 2"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624} | Where-Object { $_.Properties[5].Value -eq 'backupsvc' } |
+    Select-Object -First 3 TimeCreated, @{n='Type';e={$_.Properties[8].Value}}   # le nouveau compte s'est-il connecté, et comment ?
+```
+
+| Event ID | Ce qu'il dit |
+|---|---|
+| **4720** | Compte créé : **Subject** = qui l'a créé, **New Account** = le compte créé |
+| **4732** / **4728** / **4756** | Membre ajouté à un groupe local / global / universel (**4728** + Domain Admins = enquête critique) |
+| **4722** / **4738** | Compte réactivé / modifié (un compte dormant réactivé puis utilisé est suspect) |
+| **4723** / **4724** | Mot de passe changé / réinitialisé |
+| **4725** / **4726** | Compte désactivé / supprimé (créé → utilisé → supprimé : nettoyage) |
+| **4733** / **4729** / **4757** | Membre retiré d'un groupe local / global / universel |
+
+À regarder : un **4720** suivi de près d'un **4732** vers Administrateurs, puis d'un **4624** du même compte = persistance avec accès privilégié. Ne pas confondre l'auteur (**Subject**) et le compte qui reçoit les droits (**Target / Member**). Ces événements demandent l'audit « Gestion des comptes d'utilisateur » et « Gestion des groupes de sécurité » (`auditpol /get /category:"Gestion des comptes"`).
+
+Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et patterns SOC](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md) — Voir aussi : [retrouver les ouvertures de session](#retrouver-les-ouvertures-de-session)
+{ .kw-cs-meta }
+
 ## Effacement des traces
 
 ### Repérer un effacement de journal
@@ -445,7 +487,8 @@ wevtutil sl Security /ms:1073741824   :: 1 Go
 | 4688 | Security | Processus créé |
 | 7045 / 4697 | System / Security | Service installé (7040 : démarrage modifié ; 7036 : démarré / arrêté) |
 | 4698 / 4702 / 4699 | Security | Tâche planifiée créée / modifiée / supprimée (4700 / 4701 : activée / désactivée) |
-| 4720 / 4732 | Security | Compte créé / ajouté à un groupe local |
+| 4720 / 4726 | Security | Compte créé / supprimé (4722 : réactivé ; 4738 : modifié ; 4724 : mot de passe réinitialisé) |
+| 4732 / 4728 / 4756 | Security | Membre ajouté à un groupe local / global / universel |
 | 4740 | Security | Compte verrouillé |
 | 4768 / 4769 / 4771 / 4776 | Security (DC) | Kerberos TGT / ticket de service / échec de pré-auth / validation NTLM |
 | 1102 / 104 | Security / System | Journal effacé |

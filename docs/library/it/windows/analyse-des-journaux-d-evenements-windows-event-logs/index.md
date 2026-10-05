@@ -16,4 +16,5 @@ revue: '2026-10-05'
 - [Mouvement latéral et RDP](05-mouvement-lateral-et-rdp.md)
 - [Tâches planifiées](06-taches-planifiees.md)
 - [Services Windows](07-services-windows.md)
-- [Synthèse : verrouillage et patterns SOC](08-synthese-verrouillage-et-patterns-soc.md)
+- [Gestion des comptes](08-gestion-des-comptes.md)
+- [Synthèse : verrouillage et patterns SOC](09-synthese-verrouillage-et-patterns-soc.md)
