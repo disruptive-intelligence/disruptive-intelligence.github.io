@@ -3,7 +3,6 @@ title: Analyse des journaux d'événements Windows (Event Logs)
 source: IT/02 Windows/Journaux & investigation/Analyse des journaux d'événements Windows (Event Logs).md
 format: cours
 provenance: HTB Academy
-statut: en cours
 revue: '2026-10-05'
 ---
 
@@ -17,4 +16,8 @@ revue: '2026-10-05'
 - [Tâches planifiées](06-taches-planifiees.md)
 - [Services Windows](07-services-windows.md)
 - [Gestion des comptes](08-gestion-des-comptes.md)
-- [Synthèse : verrouillage et patterns SOC](09-synthese-verrouillage-et-patterns-soc.md)
+- [Manipulation des journaux](09-manipulation-des-journaux.md)
+- [Pare-feu Windows](10-pare-feu-windows.md)
+- [Windows Defender](11-windows-defender.md)
+- [Exécution PowerShell](12-execution-powershell.md)
+- [Synthèse : verrouillage et patterns SOC](13-synthese-verrouillage-et-patterns-soc.md)

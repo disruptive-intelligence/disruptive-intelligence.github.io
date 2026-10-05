@@ -7,7 +7,7 @@ cours:
 
 # Journaux et événements
 
-Lire les journaux Windows, filtrer par identifiant et par période, retrouver les ouvertures de session, les processus lancés, les services, tâches et comptes créés, les scripts PowerShell ; exporter pour analyse.
+Lire les journaux Windows, filtrer par identifiant et par période, retrouver les ouvertures de session, les processus lancés, les services, tâches et comptes créés, les changements du pare-feu et de Defender, les scripts PowerShell ; exporter pour analyse.
 
 Les incontournables : `Get-WinEvent -FilterHashtable` · `wevtutil` · `eventvwr.msc` · `auditpol /get` · `Get-WinEvent -Path`
 { .kw-cs-top }
@@ -277,7 +277,8 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 ### Retrouver les scripts PowerShell exécutés
 
 ```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104}   # Script Block Logging
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104}   # Script Block Logging : le code exécuté
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4103}   # Module Logging : cmdlets et paramètres
 ```
 
 ```powershell title="Exemple"
@@ -292,6 +293,11 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operationa
     -----------          -------
     02/10/2026 09:15:03  Création du texte Scriptblock (1 sur 1) : $d = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(…
     ```
+
+À chercher dans un 4104 : `-EncodedCommand`, `IEX` / `Invoke-Expression`, `FromBase64String`, `DownloadString`, `Invoke-WebRequest`, `WebClient`. Un long script est découpé en plusieurs 4104 (« 1 sur 3 », « 2 sur 3 »…) : les rassembler par `ScriptBlockId`. `whoami`, `Get-LocalUser`, `Get-LocalGroup` seuls ne prouvent rien ; juste après une connexion suspecte, ils dessinent une reconnaissance. Sans Script Block Logging activé (GPO), tout le code n'est pas journalisé.
+
+Pour comprendre : [Exécution PowerShell : 4104, 4103, transcription, corrélations](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/12-execution-powershell.md)
+{ .kw-cs-meta }
 
 ## Services et tâches planifiées
 
@@ -403,6 +409,77 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624} | Where-Object { $_
 Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et patterns SOC](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md) — Voir aussi : [retrouver les ouvertures de session](#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }
 
+## Pare-feu et antivirus
+
+### Retracer les changements du pare-feu
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Firewall With Advanced Security/Firewall'; Id=2004,2005,2003}   # règle ajoutée, modifiée ; paramètre global changé
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Firewall With Advanced Security/Firewall'; Id=2004; StartTime=(Get-Date).AddHours(-1)} |
+    Select-Object -First 2 TimeCreated, Message | Format-List   # la dernière heure seulement : Windows ajoute sans cesse des règles
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated : 02/10/2026 14:12:05
+    Message     : Une règle a été ajoutée à la liste d'exceptions du Pare-feu Windows Defender.
+                  Nom de la règle :  Windows Update
+                  Direction :  Sortant
+                  Chemin d'accès de l'application :  C:\Users\alice\Documents\Windows Update.exe
+                  Utilisateur ayant effectué la modification :  MERIDIAN\alice
+                  Application ayant effectué la modification :  C:\Windows\System32\mmc.exe
+    ```
+
+```powershell title="Exemple 2"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Firewall With Advanced Security/Firewall'; Id=2003} |
+    Where-Object Message -match 'Enable Windows Defender Firewall|Activer le Pare-feu' | Select-Object -First 5 TimeCreated, Message   # pare-feu désactivé / réactivé
+```
+
+| Event ID | Ce qu'il dit |
+|---|---|
+| **2004** | Règle ajoutée : nom, direction, programme, ports, utilisateur et application à l'origine du changement |
+| **2005** | Règle modifiée (le **Rule ID** ne change pas : il retrouve la règle d'origine dans un 2004 antérieur) |
+| **2003** | Paramètre global changé (« Enable Windows Defender Firewall » = **No** : pare-feu désactivé) |
+
+À regarder : une règle **sortante** pour un exécutable dans un dossier inscriptible (`Documents`, `%TEMP%`, `C:\Users\Public`), ajoutée par `mmc.exe`, `powershell.exe`, `cmd.exe` ou `netsh.exe` (action humaine ou script) pendant la fenêtre d'incident. **SYSTEM** n'est pas un gage de légitimité. Le trafic autorisé ou refusé n'est pas dans ce journal mais dans `%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log`, si la journalisation est activée.
+
+Pour comprendre : [Pare-feu Windows : 2004, 2005, 2003, Rule ID, dropped packets](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/10-pare-feu-windows.md) — Voir aussi : [voir le profil et l'état du pare-feu](reseau.md#voir-le-profil-et-letat-du-pare-feu)
+{ .kw-cs-meta }
+
+### Retracer les détections et l'altération de Defender
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=1116,1117}   # menace détectée, action prise
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=5001,5007}   # protection en temps réel désactivée, configuration changée
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=5007} |
+    Where-Object Message -match 'Exclusions\\Paths' | Select-Object -First 3 TimeCreated, Message   # exclusions ajoutées
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated          Message
+    -----------          -------
+    02/10/2026 14:01:37  La configuration de Microsoft Defender Antivirus a été modifiée. … Nouvelle valeur : HKLM\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths\C:\Users\Public\Tools = 0x0
+    ```
+
+| Event ID | Ce qu'il dit |
+|---|---|
+| **1116** | Menace détectée : nom, gravité, chemin, processus impliqué |
+| **1117** | Action prise (quarantaine, suppression…) et son **résultat** : une détection n'est pas une neutralisation |
+| **5001** | Protection en temps réel désactivée |
+| **5007** | Configuration modifiée ; avec `Exclusions\Paths` : exclusion ajoutée (beaucoup de bruit sinon) |
+
+À regarder : un **5001** ou une exclusion large (profil utilisateur, `C:\Users\Public`, `C:\`) pendant la fenêtre d'incident, puis un exécutable lancé depuis ce chemin (4688). Un 1117 en échec signifie que le fichier peut encore être là.
+
+Pour comprendre : [Windows Defender : 1116, 1117, 5001, 5007 et exclusions](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/11-windows-defender.md) — Voir aussi : [voir les exclusions de Defender](../administration/logiciels.md#voir-les-exclusions-de-defender)
+{ .kw-cs-meta }
+
 ## Effacement des traces
 
 ### Repérer un effacement de journal
@@ -410,6 +487,7 @@ Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et
 ```powershell title="Commande"
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102}   # journal de sécurité effacé
 Get-WinEvent -FilterHashtable @{LogName='System'; Id=104}      # autre journal effacé
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1100}   # service de journalisation arrêté
 ```
 
 ```powershell title="Exemple"
@@ -423,7 +501,9 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102} -ErrorAction Silent
     01/10/2026 23:20:11  Le journal d'audit a été effacé. Sujet : … Nom du compte : adm.martin …
     ```
 
-Pour comprendre : [Effacer un filtre ou effacer un journal](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
+Un **1102** donne le compte qui a effacé le journal Security ; un **104** dit quel autre journal a été effacé. Un **1100** apparaît aussi lors d'un arrêt ou redémarrage normal : le croiser avec 1074, 6005, 6006, 6008. Avec l'audit des processus, un 4688 `wevtutil.exe cl Security` juste avant confirme l'effacement. Les événements déjà envoyés au SIEM restent consultables.
+
+Pour comprendre : [Manipulation des journaux : 1102, 104, 1100](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/09-manipulation-des-journaux.md) · [Effacer un filtre ou effacer un journal](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
 { .kw-cs-meta }
 
 ## Exporter et configurer
@@ -491,8 +571,11 @@ wevtutil sl Security /ms:1073741824   :: 1 Go
 | 4732 / 4728 / 4756 | Security | Membre ajouté à un groupe local / global / universel |
 | 4740 | Security | Compte verrouillé |
 | 4768 / 4769 / 4771 / 4776 | Security (DC) | Kerberos TGT / ticket de service / échec de pré-auth / validation NTLM |
-| 1102 / 104 | Security / System | Journal effacé |
-| 4104 | PowerShell/Operational | Bloc de script exécuté |
+| 1102 / 104 | Security / System | Journal effacé (1100 : service de journalisation arrêté) |
+| 2004 / 2005 / 2003 | Firewall With Advanced Security | Règle de pare-feu ajoutée / modifiée / paramètre global changé |
+| 1116 / 1117 | Windows Defender/Operational | Menace détectée / action prise |
+| 5001 / 5007 | Windows Defender/Operational | Protection en temps réel désactivée / configuration (exclusions) modifiée |
+| 4104 / 4103 | PowerShell/Operational | Bloc de script exécuté / Module Logging |
 | 1, 3, 11, 13, 22 | Sysmon | Processus, réseau, fichier, registre, DNS |
 | 1149 / 261 | TerminalServices-RemoteConnectionManager | Authentification RDP réussie / connexion TCP reçue sur l'écouteur RDP |
 | 21 / 24 / 25 | TerminalServices-LocalSessionManager | Session RDP ouverte / déconnectée / reconnectée |

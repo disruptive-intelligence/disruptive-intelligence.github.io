@@ -129,3 +129,7 @@ Récapitulatif du cours, thème par thème :
 | Tâches planifiées | Security (si audit) · TaskScheduler/Operational | 4698, 4702, 4699, 4700 / 4701 · 106, 140, 141, 200, 201 |
 | Services | System (Service Control Manager) · Security (si audit) | 7045, 7040, 7036 · 4697 |
 | Gestion des comptes | Security | 4720, 4722, 4725, 4726, 4738, 4723 / 4724 · 4728 / 4732 / 4756 · 4729 / 4733 / 4757 |
+| Manipulation des journaux | Security · System | 1102, 1100 · 104 |
+| Pare-feu Windows | Windows Firewall With Advanced Security / Firewall · `pfirewall.log` | 2004, 2005, 2003 · ALLOW / DROP |
+| Windows Defender | Windows Defender/Operational | 1116, 1117, 5001, 5007 |
+| Exécution PowerShell | PowerShell/Operational · Security | 4104, 4103 · 4688 |
