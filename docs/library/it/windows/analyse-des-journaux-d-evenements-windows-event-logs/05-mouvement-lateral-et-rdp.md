@@ -30,7 +30,7 @@ Credential Guessing
 ```
 
 
-Le cours souligne qu’une série de `4625` Type `3` sur plusieurs machines mérite une investigation approfondie.
+Une série de `4625` Type `3` sur plusieurs machines mérite une investigation approfondie.
 
 ---
 
@@ -257,7 +257,7 @@ Security
 ```
 
 
-- Le cours propose de corréler les événements RDP client avec `4648`.
+- À corréler avec les événements RDP client (`RDPClient 1102`).
 
 Il peut fournir :
 
@@ -348,7 +348,7 @@ TerminalServices-RemoteConnectionManager
 ```
 
 
-- C’est l’événement utilisé par le cours dans `TerminalServices-RemoteConnectionManager`.
+- Signale une connexion TCP RDP entrante dans `TerminalServices-RemoteConnectionManager`.
 
 ```text
 Remote Host
@@ -402,7 +402,7 @@ Si :
 
 on **peut suspecter** un échec, mais pas le confirmer.
 
-Le cours souligne lui-même que cette méthode n’est pas fiable à 100 %.
+Cette méthode n’est pas fiable à 100 %.
 
 ---
 

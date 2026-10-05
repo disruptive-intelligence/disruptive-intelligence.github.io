@@ -321,17 +321,13 @@ T1069
 
 ### ⚠️ Ces commandes ne confirment pas une intrusion
 
-Le cours conclut que :
-
 ```text
 whoami
 Get-LocalUser
 Get-LocalGroup
-→ intrusion confirmed
+≠ intrusion confirmed
 ```
 
-
-C’est trop catégorique.
 
 Ces commandes sont également utilisées par :
 

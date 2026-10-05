@@ -60,7 +60,7 @@ Vue d’ensemble :
 | **10** | RemoteInteractive | RDP / Terminal Services |
 | **11** | CachedInteractive | logon avec credentials de domaine mis en cache |
 
-> Le cours parle de **9 types de logon**, mais Windows définit davantage de valeurs selon les versions et scénarios. Pour l’analyse SOC, les plus importants sont surtout `2`, `3`, `5`, `9`, `10` et `11`.
+> Windows définit de nombreuses valeurs de Logon Type selon les versions et scénarios. Pour l’analyse SOC, les plus importants sont surtout `2`, `3`, `5`, `9`, `10` et `11`.
 
 ---
 
@@ -141,7 +141,7 @@ Service
 - Très fréquent.
 - Peut générer beaucoup de bruit dans les journaux.
 
-> Le cours recommande de ne pas se focaliser sur le Type `5` lors d’une première recherche d’authentifications utilisateur, car les services en génèrent énormément. Il ne faut toutefois pas l’ignorer systématiquement : un **nouveau service malveillant** peut justement produire ce type d’événement.
+> Lors d’une première recherche d’authentifications utilisateur, on peut mettre de côté le Type `5` : les services en génèrent énormément. Il ne faut toutefois pas l’ignorer systématiquement : un **nouveau service malveillant** peut justement produire ce type d’événement.
 
 ![Evenement 4624 de type 5 genere par services.exe](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-authentication-event-logs-03.png)
 

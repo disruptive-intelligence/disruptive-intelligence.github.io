@@ -27,7 +27,7 @@ Windows Update
 
 ### Types de services
 
-Le cours distingue principalement :
+On distingue principalement :
 
 - **System Services** : composants installés/utilisés par Windows, certains drivers ou fonctions système.
 - **Application Services** : installés avec des applications pour fournir leurs fonctionnalités.
@@ -248,7 +248,7 @@ File System Driver
 ```
 
 
-> ⚠️ Le cours laisse entendre qu’il permet de savoir si le service a été « installé par l’utilisateur ou par le système ». Ce n’est pas son rôle. Il indique principalement le type d’exécution du service/driver, pas son créateur.
+> ⚠️ Le champ Service Type ne dit pas si le service a été « installé par l’utilisateur ou par le système » : il indique principalement le type d’exécution du service/driver, pas son créateur.
 
 Un attaquant peut très bien créer un service Windows classique (`ServiceType = Win32OwnProcess`) avec des privilèges administrateur.
 

@@ -460,7 +460,7 @@ Ce type d’événement relève davantage du troubleshooting, mais peut égaleme
 
 ### Filtrer par Event ID avec PowerShell
 
-Même si le cours commence avec `Where-Object`, `Get-WinEvent` permet de filtrer directement à la source.
+`Get-WinEvent` permet de filtrer directement à la source, plutôt qu’après coup avec `Where-Object`.
 
 Exemple :
 

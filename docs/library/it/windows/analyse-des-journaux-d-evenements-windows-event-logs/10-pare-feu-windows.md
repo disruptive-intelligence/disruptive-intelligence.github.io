@@ -128,9 +128,9 @@ T1562.004
 ```
 
 
-### IP Spoofing — nuance
+### IP Spoofing
 
-Le cours indique qu’un attaquant peut usurper l’IP d’un hôte autorisé pour tromper un firewall.
+Un attaquant peut tenter d’usurper l’IP d’un hôte autorisé pour tromper un firewall.
 
 C’est possible dans certains scénarios, mais :
 
@@ -751,9 +751,9 @@ Exemple :
 
 → possible C2 beaconing.
 
-### DNS et exfiltration — nuance
+### DNS et exfiltration
 
-Le cours suggère qu’une nouvelle règle UDP pourrait indiquer de l’exfiltration DNS.
+Une nouvelle règle UDP peut évoquer de l’exfiltration DNS.
 
 Possible, mais :
 

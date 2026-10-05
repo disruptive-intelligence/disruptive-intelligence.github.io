@@ -246,7 +246,7 @@ Deux Event IDs particulièrement utiles dans `TaskScheduler/Operational` :
 ```
 
 
-- Le cours présente notamment `201`, qui permet de retrouver des informations sur l’action exécutée.
+- `201` permet notamment de retrouver des informations sur l’action exécutée.
 
 Conceptuellement :
 

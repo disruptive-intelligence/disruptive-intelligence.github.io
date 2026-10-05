@@ -316,11 +316,9 @@ Event Log Service
 
 Il est intéressant pour le SOC car il peut précéder une perte de visibilité.
 
-#### ⚠️ Correction importante
+#### ⚠️ 1100 et arrêt normal du système
 
-Le cours affirme que `1100` n’est pas généré lorsque le système s’éteint.
-
-Ce n’est pas une règle fiable :
+Ne pas supposer que `1100` est absent lors d’un arrêt du système :
 
 ```text
 1100

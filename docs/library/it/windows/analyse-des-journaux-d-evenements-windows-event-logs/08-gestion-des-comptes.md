@@ -595,7 +595,7 @@ Change Request
 
 ## À propos de la Privilege Escalation
 
-Le cours associe aussi certaines exploitations Windows comme **Print Spooler** ou les techniques **Potato** à cette logique.
+Certaines exploitations Windows comme **Print Spooler** ou les techniques **Potato** sont souvent rattachées à cette logique.
 
 Il faut distinguer :
 

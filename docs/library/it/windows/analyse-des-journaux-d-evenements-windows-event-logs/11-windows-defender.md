@@ -539,9 +539,9 @@ Entire user profile
 
 Surtout si elle apparaît pendant la fenêtre d’incident.
 
-#### Mimikatz — nuance
+#### Mimikatz
 
-Le cours utilise Mimikatz comme exemple d’outil pouvant être placé dans une exclusion Defender.
+Mimikatz est un exemple d’outil qu’un attaquant peut placer dans une exclusion Defender.
 
 À retenir plus précisément :
 
@@ -558,7 +558,7 @@ Il peut notamment être utilisé pour extraire :
 - Kerberos material ;
 - credentials/secrets en mémoire selon le contexte.
 
-Le présenter uniquement comme un outil servant à « voler des tokens d’authentification » est trop réducteur. Son usage classique est surtout lié au credential dumping.
+Son usage classique est le credential dumping, bien au-delà du seul vol de tokens d’authentification.
 
 #### Event ID 5007 : bruit légitime
 
