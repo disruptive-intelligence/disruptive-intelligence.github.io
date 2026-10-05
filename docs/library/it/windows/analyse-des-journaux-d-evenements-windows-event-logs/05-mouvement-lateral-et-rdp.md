@@ -194,7 +194,7 @@ Applications and Services Logs
 Dans ce provider :
 
 ```text
-Microsoft-Windows-TerminalServices-RDPClient
+Microsoft-Windows-TerminalServices-RDPClient/Operational (sous TerminalServices-ClientActiveXCore)
 → Event ID 1102
 ```
 

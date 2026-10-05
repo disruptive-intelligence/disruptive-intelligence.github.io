@@ -4,7 +4,7 @@ source: IT/02 Windows/Journaux & investigation/Analyse des journaux d'événemen
 format: cours
 provenance: HTB Academy
 statut: en cours
-revue: '2026-10-04'
+revue: '2026-10-05'
 ---
 
 ## Sommaire
@@ -14,4 +14,5 @@ revue: '2026-10-04'
 - [Lire et filtrer les journaux](03-lire-et-filtrer-les-journaux.md)
 - [Authentification et ouvertures de session](04-authentification-et-ouvertures-de-session.md)
 - [Mouvement latéral et RDP](05-mouvement-lateral-et-rdp.md)
-- [Synthèse : verrouillage et patterns SOC](06-synthese-verrouillage-et-patterns-soc.md)
+- [Tâches planifiées](06-taches-planifiees.md)
+- [Synthèse : verrouillage et patterns SOC](07-synthese-verrouillage-et-patterns-soc.md)
