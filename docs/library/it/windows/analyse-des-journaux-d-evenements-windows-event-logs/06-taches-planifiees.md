@@ -29,12 +29,15 @@ Les Event Logs conservent la trace d’une tâche même après sa suppression : 
 
 ## Deux journaux à consulter
 
-| Journal | Où le trouver | Ce qu’il apporte |
-|---|---|---|
-| **Security** | Windows Logs → Security | Les événements détaillés (4698 à 4702), avec l’auteur et la définition de la tâche. Ils nécessitent l’audit approprié : dans **Advanced Audit Policy**, Object Access → **Audit Other Object Access Events**. |
-| **TaskScheduler/Operational** | Applications and Services Logs → Microsoft → Windows → TaskScheduler → Operational | Moins d’informations que Security, mais disponible même quand les événements détaillés de Security ne le sont pas : très utile pour reconstruire l’activité. |
+Les événements des tâches planifiées se lisent à deux endroits. Le plus détaillé dépend d’un audit **désactivé par défaut** : savoir lequel consulter évite de conclure trop vite à l’absence de trace.
 
-> Si cette journalisation n’est pas activée, les Event IDs `4698/4699/4702` peuvent être absents.
+**1. Security : les Event IDs les plus intéressants, si l’audit est activé.** C’est dans **Windows Logs → Security** que l’on trouve les événements détaillés (4698 à 4702) : auteur, nom, déclencheur, commande, arguments et définition de la tâche. Mais Windows ne les écrit que si l’audit correspondant est activé, ce qui n’est pas le cas par défaut : **Advanced Audit Policy → Object Access → Audit Other Object Access Events**.
+
+**2. TaskScheduler/Operational : le passage obligé quand l’audit n’est pas activé.** Si `4698/4699/4702` sont absents de Security, il faut aller dans **Applications and Services Logs → Microsoft → Windows → TaskScheduler → Operational**. Ses Event IDs (106, 140, 141, 200, 201) retracent la même vie de la tâche (création, modification, suppression, exécution), avec moins de détails, mais assez pour reconstruire l’activité.
+
+> **Réflexe** : chercher d’abord 4698 à 4702 dans Security ; s’ils n’apparaissent pas, l’audit n’est probablement pas activé, et c’est TaskScheduler/Operational qu’il faut lire.
+
+> Ce journal peut lui aussi être désactivé selon la version de Windows ou la configuration du poste : dans le Planificateur de tâches, **Enable All Tasks History** (« Activer l’historique de toutes les tâches ») le rallume. Les événements antérieurs à l’activation ne sont pas récupérables.
 
 ![Chemin Applications and Services Logs](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-05.png)
 
@@ -42,7 +45,7 @@ Les Event Logs conservent la trace d’une tâche même après sa suppression : 
 
 Les deux journaux suivent la vie d’une tâche, de sa création à sa suppression :
 
-| Étape | Security | TaskScheduler/Operational |
+| Étape | Security (si l’audit est activé) | TaskScheduler/Operational (sinon) |
 |---|---|---|
 | Création | **4698** — A scheduled task was created | **106** — Task registered |
 | Exécution | — | **200** — Action started · **201** — Action completed |
