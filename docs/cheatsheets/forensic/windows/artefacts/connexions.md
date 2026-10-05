@@ -70,7 +70,7 @@ RECmd.exe -f "E:\collecte\C\Users\alice\NTUSER.DAT" --kn "Software\Microsoft\Ter
         UsernameHint    REG_SZ    MERIDIAN\adm.martin
     ```
 
-Pour comprendre : [Logs côté machine source RDP](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#logs-cote-machine-source-rdp)
+Pour comprendre : [Logs côté machine source RDP](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#logs-cote-machine-source-rdp-1102-et-4648)
 { .kw-cs-meta }
 
 ## Reconstituer un rebond RDP

@@ -66,16 +66,16 @@ Vue d’ensemble, étape par étape :
 
 ### Event ID 4720 — User Account Created
 
-![Creation du compte letsdefenddemo avec net user /add](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-account-management-events-01.png)
-
-Lorsqu’un nouveau compte utilisateur est créé :
-
 ```text
 Security
 → Event ID 4720
 → A user account was created
 ```
 
+
+- Généré lorsqu’un nouveau compte utilisateur est créé.
+
+![Creation du compte letsdefenddemo avec net user /add](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-account-management-events-01.png)
 
 ![Filtre du journal Security sur Event ID 4720](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-account-management-events-02.png)
 
@@ -209,14 +209,14 @@ New User
 
 ### Event ID 4732 — Member Added to Local Security Group
 
-Lorsqu’un membre est ajouté à un groupe local de sécurité :
-
 ```text
 Security
 → 4732
 → A member was added to a security-enabled local group
 ```
 
+
+- Généré lorsqu’un membre est ajouté à un groupe local de sécurité.
 
 ![Filtre du journal Security sur Event ID 4732](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-account-management-events-05.png)
 
@@ -378,8 +378,6 @@ Peut correspondre à :
 
 ### Event IDs 4729 / 4733 / 4757 — Member Removed from a Group
 
-Événements complémentaires :
-
 ```text
 4729
 → Member removed from Global Security Group
@@ -392,7 +390,7 @@ Peut correspondre à :
 ```
 
 
-Ils peuvent être utiles pour :
+Événements complémentaires des ajouts (4728 / 4732 / 4756). Ils peuvent être utiles pour :
 
 - containment ;
 - cleanup ;

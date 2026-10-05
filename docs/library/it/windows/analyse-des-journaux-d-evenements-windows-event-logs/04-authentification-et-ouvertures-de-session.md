@@ -33,6 +33,14 @@ Legitimate / Suspicious
 
 > Une succession d’échecs suivie d’un succès est un **signal intéressant**, mais pas une preuve suffisante de compromission sans contexte supplémentaire.
 
+Vue d’ensemble :
+
+| Event ID | Journal | Signification |
+|---|---|---|
+| **4624** | Security | Successful Logon (Audit Success) |
+| **4625** | Security | Failed Logon (Audit Failure) |
+| **Logon Type** | champ de 4624 / 4625 | comment la session a été créée (2 interactive, 3 network, 5 service, 10 RDP…) |
+
 ---
 
 ## Logon Types
@@ -168,14 +176,15 @@ Très utile pour détecter :
 
 ## Event ID 4624 — Successful Logon
 
-- Un logon Windows réussi génère généralement :
-
 ```text
-Event ID 4624
+Security
+→ Event ID 4624
 → Successful Logon
 → Audit Success
 ```
 
+
+- Un logon Windows réussi génère généralement cet événement.
 
 Pour l’analyse, regarder notamment :
 
@@ -209,14 +218,15 @@ Target Host
 
 ## Event ID 4625 — Failed Logon
 
-- Une tentative d’authentification échouée génère :
-
 ```text
-Event ID 4625
+Security
+→ Event ID 4625
 → Failed Logon
 → Audit Failure
 ```
 
+
+- Une tentative d’authentification échouée génère cet événement.
 
 Informations utiles :
 

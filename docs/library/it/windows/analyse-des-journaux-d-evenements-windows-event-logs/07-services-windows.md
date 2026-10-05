@@ -128,36 +128,43 @@ System Boot
 
 ---
 
-## Event ID 7045 — Service Installed
+## Où chercher : System ou Security
 
-La création d’un nouveau service est notamment enregistrée dans :
+- **System** (`Windows Logs → System`, provider **Service Control Manager**) : 7045, 7040, 7036.
+    - Généralement la source la plus couramment utilisée pour détecter l’installation d’un service.
+- **Security** : 4697.
+    - Seulement si l’audit correspondant est activé (Audit Policies).
+
+Vue d’ensemble, étape par étape :
+
+| Étape | System (Service Control Manager) | Security (si l’audit est activé) |
+|---|---|---|
+| Installation | **7045** — A service was installed in the system | **4697** — A service was installed in the system |
+| Modification du démarrage | **7040** — Start type changed | — |
+| Démarrage / arrêt | **7036** — Service entered the running / stopped state | — |
+
+---
+
+## Installation : 7045 et 4697
+
+### Event ID 7045 — Service Installed
 
 ```text
 Windows Logs
 → System
-```
-
-
-Provider :
-
-```text
-Service Control Manager
-```
-
-
-Event ID :
-
-```text
-7045
+→ Provider : Service Control Manager
+→ 7045
 → A service was installed in the system
 ```
 
+
+- La création d’un nouveau service est notamment enregistrée dans ce journal.
 
 ![Filtre du journal System sur Event ID 7045](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-02.png)
 
 ![Evenement 7045 avec nom du service, binaire et compte LocalSystem](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-03.png)
 
-### Informations intéressantes
+#### Informations intéressantes
 
 L’événement `7045` permet généralement d’obtenir :
 
@@ -178,7 +185,7 @@ L’événement `7045` permet généralement d’obtenir :
 ```
 
 
-### Start Type
+#### Start Type
 
 Le type de démarrage indique quand le service doit être lancé. Valeurs communes :
 
@@ -191,7 +198,7 @@ Disabled
 
 Un service malveillant configuré en `Start Type = Automatic` peut fournir une persistence après reboot.
 
-### Analyse du Binary Path
+#### Analyse du Binary Path
 
 Le chemin de l’exécutable est l’un des éléments les plus importants. Exemple du cours :
 
@@ -206,7 +213,7 @@ C:\Users\<user>\Documents\Windows Update.exe
 
 Un composant prétendant être Windows Update dans `C:\Users\<user>\Documents\` est fortement suspect.
 
-#### Répertoires intéressants
+##### Répertoires intéressants
 
 Pour un service, surveiller notamment les exécutables placés dans :
 
@@ -230,7 +237,7 @@ User-writable Binary Path
 ```
 
 
-### Service Type
+#### Service Type
 
 Le champ `Service Type` indique la nature technique du service. Exemples :
 
@@ -247,7 +254,7 @@ Un attaquant peut très bien créer un service Windows classique (`ServiceType =
 
 ![Evenement 7045 d'un pilote en mode noyau (kernel mode driver)](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-services-event-logs-04.png)
 
-### Contexte d’exécution
+#### Contexte d’exécution
 
 Un service peut s’exécuter sous différents comptes :
 
@@ -272,9 +279,7 @@ LocalSystem
 
 ---
 
-## Event ID 4697 — Service Installed
-
-Si l’audit correspondant est activé, une installation de service peut également être enregistrée dans :
+### Event ID 4697 — Service Installed
 
 ```text
 Security Log
@@ -282,6 +287,8 @@ Security Log
 → A service was installed in the system
 ```
 
+
+- Si l’audit correspondant est activé, une installation de service peut également être enregistrée dans ce journal.
 
 Il peut compléter `7045` :
 
@@ -297,16 +304,19 @@ Security / 4697
 
 ---
 
-## Event ID 7040 — Start Type Changed
+## Modification : 7040
 
-Un attaquant peut également modifier le mode de démarrage d’un service existant.
+### Event ID 7040 — Start Type Changed
 
 ```text
 System
 → Service Control Manager
 → 7040
+→ Start type changed
 ```
 
+
+- Un attaquant peut également modifier le mode de démarrage d’un service existant.
 
 Exemple : `Manual → Automatic`, ou `Automatic → Disabled`.
 
@@ -330,7 +340,17 @@ User / Process Context
 
 ---
 
-## Event ID 7036 — Service State Changed
+## Démarrage et arrêt : 7036
+
+### Event ID 7036 — Service State Changed
+
+```text
+System
+→ Service Control Manager
+→ 7036
+→ Service state changed
+```
+
 
 Permet d’observer certains changements d’état :
 

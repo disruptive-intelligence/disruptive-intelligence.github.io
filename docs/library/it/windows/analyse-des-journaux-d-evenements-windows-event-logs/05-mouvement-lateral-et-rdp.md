@@ -60,13 +60,20 @@ Destination Host
 ```
 
 
+Où chercher, selon le côté de la connexion :
+
+| Côté | Journal | Event IDs |
+|---|---|---|
+| Machine **cible** | Security | **4624** Type 10 (logon RDP réussi) · **4625** Type 10 (logon RDP échoué) |
+| Machine **cible** | TerminalServices-RemoteConnectionManager/Operational | **261** (connexion TCP RDP reçue) · **1149** (authentification RDP réussie) |
+| Machine **source** | TerminalServices-RDPClient/Operational | **1102** (destination contactée) |
+| Machine **source** | Security | **4648** (explicit credentials) |
+
 ---
 
-## Logs côté machine cible RDP
+## Logs côté machine cible RDP : 4624 Type 10 et 1149
 
 ### Event ID 4624 + Logon Type 10
-
-Une authentification RDP réussie peut être identifiée via :
 
 ```text
 Security Log
@@ -74,6 +81,8 @@ Security Log
 → Logon Type 10
 ```
 
+
+- Une authentification RDP réussie peut être identifiée via cet événement.
 
 ```text
 4624 + Type 10
@@ -83,7 +92,7 @@ Security Log
 
 ---
 
-## TerminalServices-RemoteConnectionManager
+### TerminalServices-RemoteConnectionManager
 
 Windows dispose également de journaux RDP spécialisés :
 
@@ -137,7 +146,7 @@ Event ID:
 
 ---
 
-## Détecter un système source compromis
+### Détecter un système source compromis
 
 Exemple :
 
@@ -170,7 +179,7 @@ Le journal de la machine cible peut donc révéler **d’où vient le lateral mo
 
 ---
 
-## Logs côté machine source RDP
+## Logs côté machine source RDP : 1102 et 4648
 
 Il est également possible d’identifier les machines **vers lesquelles un endpoint s’est connecté en RDP**.
 
@@ -191,15 +200,13 @@ Applications and Services Logs
 
 ### Event ID 1102 — RDP Client
 
-Dans ce provider :
-
 ```text
 Microsoft-Windows-TerminalServices-RDPClient/Operational (sous TerminalServices-ClientActiveXCore)
 → Event ID 1102
 ```
 
 
-peut contenir l’adresse de destination RDP.
+- Dans ce provider, peut contenir l’adresse de destination RDP.
 
 ```text
 Compromised HOST-B
@@ -241,22 +248,16 @@ Log
 
 ---
 
-## Event ID 4648 — Explicit Credentials
-
-Le cours propose de corréler les événements RDP client avec :
+### Event ID 4648 — Explicit Credentials
 
 ```text
 Security
 → Event ID 4648
+→ A logon was attempted using explicit credentials
 ```
 
 
-`4648` signifie :
-
-```text
-A logon was attempted using explicit credentials
-```
-
+- Le cours propose de corréler les événements RDP client avec `4648`.
 
 Il peut fournir :
 
@@ -336,17 +337,18 @@ et donc de déterminer le **scope** réel de l’incident.
 
 ---
 
-## Tentatives RDP échouées
+## Tentatives RDP échouées : 261 et 4625
 
 ### Event ID 261
 
-Dans `TerminalServices-RemoteConnectionManager`, le cours utilise :
-
 ```text
-Event ID 261
+TerminalServices-RemoteConnectionManager
+→ Event ID 261
 → Incoming RDP TCP Connection
 ```
 
+
+- C’est l’événement utilisé par le cours dans `TerminalServices-RemoteConnectionManager`.
 
 ```text
 Remote Host
@@ -404,9 +406,7 @@ Le cours souligne lui-même que cette méthode n’est pas fiable à 100 %.
 
 ---
 
-## Méthode plus fiable : Event ID 4625
-
-Une authentification RDP échouée peut apparaître dans :
+### Méthode plus fiable : Event ID 4625
 
 ```text
 Security
@@ -414,6 +414,8 @@ Security
 → Logon Type 10
 ```
 
+
+- Une authentification RDP échouée peut apparaître dans cet événement.
 
 On peut alors récupérer :
 
