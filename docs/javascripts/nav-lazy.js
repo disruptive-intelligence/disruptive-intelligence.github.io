@@ -73,4 +73,30 @@
     var a = here.getBoundingClientRect(), b = list.getBoundingClientRect();
     list.scrollTop += a.top - b.top - (b.height - a.height) / 2;
   });
+
+  // Plan de la page (≡) dans le menu mobile : chaque section se replie, » déplie ses sous-sections.
+  document.querySelectorAll(".md-nav--primary .md-nav--secondary li.md-nav__item").forEach(function (li) {
+    var link = li.querySelector(":scope > a.md-nav__link");
+    if (!link || !li.querySelector(":scope > nav.md-nav")) return;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "kw-toc-fold";
+    btn.setAttribute("aria-label", "Sous-sections");
+    btn.setAttribute("aria-expanded", "false");
+    li.classList.add("kw-toc-branch");
+    link.after(btn);
+    btn.addEventListener("click", function () {
+      var open = li.classList.toggle("kw-open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+  if (drawer) drawer.addEventListener("change", function () {          // section lue : sa branche dépliée
+    if (!drawer.checked) return;
+    document.querySelectorAll(".md-nav--primary .md-nav--secondary .md-nav__link--active").forEach(function (a) {
+      for (var li = a.closest("li.kw-toc-branch"); li; li = li.parentElement.closest("li.kw-toc-branch")) {
+        li.classList.add("kw-open");
+        li.querySelector(":scope > .kw-toc-fold").setAttribute("aria-expanded", "true");
+      }
+    });
+  });
 })();

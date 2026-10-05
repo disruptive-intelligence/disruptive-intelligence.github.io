@@ -1322,7 +1322,7 @@ body[data-md-color-scheme="default"]::after {
   /* » : grande zone tactile, tournée vers le bas quand c'est déplié */
   .md-nav--primary .md-nav__link,
   .md-nav--primary .md-nav__container > .md-nav__link { align-items: center; }
-  .md-nav--primary .md-nav__link > .md-ellipsis { flex: 1 1 auto; }
+  .md-nav--primary .md-nav__link > .md-ellipsis { flex: 1 1 auto; white-space: normal; overflow: visible; overflow-wrap: anywhere; }
   .md-nav--primary .md-nav__link .md-nav__icon,
   .md-nav--primary .md-nav__item--pruned > a.md-nav__link .md-nav__icon {
     flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
@@ -1338,4 +1338,22 @@ body[data-md-color-scheme="default"]::after {
   .md-nav--primary .md-nav--secondary > .md-nav__list { border-left-color: var(--kw-toggle-line); }
   .md-nav--primary .md-nav__toggle:not(:checked) ~ .md-nav__link[for=__toc] ~ .md-nav { display: none; }
   .md-nav--primary .md-nav--secondary .md-nav__link { font-size: .7rem; padding: .3rem .3rem .3rem .4rem !important; }
+
+  .md-nav--primary .md-nav__toggle:checked ~ .md-nav__link[for=__toc] .md-nav__icon::after { transform: none; }
+
+  /* Plan de la page : sections repliables (bouton » ajouté par nav-lazy.js) */
+  .md-nav--primary .md-nav--secondary li.kw-toc-branch { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .md-nav--primary .md-nav--secondary li.kw-toc-branch > nav.md-nav { grid-column: 1 / -1; }
+  .md-nav--primary .md-nav--secondary li.kw-toc-branch:not(.kw-open) > nav.md-nav { display: none; }
+  .kw-toc-fold {
+    display: flex; align-items: center; justify-content: center; width: 1.8rem; height: 1.6rem;
+    padding: 0; border: 0; background: none; color: var(--kw-arrow); cursor: pointer;
+  }
+  .kw-toc-fold::after {
+    content: ""; width: 1rem; height: 1rem; background-color: currentcolor; transition: transform .2s;
+    -webkit-mask: var(--md-nav-icon--next) center / contain no-repeat; mask: var(--md-nav-icon--next) center / contain no-repeat;
+  }
+  .kw-toc-branch.kw-open > .kw-toc-fold::after { transform: rotate(90deg); }
 }
+.kw-toc-fold { display: none; }
+@media screen and (max-width: 76.234375em) { .md-nav--primary .kw-toc-fold { display: flex; } }
