@@ -11,127 +11,48 @@ Source des captures : [Hack The Box Academy - Event Log Analysis](https://academ
 
 ## Journaux d’événements des tâches planifiées Windows
 
-- **Task Scheduler** permet d’exécuter automatiquement :
-    - programmes ;
-    - scripts ;
-    - sauvegardes ;
-    - tâches de maintenance ;
-    - actions déclenchées par une heure, un calendrier ou un événement.
-- Les tâches peuvent être créées :
-    - localement ;
-    - à distance ;
-    - via GUI ;
-    - CLI / PowerShell ;
-    - API Windows.
+Le **Task Scheduler** exécute automatiquement des programmes, des scripts, des sauvegardes ou des tâches de maintenance, en réponse à un déclencheur : une heure, un calendrier ou un événement. Une tâche peut être créée localement ou à distance, depuis l’interface graphique, en ligne de commande (CLI / PowerShell) ou par l’API Windows.
 
-```text
-Trigger
-→ Scheduled Task
-→ Action
-→ Program / Script / Command
-```
-
+Une tâche relie toujours un déclencheur à une action : `Trigger → Scheduled Task → Action → Program / Script / Command`.
 
 ## Abus offensif des Scheduled Tasks
 
-Les attaquants peuvent créer ou modifier une tâche afin de :
+Un attaquant crée ou modifie une tâche pour exécuter du code, maintenir une **persistence** en relançant régulièrement un malware, agir avec des privilèges élevés, ou cacher son activité derrière un nom de tâche d’apparence légitime. MITRE ATT&CK range cette technique sous **T1053.005 — Scheduled Task/Job: Scheduled Task**.
 
-- exécuter du code ;
-- maintenir une **persistence** ;
-- relancer régulièrement un malware ;
-- exécuter une action avec des privilèges élevés ;
-- masquer leur activité derrière une tâche au nom légitime.
-
-MITRE ATT&CK :
-
-```text
-T1053.005
-→ Scheduled Task/Job: Scheduled Task
-```
-
-
-Exemple :
-
-```text
-Malicious Script
-→ Scheduled Task
-→ Trigger every day
-→ Persistence
-```
-
+Schéma typique : `Malicious Script → Scheduled Task → Trigger every day → Persistence`.
 
 > Une tâche ne s’exécute pas automatiquement avec les « privilèges du Task Scheduler » : elle s’exécute dans le **security context configuré pour la tâche**. Si elle est configurée sous `SYSTEM` ou avec `Run with highest privileges`, l’impact peut être particulièrement important.
 
----
-
 ## Intérêt forensique
 
-- Les Event Logs peuvent conserver la trace d’une tâche même après sa suppression.
-- Cela permet de retrouver :
-    - nom ;
-    - auteur ;
-    - trigger ;
-    - commande ;
-    - arguments ;
-    - modifications ;
-    - suppression.
+Les Event Logs conservent la trace d’une tâche même après sa suppression : son nom, son auteur, son déclencheur, sa commande et ses arguments, puis ses modifications et sa suppression. Un attaquant qui crée une tâche, l’exécute puis la supprime fait disparaître la tâche, pas la preuve : **Task no longer exists ≠ Evidence no longer exists**.
 
-```text
-Attacker
-→ Create Task
-→ Execute
-→ Delete Task
+## Deux journaux à consulter
 
-Task no longer exists
-≠
-Evidence no longer exists
-```
-
-
----
-
-## Journal Security
-
-Les événements détaillés liés aux Scheduled Tasks peuvent être enregistrés dans :
-
-```text
-Windows Logs
-→ Security
-```
-
-
-Ils nécessitent que l’audit approprié soit activé.
-
-Dans **Advanced Audit Policy**, cela relève notamment de :
-
-```text
-Object Access
-→ Audit Other Object Access Events
-```
-
+| Journal | Où le trouver | Ce qu’il apporte |
+|---|---|---|
+| **Security** | Windows Logs → Security | Les événements détaillés (4698 à 4702), avec l’auteur et la définition de la tâche. Ils nécessitent l’audit approprié : dans **Advanced Audit Policy**, Object Access → **Audit Other Object Access Events**. |
+| **TaskScheduler/Operational** | Applications and Services Logs → Microsoft → Windows → TaskScheduler → Operational | Moins d’informations que Security, mais disponible même quand les événements détaillés de Security ne le sont pas : très utile pour reconstruire l’activité. |
 
 > Si cette journalisation n’est pas activée, les Event IDs `4698/4699/4702` peuvent être absents.
 
----
+![Chemin Applications and Services Logs](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-05.png)
 
-## Event ID 4698 — Scheduled Task Created
+![Journal TaskScheduler Operational](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-06.png)
 
-```text
-Security
-→ 4698
-→ A scheduled task was created
-```
+Les deux journaux suivent la vie d’une tâche, de sa création à sa suppression :
 
+| Étape | Security | TaskScheduler/Operational |
+|---|---|---|
+| Création | **4698** — A scheduled task was created | **106** — Task registered |
+| Exécution | — | **200** — Action started · **201** — Action completed |
+| Modification | **4702** — A scheduled task was updated | **140** — Task updated |
+| Activation / désactivation | **4700** — Task enabled · **4701** — Task disabled | — |
+| Suppression | **4699** — A scheduled task was deleted | **141** — Task deleted |
 
-Lorsqu’une tâche est créée, l’événement peut fournir :
+## Création : 4698 et 106
 
-- utilisateur ayant créé la tâche ;
-- nom de la tâche ;
-- trigger ;
-- account / security context ;
-- programme exécuté ;
-- command-line arguments ;
-- définition XML de la tâche selon la version de Windows.
+**4698** (Security) est l’événement le plus riche. Il indique l’utilisateur qui a créé la tâche, son nom, son déclencheur, le compte sous lequel elle tourne (account / security context), le programme exécuté et ses arguments, et, selon la version de Windows, la définition XML complète de la tâche.
 
 Exemple :
 
@@ -157,545 +78,86 @@ Arguments:
 
 ![Evenements 4698 de creation de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-02.png)
 
----
+Les champs à examiner répondent à six questions :
 
-### Champs importants à examiner
-
-```text
-Who created it?
-What does it execute?
-From where?
-When does it execute?
-Under which account?
-With which privileges?
-```
-
-
-Rechercher notamment :
-
-- `SubjectUserName` ;
-- `TaskName` ;
-- `Author` ;
-- `Triggers` ;
-- `UserId` ;
-- `RunLevel` ;
-- `Command` ;
-- `Arguments`.
+| Question | Champs |
+|---|---|
+| Qui l’a créée ? | `SubjectUserName`, `Author` |
+| Quelle tâche ? | `TaskName` |
+| Quand s’exécute-t-elle ? | `Triggers` |
+| Sous quel compte, avec quels privilèges ? | `UserId`, `RunLevel` |
+| Qu’exécute-t-elle, et depuis où ? | `Command`, `Arguments` |
 
 ![Details du 4698 avec auteur description et declencheur](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-03.png)
 
----
-
-## Indicateurs suspects
-
-### Nom trompeur
-
-Les attaquants utilisent souvent des noms ressemblant à des tâches légitimes :
-
-```text
-Windows Update
-Microsoft Update Service
-System Maintenance
-AdobeUpdate
-ChromeUpdate
-```
-
-
-> Le nom d’une tâche n’est jamais une preuve de légitimité.
-
-Dans l’exemple du cours :
-
-```text
-"Windows Update Task"
-+
-Created by CyberJunkie
-→ Suspicious
-```
-
-
----
-
-### Chemin inhabituel
-
-Exemple :
-
-```text
-C:\Users\user\Documents\Windows Update.exe
-```
-
-
-Pour un composant supposé être Windows Update :
-
-```text
-User-writable directory
-+
-System-looking filename
-→ Highly Suspicious
-```
-
-
-Répertoires particulièrement intéressants :
-
-```text
-%TEMP%
-%APPDATA%
-%LOCALAPPDATA%
-Downloads
-Documents
-C:\Users\Public
-```
-
-
-![Commande de la tache dans le dossier Documents](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-04.png)
-
----
-
-### Commandes suspectes
-
-Exemples :
-
-```text
-powershell.exe
-cmd.exe
-wscript.exe
-cscript.exe
-mshta.exe
-rundll32.exe
-regsvr32.exe
-```
-
-
-Encore plus intéressant avec :
-
-```text
--EncodedCommand
--ExecutionPolicy Bypass
--hidden
-DownloadString
-IEX
-http:// / https://
-```
-
-
-```text
-Scheduled Task
-→ PowerShell
-→ Encoded Command
-→ External Network Connection
-```
-
-
-→ priorité d’investigation élevée.
-
----
-
-## NT AUTHORITY\SYSTEM
-
-Les tâches légitimes Windows sont souvent créées/exécutées sous :
-
-```text
-NT AUTHORITY\SYSTEM
-```
-
-
-Mais :
-
-```text
-SYSTEM
-≠ automatically legitimate
-```
-
-
-Un attaquant ayant déjà obtenu des privilèges administrateur peut également créer une tâche exécutée sous `SYSTEM`.
-
-Il faut donc corréler :
-
-```text
-Task Creator
-+
-Command
-+
-Path
-+
-Timestamp
-+
-Trigger
-+
-Incident Context
-```
-
-
----
-
-## Task Scheduler Operational Log
-
-Même lorsque les événements détaillés du journal `Security` ne sont pas disponibles, Windows possède un journal spécialisé :
-
-```text
-Applications and Services Logs
-→ Microsoft
-→ Windows
-→ TaskScheduler
-→ Operational
-```
-
-
-Il fournit généralement moins d’informations que les événements `Security`, mais reste très utile pour reconstruire l’activité.
-
-![Chemin Applications and Services Logs](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-05.png)
-
-![Journal TaskScheduler Operational](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-06.png)
-
----
-
-## Event ID 106 — Task Registered
-
-```text
-TaskScheduler/Operational
-→ 106
-→ Task registered
-```
-
-
-- Indique qu’une tâche a été enregistrée/créée.
-- Le journal fournit notamment le **Task Name**.
-
-```text
-106
-→ task appeared on the system
-```
-
+Côté TaskScheduler/Operational, **106** signale qu’une tâche vient d’être enregistrée (elle apparaît sur le système) et donne notamment son **Task Name**.
 
 ![Evenement 106 Task registered avec nom de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-07.png)
 
----
+## Exécution : 200 et 201
 
-## Event IDs 200 / 201 — Exécution
-
-Deux Event IDs particulièrement utiles dans `TaskScheduler/Operational` :
-
-```text
-200
-→ Action started
-
-201
-→ Action completed
-```
-
-
-Le cours présente notamment `201`, qui permet de retrouver des informations sur l’action exécutée.
-
-Conceptuellement :
-
-```text
-106
-→ Task Registered
-
-200
-→ Action Started
-
-201
-→ Action Completed
-```
-
-
-Cela permet de distinguer :
-
-```text
-Task exists
-≠
-Task actually executed
-```
-
+**200** marque le début de l’action, **201** sa fin. Le cours s’appuie sur 201, qui permet de retrouver des informations sur l’action exécutée. Avec 106, ils distinguent une tâche qui existe d’une tâche qui s’est réellement exécutée : **Task exists ≠ Task actually executed**.
 
 ![Execution manuelle de la tache dans Task Scheduler](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-08.png)
 
 ![Evenement 201 indiquant action terminee et commande executee](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-09.png)
 
----
+## Modification : 4702 et 140
 
-## Event ID 4702 — Scheduled Task Updated
+**4702** (Security) se déclenche quand une tâche existante est modifiée. Il contient des informations comparables à la création : nom de la tâche, nouvelle définition, déclencheur, programme et arguments. **140** signale la même modification dans TaskScheduler/Operational, généralement avec moins de détails.
 
-```text
-Security
-→ 4702
-→ A scheduled task was updated
-```
-
-
-- Déclenché lorsqu’une tâche existante est modifiée.
-- Peut contenir des informations comparables à l’événement de création :
-    - Task Name ;
-    - nouvelle définition ;
-    - trigger ;
-    - programme ;
-    - arguments.
-
-### Pourquoi modifier une tâche existante ?
-
-Cela peut être plus discret que d’en créer une nouvelle :
-
-```text
-Existing Legitimate Task
-        ↓
-Attacker modifies action
-        ↓
-Malicious Code Execution
-```
-
-
-Exemple du cours :
-
-```text
-Before:
-Friday → 15:00
-
-After:
-Every day → 12:00
-```
-
-
-→ comparaison `4698 ↔ 4702` utile pour identifier exactement ce qui a changé.
+Modifier une tâche légitime est plus discret que d’en créer une nouvelle : l’attaquant remplace l’action d’une tâche existante par son propre code. Dans l’exemple du cours, le déclencheur passe de « vendredi à 15 h » à « tous les jours à midi » ; comparer `4698 ↔ 4702` montre exactement ce qui a changé.
 
 ![Declencheur modifie chaque jour a midi](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-10.png)
 
 ![Evenement Security 4702 avec nouvelle definition de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-11.png)
 
----
-
-## Event ID 140 — Task Updated
-
-Dans :
-
-```text
-TaskScheduler/Operational
-```
-
-
-```text
-140
-→ Task updated
-```
-
-
-- Permet d’identifier qu’une modification a eu lieu.
-- Généralement moins détaillé que `Security / 4702`.
-
 ![Evenement TaskScheduler 140 mise a jour de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-12.png)
 
----
+Un attaquant peut aussi **réactiver une tâche existante** plutôt que d’en créer une : **4700** (tâche activée) et **4701** (tâche désactivée) complètent alors l’enquête.
 
-## Event ID 4699 — Scheduled Task Deleted
+## Suppression : 4699 et 141
 
-```text
-Security
-→ 4699
-→ A scheduled task was deleted
-```
+**4699** (Security) donne le nom de la tâche supprimée, l’utilisateur qui a effectué l’action et l’horodatage ; **141** (TaskScheduler/Operational) indique la même suppression, avec surtout le nom de la tâche et l’horodatage.
 
-
-Permet notamment de retrouver :
-
-- Task Name ;
-- utilisateur ayant effectué l’action ;
-- timestamp.
-
-La suppression peut être légitime, mais dans une investigation :
-
-```text
-Task Created
-→ Malicious Execution
-→ Task Deleted shortly after
-```
-
-
-peut indiquer une tentative de **cleanup / Defense Evasion**.
+Une suppression peut être légitime. Mais une tâche créée, exécutée de façon malveillante puis supprimée peu après peut indiquer une tentative de **cleanup / Defense Evasion**.
 
 ![Suppression de la tache dans Task Scheduler](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-13.png)
 
 ![Evenement Security 4699 avec nom de tache supprimee](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-14.png)
 
----
-
-## Event ID 141 — Task Deleted
-
-Dans :
-
-```text
-TaskScheduler/Operational
-```
-
-
-```text
-141
-→ Task deleted
-```
-
-
-- Indique également la suppression d’une tâche.
-- Principalement utile pour :
-    - nom de tâche ;
-    - timestamp.
-
 ![Evenement TaskScheduler 141 suppression de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-15.png)
 
----
+## Reconnaître une tâche suspecte
 
-## Autres Event IDs utiles
+| Indice | Ce qui doit alerter | Exemple |
+|---|---|---|
+| **Nom** | Un nom qui imite une tâche légitime : Windows Update, Microsoft Update Service, System Maintenance, AdobeUpdate, ChromeUpdate | « Windows Update Task » créée par CyberJunkie |
+| **Chemin** | Un exécutable au nom système dans un dossier modifiable par l’utilisateur : `%TEMP%`, `%APPDATA%`, `%LOCALAPPDATA%`, Downloads, Documents, `C:\Users\Public` | `C:\Users\user\Documents\Windows Update.exe` pour un composant censé être Windows Update |
+| **Programme** | Un interpréteur ou un LOLBin : `powershell.exe`, `cmd.exe`, `wscript.exe`, `cscript.exe`, `mshta.exe`, `rundll32.exe`, `regsvr32.exe` | Tâche qui lance PowerShell |
+| **Arguments** | `-EncodedCommand`, `-ExecutionPolicy Bypass`, `-hidden`, `DownloadString`, `IEX`, une URL ou une IP | PowerShell avec une commande encodée |
+| **Compte** | Une tâche nouvelle qui tourne sous `SYSTEM` | — |
+| **Calendrier** | Un déclencheur inhabituel, une création ou une modification pendant la fenêtre d’incident, une suppression rapide après exécution | Créée à 10:14, supprimée à 15:47 |
 
-Dans le journal `Security` :
+> Le nom d’une tâche n’est jamais une preuve de légitimité.
 
-```text
-4698 → Task created
-4699 → Task deleted
-4700 → Task enabled
-4701 → Task disabled
-4702 → Task updated
-```
+![Commande de la tache dans le dossier Documents](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-04.png)
 
+Les tâches légitimes de Windows sont souvent créées et exécutées sous `NT AUTHORITY\SYSTEM`, mais **SYSTEM ≠ automatically legitimate** : un attaquant qui a déjà obtenu des privilèges administrateur peut lui aussi créer une tâche exécutée sous `SYSTEM`. Aucun indice ne suffit seul ; il faut croiser le créateur de la tâche, la commande, le chemin, l’horodatage, le déclencheur et le contexte de l’incident. C’est leur cumul (tâche nouvelle ou modifiée, chemin modifiable, LOLBin ou script, commande encodée, privilèges `SYSTEM`, déclencheur inhabituel, fenêtre d’incident) qui rend une tâche très suspecte. Une tâche qui lance PowerShell avec une commande encodée, suivie d’une connexion réseau externe, devient une priorité d’investigation.
 
-Pour une investigation complète, `4700` et `4701` peuvent être utiles lorsqu’un attaquant **réactive une tâche existante** plutôt que d’en créer une nouvelle.
+## Corrélation et chronologie
 
----
+L’analyse d’une Scheduled Task ne doit pas s’arrêter à l’événement `4698`. En croisant les journaux de la tâche avec la création de processus (`4688`) et les traces réseau ou EDR, on reconstruit toute la chaîne :
 
-## Corrélation recommandée
+| Heure | Source | Ce qui s’est passé |
+|---|---|---|
+| 10:14 | Security **4698** | Tâche « \Windows Update » créée |
+| 10:15 | TaskScheduler **200** | Action démarrée |
+| 10:15 | Security **4688** | `powershell.exe` exécuté |
+| 10:15 | EDR / réseau | Connexion vers le C2 de l’attaquant |
+| 12:03 | Security **4702** | Tâche modifiée |
+| 15:47 | **4699** / **141** | Tâche supprimée |
 
-L’analyse d’une Scheduled Task ne doit pas s’arrêter au seul événement `4698`.
-
-Exemple :
-
-```text
-4698
-→ suspicious task created
-
-        ↓
-
-4688
-→ powershell.exe executed
-
-        ↓
-
-TaskScheduler 200
-→ task action started
-
-        ↓
-
-Network Logs / EDR
-→ connection to suspicious domain
-
-        ↓
-
-4699 / 141
-→ task deleted
-```
-
-
-→ permet de reconstruire :
-
-```text
-Persistence
-→ Execution
-→ C2
-→ Cleanup
-```
-
-
----
-
-## Timeline d’une tâche malveillante
-
-```text
-10:14
-4698
-→ Task "\Windows Update" created
-
-10:15
-200
-→ Action started
-
-10:15
-4688
-→ powershell.exe
-
-10:15
-EDR / Network
-→ connection to attacker C2
-
-12:03
-4702
-→ Task modified
-
-15:47
-4699 / 141
-→ Task deleted
-```
-
-
-Même si la tâche a disparu du système :
-
-```text
-Event Logs
-→ reconstruct attacker activity
-```
-
-
----
-
-## Points à rechercher en SOC
-
-Une Scheduled Task devient plus suspecte lorsqu’elle présente plusieurs caractéristiques :
-
-```text
-New / Modified Task
-+
-User-writable Path
-+
-LOLBin / Script
-+
-Encoded Command
-+
-SYSTEM Privileges
-+
-Unusual Trigger
-+
-Incident Time Window
-→ High Suspicion
-```
-
-
-Rechercher notamment :
-
-- tâches nouvellement créées ;
-- noms ressemblant à Microsoft / Windows ;
-- exécutables dans `%TEMP%`, `%APPDATA%`, `Downloads` ;
-- PowerShell / CMD / WScript / MSHTA ;
-- URLs ou IP dans les arguments ;
-- tâche exécutée sous `SYSTEM` ;
-- triggers inhabituels ;
-- tâches créées puis rapidement supprimées ;
-- modifications pendant la fenêtre d’incident.
-
----
-
-## Vue d’ensemble
-
-```text
-Security Log
-├─ 4698 → Created
-├─ 4699 → Deleted
-├─ 4700 → Enabled
-├─ 4701 → Disabled
-└─ 4702 → Updated
-
-TaskScheduler/Operational
-├─ 106 → Registered
-├─ 140 → Updated
-├─ 141 → Deleted
-├─ 200 → Action Started
-└─ 201 → Action Completed
-```
-
+Lue dans l’ordre, cette chronologie retrace **Persistence → Execution → C2 → Cleanup**, même si la tâche a disparu du système.
 
 Le point important est de ne pas seulement chercher **si une tâche existe actuellement** : les Event Logs permettent de reconstruire **sa création, ses modifications, son exécution et sa suppression**, ce qui en fait une source particulièrement utile pour détecter les mécanismes de **Persistence / Execution** basés sur `T1053.005`.
-
-Source des captures : [Hack The Box Academy - Event Log Analysis](https://academy.hackthebox.com/course/preview/event-log-analysis)
