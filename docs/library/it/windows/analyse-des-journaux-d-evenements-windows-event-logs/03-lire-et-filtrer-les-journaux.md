@@ -385,9 +385,17 @@ Provider
 ### Service Control Manager
 Le **Service Control Manager — SCM** gère les services Windows.
 
-Certains Event IDs visibles dans ton screenshot :
+Certains Event IDs visibles dans la capture :
 
 #### Event ID 7040
+
+```text
+System
+→ Service Control Manager
+→ 7040
+→ Start type changed
+```
+
 
 - Changement du **Start Type** d’un service.
 
@@ -408,7 +416,10 @@ En investigation, un changement inattendu du mode de démarrage d’un service p
 #### Event ID 7045
 
 ```text
-A service was installed in the system
+System
+→ Service Control Manager
+→ 7045
+→ A service was installed in the system
 ```
 
 
@@ -432,6 +443,14 @@ ou
 ---
 
 #### Event ID 7026
+
+```text
+System
+→ Service Control Manager
+→ 7026
+→ Boot-start / system-start driver(s) failed to load
+```
+
 
 - Signale qu’un ou plusieurs drivers `boot-start` ou `system-start` n’ont pas pu être chargés.
 
