@@ -154,3 +154,22 @@ Sans `/p:`, xfreerdp demande le mot de passe : il ne reste pas dans l'historique
 
 Pour comprendre : [Analyse des journaux d'événements, RDP](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Action | PowerShell | `netsh` |
+|---|---|---|
+| Fixer une adresse IP | `New-NetIPAddress` | `netsh interface ip set address` |
+| Changer de DNS | `Set-DnsClientServerAddress` | `netsh interface ip set dns` |
+| Ouvrir un port | `New-NetFirewallRule -Direction Inbound -Action Allow` | `netsh advfirewall firewall add rule` |
+| Lister les règles | `Get-NetFirewallRule` | `netsh advfirewall firewall show rule name=all` |
+| Supprimer une règle | `Remove-NetFirewallRule` | `netsh advfirewall firewall delete rule name=<nom>` |
+
+| Durcissement | Réglage | Valeur |
+|---|---|---|
+| LLMNR | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient\EnableMulticast` | `0` |
+| NetBIOS sur TCP/IP | `TcpipNetbiosOptions` de chaque interface | `2` (désactivé) |
+| SMBv1 | `Set-SmbServerConfiguration -EnableSMB1Protocol` | `$false` |
+| Signature SMB | `Set-SmbServerConfiguration -RequireSecuritySignature` | `$true` |
+
+Fichier hosts : `C:\Windows\System32\drivers\etc\hosts`.

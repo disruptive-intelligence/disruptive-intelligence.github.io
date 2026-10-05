@@ -270,3 +270,18 @@ whoami /user
 
 Ensuite : [droits et identités](droits.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Je veux savoir… | Commande | À regarder |
+|---|---|---|
+| Version et build de Windows | `Get-CimInstance Win32_OperatingSystem` | `Caption`, `Version`, `BuildNumber` |
+| Tout sur la machine d'un coup | `systeminfo` | OS, date d'installation, dernier démarrage, domaine, correctifs |
+| Si la machine est dans un domaine | `Get-CimInstance Win32_ComputerSystem` | `Domain`, `PartOfDomain` |
+| Numéro de série, BIOS | `Get-CimInstance Win32_BIOS` | `Manufacturer`, `SerialNumber` |
+| Correctifs installés | `Get-HotFix` | `HotFixID`, `InstalledOn` |
+| Depuis quand elle tourne | `(Get-CimInstance Win32_OperatingSystem).LastBootUpTime` | Date du dernier démarrage |
+| Fichiers cachés d'un dossier | `Get-ChildItem -Force` | Attributs `h` (caché), `s` (système) |
+| Variables d'environnement | `Get-ChildItem Env:` · `$env:<NOM>` | `%TEMP%`, `%APPDATA%`, `PATH` |
+| Qui est connecté | `query user` | Sessions locales et RDP |
+| Qui je suis | `whoami /all` | SID, groupes, privilèges, niveau d'intégrité |

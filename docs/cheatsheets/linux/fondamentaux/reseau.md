@@ -247,3 +247,19 @@ sudo tcpdump -i eth0 -nn -w capture.pcap   # enregistrer pour l'ouvrir dans Wire
 
 !!! warning "Attention"
     Une capture peut contenir des identifiants et des données personnelles : la stocker comme une donnée sensible.
+
+## Vue d'ensemble
+
+| Besoin | Linux | Équivalent Windows |
+|---|---|---|
+| Adresses IP | `ip -br a` | `Get-NetIPConfiguration` |
+| Routes, passerelle | `ip route` | `Get-NetRoute` |
+| Voisins (ARP) | `ip neigh` | `arp -a` |
+| Ports en écoute | `ss -tulpn` | `Get-NetTCPConnection -State Listen` |
+| Connexions établies | `ss -tnp state established` | `Get-NetTCPConnection -State Established` |
+| Processus d'un port | `lsof -i :<port>` | `OwningProcess` de `Get-NetTCPConnection` |
+| Connectivité | `ping -c` · `traceroute` | `Test-Connection` · `tracert` |
+| Résolution de nom | `dig +short` · `getent hosts` | `Resolve-DnsName` |
+| Port distant | `nc -zv <hôte> <port>` | `Test-NetConnection -Port` |
+| En-têtes HTTP | `curl -I` | `Invoke-WebRequest -Method Head` |
+| Capture | `tcpdump -i <interface> -w <fichier>` | `pktmon`, Wireshark |

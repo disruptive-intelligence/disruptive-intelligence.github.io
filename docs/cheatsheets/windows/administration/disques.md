@@ -112,3 +112,15 @@ $s = New-PSSession -ComputerName <hôte>; Copy-Item <fichier> -Destination <chem
 ```bat title="Exemple"
 scp C:\Collecte\triage.zip analyste@192.168.1.200:/srv/collecte/   :: client OpenSSH intégré à Windows
 ```
+
+## Vue d'ensemble
+
+| Besoin | PowerShell / Windows | Équivalent Linux |
+|---|---|---|
+| Espace disque | `Get-Volume` | `df -h` |
+| Taille d'un dossier | `Get-ChildItem -Recurse -File | Measure-Object Length -Sum` | `du -sh` |
+| Disques et partitions | `Get-Disk` · `Get-Partition` | `lsblk` |
+| Chiffrement du disque | `manage-bde -status` (BitLocker) | `cryptsetup status` (LUKS) |
+| Créer, extraire une archive | `Compress-Archive` · `Expand-Archive` (zip) | `tar -czf` · `tar -xzf` |
+| Copier un gros dossier avec reprise | `robocopy /E` | `rsync -a` |
+| Copier vers une autre machine | `Copy-Item \\<hôte>\<partage>` ou session PowerShell distante | `scp`, `rsync` |

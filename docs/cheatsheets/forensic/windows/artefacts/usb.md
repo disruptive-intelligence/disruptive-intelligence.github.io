@@ -31,3 +31,13 @@ Get-ChildItem HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR | Select-Object PSChil
 ```powershell title="Exemple"
 Select-String -Path C:\Windows\INF\setupapi.dev.log -Pattern "USBSTOR" -Context 0,1   # première connexion de chaque clé
 ```
+
+## Vue d'ensemble
+
+| Question | Artefact | Où |
+|---|---|---|
+| Quels périphériques (fabricant, modèle, n° de série) | USBSTOR | `SYSTEM\CurrentControlSet\Enum\USBSTOR` |
+| Première connexion | setupapi | `C:\Windows\INF\setupapi.dev.log` |
+| Quelle lettre de lecteur | MountedDevices | `SYSTEM\MountedDevices` |
+| Quel utilisateur | MountPoints2 | `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2` |
+| Ce qui a été ouvert sur la clé | LNK, Shellbags, Jump Lists | Même lettre de lecteur, même n° de série de volume |

@@ -257,7 +257,7 @@ sudo lastb -n 20   # tentatives échouées (lit /var/log/btmp)
 Pour comprendre : [Linux — prises de notes, investigation](../../../library/it/linux/linux-prises-de-notes/02-investigation-forensics.md)
 { .kw-cs-meta }
 
-## Repères : où sont les choses
+## Vue d'ensemble : où sont les choses
 
 | Dossier | Contenu |
 |---|---|

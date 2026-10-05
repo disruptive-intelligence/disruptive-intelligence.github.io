@@ -130,3 +130,16 @@ New-LocalGroup -Name LG-Lecture-Logs -Description "Lecture des journaux applicat
 
 Pour comprendre : [PowerShell, ch. 10 (utilisateurs et groupes locaux)](../../../library/it/windows/powershell/02-partie-ii-administration-windows-locale/02-chapitre-10-utilisateurs-et-groupes-locaux.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Action | Compte local (PowerShell) | Avec `net` | Compte de domaine |
+|---|---|---|---|
+| Lister | `Get-LocalUser` | `net user` | `Get-ADUser -Filter *` |
+| Créer | `New-LocalUser` | `net user <nom> * /add` | `New-ADUser` |
+| Réinitialiser le mot de passe | `Set-LocalUser -Password` | `net user <nom> *` | `Set-ADAccountPassword -Reset` |
+| Désactiver / réactiver | `Disable-LocalUser` · `Enable-LocalUser` | `net user <nom> /active:no` | `Disable-ADAccount` · `Enable-ADAccount` |
+| Supprimer | `Remove-LocalUser` | `net user <nom> /delete` | `Remove-ADUser` |
+| Ajouter à un groupe | `Add-LocalGroupMember` | `net localgroup <groupe> <compte> /add` | `Add-ADGroupMember` |
+| Retirer d'un groupe | `Remove-LocalGroupMember` | `net localgroup <groupe> <compte> /delete` | `Remove-ADGroupMember` |
+| Créer un groupe | `New-LocalGroup` | `net localgroup <groupe> /add` | `New-ADGroup` |

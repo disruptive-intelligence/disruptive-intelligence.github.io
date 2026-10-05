@@ -55,3 +55,10 @@ cmd /c mklink /d C:\vss1 \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\       
 ```powershell title="Exemple"
 Get-ChildItem C:\vss1\Users\alice\Documents -Recurse | Where-Object Name -like "*salaires*"
 ```
+
+## Vue d'ensemble
+
+| Source | Où | Outil | Ce qu'on retrouve | Limites |
+|---|---|---|---|---|
+| Corbeille | `C:\$Recycle.Bin\<SID>\` (`$I…` métadonnées, `$R…` contenu) | RBCmd | Chemin d'origine, taille, date de suppression, contenu | Rien après Maj+Suppr ou corbeille vidée |
+| Clichés instantanés (VSS) | `\System Volume Information` | `vssadmin list shadows`, `mklink /d` | Version antérieure ou fichier supprimé depuis | Souvent supprimés par les rançongiciels : leur absence est un indice |

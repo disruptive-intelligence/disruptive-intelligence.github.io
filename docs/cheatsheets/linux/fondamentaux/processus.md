@@ -319,7 +319,7 @@ systemctl cat ssh.service
 Ensuite : [démarrer, arrêter ou redémarrer un service](../administration/services.md#demarrer-arreter-ou-redemarrer-un-service)
 { .kw-cs-meta }
 
-## Repères : les signaux
+## Vue d'ensemble : les signaux
 
 | Signal | Numéro | Effet |
 |---|---|---|

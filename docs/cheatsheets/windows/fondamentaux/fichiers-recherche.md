@@ -270,3 +270,18 @@ dir /r C:\Users\alice\Downloads   :: /r : affiche les flux alternatifs
 
 Pour comprendre : [Windows en profondeur, ch. 4 (NTFS)](../../../library/it/windows/windows-en-profondeur/01-partie-i-architecture-fondamentale/04-chapitre-4-le-systeme-de-fichiers-ntfs.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Besoin | PowerShell | Équivalent Linux |
+|---|---|---|
+| Lire un fichier | `Get-Content <fichier>` | `cat`, `less` |
+| Suivre un fichier qui grossit | `Get-Content <fichier> -Tail <n> -Wait` | `tail -f` |
+| Trouver un fichier par son nom | `Get-ChildItem -Recurse -Filter <motif>` | `find -name` |
+| Fichiers modifiés récemment | `Get-ChildItem -Recurse -File | Where-Object LastWriteTime -gt <date>` | `find -mmin` / `-mtime` |
+| Plus gros fichiers | `Get-ChildItem -Recurse -File | Sort-Object Length -Descending` | `find -size`, `du` |
+| Chercher un mot | `Select-String -Pattern <motif>` | `grep` |
+| Empreinte | `Get-FileHash -Algorithm SHA256` | `sha256sum` |
+| Signature d'un exécutable | `Get-AuthenticodeSignature` | — |
+| Comparer deux fichiers | `Compare-Object (Get-Content a) (Get-Content b)` | `diff` |
+| Flux de données alternatifs | `Get-Item <fichier> -Stream *` | — (propre à NTFS) |

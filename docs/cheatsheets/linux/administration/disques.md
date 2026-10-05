@@ -193,3 +193,23 @@ python3 -m http.server 8000 --directory /tmp/partage
 
 !!! warning "Attention"
     Tout le dossier devient lisible par le réseau, sans authentification : à couper juste après.
+
+## Vue d'ensemble
+
+| Besoin | Commande |
+|---|---|
+| Espace disque | `df -h` (`-i` : inodes) |
+| Ce qui occupe la place | `du -sh <dossier>/* | sort -h` |
+| Disques et partitions | `lsblk -f` · `fdisk -l` |
+| Monter, démonter | `mount` (`-o ro` : lecture seule) · `umount` |
+| Copier vers une autre machine | `scp` · `rsync -avz` |
+| Télécharger | `curl -O` · `wget` |
+| Servir un dossier en HTTP | `python3 -m http.server <port>` |
+
+| Option `tar` | Sens |
+|---|---|
+| `c` · `x` · `t` | Créer · extraire · lister |
+| `z` · `j` · `J` | Compression gzip (`.tar.gz`) · bzip2 (`.tar.bz2`) · xz (`.tar.xz`) |
+| `f` | Nom de l'archive (toujours en dernier dans le groupe d'options) |
+| `v` | Affiche les fichiers traités |
+| `-C <dossier>` | Extraire dans ce dossier |

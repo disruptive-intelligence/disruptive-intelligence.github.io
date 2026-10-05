@@ -94,3 +94,15 @@ En réponse à incident : exporter d'abord la définition (`Export-ScheduledTask
 
 Pour comprendre : [PowerShell, ch. 13 (tâches planifiées)](../../../library/it/windows/powershell/02-partie-ii-administration-windows-locale/05-chapitre-13-taches-planifiees.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Action | PowerShell | `schtasks` |
+|---|---|---|
+| Lister les tâches | `Get-ScheduledTask` | `schtasks /query /fo LIST /v` |
+| Dernière et prochaine exécution | `Get-ScheduledTaskInfo -TaskName <nom>` | `schtasks /query /tn <nom> /v` |
+| Créer | `Register-ScheduledTask` | `schtasks /create /tn <nom> /tr <programme> /sc daily /st <heure>` |
+| Désactiver | `Disable-ScheduledTask` | `schtasks /change /tn <nom> /disable` |
+| Supprimer | `Unregister-ScheduledTask` | `schtasks /delete /tn <nom> /f` |
+
+Les définitions sont dans `C:\Windows\System32\Tasks` (un fichier XML par tâche). Dans les journaux : 4698 / 4702 / 4699 (Journaux Windows → Security, si l'audit est activé) et 106 / 200 / 201 (Journaux des applications et des services → Microsoft → Windows → TaskScheduler → Operational).

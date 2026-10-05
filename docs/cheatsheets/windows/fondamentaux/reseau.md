@@ -279,3 +279,18 @@ Get-NetFirewallProfile | Select-Object Name, Enabled, DefaultInboundAction
 
 Ensuite : [ouvrir un port dans le pare-feu](../administration/reseau.md#ouvrir-un-port-dans-le-pare-feu)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Besoin | PowerShell | Équivalent Linux |
+|---|---|---|
+| Adresses, passerelle, DNS | `Get-NetIPConfiguration` | `ip -br a`, `ip route`, `resolvectl status` |
+| Table de routage | `Get-NetRoute -AddressFamily IPv4` | `ip route` |
+| Table ARP | `arp -a` | `ip neigh` |
+| Ports en écoute | `Get-NetTCPConnection -State Listen` · `Get-NetUDPEndpoint` | `ss -tulpn` |
+| Connexions et leur processus | `Get-NetTCPConnection` (`OwningProcess`) | `ss -tnp` |
+| Tester un port | `Test-NetConnection <hôte> -Port <port>` | `nc -zv` |
+| Résoudre un nom | `Resolve-DnsName <nom>` | `dig` |
+| Cache DNS | `ipconfig /displaydns` · `/flushdns` | `resolvectl statistics` · `resolvectl flush-caches` |
+| Partages offerts, montés, sessions | `Get-SmbShare` · `Get-SmbMapping` · `Get-SmbSession` | `smbclient -L`, `mount` |
+| État du pare-feu | `Get-NetFirewallProfile` | `ufw status`, `nft list ruleset` |

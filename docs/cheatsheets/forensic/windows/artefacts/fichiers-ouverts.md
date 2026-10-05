@@ -83,3 +83,12 @@ reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths"
         b    REG_SZ    cmd\1
         MRUList    REG_SZ    ab
     ```
+
+## Vue d'ensemble
+
+| Artefact | Où | Outil | Ce qu'il prouve | Limites |
+|---|---|---|---|---|
+| LNK | `C:\Users\<utilisateur>\AppData\Roaming\Microsoft\Windows\Recent\*.lnk` | LECmd | Fichier ouvert (même sur USB ou partage), dates, n° de série du volume | Un raccourci par nom de fichier |
+| Jump Lists | `…\Recent\AutomaticDestinations\` · `…\CustomDestinations\` | JLECmd | Fichiers ou hôtes ouverts par application (dont `mstsc`) | AppID à traduire |
+| Shellbags | `NTUSER.DAT`, surtout `UsrClass.dat` (`BagMRU`, `Bags`) | SBECmd | Dossiers affichés, même supprimés depuis | Dossier affiché ≠ fichier ouvert |
+| RunMRU, TypedPaths, RecentDocs | `NTUSER.DAT` → `Software\Microsoft\Windows\CurrentVersion\Explorer\` | `reg query`, Registry Explorer | Ce que l'utilisateur a tapé ou ouvert, dans l'ordre | Propre à chaque utilisateur |

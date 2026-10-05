@@ -65,9 +65,9 @@ Pour comprendre : [Exécution PowerShell : 4104, 4103, transcription, corrélati
 
 | Event ID | Journal | Signification | À retenir |
 |---|---|---|---|
-| **4688** | Security | Processus créé | Ligne de commande seulement si la GPO « Include command line » est activée |
-| **1** | Sysmon | Processus créé | Plus riche que 4688 : hash, processus parent, ligne de commande |
-| **4104** | PowerShell/Operational | Script Block Logging : code exécuté | Rassembler les fragments par `ScriptBlockId` ; chercher `-EncodedCommand`, `IEX`, `FromBase64String`, `DownloadString` |
-| **4103** | PowerShell/Operational | Module Logging : cmdlets et paramètres | Complète 4104 |
+| **4688** | Journaux Windows → Security | Processus créé | Ligne de commande seulement si la GPO « Include command line » est activée |
+| **1** | Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | Processus créé | Plus riche que 4688 : hash, processus parent, ligne de commande |
+| **4104** | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Script Block Logging : code exécuté | Rassembler les fragments par `ScriptBlockId` ; chercher `-EncodedCommand`, `IEX`, `FromBase64String`, `DownloadString` |
+| **4103** | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Module Logging : cmdlets et paramètres | Complète 4104 |
 
 Chaîne typique : 4688 `powershell.exe` → 4104 (code) → connexion réseau (EDR, pare-feu).

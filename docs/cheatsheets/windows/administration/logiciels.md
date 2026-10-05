@@ -96,3 +96,15 @@ Get-MpPreference | Select-Object ExclusionPath, ExclusionProcess, ExclusionExten
 ```
 
 Une exclusion inattendue (dossier temporaire, `ProgramData`, extension `.ps1`) est un signal à vérifier : c'est un moyen classique de neutraliser l'antivirus.
+
+## Vue d'ensemble
+
+| Besoin | Commande | À regarder |
+|---|---|---|
+| Logiciels installés | `winget list` | Nom, ID, version |
+| Chercher, installer, mettre à jour | `winget search` · `winget install --id <ID> -e` · `winget upgrade --all` | `-e` : ID exact |
+| Mises à jour Windows | `Get-HotFix` | `HotFixID`, `InstalledOn` |
+| État de Defender | `Get-MpComputerStatus` | `AMServiceEnabled`, `RealTimeProtectionEnabled`, date des signatures |
+| Mettre à jour, analyser | `Update-MpSignature` · `Start-MpScan -ScanType QuickScan` | `FullScan`, `CustomScan` |
+| Détections récentes | `Get-MpThreatDetection` | Menace, chemin, date |
+| Exclusions de Defender | `Get-MpPreference` | `ExclusionPath`, `ExclusionProcess`, `ExclusionExtension` |

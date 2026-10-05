@@ -39,10 +39,10 @@ Get-WinEvent -FilterHashtable @{LogName='System'; Id=7040} -MaxEvents 5 | Select
 
 | Event ID | Journal | Ce qu'il dit |
 |---|---|---|
-| **7045** | System (Service Control Manager) | Service installé : nom, binaire, type de démarrage, compte |
-| **4697** | Security | Même information, si l'audit est activé : complète le 7045 |
-| **7040** | System | Type de démarrage modifié (manuel → automatique : persistance ; automatique → désactivé : antivirus ou EDR neutralisé) |
-| **7036** | System | Service démarré ou arrêté |
+| **7045** | Journaux Windows → System (Service Control Manager) | Service installé : nom, binaire, type de démarrage, compte |
+| **4697** | Journaux Windows → Security | Même information, si l'audit est activé : complète le 7045 |
+| **7040** | Journaux Windows → System | Type de démarrage modifié (manuel → automatique : persistance ; automatique → désactivé : antivirus ou EDR neutralisé) |
+| **7036** | Journaux Windows → System | Service démarré ou arrêté |
 
 À regarder dans un 7045 : un **nom qui imite Windows** + un **binaire dans un dossier inscriptible par l'utilisateur** (`Documents`, `%TEMP%`, `%APPDATA%`, `C:\Users\Public`) + un **démarrage automatique** + le compte **LocalSystem** = investigation prioritaire. Le champ « type de service » dit comment le service s'exécute, pas qui l'a installé.
 
@@ -123,18 +123,18 @@ Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et
 
 | Thème | Event ID | Journal | Signification |
 |---|---|---|---|
-| Services | **7045** | System | Service installé (nom, binaire, démarrage, compte) |
-| Services | **4697** | Security (si audit) | Service installé |
-| Services | **7040** | System | Type de démarrage modifié |
-| Services | **7036** | System | Service démarré / arrêté |
-| Tâches | **4698** / **4702** / **4699** | Security (si audit) | Tâche créée / modifiée / supprimée |
-| Tâches | **4700** / **4701** | Security (si audit) | Tâche activée / désactivée |
-| Tâches | **106** / **140** / **141** | TaskScheduler/Operational | Tâche enregistrée / modifiée / supprimée |
-| Tâches | **200** / **201** | TaskScheduler/Operational | Action lancée / terminée : la tâche a vraiment tourné |
-| Comptes | **4720** / **4726** | Security | Compte créé / supprimé |
-| Comptes | **4722** / **4725** / **4738** | Security | Compte réactivé / désactivé / modifié |
-| Comptes | **4723** / **4724** | Security | Mot de passe changé / réinitialisé |
-| Groupes | **4732** / **4728** / **4756** | Security | Membre ajouté à un groupe local / global / universel |
-| Groupes | **4733** / **4729** / **4757** | Security | Membre retiré d'un groupe local / global / universel |
+| Services | **7045** | Journaux Windows → System | Service installé (nom, binaire, démarrage, compte) |
+| Services | **4697** | Journaux Windows → Security (si l'audit est activé) | Service installé |
+| Services | **7040** | Journaux Windows → System | Type de démarrage modifié |
+| Services | **7036** | Journaux Windows → System | Service démarré / arrêté |
+| Tâches | **4698** / **4702** / **4699** | Journaux Windows → Security (si l'audit est activé) | Tâche créée / modifiée / supprimée |
+| Tâches | **4700** / **4701** | Journaux Windows → Security (si l'audit est activé) | Tâche activée / désactivée |
+| Tâches | **106** / **140** / **141** | Journaux des applications et des services → Microsoft → Windows → TaskScheduler → Operational | Tâche enregistrée / modifiée / supprimée |
+| Tâches | **200** / **201** | Journaux des applications et des services → Microsoft → Windows → TaskScheduler → Operational | Action lancée / terminée : la tâche a vraiment tourné |
+| Comptes | **4720** / **4726** | Journaux Windows → Security | Compte créé / supprimé |
+| Comptes | **4722** / **4725** / **4738** | Journaux Windows → Security | Compte réactivé / désactivé / modifié |
+| Comptes | **4723** / **4724** | Journaux Windows → Security | Mot de passe changé / réinitialisé |
+| Groupes | **4732** / **4728** / **4756** | Journaux Windows → Security | Membre ajouté à un groupe local / global / universel |
+| Groupes | **4733** / **4729** / **4757** | Journaux Windows → Security | Membre retiré d'un groupe local / global / universel |
 
 Patterns : 7045 avec un binaire dans un dossier inscriptible + démarrage automatique + LocalSystem ; 4698 puis 200/201 puis 4699 (tâche créée, exécutée, effacée) ; 4720 → 4732 Administrateurs → 4624 du nouveau compte.

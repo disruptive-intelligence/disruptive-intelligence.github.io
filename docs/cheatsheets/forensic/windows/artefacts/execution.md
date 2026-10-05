@@ -106,3 +106,14 @@ SrumECmd.exe -f E:\collecte\C\Windows\System32\sru\SRUDB.dat -r E:\collecte\C\Wi
 
 Pour comprendre : [Windows en profondeur, ch. 23 (artefacts d'exécution)](../../../../library/it/windows/windows-en-profondeur/index.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Artefact | Où | Outil | Ce qu'il prouve | Limites |
+|---|---|---|---|---|
+| Prefetch | `C:\Windows\Prefetch\*.pf` | PECmd | Exécution : nombre, jusqu'à 8 dernières dates | Désactivé par défaut sur Windows Server ; 1 024 fichiers au plus |
+| BAM | `SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\<SID>` | `reg query`, Registry Explorer | Qui a lancé quoi, dernier lancement | Une date par programme ; purge après une semaine environ |
+| Amcache | `C:\Windows\AppCompat\Programs\Amcache.hve` | AmcacheParser | Présence, éditeur, **SHA-1** | Présence ≠ exécution |
+| ShimCache | `SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache` | AppCompatCacheParser | Exécutables examinés par Windows | Écrit à l'arrêt ; ne prouve pas l'exécution (Windows 10 et plus) |
+| SRUM | `C:\Windows\System32\sru\SRUDB.dat` | SrumECmd | Octets échangés par application et par utilisateur (30 à 60 jours) | Écrit environ toutes les heures |
+| Événement 4688 | Journaux Windows → Security | EvtxECmd, `Get-WinEvent` | Processus créé, ligne de commande | Seulement si l'audit est activé |

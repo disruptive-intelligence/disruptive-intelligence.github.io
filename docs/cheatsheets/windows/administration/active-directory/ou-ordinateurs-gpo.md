@@ -163,3 +163,17 @@ Get-GPO -All | Sort-Object ModificationTime -Descending | Select-Object -First 3
     Default Domain Policy        12/09/2026 10:05:44
     RDP policy                   02/06/2026 14:31:09
     ```
+
+## Vue d'ensemble
+
+| Besoin | Commande | À retenir |
+|---|---|---|
+| OU d'un objet, déplacement | `Get-ADComputer` / `Get-ADUser` · `Move-ADObject` | L'OU se lit dans le `DistinguishedName` |
+| Supprimer une OU protégée | `Set-ADOrganizationalUnit -ProtectedFromAccidentalDeletion $false` · `Remove-ADOrganizationalUnit -Recursive` | Vérifier d'abord son contenu |
+| Ordinateurs et leur système | `Get-ADComputer -Properties OperatingSystem, LastLogonDate` | Postes inactifs, systèmes obsolètes |
+| Mot de passe LAPS | `Get-LapsADPassword -AsPlainText` · `Set-LapsADPasswordExpirationTime` | Le faire renouveler après usage |
+| GPO appliquées | `gpresult /r` · `gpresult /h <rapport.html>` | Appliquées et refusées |
+| Forcer l'application | `gpupdate /force` | — |
+| GPO modifiées récemment | `Get-GPO -All | Sort-Object ModificationTime` | Changement inattendu = à vérifier |
+
+Ordre d'application des GPO : **local → site → domaine → OU** (de la plus haute à la plus proche) ; en cas de conflit, la dernière appliquée l'emporte, sauf GPO « appliquée » (enforced) ou héritage bloqué.

@@ -162,7 +162,7 @@ git clone https://github.com/<auteur>/<projet>.git /opt/projet
     Receiving objects: 100% (1532/1532), 2.41 MiB | 8.10 MiB/s, done.
     ```
 
-## Repères : équivalents d'une famille à l'autre
+## Vue d'ensemble : équivalents d'une famille à l'autre
 
 | Besoin | Debian, Ubuntu | RHEL, Fedora | Arch |
 |---|---|---|---|

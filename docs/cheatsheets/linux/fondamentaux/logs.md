@@ -176,7 +176,7 @@ sudo du -sh /var/log/* | sort -h | tail -3
     1.2G	/var/log/journal
     ```
 
-## Repères : quel journal pour quoi
+## Vue d'ensemble : quel journal pour quoi
 
 | Fichier | Contenu |
 |---|---|

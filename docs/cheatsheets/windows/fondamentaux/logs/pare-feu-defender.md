@@ -84,13 +84,13 @@ Pour comprendre : [Windows Defender : 1116, 1117, 5001, 5007 et exclusions](../.
 
 | Event ID | Journal | Signification | À retenir |
 |---|---|---|---|
-| **2004** | Firewall With Advanced Security / Firewall | Règle ajoutée | Beaucoup de bruit : filtrer sur la fenêtre d'incident ; regarder direction, programme, `Modifying Application` |
-| **2005** | Firewall With Advanced Security / Firewall | Règle modifiée | Le **Rule ID** retrouve la règle d'origine (2004 antérieur) |
-| **2003** | Firewall With Advanced Security / Firewall | Paramètre global changé | « Enable Windows Defender Firewall » = **No** : pare-feu désactivé |
-| `pfirewall.log` | Fichier texte | Trafic `ALLOW` / `DROP` | Seulement si la journalisation est activée |
-| **1116** | Windows Defender/Operational | Menace détectée | Nom, chemin, processus impliqué |
-| **1117** | Windows Defender/Operational | Action prise | Vérifier le **résultat** : détection ≠ neutralisation |
-| **5001** | Windows Defender/Operational | Protection en temps réel désactivée | Pendant un incident : Defense Evasion probable |
-| **5007** | Windows Defender/Operational | Configuration modifiée | Avec `Exclusions\Paths` : exclusion ajoutée |
+| **2004** | Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | Règle ajoutée | Beaucoup de bruit : filtrer sur la fenêtre d'incident ; regarder direction, programme, `Modifying Application` |
+| **2005** | Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | Règle modifiée | Le **Rule ID** retrouve la règle d'origine (2004 antérieur) |
+| **2003** | Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | Paramètre global changé | « Enable Windows Defender Firewall » = **No** : pare-feu désactivé |
+| `pfirewall.log` | Fichier `%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log` | Trafic `ALLOW` / `DROP` | Seulement si la journalisation est activée |
+| **1116** | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Menace détectée | Nom, chemin, processus impliqué |
+| **1117** | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Action prise | Vérifier le **résultat** : détection ≠ neutralisation |
+| **5001** | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Protection en temps réel désactivée | Pendant un incident : Defense Evasion probable |
+| **5007** | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Configuration modifiée | Avec `Exclusions\Paths` : exclusion ajoutée |
 
 Patterns : 2004 sortant pour un exécutable inconnu → connexion externe ; 5007 exclusion → exécutable lancé depuis ce chemin (4688) ; 5001 → outils déposés et exécutés.

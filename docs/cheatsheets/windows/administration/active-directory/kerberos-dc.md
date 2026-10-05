@@ -128,3 +128,21 @@ repadmin /replsummary
      DC01-LYO               04m:12s    0 /  10    0
      DC02-LYO               03m:58s    0 /  10    0
     ```
+
+## Vue d'ensemble
+
+| Rôle FSMO | Portée | Rôle |
+|---|---|---|
+| Schema Master | Forêt | Seul à pouvoir modifier le schéma |
+| Domain Naming Master | Forêt | Ajout et suppression de domaines |
+| RID Master | Domaine | Distribue les blocs de RID qui composent les SID |
+| PDC Emulator | Domaine | Heure de référence, changements de mot de passe, verrouillages |
+| Infrastructure Master | Domaine | Références vers les objets d'autres domaines |
+
+| Échec Kerberos | Vérification |
+|---|---|
+| Aucun DC joignable | `nltest /dsgetdc:<domaine>` |
+| Horloge décalée (plus de 5 minutes) | `w32tm /query /status` |
+| SPN absent ou dupliqué | `setspn -L <compte>` · `setspn -X` |
+| Ticket périmé ou faux | `klist` · `klist purge` |
+| Santé et réplication des DC | `dcdiag /q` · `repadmin /replsummary` |

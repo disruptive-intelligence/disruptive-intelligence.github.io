@@ -58,3 +58,13 @@ Un `krbtgt` jamais renouvelé depuis la création du domaine est une recommandat
 
 Pour comprendre : [Active Directory, ch. 10 (requêtes d'hygiène)](../../../../library/it/active-directory/active-directory/03-partie-iii-administration-et-controle/02-chapitre-10-outils-d-administration-et-requetage.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Contrôle | Commande | Pourquoi |
+|---|---|---|
+| Comptes inactifs | `Search-ADAccount -AccountInactive -TimeSpan <jours>` | Comptes oubliés, réutilisables par un attaquant |
+| Mots de passe qui n'expirent jamais | `Get-ADUser -Filter 'PasswordNeverExpires -eq $true'` | Mots de passe anciens, rarement changés |
+| Comptes privilégiés, actuels et anciens | `Get-ADUser -Filter 'adminCount -eq 1'` | `adminCount = 1` : protégé un jour par AdminSDHolder |
+| Comptes utilisateurs avec un SPN | `Get-ADUser -Filter 'servicePrincipalName -like "*"'` | Cibles du Kerberoasting : mot de passe long exigé |
+| Âge du mot de passe de krbtgt | `Get-ADUser krbtgt -Properties PasswordLastSet` | Un krbtgt ancien prolonge la validité d'un Golden Ticket |

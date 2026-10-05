@@ -49,3 +49,14 @@ Marche même si le fichier a été supprimé du disque après le lancement. Ensu
 
 Étape suivante : [Réseau](reseau.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Ce qu'on regarde | Commande | Ce qui doit alerter |
+|---|---|---|
+| Tous les processus | `ps auxf` | Nom inconnu, utilisateur inattendu, processus enfant d'un serveur web |
+| Binaire réel | `ls -l /proc/<PID>/exe` | Binaire marqué `(deleted)`, ou dans `/tmp`, `/dev/shm` |
+| Ligne de commande | `tr '\0' ' ' < /proc/<PID>/cmdline` | Arguments encodés, connexion sortante |
+| Dossier de travail | `ls -l /proc/<PID>/cwd` | Dossier temporaire ou caché |
+| Fichiers et connexions | `lsof -p <PID>` | Connexion vers une IP inconnue |
+| Préserver le binaire | `cp /proc/<PID>/exe` + `sha256sum` | À faire avant de tuer le processus |

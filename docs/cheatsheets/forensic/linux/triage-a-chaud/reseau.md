@@ -19,3 +19,11 @@ Les incontournables : `ss -tlnp` · `ss -tnp` · `lsof -i`
 
 Étape suivante : [Persistance](persistance.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Ce qu'on regarde | Commande | Ce qui doit alerter |
+|---|---|---|
+| Ports en écoute | `ss -tulpn` | Port inattendu, processus inconnu à l'écoute |
+| Connexions établies | `ss -tnp state established` | Connexion sortante persistante vers une IP inconnue (C2) |
+| Processus d'un port | `lsof -i :<port>` | Programme lancé depuis `/tmp` ou `/dev/shm` |

@@ -50,3 +50,13 @@ sudo find / -xdev -name ".*_history" -type f -exec ls -l {} \; 2>/dev/null   # t
 
 Étape suivante : [Clore la collecte](cloture.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Trace | Où | Commande |
+|---|---|---|
+| Dernières connexions | `/var/log/wtmp` | `last -n <nombre>` |
+| Échecs de connexion | `/var/log/auth.log` (`/var/log/secure` sur RHEL) | `grep "Failed password"` |
+| Usage de sudo | `/var/log/auth.log` | `grep "COMMAND="` · `journalctl _COMM=sudo` |
+| Commandes tapées | `~/.bash_history` | `cat` (peut avoir été vidé ou désactivé) |
+| Fichiers modifiés récemment | Tout le disque | `find / -mmin -<minutes>` |

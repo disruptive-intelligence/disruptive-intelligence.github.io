@@ -39,3 +39,15 @@ autorunsc64.exe -accepteula -a * -c -h -s -m > autoruns.csv   # tout, en CSV, av
 ![[cheatsheets/windows/fondamentaux/logs/persistance#Retracer la vie d'une tâche planifiée]]
 
 ![[cheatsheets/windows/fondamentaux/logs/persistance#Retracer la création d'un compte et ses privilèges]]
+
+## Vue d'ensemble
+
+| Mécanisme | Où | Trace dans les journaux |
+|---|---|---|
+| Clés Run / RunOnce | `HKLM` et `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` (et `RunOnce`) | — |
+| Services | `HKLM\SYSTEM\CurrentControlSet\Services` | 7045 (Journaux Windows → System) ; 4697 (Security, si audit) |
+| Tâches planifiées | `C:\Windows\System32\Tasks` | 4698 (Security, si audit) ; 106, 200, 201 (TaskScheduler → Operational) |
+| Abonnements WMI | Espace de noms `root\subscription` | — |
+| Comptes ajoutés | Comptes locaux ou du domaine | 4720, 4732 (Journaux Windows → Security) |
+
+Autoruns (`autorunsc.exe -a *`) rassemble tous ces mécanismes en une passe.

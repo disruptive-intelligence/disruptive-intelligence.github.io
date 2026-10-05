@@ -183,3 +183,21 @@ sudo ufw status numbered
     [ 1] 22/tcp                     ALLOW IN    192.168.1.0/24
     [ 2] 443/tcp                    ALLOW IN    Anywhere
     ```
+
+## Vue d'ensemble
+
+| Réglage | Temporaire (jusqu'au redémarrage) | Persistant |
+|---|---|---|
+| Adresse IP | `ip addr add <IP>/<masque> dev <interface>` | `nmcli con mod "<connexion>" ipv4.addresses <IP>/<masque>` |
+| Passerelle | `ip route replace default via <passerelle>` | `nmcli con mod "<connexion>" ipv4.gateway <passerelle>` |
+| DNS | `resolvectl dns <interface> <IP>` | `nmcli con mod "<connexion>" ipv4.dns <IP>` |
+| Nom d'hôte | `hostname <nom>` | `hostnamectl set-hostname <nom>` |
+| Interface | `ip link set <interface> up` · `down` | `nmcli con up` · `down` |
+
+| Pare-feu | Voir les règles | Ouvrir un port |
+|---|---|---|
+| UFW | `ufw status verbose` | `ufw allow <port>/<protocole>` |
+| iptables | `iptables -L -n -v` | `iptables -A INPUT -p tcp --dport <port> -j ACCEPT` |
+| nftables | `nft list ruleset` | `nft add rule inet filter input tcp dport <port> accept` |
+
+Fichiers : `/etc/hosts` (noms locaux), `/etc/resolv.conf` (DNS, souvent géré par `systemd-resolved`).

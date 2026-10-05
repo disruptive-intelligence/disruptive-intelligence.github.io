@@ -122,3 +122,20 @@ systemctl list-unit-files --type=service --state=enabled --no-pager | head -4
 
 Ensuite : [lister les timers systemd](taches.md#lister-les-timers-systemd)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Action | Commande |
+|---|---|
+| Démarrer, arrêter, redémarrer | `systemctl start` · `stop` · `restart <service>` |
+| Relire la configuration sans couper | `systemctl reload <service>` |
+| Au démarrage, ou plus | `systemctl enable --now` · `disable --now` |
+| Interdire complètement | `systemctl mask` · `unmask` |
+| Après modification d'un fichier d'unité | `systemctl daemon-reload` |
+| Ce qui démarre avec la machine | `systemctl list-unit-files --state=enabled` |
+
+| Emplacement des unités | Rôle |
+|---|---|
+| `/etc/systemd/system/` | Unités de l'administrateur (prioritaires) |
+| `/lib/systemd/system/` ou `/usr/lib/systemd/system/` | Unités installées par les paquets |
+| `/etc/systemd/system/<service>.d/` | Surcharges d'une unité existante |

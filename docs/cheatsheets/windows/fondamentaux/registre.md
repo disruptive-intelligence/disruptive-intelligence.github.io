@@ -154,3 +154,18 @@ reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v Updater /f
 
 !!! warning "Attention"
     Une erreur dans `HKLM` peut empêcher le démarrage : exporter la clé d'abord, et préférer une GPO pour un réglage à appliquer sur tout un parc.
+
+## Vue d'ensemble
+
+| Ruche | Contenu utile | Fichier sur le disque |
+|---|---|---|
+| `HKLM\SYSTEM` | Services, matériel, USB (`USBSTOR`), ShimCache, BAM | `C:\Windows\System32\config\SYSTEM` |
+| `HKLM\SOFTWARE` | Logiciels installés, clés `Run` de la machine | `C:\Windows\System32\config\SOFTWARE` |
+| `HKLM\SAM` | Comptes locaux et empreintes de leurs mots de passe | `C:\Windows\System32\config\SAM` |
+| `HKLM\SECURITY` | Secrets LSA, identifiants de domaine en cache | `C:\Windows\System32\config\SECURITY` |
+| `HKCU` | Utilisateur courant : `Run`, `RecentDocs`, `RunMRU`, `TypedPaths` | `C:\Users\<utilisateur>\NTUSER.DAT` |
+| `HKCU\Software\Classes` | Shellbags (dossiers parcourus) | `C:\Users\<utilisateur>\AppData\Local\Microsoft\Windows\UsrClass.dat` |
+| `HKU` | Profils chargés de tous les utilisateurs (par SID) | — |
+| `HKCR` | Associations de fichiers (fusion de `HKLM` et `HKCU\Software\Classes`) | — |
+
+Les ruches sont verrouillées quand Windows tourne : les copier avec KAPE ou `reg save`, pas par copier-coller.

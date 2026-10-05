@@ -318,3 +318,19 @@ sha256sum /usr/bin/ssh
 ```bash title="Exemple 2"
 sha256sum -c empreintes.txt   # vérifier une liste d'empreintes enregistrée plus tôt
 ```
+
+## Vue d'ensemble
+
+| Besoin | Linux | Équivalent PowerShell |
+|---|---|---|
+| Lire un long fichier | `less` | `Get-Content | more` |
+| Début ou fin d'un fichier | `head -n` · `tail -n` | `Get-Content -TotalCount` · `-Tail` |
+| Suivre un fichier | `tail -f` (`-F` après rotation) | `Get-Content -Tail <n> -Wait` |
+| Trouver par nom | `find <dossier> -name "<motif>"` | `Get-ChildItem -Recurse -Filter` |
+| Modifiés récemment | `find -mmin -<minutes>` · `-mtime -<jours>` | `Where-Object LastWriteTime -gt` |
+| Gros fichiers | `find -size +100M` | `Sort-Object Length -Descending` |
+| D'un utilisateur | `find -user <utilisateur>` | `Get-Acl` (propriétaire) |
+| Chercher dans le contenu | `grep -rni "<motif>"` | `Select-String` |
+| Comparer | `diff -u` | `Compare-Object` |
+| Empreinte | `sha256sum` | `Get-FileHash` |
+| Lien symbolique | `ln -s` · `readlink -f` | `New-Item -ItemType SymbolicLink` |

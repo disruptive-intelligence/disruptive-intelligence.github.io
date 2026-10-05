@@ -43,3 +43,13 @@ Pour comprendre : [Linux — prises de notes, investigation](../../../../library
 
 Étape suivante : [Traces d'activité](traces.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Mécanisme | Où regarder | Commande |
+|---|---|---|
+| Cron | `/etc/crontab`, `/etc/cron.*`, `/var/spool/cron/crontabs` | `ls -la /etc/cron.*` · `crontab -l -u <utilisateur>` |
+| Timers systemd | Unités `.timer` | `systemctl list-timers --all` |
+| Services | `/etc/systemd/system/` | `systemctl list-unit-files --state=enabled` |
+| Scripts de connexion | `/etc/profile.d/`, `~/.bashrc`, `~/.profile` | `ls -la` + lecture |
+| Clés SSH autorisées | `~/.ssh/authorized_keys` | Clé inconnue = accès permanent |

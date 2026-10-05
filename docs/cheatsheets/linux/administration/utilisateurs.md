@@ -143,3 +143,22 @@ alice ALL=(root) /usr/bin/systemctl restart nginx
 
 Pour comprendre : [Administration Linux, ch. 11](../../../library/it/linux/administration-linux/03-partie-3-qui-a-le-droit-de-quoi/03-chapitre-11-sudo-et-l-elevation-de-privileges.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Action | Debian, Ubuntu | Toutes distributions |
+|---|---|---|
+| Créer un compte | `adduser <utilisateur>` | `useradd -m <utilisateur>` |
+| Supprimer un compte | `deluser --remove-home <utilisateur>` | `userdel -r <utilisateur>` |
+| Mot de passe, expiration | `passwd` · `chage -l` | idem |
+| Verrouiller, déverrouiller | `usermod -L` · `usermod -U` | idem |
+| Ajouter à un groupe | `usermod -aG <groupe> <utilisateur>` | idem (sans `-a`, la liste est remplacée) |
+| Créer un groupe | `groupadd <groupe>` | idem |
+| Droit sudo | `visudo -f /etc/sudoers.d/<fichier>` | idem |
+
+| Fichier | Contenu |
+|---|---|
+| `/etc/passwd` | Comptes : nom, UID, GID, dossier personnel, shell |
+| `/etc/shadow` | Empreintes des mots de passe et dates d'expiration (lisible par root seulement) |
+| `/etc/group` | Groupes et leurs membres |
+| `/etc/sudoers`, `/etc/sudoers.d/` | Droits sudo (toujours éditer avec `visudo`) |

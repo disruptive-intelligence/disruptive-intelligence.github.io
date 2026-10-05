@@ -294,3 +294,18 @@ Sans guillemets, Windows essaie `C:\Program.exe`, puis `C:\Program Files\Mon.exe
 
 Pour comprendre : [Windows en profondeur, ch. 7 (services)](../../../library/it/windows/windows-en-profondeur/02-partie-ii-processus-execution-et-code.md)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Besoin | Commande | Propriété utile |
+|---|---|---|
+| Lister les processus | `Get-Process` | `Id`, `ProcessName`, `CPU` |
+| Ligne de commande et parent | `Get-CimInstance Win32_Process` | `CommandLine`, `ParentProcessId` |
+| Compte d'un processus | `Get-Process -Id <PID> -IncludeUserName` | `UserName` (console administrateur) |
+| DLL chargées | `(Get-Process -Id <PID>).Modules` | `FileName` |
+| Arrêter un processus | `Stop-Process -Id <PID>` | `-Force` s'il résiste |
+| Lister les services | `Get-Service` | `Status`, `Name` |
+| Binaire, compte, démarrage d'un service | `Get-CimInstance Win32_Service` | `PathName`, `StartName`, `StartMode` |
+| Contenu de chaque `svchost.exe` | `tasklist /svc` | Services hébergés par PID |
+| Permissions d'un service | `sc.exe sdshow <service>` | Descripteur SDDL |
+| Service mal configuré | `Win32_Service` + `icacls` | Chemin sans guillemets avec espaces ; dossier du binaire modifiable |

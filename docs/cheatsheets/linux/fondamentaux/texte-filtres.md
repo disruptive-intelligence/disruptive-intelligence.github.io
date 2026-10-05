@@ -206,3 +206,24 @@ sudo ss -tunap | tee connexions.txt
 ```bash title="Exemple 2"
 sudo ss -tunap | tee -a journal-intervention.txt
 ```
+
+## Vue d'ensemble
+
+| Opérateur | Effet |
+|---|---|
+| `>` | Écrit la sortie dans un fichier (le remplace) |
+| `>>` | Ajoute la sortie à la fin du fichier |
+| `2>` | Envoie les erreurs ailleurs (`2>/dev/null` : les jette) |
+| `2>&1` | Envoie les erreurs au même endroit que la sortie |
+| `|` | Passe la sortie à la commande suivante |
+| `| tee <fichier>` | Affiche et enregistre en même temps (`-a` : ajoute) |
+
+| Outil | Rôle | Exemple |
+|---|---|---|
+| `cut` | Garder une colonne | `cut -d':' -f1 /etc/passwd` |
+| `grep -oE` / `grep -v` | Extraire un motif / exclure des lignes | `grep -v '^#'` |
+| `sort | uniq -c | sort -rn` | Compter les occurrences, les plus fréquentes en tête | Top des IP d'un journal |
+| `wc -l` | Compter les lignes | — |
+| `sed 's/a/b/g'` | Remplacer | `-i` : modifie le fichier |
+| `tr` | Changer ou supprimer des caractères | `tr 'a-z' 'A-Z'` |
+| `column -t` | Aligner en tableau | `column -t -s':'` |

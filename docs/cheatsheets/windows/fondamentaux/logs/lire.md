@@ -22,11 +22,11 @@ eventvwr.msc   :: Observateur d'événements
 | Ouvertures de session, comptes, privilèges | Journaux Windows → **Security** |
 | Services, pilotes, démarrages | Journaux Windows → **System** |
 | Connexions RDP reçues (1149, 261) | Journaux des applications et des services → Microsoft → Windows → **TerminalServices-RemoteConnectionManager** → Operational |
-| Sessions RDP ouvertes, déconnectées, reconnectées (21, 24, 25) | … → **TerminalServices-LocalSessionManager** → Operational |
-| Connexions RDP **émises** par ce poste (1102) | … → **TerminalServices-RDPClient** → Operational |
-| Tâches planifiées (106, 140, 141, 200, 201) | … → **TaskScheduler** → Operational |
-| Scripts PowerShell (4104) | … → **PowerShell** → Operational |
-| Sysmon | … → **Sysmon** → Operational |
+| Sessions RDP ouvertes, déconnectées, reconnectées (21, 24, 25) | Journaux des applications et des services → Microsoft → Windows → **TerminalServices-LocalSessionManager** → Operational |
+| Connexions RDP **émises** par ce poste (1102) | Journaux des applications et des services → Microsoft → Windows → **TerminalServices-RDPClient** → Operational |
+| Tâches planifiées (106, 140, 141, 200, 201) | Journaux des applications et des services → Microsoft → Windows → **TaskScheduler** → Operational |
+| Scripts PowerShell (4104) | Journaux des applications et des services → Microsoft → Windows → **PowerShell** → Operational |
+| Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | Journaux des applications et des services → Microsoft → Windows → **Sysmon** → Operational |
 
 Clic droit sur le journal → **Filtrer le journal actuel** : Event ID (plusieurs séparés par des virgules, plages avec un tiret, exclusions précédées de `-`), source, période. L'onglet **Détails** d'un événement montre tous ses champs en XML.
 
@@ -186,13 +186,13 @@ Les journaux utiles en investigation, leur nom pour `Get-WinEvent -FilterHashtab
 
 | Journal | Nom à donner à `LogName` | Event IDs clés | Fiche |
 |---|---|---|---|
-| Security | `Security` | 4624, 4625, 4648, 4688, 4720, 4732, 4698, 1102, 1100 | [Sessions](sessions-rdp.md), [processus](processus-powershell.md), [persistance](persistance.md), [effacement](effacement.md) |
-| System | `System` | 7045, 7040, 7036, 104 | [Persistance](persistance.md), [effacement](effacement.md) |
-| RDP reçu (cible) | `Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational` | 261, 1149 | [Sessions et RDP](sessions-rdp.md) |
-| Sessions RDP (cible) | `Microsoft-Windows-TerminalServices-LocalSessionManager/Operational` | 21, 24, 25 | [Sessions et RDP](sessions-rdp.md) |
-| RDP émis (source) | `Microsoft-Windows-TerminalServices-RDPClient/Operational` | 1102 | [Sessions et RDP](sessions-rdp.md) |
-| Tâches planifiées | `Microsoft-Windows-TaskScheduler/Operational` | 106, 140, 141, 200, 201 | [Persistance](persistance.md) |
-| PowerShell | `Microsoft-Windows-PowerShell/Operational` | 4104, 4103 | [Processus et PowerShell](processus-powershell.md) |
-| Pare-feu | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 2004, 2005, 2003 | [Pare-feu et Defender](pare-feu-defender.md) |
-| Defender | `Microsoft-Windows-Windows Defender/Operational` | 1116, 1117, 5001, 5007 | [Pare-feu et Defender](pare-feu-defender.md) |
-| Sysmon | `Microsoft-Windows-Sysmon/Operational` | 1, 3, 11, 13, 22 | [Processus et PowerShell](processus-powershell.md) |
+| Journaux Windows → Security | `Security` | 4624, 4625, 4648, 4688, 4720, 4732, 4698, 1102, 1100 | [Sessions](sessions-rdp.md), [processus](processus-powershell.md), [persistance](persistance.md), [effacement](effacement.md) |
+| Journaux Windows → System | `System` | 7045, 7040, 7036, 104 | [Persistance](persistance.md), [effacement](effacement.md) |
+| Journaux des applications et des services → Microsoft → Windows → TerminalServices-RemoteConnectionManager → Operational | `Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational` | 261, 1149 | [Sessions et RDP](sessions-rdp.md) |
+| Journaux des applications et des services → Microsoft → Windows → TerminalServices-LocalSessionManager → Operational | `Microsoft-Windows-TerminalServices-LocalSessionManager/Operational` | 21, 24, 25 | [Sessions et RDP](sessions-rdp.md) |
+| Journaux des applications et des services → Microsoft → Windows → TerminalServices-RDPClient → Operational | `Microsoft-Windows-TerminalServices-RDPClient/Operational` | 1102 | [Sessions et RDP](sessions-rdp.md) |
+| Journaux des applications et des services → Microsoft → Windows → TaskScheduler → Operational | `Microsoft-Windows-TaskScheduler/Operational` | 106, 140, 141, 200, 201 | [Persistance](persistance.md) |
+| Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | `Microsoft-Windows-PowerShell/Operational` | 4104, 4103 | [Processus et PowerShell](processus-powershell.md) |
+| Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 2004, 2005, 2003 | [Pare-feu et Defender](pare-feu-defender.md) |
+| Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | `Microsoft-Windows-Windows Defender/Operational` | 1116, 1117, 5001, 5007 | [Pare-feu et Defender](pare-feu-defender.md) |
+| Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | `Microsoft-Windows-Sysmon/Operational` | 1, 3, 11, 13, 22 | [Processus et PowerShell](processus-powershell.md) |

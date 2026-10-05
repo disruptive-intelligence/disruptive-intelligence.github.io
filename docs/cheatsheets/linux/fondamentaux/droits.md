@@ -206,7 +206,7 @@ getcap -r /usr 2>/dev/null
     /usr/bin/python3.12 cap_setuid=ep
     ```
 
-## Repères : lire `rwx`
+## Vue d'ensemble : lire `rwx`
 
 | Notation | Octal | Sens |
 |---|---|---|

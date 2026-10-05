@@ -105,3 +105,21 @@ explorer "shell:common startup" :: tous les utilisateurs
 ```powershell title="Exemple"
 Get-ChildItem "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup", "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp"
 ```
+
+## Vue d'ensemble
+
+| Mode de démarrage | `Set-Service -StartupType` | `sc.exe config <nom> start=` | Effet |
+|---|---|---|---|
+| Automatique | `Automatic` | `auto` | Démarre avec Windows |
+| Automatique différé | `AutomaticDelayedStart` | `delayed-auto` | Démarre peu après le démarrage |
+| Manuel | `Manual` | `demand` | Démarre à la demande |
+| Désactivé | `Disabled` | `disabled` | Ne peut pas démarrer |
+
+| Action | PowerShell | `sc.exe` |
+|---|---|---|
+| Démarrer, arrêter | `Start-Service` · `Stop-Service` | `sc.exe start` · `sc.exe stop` |
+| Voir la configuration | `Get-CimInstance Win32_Service` | `sc.exe qc <nom>` |
+| Dépendances | `Get-Service -DependentServices` · `-RequiredServices` | `sc.exe enumdepend <nom>` |
+| Tout ce qui démarre | `autorunsc.exe -a *` | — |
+
+Dossiers de démarrage : `shell:startup` = `C:\Users\<utilisateur>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` ; `shell:common startup` = `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp`.

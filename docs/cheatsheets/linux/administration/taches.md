@@ -126,7 +126,7 @@ echo "/opt/scripts/rapport.sh" | at 18:00
 atq
 ```
 
-## Repères : lire une ligne cron
+## Vue d'ensemble : lire une ligne cron
 
 ```
 ┌ minute (0-59)

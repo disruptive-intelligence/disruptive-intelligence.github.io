@@ -32,30 +32,30 @@ Les incontournables : `Get-WinEvent -FilterHashtable` · `wevtutil` · `eventvwr
 - [Pare-feu et Defender](pare-feu-defender.md) — [Retracer les changements du pare-feu](pare-feu-defender.md#retracer-les-changements-du-pare-feu) · [Retracer les détections et l'altération de Defender](pare-feu-defender.md#retracer-les-detections-et-lalteration-de-defender)
 - [Effacement des traces](effacement.md) — [Repérer un effacement de journal](effacement.md#reperer-un-effacement-de-journal)
 
-## Repères : quel événement pour quoi
+## Vue d'ensemble : quel événement pour quoi
 
 | Event ID | Journal | Signification |
 |---|---|---|
-| 4624 / 4625 | Security | Ouverture de session réussie / échouée |
-| 4648 | Security | Ouverture avec identifiants explicites |
-| 4672 | Security | Session avec privilèges spéciaux (admin) |
-| 4688 | Security | Processus créé |
-| 7045 / 4697 | System / Security | Service installé (7040 : démarrage modifié ; 7036 : démarré / arrêté) |
-| 4698 / 4702 / 4699 | Security | Tâche planifiée créée / modifiée / supprimée (4700 / 4701 : activée / désactivée) |
-| 4720 / 4726 | Security | Compte créé / supprimé (4722 : réactivé ; 4738 : modifié ; 4724 : mot de passe réinitialisé) |
-| 4732 / 4728 / 4756 | Security | Membre ajouté à un groupe local / global / universel |
-| 4740 | Security | Compte verrouillé |
-| 4768 / 4769 / 4771 / 4776 | Security (DC) | Kerberos TGT / ticket de service / échec de pré-auth / validation NTLM |
-| 1102 / 104 | Security / System | Journal effacé (1100 : service de journalisation arrêté) |
-| 2004 / 2005 / 2003 | Firewall With Advanced Security | Règle de pare-feu ajoutée / modifiée / paramètre global changé |
-| 1116 / 1117 | Windows Defender/Operational | Menace détectée / action prise |
-| 5001 / 5007 | Windows Defender/Operational | Protection en temps réel désactivée / configuration (exclusions) modifiée |
-| 4104 / 4103 | PowerShell/Operational | Bloc de script exécuté / Module Logging |
-| 1, 3, 11, 13, 22 | Sysmon | Processus, réseau, fichier, registre, DNS |
-| 1149 / 261 | TerminalServices-RemoteConnectionManager | Authentification RDP réussie / connexion TCP reçue sur l'écouteur RDP |
-| 21 / 24 / 25 | TerminalServices-LocalSessionManager | Session RDP ouverte / déconnectée / reconnectée |
-| 1102 | TerminalServices-RDPClient | Connexion RDP **émise** par le poste (≠ 1102 de Security) |
-| 106 / 140 / 141 / 200 / 201 | TaskScheduler/Operational | Tâche enregistrée / modifiée / supprimée / action lancée / terminée |
+| 4624 / 4625 | Journaux Windows → Security | Ouverture de session réussie / échouée |
+| 4648 | Journaux Windows → Security | Ouverture avec identifiants explicites |
+| 4672 | Journaux Windows → Security | Session avec privilèges spéciaux (admin) |
+| 4688 | Journaux Windows → Security | Processus créé |
+| 7045 / 4697 | Journaux Windows → System / Journaux Windows → Security | Service installé (7040 : démarrage modifié ; 7036 : démarré / arrêté) |
+| 4698 / 4702 / 4699 | Journaux Windows → Security | Tâche planifiée créée / modifiée / supprimée (4700 / 4701 : activée / désactivée) |
+| 4720 / 4726 | Journaux Windows → Security | Compte créé / supprimé (4722 : réactivé ; 4738 : modifié ; 4724 : mot de passe réinitialisé) |
+| 4732 / 4728 / 4756 | Journaux Windows → Security | Membre ajouté à un groupe local / global / universel |
+| 4740 | Journaux Windows → Security | Compte verrouillé |
+| 4768 / 4769 / 4771 / 4776 | Journaux Windows → Security (contrôleur de domaine) | Kerberos TGT / ticket de service / échec de pré-auth / validation NTLM |
+| 1102 / 104 | Journaux Windows → Security / Journaux Windows → System | Journal effacé (1100 : service de journalisation arrêté) |
+| 2004 / 2005 / 2003 | Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | Règle de pare-feu ajoutée / modifiée / paramètre global changé |
+| 1116 / 1117 | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Menace détectée / action prise |
+| 5001 / 5007 | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | Protection en temps réel désactivée / configuration (exclusions) modifiée |
+| 4104 / 4103 | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Bloc de script exécuté / Module Logging |
+| 1, 3, 11, 13, 22 | Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | Processus, réseau, fichier, registre, DNS |
+| 1149 / 261 | Journaux des applications et des services → Microsoft → Windows → TerminalServices-RemoteConnectionManager → Operational | Authentification RDP réussie / connexion TCP reçue sur l'écouteur RDP |
+| 21 / 24 / 25 | Journaux des applications et des services → Microsoft → Windows → TerminalServices-LocalSessionManager → Operational | Session RDP ouverte / déconnectée / reconnectée |
+| 1102 | Journaux des applications et des services → Microsoft → Windows → TerminalServices-RDPClient → Operational | Connexion RDP **émise** par le poste (≠ 1102 de Security) |
+| 106 / 140 / 141 / 200 / 201 | Journaux des applications et des services → Microsoft → Windows → TaskScheduler → Operational | Tâche enregistrée / modifiée / supprimée / action lancée / terminée |
 
 Pour la méthode complète (approche SOC, corrélations, brute force, password spray, RDP), voir le cours [Analyse des journaux d'événements Windows](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/index.md).
 { .kw-cs-meta }

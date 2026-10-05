@@ -143,3 +143,16 @@ Add-ADGroupMember -Identity "GG-Compta" -Members j.petit
 ```
 
 L'utilisateur doit rouvrir sa session (nouveau jeton) pour que le changement s'applique.
+
+## Vue d'ensemble
+
+| Besoin | Cmdlet | Propriétés utiles |
+|---|---|---|
+| Tout savoir sur un compte | `Get-ADUser <compte> -Properties *` | `Enabled`, `LockedOut`, `LastLogonDate`, `PasswordLastSet`, `MemberOf` |
+| Comptes verrouillés | `Search-ADAccount -LockedOut` · `Unlock-ADAccount` | `LockedOut` |
+| Réinitialiser un mot de passe | `Set-ADAccountPassword -Reset` | Puis `-ChangePasswordAtLogon $true` |
+| Désactiver | `Disable-ADAccount` | `Enabled` |
+| Créer | `New-ADUser` | `-Path` (OU), `-Enabled`, `-ChangePasswordAtLogon` |
+| Membres d'un groupe | `Get-ADGroupMember -Recursive` | Imbrications comprises |
+| Groupes d'un compte | `Get-ADPrincipalGroupMembership` | `Name` |
+| Ajouter, retirer un membre | `Add-ADGroupMember` · `Remove-ADGroupMember` | — |

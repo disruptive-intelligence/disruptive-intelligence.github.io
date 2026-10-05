@@ -200,3 +200,16 @@ takeown /f D:\Archives\ancien-projet /r /d o
 
 !!! warning "Attention"
     Opération d'administration : à tracer, et à réserver aux cas où l'ancien propriétaire n'existe plus.
+
+## Vue d'ensemble
+
+| Besoin | Commande | À retenir |
+|---|---|---|
+| Mon SID, mes groupes, mes privilèges | `whoami /user` · `/groups` · `/priv` | Le jeton de la session |
+| Session élevée ou non | `whoami /groups | findstr /i "Mandatory"` | Niveau d'intégrité Medium = non élevée, High = élevée |
+| SID ↔ compte | `NTAccount.Translate(...)` · `SecurityIdentifier.Translate(...)` | Dans les deux sens |
+| Administrateurs de la machine | `Get-LocalGroupMember -Group Administrateurs` | « Administrators » sur un Windows anglais |
+| Lire les permissions NTFS | `icacls <chemin>` | `F` total, `M` modification, `RX` lecture et exécution ; `(OI)(CI)` héritage |
+| Permissions trop larges | `Get-Acl` filtré sur Everyone / Users | Écriture pour tous = point d'entrée |
+| Accorder, retirer un droit | `icacls /grant` · `/remove` · `/inheritance:d` | Couper l'héritage avant de retirer |
+| Prendre possession | `takeown /f <chemin>` | Console administrateur |
