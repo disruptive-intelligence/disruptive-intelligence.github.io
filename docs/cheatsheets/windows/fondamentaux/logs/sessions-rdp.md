@@ -123,3 +123,18 @@ Sur un poste compromis, chaque destination devient une nouvelle piste. Attention
 
 Pour comprendre : [Logs côté machine source RDP, Event ID 1102](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#event-id-1102-rdp-client) · [Corrélation RDP recommandée](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#correlation-rdp-recommandee)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Event ID | Journal | Signification | À retenir |
+|---|---|---|---|
+| **4624** | Security | Ouverture de session réussie | Lire le **Logon Type** (2 console, 3 réseau, 10 RDP…) et l'IP source |
+| **4625** | Security | Échec d'ouverture de session | Rafale sur un compte = brute force ; sur beaucoup de comptes = password spraying ; Type 10 = échec RDP |
+| **4634** / **4647** | Security | Fermeture de session / déconnexion par l'utilisateur | Bornent la durée d'une session |
+| **4648** | Security | Logon avec identifiants explicites | Côté poste source : compte utilisé pour rebondir |
+| **261** | TerminalServices-RemoteConnectionManager | Connexion TCP reçue sur l'écouteur RDP | ≠ authentification : un scan du port 3389 en produit aussi |
+| **1149** | TerminalServices-RemoteConnectionManager | Authentification RDP réussie | Utilisateur + IP source ; à confirmer par 4624 Type 10 |
+| **21** / **24** / **25** | TerminalServices-LocalSessionManager | Session RDP ouverte / déconnectée / reconnectée | Confirme la session interactive |
+| **1102** | TerminalServices-RDPClient | Connexion RDP **émise** par le poste | Donne la destination ; ≠ 1102 de Security (journal effacé) |
+
+Côté **cible** : 261 → 1149 → 4624 Type 10 → 21. Côté **source** : 1102 + 4648.

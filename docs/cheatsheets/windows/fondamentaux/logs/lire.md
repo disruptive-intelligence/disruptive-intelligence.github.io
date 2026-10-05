@@ -179,3 +179,20 @@ wevtutil sl Security /ms:1073741824   :: 1 Go
 
 !!! warning "Attention"
     En parc, régler la taille et l'audit par GPO plutôt que machine par machine, et centraliser vers le SIEM.
+
+## Vue d'ensemble
+
+Les journaux utiles en investigation, leur nom pour `Get-WinEvent -FilterHashtable @{LogName=…}` et leurs Event IDs clés.
+
+| Journal | Nom à donner à `LogName` | Event IDs clés | Fiche |
+|---|---|---|---|
+| Security | `Security` | 4624, 4625, 4648, 4688, 4720, 4732, 4698, 1102, 1100 | [Sessions](sessions-rdp.md), [processus](processus-powershell.md), [persistance](persistance.md), [effacement](effacement.md) |
+| System | `System` | 7045, 7040, 7036, 104 | [Persistance](persistance.md), [effacement](effacement.md) |
+| RDP reçu (cible) | `Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational` | 261, 1149 | [Sessions et RDP](sessions-rdp.md) |
+| Sessions RDP (cible) | `Microsoft-Windows-TerminalServices-LocalSessionManager/Operational` | 21, 24, 25 | [Sessions et RDP](sessions-rdp.md) |
+| RDP émis (source) | `Microsoft-Windows-TerminalServices-RDPClient/Operational` | 1102 | [Sessions et RDP](sessions-rdp.md) |
+| Tâches planifiées | `Microsoft-Windows-TaskScheduler/Operational` | 106, 140, 141, 200, 201 | [Persistance](persistance.md) |
+| PowerShell | `Microsoft-Windows-PowerShell/Operational` | 4104, 4103 | [Processus et PowerShell](processus-powershell.md) |
+| Pare-feu | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 2004, 2005, 2003 | [Pare-feu et Defender](pare-feu-defender.md) |
+| Defender | `Microsoft-Windows-Windows Defender/Operational` | 1116, 1117, 5001, 5007 | [Pare-feu et Defender](pare-feu-defender.md) |
+| Sysmon | `Microsoft-Windows-Sysmon/Operational` | 1, 3, 11, 13, 22 | [Processus et PowerShell](processus-powershell.md) |

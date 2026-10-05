@@ -34,3 +34,14 @@ Un **1102** donne le compte qui a effacé le journal Security ; un **104** dit q
 
 Pour comprendre : [Manipulation des journaux : 1102, 104, 1100](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/09-manipulation-des-journaux.md) · [Effacer un filtre ou effacer un journal](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Event ID | Journal | Signification | À retenir |
+|---|---|---|---|
+| **1102** | Security | Journal Security effacé | Donne le compte qui a effacé |
+| **104** | System (Microsoft-Windows-Eventlog) | Autre journal effacé | Dit quel journal (System, PowerShell/Operational…) |
+| **1100** | Security | Service de journalisation arrêté | Aussi lors d'un arrêt normal : croiser avec 1074, 6005, 6006, 6008 |
+| **4688** | Security | Processus créé | `wevtutil.exe cl Security` juste avant un 1102 confirme l'effacement |
+
+Pattern : 104 (PowerShell/Operational) → 104 (System) → 1102 → 1100, en quelques minutes : Defense Evasion. Les événements déjà envoyés au SIEM restent consultables.

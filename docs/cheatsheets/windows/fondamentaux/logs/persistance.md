@@ -118,3 +118,23 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624} | Where-Object { $_
 
 Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et patterns SOC](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md) — Voir aussi : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }
+
+## Vue d'ensemble
+
+| Thème | Event ID | Journal | Signification |
+|---|---|---|---|
+| Services | **7045** | System | Service installé (nom, binaire, démarrage, compte) |
+| Services | **4697** | Security (si audit) | Service installé |
+| Services | **7040** | System | Type de démarrage modifié |
+| Services | **7036** | System | Service démarré / arrêté |
+| Tâches | **4698** / **4702** / **4699** | Security (si audit) | Tâche créée / modifiée / supprimée |
+| Tâches | **4700** / **4701** | Security (si audit) | Tâche activée / désactivée |
+| Tâches | **106** / **140** / **141** | TaskScheduler/Operational | Tâche enregistrée / modifiée / supprimée |
+| Tâches | **200** / **201** | TaskScheduler/Operational | Action lancée / terminée : la tâche a vraiment tourné |
+| Comptes | **4720** / **4726** | Security | Compte créé / supprimé |
+| Comptes | **4722** / **4725** / **4738** | Security | Compte réactivé / désactivé / modifié |
+| Comptes | **4723** / **4724** | Security | Mot de passe changé / réinitialisé |
+| Groupes | **4732** / **4728** / **4756** | Security | Membre ajouté à un groupe local / global / universel |
+| Groupes | **4733** / **4729** / **4757** | Security | Membre retiré d'un groupe local / global / universel |
+
+Patterns : 7045 avec un binaire dans un dossier inscriptible + démarrage automatique + LocalSystem ; 4698 puis 200/201 puis 4699 (tâche créée, exécutée, effacée) ; 4720 → 4732 Administrateurs → 4624 du nouveau compte.
