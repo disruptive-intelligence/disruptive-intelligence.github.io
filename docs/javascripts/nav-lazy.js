@@ -2,10 +2,10 @@
 // Le thème n'écrit dans chaque page que la partie du menu qui mène à la page lue (navigation.prune : la
 // Bibliothèque compte plus de 2 000 pages) ; une entrée repliée n'y est qu'un lien vers sa page. Au clic
 // sur la flèche, ce script charge cette page en arrière-plan, y prend le sous-menu de l'entrée et l'insère.
-// Un clic sur le nom ouvre toujours la page. Sur mobile (menu en panneaux), comportement du thème inchangé.
+// Un clic sur le nom ouvre toujours la page. Même chose sur mobile, où le menu est un accordéon (extra.css) :
+// à l'ouverture du tiroir, la page lue est centrée dans le menu.
 (function () {
   var cache = {};
-  var desktop = window.matchMedia("(min-width: 76.25em)");
 
   function sameUrl(a, b) {
     return a.replace(/index\.html$/, "") === b.replace(/index\.html$/, "");
@@ -55,7 +55,7 @@
   }
 
   document.addEventListener("click", function (e) {
-    if (!desktop.matches || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
     var icon = e.target.closest(".md-nav--primary .md-nav__item--pruned > a.md-nav__link .md-nav__icon");
     if (!icon) return;
     e.preventDefault();
@@ -63,4 +63,14 @@
     var link = icon.closest("a.md-nav__link");
     toggle(link.parentElement, link);
   }, true);
+
+  var drawer = document.getElementById("__drawer");
+  if (drawer) drawer.addEventListener("change", function () {
+    var list = document.querySelector(".md-nav--primary > .md-nav__list");
+    var here = Array.prototype.filter.call(document.querySelectorAll(".md-nav--primary .md-nav__link--active"),
+      function (el) { return el.offsetParent && !el.closest(".md-nav--secondary"); }).pop();
+    if (!drawer.checked || !list || !here) return;
+    var a = here.getBoundingClientRect(), b = list.getBoundingClientRect();
+    list.scrollTop += a.top - b.top - (b.height - a.height) / 2;
+  });
 })();

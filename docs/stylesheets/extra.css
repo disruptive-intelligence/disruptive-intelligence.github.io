@@ -1272,3 +1272,70 @@ body[data-md-color-scheme="default"]::after {
 }
 .md-typeset pre > code { border: 1px solid #241d1d; }
 .md-typeset .highlight .md-clipboard { color: #8d8484; }
+
+/* ---------- Menu mobile et écran réduit : accordéon au lieu de panneaux ----------
+   Material affiche un niveau à la fois (un panneau par niveau, « ← » pour remonter) : à 5 niveaux de
+   profondeur, on perd le fil. Ici tout le chemin de la page lue est déplié dans un seul panneau, la page
+   est centrée à l'ouverture (javascripts/nav-lazy.js) ; » déplie sur place, le nom ouvre la page. */
+@media screen and (max-width: 76.234375em) {
+  :root { --kw-drawer: min(19rem, 88vw); }
+  [dir=ltr] .md-sidebar--primary { left: calc(-1 * var(--kw-drawer)); }
+  .md-sidebar--primary { width: var(--kw-drawer); background: var(--kw-sidebar, var(--md-default-bg-color)); }
+  [data-md-toggle=drawer]:checked ~ .md-container .md-sidebar--primary { transform: translateX(var(--kw-drawer)); }
+
+  /* En-tête du tiroir (logo + nom du site) : compact */
+  .md-nav--primary > .md-nav__title { height: auto; padding: .7rem .8rem .7rem 3.7rem; line-height: 1.6rem; }
+  .md-nav--primary > .md-nav__title .md-logo { top: .35rem; right: auto; }
+  .md-nav--primary > .md-nav__list { padding: .3rem .4rem 2rem .2rem; overflow-y: auto; }
+
+  /* Sous-menus : dans le flux, repliés sauf ceux du chemin ; plus de panneaux ni d'en-têtes « ← » */
+  .md-nav--primary .md-nav {
+    position: static; display: none; height: auto; background: transparent;
+    transform: none; opacity: 1; transition: none; box-shadow: none;
+  }
+  .md-nav--primary .md-nav__toggle:checked ~ .md-nav,
+  .md-nav--primary .md-nav__item--pruned.kw-open > nav.md-nav { display: block; }
+  .md-nav--primary .md-nav .md-nav__title { display: none; }
+  .md-nav--primary .md-nav--secondary .md-nav { display: block; }
+  .md-nav--primary .md-nav > .md-nav__list {
+    overflow: visible; box-shadow: none; scroll-snap-type: none;
+    margin-left: .55rem; padding-left: .5rem; border-left: 1px solid var(--kw-line);
+  }
+
+  /* Entrées : pas de filets entre chaque ligne, cible tactile confortable, titres en entier */
+  .md-nav--primary .md-nav__item { border-top: 0; font-size: .74rem; line-height: 1.4; }
+  .md-nav--primary .md-nav__link { margin: 0; padding: .48rem .3rem .48rem .4rem; white-space: normal; }
+  .md-nav--primary .md-nav__link.md-nav__container { padding: 0; }
+  .md-nav--primary .md-nav__container > .md-nav__link:first-child { padding-right: 0; }
+  .md-nav--primary .md-nav__container > label.md-nav__link { flex: 0 0 auto; padding: .48rem .5rem; }
+  .md-nav--primary > .md-nav__list > .md-nav__item { border-top: 1px solid var(--kw-line); }
+  .md-nav--primary > .md-nav__list > .md-nav__item:first-child { border-top: 0; }
+  .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link,
+  .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__container > .md-nav__link { font-weight: 700; font-size: .78rem; }
+  .md-nav--primary .md-nav__item--section,
+  .md-nav--primary .md-nav__item--section:first-child { margin: 0; }
+  .md-nav--primary .md-nav__item--section > .md-nav__link,
+  .md-nav--primary .md-nav__item--section > .md-nav__container > .md-nav__link {
+    text-transform: none; font-size: inherit; letter-spacing: 0; pointer-events: auto;
+  }
+
+  /* » : grande zone tactile, tournée vers le bas quand c'est déplié */
+  .md-nav--primary .md-nav__link,
+  .md-nav--primary .md-nav__container > .md-nav__link { align-items: center; }
+  .md-nav--primary .md-nav__link > .md-ellipsis { flex: 1 1 auto; }
+  .md-nav--primary .md-nav__link .md-nav__icon,
+  .md-nav--primary .md-nav__item--pruned > a.md-nav__link .md-nav__icon {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+    width: 1.8rem; height: 1.4rem; margin: -.2rem -.2rem -.2rem 0; padding: 0;
+  }
+  .md-nav--primary .md-nav__link .md-nav__icon::after { width: 1rem; height: 1rem; transition: transform .2s; }
+  .md-nav--primary .md-nav__toggle:checked ~ .md-nav__link .md-nav__icon::after,
+  .md-nav--primary .md-nav__toggle:checked ~ .md-nav__container .md-nav__icon::after { transform: rotate(90deg); }
+
+  /* Page lue : surlignée ; son plan (≡) se déplie sous elle */
+  .md-nav--primary .md-nav__link--active { background: var(--kw-soft); border-radius: 6px; font-weight: 600; }
+  .md-nav--primary .md-nav__container > label.md-nav__link--active { background: none; }
+  .md-nav--primary .md-nav--secondary > .md-nav__list { border-left-color: var(--kw-toggle-line); }
+  .md-nav--primary .md-nav__toggle:not(:checked) ~ .md-nav__link[for=__toc] ~ .md-nav { display: none; }
+  .md-nav--primary .md-nav--secondary .md-nav__link { font-size: .7rem; padding: .3rem .3rem .3rem .4rem !important; }
+}
