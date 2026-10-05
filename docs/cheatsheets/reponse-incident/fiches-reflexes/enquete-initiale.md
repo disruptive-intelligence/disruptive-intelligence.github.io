@@ -90,7 +90,7 @@ Impact technique + criticité de l'actif + impact métier → priorité de l'inc
 
 ## Ensuite
 
-- [Triage à chaud d'une machine Linux](../../forensic/linux/triage-a-chaud.md) pour collecter sur la machine.
+- [Triage à chaud d'une machine Linux](../../forensic/linux/triage-a-chaud/index.md) pour collecter sur la machine.
 - Construire la chronologie et délimiter l'étendue : [Réponse à incident — synthèse, phase de détection et d'analyse](../../../library/cyber/detection/reponse-a-incident-synthese/05-phase-de-detection-et-d-analyse.md).
 
 *D'après mon cours [Réponse à incident — synthèse](../../../library/cyber/detection/reponse-a-incident-synthese/05-phase-de-detection-et-d-analyse.md) (enquête initiale, informations à collecter, contexte métier).*

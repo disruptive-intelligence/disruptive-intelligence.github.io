@@ -179,10 +179,23 @@ nav:
         - cheatsheets/forensic/index.md
         - Linux:
             - cheatsheets/forensic/linux/index.md
-            - Triage à chaud: cheatsheets/forensic/linux/triage-a-chaud.md
+            - Triage à chaud:
+                - cheatsheets/forensic/linux/triage-a-chaud/index.md
+                - Processus: cheatsheets/forensic/linux/triage-a-chaud/processus.md
+                - Réseau: cheatsheets/forensic/linux/triage-a-chaud/reseau.md
+                - Persistance: cheatsheets/forensic/linux/triage-a-chaud/persistance.md
+                - Traces d'activité: cheatsheets/forensic/linux/triage-a-chaud/traces.md
+                - Clore la collecte: cheatsheets/forensic/linux/triage-a-chaud/cloture.md
         - Windows:
             - cheatsheets/forensic/windows/index.md
-            - Artefacts Windows: cheatsheets/forensic/windows/artefacts.md
+            - Artefacts Windows:
+                - cheatsheets/forensic/windows/artefacts/index.md
+                - Exécution: cheatsheets/forensic/windows/artefacts/execution.md
+                - Fichiers et dossiers ouverts: cheatsheets/forensic/windows/artefacts/fichiers-ouverts.md
+                - Périphériques USB: cheatsheets/forensic/windows/artefacts/usb.md
+                - Suppressions: cheatsheets/forensic/windows/artefacts/suppressions.md
+                - Connexions et RDP: cheatsheets/forensic/windows/artefacts/connexions.md
+                - Persistance: cheatsheets/forensic/windows/artefacts/persistance.md
     - 🚨 Réponse à incident:
         - cheatsheets/reponse-incident/index.md
         - Fiches réflexes:

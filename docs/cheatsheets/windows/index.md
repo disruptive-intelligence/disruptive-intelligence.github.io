@@ -29,4 +29,4 @@ Modifier le système.
 - [Disques, archives et transferts](administration/disques.md) — Espace disque, BitLocker, zip, robocopy, copie vers une autre machine.
 - [Active Directory au quotidien](administration/active-directory.md) — Comptes, verrouillages, groupes, OU et ordinateurs, LAPS, gMSA, GPO, Kerberos, santé des DC, contrôles d'hygiène.
 
-Pour l'investigation, voir aussi [Artefacts Windows](../forensic/windows/artefacts.md).
+Pour l'investigation, voir aussi [Artefacts Windows](../forensic/windows/artefacts/index.md).

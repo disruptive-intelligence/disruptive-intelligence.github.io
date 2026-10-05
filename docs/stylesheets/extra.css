@@ -1250,3 +1250,25 @@ body[data-md-color-scheme="default"]::after {
   background: rgba(10, 8, 8, .88); cursor: zoom-out; }
 .kw-zoom img { max-width: 100%; max-height: 100%; border-radius: 8px; background: #fff; padding: .4rem; box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
 .kw-zoom figcaption { position: absolute; bottom: .8rem; left: 0; right: 0; text-align: center; font-size: .7rem; color: #ddd; padding: 0 1rem; }
+
+/* Blocs de code de tout le site (Bibliothèque, analyses, Pentest…) : fond noir façon terminal, comme les cheat
+   sheets, dans les deux thèmes. Les variables sont posées sur le bloc lui-même : le code en ligne dans le texte
+   garde son style discret. */
+.md-typeset .highlight, .md-typeset pre {
+  --md-code-bg-color: #0b0909;
+  --md-code-fg-color: #e9e4e4;
+  --md-code-hl-comment-color: #8d8484;
+  --md-code-hl-keyword-color: #8f9bff;
+  --md-code-hl-function-color: #c39bff;
+  --md-code-hl-string-color: #6fd3a8;
+  --md-code-hl-number-color: #ffb36b;
+  --md-code-hl-constant-color: #ff8a8a;
+  --md-code-hl-name-color: #e9e4e4;
+  --md-code-hl-operator-color: #d6c7c7;
+  --md-code-hl-punctuation-color: #b8aeae;
+  --md-code-hl-variable-color: #f7c97a;
+  --md-code-hl-special-color: #ed4d5a;
+  --md-code-hl-generic-color: #b8aeae;
+}
+.md-typeset pre > code { border: 1px solid #241d1d; }
+.md-typeset .highlight .md-clipboard { color: #8d8484; }

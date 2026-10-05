@@ -132,7 +132,7 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date
 Ensuite : [retrouver les ouvertures de session](#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }
 
-## Retrouver une activité
+## Ouvertures de session
 
 ### Retrouver les ouvertures de session
 
@@ -167,123 +167,6 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624; StartTime=(Get-Date
 | 11 | Identifiants mis en cache |
 
 Pour comprendre : [Analyse des journaux Windows, authentification et ouvertures de session](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md)
-{ .kw-cs-meta }
-
-### Retrouver les processus lancés
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4688}                                   # si l'audit est activé
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1}          # si Sysmon est installé
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} -MaxEvents 200 |
-    Where-Object Message -match 'ParentImage:.*WINWORD' | Select-Object -First 1 -ExpandProperty Message
-```
-
-??? example "Sortie"
-    ```text
-    Process Create:
-    UtcTime: 2026-10-02 07:15:01.284
-    Image: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
-    CommandLine: "powershell.exe" -nop -w hidden -File C:\Users\alice\AppData\Local\Temp\maj.ps1
-    User: MERIDIAN\alice
-    ParentImage: C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE
-    ```
-
-!!! warning "Attention"
-    Sans la GPO *Include command line in process creation events*, l'événement 4688 ne contient pas la ligne de commande.
-
-### Retrouver les services et tâches planifiées créés
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045}     # service installé
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698}   # tâche planifiée créée (audit requis)
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045} -MaxEvents 2 | Select-Object TimeCreated, Message | Format-List
-```
-
-??? example "Sortie"
-    ```text
-    TimeCreated : 01/10/2026 23:12:40
-    Message     : Un service a été installé sur le système.
-                  Nom du service :  UpdaterSvc
-                  Nom du fichier du service :  C:\ProgramData\Updater\upd.exe
-                  Type de démarrage du service :  démarrage automatique
-                  Compte du service :  LocalSystem
-    ```
-
-Ensuite : [voir le binaire, le compte et le mode de démarrage d'un service](processus.md#voir-le-binaire-le-compte-et-le-mode-de-demarrage-dun-service)
-{ .kw-cs-meta }
-
-### Retracer la vie d'une tâche planifiée
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698,4699,4700,4701,4702}   # créée, supprimée, activée, désactivée, modifiée (audit requis)
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational'; Id=106,140,141,200,201}   # enregistrée, modifiée, supprimée, action lancée, terminée
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational'; Id=106,140,141,200,201} -MaxEvents 5 |
-    Select-Object TimeCreated, Id, @{n='Message';e={($_.Message -split "`r?`n")[0]}}
-```
-
-??? example "Sortie"
-    ```text
-    TimeCreated          Id Message
-    -----------          -- -------
-    02/10/2026 15:47:02 141 L'utilisateur « MERIDIAN\alice » a supprimé la tâche « \Windows Update Task ».
-    02/10/2026 12:03:10 140 L'utilisateur « MERIDIAN\alice » a mis à jour la tâche « \Windows Update Task ».
-    02/10/2026 10:15:04 201 Le Planificateur de tâches a terminé l'action « powershell.exe » de la tâche « \Windows Update Task ».
-    02/10/2026 10:15:01 200 Le Planificateur de tâches a lancé l'action « powershell.exe » de la tâche « \Windows Update Task ».
-    02/10/2026 10:14:22 106 L'utilisateur « MERIDIAN\alice » a inscrit la tâche « \Windows Update Task ».
-    ```
-
-Une tâche supprimée a disparu du système, pas des journaux. Le 4698 donne l'auteur, le déclencheur, le compte et la commande ; 200/201 prouvent que l'action a réellement tourné ; comparer 4698 et 4702 montre ce qui a été modifié.
-
-Pour comprendre : [Journaux des tâches planifiées : 4698, 106, 200/201, 4702, 4699 et chronologie d'une tâche malveillante](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md) — Voir aussi : [lister les tâches et ce qu'elles lancent](../administration/taches.md#lister-les-taches-et-ce-quelles-lancent)
-{ .kw-cs-meta }
-
-### Retrouver les scripts PowerShell exécutés
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104}   # Script Block Logging
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104} -MaxEvents 50 |
-    Where-Object Message -match 'DownloadString|FromBase64String|Invoke-Expression' |
-    Select-Object -First 1 TimeCreated, @{n='Extrait';e={$_.Message.Substring(0,120)}}
-```
-
-??? example "Sortie"
-    ```text
-    TimeCreated          Extrait
-    -----------          -------
-    02/10/2026 09:15:03  Création du texte Scriptblock (1 sur 1) : $d = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(…
-    ```
-
-### Repérer un effacement de journal
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102}   # journal de sécurité effacé
-Get-WinEvent -FilterHashtable @{LogName='System'; Id=104}      # autre journal effacé
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102} -ErrorAction SilentlyContinue | Select-Object TimeCreated, Message
-```
-
-??? example "Sortie"
-    ```text
-    TimeCreated          Message
-    -----------          -------
-    01/10/2026 23:20:11  Le journal d'audit a été effacé. Sujet : … Nom du compte : adm.martin …
-    ```
-
-Pour comprendre : [Effacer un filtre ou effacer un journal](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
 { .kw-cs-meta }
 
 ## Bureau à distance (RDP)
@@ -362,6 +245,129 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TerminalServices-RDPC
 Sur un poste compromis, chaque destination devient une nouvelle piste. Attention : **le même numéro 1102 signifie « journal effacé » dans Security** — un Event ID ne se lit qu'avec son journal et son fournisseur. Les connexions sortantes laissent aussi un **4648** (identifiants explicites) dans le Security du poste source.
 
 Pour comprendre : [Logs côté machine source RDP, Event ID 1102](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#event-id-1102-rdp-client) · [Corrélation RDP recommandée](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md#correlation-rdp-recommandee)
+{ .kw-cs-meta }
+
+## Processus et scripts
+
+### Retrouver les processus lancés
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4688}                                   # si l'audit est activé
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1}          # si Sysmon est installé
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} -MaxEvents 200 |
+    Where-Object Message -match 'ParentImage:.*WINWORD' | Select-Object -First 1 -ExpandProperty Message
+```
+
+??? example "Sortie"
+    ```text
+    Process Create:
+    UtcTime: 2026-10-02 07:15:01.284
+    Image: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    CommandLine: "powershell.exe" -nop -w hidden -File C:\Users\alice\AppData\Local\Temp\maj.ps1
+    User: MERIDIAN\alice
+    ParentImage: C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE
+    ```
+
+!!! warning "Attention"
+    Sans la GPO *Include command line in process creation events*, l'événement 4688 ne contient pas la ligne de commande.
+
+### Retrouver les scripts PowerShell exécutés
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104}   # Script Block Logging
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104} -MaxEvents 50 |
+    Where-Object Message -match 'DownloadString|FromBase64String|Invoke-Expression' |
+    Select-Object -First 1 TimeCreated, @{n='Extrait';e={$_.Message.Substring(0,120)}}
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated          Extrait
+    -----------          -------
+    02/10/2026 09:15:03  Création du texte Scriptblock (1 sur 1) : $d = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(…
+    ```
+
+## Services et tâches planifiées
+
+### Retrouver les services et tâches planifiées créés
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045}     # service installé
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698}   # tâche planifiée créée (audit requis)
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045} -MaxEvents 2 | Select-Object TimeCreated, Message | Format-List
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated : 01/10/2026 23:12:40
+    Message     : Un service a été installé sur le système.
+                  Nom du service :  UpdaterSvc
+                  Nom du fichier du service :  C:\ProgramData\Updater\upd.exe
+                  Type de démarrage du service :  démarrage automatique
+                  Compte du service :  LocalSystem
+    ```
+
+Ensuite : [voir le binaire, le compte et le mode de démarrage d'un service](processus.md#voir-le-binaire-le-compte-et-le-mode-de-demarrage-dun-service)
+{ .kw-cs-meta }
+
+### Retracer la vie d'une tâche planifiée
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698,4699,4700,4701,4702}   # créée, supprimée, activée, désactivée, modifiée (audit requis)
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational'; Id=106,140,141,200,201}   # enregistrée, modifiée, supprimée, action lancée, terminée
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-TaskScheduler/Operational'; Id=106,140,141,200,201} -MaxEvents 5 |
+    Select-Object TimeCreated, Id, @{n='Message';e={($_.Message -split "`r?`n")[0]}}
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated          Id Message
+    -----------          -- -------
+    02/10/2026 15:47:02 141 L'utilisateur « MERIDIAN\alice » a supprimé la tâche « \Windows Update Task ».
+    02/10/2026 12:03:10 140 L'utilisateur « MERIDIAN\alice » a mis à jour la tâche « \Windows Update Task ».
+    02/10/2026 10:15:04 201 Le Planificateur de tâches a terminé l'action « powershell.exe » de la tâche « \Windows Update Task ».
+    02/10/2026 10:15:01 200 Le Planificateur de tâches a lancé l'action « powershell.exe » de la tâche « \Windows Update Task ».
+    02/10/2026 10:14:22 106 L'utilisateur « MERIDIAN\alice » a inscrit la tâche « \Windows Update Task ».
+    ```
+
+Une tâche supprimée a disparu du système, pas des journaux. Le 4698 donne l'auteur, le déclencheur, le compte et la commande ; 200/201 prouvent que l'action a réellement tourné ; comparer 4698 et 4702 montre ce qui a été modifié.
+
+Pour comprendre : [Journaux des tâches planifiées : 4698, 106, 200/201, 4702, 4699 et chronologie d'une tâche malveillante](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md) — Voir aussi : [lister les tâches et ce qu'elles lancent](../administration/taches.md#lister-les-taches-et-ce-quelles-lancent)
+{ .kw-cs-meta }
+
+## Effacement des traces
+
+### Repérer un effacement de journal
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102}   # journal de sécurité effacé
+Get-WinEvent -FilterHashtable @{LogName='System'; Id=104}      # autre journal effacé
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102} -ErrorAction SilentlyContinue | Select-Object TimeCreated, Message
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated          Message
+    -----------          -------
+    01/10/2026 23:20:11  Le journal d'audit a été effacé. Sujet : … Nom du compte : adm.martin …
+    ```
+
+Pour comprendre : [Effacer un filtre ou effacer un journal](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
 { .kw-cs-meta }
 
 ## Exporter et configurer
