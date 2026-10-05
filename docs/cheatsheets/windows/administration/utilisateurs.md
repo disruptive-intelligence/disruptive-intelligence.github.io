@@ -11,7 +11,7 @@ Créer, modifier, désactiver ou supprimer des comptes et des groupes locaux ; r
 Les incontournables : `Get-LocalUser` · `New-LocalUser` · `Disable-LocalUser` · `Add-LocalGroupMember` · `net user`
 { .kw-cs-top }
 
-Toutes ces commandes demandent une console administrateur. Pour les comptes du domaine, voir la fiche [Active Directory](active-directory.md).
+Toutes ces commandes demandent une console administrateur. Pour les comptes du domaine, voir la fiche [Active Directory](active-directory/index.md).
 
 ## Comptes
 

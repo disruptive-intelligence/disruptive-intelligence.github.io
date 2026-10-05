@@ -163,7 +163,14 @@ nav:
             - Fichiers et recherche: cheatsheets/windows/fondamentaux/fichiers-recherche.md
             - Processus et services: cheatsheets/windows/fondamentaux/processus.md
             - Réseau: cheatsheets/windows/fondamentaux/reseau.md
-            - Journaux et événements: cheatsheets/windows/fondamentaux/logs.md
+            - Journaux et événements:
+                - cheatsheets/windows/fondamentaux/logs/index.md
+                - Lire, filtrer et exporter: cheatsheets/windows/fondamentaux/logs/lire.md
+                - Ouvertures de session et RDP: cheatsheets/windows/fondamentaux/logs/sessions-rdp.md
+                - Processus et PowerShell: cheatsheets/windows/fondamentaux/logs/processus-powershell.md
+                - Services, tâches et comptes: cheatsheets/windows/fondamentaux/logs/persistance.md
+                - Pare-feu et Defender: cheatsheets/windows/fondamentaux/logs/pare-feu-defender.md
+                - Effacement des traces: cheatsheets/windows/fondamentaux/logs/effacement.md
             - Droits et identités: cheatsheets/windows/fondamentaux/droits.md
             - Registre: cheatsheets/windows/fondamentaux/registre.md
         - Administration:
@@ -174,7 +181,12 @@ nav:
             - Réseau et pare-feu: cheatsheets/windows/administration/reseau.md
             - Logiciels et mises à jour: cheatsheets/windows/administration/logiciels.md
             - Disques, archives et transferts: cheatsheets/windows/administration/disques.md
-            - Active Directory au quotidien: cheatsheets/windows/administration/active-directory.md
+            - Active Directory au quotidien:
+                - cheatsheets/windows/administration/active-directory/index.md
+                - Comptes et groupes: cheatsheets/windows/administration/active-directory/comptes-groupes.md
+                - OU, ordinateurs et GPO: cheatsheets/windows/administration/active-directory/ou-ordinateurs-gpo.md
+                - Kerberos, DC et comptes de service: cheatsheets/windows/administration/active-directory/kerberos-dc.md
+                - Contrôles d'hygiène: cheatsheets/windows/administration/active-directory/hygiene.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md
         - Linux:

@@ -55,7 +55,7 @@ Get-ScheduledTaskInfo -TaskName WindowsUpdateCheck | Select-Object LastRunTime, 
 
 Les fichiers de définition sont dans `C:\Windows\System32\Tasks` ; la création est journalisée en 4698 (audit) et dans `Microsoft-Windows-TaskScheduler/Operational` (106).
 
-Pour comprendre : [Journaux des tâches planifiées (4698, 106, 200/201, 4702, 4699)](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md) · [retracer la vie d'une tâche](../fondamentaux/logs.md#retracer-la-vie-dune-tache-planifiee)
+Pour comprendre : [Journaux des tâches planifiées (4698, 106, 200/201, 4702, 4699)](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md) · [retracer la vie d'une tâche](../fondamentaux/logs/persistance.md#retracer-la-vie-dune-tache-planifiee)
 { .kw-cs-meta }
 
 ### Créer une tâche planifiée

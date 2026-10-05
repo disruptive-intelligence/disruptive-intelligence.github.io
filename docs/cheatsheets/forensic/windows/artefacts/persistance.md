@@ -34,8 +34,8 @@ autorunsc64.exe -accepteula -a * -c -h -s -m > autoruns.csv   # tout, en CSV, av
 
 ## Traces dans les journaux
 
-![[cheatsheets/windows/fondamentaux/logs#Retrouver les services installés ou modifiés]]
+![[cheatsheets/windows/fondamentaux/logs/persistance#Retrouver les services installés ou modifiés]]
 
-![[cheatsheets/windows/fondamentaux/logs#Retracer la vie d'une tâche planifiée]]
+![[cheatsheets/windows/fondamentaux/logs/persistance#Retracer la vie d'une tâche planifiée]]
 
-![[cheatsheets/windows/fondamentaux/logs#Retracer la création d'un compte et ses privilèges]]
+![[cheatsheets/windows/fondamentaux/logs/persistance#Retracer la création d'un compte et ses privilèges]]

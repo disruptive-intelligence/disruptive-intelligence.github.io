@@ -96,7 +96,7 @@ Get-CimInstance Win32_ComputerSystem | Select-Object Name, Domain, PartOfDomain,
 nltest /dsgetdc:meridian.local   :: quel contrôleur de domaine le poste utilise
 ```
 
-Ensuite : [fiche Active Directory](../administration/active-directory.md)
+Ensuite : [fiche Active Directory](../administration/active-directory/index.md)
 { .kw-cs-meta }
 
 ### Voir le numéro de série et le BIOS
@@ -245,7 +245,7 @@ query user
      adm.martin            rdp-tcp#3           2  Actif               5 02/10/2026 09:44
     ```
 
-Ensuite : [retrouver les ouvertures de session](logs.md#retrouver-les-ouvertures-de-session)
+Ensuite : [retrouver les ouvertures de session](logs/sessions-rdp.md#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }
 
 ### Savoir qui je suis

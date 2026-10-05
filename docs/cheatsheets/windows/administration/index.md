@@ -11,4 +11,4 @@ Modifier un système Windows et administrer le domaine. Ces commandes demandent 
 - [Réseau et pare-feu](reseau.md) — IP, DNS, hosts, règles de pare-feu, durcissement réseau, RDP.
 - [Logiciels et mises à jour](logiciels.md) — winget, correctifs, Defender.
 - [Disques, archives et transferts](disques.md) — Volumes, BitLocker, archives, copies.
-- [Active Directory au quotidien](active-directory.md) — Comptes, groupes, OU, LAPS, gMSA, GPO, Kerberos, DC, hygiène.
+- [Active Directory au quotidien](active-directory/index.md) — Comptes, groupes, OU, LAPS, gMSA, GPO, Kerberos, DC, hygiène.

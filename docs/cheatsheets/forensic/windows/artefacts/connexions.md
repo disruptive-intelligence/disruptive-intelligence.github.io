@@ -34,15 +34,15 @@ EvtxECmd.exe -d E:\collecte\C\Windows\System32\winevt\Logs --csv E:\analyse\evtx
 
 ## RDP sur la machine cible
 
-Les entrées suivantes viennent de la fiche [Journaux et événements](../../../windows/fondamentaux/logs.md) : elles n'y sont écrites qu'une fois.
+Les entrées suivantes viennent de la fiche [Journaux et événements](../../../windows/fondamentaux/logs/index.md) : elles n'y sont écrites qu'une fois.
 
-![[cheatsheets/windows/fondamentaux/logs#Retrouver les connexions RDP reçues]]
+![[cheatsheets/windows/fondamentaux/logs/sessions-rdp#Retrouver les connexions RDP reçues]]
 
-![[cheatsheets/windows/fondamentaux/logs#Repérer les connexions RDP et les échecs d'authentification]]
+![[cheatsheets/windows/fondamentaux/logs/sessions-rdp#Repérer les connexions RDP et les échecs d'authentification]]
 
 ## RDP depuis la machine source
 
-![[cheatsheets/windows/fondamentaux/logs#Savoir vers quelles machines un poste s'est connecté en RDP]]
+![[cheatsheets/windows/fondamentaux/logs/sessions-rdp#Savoir vers quelles machines un poste s'est connecté en RDP]]
 
 ### Retrouver les serveurs RDP contactés depuis un poste (registre et fichiers)
 
