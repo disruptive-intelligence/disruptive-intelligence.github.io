@@ -37,9 +37,9 @@ Le cours souligne qu’une série de `4625` Type `3` sur plusieurs machines mér
 ## Authentification RDP
 
 - **RDP — Remote Desktop Protocol** est largement utilisé pour :
-  - administration ;
-  - support ;
-  - accès distant.
+    - administration ;
+    - support ;
+    - accès distant.
 - Il est également fréquemment utilisé par les attaquants pour le **lateral movement**.
 
 ```text
@@ -119,9 +119,9 @@ Event ID:
 
 - Signale qu’une **authentification RDP a réussi** au niveau du Remote Connection Manager.
 - Peut notamment contenir :
-  - username ;
-  - domain ;
-  - source IP.
+    - username ;
+    - domain ;
+    - source IP.
 
 ```text
 1149

@@ -8,11 +8,11 @@ up:
 ---
 
 - La journalisation Windows permet d’enregistrer les activités du système, des applications et des utilisateurs afin de faciliter :
-	- troubleshooting ;
-	- monitoring ;
-	- détection d’incidents ;
-	- investigation ;
-	- audit / conformité.
+    - troubleshooting ;
+    - monitoring ;
+    - détection d’incidents ;
+    - investigation ;
+    - audit / conformité.
 
 ```
 Windows Events
@@ -225,13 +225,13 @@ Même avec des alertes automatiques, une revue périodique des logs reste utile 
 
 - Les **Security Logs** sont essentiels pour détecter les signes d’une compromission.
 - Ils peuvent aider à identifier :
-	- activités anormales ;
-	- multiples password failures ;
-	- accès inhabituels ;
-	- changements de comptes ;
-	- élévations de privilèges ;
-	- corréler les menaces ;
-	- modifications de sécurité.
+    - activités anormales ;
+    - multiples password failures ;
+    - accès inhabituels ;
+    - changements de comptes ;
+    - élévations de privilèges ;
+    - corréler les menaces ;
+    - modifications de sécurité.
 
 ```
 Multiple Failed Logons
@@ -260,20 +260,20 @@ Quelques événements Windows souvent surveillés :
 ### Journaux PowerShell
 
 - PowerShell est largement utilisé pour :
-	- administration ;
-	- automatisation ;
-	- configuration ;
-	- mais aussi par des attaquants.
+    - administration ;
+    - automatisation ;
+    - configuration ;
+    - mais aussi par des attaquants.
 - Ses logs sont donc très importants en investigation.
 - Ils peuvent fournir des informations sur :
-	- journaux d'exécution de commandes ;
-	- commandes exécutées ;
-	- scripts ;
-	- utilisateur ;
-	- modules chargés ;
-	- exécution distante ;
-	- paramètres ;
-	- certaines sorties.
+    - journaux d'exécution de commandes ;
+    - commandes exécutées ;
+    - scripts ;
+    - utilisateur ;
+    - modules chargés ;
+    - exécution distante ;
+    - paramètres ;
+    - certaines sorties.
 
 ![W Event P](../../../assets/securite-systeme-windows-w-event-p.png){ width="600" }
 #### Logs PowerShell importants

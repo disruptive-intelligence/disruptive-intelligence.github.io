@@ -48,9 +48,9 @@ sudo cat /etc/shadow     # les mots de passe (chiffrés) — accès root uniquem
 
 - **`/etc/passwd`** : une ligne par compte. Malgré son nom, il ne contient **pas** les mots de passe (historiquement oui, plus aujourd'hui). Chaque ligne, séparée par des `:`, donne le nom, l'UID, le GID, le dossier personnel, le shell…
 
-  ```
-  alice:x:1000:1000:Alice Martin:/home/alice:/bin/bash
-  ```
+    ```
+    alice:x:1000:1000:Alice Martin:/home/alice:/bin/bash
+    ```
 
 
 - **`/etc/group`** : les groupes et leurs membres.

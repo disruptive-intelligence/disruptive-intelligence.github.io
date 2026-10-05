@@ -53,9 +53,9 @@ Permet de visualiser et d’annoter les matrices, utiles pour individualiser en 
 Un référentiel d’**analyses de détection** basé sur le modèle ATT&CK. CAR complète ATT&CK qui décrit les attaques, CAR explique comment les détecter. https://car.mitre.org/
 
 - Fournit des éléments divers :
-	- Pseudocodes décrivant requêtes de détection (Splunk, EQL…)
-	- Références vers TTPs
-	- Implémentations selon OS et outils.
+    - Pseudocodes décrivant requêtes de détection (Splunk, EQL…)
+    - Références vers TTPs
+    - Implémentations selon OS et outils.
 
 ![image 17 1.png](../../../../assets/modeles-d-analyse-de-la-menace-image-17-1.png)
 

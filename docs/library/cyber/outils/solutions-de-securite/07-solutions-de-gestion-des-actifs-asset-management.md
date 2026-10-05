@@ -28,10 +28,10 @@ Asset
 ## Types d’actifs gérés
 
 - Les principaux types d’actifs IT sont :
-	1. **Software**
-	2. **Hardware**
-	3. **Mobile Devices**
-	4. **Cloud Assets**
+    1. **Software**
+    2. **Hardware**
+    3. **Mobile Devices**
+    4. **Cloud Assets**
 
 ```
 ITAM
@@ -44,11 +44,11 @@ ITAM
 ## Importance pour la sécurité
 
 - Plus le nombre d’équipements augmente, plus il devient difficile de savoir :
-	- quels systèmes sont présents ;
-	- quelles versions ils utilisent ;
-	- lesquels sont obsolètes ;
-	- lesquels nécessitent une mise à jour ;
-	- lesquels ne devraient plus être connectés au réseau.
+    - quels systèmes sont présents ;
+    - quelles versions ils utilisent ;
+    - lesquels sont obsolètes ;
+    - lesquels nécessitent une mise à jour ;
+    - lesquels ne devraient plus être connectés au réseau.
 - Un outil d’Asset Management permet donc d’identifier rapidement :
 
 ```
@@ -92,7 +92,7 @@ Acquire
 ```
 
 - Le retrait d’un actif doit aussi être contrôlé pour éviter de laisser :
-	- données sensibles ;
-	- credentials ;
-	- configurations ;
-	- équipements encore accessibles.
+    - données sensibles ;
+    - credentials ;
+    - configurations ;
+    - équipements encore accessibles.

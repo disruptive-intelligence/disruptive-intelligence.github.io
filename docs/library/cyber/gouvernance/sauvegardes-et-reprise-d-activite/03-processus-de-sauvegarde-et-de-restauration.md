@@ -33,16 +33,16 @@ Inventory / Criticality
 ### 2. Choisir le type de sauvegarde
 
 - Selon les besoins :
-	- **Full** ;
-	- **Incremental** ;
-	- **Differential** ;
-	- **Mirror**.
+    - **Full** ;
+    - **Incremental** ;
+    - **Differential** ;
+    - **Mirror**.
 - Le choix dépend notamment de :
-	- volume de données ;
-	- fréquence des changements ;
-	- capacité de stockage ;
-	- temps disponible pour le backup ;
-	- temps attendu pour la restauration.
+    - volume de données ;
+    - fréquence des changements ;
+    - capacité de stockage ;
+    - temps disponible pour le backup ;
+    - temps attendu pour la restauration.
 
 ```
 Backup Type
@@ -73,12 +73,12 @@ RPO faible
     - service cloud ;
     - plateforme centralisée.
 - À contrôler après exécution :
-	- statut du job ;
-	- erreurs ;
-	- quantité de données sauvegardées ;
-	- durée ;
-	- destination ;
-	- intégrité du backup.
+    - statut du job ;
+    - erreurs ;
+    - quantité de données sauvegardées ;
+    - durée ;
+    - destination ;
+    - intégrité du backup.
 
 ```
 Backup Job
@@ -117,12 +117,12 @@ Backup mardi → peut être préférable
 ### 2. Choisir l’emplacement de restauration
 
 - Deux possibilités principales :
-	- Original Location :Utilisé lorsque l’environnement original est toujours considéré comme fiable.
-	- Alternate Location : backup → nouvelle machine / environnement isolé. Utile notamment :
-		- après compromission ;
-		- pour tester une restauration ;
-		- pour analyser des données ;
-		- lorsque le système original est détruit.
+    - Original Location :Utilisé lorsque l’environnement original est toujours considéré comme fiable.
+    - Alternate Location : backup → nouvelle machine / environnement isolé. Utile notamment :
+        - après compromission ;
+        - pour tester une restauration ;
+        - pour analyser des données ;
+        - lorsque le système original est détruit.
 ### 3. Effectuer la restauration
 
 - La solution de backup récupère les données depuis le support choisi puis les replace à l’emplacement défini.
@@ -143,13 +143,13 @@ Differential Restore
 
 - Une restauration ne doit pas s’arrêter au message `Restore completed`.
 - Il faut vérifier :
-	- intégrité des fichiers ;
-	- fonctionnement des applications ;
-	- cohérence des bases de données ;
-	- permissions ;
-	- services ;
-	- données attendues ;
-	- absence de corruption.
+    - intégrité des fichiers ;
+    - fonctionnement des applications ;
+    - cohérence des bases de données ;
+    - permissions ;
+    - services ;
+    - données attendues ;
+    - absence de corruption.
 
 ```
 Restore
@@ -162,11 +162,11 @@ Restore
 
 - Les processus doivent être **régulièrement testés**.
 - Objectifs :
-	- vérifier que les backups sont utilisables ;
-	- entraîner les équipes ;
-	- mesurer la durée réelle de restauration ;
-	- identifier les dépendances oubliées ;
-	- vérifier que le RTO peut être respecté.
+    - vérifier que les backups sont utilisables ;
+    - entraîner les équipes ;
+    - mesurer la durée réelle de restauration ;
+    - identifier les dépendances oubliées ;
+    - vérifier que le RTO peut être respecté.
 
 ```
 Backup Test

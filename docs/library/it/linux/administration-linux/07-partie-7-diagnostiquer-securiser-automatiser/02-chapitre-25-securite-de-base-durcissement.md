@@ -19,17 +19,17 @@ up:
 
 1. **Maintenir à jour** (chapitre 20). La mesure la plus rentable, et de loin : beaucoup d'attaques exploitent des failles déjà connues et corrigées.
 
-   ```bash
-   sudo apt update && sudo apt upgrade
-   ```
+    ```bash
+    sudo apt update && sudo apt upgrade
+    ```
 
 
 2. **Réduire les services et ports** (chapitres 14, 17). Désactiver ce qui ne sert pas.
 
-   ```bash
-   sudo ss -tulpn                       # qu'est-ce qui écoute ?
-   sudo systemctl disable --now service-inutile   # arrêter et désactiver
-   ```
+    ```bash
+    sudo ss -tulpn                       # qu'est-ce qui écoute ?
+    sudo systemctl disable --now service-inutile   # arrêter et désactiver
+    ```
 
 
 3. **Durcir SSH** (chapitre 18). Pas de connexion root, clés plutôt que mots de passe.

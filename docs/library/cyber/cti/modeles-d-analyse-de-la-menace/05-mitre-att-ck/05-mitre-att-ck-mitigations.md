@@ -13,10 +13,10 @@ up:
 
 - Une **Mitigation** décrit une mesure défensive permettant de réduire, empêcher ou limiter l’efficacité d’une technique ATT&CK.
 - Chaque mitigation possède :
-	- un **ID unique** ;
-	- un **nom** ;
-	- une **description** ;
-	- les techniques auxquelles elle peut s’appliquer.
+    - un **ID unique** ;
+    - un **nom** ;
+    - une **description** ;
+    - les techniques auxquelles elle peut s’appliquer.
 
 ```
 Technique = ce que fait l’attaquant

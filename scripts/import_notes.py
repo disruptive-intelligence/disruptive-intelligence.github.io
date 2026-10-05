@@ -355,6 +355,49 @@ def space_blocks(text, shield):
         prev = k if not (indented and prev == "list" and k in ("text", "code")) else "list"
     return "\n".join(out)
 
+
+LIST_MARK = re.compile(r"^[ \t]*((?:[-*+]|\d+[.)])[ \t]+)(.*)$")
+
+
+def nest_lists(text, shield):
+    """Obsidian imbrique une sous-liste décalée de 2 espaces ; Python-Markdown en veut 4 et l'aplatit
+    sinon (« Task Scheduler permet : » puis ses sous-points au même niveau, en une longue liste).
+    Réindente : chaque niveau à 4 espaces de son parent ; les suites d'une puce (texte, tableau, bloc
+    de code) suivent leur puce."""
+    def shift(token, delta):                                 # lignes internes d'un bloc de code gardé
+        i = int(token.strip("\x00"))
+        lines = shield.saved[i].split("\n")
+        pad = " " * max(delta, 0)
+        shield.saved[i] = "\n".join(lines[:1] + [pad + l[min(-delta, len(l) - len(l.lstrip(" "))):]
+                                                 if delta < 0 else pad + l for l in lines[1:]])
+
+    out, stack, blank = [], [], True                         # stack : (colonne du texte source, retrait cible)
+    for line in text.split("\n"):
+        body = line.lstrip(" \t")
+        if not body:
+            out.append(line)
+            blank = True
+            continue
+        col = len(line[:len(line) - len(body)].expandtabs(4))
+        m = LIST_MARK.match(line)
+        if HEADING.match(line) or (col == 0 and not m and blank):
+            stack = []                                       # titre, ou paragraphe après une ligne vide : fin de liste
+        while stack and col < stack[-1][0]:
+            stack.pop()
+        if m and (stack or col < 4):
+            dst = stack[-1][1] if stack else 0
+            stack.append((col + len(m.group(1).expandtabs(4)), dst + 4))
+            line = " " * dst + body
+        elif stack and col:
+            extra = col - stack[-1][0]                       # 1 à 3 espaces de plus : même suite de puce
+            dst = stack[-1][1] + (extra if extra >= 4 else 0)
+            if body.strip() in shield.blocks and dst != col:
+                shift(body.strip(), dst - col)
+            line = " " * dst + body
+        out.append(line)
+        blank = False
+    return "\n".join(out)
+
 class Converter:
     def __init__(self, vault, tree, index=None):
         self.vault, self.tree = vault, tree
@@ -439,7 +482,7 @@ class Converter:
         text = re.sub(r"(!?)\[([^\]\n]*)\]\(<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\)", local, text)
         # Blocs repliables HTML (exports Notion) : leur contenu reste du Markdown (extension md_in_html)
         text = re.sub(r"<details(?![^>]*\bmarkdown=)([^>]*)>", r'<details markdown="1"\1>', text)
-        return space_blocks(text, shield)
+        return nest_lists(space_blocks(text, shield), shield)
 
 
 def build_index(vault, tree):

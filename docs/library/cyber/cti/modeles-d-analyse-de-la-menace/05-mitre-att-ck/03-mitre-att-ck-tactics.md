@@ -107,11 +107,11 @@ Avec également des tactics spécifiques aux appareils mobiles :
 ICS reprend aussi plusieurs tactics classiques, mais ajoute des objectifs spécifiques aux systèmes industriels :
 
 - **Inhibit Response Function**
-	- empêcher les mécanismes de sécurité/réponse de fonctionner.
+    - empêcher les mécanismes de sécurité/réponse de fonctionner.
 - **Impair Process Control**
-	- dégrader ou modifier le contrôle d’un processus industriel.
+    - dégrader ou modifier le contrôle d’un processus industriel.
 - **Impact**
-	- provoquer un effet réel sur la production / infrastructure.
+    - provoquer un effet réel sur la production / infrastructure.
 
 Exemple :
 

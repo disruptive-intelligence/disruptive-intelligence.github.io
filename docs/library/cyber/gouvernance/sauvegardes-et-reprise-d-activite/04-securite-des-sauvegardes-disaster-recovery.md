@@ -54,8 +54,8 @@ At Rest
 ```
 
 - Objectif :
-	- protéger la confidentialité des données ;
-	- empêcher leur lecture en cas de vol du support ou d’accès non autorisé.
+    - protéger la confidentialité des données ;
+    - empêcher leur lecture en cas de vol du support ou d’accès non autorisé.
 
 > Il faut également protéger les **clés de chiffrement** : perdre la clé peut rendre une sauvegarde parfaitement intacte mais inutilisable.
 ### Integrity Checks
@@ -75,10 +75,10 @@ Backup
 ### Physical Security
 
 - Les supports physiques doivent être protégés contre :
-	- vol ;
-	- incendie ;
-	- dégâts matériels ;
-	- accès non autorisé.
+    - vol ;
+    - incendie ;
+    - dégâts matériels ;
+    - accès non autorisé.
 - Exemples :
 
 ```
@@ -111,12 +111,12 @@ Offline / Air-Gapped / Immutable Backup
 ### Secure Erase
 
 - Lorsqu’un support arrive en fin de vie :
-	- supprimer les données de manière irréversible ;
-	- éviter qu’elles puissent être récupérées par un tiers.
+    - supprimer les données de manière irréversible ;
+    - éviter qu’elles puissent être récupérées par un tiers.
 - Selon le support :
-	- secure erase ;
-	- cryptographic erase ;
-	- destruction physique.
+    - secure erase ;
+    - cryptographic erase ;
+    - destruction physique.
 
 ```
 Backup Media EOL
@@ -128,12 +128,12 @@ Backup Media EOL
 
 - Le **Disaster Recovery (DR)** désigne l’ensemble des moyens permettant de **restaurer les systèmes et reprendre les services** après un incident majeur.
 - Scénarios :
-	- cyberattaque ;
-	- ransomware ;
-	- panne matérielle majeure ;
-	- destruction d’un datacenter ;
-	- catastrophe naturelle ;
-	- corruption massive.
+    - cyberattaque ;
+    - ransomware ;
+    - panne matérielle majeure ;
+    - destruction d’un datacenter ;
+    - catastrophe naturelle ;
+    - corruption massive.
 
 ```
 Disaster
@@ -180,10 +180,10 @@ Backup
 ### 3. Data Restoration
 
 - En cas de perte :
-	1. identifier le bon restore point ;
-	2. vérifier que le backup est sain ;
-	3. restaurer les données ;
-	4. valider leur intégrité.
+    1. identifier le bon restore point ;
+    2. vérifier que le backup est sain ;
+    3. restaurer les données ;
+    4. valider leur intégrité.
 
 ```
 Known-Good Backup
@@ -195,12 +195,12 @@ Known-Good Backup
 ### 4. System Reinstallation / Recovery
 
 - Un sinistre peut nécessiter plus qu’une restauration de fichiers :
-	- réinstaller OS et applications ;
-	- reconstruire des serveurs ;
-	- reconfigurer le réseau ;
-	- restaurer les services ;
-	- appliquer patches/hardening ;
-	- effectuer des tests avant remise en production.
+    - réinstaller OS et applications ;
+    - reconstruire des serveurs ;
+    - reconfigurer le réseau ;
+    - restaurer les services ;
+    - appliquer patches/hardening ;
+    - effectuer des tests avant remise en production.
 
 ```
 Clean System
@@ -215,8 +215,8 @@ Clean System
 
 - Le DR Plan doit être régulièrement testé.
 - Objectifs :
-	- vérifier que les procédures fonctionnent ;
-	- mesurer les temps de récupération ;
-	- identifier les dépendances oubliées ;
-	- former les équipes ;
-	- corriger les faiblesses.
+    - vérifier que les procédures fonctionnent ;
+    - mesurer les temps de récupération ;
+    - identifier les dépendances oubliées ;
+    - former les équipes ;
+    - corriger les faiblesses.

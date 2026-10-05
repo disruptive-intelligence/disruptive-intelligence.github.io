@@ -10,10 +10,10 @@ up:
 ## Types de sauvegarde
 
 - Le type de sauvegarde détermine **quelles données sont copiées** et donc :
-	- temps de sauvegarde ;
-	- espace nécessaire ;
-	- vitesse de restauration ;
-	- dépendances entre backups.
+    - temps de sauvegarde ;
+    - espace nécessaire ;
+    - vitesse de restauration ;
+    - dépendances entre backups.
 
 ![Backup](../../../assets/sauvegardes-et-reprise-d-activite-backup.png){ width="400" }
 ### Full Backup — Sauvegarde complète
@@ -30,8 +30,8 @@ Full Backup
 ```
 
 - Avantages :
-	- restauration simple ;
-	- peu de dépendances.
+    - restauration simple ;
+    - peu de dépendances.
 ### Incremental Backup — Sauvegarde incrémentielle
 
 - Copie uniquement les données modifiées **depuis la dernière sauvegarde**, qu’elle soit complète ou incrémentielle.
@@ -45,10 +45,10 @@ Jeudi    → changements depuis mercredi
 ```
 
 - Avantages :
-	- sauvegarde rapide ;
-	- faible consommation de stockage.
+    - sauvegarde rapide ;
+    - faible consommation de stockage.
 - Inconvénient :
-	- restauration plus complexe.
+    - restauration plus complexe.
 - Pour restaurer jeudi :
 
 ```
@@ -79,9 +79,9 @@ Full lundi
 ```
 
 - Avantage :
-	- restauration plus rapide/simple qu’avec une longue chaîne incrémentielle.
+    - restauration plus rapide/simple qu’avec une longue chaîne incrémentielle.
 - Inconvénient :
-	- les sauvegardes différentielles grossissent au fil du temps jusqu’à la prochaine Full.
+    - les sauvegardes différentielles grossissent au fil du temps jusqu’à la prochaine Full.
 ### Full vs Incremental vs Differential
 
 |Type|Données copiées|Stockage|Restore|
@@ -109,7 +109,7 @@ Source   ↔   Mirror
 ```
 
 - Avantage :
-	- accès/reprise rapide.
+    - accès/reprise rapide.
 - Problème :
 
 ```
@@ -133,13 +133,13 @@ Snapshot @ 14:00
 ```
 
 - Utilisé notamment pour :
-	- virtualisation ;
-	- stockage ;
-	- bases de données ;
-	- rollback rapide.
+    - virtualisation ;
+    - stockage ;
+    - bases de données ;
+    - rollback rapide.
 - Avantages :
-	- création rapide ;
-	- restauration rapide selon la technologie.
+    - création rapide ;
+    - restauration rapide selon la technologie.
 
 > ⚠️ Un snapshot n’est pas nécessairement une sauvegarde indépendante. Il peut dépendre du même stockage que les données originales : si ce stockage est détruit, les snapshots peuvent disparaître avec lui.
 
@@ -152,23 +152,23 @@ Backup   → copie indépendante à privilégier pour la résilience
 
 - Le **support** correspond à l’endroit ou au média sur lequel les backups sont stockés.
 - Le choix dépend notamment de :
-	- capacité ;
-	- coût ;
-	- vitesse ;
-	- disponibilité ;
-	- sécurité ;
-	- durée de conservation.
+    - capacité ;
+    - coût ;
+    - vitesse ;
+    - disponibilité ;
+    - sécurité ;
+    - durée de conservation.
 ### Bandes magnétiques — Tape / LTO
 
 - Toujours utilisées dans de grandes infrastructures.
 - Très adaptées aux gros volumes et à l’archivage.
 - Avantages :
-	- coût par To relativement faible ;
-	- longue conservation ;
-	- peut être physiquement **offline / air-gapped**.
+    - coût par To relativement faible ;
+    - longue conservation ;
+    - peut être physiquement **offline / air-gapped**.
 - Inconvénients :
-	- accès séquentiel ;
-	- restauration plus lente qu’avec du stockage disque.
+    - accès séquentiel ;
+    - restauration plus lente qu’avec du stockage disque.
 
 ```
 Tape
@@ -182,11 +182,11 @@ Tape
 - Solution simple pour petites structures ou utilisateurs individuels.
 - Accès relativement rapide.
 - Risques :
-	- panne matérielle ;
-	- vol ;
-	- dommage physique ;
-	- corruption ;
-	- ransomware si le disque reste connecté.
+    - panne matérielle ;
+    - vol ;
+    - dommage physique ;
+    - corruption ;
+    - ransomware si le disque reste connecté.
 
 ```
 External HDD
@@ -206,9 +206,9 @@ Servers / Clients
 ```
 
 - Avantages :
-	- centralisation ;
-	- facilité d’administration ;
-	- capacité évolutive.
+    - centralisation ;
+    - facilité d’administration ;
+    - capacité évolutive.
 
 > Un NAS accessible avec les mêmes credentials/réseaux que la production peut également être compromis par un attaquant.
 ### SAN — Storage Area Network
@@ -216,10 +216,10 @@ Servers / Clients
 - Infrastructure de stockage dédiée, généralement utilisée dans les datacenters.
 - Fournit du stockage en mode **bloc** avec de hautes performances.
 - Utilisé notamment pour :
-	- serveurs ;
-	- virtualisation ;
-	- bases de données ;
-	- grandes infrastructures.
+    - serveurs ;
+    - virtualisation ;
+    - bases de données ;
+    - grandes infrastructures.
 
 ```
 Servers
@@ -239,18 +239,18 @@ Storage Arrays
 - Sauvegardes stockées chez un fournisseur cloud.
 - Permet d’éviter de maintenir toute l’infrastructure de stockage localement.
 - Avantages :
-	- scalable ;
-	- accessible hors site ;
-	- facilité d’augmentation de capacité ;
-	- services d’immutabilité disponibles selon le fournisseur.
+    - scalable ;
+    - accessible hors site ;
+    - facilité d’augmentation de capacité ;
+    - services d’immutabilité disponibles selon le fournisseur.
 - Points à surveiller :
-	- IAM / permissions ;
-	- MFA ;
-	- chiffrement ;
-	- coûts de stockage/restauration ;
-	- localisation des données ;
-	- confidentialité ;
-	- politique de rétention.
+    - IAM / permissions ;
+    - MFA ;
+    - chiffrement ;
+    - coûts de stockage/restauration ;
+    - localisation des données ;
+    - confidentialité ;
+    - politique de rétention.
 
 ```
 Cloud Backup
@@ -275,6 +275,6 @@ Offline / Immutable Copy
 ```
 
 - Cela permet d’obtenir :
-	- restauration locale rapide ;
-	- protection hors site ;
-	- meilleure résistance au ransomware/destruction physique.
+    - restauration locale rapide ;
+    - protection hors site ;
+    - meilleure résistance au ransomware/destruction physique.

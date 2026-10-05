@@ -14,9 +14,9 @@ up:
     - **Dumpster Diving** : récupérer des documents jetés ;
     - fouiller bureaux, tiroirs ou armoires d’autres employés.
 - Prévention
-	- **Clean Desk Policy** : ne pas laisser de documents sensibles sans surveillance.
-	- Stocker les documents dans des **armoires verrouillées** et zones sécurisées.
-	- **Détruire/shredder** les documents avant de les jeter.
+    - **Clean Desk Policy** : ne pas laisser de documents sensibles sans surveillance.
+    - Stocker les documents dans des **armoires verrouillées** et zones sécurisées.
+    - **Détruire/shredder** les documents avant de les jeter.
 
 ```
 Document sensible

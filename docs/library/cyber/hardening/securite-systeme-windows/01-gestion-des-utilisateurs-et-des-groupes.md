@@ -52,7 +52,7 @@ Administrator
 #### Gestion des utilisateurs locaux
 
 - Sous Windows Server :
-	- L'écran Démarrer -> Gestion de l'ordinateur -> Utilisateurs et groupes locaux -> Utilisateurs s'ouvre :
+    - L'écran Démarrer -> Gestion de l'ordinateur -> Utilisateurs et groupes locaux -> Utilisateurs s'ouvre :
 
 ![W User](../../../assets/securite-systeme-windows-w-gestion-user.png){ width="600" }
 
@@ -79,10 +79,10 @@ Administrator
 - Réduire le nombre de comptes à privilèges.
 - Réserver leur usage aux tâches qui nécessitent réellement une élévation.
 - Bonnes pratiques :
-	- compte standard pour le quotidien ;
-	- compte admin dédié ;
-	- MFA pour les comptes privilégiés ;
-	- monitoring renforcé.
+    - compte standard pour le quotidien ;
+    - compte admin dédié ;
+    - MFA pour les comptes privilégiés ;
+    - monitoring renforcé.
 ### Politiques de sécurité
 #### Politiques de mot de passe
 ##### Strong Passwords
@@ -111,10 +111,10 @@ Un changement doit surtout être imposé en cas de :
 
 - Ajouter un second facteur réduit fortement le risque lié au vol de mot de passe.
 - Exemples :
-	- authenticator app ;
-	- security key ;
-	- OTP ;
-	- biométrie.
+    - authenticator app ;
+    - security key ;
+    - OTP ;
+    - biométrie.
 #### UAC — User Account Control - Contrôle de compte user
 
 - **UAC** limite l’élévation de privilèges automatique.
@@ -202,11 +202,11 @@ AD User
 ##### Types de groupes Active Directory
 
 - Domain Local
-	- Utilisé principalement pour attribuer des permissions sur des ressources du domaine concerné.
+    - Utilisé principalement pour attribuer des permissions sur des ressources du domaine concerné.
 - Global
-	- Regroupe surtout des utilisateurs/comptes ayant un rôle commun dans le même domaine.
+    - Regroupe surtout des utilisateurs/comptes ayant un rôle commun dans le même domaine.
 - Universal
-	- Peut contenir des membres provenant de plusieurs domaines d’une forêt.
+    - Peut contenir des membres provenant de plusieurs domaines d’une forêt.
 
 ```
 Global Group
@@ -243,8 +243,8 @@ Accounts
     - pourquoi ;
     - si cet accès est encore nécessaire.
 - Particulièrement important pour les groupes sensibles :
-	- Administrators
-	- Domain Admins
-	- Enterprise Admins
-	- Remote Desktop Users
-	- Backup Operators
+    - Administrators
+    - Domain Admins
+    - Enterprise Admins
+    - Remote Desktop Users
+    - Backup Operators

@@ -56,8 +56,8 @@ Cible : « NEXUS HOLDINGS », mentionnée dans une DS comme contrepartie d’un 
 
 - Recherche initiale : Pappers, Companies House, OpenCorporates → 14 résultats sociétés contenant « Nexus » dans le nom, dans 9 juridictions.
 - Affinage avec le contexte (Chypre + 2019 + dirigeant connu) : 2 candidats.
-  - NEXUS HOLDINGS LTD (Chypre, registered 2019, directeur M. Y) → match probable.
-  - NEXUS HOLDINGS LIMITED (BVI, registered 2010, directeurs trustees professionnels) → exclu (différents directeurs et antériorité).
+    - NEXUS HOLDINGS LTD (Chypre, registered 2019, directeur M. Y) → match probable.
+    - NEXUS HOLDINGS LIMITED (BVI, registered 2010, directeurs trustees professionnels) → exclu (différents directeurs et antériorité).
 - Identifiant officiel : Cyprus Company Registration Number HE-XXXXXX.
 - Historique : pas de changement de dénomination depuis création.
 - Entités liées : la société est associée majoritaire d’une SAS française et d’une LLC US — graphe à étendre.

@@ -340,10 +340,10 @@ Dernier checkpoint avant de plonger dans le reverse. Tu dois pouvoir :
 - [ ] Comprendre **pourquoi** il faut `xor rax, rax` avant un appel variadique.
 - [ ] Compiler un `.c` en `.s` avec `gcc -O0 -masm=intel -S`.
 - [ ] **Reconnaître dans un `.s`** :
-  - [ ] Un prologue de fonction.
-  - [ ] Un `if/else`.
-  - [ ] Une boucle (saut arrière).
-  - [ ] Un appel de fonction avec son argument.
+    - [ ] Un prologue de fonction.
+    - [ ] Un `if/else`.
+    - [ ] Une boucle (saut arrière).
+    - [ ] Un appel de fonction avec son argument.
 - [ ] Comprendre la différence d'aspect entre `-O0` et `-O2`.
 
 **Si tu coches tout, tu as toutes les armes pour le reverse débutant.** La partie IX ne fait que t'apprendre à appliquer ces réflexes à un vrai binaire.

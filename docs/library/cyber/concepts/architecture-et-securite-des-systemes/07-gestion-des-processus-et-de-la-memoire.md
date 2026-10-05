@@ -65,11 +65,11 @@ Ready → Running → Waiting
 - Le **scheduler** décide quel processus/thread obtient du temps CPU et à quel moment.
 - Il cherche à répartir efficacement les ressources entre les différentes tâches.
 - Critères possibles :
-	- priorité ;
-	- temps CPU déjà utilisé ;
-	- état du processus ;
-	- type de charge ;
-	- politique de scheduling de l’OS.
+    - priorité ;
+    - temps CPU déjà utilisé ;
+    - état du processus ;
+    - type de charge ;
+    - politique de scheduling de l’OS.
 ### Time Sharing
 
 - Le CPU peut être partagé entre plusieurs processus en leur attribuant de petites périodes d’exécution appelées **time slices / quanta**.
@@ -100,11 +100,11 @@ High Priority
 ### Ordre d’exécution
 
 - L’ordre dépend de plusieurs facteurs :
-	- priorité ;
-	- état `Ready/Waiting` ;
-	- algorithme de scheduling ;
-	- temps CPU disponible ;
-	- événements système.
+    - priorité ;
+    - état `Ready/Waiting` ;
+    - algorithme de scheduling ;
+    - temps CPU disponible ;
+    - événements système.
 ### Concurrence / Parallélisme / Synchronisme
 
 - À distinguer :
@@ -121,13 +121,13 @@ Le parallélisme nécessite généralement plusieurs cœurs/processeurs.
 ### Intérêt sécurité des processus
 
 - En Incident Response / Threat Hunting, on examine souvent :
-	- PID / PPID ;
-	- nom et chemin de l’exécutable ;
-	- utilisateur ayant lancé le processus ;
-	- ligne de commande ;
-	- parent / enfant ;
-	- connexions réseau ;
-	- processus inhabituels ou non signés.
+    - PID / PPID ;
+    - nom et chemin de l’exécutable ;
+    - utilisateur ayant lancé le processus ;
+    - ligne de commande ;
+    - parent / enfant ;
+    - connexions réseau ;
+    - processus inhabituels ou non signés.
 
 ```
 Process Tree
@@ -162,12 +162,12 @@ SSD / HDD
 ```
 
 - Plus on monte :
-	- plus rapide ;
-	- plus petit ;
-	- plus coûteux.
+    - plus rapide ;
+    - plus petit ;
+    - plus coûteux.
 - Plus on descend :
-	- plus lent ;
-	- plus grande capacité.
+    - plus lent ;
+    - plus grande capacité.
 ### Mémoire principale — RAM
 
 - La **RAM** contient notamment :
@@ -195,8 +195,8 @@ Process
 ```
 
 - Lorsqu’il manque de RAM, certaines pages peuvent être déplacées vers un stockage secondaire :
-	- Windows → **pagefile**
-	- Linux → **swap**
+    - Windows → **pagefile**
+    - Linux → **swap**
 
 > ⚠️ La mémoire virtuelle n’est pas simplement « de la RAM supplémentaire sur disque ». C’est avant tout un **mécanisme d’abstraction et de gestion de l’espace mémoire** ; le disque peut servir de backing storage.
 ### Opérations de gestion de la mémoire
@@ -214,10 +214,10 @@ Process requests memory
 #### Suivi
 
 - Le système maintient l’état des zones mémoire :
-	- utilisées ;
-	- libres ;
-	- associées à certains processus ;
-	- partagées.
+    - utilisées ;
+    - libres ;
+    - associées à certains processus ;
+    - partagées.
 #### Désallocation / Deallocation
 
 - Lorsqu’une zone n’est plus nécessaire, elle peut être libérée et réutilisée.

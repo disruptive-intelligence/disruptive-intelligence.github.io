@@ -59,6 +59,6 @@ Ressources logiques ou physiques utilisées pour livrer, héberger ou contrôler
 ## Axes complémentaires
 
 - Composant Social-Politique : Décrit l’intention & motivation de l’adversaire
-	- Gai financier, espionnage industriel ou étatique, hacktivisme…
+    - Gai financier, espionnage industriel ou étatique, hacktivisme…
 - Composant technologique : Décrit la relation entre la capacité et l’infrastructure
-	- Comment les outils (capabilities) interagissent avec les serveurs ou vecteurs techniques (infrastructures), met en évidence les méthodes d’attaque spécifiques.
+    - Comment les outils (capabilities) interagissent avec les serveurs ou vecteurs techniques (infrastructures), met en évidence les méthodes d’attaque spécifiques.

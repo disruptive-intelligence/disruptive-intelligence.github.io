@@ -59,7 +59,7 @@ Avec Load Balancer
 ## Health Checks
 
 - Complément important :
-	- Le Load Balancer vérifie généralement que les serveurs sont **disponibles et fonctionnels**.
+    - Le Load Balancer vérifie généralement que les serveurs sont **disponibles et fonctionnels**.
 - Si un serveur ne répond plus :
 
 ```
@@ -120,11 +120,11 @@ Load Balancer
 > ⚠️ Il **ne constitue pas à lui seul une protection DDoS**. Une attaque suffisamment importante peut saturer le Load Balancer, la connexion Internet ou l’ensemble du backend.
 
 - Pour le DDoS, on utilise aussi :
-	- rate limiting ;
-	- CDN / Anycast ;
-	- anti-DDoS / scrubbing service ;
-	- firewall / WAF ;
-	- capacité réseau distribuée.
+    - rate limiting ;
+    - CDN / Anycast ;
+    - anti-DDoS / scrubbing service ;
+    - firewall / WAF ;
+    - capacité réseau distribuée.
 ## Session Persistence / Sticky Sessions
 
 - Complément utile pour les applications Web :

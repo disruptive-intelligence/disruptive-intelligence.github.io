@@ -85,16 +85,16 @@ Vecteurs documentés :
 
 - **MVT (Mobile Verification Toolkit)** : développé et maintenu par *Amnesty Security Lab*, open source (https://github.com/mvt-project/mvt). Analyse les sauvegardes iPhone (iTunes/iCloud-style local backups, *pas* iCloud chiffré) et les *full filesystem dumps* Android pour détecter des indicateurs de compromission (IOCs) Pegasus, Predator, Graphite, QuaDream et d’autres familles documentées. Plus efficace en post-mortem (sur un appareil suspecté) qu’en temps réel. Les IOCs sont publiés et mis à jour par Amnesty et Citizen Lab à mesure de leurs investigations.
   
-  *Limites* : MVT détecte les IOCs *connus*. Une variante neuve d’un spyware mercenaire peut ne pas être détectée. L’absence de détection ne prouve pas l’absence d’infection. C’est néanmoins un outil de référence — la majorité des cas Pegasus publiquement confirmés l’ont été après analyse MVT par Amnesty ou Citizen Lab.
+    *Limites* : MVT détecte les IOCs *connus*. Une variante neuve d’un spyware mercenaire peut ne pas être détectée. L’absence de détection ne prouve pas l’absence d’infection. C’est néanmoins un outil de référence — la majorité des cas Pegasus publiquement confirmés l’ont été après analyse MVT par Amnesty ou Citizen Lab.
   
-  *Workflow typique* : sauvegarde locale iTunes du iPhone (cryptée, mais MVT peut traiter), import dans MVT, scan automatique contre les IOCs, génération d’un rapport. Pour Android, plus complexe (full image dump requis, possibilité de root requis).
+    *Workflow typique* : sauvegarde locale iTunes du iPhone (cryptée, mais MVT peut traiter), import dans MVT, scan automatique contre les IOCs, génération d’un rapport. Pour Android, plus complexe (full image dump requis, possibilité de root requis).
 
 - **iVerify** : outil commercial développé par *Trail of Bits* puis par une équipe dédiée. Application iOS / Android. Heuristiques pour détecter spywares connus, audit de la posture de sécurité de l’appareil (versions à jour, Lockdown Mode actif, services à risque), alertes en cas d’anomalie. Pratique au quotidien pour profils HVT — c’est un complément de MVT, pas un substitut. Modèle freemium, plans pro pour journalistes/ONG accessibles via partenariats avec Access Now.
 - **Notifications plateformes** :
-  - **Apple Threat Notifications** envoyées depuis 2021. Le wording standard est « Apple a détecté que vous êtes potentiellement la cible d’une attaque parrainée par un État ». Apple ne précise pas le vecteur, mais publie les critères généraux. Ces notifications sont conservatrices — Apple privilégie d’alerter à risque légèrement avéré plutôt que tarder à le faire.
-  - **Google Threat Analysis Group (TAG)** envoie des notifications équivalentes sur Gmail et Workspace pour ciblage par acteurs étatiques.
-  - **Meta** alerte via WhatsApp dans les cas de zero-click exploit (cas Paragon Graphite, janvier 2025 : ~90 utilisateurs notifiés dans plusieurs pays dont l’Italie).
-  - **Si tu reçois une telle notification** : prends-la au sérieux. C’est rare. Ces notifications sont quasi systématiquement validées par des éléments concrets côté plateforme. Application immédiate de la procédure 33.9.
+    - **Apple Threat Notifications** envoyées depuis 2021. Le wording standard est « Apple a détecté que vous êtes potentiellement la cible d’une attaque parrainée par un État ». Apple ne précise pas le vecteur, mais publie les critères généraux. Ces notifications sont conservatrices — Apple privilégie d’alerter à risque légèrement avéré plutôt que tarder à le faire.
+    - **Google Threat Analysis Group (TAG)** envoie des notifications équivalentes sur Gmail et Workspace pour ciblage par acteurs étatiques.
+    - **Meta** alerte via WhatsApp dans les cas de zero-click exploit (cas Paragon Graphite, janvier 2025 : ~90 utilisateurs notifiés dans plusieurs pays dont l’Italie).
+    - **Si tu reçois une telle notification** : prends-la au sérieux. C’est rare. Ces notifications sont quasi systématiquement validées par des éléments concrets côté plateforme. Application immédiate de la procédure 33.9.
 
 ## 33.9 Procédure post-compromission suspectée
 

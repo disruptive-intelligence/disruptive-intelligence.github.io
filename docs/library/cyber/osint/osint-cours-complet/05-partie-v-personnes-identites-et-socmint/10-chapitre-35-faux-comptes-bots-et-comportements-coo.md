@@ -46,9 +46,9 @@ L'inauthenticité numérique s'est industrialisée. Bots, fermes de comptes, IA-
 
 - Comptes créés en lot (timestamps de création groupés).
 - Photos de profil :
-  - Recyclées (recherche inversée renvoie autres comptes).
-  - Volées de banques d'images.
-  - **Générées par IA** (signal 2026 majeur).
+    - Recyclées (recherche inversée renvoie autres comptes).
+    - Volées de banques d'images.
+    - **Générées par IA** (signal 2026 majeur).
 - Bios génériques ou absentes.
 - Followings disproportionnés (50 000 follow, 200 follower).
 - Activité corrélée temporellement.

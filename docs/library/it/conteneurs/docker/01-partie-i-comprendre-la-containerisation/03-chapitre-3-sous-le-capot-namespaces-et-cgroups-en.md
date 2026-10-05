@@ -59,8 +59,8 @@ Le processus du conteneur est **bien là, sur l'hôte** — simplement isolé pa
 
 - **Côté admin :** savoir que namespaces + cgroups = l'isolation t'aide à **diagnostiquer**. Un conteneur qui « voit trop » ou « consomme trop » est presque toujours un problème de namespace ou de cgroup mal réglé.
 - **Côté SOC / cyber :** c'est **la clé** pour comprendre les risques de la Partie VIII :
-  - 🛡️ **`--privileged`** **casse des cloisons** (namespaces) et redonne au conteneur un accès large à l'hôte.
-  - 🛡️ **Absence de cgroup / de limites** = pas de garde-fou de ressources = un conteneur (ou un attaquant qui le contrôle) peut provoquer un **déni de service** sur la machine.
+    - 🛡️ **`--privileged`** **casse des cloisons** (namespaces) et redonne au conteneur un accès large à l'hôte.
+    - 🛡️ **Absence de cgroup / de limites** = pas de garde-fou de ressources = un conteneur (ou un attaquant qui le contrôle) peut provoquer un **déni de service** sur la machine.
 
 🔍 **Réflexe diagnostic :** quand un conteneur a un comportement « trop puissant » (il voit l'hôte, accède à des périphériques, consomme sans limite), pose-toi la question : *quelles cloisons ont été abaissées ?* La réponse est presque toujours dans les options de lancement.
 

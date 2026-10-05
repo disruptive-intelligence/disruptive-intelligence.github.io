@@ -45,14 +45,14 @@ Hors périmètre :
 **Jour 2-3** :
 
 - **Tous les mots de passe critiques changés** depuis le nouveau téléphone (ou depuis un cybercafé sécurisé) :
-  - Apple ID Catherine (sortie du « Family Sharing » avec Marc, création nouveau compte distinct si elle migre vers iPhone neuf).
-  - Compte Google.
-  - Compte Microsoft.
-  - Comptes bancaires (et procédure spécifique avec la banque pour bloquer Marc de l’accès en ligne sur comptes joints).
-  - Messageries : Signal, WhatsApp réinstallés sur nouveau téléphone, anciennes sessions révoquées.
-  - Réseaux sociaux : changement de mots de passe, retrait de Marc des contacts (Facebook, Instagram, LinkedIn).
-  - Compte impôts, sécurité sociale, et autres administratifs.
-  - Email principal (Gmail Catherine) : mot de passe, MFA, contacts de récupération vérifiés (retrait de Marc s’il était listé), questions de récupération mises à jour.
+    - Apple ID Catherine (sortie du « Family Sharing » avec Marc, création nouveau compte distinct si elle migre vers iPhone neuf).
+    - Compte Google.
+    - Compte Microsoft.
+    - Comptes bancaires (et procédure spécifique avec la banque pour bloquer Marc de l’accès en ligne sur comptes joints).
+    - Messageries : Signal, WhatsApp réinstallés sur nouveau téléphone, anciennes sessions révoquées.
+    - Réseaux sociaux : changement de mots de passe, retrait de Marc des contacts (Facebook, Instagram, LinkedIn).
+    - Compte impôts, sécurité sociale, et autres administratifs.
+    - Email principal (Gmail Catherine) : mot de passe, MFA, contacts de récupération vérifiés (retrait de Marc s’il était listé), questions de récupération mises à jour.
 - **Contacts de récupération audités** : Apple Account Recovery Contacts (retrait de Marc s’il l’avait été), Google (idem).
 - **Numéro de récupération** : remplacement par le nouveau numéro.
 - **Comptes joints non clos immédiatement** (procédure légale en cours pour le partage), mais surveillés activement et logs préservés.

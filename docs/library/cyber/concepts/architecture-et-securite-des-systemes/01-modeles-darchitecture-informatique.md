@@ -18,8 +18,8 @@ up:
 - Ce modèle de base a jeté les fondations de la conception des ordinateurs modernes et est encore largement utilisé aujourd'hui.
 - Modèle fondamental proposé en **1945**.
 - Selon ce modèle, une architecture informatique de base se compose : 
-	- d'une unité de traitement centrale (**CPU**) ;
-	- d'une structure de mémoire qui collecte les données ;
+    - d'une unité de traitement centrale (**CPU**) ;
+    - d'une structure de mémoire qui collecte les données ;
     - périphériques d’entrée/sortie ;
     - bus permettant les communications.
 
@@ -51,9 +51,9 @@ CPU
 #### Memory
 
 - Dans l’architecture Von Neumann :
-	- **instructions et données utilisent la même mémoire** ;
-	- La mémoire sert à la fois pour les instructions et les données, permettant le stockage simultané des programmes et des données ;
-	- le CPU lit et écrit dans cette mémoire.
+    - **instructions et données utilisent la même mémoire** ;
+    - La mémoire sert à la fois pour les instructions et les données, permettant le stockage simultané des programmes et des données ;
+    - le CPU lit et écrit dans cette mémoire.
 
 ```
 Memory
@@ -96,11 +96,11 @@ Address Bus → où ?
 #### Input / Output Devices
 
 - Permettent au système de communiquer avec l’extérieur :
-	- keyboard ;
-	- mouse ;
-	- monitor ;
-	- printer ;
-	- périphériques externes.
+    - keyboard ;
+    - mouse ;
+    - monitor ;
+    - printer ;
+    - périphériques externes.
 ### Architecture Harvard
 
 - L'architecture Harvard, tout comme l'architecture de Von Neumann, est un modèle qui définit l'architecture informatique de base.
@@ -127,9 +127,9 @@ Harvard
 
 - Les différentes structures de mémoire proposées dans le cadre de l'architecture Harvard permettent de traiter simultanément les instructions et les données, ce qui augmente la vitesse du processeur.
 - Cette séparation permet :
-	- accès simultané aux instructions et aux données ;
-	- réduction de certains conflits d’accès mémoire ;
-	- meilleures performances dans certains systèmes.
+    - accès simultané aux instructions et aux données ;
+    - réduction de certains conflits d’accès mémoire ;
+    - meilleures performances dans certains systèmes.
 
 > Complément : beaucoup de processeurs modernes utilisent une **Modified Harvard Architecture** : espace mémoire globalement unifié, mais caches séparés pour instructions et données (`I-Cache` / `D-Cache`).
 
@@ -157,11 +157,11 @@ Harvard     → separate instructions/data paths
 
 - Une **ISA** définit définit les instructions des systèmes informatiques, leur fonctionnalité et leur mode de fonctionnement
 - Elle détermine l'interaction entre le processeur (CPU) et le logiciel :
-	- instructions disponibles ;
-	- registres ;
-	- types de données ;
-	- modes d’adressage ;
-	- comportement des instructions.
+    - instructions disponibles ;
+    - registres ;
+    - types de données ;
+    - modes d’adressage ;
+    - comportement des instructions.
 
 ```
 Software
@@ -185,7 +185,7 @@ ISA
 
 - L'architecture CISC (Ordinateur à jeu d'instructions complexe) Offre plus de généralité et de flexibilité dans le traitement d'une grande variété d'instructions.
 - Architecture est utilisée dans les processeurs des ordinateurs modernes à usage général :
-	- (**Intel x86**, etc.).
+    - (**Intel x86**, etc.).
 - Jeu d’instructions riche et complexe.
 - Une instruction peut effectuer plusieurs opérations.
 ##### Caractéristiques
@@ -248,10 +248,10 @@ RISC
     - composants noyau ;
     - drivers exécutés en kernel mode.
 - Peut accéder directement à :
-	- mémoire ;
-	- CPU ;
-	- périphériques ;
-	- ressources système critiques.
+    - mémoire ;
+    - CPU ;
+    - périphériques ;
+    - ressources système critiques.
 
 ```
 Ring 0

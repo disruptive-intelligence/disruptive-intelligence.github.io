@@ -270,9 +270,9 @@ Pour mettre en pratique ces notions de base, voici un mini-cas très simple :
 
 - **Faits observables** : la société est récente (8 mois), à très faible capital, sans présence opérationnelle visible (pas de site, domiciliation), avec un dirigeant au profil incohérent avec une activité commerciale internationale supposée. Le flux entrant (400 000 €) est significatif au regard de la taille apparente.
 - **Hypothèses calibrées** :
-  - Société écran *probable* (signaux convergents).
-  - Activité économique réelle *douteuse* à ce stade.
-  - Le flux entrant est *à investiguer* : est-il cohérent avec une activité légitime ?
+    - Société écran *probable* (signaux convergents).
+    - Activité économique réelle *douteuse* à ce stade.
+    - Le flux entrant est *à investiguer* : est-il cohérent avec une activité légitime ?
 
 #### Ce qu’on **ne peut pas** dire à ce stade
 

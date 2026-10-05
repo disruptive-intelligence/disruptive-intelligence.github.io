@@ -12,17 +12,17 @@ Source des captures : [Hack The Box Academy - Event Log Analysis](https://academ
 ## Journaux d’événements des tâches planifiées Windows
 
 - **Task Scheduler** permet d’exécuter automatiquement :
-  - programmes ;
-  - scripts ;
-  - sauvegardes ;
-  - tâches de maintenance ;
-  - actions déclenchées par une heure, un calendrier ou un événement.
+    - programmes ;
+    - scripts ;
+    - sauvegardes ;
+    - tâches de maintenance ;
+    - actions déclenchées par une heure, un calendrier ou un événement.
 - Les tâches peuvent être créées :
-  - localement ;
-  - à distance ;
-  - via GUI ;
-  - CLI / PowerShell ;
-  - API Windows.
+    - localement ;
+    - à distance ;
+    - via GUI ;
+    - CLI / PowerShell ;
+    - API Windows.
 
 ```text
 Trigger
@@ -68,13 +68,13 @@ Malicious Script
 
 - Les Event Logs peuvent conserver la trace d’une tâche même après sa suppression.
 - Cela permet de retrouver :
-  - nom ;
-  - auteur ;
-  - trigger ;
-  - commande ;
-  - arguments ;
-  - modifications ;
-  - suppression.
+    - nom ;
+    - auteur ;
+    - trigger ;
+    - commande ;
+    - arguments ;
+    - modifications ;
+    - suppression.
 
 ```text
 Attacker
@@ -425,11 +425,11 @@ Security
 
 - Déclenché lorsqu’une tâche existante est modifiée.
 - Peut contenir des informations comparables à l’événement de création :
-  - Task Name ;
-  - nouvelle définition ;
-  - trigger ;
-  - programme ;
-  - arguments.
+    - Task Name ;
+    - nouvelle définition ;
+    - trigger ;
+    - programme ;
+    - arguments.
 
 ### Pourquoi modifier une tâche existante ?
 
@@ -534,8 +534,8 @@ TaskScheduler/Operational
 
 - Indique également la suppression d’une tâche.
 - Principalement utile pour :
-  - nom de tâche ;
-  - timestamp.
+    - nom de tâche ;
+    - timestamp.
 
 ![Evenement TaskScheduler 141 suppression de tache](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-scheduled-tasks-event-logs-15.png)
 

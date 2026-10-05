@@ -26,21 +26,21 @@ Assets
 ## Sécurité des installations
 
 - Concerne notamment :
-	- bâtiments ;
-	- bureaux ;
-	- entrepôts ;
-	- usines.
+    - bâtiments ;
+    - bureaux ;
+    - entrepôts ;
+    - usines.
 - L’objectif est de protéger les **personnes, actifs et informations** présents sur le site.
 ### Sécurité environnementale
 
 - Utiliser des barrières physiques pour limiter les accès non autorisés :
-	- clôtures ;
-	- barrières ;
-	- checkpoints ;
-	- points d’entrée/sortie contrôlés ;
-	- éclairage ;
-	- agents de sécurité ;
-	- caméras.
+    - clôtures ;
+    - barrières ;
+    - checkpoints ;
+    - points d’entrée/sortie contrôlés ;
+    - éclairage ;
+    - agents de sécurité ;
+    - caméras.
 
 ```
 Perimeter
@@ -52,10 +52,10 @@ Perimeter
 ### Gestion des visiteurs
 
 - Les visiteurs doivent être contrôlés via :
-	- vérification d’identité ;
-	- enregistrement ;
-	- badges/cartes temporaires ;
-	- accompagnement par un employé.
+    - vérification d’identité ;
+    - enregistrement ;
+    - badges/cartes temporaires ;
+    - accompagnement par un employé.
 
 ```
 Visitor
@@ -89,10 +89,10 @@ Visitor
 ## Préparation aux urgences
 
 - Prévoir :
-	- plans d’évacuation ;
-	- procédures de gestion de crise ;
-	- systèmes de communication ;
-	- procédures adaptées aux incendies, catastrophes ou attaques.
+    - plans d’évacuation ;
+    - procédures de gestion de crise ;
+    - systèmes de communication ;
+    - procédures adaptées aux incendies, catastrophes ou attaques.
 - Ces plans doivent être :
 
 ```
@@ -105,10 +105,10 @@ Create
 ## Sécurité des Data Centers
 
 - Les centres de données hébergent des ressources critiques :
-	- données ;
-	- serveurs ;
-	- systèmes ;
-	- infrastructure réseau.
+    - données ;
+    - serveurs ;
+    - systèmes ;
+    - infrastructure réseau.
 ### Contrôle d’accès
 
 - L’accès doit être limité au personnel autorisé.
@@ -131,11 +131,11 @@ Malicious Traffic   → Detect / Block
 ### Physical Security
 
 - Mesures possibles :
-	- CCTV ;
-	- détecteurs de mouvement ;
-	- alarmes ;
-	- systèmes de surveillance ;
-	- personnel de sécurité.
+    - CCTV ;
+    - détecteurs de mouvement ;
+    - alarmes ;
+    - systèmes de surveillance ;
+    - personnel de sécurité.
 
 → permettent de détecter ou empêcher :
 
@@ -145,11 +145,11 @@ Malicious Traffic   → Detect / Block
 ### Incendie & contrôle climatique
 
 - Un datacenter doit disposer de :
-	- détection de fumée ;
-	- systèmes anti-incendie ;
-	- extinction incendie ;
-	- contrôle de la température ;
-	- contrôle de l’humidité.
+    - détection de fumée ;
+    - systèmes anti-incendie ;
+    - extinction incendie ;
+    - contrôle de la température ;
+    - contrôle de l’humidité.
 
 → protège le matériel et les données contre les risques environnementaux.
 ### UPS / ASI & sauvegardes
@@ -218,8 +218,8 @@ Personnel
     - barrières ;
     - contrôles d’accès.
 - Objectifs :
-	- protéger les données sensibles ;
-	- réduire les risques de fuite/perte ;
-	- assurer la continuité d’activité ;
-	- protéger les équipements volés/perdus ;
-	- répondre aux exigences de conformité.
+    - protéger les données sensibles ;
+    - réduire les risques de fuite/perte ;
+    - assurer la continuité d’activité ;
+    - protéger les équipements volés/perdus ;
+    - répondre aux exigences de conformité.

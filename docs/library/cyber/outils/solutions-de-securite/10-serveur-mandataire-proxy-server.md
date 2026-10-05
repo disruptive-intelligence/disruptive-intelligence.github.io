@@ -80,14 +80,14 @@ Source IP = Proxy
 
 - et non directement l’IP du client. Il faut donc corréler avec les **logs du proxy** pour retrouver l’utilisateur/source d’origine.
 - Informations utiles :
-	- timestamp ;
-	- IP client ;
-	- utilisateur authentifié ;
-	- destination ;
-	- URL ;
-	- méthode HTTP ;
-	- action `ALLOW/DENY` ;
-	- volume de données.
+    - timestamp ;
+    - IP client ;
+    - utilisateur authentifié ;
+    - destination ;
+    - URL ;
+    - méthode HTTP ;
+    - action `ALLOW/DENY` ;
+    - volume de données.
 ### Headers Proxy
 
 - Dans certains environnements Web, l’IP originale peut être transmise dans des headers comme :

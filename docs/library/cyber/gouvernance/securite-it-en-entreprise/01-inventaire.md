@@ -18,12 +18,12 @@ up:
 - logiciels installés avec leur **version exacte** ;
 - date du dernier inventaire/report.
 - Complément utile pour un inventaire exploitable :
-	- hostname / IP / OS ;
-	- propriétaire / utilisateur ;
-	- localisation ;
-	- criticité de l’asset ;
-	- statut de support ;
-	- dernier contact / dernière mise à jour.
+    - hostname / IP / OS ;
+    - propriétaire / utilisateur ;
+    - localisation ;
+    - criticité de l’asset ;
+    - statut de support ;
+    - dernier contact / dernière mise à jour.
 
 ```
 Inventory → savoir ce qu'on possède
@@ -38,9 +38,9 @@ Inventory → savoir ce qu'on possède
     - l’identifier via l’inventaire ;
     - le remplacer ou le retirer du réseau.
 - Si son maintien est indispensable :
-	- effectuer une **risk acceptance** formelle par le CISO ;
-	- documenter cette exception dans l’inventaire ;
-	- réévaluer régulièrement le risque, notamment lors de nouvelles vulnérabilités.
+    - effectuer une **risk acceptance** formelle par le CISO ;
+    - documenter cette exception dans l’inventaire ;
+    - réévaluer régulièrement le risque, notamment lors de nouvelles vulnérabilités.
 - Complément pertinent :
 
 ```
@@ -94,9 +94,9 @@ Catalogue approuvé
     - vulnérables / présentant une CVE jugée critique ;
     - incompatibles avec la politique de sécurité.
 - Outils possibles :
-	- **AppLocker**
-	- Intune
-	- politiques centralisées.
+    - **AppLocker**
+    - Intune
+    - politiques centralisées.
 - Toute tentative d’exécution d’un logiciel interdit doit idéalement :
 
 ```
@@ -111,9 +111,9 @@ Alert IT/SOC
 
 - Définir des **hardening baselines** afin que les postes/serveurs aient une configuration sécurisée et homogène.
 - Peut couvrir :
-	- procédure de remise d’un poste avec checklist ;
-	- audit de la configuration sécurisée ;
-	- détection/alerte lorsqu’une configuration est modifiée.
+    - procédure de remise d’un poste avec checklist ;
+    - audit de la configuration sécurisée ;
+    - détection/alerte lorsqu’une configuration est modifiée.
 
 ```
 Security Baseline
@@ -125,9 +125,9 @@ Configuration modifiée
 ```
 
 - Outils cités :
-	- **Ansible**
-	- **GPO**
-	- **Intune**
+    - **Ansible**
+    - **GPO**
+    - **Intune**
 ## Antivirus / EDR
 
 - Déployer un **AV**, idéalement un **EDR**, sur l’ensemble du parc.
@@ -139,7 +139,7 @@ EDR → monitorer / détecter / investiguer / répondre
 ```
 
 - Le déploiement seul ne suffit pas :
-	- vérifier que les agents fonctionnent ;
-	- surveiller les alertes ;
-	- investiguer les détections ;
-	- suivre les endpoints non protégés ou déconnectés.
+    - vérifier que les agents fonctionnent ;
+    - surveiller les alertes ;
+    - investiguer les détections ;
+    - suivre les endpoints non protégés ou déconnectés.

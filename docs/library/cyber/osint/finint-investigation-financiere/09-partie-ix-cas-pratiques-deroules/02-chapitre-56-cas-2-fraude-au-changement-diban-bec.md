@@ -51,9 +51,9 @@ ALPHA dépose plainte le mercredi 15 mars matin et saisit son cabinet d’avocat
 
 - La banque d’IBERICA en Espagne, sollicitée, indique des transferts sortants rapides après le crédit de 215 K€.
 - Détail (partiel, sous le cadre coopération européenne) :
-  - 14h35-14h41 : 5 SCT Inst sortants depuis IBERICA vers 5 IBAN distincts (3 au Portugal, 2 en Lituanie).
-  - Chaque sortie : 40 000 € à 45 000 €.
-  - Bénéficiaires : 5 comptes ouverts récemment dans 3 banques différentes (Revolut LT, Wise via BE, et 3 banques portugaises moyennes).
+    - 14h35-14h41 : 5 SCT Inst sortants depuis IBERICA vers 5 IBAN distincts (3 au Portugal, 2 en Lituanie).
+    - Chaque sortie : 40 000 € à 45 000 €.
+    - Bénéficiaires : 5 comptes ouverts récemment dans 3 banques différentes (Revolut LT, Wise via BE, et 3 banques portugaises moyennes).
 
 **OSINT sur les 5 destinataires** : tous sont des personnes physiques (apparemment), avec profils minimaux. Aucun lien apparent entre elles. *Probable* réseau de mules.
 

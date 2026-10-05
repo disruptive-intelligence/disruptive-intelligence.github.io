@@ -289,9 +289,9 @@ Crée `compare.asm` qui :
 1. Déclare `a dq 25` et `b dq 17` dans `.data`.
 2. Compare les deux valeurs.
 3. Affiche un des trois messages :
-   - `"A est plus grand"`
-   - `"B est plus grand"`
-   - `"A et B sont egaux"`
+    - `"A est plus grand"`
+    - `"B est plus grand"`
+    - `"A et B sont egaux"`
 4. Quitte avec code 0.
 
 Tu auras besoin de trois messages dans `.data`, et de **trois branches** (`jg`, `jl`, et le cas d'égalité par défaut).

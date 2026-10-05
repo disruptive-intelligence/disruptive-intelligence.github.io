@@ -143,10 +143,10 @@ Le **Key Assumptions Check** identifie et teste les hypothèses tacites sur lesq
 
 1. Lister explicitement les hypothèses non démontrées qui sous-tendent l'analyse.
 2. Pour chaque hypothèse, évaluer :
-   - Est-elle nécessaire ?
-   - Est-elle vraie ?
-   - Quelle évidence la soutient ?
-   - Quelle évidence la contredirait ?
+    - Est-elle nécessaire ?
+    - Est-elle vraie ?
+    - Quelle évidence la soutient ?
+    - Quelle évidence la contredirait ?
 3. Identifier les hypothèses dont l'invalidation casserait l'analyse.
 4. Tester ces hypothèses avec sources spécifiques.
 

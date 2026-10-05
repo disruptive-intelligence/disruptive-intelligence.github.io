@@ -31,8 +31,8 @@ CPU
 - Sous-système d'un processeur qui effectue les opérations mathématiques et logiques de base.
 - L'élément de base de tous les processeurs, de ceux qui effectuent les opérations les plus simples aux systèmes informatiques les plus complexes.
 - L'ALU se compose de deux parties principales :
-	- **Arithmetic Unit** - Unité arithmétique : Effectue des opérations arithmétiques telles que l'addition, la soustraction, la multiplication et la division.
-	- **Logic Unit** - : Effectue des opérations logiques comme : AND, OR, NOT, XOR
+    - **Arithmetic Unit** - Unité arithmétique : Effectue des opérations arithmétiques telles que l'addition, la soustraction, la multiplication et la division.
+    - **Logic Unit** - : Effectue des opérations logiques comme : AND, OR, NOT, XOR
 
 → l’ALU constitue une partie essentielle de l’exécution des instructions.
 ### CU - Control Unit / Unité de Contrôle
@@ -47,10 +47,10 @@ Fetch
 ```
 
 - Responsabilités principales :
-	- `Lecture et interprétation des instructions` :  La CU reçoit les instructions de la mémoire et les interprète. Cela implique de déterminer la fonction de l'instruction.
-	- `Exécution des instructions :` La CU envoie les instructions à l'ALU. L'ALU les exécute et renvoie les résultats à la CU.
-	- `Ordonnancement des instructions :` La CU met les instructions en ordre. Cela garantit qu'elles sont exécutées dans le bon ordre.
-	- `Interruption des instructions :` La CU peut interrompre les instructions. Cela permet au CPU d'exécuter une autre tâche.
+    - `Lecture et interprétation des instructions` :  La CU reçoit les instructions de la mémoire et les interprète. Cela implique de déterminer la fonction de l'instruction.
+    - `Exécution des instructions :` La CU envoie les instructions à l'ALU. L'ALU les exécute et renvoie les résultats à la CU.
+    - `Ordonnancement des instructions :` La CU met les instructions en ordre. Cela garantit qu'elles sont exécutées dans le bon ordre.
+    - `Interruption des instructions :` La CU peut interrompre les instructions. Cela permet au CPU d'exécuter une autre tâche.
 
 > La CU ne « renvoie » pas systématiquement elle-même chaque résultat en mémoire : elle **contrôle et coordonne** les unités qui réalisent les opérations.
 ### Registers — Registres
@@ -72,10 +72,10 @@ Registers
 
 - Ils réduisent le nombre d’accès nécessaires à la RAM.
 - Exemples courants de registres selon l’architecture :
-	- registres généraux ;
-	- **Program Counter / Instruction Pointer** ;
-	- **Stack Pointer** ;
-	- registres de flags/status.
+    - registres généraux ;
+    - **Program Counter / Instruction Pointer** ;
+    - **Stack Pointer** ;
+    - registres de flags/status.
 
 > ⚠️ Dire qu’un CPU 32 bits possède uniquement des registres de 32 bits est une simplification. La taille des registres dépend de l’ISA et du type de registre.
 ## Types d’Exécution du CPU
@@ -101,9 +101,9 @@ CPU/Core 3 → Task C
 ```
 
 - Avantages :
-	- parallélisme ;
-	- meilleures performances ;
-	- meilleure capacité à traiter plusieurs workloads simultanément.
+    - parallélisme ;
+    - meilleures performances ;
+    - meilleure capacité à traiter plusieurs workloads simultanément.
 - Aujourd’hui, les processeurs multicœurs rendent ce modèle très courant.
 - en pratique moderne, le terme _multiprocessing_ peut aussi désigner l'utilisation de **plusieurs unités d'exécution CPU**, donc plusieurs cœurs. Il faut distinguer trois niveaux :
 
@@ -114,7 +114,7 @@ CPU/Core 3 → Task C
 |**Thread logique**|SMT / Hyper-Threading|plusieurs CPU logiques par cœur|
 
 - Cas 1 — plusieurs processeurs physiques : Historiquement, le multiprocessing ressemblait surtout à ça :
-	- Deux processeurs physiques travaillent en parallèle. C'est ce qu'on appelle typiquement un système **multiprocesseur**, souvent avec une architecture **SMP** (_Symmetric Multiprocessing_).
+    - Deux processeurs physiques travaillent en parallèle. C'est ce qu'on appelle typiquement un système **multiprocesseur**, souvent avec une architecture **SMP** (_Symmetric Multiprocessing_).
 
 ```
 Carte mère
@@ -125,9 +125,9 @@ Carte mère
 ```
 
 - Cas 2 — un seul CPU avec plusieurs cœurs : Aujourd'hui, beaucoup de machines sont plutôt :
-	- Il n'y a qu'**un seul processeur physique**, mais quatre cœurs capables d'exécuter du travail en parallèle.
-	- Du point de vue du système d'exploitation, cela permet quand même du **multiprocessing parallèle**.
-	- C'est pourquoi l'expression « plusieurs processeurs » est un peu ambiguë.
+    - Il n'y a qu'**un seul processeur physique**, mais quatre cœurs capables d'exécuter du travail en parallèle.
+    - Du point de vue du système d'exploitation, cela permet quand même du **multiprocessing parallèle**.
+    - C'est pourquoi l'expression « plusieurs processeurs » est un peu ambiguë.
 
 ```
 CPU physique
@@ -160,18 +160,18 @@ CPU physique
 ```
 
 - Donc la machine peut avoir :
-	- **1 socket CPU**
-	- **4 cœurs physiques**
-	- **2 threads par cœur**
-	- donc **8 CPU logiques**
+    - **1 socket CPU**
+    - **4 cœurs physiques**
+    - **2 threads par cœur**
+    - donc **8 CPU logiques**
 ### Multitasking — Multitâche
 
 - Capacité d’un OS à faire progresser **plusieurs tâches/processus** de façon concurrente.
 - Chaque processus possède généralement son propre :
-	- espace mémoire virtuel ;
-	- contexte d’exécution ;
-	- ressources.
-		- ce qui entraîne une augmentation des besoins en mémoire.
+    - espace mémoire virtuel ;
+    - contexte d’exécution ;
+    - ressources.
+        - ce qui entraîne une augmentation des besoins en mémoire.
 - Exemple :
 
 ```
@@ -237,13 +237,13 @@ Thread 3 → autosave
 ```
 
 - Les threads d’un même processus partagent généralement :
-	- espace mémoire ;
-	- code ;
-	- certaines ressources.
+    - espace mémoire ;
+    - code ;
+    - certaines ressources.
 - Mais disposent notamment de leur propre :
-	- stack ;
-	- état d’exécution ;
-	- registres CPU lorsqu’ils sont planifiés.
+    - stack ;
+    - état d’exécution ;
+    - registres CPU lorsqu’ils sont planifiés.
 
 > ⚠️ Le multithreading permet la **concurrence** ; il devient réellement parallèle lorsque plusieurs threads sont exécutés simultanément sur plusieurs cores.
 ## Process vs Thread

@@ -18,12 +18,12 @@ ASIC
 ```
 
 - Le choix dépend notamment de :
-	- performance ;
-	- consommation ;
-	- coût ;
-	- flexibilité ;
-	- capacité de reprogrammation ;
-	- usage prévu.
+    - performance ;
+    - consommation ;
+    - coût ;
+    - flexibilité ;
+    - capacité de reprogrammation ;
+    - usage prévu.
 ## Microcontrôleur — MCU
 
 - Un **microcontrôleur** regroupe dans un même circuit intégré :
@@ -68,16 +68,16 @@ Les microcontrôleurs sont très présents dans les **Systèmes embarqués** :
 - équipements industriels ;
 - appareils électroniques.
 - Exemples de familles :
-	- PIC12 / PIC16 / PIC18 / PIC32 ;
-	- MSP430 ;
-	- STM32 ;
-	- NXP LPC / S32K ;
-	- Renesas RA / RX.
+    - PIC12 / PIC16 / PIC18 / PIC32 ;
+    - MSP430 ;
+    - STM32 ;
+    - NXP LPC / S32K ;
+    - Renesas RA / RX.
 ### Limites
 
 - Généralement moins puissants qu’un CPU généraliste moderne.
-	- Cette structure flexible entraîne une perte de vitesse et de performance par rapport aux CPU.
-	- Peuvent pas être utilisés dans des environnements qui nécessitent grande puissance de traitement.
+    - Cette structure flexible entraîne une perte de vitesse et de performance par rapport aux CPU.
+    - Peuvent pas être utilisés dans des environnements qui nécessitent grande puissance de traitement.
 - Optimisés pour :
     - contrôle ;
     - faible consommation ;
@@ -104,8 +104,8 @@ FPGA
 ### Programmation
 
 - Les FPGA sont généralement décrits avec des **Hardware Description Languages (HDL)** :
-	- Verilog ;
-	- VHDL.
+    - Verilog ;
+    - VHDL.
 
 ```
 VHDL / Verilog
@@ -115,21 +115,21 @@ VHDL / Verilog
 ```
 
 - Ils permettent de créer :
-	- circuits logiques spécifiques ;
-	- accélérateurs ;
-	- interfaces matérielles ;
-	- parfois un processeur soft-core.
+    - circuits logiques spécifiques ;
+    - accélérateurs ;
+    - interfaces matérielles ;
+    - parfois un processeur soft-core.
 ### Caractéristiques
 
 - Avantages :
-	- forte parallélisation ;
-	- haute performance sur certains traitements ;
-	- reprogrammable ;
-	- architecture personnalisable.
+    - forte parallélisation ;
+    - haute performance sur certains traitements ;
+    - reprogrammable ;
+    - architecture personnalisable.
 - Inconvénients :
-	- coûts plus élevés que les microcontrôleurs, tant en termes d'acquisition que de mise en œuvre ;
-	- développement plus complexe ;
-	- besoin de compétences hardware/HDL.
+    - coûts plus élevés que les microcontrôleurs, tant en termes d'acquisition que de mise en œuvre ;
+    - développement plus complexe ;
+    - besoin de compétences hardware/HDL.
 ### Domaines d’utilisation
 
 - systèmes militaires ;

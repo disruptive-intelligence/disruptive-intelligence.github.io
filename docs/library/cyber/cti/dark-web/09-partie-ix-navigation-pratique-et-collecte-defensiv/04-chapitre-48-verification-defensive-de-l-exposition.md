@@ -84,10 +84,10 @@ Pour les propriétaires de domaines vérifiés, HIBP expose tous les emails comp
 1. Aller sur haveibeenpwned.com/DomainSearch.
 2. Entrer le domaine (ex : `vectris-aerospace.eu`).
 3. HIBP demande de prouver la propriété — plusieurs méthodes :
-   - Email à un compte privilégié du domaine (postmaster@, security@, etc.).
-   - DNS TXT record.
-   - Meta tag sur le site web.
-   - Upload d'un fichier sur le site web.
+    - Email à un compte privilégié du domaine (postmaster@, security@, etc.).
+    - DNS TXT record.
+    - Meta tag sur le site web.
+    - Upload d'un fichier sur le site web.
 4. Une fois vérifié, accès aux résultats.
 
 **Résultats** : liste de tous les emails du domaine apparaissant dans des breaches, breaches concernés, dates, statistiques.

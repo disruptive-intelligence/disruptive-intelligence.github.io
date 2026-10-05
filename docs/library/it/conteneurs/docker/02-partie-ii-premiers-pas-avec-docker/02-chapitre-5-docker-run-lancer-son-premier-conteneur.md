@@ -84,9 +84,9 @@ docker run --rm -it alpine sh
 
 - **Côté admin :** `docker run` remplace tout un rituel (installer, configurer, démarrer un service) par **une ligne reproductible**. Lancer ≠ installer : tu ne « salis » pas la machine hôte, tout vit dans le conteneur.
 - **Côté SOC / cyber :** chaque option de `run` est une **décision de surface d'attaque**. Quelques réflexes posés ici, détaillés plus loin :
-  - 🛡️ `-p 8080:80` **publie un port** : ce qui était interne devient **joignable**. À ne faire qu'en conscience (Ch. 13).
-  - 🛡️ `-v` / `--mount` **monte des chemins de l'hôte** : puissant et risqué (Ch. 12).
-  - 🛡️ `--privileged`, `--user`, `--network host` : changent radicalement l'isolation (Ch. 17).
+    - 🛡️ `-p 8080:80` **publie un port** : ce qui était interne devient **joignable**. À ne faire qu'en conscience (Ch. 13).
+    - 🛡️ `-v` / `--mount` **monte des chemins de l'hôte** : puissant et risqué (Ch. 12).
+    - 🛡️ `--privileged`, `--user`, `--network host` : changent radicalement l'isolation (Ch. 17).
 
 🔍 **Réflexe diagnostic :** quand un conteneur « ne se comporte pas comme prévu », la cause est souvent **dans les options de `run`** (mauvais port publié, image inattendue, commande surchargée). Relis la ligne `run` avant d'aller chercher plus loin.
 

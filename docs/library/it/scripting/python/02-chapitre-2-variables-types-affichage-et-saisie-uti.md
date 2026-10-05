@@ -332,7 +332,7 @@ Crée un script `fiche_ioc.py` qui :
 3. Demande un nombre de connexions observées (converti en entier).
 4. Demande un niveau de confiance entre 0 et 1 (converti en `float`).
 5. Affiche une fiche récapitulative claire avec des f-strings, par exemple :
-   `"[!] IOC 203.0.113.5 — 47 connexions — confiance 0.9"`.
+    `"[!] IOC 203.0.113.5 — 47 connexions — confiance 0.9"`.
 
 ## ✅ Tu sais maintenant…
 

@@ -202,10 +202,10 @@ up:
 2. **Executive summary** (1-2 pages) : principaux constats, menaces prioritaires, recommandations clés
 3. **Méthodologie** (1 page) : périmètre, période, sources, frameworks, limites explicites
 4. **Analyse par catégorie de menace** :
-   - Menace étatique (par nexus : Chine, Russie, Iran, RPDC, autres)
-   - Cybercriminalité (ransomware, infostealers, IAB, fraude)
-   - Hacktivisme et menaces idéologiques
-   - Menaces émergentes (IA, supply chain, OT)
+    - Menace étatique (par nexus : Chine, Russie, Iran, RPDC, autres)
+    - Cybercriminalité (ransomware, infostealers, IAB, fraude)
+    - Hacktivisme et menaces idéologiques
+    - Menaces émergentes (IA, supply chain, OT)
 5. **Analyse sectorielle** : menaces spécifiques au secteur de l'organisation
 6. **Tendances et prospective** : évolutions à 12-24 mois
 7. **Recommandations priorisées** : P0/P1/P2 avec justification fondée sur le CTL

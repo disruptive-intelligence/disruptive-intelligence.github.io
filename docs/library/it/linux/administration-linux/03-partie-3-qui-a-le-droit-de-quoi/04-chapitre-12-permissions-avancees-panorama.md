@@ -59,10 +59,10 @@ Deux autres bits spéciaux, à connaître de nom :
 - **SGID** (*Set Group ID*) : comme le SUID mais pour le **groupe**. Sur un dossier, il fait hériter tous les nouveaux fichiers du groupe du dossier — pratique pour le travail collaboratif. Repérable par un `s` dans le triplet du groupe.
 - **Sticky bit** : posé sur un dossier partagé (comme `/tmp`), il empêche chacun de supprimer les fichiers des autres — tu ne peux effacer que **tes** fichiers. Repérable par un `t` à la fin :
 
-  ```bash
-  ls -ld /tmp
-  # drwxrwxrwt ... /tmp     ← le "t" final = sticky bit
-  ```
+    ```bash
+    ls -ld /tmp
+    # drwxrwxrwt ... /tmp     ← le "t" final = sticky bit
+    ```
 
 
 ### Les capabilities : des privilèges root « en pièces détachées »

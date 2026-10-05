@@ -19,12 +19,12 @@ up:
     - externalisée auprès d’un prestataire ;
     - hybride.
 - La gestion des incidents est un ensemble de procédures clairement définies pour gérer et répondre aux incidents de sécurité, permettant de : 
-	- identifier ;
-	- analyser ;
-	- contenir ;
-	- éradiquer ;
-	- récupérer ;
-	- documenter les incidents.
+    - identifier ;
+    - analyser ;
+    - contenir ;
+    - éradiquer ;
+    - récupérer ;
+    - documenter les incidents.
 ### Cycle de vie
 
 ```

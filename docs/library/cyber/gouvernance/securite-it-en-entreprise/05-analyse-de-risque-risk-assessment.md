@@ -36,9 +36,9 @@ Incident majeur
 ## Business Impact Analysis — BIA
 
 - Cette démarche correspond notamment à une **BIA — Business Impact Analysis** :
-	- identifier les processus critiques ;
-	- mesurer l’impact de leur indisponibilité ;
-	- déterminer leurs priorités de restauration.
+    - identifier les processus critiques ;
+    - mesurer l’impact de leur indisponibilité ;
+    - déterminer leurs priorités de restauration.
 - Elle permet notamment de définir :
 
 |Concept|Signification|
@@ -67,14 +67,14 @@ Company A ← VPN / API / Network Link → Partner B
 
 - Il faut évaluer le niveau de sécurité des partenaires avant et pendant la relation.
 - Points à vérifier :
-	- rapidité d’application des correctifs ;
-	- politique de gestion des vulnérabilités ;
-	- configuration sécurisée des VPN ;
-	- gestion des certificats ;
-	- MFA et contrôle des accès ;
-	- sécurité des services exposés ;
-	- configuration des solutions cloud ;
-	- journalisation et capacité de réponse aux incidents.
+    - rapidité d’application des correctifs ;
+    - politique de gestion des vulnérabilités ;
+    - configuration sécurisée des VPN ;
+    - gestion des certificats ;
+    - MFA et contrôle des accès ;
+    - sécurité des services exposés ;
+    - configuration des solutions cloud ;
+    - journalisation et capacité de réponse aux incidents.
 
 ```
 Votre sécurité
@@ -105,19 +105,19 @@ Partner
 ```
 
 - Mesures utiles :
-	- segmentation réseau ;
-	- comptes dédiés ;
-	- MFA ;
-	- accès temporaires si possible ;
-	- monitoring renforcé ;
-	- révocation immédiate lorsque l’accès n’est plus nécessaire.
+    - segmentation réseau ;
+    - comptes dédiés ;
+    - MFA ;
+    - accès temporaires si possible ;
+    - monitoring renforcé ;
+    - révocation immédiate lorsque l’accès n’est plus nécessaire.
 ## Réévaluation du risque
 
 - Une analyse de risque n’est pas définitive.
 - Elle doit être réévaluée notamment lors de :
-	- nouvelle vulnérabilité critique ;
-	- changement d’architecture ;
-	- ajout d’un partenaire ;
-	- nouvelle connexion réseau ;
-	- migration cloud ;
-	- incident de sécurité chez un fournisseur.
+    - nouvelle vulnérabilité critique ;
+    - changement d’architecture ;
+    - ajout d’un partenaire ;
+    - nouvelle connexion réseau ;
+    - migration cloud ;
+    - incident de sécurité chez un fournisseur.

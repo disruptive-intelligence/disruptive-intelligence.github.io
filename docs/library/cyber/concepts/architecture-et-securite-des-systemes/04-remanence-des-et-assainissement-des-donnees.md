@@ -9,8 +9,8 @@ up:
 
 - Lorsqu'une donnée est supprimée, elle peut parfois rester partiellement ou totalement récupérable sur le support.
 - Deux concepts sont donc importants :
-	- Data Remanence -> persistance de données après suppression ;
-	- Data Sanitization -> suppression sécurisée et permanente des données sensibles.
+    - Data Remanence -> persistance de données après suppression ;
+    - Data Sanitization -> suppression sécurisée et permanente des données sensibles.
 
 ```
 Delete ≠ Data Gone
@@ -25,10 +25,10 @@ Data Sanitization
 ## Mémoire volatile
 
 - Les mémoires volatiles comme : 
-	- RAM ;
-	- Cache ;
+    - RAM ;
+    - Cache ;
 - Perdent normalement leur contenu lorsque l'alimentation est coupée.
-	- Cependant, il existe une attaque spécifique : **Cold boot Attack**
+    - Cependant, il existe une attaque spécifique : **Cold boot Attack**
 ### Cold boot attack
 
 - Exploite le fait que les données présentes en RAM ne disparaissent pas toujours instantanément après coupure d'alimentation.
@@ -45,10 +45,10 @@ System running
 
 
 - Pendant l’exécution d’un système, certaines données sensibles peuvent être présentes temporairement en mémoire, parfois sous une forme directement exploitable :
-	- clés cryptographiques ;
-	- credentials ;
-	- secrets applicatifs ;
-	- données déchiffrées.
+    - clés cryptographiques ;
+    - credentials ;
+    - secrets applicatifs ;
+    - données déchiffrées.
 
 > ⚠️ Le cours simplifie en parlant de données « gelées » dans la RAM. Le refroidissement **ralentit la dégradation électrique des bits**, il ne fige pas littéralement les données.
 #### Protections
@@ -69,10 +69,10 @@ Compléments utiles :
 
 - Les HDD, SSD, Flash, EEPROM, EFROM, ROM... peuvent conserver des données sans alimentation.
 - Pour les assainir :
-	- Clear / Delete ;
-	- Overwrite ;
-	- Degauss ;
-	- Destroy.
+    - Clear / Delete ;
+    - Overwrite ;
+    - Degauss ;
+    - Destroy.
 ### Suppression / Reformatage
 
 - Une suppression classique ou un formatage peut simplement retirer les références logiques aux données.
@@ -80,27 +80,27 @@ Compléments utiles :
 ### Overwriting - Réécriture
 
 - Consiste à écraser les données avec : 
-	- 0 ;
-	- 1 ;
-	- valeurs aléatoires.
+    - 0 ;
+    - 1 ;
+    - valeurs aléatoires.
 - Le cours cite des outils comme :
-	- BitRaser ;
-	- BitWiper ;
-	- CCleaner ;
-	- DBAN.
+    - BitRaser ;
+    - BitWiper ;
+    - CCleaner ;
+    - DBAN.
 
 > ⚠️ L’overwriting fonctionne bien sur les **HDD**, mais est moins fiable sur les **SSD/Flash** à cause du wear leveling et des blocs remappés. Pour ces supports, il vaut mieux utiliser les commandes de **secure erase / sanitize** prévues par le constructeur ou le standard du périphérique.
 ### Degaussing - Démagnétisation
 
 - Détruit ou neutralise les données en perturbant le champ magnétique du support.
 - Adapté aux supports magnétiques comme :
-	- HDD ;
-	- Bandes magnétiques.
+    - HDD ;
+    - Bandes magnétiques.
 - Avantages :
-	- très efficace ;
-	- utile même lorsqu’un disque n’est plus accessible logiciellement.
+    - très efficace ;
+    - utile même lorsqu’un disque n’est plus accessible logiciellement.
 - Inconvénient :
-	- le support peut devenir inutilisable.
+    - le support peut devenir inutilisable.
 
 > Le degaussing **ne fonctionne pas sur SSD/Flash**, car ces supports ne stockent pas les données magnétiquement.
 ![demagnetiseur](../../../assets/architecture-et-securite-des-systemes-demagnetiseur.png){ width="300" }
@@ -108,17 +108,17 @@ Compléments utiles :
 
 - Pour les données très sensibles ou lorsque le support est inutilisable, la destruction physique peut être nécessaire.
 - Cas typiques :
-	- disque défectueux ;
-	- secure erase impossible ;
-	- support destiné à ne jamais être réutilisé ;
-	- données de très haute sensibilité.
+    - disque défectueux ;
+    - secure erase impossible ;
+    - support destiné à ne jamais être réutilisé ;
+    - données de très haute sensibilité.
 - Supports concernés :
-	- - HDD ;
-	- SSD ;
-	- Flash ;
-	- ROM ;
-	- EPROM / EEPROM ;
-	- supports optiques.
+    - - HDD ;
+    - SSD ;
+    - Flash ;
+    - ROM ;
+    - EPROM / EEPROM ;
+    - supports optiques.
 
 ![destroy](../../../assets/architecture-et-securite-des-systemes-destroy.png){ width="300" }
 ### ROM / EPROM / EEPROM

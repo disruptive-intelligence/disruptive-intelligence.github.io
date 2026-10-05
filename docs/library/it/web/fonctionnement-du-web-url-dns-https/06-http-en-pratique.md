@@ -185,9 +185,9 @@ Authentification ≠ autorisation. Basic Auth = Base64 décodable, acceptable **
 
 - **GET** : `search.php?q=london`. Visible dans **logs, historique, proxys** → jamais de secret dans l'URL.
 - **POST** : données dans le body. Types courants :
-  - `application/x-www-form-urlencoded` (formulaire classique)
-  - `application/json` (API)
-  - `multipart/form-data` (upload de fichiers)
+    - `application/x-www-form-urlencoded` (formulaire classique)
+    - `application/json` (API)
+    - `multipart/form-data` (upload de fichiers)
 - Avantages POST : moins de logs, accepte le binaire, plus de volume (l'URL est limitée à ~2000 caractères).
 
 **Nuance** : POST n'est pas « secret » — le body peut être **loggé** par l'appli, un proxy ou un WAF.

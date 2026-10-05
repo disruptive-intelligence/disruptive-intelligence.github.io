@@ -76,9 +76,9 @@ La charge ralentit volontairement au-delà de ~80 % pour préserver la batterie.
 - **Multiprise simple** : ne protège de rien.
 - **Parasurtenseur** : absorbe les pics de tension (foudre). Protège, mais ne fournit pas d'énergie en cas de coupure.
 - **Onduleur (UPS)** : batterie qui prend le relais lors d'une coupure. Trois types :
-  - **Offline (standby)** : bascule sur batterie en cas de coupure. Économique, PC bureautique.
-  - **Line-interactive** : régule aussi les petites variations de tension. Bon pour NAS/petit serveur.
-  - **Online (double conversion)** : alimente *en permanence* via la batterie, isolation totale du secteur. Serveurs et équipements critiques.
+    - **Offline (standby)** : bascule sur batterie en cas de coupure. Économique, PC bureautique.
+    - **Line-interactive** : régule aussi les petites variations de tension. Bon pour NAS/petit serveur.
+    - **Online (double conversion)** : alimente *en permanence* via la batterie, isolation totale du secteur. Serveurs et équipements critiques.
 
 > **🎯 À retenir**
 > Le rôle principal d'un onduleur n'est pas (que) de « continuer à travailler » : c'est de permettre un **arrêt propre** des équipements (NAS, serveur) pour éviter la corruption de données lors d'une coupure brutale. Beaucoup s'intègrent à l'OS pour déclencher l'extinction automatique quand la batterie faiblit.

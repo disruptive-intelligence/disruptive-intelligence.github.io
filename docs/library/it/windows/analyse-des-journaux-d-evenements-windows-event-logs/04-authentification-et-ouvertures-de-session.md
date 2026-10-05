@@ -11,12 +11,12 @@ up:
 
 - Windows journalise les authentifications **réussies et échouées** dans le journal `Security`.
 - Ces événements permettent notamment de détecter :
-  - brute force ;
-  - password spraying ;
-  - compromission de compte ;
-  - utilisation suspecte de credentials ;
-  - connexions RDP ;
-  - lateral movement.
+    - brute force ;
+    - password spraying ;
+    - compromission de compte ;
+    - utilisation suspecte de credentials ;
+    - connexions RDP ;
+    - lateral movement.
 
 ```text
 Authentication Attempt
@@ -67,8 +67,8 @@ User
 
 - Connexion interactive directement sur la machine.
 - Typiquement :
-  - console locale ;
-  - utilisateur devant le poste.
+    - console locale ;
+    - utilisateur devant le poste.
 
 ![Evenement 4624 avec Logon Type 2 et compte utilisateur](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-authentication-event-logs-04.png)
 

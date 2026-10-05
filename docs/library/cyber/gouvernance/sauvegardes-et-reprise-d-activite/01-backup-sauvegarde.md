@@ -29,12 +29,12 @@ Restore si perte / corruption
 ### Protection contre la perte de données
 
 - Une perte de données peut résulter de :
-	- suppression accidentelle ;
-	- panne système ;
-	- attaque informatique ;
-	- ransomware ;
-	- corruption ;
-	- destruction physique de l’infrastructure.
+    - suppression accidentelle ;
+    - panne système ;
+    - attaque informatique ;
+    - ransomware ;
+    - corruption ;
+    - destruction physique de l’infrastructure.
 
 ```
 Data Loss
@@ -65,10 +65,10 @@ Data Loss
 ### Customer Trust
 
 - Une perte de données peut entraîner :
-	- perte de confiance des clients ;
-	- atteinte à la réputation ;
-	- interruption de service ;
-	- impacts financiers.
+    - perte de confiance des clients ;
+    - atteinte à la réputation ;
+    - interruption de service ;
+    - impacts financiers.
 - Les sauvegardes permettent de réduire l’impact opérationnel d’un incident, même si elles ne peuvent pas empêcher à elles seules une fuite de données.
 
 ```
@@ -97,11 +97,11 @@ Recovery
 ## Stratégie de sauvegarde
 
 - Une sauvegarde efficace doit être :
-	- réalisée régulièrement ;
-	- protégée contre les accès non autorisés ;
-	- suffisamment indépendante de la production ;
-	- conservée pendant une durée adaptée ;
-	- **testée en restauration**.
+    - réalisée régulièrement ;
+    - protégée contre les accès non autorisés ;
+    - suffisamment indépendante de la production ;
+    - conservée pendant une durée adaptée ;
+    - **testée en restauration**.
 
 ```
 Backup créé

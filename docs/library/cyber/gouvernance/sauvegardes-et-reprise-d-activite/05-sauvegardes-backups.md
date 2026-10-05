@@ -91,11 +91,11 @@ Attaquant présent depuis plusieurs semaines
 - Le cours recommande que **chaque serveur soit restauré au moins une fois par an**.
 - Pour les systèmes critiques, des tests plus fréquents sont préférables.
 - À vérifier :
-	- données lisibles ;
-	- fichiers non corrompus ;
-	- applications fonctionnelles ;
-	- procédure de restauration maîtrisée ;
-	- temps nécessaire à la restauration.
+    - données lisibles ;
+    - fichiers non corrompus ;
+    - applications fonctionnelles ;
+    - procédure de restauration maîtrisée ;
+    - temps nécessaire à la restauration.
 ## RPO (PDMA) / RTO (DMIA)
 
 - Complément important pour la stratégie de backup :
@@ -118,12 +118,12 @@ RTO = 2h
 ## Protection des backups
 
 - Pour éviter qu'un ransomware compromette aussi les sauvegardes :
-	- comptes de backup dédiés ;
-	- MFA sur les consoles d'administration ;
-	- droits minimums ;
-	- sauvegardes immutables/offline ;
-	- séparation entre infrastructure de production et backup ;
-	- alertes sur suppression/modification anormale des sauvegardes.
+    - comptes de backup dédiés ;
+    - MFA sur les consoles d'administration ;
+    - droits minimums ;
+    - sauvegardes immutables/offline ;
+    - séparation entre infrastructure de production et backup ;
+    - alertes sur suppression/modification anormale des sauvegardes.
 
 ```
 Attaquant Domain Admin

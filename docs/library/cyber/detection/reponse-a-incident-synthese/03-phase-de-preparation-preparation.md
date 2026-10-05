@@ -301,8 +301,8 @@ Les exigences dépendent notamment :
 → Legal / Compliance doit donc être impliqué **avant l’incident**, pas découvert au moment de la crise.
 ## Documentation pendant l’incident
 
- - La documentation ne doit pas seulement exister avant l’incident : elle doit être maintenue **pendant toute l’investigation**. 
- - Faire une main courante.
+- La documentation ne doit pas seulement exister avant l’incident : elle doit être maintenue **pendant toute l’investigation**. 
+- Faire une main courante.
 
 Pour chaque action :
 

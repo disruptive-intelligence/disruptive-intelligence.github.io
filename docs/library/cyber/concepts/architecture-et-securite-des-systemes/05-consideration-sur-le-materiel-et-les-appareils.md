@@ -11,12 +11,12 @@ up:
 
 - Le BIOS contient le code nécessaire à l’initialisation du matériel et permet de configurer différents paramètres via le setup BIOS/CMOS.
 - Côté sécurité :
-	- contrôler le **boot order** ;
-	- éviter le boot depuis :
-	    - USB ;
-	    - CD/DVD ;
-	    - réseau/PXE ;
-	- privilégier le disque local.
+    - contrôler le **boot order** ;
+    - éviter le boot depuis :
+        - USB ;
+        - CD/DVD ;
+        - réseau/PXE ;
+    - privilégier le disque local.
 
 ```
 Boot externe autorisé
@@ -30,10 +30,10 @@ Boot externe autorisé
 
 - Les clés USB facilitent le transport de données hors de l’entreprise.
 - Mesures :
-	- définir quelles données peuvent être stockées sur USB ;
-	- interdire les supports personnels si nécessaire ;
-	- mettre en place station blanche ;
-	- dans les environnements sensibles, **désactiver complètement les ports USB**.
+    - définir quelles données peuvent être stockées sur USB ;
+    - interdire les supports personnels si nécessaire ;
+    - mettre en place station blanche ;
+    - dans les environnements sensibles, **désactiver complètement les ports USB**.
 
 ```
 USB → risque d'exfiltration + introduction de malware
@@ -42,19 +42,19 @@ USB → risque d'exfiltration + introduction de malware
 ## Smartphones & Tablettes
 
 - Les appareils mobiles contiennent souvent :
-	- contacts professionnels ;
-	- documents ;
-	- emails ;
-	- accès Internet et applications internes.
+    - contacts professionnels ;
+    - documents ;
+    - emails ;
+    - accès Internet et applications internes.
 - Mesures principales :
-	- gestion du cycle de vie, via mdm ;
-	- verrouillage de l’appareil ;
-	- chiffrement des données ;
-	- analyser les vulnérabilités des appareils utilisés dans l’organisation.
+    - gestion du cycle de vie, via mdm ;
+    - verrouillage de l’appareil ;
+    - chiffrement des données ;
+    - analyser les vulnérabilités des appareils utilisés dans l’organisation.
 - Vulnérables à plusieurs types d'attaques : 
-	- Bluesnarfing : Connexion Bluetooth non autorisée permettant de **récupérer des données** depuis l’appareil.
-	- Bluejacking : Envoi de **messages non sollicités** entre appareils Bluetooth.
-	- Bluebugging : Exploit Bluetooth qui permet à un pirate d'accéder aux fonctionnalités du téléphone. Peut permettre, par exemple, de passer des appels via des commandes AT.
+    - Bluesnarfing : Connexion Bluetooth non autorisée permettant de **récupérer des données** depuis l’appareil.
+    - Bluejacking : Envoi de **messages non sollicités** entre appareils Bluetooth.
+    - Bluebugging : Exploit Bluetooth qui permet à un pirate d'accéder aux fonctionnalités du téléphone. Peut permettre, par exemple, de passer des appels via des commandes AT.
 
 ```
 Bluesnarfing → récupérer des données
@@ -65,9 +65,9 @@ Bluebugging  → contrôler certaines fonctions
 ## Stockage amovible
 
 - Les supports amovibles peuvent :
-	- introduire des malwares ;
-	- permettre l’exfiltration de données ;
-	- être perdus ou volés.
+    - introduire des malwares ;
+    - permettre l’exfiltration de données ;
+    - être perdus ou volés.
 - Exemple :
 
 ```
@@ -77,25 +77,25 @@ USB personnel infecté
 ```
 
 - Mesures :
-	- interdire les supports amovibles si possible ;
-	- interdire les supports personnels ;
-	- interdire la sortie des supports ;
-	- mettre en place station blanche ;
-	- formaliser cette règle dans la politique de sécurité ;
-	- lorsqu’ils sont nécessaires :
-	    - les retirer lorsque l’utilisateur quitte son poste ;
-	    - les stocker dans une armoire sécurisée.
-	- La même logique peut s’appliquer aux laptops laissés sans surveillance.
+    - interdire les supports amovibles si possible ;
+    - interdire les supports personnels ;
+    - interdire la sortie des supports ;
+    - mettre en place station blanche ;
+    - formaliser cette règle dans la politique de sécurité ;
+    - lorsqu’ils sont nécessaires :
+        - les retirer lorsque l’utilisateur quitte son poste ;
+        - les stocker dans une armoire sécurisée.
+    - La même logique peut s’appliquer aux laptops laissés sans surveillance.
 ## Stockage en réseau (NAS)
 
 - Un **NAS** fournit un stockage central accessible via le réseau.
 - La sauvegarde des données sur un NAS est essentielle, car il peut stocker toutes les données de l'entreprise en un seul endroit.
 - Caractéristiques :
-	- ses paramètres peuvent être gérés via une interface web ;
-	- plusieurs disques ;
-	- souvent RAID / tolérance aux pannes ;
-	- partage de fichiers centralisé ;
-	- compatible avec différents OS/protocoles.
+    - ses paramètres peuvent être gérés via une interface web ;
+    - plusieurs disques ;
+    - souvent RAID / tolérance aux pannes ;
+    - partage de fichiers centralisé ;
+    - compatible avec différents OS/protocoles.
 - Exemples :
 
 ```
@@ -123,14 +123,14 @@ Linux   → NFS
 - Un **PBX (Private Branch Exchange)** est un système téléphonique utilisé au sein d'une entreprise pour gérer tous les appels téléphoniques internes, permettant de gérer plusieurs extensions à partir de l’infrastructure téléphonique de l’entreprise.
 -  Il permet à une entreprise d'avoir une seule ligne téléphonique externe tout en prenant en charge plusieurs systèmes et numéros de téléphone internes. Chaque téléphone de l'entreprise se voit attribuer un numéro de poste unique.
 - Mesures de sécurité :
-	-  Contrôle physique :
-		- placer le PBX dans une salle verrouillée ;
-		- accès limité ;
-		- dispositifs anti-sabotage ;
-		- inspection régulière du matériel.
-	- Paramètres par défaut :
-		- changer les comptes/passwords par défaut ;
-		- sécuriser l’administration distante.
+    -  Contrôle physique :
+        - placer le PBX dans une salle verrouillée ;
+        - accès limité ;
+        - dispositifs anti-sabotage ;
+        - inspection régulière du matériel.
+    - Paramètres par défaut :
+        - changer les comptes/passwords par défaut ;
+        - sécuriser l’administration distante.
 ## Risques de sécurité avec les systèmes embarqués et spécialisés
 ### Raspberry Pi
 
@@ -169,9 +169,9 @@ Sécurité :
     - réfrigération ;
     - systèmes industriels.
 - La sécurité physique est importante car une manipulation peut perturber :
-	- supervision ;
-	- alarmes ;
-	- fonctionnement industriel.
+    - supervision ;
+    - alarmes ;
+    - fonctionnement industriel.
 ### ICS - Industrial Control Systems
 
 - Terme plus large (qui inclut les systèmes SCADA) regroupant les systèmes utilisés pour surveiller/contrôler des équipements industriels.
@@ -183,31 +183,31 @@ ICS
 ```
 
 - Présents notamment dans :
-	- usines ;
-	- manufacturing ;
-	- production d’énergie.
+    - usines ;
+    - manufacturing ;
+    - production d’énergie.
 ## IoT - Internet of Things
 
 - Les appareils **IoT** communiquent avec d’autres systèmes via Internet ou des réseaux locaux.
 - Leur sécurité peut être faible lorsque les fabricants privilégient la **connectivité et la simplicité** aux contrôles de sécurité.
 -  Catégories
-	- **Sensors**
-	    - thermostats ;
-	    - caméras ;
-	    - capteurs environnementaux.
-	- **Smart Devices** : appareils connectés au réseau qui communiquent avec d'autres en utilisant des technologies telles que :
-	    - Wi-Fi ;
-	    - Bluetooth ;
-	    - réseau cellulaire.
-	- **Wearables**
-	    - smartwatch ;
-	    - objets portés sur le corps ;
-	    - souvent reliés au smartphone.
-	- **Facility Automation** : Systèmes conçus pour contrôler les éléments de :
-	    - HVAC/CVC ( (chauffage, ventilation et climatisation)) ;
-	    - automatisation du bâtiment.
+    - **Sensors**
+        - thermostats ;
+        - caméras ;
+        - capteurs environnementaux.
+    - **Smart Devices** : appareils connectés au réseau qui communiquent avec d'autres en utilisant des technologies telles que :
+        - Wi-Fi ;
+        - Bluetooth ;
+        - réseau cellulaire.
+    - **Wearables**
+        - smartwatch ;
+        - objets portés sur le corps ;
+        - souvent reliés au smartphone.
+    - **Facility Automation** : Systèmes conçus pour contrôler les éléments de :
+        - HVAC/CVC ( (chauffage, ventilation et climatisation)) ;
+        - automatisation du bâtiment.
 - Weak Default Settings
-	- Problème fréquent :
+    - Problème fréquent :
 
 ```
 Default username/password
@@ -218,7 +218,7 @@ Default network settings
 → les attaquants connaissent souvent ces configurations.
 
 - Mesures :
-	- changer les credentials par défaut ;
-	- désactiver les services inutiles ;
-	- patcher/mettre à jour si possible ;
-	- segmenter les appareils IoT du reste du réseau.
+    - changer les credentials par défaut ;
+    - désactiver les services inutiles ;
+    - patcher/mettre à jour si possible ;
+    - segmenter les appareils IoT du reste du réseau.

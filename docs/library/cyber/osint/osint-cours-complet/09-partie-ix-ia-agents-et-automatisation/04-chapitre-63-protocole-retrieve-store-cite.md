@@ -49,10 +49,10 @@ Le **protocole Retrieve-Store-Cite** est la formalisation de l'usage rigoureux d
 **Étape Store.**
 
 - Pour chaque élément retenu :
-  - Vérifier la source en cliquant / consultant directement.
-  - Capturer la source (Hunchly, SingleFile).
-  - Enregistrer dans le journal d'enquête (Ch.15).
-  - Coter Admiralty (Ch.84).
+    - Vérifier la source en cliquant / consultant directement.
+    - Capturer la source (Hunchly, SingleFile).
+    - Enregistrer dans le journal d'enquête (Ch.15).
+    - Coter Admiralty (Ch.84).
 
 **Étape Cite.**
 

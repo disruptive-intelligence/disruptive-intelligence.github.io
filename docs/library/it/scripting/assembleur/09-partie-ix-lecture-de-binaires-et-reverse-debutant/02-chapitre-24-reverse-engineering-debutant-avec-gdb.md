@@ -368,10 +368,10 @@ gcc -O0 -no-pie crackme3.c -o crackme3
 3. Identifie la **clé XOR** (cherche `0x42` dans le code, ou pose un breakpoint et regarde un registre).
 4. Identifie les **octets attendus** (cherche un tableau initialisé : `0x18, 0x05, 0x07, 0x02`).
 5. **Inverse l'opération** : applique `^= 0x42` aux octets attendus pour retrouver l'entrée correcte.
-   - `0x18 ^ 0x42 = 0x5A = 'Z'`
-   - `0x05 ^ 0x42 = 0x47 = 'G'`
-   - `0x07 ^ 0x42 = 0x45 = 'E'`
-   - `0x02 ^ 0x42 = 0x40 = '@'`
+    - `0x18 ^ 0x42 = 0x5A = 'Z'`
+    - `0x05 ^ 0x42 = 0x47 = 'G'`
+    - `0x07 ^ 0x42 = 0x45 = 'E'`
+    - `0x02 ^ 0x42 = 0x40 = '@'`
 6. Le mot de passe est `ZGE@`.
 7. Vérifie : `./crackme3` → tape `ZGE@` → "Bravo !".
 

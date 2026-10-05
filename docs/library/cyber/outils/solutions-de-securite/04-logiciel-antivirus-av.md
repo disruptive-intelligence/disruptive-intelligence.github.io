@@ -36,11 +36,11 @@ Match → Malware connu
 ```
 
 - Limite principale :
-	- peut rater :
-	    - nouveaux malwares ;
-	    - variantes modifiées ;
-	    - malware polymorphe ;
-	    - menaces sans signature connue.
+    - peut rater :
+        - nouveaux malwares ;
+        - variantes modifiées ;
+        - malware polymorphe ;
+        - menaces sans signature connue.
 ### Heuristic Scanning
 
 - Analyse le **comportement** du fichier plutôt que seulement sa signature.
@@ -55,8 +55,8 @@ Executable
 ```
 
 - Intérêt :
-	- peut détecter des menaces **inconnues ou modifiées** ;
-	- ne dépend pas uniquement d’une signature présente dans la base.
+    - peut détecter des menaces **inconnues ou modifiées** ;
+    - ne dépend pas uniquement d’une signature présente dans la base.
 - Limite :
 
 ```

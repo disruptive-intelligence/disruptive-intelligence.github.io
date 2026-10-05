@@ -70,10 +70,10 @@ Cette annexe consolide les cadres juridiques, institutions, et qualifications me
 - **Périmètre** : 18 secteurs (énergie, transport, banque, santé, eau, infrastructures numériques, administration publique, espace, services postaux, gestion des déchets, produits chimiques, alimentation, fabrication, fournisseurs numériques, recherche, etc.).
 - **Deux niveaux** : **Entités Essentielles (EE)** et **Entités Importantes (EI)** avec obligations différenciées.
 - **Obligations principales** :
-  - Mesures techniques, opérationnelles et organisationnelles (art. 21) : gestion des risques, IR, continuité, supply chain, MFA, chiffrement, etc.
-  - **Notification d’incidents** : early warning sous 24h, notification détaillée sous 72h, rapport final dans un mois.
-  - **Gouvernance** : responsabilité direct au niveau direction (board), formation des dirigeants.
-  - **Supply chain** : évaluation des risques fournisseurs.
+    - Mesures techniques, opérationnelles et organisationnelles (art. 21) : gestion des risques, IR, continuité, supply chain, MFA, chiffrement, etc.
+    - **Notification d’incidents** : early warning sous 24h, notification détaillée sous 72h, rapport final dans un mois.
+    - **Gouvernance** : responsabilité direct au niveau direction (board), formation des dirigeants.
+    - **Supply chain** : évaluation des risques fournisseurs.
 - **Sanctions** : jusqu’à **10 M€ ou 2% du CA mondial** pour les EE, 7 M€ ou 1,4% pour les EI.
 - **Transposition** : États membres, avec variations nationales (en France, transposition en cours au moment de la rédaction, avec l’ANSSI comme autorité compétente).
 

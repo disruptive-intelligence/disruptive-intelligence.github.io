@@ -17,8 +17,8 @@ Un portable est un PC contraint par la **place** et la **chaleur**.
 - **Batterie** : capacité en **Wh** (wattheures), la vraie mesure d'énergie.
 - **Écran intégré** : non remplaçable, donc à bien choisir à l'achat (Partie 5).
 - **Réparabilité** — les deux lignes décisives :
-  - **RAM soudée** ou non : si soudée, jamais extensible.
-  - **SSD** remplaçable (M.2) ou soudé.
+    - **RAM soudée** ou non : si soudée, jamais extensible.
+    - **SSD** remplaçable (M.2) ou soudé.
 
 ### Mini-PC, NUC, thin client
 

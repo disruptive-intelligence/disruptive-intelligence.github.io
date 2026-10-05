@@ -118,11 +118,11 @@ Ce chapitre approfondit le profil des six groupes APT russes les plus importants
 - **Watering hole** : compromission de sites web fréquentés par les cibles pour les infecter lors de leur visite. Sites gouvernementaux, académiques, ou institutionnels pertinents pour la cible.
 - **Supply chain** : opérations de longue durée impliquant compromission d’éditeurs ou de prestataires pour atteindre les cibles finales.
 - **Malware signature** — Turla développe et maintient un arsenal malware remarquable :
-  - **Snake / Uroburos** : rootkit multi-plateforme (Windows, Linux, macOS) actif depuis au moins 2003. Persistence kernel, évasion sophistiquée, communications P2P entre instances. Démantelé par le FBI en mai 2023 (opération Medusa) mais les variants post-Snake continuent.
-  - **Kazuar** : backdoor modulaire (.NET) utilisée pour des opérations ciblées.
-  - **LightNeuron** : backdoor Exchange serveur (transport agent malveillant) — interception d’emails au niveau serveur. Actif depuis au moins 2014, découvert par ESET en 2019.
-  - **Crutch** : backdoor Windows utilisée contre des cibles diplomatiques en Europe.
-  - **Carbon / Cobra** : framework modulaire historique.
+    - **Snake / Uroburos** : rootkit multi-plateforme (Windows, Linux, macOS) actif depuis au moins 2003. Persistence kernel, évasion sophistiquée, communications P2P entre instances. Démantelé par le FBI en mai 2023 (opération Medusa) mais les variants post-Snake continuent.
+    - **Kazuar** : backdoor modulaire (.NET) utilisée pour des opérations ciblées.
+    - **LightNeuron** : backdoor Exchange serveur (transport agent malveillant) — interception d’emails au niveau serveur. Actif depuis au moins 2014, découvert par ESET en 2019.
+    - **Crutch** : backdoor Windows utilisée contre des cibles diplomatiques en Europe.
+    - **Carbon / Cobra** : framework modulaire historique.
 - **Infrastructure par satellite** : Turla est documenté pour avoir utilisé des **liaisons satellite détournées** comme canal C2 — exploitation de liaisons satellite de FAI commerciaux (clients commerciaux des FAI satellites dans des régions où la sécurité est faible) pour masquer l’origine réelle des C2. Technique documentée par Kaspersky en 2015.
 - **Piggybacking sur d’autres APT** : Turla a été observé en train d’utiliser l’**infrastructure d’autres groupes APT** pour ses opérations. Le cas le plus documenté : Turla a compromis l’infrastructure d’APT34 (OilRig, Iran) et l’a utilisée pour mener ses propres opérations. Cette technique, documentée publiquement par UK NCSC et NSA en octobre 2019, est unique dans le monde APT par son niveau de sophistication opérationnelle et par l’impact qu’elle a sur l’attribution (une victime peut voir une intrusion qui semble iranienne alors qu’elle est russe).
 

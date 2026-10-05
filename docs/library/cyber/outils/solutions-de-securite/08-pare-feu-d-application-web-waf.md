@@ -45,11 +45,11 @@ Web Application
 
 - Les règles peuvent chercher à identifier des requêtes malveillantes et les bloquer.
 - Exemples de menaces Web qu'un WAF peut aider à détecter/bloquer :
-	- SQL Injection ;
-	- Cross-Site Scripting (XSS) ;
-	- path traversal ;
-	- requêtes HTTP anormales ;
-	- patterns malveillants connus.
+    - SQL Injection ;
+    - Cross-Site Scripting (XSS) ;
+    - path traversal ;
+    - requêtes HTTP anormales ;
+    - patterns malveillants connus.
 ## Importance du tuning
 
 - La qualité du WAF dépend fortement de ses règles.
@@ -65,9 +65,9 @@ Attaque autorisée
 → Les règles doivent être régulièrement **ajustées / tuned** selon l'application.
 
 - Un WAF mal configuré peut :
-	- bloquer des utilisateurs légitimes ;
-	- laisser passer certaines attaques ;
-	- générer trop d'alertes inutiles.
+    - bloquer des utilisateurs légitimes ;
+    - laisser passer certaines attaques ;
+    - générer trop d'alertes inutiles.
 ## WAF vs Firewall classique
 
 |Firewall|WAF|

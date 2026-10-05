@@ -49,18 +49,18 @@ https://bit.ly/xxxx
 ```
 
 - Selon la politique de l’entreprise :
-	- bloquer certains services de shortening ;
-	- ou les analyser/résoudre avant autorisation.
+    - bloquer certains services de shortening ;
+    - ou les analyser/résoudre avant autorisation.
 ## Monitoring des blocages
 
 - Après mise en place du filtrage, il faut examiner les tentatives d’accès bloquées.
 - Informations utiles :
-	- utilisateur ;
-	- device ;
-	- domaine demandé ;
-	- catégorie ;
-	- timestamp ;
-	- fréquence des tentatives.
+    - utilisateur ;
+    - device ;
+    - domaine demandé ;
+    - catégorie ;
+    - timestamp ;
+    - fréquence des tentatives.
 
 ```
 DNS Block Logs
@@ -76,12 +76,12 @@ DNS Block Logs
 - Appliquer une configuration homogène et sécurisée sur les navigateurs de l’entreprise.
 - Objectif : réduire les possibilités d’exécution ou d’installation de contenu dangereux.
 - Mesures possibles :
-	- mises à jour automatiques ;
-	- limiter/interdire les extensions non approuvées ;
-	- désactiver certains contenus ou fonctions à risque ;
-	- imposer les paramètres de sécurité ;
-	- contrôler les téléchargements ;
-	- appliquer des politiques de navigation.
+    - mises à jour automatiques ;
+    - limiter/interdire les extensions non approuvées ;
+    - désactiver certains contenus ou fonctions à risque ;
+    - imposer les paramètres de sécurité ;
+    - contrôler les téléchargements ;
+    - appliquer des politiques de navigation.
 - Outils possibles selon l’environnement :
 
 ```

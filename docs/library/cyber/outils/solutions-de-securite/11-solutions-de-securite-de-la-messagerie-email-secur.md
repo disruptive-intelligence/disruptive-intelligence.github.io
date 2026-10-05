@@ -41,10 +41,10 @@ Malware Delivery
 ### Analyse des pièces jointes
 
 - Les fichiers joints peuvent être analysés pour détecter :
-	- signatures malveillantes ;
-	- macros suspectes ;
-	- malware connu ;
-	- comportement anormal.
+    - signatures malveillantes ;
+    - macros suspectes ;
+    - malware connu ;
+    - comportement anormal.
 - Certaines solutions envoient aussi les pièces jointes dans une **sandbox** pour observer leur comportement avant livraison.
 
 ```
@@ -62,9 +62,9 @@ Attachment
     - malware ;
     - infrastructure connue comme dangereuse.
 - Selon la solution, le lien peut être :
-	- bloqué ;
-	- réécrit ;
-	- analysé au moment du clic.
+    - bloqué ;
+    - réécrit ;
+    - analysé au moment du clic.
 ### Email Spoofing
 
 - Un attaquant peut falsifier l’identité apparente de l’expéditeur afin de rendre l’email crédible.
@@ -77,9 +77,9 @@ From: ceo@company.com
 ```
 
 - Les solutions de sécurité peuvent utiliser des mécanismes d’authentification email comme :
-	- **SPF** → quels serveurs sont autorisés à envoyer pour le domaine ;
-	- **DKIM** → signature cryptographique du message ;
-	- **DMARC** → politique basée sur SPF/DKIM + reporting.
+    - **SPF** → quels serveurs sont autorisés à envoyer pour le domaine ;
+    - **DKIM** → signature cryptographique du message ;
+    - **DMARC** → politique basée sur SPF/DKIM + reporting.
 
 ```
 SPF + DKIM + DMARC
@@ -104,16 +104,16 @@ Email Security
 ## Logs / informations utiles
 
 - Complément pertinent côté SOC :
-	- sender / recipient ;
-	- subject ;
-	- timestamp ;
-	- source IP ;
-	- verdict ;
-	- URL détectée ;
-	- fichier joint ;
-	- hash ;
-	- action : `Delivered / Blocked / Quarantined` ;
-	- résultats SPF / DKIM / DMARC.
+    - sender / recipient ;
+    - subject ;
+    - timestamp ;
+    - source IP ;
+    - verdict ;
+    - URL détectée ;
+    - fichier joint ;
+    - hash ;
+    - action : `Delivered / Blocked / Quarantined` ;
+    - résultats SPF / DKIM / DMARC.
 
 ```
 Email Alert

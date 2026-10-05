@@ -104,11 +104,11 @@ Email Address
 
 - Un IOC ne doit pas être interprété seul.
 - Une IP peut être :
-	- réellement malveillante ;
-	- partagée par plusieurs services ;
-	- réattribuée ;
-	- utilisée temporairement ;
-	- issue d’un CDN / cloud provider.
+    - réellement malveillante ;
+    - partagée par plusieurs services ;
+    - réattribuée ;
+    - utilisée temporairement ;
+    - issue d’un CDN / cloud provider.
 
 > **IOC hit ≠ preuve définitive de compromission**.
 ## Formats et outils pour les IOC

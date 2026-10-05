@@ -39,7 +39,7 @@ Vulnerability Scanning
 
  **Asset Discovery ≠ Vulnerability Scanning**
 
- - Asset Discovery → _Qu’est-ce qui existe ?_
+- Asset Discovery → _Qu’est-ce qui existe ?_
 - Vulnerability Scanning → _Qu’est-ce qui est vulnérable ?_
 ### Réduction des actifs
 

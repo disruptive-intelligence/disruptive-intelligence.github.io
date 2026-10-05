@@ -54,11 +54,11 @@ L’action dépend des règles configurées.
 - Surveille les activités locales plutôt que seulement les flux réseau.
 - Particulièrement utile pour les **utilisateurs distants**.
 - Peut notamment contrôler :
-	- copie de fichiers ;
-	- stockage local ;
-	- chiffrement des données ;
-	- utilisation de périphériques amovibles ;
-	- autres actions sur des données sensibles.
+    - copie de fichiers ;
+    - stockage local ;
+    - chiffrement des données ;
+    - utilisation de périphériques amovibles ;
+    - autres actions sur des données sensibles.
 
 ```
 Sensitive File
@@ -97,24 +97,24 @@ Block / Encrypt / Alert
 
 - Les règles peuvent donc s’appuyer sur des formats de données connus.
 - Exemples :
-	- numéros de carte bancaire ;
-	- données personnelles ;
-	- informations financières ;
-	- documents confidentiels.
+    - numéros de carte bancaire ;
+    - données personnelles ;
+    - informations financières ;
+    - documents confidentiels.
 - Les DLP modernes peuvent aussi utiliser des classifications, labels, mots-clés ou fingerprinting de documents, pas uniquement des patterns simples.
 ## Actions possibles
 
 - Selon la politique :
-	- **Block** → empêcher le transfert ;
-	- **Encrypt** → sécuriser la transmission ;
-	- **Alert** → prévenir l’administrateur/SOC ;
-	- **Log** → conserver l’événement ;
-	- **Audit** → permettre l’action mais la tracer.
+    - **Block** → empêcher le transfert ;
+    - **Encrypt** → sécuriser la transmission ;
+    - **Alert** → prévenir l’administrateur/SOC ;
+    - **Log** → conserver l’événement ;
+    - **Audit** → permettre l’action mais la tracer.
 ## Importance du DLP
 
 - Une fuite de données peut entraîner :
-	- exposition d’informations confidentielles ;
-	- violation réglementaire ;
-	- pertes financières ;
-	- atteinte à la réputation.
+    - exposition d’informations confidentielles ;
+    - violation réglementaire ;
+    - pertes financières ;
+    - atteinte à la réputation.
 - Le DLP est donc particulièrement important pour les organisations manipulant des **données sensibles ou critiques**.

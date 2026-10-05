@@ -62,12 +62,12 @@ sample.exe
 |**Network Activity**|connexions réseau effectuées|
 
 - **Complément utile :** selon le produit, on peut également retrouver :
-	- domaines contactés ;
-	- IP ;
-	- URLs ;
-	- clés registre modifiées ;
-	- processus parent/enfant ;
-	- fichiers dropped.
+    - domaines contactés ;
+    - IP ;
+    - URLs ;
+    - clés registre modifiées ;
+    - processus parent/enfant ;
+    - fichiers dropped.
 ## Importance en sécurité
 
 - Les malwares modernes utilisent souvent des techniques plus complexes pour éviter les détections classiques.
@@ -95,10 +95,10 @@ AV
 
 - Certains malwares tentent de détecter qu’ils s’exécutent dans une sandbox.
 - Techniques possibles :
-	- attendre plusieurs minutes avant d’agir ;
-	- vérifier la présence de processus/artefacts de VM ;
-	- détecter peu d’activité utilisateur ;
-	- ne s’activer que sous certaines conditions.
+    - attendre plusieurs minutes avant d’agir ;
+    - vérifier la présence de processus/artefacts de VM ;
+    - détecter peu d’activité utilisateur ;
+    - ne s’activer que sous certaines conditions.
 
 ```
 Malware détecte Sandbox

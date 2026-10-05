@@ -44,10 +44,10 @@ Le cours s'adresse également à des **citoyens formés** qui souhaitent compren
 #### Ce que ce cours ne fait pas
 
 - Il ne se substitue pas aux cours spécialisés de la bibliothèque pour les domaines suivants :
-  - L'enquête crypto on-chain approfondie (clustering, attribution, mixers, bridges, cashout) — renvoi systématique à **OSINT Crypto vFULL**.
-  - L'investigation financière approfondie (UBO complexes, schémas de blanchiment, AML/CFT, comptabilité forensique) — renvoi systématique à **FININT Investigation Financière vFULL**.
-  - L'enquête dark web approfondie (Tor en profondeur, marketplaces, leak sites, IA criminelle, écosystèmes) — renvoi systématique à **Dark Web vFULL**.
-  - La Cyber Threat Intelligence approfondie (acteurs, TTP, intrusion analysis, attribution étatique) — renvoi vers le cours CTI dédié.
+    - L'enquête crypto on-chain approfondie (clustering, attribution, mixers, bridges, cashout) — renvoi systématique à **OSINT Crypto vFULL**.
+    - L'investigation financière approfondie (UBO complexes, schémas de blanchiment, AML/CFT, comptabilité forensique) — renvoi systématique à **FININT Investigation Financière vFULL**.
+    - L'enquête dark web approfondie (Tor en profondeur, marketplaces, leak sites, IA criminelle, écosystèmes) — renvoi systématique à **Dark Web vFULL**.
+    - La Cyber Threat Intelligence approfondie (acteurs, TTP, intrusion analysis, attribution étatique) — renvoi vers le cours CTI dédié.
 - Il ne fournit pas de tutoriel exhaustif pour chaque outil cité : les outils changent tous les six mois, la méthodologie reste. Les outils sont présentés comme exemples opérationnels à date 2026.
 - Il n'est pas un précis de droit ni un manuel de procédure pénale : il pose le cadre, il ne tient pas lieu de conseil juridique.
 - Il ne forme pas à l'utilisation offensive de l'OSINT, à l'usurpation d'identité agressive, au harcèlement, au doxxing, ou à toute pratique non conforme au droit et à l'éthique professionnelle.

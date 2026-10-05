@@ -93,10 +93,10 @@ Note FININT interne CRF + signalement :
 
 - Profil de risque *probable* de contournement de sanctions, biens dual-use.
 - Recommandations :
-  - DS validée et enrichie, transmission au PNF (équivalent fiction).
-  - Saisine immédiate de la DG Trésor (pôle sanctions financières) (Direction Générale du Trésor — sanctions) et des services douaniers (DGDDI).
-  - Coopération Egmont avec la CRF turque pour qualifier ATLAS et son réseau.
-  - Possibilité de gel administratif si éléments suffisants confirment l’attribution sanctionnée.
+    - DS validée et enrichie, transmission au PNF (équivalent fiction).
+    - Saisine immédiate de la DG Trésor (pôle sanctions financières) (Direction Générale du Trésor — sanctions) et des services douaniers (DGDDI).
+    - Coopération Egmont avec la CRF turque pour qualifier ATLAS et son réseau.
+    - Possibilité de gel administratif si éléments suffisants confirment l’attribution sanctionnée.
 
 ## Bilan honnête
 

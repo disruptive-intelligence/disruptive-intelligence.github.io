@@ -24,10 +24,10 @@ Get-WinEvent
 ## Event Viewer — Observateur d’événements
 
 - Interface graphique native de Windows pour :
-  - consulter les Event Logs ;
-  - examiner le détail d’un événement ;
-  - filtrer les événements ;
-  - exporter les résultats.
+    - consulter les Event Logs ;
+    - examiner le détail d’un événement ;
+    - filtrer les événements ;
+    - exporter les résultats.
 
 Lancement :
 
@@ -294,13 +294,13 @@ System Log
 
 - Cmdlet PowerShell destiné à consulter les Windows Event Logs.
 - Peut fonctionner sur :
-  - machine locale ;
-  - machine distante.
+    - machine locale ;
+    - machine distante.
 - Permet des requêtes beaucoup plus avancées grâce notamment à :
-  - `FilterHashtable` ;
-  - XPath ;
-  - XML queries ;
-  - pipeline PowerShell.
+    - `FilterHashtable` ;
+    - XPath ;
+    - XML queries ;
+    - pipeline PowerShell.
 ### Lister les journaux
 
 ```powershell

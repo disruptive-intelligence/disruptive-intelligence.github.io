@@ -20,13 +20,13 @@ up:
 
 - facilite la configuration et la mise à jour régulières des ressources ainsi que le contrôle des droits d'accès.
 - AD permet de gérer notamment :
-	- utilisateurs ;
-	- groupes ;
-	- ordinateurs ;
-	- serveurs ;
-	- shared folders ;
-	- imprimantes ;
-	- autres ressources réseau.
+    - utilisateurs ;
+    - groupes ;
+    - ordinateurs ;
+    - serveurs ;
+    - shared folders ;
+    - imprimantes ;
+    - autres ressources réseau.
 ## Stratégie de groupe
 
 - Les stratégies de groupe sont utilisées pour gérer de manière centralisée les paramètres de configuration des utilisateurs et des ordinateurs.
@@ -145,9 +145,9 @@ Need Admin Privilege
 ## Séparer compte utilisateur et compte administrateur
 
 - Pourquoi utiliser plusieurs comptes ? 
-	- Séparation des privilèges ;
-	- Limitation des attaques ;
-	- Sécurité des données et du système.
+    - Séparation des privilèges ;
+    - Limitation des attaques ;
+    - Sécurité des données et du système.
 - Un administrateur devrait posséder au minimum :
 
 ```
@@ -237,9 +237,9 @@ User
 
 - **Windows LAPS — Local Administrator Password Solution** automatise la gestion des mots de passe des comptes administrateur locaux.
 - Permet :
-	- Simplifier gestion des MDP ;
-	- Améliorer la sécurité des MDP ;
-	- Prévenir les attaques.
+    - Simplifier gestion des MDP ;
+    - Améliorer la sécurité des MDP ;
+    - Prévenir les attaques.
 - Problème classique sans LAPS :
 
 ```
@@ -757,9 +757,9 @@ example.com → 10.0.0.99
 → les clients suivent ensuite la résolution falsifiée.
 
 - Cela peut provenir notamment d’une modification :
-	- des DNS records ;
-	- de la configuration DNS ;
-	- du serveur utilisé pour la résolution.
+    - des DNS records ;
+    - de la configuration DNS ;
+    - du serveur utilisé pour la résolution.
 ## Sécurité du DHCP Windows
 
 - **DHCP — Dynamic Host Configuration Protocol** attribue automatiquement aux clients leur configuration réseau :

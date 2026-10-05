@@ -91,10 +91,10 @@ Rapport à la banque BANQUE-PARTNER :
 
 - Le profil et l’activité du compte sont *probable* compatibles avec un schéma de rétrocommissions de corruption transnationale antérieures.
 - Recommandations :
-  - **Déclaration de soupçon à la CRF nationale** (TRACFIN équivalent local) : suffisamment d’éléments pour DS.
-  - **Vigilance renforcée maximale** : limitation des opérations, demandes systématiques de justificatifs.
-  - **Évaluer la rupture** de la relation d’affaires : décision banque selon politique interne et avis juridique.
-  - **Coopérations Egmont** : la CRF pourra solliciter la CRF du pays d’origine pour qualifier les marchés publics.
+    - **Déclaration de soupçon à la CRF nationale** (TRACFIN équivalent local) : suffisamment d’éléments pour DS.
+    - **Vigilance renforcée maximale** : limitation des opérations, demandes systématiques de justificatifs.
+    - **Évaluer la rupture** de la relation d’affaires : décision banque selon politique interne et avis juridique.
+    - **Coopérations Egmont** : la CRF pourra solliciter la CRF du pays d’origine pour qualifier les marchés publics.
 
 ## Bilan honnête
 

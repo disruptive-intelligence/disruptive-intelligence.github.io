@@ -103,16 +103,16 @@ LAN
 ```
 
 - ou via un :
-	- **SPAN / Mirror Port** sur un switch ;
-	- **Network TAP**.
+    - **SPAN / Mirror Port** sur un switch ;
+    - **Network TAP**.
 
 > Un NIDS n'a pas forcément besoin que le trafic « traverse » physiquement l'IDS : il peut recevoir une **copie du trafic** via SPAN/TAP.
 
 - Points fréquents de surveillance :
-	- périmètre Internet ;
-	- DMZ ;
-	- segments critiques ;
-	- trafic inter-VLAN.
+    - périmètre Internet ;
+    - DMZ ;
+    - segments critiques ;
+    - trafic inter-VLAN.
 #### HIDS
 
 - Installé directement sur les machines à protéger :

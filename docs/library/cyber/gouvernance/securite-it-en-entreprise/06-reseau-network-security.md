@@ -29,11 +29,11 @@ Switch
 ```
 
 - Exemples d’éléments suspects :
-	- hausse inhabituelle du trafic DNS ;
-	- connexions vers une IP rare ;
-	- protocole inhabituel ;
-	- volume anormal de données sortantes ;
-	- beaconing périodique vers une destination externe.
+    - hausse inhabituelle du trafic DNS ;
+    - connexions vers une IP rare ;
+    - protocole inhabituel ;
+    - volume anormal de données sortantes ;
+    - beaconing périodique vers une destination externe.
 
 > ⚠️ Un port SPAN peut perdre des paquets en cas de forte charge. Pour une capture plus fiable, un **network TAP** peut être préférable.
 ## Segmentation réseau
@@ -74,22 +74,22 @@ Management Interface
 ```
 
 - À isoler idéalement :
-	- interfaces de switches/routers/firewalls ;
-	- hyperviseurs ;
-	- iDRAC / iLO ;
-	- consoles d’administration ;
-	- RDP / SSH d’administration.
+    - interfaces de switches/routers/firewalls ;
+    - hyperviseurs ;
+    - iDRAC / iLO ;
+    - consoles d’administration ;
+    - RDP / SSH d’administration.
 - Le **RDP administratif** peut par exemple être limité à un réseau dédié ou à un jump server.
 ## Examen des flux bloqués
 
 - Après segmentation et mise en place de règles restrictives, il faut analyser les flux bloqués.
 - Un blocage peut révéler :
-	- endpoint compromis ;
-	- malware tentant une communication ;
-	- application non inventoriée ;
-	- mauvaise configuration ;
-	- dépendance oubliée ;
-	- tentative de mouvement latéral.
+    - endpoint compromis ;
+    - malware tentant une communication ;
+    - application non inventoriée ;
+    - mauvaise configuration ;
+    - dépendance oubliée ;
+    - tentative de mouvement latéral.
 
 ```
 Firewall DENY
@@ -105,13 +105,13 @@ Firewall DENY
 
 - Une fois la visibilité réseau suffisante, définir des alertes sur les comportements inhabituels.
 - Exemples :
-	- hausse soudaine du trafic ;
-	- transfert important vers Internet ;
-	- protocole jamais utilisé auparavant ;
-	- communication vers une destination rare ;
-	- scans réseau ;
-	- trafic hors des horaires habituels ;
-	- saturation d’un lien.
+    - hausse soudaine du trafic ;
+    - transfert important vers Internet ;
+    - protocole jamais utilisé auparavant ;
+    - communication vers une destination rare ;
+    - scans réseau ;
+    - trafic hors des horaires habituels ;
+    - saturation d’un lien.
 
 ```
 Baseline normale

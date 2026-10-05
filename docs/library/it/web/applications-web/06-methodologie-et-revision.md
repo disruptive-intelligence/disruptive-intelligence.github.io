@@ -120,31 +120,31 @@ La plupart de ces erreurs reviennent à **faire confiance au client** ou à **co
 ## 34. Mini quiz
 
 1. **Quelle est la différence fondamentale entre front-end et back-end ?**
-   Le front-end s'exécute dans le navigateur (visible et modifiable) ; le back-end s'exécute sur le serveur et prend les décisions de sécurité.
+    Le front-end s'exécute dans le navigateur (visible et modifiable) ; le back-end s'exécute sur le serveur et prend les décisions de sécurité.
 
 2. **Pourquoi ne faut-il jamais faire confiance au front-end ?**
-   Tout ce qui est côté client est visible, modifiable et rejouable (JS désactivable, requêtes forgeables via curl/Burp).
+    Tout ce qui est côté client est visible, modifiable et rejouable (JS désactivable, requêtes forgeables via curl/Burp).
 
 3. **Que signifie « Web 2.0 » par rapport à « Web 1.0 » ?**
-   Contenu dynamique et personnalisé (Web 2.0) vs pages statiques identiques pour tous (Web 1.0).
+    Contenu dynamique et personnalisé (Web 2.0) vs pages statiques identiques pour tous (Web 1.0).
 
 4. **Quelles sont les trois couches de la Three Tier Architecture ?**
-   Presentation Layer, Application Layer, Data Layer.
+    Presentation Layer, Application Layer, Data Layer.
 
 5. **Quel modèle d'infrastructure est le plus risqué et pourquoi ?**
-   « One Server » : tout sur un même serveur, donc une faille ou une panne compromet tout (œufs dans le même panier).
+    « One Server » : tout sur un même serveur, donc une faille ou une panne compromet tout (œufs dans le même panier).
 
 6. **Quel est l'intérêt sécurité de la segmentation (many servers / one database) ?**
-   Un composant compromis n'expose pas directement les autres ; l'impact est contenu.
+    Un composant compromis n'expose pas directement les autres ; l'impact est contenu.
 
 7. **Différence entre authentification et autorisation ?**
-   Authentification = « qui es-tu ? » ; autorisation = « as-tu le droit ? ».
+    Authentification = « qui es-tu ? » ; autorisation = « as-tu le droit ? ».
 
 8. **Qu'est-ce qu'un IDOR ?**
-   Manipuler un identifiant d'objet (ex. `/user/701` → `/user/702`) pour accéder aux ressources d'autrui faute de contrôle d'accès serveur.
+    Manipuler un identifiant d'objet (ex. `/user/701` → `/user/702`) pour accéder aux ressources d'autrui faute de contrôle d'accès serveur.
 
 9. **Différence entre HTML injection et XSS ?**
-   HTML injection = injecter du HTML interprété ; XSS = injecter du JavaScript exécuté chez la victime.
+    HTML injection = injecter du HTML interprété ; XSS = injecter du JavaScript exécuté chez la victime.
 
 10. **Cite les trois types de XSS.**
     Reflected, Stored, DOM.

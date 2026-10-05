@@ -11,13 +11,13 @@ up:
 
 - Une **Matrix ATT&CK** est une représentation visuelle des comportements et méthodes utilisés par les attaquants.
 - Elle permet de classifier les actions adverses selon :
-	- leur **objectif** → Tactic
-	- la **méthode utilisée** → Technique / Sub-technique
+    - leur **objectif** → Tactic
+    - la **méthode utilisée** → Technique / Sub-technique
 - Utilisée pour :
-	- comprendre une attaque ;
-	- mapper le comportement d’un threat actor / malware ;
-	- analyser la couverture de détection d’un SOC ;
-	- identifier des gaps de sécurité.
+    - comprendre une attaque ;
+    - mapper le comportement d’un threat actor / malware ;
+    - analyser la couverture de détection d’un SOC ;
+    - identifier des gaps de sécurité.
 
 Structure générale :
 
@@ -55,13 +55,13 @@ MITRE ATT&CK distingue principalement 3 matrices :
 - Matrice principale et la plus riche.
 - Conçue pour représenter les comportements adverses rencontrés dans les environnements d’entreprise.
 - Couvre notamment 7 sous-matrices :
-	- Windows
-	- Linux
-	- macOS
-	- Cloud
-	- équipements réseau
-	- containers
-	- PRE (activités précédant ou préparant certaines phases d’attaque)
+    - Windows
+    - Linux
+    - macOS
+    - Cloud
+    - équipements réseau
+    - containers
+    - PRE (activités précédant ou préparant certaines phases d’attaque)
 
 ![image 1.png](../../../../assets/modeles-d-analyse-de-la-menace-image-1.png)
 
@@ -87,8 +87,8 @@ Exfiltration
 
 - Orientée sécurité des smartphones/tablettes.
 - Plateformes principales, 2 sous-matrices :
-	- `Android`
-	- `iOS`
+    - `Android`
+    - `iOS`
 
 ![image 3.png](../../../../assets/modeles-d-analyse-de-la-menace-image-3.png)
 

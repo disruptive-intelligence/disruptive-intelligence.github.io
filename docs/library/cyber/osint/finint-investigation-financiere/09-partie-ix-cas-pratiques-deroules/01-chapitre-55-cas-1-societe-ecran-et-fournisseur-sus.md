@@ -91,12 +91,12 @@ Rapport au client (CONSTRUCT) :
 - Société présentant *probable* fronting.
 - Risque de facturation fictive ou de travail dissimulé : *possible à probable*.
 - Recommandations :
-  - **Rupture progressive** de la relation commerciale, avec mention explicite du risque dans le dossier compliance.
-  - **Plainte au procureur de la République** (article 40 CPP ne s’applique pas à une entreprise privée, mais une plainte est ouverte à toute personne morale victime ou témoin d’infractions) si éléments suffisants de facturation fictive ou d’escroquerie au préjudice de CONSTRUCT.
-  - **Signalement à l’inspection du travail** pour le volet travail dissimulé.
-  - **Signalement à l’URSSAF** et à la **DGFiP** selon les indices.
-  - **Important** : une entreprise du BTP comme CONSTRUCT n’est **pas, en principe, assujettie LCB-FT** au sens du Code monétaire et financier. La déclaration de soupçon à TRACFIN concerne les **assujettis** (banques, PSP, notaires, certaines professions). CONSTRUCT ne peut donc pas faire de DS TRACFIN ; ses signalements passent par les voies évoquées ci-dessus (plainte, inspection, URSSAF, DGFiP). C’est sa **banque** qui, le cas échéant, sera assujettie et susceptible de produire une DS sur les flux observés.
-  - **Audit interne** sur les processus de KYB fournisseurs.
+    - **Rupture progressive** de la relation commerciale, avec mention explicite du risque dans le dossier compliance.
+    - **Plainte au procureur de la République** (article 40 CPP ne s’applique pas à une entreprise privée, mais une plainte est ouverte à toute personne morale victime ou témoin d’infractions) si éléments suffisants de facturation fictive ou d’escroquerie au préjudice de CONSTRUCT.
+    - **Signalement à l’inspection du travail** pour le volet travail dissimulé.
+    - **Signalement à l’URSSAF** et à la **DGFiP** selon les indices.
+    - **Important** : une entreprise du BTP comme CONSTRUCT n’est **pas, en principe, assujettie LCB-FT** au sens du Code monétaire et financier. La déclaration de soupçon à TRACFIN concerne les **assujettis** (banques, PSP, notaires, certaines professions). CONSTRUCT ne peut donc pas faire de DS TRACFIN ; ses signalements passent par les voies évoquées ci-dessus (plainte, inspection, URSSAF, DGFiP). C’est sa **banque** qui, le cas échéant, sera assujettie et susceptible de produire une DS sur les flux observés.
+    - **Audit interne** sur les processus de KYB fournisseurs.
 
 ## Bilan honnête
 

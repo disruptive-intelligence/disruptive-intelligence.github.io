@@ -27,9 +27,9 @@ Email entrant
 
 
 - **Complément utile :**
-	- analyser également les **URLs** contenues dans les emails ;
-	- utiliser SPF / DKIM / DMARC contre certaines formes de spoofing ;
-	- sandboxer les pièces jointes suspectes si disponible.
+    - analyser également les **URLs** contenues dans les emails ;
+    - utiliser SPF / DKIM / DMARC contre certaines formes de spoofing ;
+    - sandboxer les pièces jointes suspectes si disponible.
 ## Procédure d’analyse
 
 - Un employé ayant un doute sur un email doit savoir **à qui le signaler**.

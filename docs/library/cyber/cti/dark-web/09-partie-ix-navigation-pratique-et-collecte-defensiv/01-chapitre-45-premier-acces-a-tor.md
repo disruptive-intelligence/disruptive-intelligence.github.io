@@ -55,9 +55,9 @@ Par défaut, Tor Browser opère en mode **Standard** — JavaScript activé, fon
 1. Cliquer sur l'icône bouclier en haut à droite du navigateur.
 2. Sélectionner **« Settings »** ou « Change ».
 3. Choisir **« Safest »** parmi les trois niveaux :
-   - **Standard** : tout activé (par défaut).
-   - **Safer** : JavaScript désactivé sur sites HTTP (mais activé sur HTTPS), fonts/icônes affichés autrement.
-   - **Safest** : JavaScript désactivé partout, beaucoup de fonctionnalités neutralisées.
+    - **Standard** : tout activé (par défaut).
+    - **Safer** : JavaScript désactivé sur sites HTTP (mais activé sur HTTPS), fonts/icônes affichés autrement.
+    - **Safest** : JavaScript désactivé partout, beaucoup de fonctionnalités neutralisées.
 
 **Conséquences du mode Safest** :
 
@@ -153,9 +153,9 @@ Pour un nouvel analyste, séquence d'apprentissage progressive sur ~6-8h cumulé
 **TP 5 — Découverte passive de SecureDrop** (1h) :
 
 - Visite SecureDrop instances de médias **sans soumettre de contenu** :
-  - NYT SecureDrop : sur le site NYT classique, lien vers .onion.
-  - Guardian SecureDrop.
-  - The Intercept.
+    - NYT SecureDrop : sur le site NYT classique, lien vers .onion.
+    - Guardian SecureDrop.
+    - The Intercept.
 - Comprendre comment ces services protègent les sources.
 
 **Règle stricte pour ces TPs** : aucun téléchargement, aucune création de compte, aucune soumission de formulaire et aucune interaction avec un service sensible. Navigation et observation passives uniquement.

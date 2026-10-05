@@ -71,9 +71,9 @@ Cible : « Karim Haddad », mentionné dans une DS comme dirigeant suspect.
 - Attributs initiaux fournis par la DS : âge approximatif (« la cinquantaine »), nationalité (franco-libanais), domaine d’activité (négoce et import-export).
 - Recherche affinée : « Karim Haddad » + « négoce » + « Liban » ou « France ».
 - 3 candidats émergent :
-  - Karim Haddad A, né 1965, ingénieur télécoms à Beyrouth → exclu (profession différente).
-  - Karim Haddad B, né 1968, négociant franco-libanais, dirigeant déclaré de plusieurs sociétés en France et au Liban → match probable.
-  - Karim Haddad C, né 1981, journaliste basé à Paris → exclu (profession différente).
+    - Karim Haddad A, né 1965, ingénieur télécoms à Beyrouth → exclu (profession différente).
+    - Karim Haddad B, né 1968, négociant franco-libanais, dirigeant déclaré de plusieurs sociétés en France et au Liban → match probable.
+    - Karim Haddad C, né 1981, journaliste basé à Paris → exclu (profession différente).
 - Recoupement complémentaire : RBE des SAS françaises identifie un UBO Karim Haddad, né 1968 à Beyrouth, nationalité française. Convergence : nom + date + lieu + nationalité + profession + mandats → identification *quasi-certaine*.
 
 ## Erreurs fréquentes

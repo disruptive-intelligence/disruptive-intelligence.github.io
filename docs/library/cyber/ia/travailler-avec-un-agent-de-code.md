@@ -6,55 +6,55 @@ revue: '2026-09-06'
 ---
 
 - Créer projet 
-	- mkdir ~/veille-agent
+    - mkdir ~/veille-agent
 - Créer structure 
-	- mkdir inbox analyses briefs reports archive templates config logs
-	- Pour l'instant :
-		- `inbox/` → articles à traiter
-		- `analyses/` → analyses individuelles
-		- `briefs/` → synthèses courtes
-		- `reports/` → rapports plus élaborés
-		- `archive/` → contenu traité
-		- `templates/` → modèles d'analyse
-		- `config/` → règles de notre système
-		- `logs/` → historique / état
+    - mkdir inbox analyses briefs reports archive templates config logs
+    - Pour l'instant :
+        - `inbox/` → articles à traiter
+        - `analyses/` → analyses individuelles
+        - `briefs/` → synthèses courtes
+        - `reports/` → rapports plus élaborés
+        - `archive/` → contenu traité
+        - `templates/` → modèles d'analyse
+        - `config/` → règles de notre système
+        - `logs/` → historique / état
 - Créer README;md
-	- nano README.md
+    - nano README.md
 - Git
-	- git init 
-	- `.git` transforme essentiellement ton dossier normal en **projet suivi par Git**.
-	- Permet de suivre ce qui est modifié donc si codex touche fichiers, peut vérifier : git status
-	- Suit que les fichiers de base, mais ajout de .gitkeep :
-		- touch inbox/.gitkeep
-			touch analyses/.gitkeep
-			touch briefs/.gitkeep
-			touch reports/.gitkeep
-			touch archive/.gitkeep
-			touch templates/.gitkeep
-			touch config/.gitkeep
-			touch logs/.gitkeep
-	- Commandes importantes à retenir :
-		- git status : quel est l'état actuel du projet ?
-		- git add . : prépare tous les changements présents dans ce dossier
-		- git commit -m "MESSAGE" : Snapshot
-		- git log : vérification avec status en complément.
-		- git diff : voir ajout concret
+    - git init 
+    - `.git` transforme essentiellement ton dossier normal en **projet suivi par Git**.
+    - Permet de suivre ce qui est modifié donc si codex touche fichiers, peut vérifier : git status
+    - Suit que les fichiers de base, mais ajout de .gitkeep :
+        - touch inbox/.gitkeep
+            touch analyses/.gitkeep
+            touch briefs/.gitkeep
+            touch reports/.gitkeep
+            touch archive/.gitkeep
+            touch templates/.gitkeep
+            touch config/.gitkeep
+            touch logs/.gitkeep
+    - Commandes importantes à retenir :
+        - git status : quel est l'état actuel du projet ?
+        - git add . : prépare tous les changements présents dans ce dossier
+        - git commit -m "MESSAGE" : Snapshot
+        - git log : vérification avec status en complément.
+        - git diff : voir ajout concret
 - Installer codex via npm et insérer dans path
-	- npm install -g @openai/codex@latest
-	- créer emplacement dédié : mkdir -p ~/.local/npm
-		- npm config set prefix ~/.local/npm
-		- npm config get prefix
-			- /home/cam/.local/npm
-	- echo 'export PATH="$HOME/.local/npm/bin:$PATH"' >> ~/.zshrc
-		- source ~/.zshrc
-			- echo $PATH
-	- npm install -g @openai/codex@latest
+    - npm install -g @openai/codex@latest
+    - créer emplacement dédié : mkdir -p ~/.local/npm
+        - npm config set prefix ~/.local/npm
+        - npm config get prefix
+            - /home/cam/.local/npm
+    - echo 'export PATH="$HOME/.local/npm/bin:$PATH"' >> ~/.zshrc
+        - source ~/.zshrc
+            - echo $PATH
+    - npm install -g @openai/codex@latest
 - Lancer codex en lecture seule : restriction d'environnement, limitation technique pour empêcher modif.
-	- codex --sandbox read-only --ask-for-approval on-request
+    - codex --sandbox read-only --ask-for-approval on-request
 - Lancer codex en écriture : pour ajouter analyse...
-	- codex --sandbox workspace-write --ask-for-approval on-request
+    - codex --sandbox workspace-write --ask-for-approval on-request
 - Ouvrir dossier courant
-	- explorer.exe .
+    - explorer.exe .
 
 
 ## `AGENTS.md` ≠ template

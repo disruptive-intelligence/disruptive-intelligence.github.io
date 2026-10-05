@@ -115,11 +115,11 @@ Linux   → Owner / Group / rwx / ACL
 ```
 
 - Principes importants :
-	- **Least Privilege** ;
-	- limiter les droits d’écriture ;
-	- protéger les fichiers sensibles ;
-	- éviter les permissions excessives ;
-	- journaliser les accès critiques lorsque nécessaire.
+    - **Least Privilege** ;
+    - limiter les droits d’écriture ;
+    - protéger les fichiers sensibles ;
+    - éviter les permissions excessives ;
+    - journaliser les accès critiques lorsque nécessaire.
 
 ```
 User autorisé
@@ -141,13 +141,13 @@ User non autorisé
 
 - Cela inclut les processus par lesquels les fichiers sont gérés sur des supports de stockage physiques.
 - La gestion des disques comprend notamment :
-	- partitions ;
-	- volumes ;
-	- allocation d’espace ;
-	- formatage ;
-	- montage des filesystems ;
-	- gestion du stockage ;
-	- récupération selon les outils disponibles.
+    - partitions ;
+    - volumes ;
+    - allocation d’espace ;
+    - formatage ;
+    - montage des filesystems ;
+    - gestion du stockage ;
+    - récupération selon les outils disponibles.
 
 ```
 Physical Disk
@@ -168,13 +168,13 @@ Physical Disk
 #### Gestion du réseau - Network Configuration
 
 - Configuration possible au niveau d’un hôte :
-	- adresse IP ;
-	- subnet mask / prefix ;
-	- default gateway ;
-	- DNS ;
-	- interfaces réseau ;
-	- routes ;
-	- parfois VLANs selon l’environnement.
+    - adresse IP ;
+    - subnet mask / prefix ;
+    - default gateway ;
+    - DNS ;
+    - interfaces réseau ;
+    - routes ;
+    - parfois VLANs selon l’environnement.
 
 ```
 Host
@@ -190,11 +190,11 @@ Host
 #### Network Security
 
 - Le système peut participer à la sécurité réseau via :
-	- host firewall ;
-	- authentification ;
-	- autorisation ;
-	- chiffrement ;
-	- contrôle des services exposés.
+    - host firewall ;
+    - authentification ;
+    - autorisation ;
+    - chiffrement ;
+    - contrôle des services exposés.
 - Exemples :
 
 ```
@@ -230,10 +230,10 @@ Linux   → ip, ss, ping, traceroute
 ```
 
 - En sécurité, ces informations permettent notamment d’identifier :
-	- port inhabituel en écoute ;
-	- connexion vers une IP suspecte ;
-	- communication C2 ;
-	- trafic anormal.
+    - port inhabituel en écoute ;
+    - connexion vers une IP suspecte ;
+    - communication C2 ;
+    - trafic anormal.
 #### Network Services Management
 
 - L’environnement réseau peut fournir différents services :
@@ -258,12 +258,12 @@ Configure
 #### Network Troubleshooting
 
 - L’OS fournit des outils permettant de diagnostiquer :
-	- perte de connectivité ;
-	- mauvaise configuration IP ;
-	- problèmes DNS ;
-	- routes incorrectes ;
-	- ports bloqués ;
-	- services indisponibles.
+    - perte de connectivité ;
+    - mauvaise configuration IP ;
+    - problèmes DNS ;
+    - routes incorrectes ;
+    - ports bloqués ;
+    - services indisponibles.
 - Workflow simple :
 
 ```
@@ -278,10 +278,10 @@ Interface UP ?
 
 - Le cours inclut également la sauvegarde et la récupération dans la gestion réseau.
 - Cela peut concerner :
-	- données accessibles sur le réseau ;
-	- configurations ;
-	- serveurs ;
-	- services critiques.
+    - données accessibles sur le réseau ;
+    - configurations ;
+    - serveurs ;
+    - services critiques.
 
 > En pratique, la sauvegarde de la **configuration des équipements réseau** et le disaster recovery sont souvent gérés via des outils spécialisés plutôt que directement par l’OS.
 ### Intérêt en sécurité

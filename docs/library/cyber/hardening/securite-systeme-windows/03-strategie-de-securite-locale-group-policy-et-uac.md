@@ -53,18 +53,18 @@ Account Policies
 ## Stratégie de groupe (gpedit.msc)
 
 - Une **Group Policy** permet d’appliquer des configurations aux :
-	- ordinateurs ;
-	- utilisateurs.
+    - ordinateurs ;
+    - utilisateurs.
 - Cet outil est souvent utilisé pour contrôler de manière centralisée les paramètres sur plusieurs ordinateurs d'un réseau.
 - Elle peut gérer :
-	- paramètres de sécurité ;
-	- Windows Update ;
-	- firewall ;
-	- network settings ;
-	- applications autorisées/interdites ;
-	- scripts startup/shutdown ;
-	- Windows Defender ;
-	- paramètres utilisateur.
+    - paramètres de sécurité ;
+    - Windows Update ;
+    - firewall ;
+    - network settings ;
+    - applications autorisées/interdites ;
+    - scripts startup/shutdown ;
+    - Windows Defender ;
+    - paramètres utilisateur.
 ### `gpedit.msc` vs Group Policy Management
 
 ```

@@ -35,12 +35,12 @@ Endpoint activity
 ### Monitoring / Collection
 
 - L’EDR collecte les événements utiles à la détection :
-	- processus lancés ;
-	- fichiers accédés/modifiés ;
-	- chemins de fichiers ;
-	- hashes ;
-	- relations entre processus ;
-	- autres événements jugés pertinents pour la sécurité.
+    - processus lancés ;
+    - fichiers accédés/modifiés ;
+    - chemins de fichiers ;
+    - hashes ;
+    - relations entre processus ;
+    - autres événements jugés pertinents pour la sécurité.
 - Exemple :
 
 ```
@@ -69,15 +69,15 @@ Comportement anormal → détection possible même sans signature exacte
 ## Response
 
 - Lorsqu’une menace est détectée, l’EDR peut :
-	- générer une alerte ;
-	- notifier l’analyste ;
-	- prendre certaines mesures automatiquement.
+    - générer une alerte ;
+    - notifier l’analyste ;
+    - prendre certaines mesures automatiquement.
 - **Complément utile :** selon le produit, la réponse peut inclure :
-	- isoler l’endpoint du réseau ;
-	- tuer un processus ;
-	- mettre un fichier en quarantaine ;
-	- supprimer/bloquer un artefact ;
-	- lancer une investigation ou collecte supplémentaire.
+    - isoler l’endpoint du réseau ;
+    - tuer un processus ;
+    - mettre un fichier en quarantaine ;
+    - supprimer/bloquer un artefact ;
+    - lancer une investigation ou collecte supplémentaire.
 ### Digital Investigation
 
 - L’EDR permet de mener une investigation approfondie directement à partir de la télémétrie de l’hôte.
@@ -122,9 +122,9 @@ EDR
 ```
 
 - Un EDR apporte donc davantage de contexte sur :
-	- comment le processus a démarré ;
-	- quels fichiers ont été touchés ;
-	- quels processus sont liés ;
-	- quelles actions de réponse ont été prises.
+    - comment le processus a démarré ;
+    - quels fichiers ont été touchés ;
+    - quels processus sont liés ;
+    - quelles actions de réponse ont été prises.
 
 > Un EDR ne remplace pas forcément l’antivirus : les solutions modernes combinent souvent plusieurs fonctions dans une même plateforme.

@@ -18,11 +18,11 @@ up:
 - Dans MITRE ATT&CK, un **Group** représente un ensemble d’activités d’intrusion associées à un même acteur / groupe suivi par la communauté CTI.
 - Souvent lié à des **APT (Advanced Persistent Threats)**, mais tous les groupes ATT&CK ne sont pas forcément des acteurs étatiques.
 - Motivations possibles :
-	- espionnage ;
-	- gain financier ;
-	- sabotage ;
-	- influence ;
-	- objectifs militaires / géopolitiques.
+    - espionnage ;
+    - gain financier ;
+    - sabotage ;
+    - influence ;
+    - objectifs militaires / géopolitiques.
 
 ```
 Group = QUI mène l’attaque
@@ -197,10 +197,10 @@ Tactic
 - ID de type `Gxxxx`.
 - Un groupe peut posséder plusieurs **aliases**.
 - MITRE documente les :
-	- techniques utilisées ;
-	- outils/malwares associés ;
-	- procédures observées ;
-	- références CTI.
+    - techniques utilisées ;
+    - outils/malwares associés ;
+    - procédures observées ;
+    - références CTI.
 - Permet de construire une **attack map / profil ATT&CK** d’un acteur.
 - Attribution ≠ certitude absolue.
 - Le nombre de groupes évolue régulièrement → inutile de mémoriser le chiffre donné dans le cours.

@@ -48,25 +48,25 @@ Ces interdits sont rappelés dans le README du projet, pas en ornement, mais com
 
 1. **`config/targets.txt`** : une URL publique par ligne. Commentaires possibles avec `#`.
    
-   ```
-   # Liste des cibles
-   https://books.toscrape.com/
-   https://quotes.toscrape.com/
-   ```
+    ```
+    # Liste des cibles
+    https://books.toscrape.com/
+    https://quotes.toscrape.com/
+    ```
 
 1. **`config/config.yaml`** : paramètres globaux.
    
-   ```yaml
-   user_agent: "osint-web-collector/1.0 (+contact: osint-projet@example.org)"
-   timeout: 10
-   delay: 1.5
-   max_pages_per_target: 5      # pour cible avec pagination
-   max_items_total: 2000
-   raw_dir: data/raw
-   processed_dir: data/processed
-   log_dir: logs
-   report_dir: reports
-   ```
+    ```yaml
+    user_agent: "osint-web-collector/1.0 (+contact: osint-projet@example.org)"
+    timeout: 10
+    delay: 1.5
+    max_pages_per_target: 5      # pour cible avec pagination
+    max_items_total: 2000
+    raw_dir: data/raw
+    processed_dir: data/processed
+    log_dir: logs
+    report_dir: reports
+    ```
 
 1. **`.env`** (optionnel, pour les éventuelles APIs) : secrets, jamais versionné.
 

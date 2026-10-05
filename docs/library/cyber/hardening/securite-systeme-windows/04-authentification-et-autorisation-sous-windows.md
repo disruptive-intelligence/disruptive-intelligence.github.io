@@ -19,11 +19,11 @@ Authorization  → Qu'as-tu le droit de faire ?
 
 - L'authentification est le processus de vérification de l'identité d'un utilisateur.
 - Windows peut utiliser plusieurs méthodes :
-	- username/password ;
-	- smart card ;
-	- biométrie ;
-	- certificats ;
-	- MFA.
+    - username/password ;
+    - smart card ;
+    - biométrie ;
+    - certificats ;
+    - MFA.
 - Dans un environnement Active Directory, les protocoles les plus importants sont surtout **Kerberos** et **NTLM**.
 ### Kerberos
 
@@ -173,10 +173,10 @@ Bonnes pratiques :
 
 - Une fois l’utilisateur authentifié, Windows doit déterminer ce qu’il peut faire.
 - Lors de la connexion, Windows construit un **Access Token / Security Token** contenant notamment :
-	- SID de l’utilisateur ;
-	- SIDs des groupes ;
-	- privilèges ;
-	- informations de sécurité.
+    - SID de l’utilisateur ;
+    - SIDs des groupes ;
+    - privilèges ;
+    - informations de sécurité.
 
 ```
 Authenticated User
@@ -186,8 +186,8 @@ Authenticated User
 ```
 
 - Une partie importante de l'autorisation Windows est l'utilisation des Listes de Contrôle d'Accès (Access Control Lists - ACL) et des Entrées de Contrôle d'Accès (Access Control Entries - ACE).
-	- ACL déterminent le type d'accès qu'un utilisateur ou un groupe a sur un objet (par exemple, un fichier, un dossier ou une clé de registre) ;
-	- ACE sont des entrées individuelles dans les ACL et déterminent comment un utilisateur ou un groupe particulier peut accéder à un objet.
+    - ACL déterminent le type d'accès qu'un utilisateur ou un groupe a sur un objet (par exemple, un fichier, un dossier ou une clé de registre) ;
+    - ACE sont des entrées individuelles dans les ACL et déterminent comment un utilisateur ou un groupe particulier peut accéder à un objet.
 ### SID — Security Identifier
 
 - Windows identifie les utilisateurs et groupes principalement avec leur **SID**, pas simplement leur nom.
@@ -209,12 +209,12 @@ SID      → identité réellement utilisée par Windows
 - Une ACL répertorie les utilisateurs et les groupes qui ont la permission d'accéder à l'objet.
 - Chaque entrée est appelée une ACE et détermine comment un utilisateur ou un groupe particulier peut accéder à l'objet.
 - Objets possibles :
-	- fichier ;
-	- dossier ;
-	- registry key ;
-	- printer ;
-	- service ;
-	- autr
+    - fichier ;
+    - dossier ;
+    - registry key ;
+    - printer ;
+    - service ;
+    - autr
 
 ```
 Object

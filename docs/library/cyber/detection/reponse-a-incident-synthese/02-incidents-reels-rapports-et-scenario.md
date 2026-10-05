@@ -114,12 +114,12 @@ Vendor Compromise
 
 - Un rapport d’incident doit documenter les événements de manière **chronologique et séquentielle**.
 - Il peut être aligné sur :
-	- Cyber Kill Chain ;
-	- MITRE ATT&CK.
+    - Cyber Kill Chain ;
+    - MITRE ATT&CK.
 - Exemple de rapport : 
-	- DFIR Labs : https://thedfirreport.com/2025/02/24/confluence-exploit-leads-to-lockbit-ransomware/
-	- La plateforme DFIR Labs contient de nombreux autres rapports d'incident. : https://thedfirreport.com/
-	- Cybereason : https://www.cybereason.com/hubfs/dam/collateral/reports/11-2020-Chaes-e-commerce-malware-research.pdf
+    - DFIR Labs : https://thedfirreport.com/2025/02/24/confluence-exploit-leads-to-lockbit-ransomware/
+    - La plateforme DFIR Labs contient de nombreux autres rapports d'incident. : https://thedfirreport.com/
+    - Cybereason : https://www.cybereason.com/hubfs/dam/collateral/reports/11-2020-Chaes-e-commerce-malware-research.pdf
 
 Exemple de progression :
 
@@ -168,7 +168,7 @@ Many Incidents
 ```
 
 - Par exemple rapport de l'Unit 42 :
-	- https://www.paloaltonetworks.com/engage/unit42-2025-global-incident-response-report
+    - https://www.paloaltonetworks.com/engage/unit42-2025-global-incident-response-report
 ## Scénario (fictif) d'incident
 
 - Le module utilise un scénario fictif autour de **Insight Nexus**, entreprise manipulant des données concurrentielles sensibles.

@@ -99,10 +99,10 @@ Rapport au magistrat instructeur :
 
 - Cartographie patrimoniale consolidée : ~10,4 M€ identifiés.
 - Actifs prioritaires pour mesures conservatoires :
-  - France : saisine AGRASC pour gel et saisie des biens immobiliers et comptes.
-  - Suisse : demande d’entraide pour gel via MROS et coopération judiciaire.
-  - Émirats : demande d’entraide judiciaire (plus complexe et plus longue).
-  - Yacht : possible saisie sous pavillon Malte (coopération MLA).
+    - France : saisine AGRASC pour gel et saisie des biens immobiliers et comptes.
+    - Suisse : demande d’entraide pour gel via MROS et coopération judiciaire.
+    - Émirats : demande d’entraide judiciaire (plus complexe et plus longue).
+    - Yacht : possible saisie sous pavillon Malte (coopération MLA).
 - Recommandation d’urgence : geler immédiatement les comptes français pour stopper la dissipation, puis enchaîner les coopérations internationales en parallèle.
 
 ## Bilan honnête

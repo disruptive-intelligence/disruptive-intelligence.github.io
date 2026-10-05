@@ -95,9 +95,9 @@ En une commande, tu viens de vivre **tout le cycle** : Docker a cherché l'image
 
 - **Côté admin :** `docker info` est ta **fiche d'identité** de l'installation : version, nombre de conteneurs/images, **driver de stockage**, dossier de données. C'est le premier endroit où regarder pour comprendre une machine Docker que tu découvres.
 - **Côté SOC / cyber :** la séparation CLI/daemon/socket **est** le modèle de menace de Docker. Retiens trois choses :
-  - 🛡️ Le **daemon = root**. Le compromettre ou détourner le socket, c'est compromettre l'hôte.
-  - 🛡️ Le **groupe `docker` = root de fait**. Qui tu ajoutes à ce groupe est une **décision de sécurité**, pas de confort.
-  - 🛡️ Le **socket `/var/run/docker.sock`** est l'objet le plus sensible de tout l'écosystème. On verra au Ch. 17 pourquoi le **monter dans un conteneur** est l'une des pires erreurs possibles.
+    - 🛡️ Le **daemon = root**. Le compromettre ou détourner le socket, c'est compromettre l'hôte.
+    - 🛡️ Le **groupe `docker` = root de fait**. Qui tu ajoutes à ce groupe est une **décision de sécurité**, pas de confort.
+    - 🛡️ Le **socket `/var/run/docker.sock`** est l'objet le plus sensible de tout l'écosystème. On verra au Ch. 17 pourquoi le **monter dans un conteneur** est l'une des pires erreurs possibles.
 
 🔍 **Réflexe diagnostic :** devant une machine Docker inconnue, commence par `docker version` (le daemon répond-il ?) et `docker info` (qu'y a-t-il dessus ?). Ces deux commandes te disent l'essentiel avant même de lister quoi que ce soit.
 
@@ -108,15 +108,15 @@ En une commande, tu viens de vivre **tout le cycle** : Docker a cherché l'image
 C'est **la** panne d'installation la plus fréquente. Deux causes, deux réflexes :
 
 1. **Le daemon ne tourne pas.** Sur Linux, il faut démarrer le service :
-   ```bash
-   sudo systemctl start docker      # démarrer le daemon maintenant
-   sudo systemctl enable docker     # le démarrer automatiquement au boot
-   ```
+    ```bash
+    sudo systemctl start docker      # démarrer le daemon maintenant
+    sudo systemctl enable docker     # le démarrer automatiquement au boot
+    ```
 2. **Tu n'as pas le droit de parler au daemon.** Ton utilisateur n'est pas dans le groupe `docker`, donc seul `sudo docker ...` fonctionne. On peut ajouter l'utilisateur au groupe :
-   ```bash
-   sudo usermod -aG docker $USER    # puis se déconnecter/reconnecter
-   ```
-   > ⚠️ **Mais souviens-toi de ce que ça signifie :** rejoindre le groupe `docker`, c'est s'octroyer un **équivalent root**. En lab perso, c'est commode. Sur une machine partagée ou sensible, c'est une décision à prendre **en conscience**.
+    ```bash
+    sudo usermod -aG docker $USER    # puis se déconnecter/reconnecter
+    ```
+    > ⚠️ **Mais souviens-toi de ce que ça signifie :** rejoindre le groupe `docker`, c'est s'octroyer un **équivalent root**. En lab perso, c'est commode. Sur une machine partagée ou sensible, c'est une décision à prendre **en conscience**.
 
 ## Exercices
 

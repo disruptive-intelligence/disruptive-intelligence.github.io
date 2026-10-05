@@ -39,13 +39,13 @@ Traffic → Firewall Rules → Allow / Deny
 
 - Le firewall applique une suite de **règles** au trafic.
 - Une règle peut se baser sur :
-	- IP source ;
-	- IP destination ;
-	- port source ;
-	- port destination ;
-	- protocole ;
-	- interface / zone ;
-	- parfois utilisateur, application ou contenu.
+    - IP source ;
+    - IP destination ;
+    - port source ;
+    - port destination ;
+    - protocole ;
+    - interface / zone ;
+    - parfois utilisateur, application ou contenu.
 - Exemple :
 
 ```
@@ -88,9 +88,9 @@ Firewall
 ```
 
 - Objectif :
-	- limiter les communications inutiles ;
-	- réduire le lateral movement ;
-	- limiter l’impact d’une compromission.
+    - limiter les communications inutiles ;
+    - réduire le lateral movement ;
+    - limiter l’impact d’une compromission.
 ## Logs Firewall
 
 - Informations typiques :

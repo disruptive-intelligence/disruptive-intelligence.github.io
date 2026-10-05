@@ -10,9 +10,9 @@ up:
 ## Account Lockout Policy
 
 - Une **Account Lockout Policy** peut limiter certaines attaques par password guessing :
-  - nombre maximal d’échecs ;
-  - durée du lockout ;
-  - délai avant reset du compteur.
+    - nombre maximal d’échecs ;
+    - durée du lockout ;
+    - délai avant reset du compteur.
 
 ```text
 Repeated Failed Logons

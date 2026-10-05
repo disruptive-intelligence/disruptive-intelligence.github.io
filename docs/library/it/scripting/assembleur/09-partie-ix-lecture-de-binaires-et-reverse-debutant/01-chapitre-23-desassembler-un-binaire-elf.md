@@ -174,12 +174,12 @@ Si `nm` montre `main`, super. Sinon (binaire strippé) :
 2. **Attention :** sous Linux avec la libc, `_start` n'appelle **pas** directement `main`. Il prépare les arguments puis appelle **`__libc_start_main`**, qui se charge d'appeler `main` ensuite.
 3. L'adresse de `main` est généralement passée en **premier argument** à `__libc_start_main`, donc dans **`rdi`** (convention System V).
 4. En désassemblage, cherche dans `_start` une instruction du type :
-   ```
-   mov  rdi, <adresse>        ; ← adresse de main
-   ; ou
-   lea  rdi, [rip + ...]
-   ```
-   juste avant `call __libc_start_main@plt`. Cette adresse, c'est `main`.
+    ```
+    mov  rdi, <adresse>        ; ← adresse de main
+    ; ou
+    lea  rdi, [rip + ...]
+    ```
+    juste avant `call __libc_start_main@plt`. Cette adresse, c'est `main`.
 
 Exemple typique dans `_start` :
 

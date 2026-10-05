@@ -119,16 +119,16 @@ dig _dmarc.technovert.fr TXT
 - **Vérification du sender** : analyser les en-têtes complets (Received, Authentication-Results).[^7]
 
 - Complément pertinent côté SOC :
-	- sender / recipient ;
-	- subject ;
-	- timestamp ;
-	- source IP ;
-	- verdict ;
-	- URL détectée ;
-	- fichier joint ;
-	- hash ;
-	- action : `Delivered / Blocked / Quarantined` ;
-	- résultats SPF / DKIM / DMARC.[^8]
+    - sender / recipient ;
+    - subject ;
+    - timestamp ;
+    - source IP ;
+    - verdict ;
+    - URL détectée ;
+    - fichier joint ;
+    - hash ;
+    - action : `Delivered / Blocked / Quarantined` ;
+    - résultats SPF / DKIM / DMARC.[^8]
 
 ## À retenir
 
