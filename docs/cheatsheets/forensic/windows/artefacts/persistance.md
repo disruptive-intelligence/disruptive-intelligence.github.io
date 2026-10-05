@@ -33,6 +33,6 @@ autorunsc64.exe -accepteula -a * -c -h -s -m > autoruns.csv   # tout, en CSV, av
 
 ## Traces dans les journaux
 
-![[cheatsheets/windows/fondamentaux/logs#Retrouver les services et tâches planifiées créés]]
+![[cheatsheets/windows/fondamentaux/logs#Retrouver les services installés ou modifiés]]
 
 ![[cheatsheets/windows/fondamentaux/logs#Retracer la vie d'une tâche planifiée]]

@@ -295,11 +295,11 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operationa
 
 ## Services et tâches planifiées
 
-### Retrouver les services et tâches planifiées créés
+### Retrouver les services installés ou modifiés
 
 ```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045}     # service installé
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698}   # tâche planifiée créée (audit requis)
+Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7045,7040,7036}   # installé, démarrage modifié, état changé
+Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4697}                                                  # service installé (si l'audit est activé)
 ```
 
 ```powershell title="Exemple"
@@ -310,13 +310,27 @@ Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045} -MaxEvents 2 | Select
     ```text
     TimeCreated : 01/10/2026 23:12:40
     Message     : Un service a été installé sur le système.
-                  Nom du service :  UpdaterSvc
-                  Nom du fichier du service :  C:\ProgramData\Updater\upd.exe
+                  Nom du service :  WindowsUpdateCritical
+                  Nom du fichier du service :  C:\Users\alice\Documents\Windows Update.exe
+                  Type de service :  service en mode utilisateur
                   Type de démarrage du service :  démarrage automatique
                   Compte du service :  LocalSystem
     ```
 
-Ensuite : [voir le binaire, le compte et le mode de démarrage d'un service](processus.md#voir-le-binaire-le-compte-et-le-mode-de-demarrage-dun-service)
+```powershell title="Exemple 2"
+Get-WinEvent -FilterHashtable @{LogName='System'; Id=7040} -MaxEvents 5 | Select-Object TimeCreated, Message   # type de démarrage changé (ex. antivirus passé en « désactivé »)
+```
+
+| Event ID | Journal | Ce qu'il dit |
+|---|---|---|
+| **7045** | System (Service Control Manager) | Service installé : nom, binaire, type de démarrage, compte |
+| **4697** | Security | Même information, si l'audit est activé : complète le 7045 |
+| **7040** | System | Type de démarrage modifié (manuel → automatique : persistance ; automatique → désactivé : antivirus ou EDR neutralisé) |
+| **7036** | System | Service démarré ou arrêté |
+
+À regarder dans un 7045 : un **nom qui imite Windows** + un **binaire dans un dossier inscriptible par l'utilisateur** (`Documents`, `%TEMP%`, `%APPDATA%`, `C:\Users\Public`) + un **démarrage automatique** + le compte **LocalSystem** = investigation prioritaire. Le champ « type de service » dit comment le service s'exécute, pas qui l'a installé.
+
+Pour comprendre : [Services Windows : 7045, binaire, compte, 7040, 7036](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/07-services-windows.md) · [Corrélation 7045 → 4688 → 7036 → C2](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/07-services-windows.md#correlation-recommandee-services) — Ensuite : [voir le binaire, le compte et le mode de démarrage d'un service](processus.md#voir-le-binaire-le-compte-et-le-mode-de-demarrage-dun-service)
 { .kw-cs-meta }
 
 ### Retracer la vie d'une tâche planifiée
@@ -429,7 +443,7 @@ wevtutil sl Security /ms:1073741824   :: 1 Go
 | 4648 | Security | Ouverture avec identifiants explicites |
 | 4672 | Security | Session avec privilèges spéciaux (admin) |
 | 4688 | Security | Processus créé |
-| 4697 / 7045 | Security / System | Service installé |
+| 7045 / 4697 | System / Security | Service installé (7040 : démarrage modifié ; 7036 : démarré / arrêté) |
 | 4698 / 4702 / 4699 | Security | Tâche planifiée créée / modifiée / supprimée (4700 / 4701 : activée / désactivée) |
 | 4720 / 4732 | Security | Compte créé / ajouté à un groupe local |
 | 4740 | Security | Compte verrouillé |

@@ -15,4 +15,5 @@ revue: '2026-10-05'
 - [Authentification et ouvertures de session](04-authentification-et-ouvertures-de-session.md)
 - [Mouvement latéral et RDP](05-mouvement-lateral-et-rdp.md)
 - [Tâches planifiées](06-taches-planifiees.md)
-- [Synthèse : verrouillage et patterns SOC](07-synthese-verrouillage-et-patterns-soc.md)
+- [Services Windows](07-services-windows.md)
+- [Synthèse : verrouillage et patterns SOC](08-synthese-verrouillage-et-patterns-soc.md)
