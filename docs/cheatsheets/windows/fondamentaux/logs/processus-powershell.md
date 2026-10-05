@@ -56,9 +56,33 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operationa
     02/10/2026 09:15:03  Création du texte Scriptblock (1 sur 1) : $d = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(…
     ```
 
-À chercher dans un 4104 : `-EncodedCommand`, `IEX` / `Invoke-Expression`, `FromBase64String`, `DownloadString`, `Invoke-WebRequest`, `WebClient`. Un long script est découpé en plusieurs 4104 (« 1 sur 3 », « 2 sur 3 »…) : les rassembler par `ScriptBlockId`. `whoami`, `Get-LocalUser`, `Get-LocalGroup` seuls ne prouvent rien ; juste après une connexion suspecte, ils dessinent une reconnaissance. Sans Script Block Logging activé (GPO), tout le code n'est pas journalisé.
+À chercher dans un 4104 : `-EncodedCommand`, `IEX` / `Invoke-Expression`, `FromBase64String`, `DownloadString`, `Invoke-WebRequest`, `WebClient`. Un long script est découpé en plusieurs 4104 (« 1 sur 3 », « 2 sur 3 »…) : les rassembler par `ScriptBlockId`. `whoami`, `Get-LocalUser`, `Get-LocalGroup` seuls ne prouvent rien ; juste après une connexion suspecte, ils dessinent une reconnaissance. PowerShell exécute aussi des commandes en arrière-plan (`Set-StrictMode`…) : du bruit, même dans un filtre resserré. Sans Script Block Logging activé, tout le code n'est pas journalisé (voir l'entrée suivante).
 
 Pour comprendre : [Exécution PowerShell : 4104, 4103, transcription, corrélations](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/12-execution-powershell.md)
+{ .kw-cs-meta }
+
+### Activer la journalisation des scripts PowerShell
+
+```powershell title="Commande"
+New-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -Force | Out-Null   # console administrateur
+Set-ItemProperty 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -Name EnableScriptBlockLogging -Value 1   # même effet que la GPO
+```
+
+```powershell title="Exemple"
+Get-ItemProperty 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -ErrorAction SilentlyContinue |
+    Select-Object EnableScriptBlockLogging   # 1 : activé ; rien : non configuré
+```
+
+??? example "Sortie"
+    ```text
+    EnableScriptBlockLogging
+    ------------------------
+                           1
+    ```
+
+Par l'interface : `gpedit.msc` → Configuration ordinateur → Modèles d'administration → Composants Windows → Windows PowerShell → **Activer la journalisation de blocs de scripts PowerShell** → Activé (en domaine : la même stratégie dans une GPO). Dans le même dossier : « Activer l'enregistrement des modules » (4103) et « Activer la transcription PowerShell ». Seul ce qui est exécuté après l'activation est journalisé.
+
+Pour comprendre : [Activation du Script Block Logging](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/12-execution-powershell.md#activation-du-script-block-logging)
 { .kw-cs-meta }
 
 ## Vue d'ensemble
@@ -67,7 +91,7 @@ Pour comprendre : [Exécution PowerShell : 4104, 4103, transcription, corrélati
 |---|---|---|---|
 | **4688** | Journaux Windows → Security | Processus créé | Ligne de commande seulement si la GPO « Include command line » est activée |
 | **1** | Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | Processus créé | Plus riche que 4688 : hash, processus parent, ligne de commande |
-| **4104** | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Script Block Logging : code exécuté | Rassembler les fragments par `ScriptBlockId` ; chercher `-EncodedCommand`, `IEX`, `FromBase64String`, `DownloadString` |
+| **4104** | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Script Block Logging : code exécuté | À activer (GPO « Activer la journalisation de blocs de scripts PowerShell ») ; rassembler les fragments par `ScriptBlockId` ; chercher `-EncodedCommand`, `IEX`, `FromBase64String`, `DownloadString` |
 | **4103** | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | Module Logging : cmdlets et paramètres | Complète 4104 |
 
 Chaîne typique : 4688 `powershell.exe` → 4104 (code) → connexion réseau (EDR, pare-feu).

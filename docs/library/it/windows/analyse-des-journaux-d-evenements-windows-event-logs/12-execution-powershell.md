@@ -159,6 +159,22 @@ Administrative Templates
 
 > Sans cette configuration, il ne faut pas supposer que **toutes les commandes PowerShell** seront nécessairement présentes dans les `4104`.
 
+Sur un poste, dans l’Éditeur de stratégie de groupe locale (`gpedit.msc`) :
+
+```text
+Configuration ordinateur
+→ Modèles d’administration
+→ Composants Windows
+→ Windows PowerShell
+→ Activer la journalisation de blocs de scripts PowerShell
+→ Activé
+```
+
+
+![Editeur de strategie de groupe locale : Modeles d'administration, Composants Windows](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-gpo-script-block-logging-01.png)
+
+![Strategie Activer la journalisation de blocs de scripts PowerShell sur Active, puis filtre 4104 dans PowerShell/Operational](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-gpo-script-block-logging-02.png)
+
 ### Informations utiles dans un 4104
 
 Un événement peut contenir notamment :
@@ -218,6 +234,8 @@ Le filtrage temporel est particulièrement utile lorsqu’on connaît déjà :
 - authentification suspecte ;
 - exécution d’un malware ;
 - fenêtre de compromission.
+
+- PowerShell exécute parfois des commandes en arrière-plan qui peuvent encore causer du bruit dans notre filtre.
 
 ![Bruit de fond : script block Set-StrictMode execute par PowerShell](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-powershell-command-execution-event-logs-08.png)
 
