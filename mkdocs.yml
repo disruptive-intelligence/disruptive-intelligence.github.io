@@ -208,6 +208,14 @@ nav:
                 - Suppressions: cheatsheets/forensic/windows/artefacts/suppressions.md
                 - Connexions et RDP: cheatsheets/forensic/windows/artefacts/connexions.md
                 - Persistance: cheatsheets/forensic/windows/artefacts/persistance.md
+        - Réseau:
+            - cheatsheets/forensic/reseau/index.md
+            - Journaux réseau:
+                - cheatsheets/forensic/reseau/journaux/index.md
+                - Pare-feu, NetFlow et VPN: cheatsheets/forensic/reseau/journaux/pare-feu-vpn.md
+                - Proxy et DNS: cheatsheets/forensic/reseau/journaux/proxy-dns.md
+                - IDS / IPS et WAF: cheatsheets/forensic/reseau/journaux/ids-waf.md
+                - Logs web: cheatsheets/forensic/reseau/journaux/web.md
     - 🚨 Réponse à incident:
         - cheatsheets/reponse-incident/index.md
         - Fiches réflexes:

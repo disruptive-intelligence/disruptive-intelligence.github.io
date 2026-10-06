@@ -1,6 +1,6 @@
 ---
 title: 'Chapitre 12 — La messagerie : SMTP, POP3, IMAP'
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau

@@ -414,3 +414,10 @@ zip:
   fait: Crée une archive .zip.
   cmd: tar -a -cf <archive>.zip <dossier>
   powershell: Compress-Archive -Path <dossier> -DestinationPath <archive>.zip
+jq:
+  fait: Filtre et extrait des champs d'un JSON (journaux, API) en ligne de commande.
+  powershell: Get-Content <fichier> | ConvertFrom-Json | Select-Object <champ>
+nfdump:
+  fait: Lit et agrège des flux NetFlow / IPFIX enregistrés (plus gros émetteurs, ports contactés).
+zeek-cut:
+  fait: Extrait des colonnes nommées d'un journal Zeek (dns.log, conn.log, http.log).

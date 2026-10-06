@@ -3,7 +3,7 @@ title: Révision — Réseau
 revision: it/reseau
 domaine: IT
 sources:
-- IT/04 Réseau/Réseau.md
+- IT/04 Réseau/Comprendre le réseau/Réseau.md
 ---
 
 *D'après le cours [Réseau](../it/reseau/reseau/index.md)*

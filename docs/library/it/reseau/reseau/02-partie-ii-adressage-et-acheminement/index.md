@@ -1,6 +1,6 @@
 ---
 title: Partie II — Adressage et acheminement
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau

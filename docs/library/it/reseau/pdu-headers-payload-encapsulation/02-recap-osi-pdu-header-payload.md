@@ -1,6 +1,6 @@
 ---
 title: 'Récap OSI : PDU + Header + Payload'
-source: IT/04 Réseau/PDU, headers, payload & encapsulation.md
+source: IT/04 Réseau/Comprendre le réseau/PDU, headers, payload & encapsulation.md
 note: PDU, headers, payload & encapsulation
 up:
 - - PDU, headers, payload & encapsulation

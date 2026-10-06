@@ -1,6 +1,6 @@
 ---
 title: Chapitre 10 — DNS et WHOIS
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau
@@ -59,3 +59,5 @@ Sous Linux, les serveurs DNS utilisés sont dans `/etc/resolv.conf`. Un domaine 
 **WHOIS** — aujourd'hui souvent via **RDAP**, son successeur structuré — donne les informations d'enregistrement d'un domaine ou d'une plage d'adresses : registrar, dates de création et d'expiration, serveurs de noms, parfois les contacts (souvent masqués). C'est une source de base en OSINT et en analyse d'un domaine suspect (un domaine créé il y a trois jours qui imite une banque…).
 
 ---
+
+> En investigation, les journaux DNS révèlent le tunneling, les domaines générés (DGA) et les rafales de NXDOMAIN : voir la partie DNS de [Analyse des journaux réseau (Network Log Analysis)](../../analyse-des-journaux-reseau-network-log-analysis/index.md).

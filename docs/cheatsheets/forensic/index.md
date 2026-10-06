@@ -14,3 +14,7 @@ les empreintes, chercher la persistance, lire les traces.
 ## [Windows](windows/index.md)
 
 - [Artefacts Windows](windows/artefacts/index.md) — [exécution](windows/artefacts/execution.md), [fichiers ouverts](windows/artefacts/fichiers-ouverts.md), [USB](windows/artefacts/usb.md), [suppressions](windows/artefacts/suppressions.md), [connexions et RDP](windows/artefacts/connexions.md), [persistance](windows/artefacts/persistance.md) : où chercher et avec quoi lire.
+
+## [Réseau](reseau/index.md)
+
+- [Journaux réseau](reseau/journaux/index.md) — [pare-feu, NetFlow et VPN](reseau/journaux/pare-feu-vpn.md), [proxy et DNS](reseau/journaux/proxy-dns.md), [IDS / IPS et WAF](reseau/journaux/ids-waf.md), [logs web](reseau/journaux/web.md) : retrouver une attaque dans les journaux des équipements réseau.

@@ -141,4 +141,6 @@ PUT et DELETE mal sécurisées = upload malveillant ou suppression de données.
 ### Point clé à mémoriser
 4xx = ta faute (client), 5xx = sa faute (serveur). Les 401/403/404/500 guident l'énumération.
 
+En investigation, un `200` dans un log web ne prouve pas qu'une attaque a réussi (page d'erreur personnalisée, requête rejetée par l'application) : voir la partie « Logs web » de [Analyse des journaux réseau (Network Log Analysis)](../../reseau/analyse-des-journaux-reseau-network-log-analysis/index.md).
+
 ---

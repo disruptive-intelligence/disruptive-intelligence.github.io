@@ -3,7 +3,7 @@ title: Analyse des journaux d'événements Windows (Event Logs)
 source: IT/02 Windows/Journaux & investigation/Analyse des journaux d'événements Windows (Event Logs).md
 format: cours
 provenance: HTB Academy
-revue: '2026-10-05'
+revue: '2026-10-06'
 ---
 
 ## Sommaire

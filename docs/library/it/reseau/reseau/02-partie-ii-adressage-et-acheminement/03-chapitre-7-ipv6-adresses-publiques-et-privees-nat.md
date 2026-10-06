@@ -1,6 +1,6 @@
 ---
 title: Chapitre 7 — IPv6, adresses publiques et privées, NAT
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau

@@ -2,7 +2,7 @@
 title: HTTP & requêtes web
 source: IT/05 Web & applications/Le web/HTTP & requêtes web.md
 format: synthese
-revue: '2026-09-30'
+revue: '2026-10-06'
 ---
 
 > Fiche de révision orientée pratique cyber (HTB / eJPT / pentest débutant).

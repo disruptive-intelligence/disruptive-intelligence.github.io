@@ -183,6 +183,14 @@ Les **logs VPN** (Fortinet, Cisco, Palo Alto GlobalProtect, Ivanti/Pulse Secure)
 
 Les **NetFlow** (métadonnées de flux sans le contenu — source, destination, port, volume, durée) sont disponibles sur les routeurs et les switches. Utilité SOC : analyse de volume à grande échelle, détection de beaconing, et cartographie des communications internes inhabituelles.
 
+Les **logs IDS / IPS** (Suricata, Snort, modules IPS des pare-feu) indiquent la signature d'attaque déclenchée (`attack`, `attackid`), sa sévérité, la direction et l'action : `detected` pour un IDS, `dropped` ou `blocked` pour un IPS. Utilité SOC : repérer scans, injections, brute force et trafic de botnets connus. Une détection ne prouve pas une exploitation réussie : vérifier que le service ciblé existe, qu'il est vulnérable, et ce que montrent ensuite l'EDR et le pare-feu.
+
+Les **logs WAF** (F5, Imperva, FortiWeb, Cloudflare, AWS WAF) se placent devant les applications web et voient les requêtes HTTP déchiffrées : type d'attaque (`SQL Injection`, `XSS`…), signature, méthode, hôte, action (`Alert` ou blocage). Utilité SOC : qualifier une attaque applicative et la source qui la mène.
+
+Les **logs web** (Apache, Nginx, IIS) enregistrent chaque requête : IP source, méthode, URI, code de statut, taille de réponse, User-Agent. Utilité SOC : confirmer ce que le WAF a laissé passer, repérer les IP les plus actives et les URI anormales. Le corps des requêtes POST n'est généralement pas journalisé, et un code `200` ne prouve pas qu'une attaque a réussi.
+
+Le détail de chacune de ces sources, champ par champ, est dans [Analyse des journaux réseau (Network Log Analysis)](../../../../it/reseau/analyse-des-journaux-reseau-network-log-analysis/index.md).
+
 ## 2.5 Sources cloud et SaaS
 
 En 2025-2026, les sources cloud sont devenues aussi critiques que les sources endpoint.

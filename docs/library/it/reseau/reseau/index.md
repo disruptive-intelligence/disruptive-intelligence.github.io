@@ -1,8 +1,8 @@
 ---
 title: Réseau
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 format: cours
-revue: '2026-10-04'
+revue: '2026-10-06'
 revision: library/revision/reseau.md
 ---
 

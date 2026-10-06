@@ -64,6 +64,8 @@ Le firewall Windows peut également journaliser les **dropped packets**, ce qui 
 
 Les logs d’un firewall réseau, NetFlow ou NDR donnent souvent une meilleure visibilité globale, mais le firewall local apporte le contexte directement lié à l’endpoint.
 
+Pour le pare-feu de périmètre, NetFlow, le proxy et le DNS : [Analyse des journaux réseau (Network Log Analysis)](../../reseau/analyse-des-journaux-reseau-network-log-analysis/index.md).
+
 ## C2 et Firewall
 
 Un firewall peut limiter les communications C2 :

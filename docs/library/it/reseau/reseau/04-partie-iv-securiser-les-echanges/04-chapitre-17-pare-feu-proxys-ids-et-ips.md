@@ -1,6 +1,6 @@
 ---
 title: Chapitre 17 — Pare-feu, proxys, IDS et IPS
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau
@@ -91,3 +91,5 @@ sudo snort -q -l /var/log/snort -i lo -A console -c /etc/snort/snort.conf
 ![Alertes Snort dans la console](../../../../assets/reseau-image-26.png)
 
 ---
+
+> Ce que ces équipements journalisent, et comment le lire en investigation (pare-feu, proxy, IDS / IPS, WAF, VPN, NetFlow) : [Analyse des journaux réseau (Network Log Analysis)](../../analyse-des-journaux-reseau-network-log-analysis/index.md).

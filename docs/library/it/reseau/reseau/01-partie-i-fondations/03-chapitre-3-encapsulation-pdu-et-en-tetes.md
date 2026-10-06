@@ -1,6 +1,6 @@
 ---
 title: Chapitre 3 — Encapsulation, PDU et en-têtes
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau

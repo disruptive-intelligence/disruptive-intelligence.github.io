@@ -70,6 +70,7 @@
 # IT — Réseau, web
 "Réseau": "Le cours réseau : modèles OSI et TCP/IP, encapsulation, adressage et sous-réseaux, ARP, DHCP, NAT et routage, DNS, HTTP et messagerie, TLS, SSH, VPN, pare-feu, IDS et Wi-Fi."
 "PDU, headers, payload & encapsulation": "Ce que chaque couche ajoute à un paquet, en un schéma."
+"Analyse des journaux réseau (Network Log Analysis)": "NetFlow, pare-feu, VPN, proxy, IDS/IPS, WAF, logs web et DNS : ce que chaque source révèle d'une attaque."
 "Fonctionnement du web : URL, DNS, HTTPS": "Ce qui se passe entre la saisie d'une URL et l'affichage de la page."
 "HTTP & requêtes web": "Lire et forger des requêtes HTTP avec cURL et les DevTools."
 "Applications web": "Architecture d'une application web, failles côté client et serveur, méthode d'audit."

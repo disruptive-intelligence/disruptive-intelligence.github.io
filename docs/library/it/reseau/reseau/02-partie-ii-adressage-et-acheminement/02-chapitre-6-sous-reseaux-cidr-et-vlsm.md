@@ -1,6 +1,6 @@
 ---
 title: Chapitre 6 — Sous-réseaux, CIDR et VLSM
-source: IT/04 Réseau/Réseau.md
+source: IT/04 Réseau/Comprendre le réseau/Réseau.md
 note: Réseau
 up:
 - - Réseau
