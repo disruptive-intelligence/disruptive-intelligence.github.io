@@ -15,7 +15,7 @@ tags:
   - chaîne d'approvisionnement
   - manipulation de l'information
 source_file: inbox/ENISA Threat Landscape 2026_Final.pdf
-source_url: https://www.enisa.europa.eu/sites/default/files/2026-09/ENISA%20Threat%20Landscape%202026_Final.pdf
+source_url: https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026
 ---
 
 # Analyse — ENISA : rapport sur le panorama des menaces cyber, édition 2026
