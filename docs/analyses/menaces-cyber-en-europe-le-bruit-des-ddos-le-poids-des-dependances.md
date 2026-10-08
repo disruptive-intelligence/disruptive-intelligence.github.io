@@ -1,5 +1,5 @@
 ---
-title: "Analyse — Menaces cyber en Europe : le bruit des DDoS, le poids des dépendances"
+title: "Analyse — ENISA : rapport sur le panorama des menaces cyber, édition 2026"
 date: 2026-10-08
 kind: analysis
 document_type: rapport
@@ -18,7 +18,7 @@ source_file: inbox/ENISA Threat Landscape 2026_Final.pdf
 source_url: https://www.enisa.europa.eu/sites/default/files/2026-09/ENISA%20Threat%20Landscape%202026_Final.pdf
 ---
 
-# Analyse — Menaces cyber en Europe : le bruit des DDoS, le poids des dépendances
+# Analyse — ENISA : rapport sur le panorama des menaces cyber, édition 2026
 
 ## Métadonnées
 
