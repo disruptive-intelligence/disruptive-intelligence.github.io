@@ -8,6 +8,8 @@ et l'étape suivante. Les cours complets restent dans la [Bibliothèque](../libr
 
 [🔎 Que veux-tu faire ?](besoins.md){ .md-button .md-button--primary } [🔤 Par commande](commandes.md){ .md-button } [🔁 Linux ↔ Windows](linux-windows.md){ .md-button }
 
+Pour ouvrir une session sur une autre machine : [Accès distant — SSH, RDP et VNC](acces-distant.md).
+
 Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la commande** (« à quoi sert
 `tail` ? »). Les [conventions](conventions.md) expliquent comment se lit une fiche.
 

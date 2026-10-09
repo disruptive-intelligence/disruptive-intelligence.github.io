@@ -116,6 +116,7 @@ nav:
       - 🆕 Quoi de neuf: nouveautes.md
   - 📋 Cheat sheets:
     - cheatsheets/index.md
+    - Accès distant (SSH, RDP, VNC): cheatsheets/acces-distant.md
     - 🔎 Que veux-tu faire ?: cheatsheets/besoins.md
     - 🔤 Par commande: cheatsheets/commandes.md
     - 🔁 Linux ↔ Windows: cheatsheets/linux-windows.md

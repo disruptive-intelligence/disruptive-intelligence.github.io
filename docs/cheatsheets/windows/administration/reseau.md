@@ -135,6 +135,8 @@ Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
 
 ## Bureau à distance
 
+Pour les connexions SSH et VNC, FreeRDP et le serveur Linux xrdp, voir la fiche [Accès distant](../../acces-distant.md).
+
 ### Ouvrir une session de bureau à distance (RDP)
 
 ```bat title="Commande"
