@@ -35,7 +35,7 @@ Pour comprendre : [Pare-feu : champs des traffic logs, action, NAT](../../../../
 
 ### Repérer un scan de ports
 
-Pour extraire la liste et le nombre de ports visés par une source dans un journal `src=…|dstport=…`, voir [Texte et filtres — ports distincts](../../../linux/fondamentaux/texte-filtres.md#extraire-et-compter-des-ports-de-destination-distincts).
+Pour extraire la liste et le nombre de ports visés par une source, ou limiter le calcul aux connexions autorisées, voir [Texte et filtres — ports distincts et actions](../../../linux/fondamentaux/texte-filtres.md#extraire-et-compter-des-ports-de-destination-distincts).
 
 ```bash title="Commande"
 sed -n 's/.*srcip=\([0-9.]*\).*dstport=\([0-9]*\).*/\1 \2/p' <journal> | sort -u | awk '{print $1}' | uniq -c | sort -rn | head   # ports distincts par source (scan vertical)

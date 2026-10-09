@@ -124,7 +124,51 @@ Si le journal contient plusieurs sources et que la question porte sur une seule,
 grep -F '|src=198.51.100.23|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
 ```
 
-Remplace `198.51.100.23` par la source recherchée. Ne filtre pas sur `action=deny` si tu veux compter **toutes les tentatives** : une connexion autorisée vise elle aussi un port. Pour un autre format de journal, adapte `src=` et `dstport=` aux noms de champs réellement présents.
+Remplace `198.51.100.23` par la source recherchée. Pour compter **toutes les tentatives**, garde les actions autorisées et refusées : une connexion autorisée vise elle aussi un port. Pour un autre format de journal, adapte `src=` et `dstport=` aux noms de champs réellement présents.
+
+### Filtrer par action avant de compter
+
+Pour ne regarder que les connexions **autorisées** dans ce journal à champs séparés par `|`, filtre d'abord les lignes sur le champ entier `|action=allow|` :
+
+```bash title="Lister les ports autorisés distincts"
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+```
+
+```bash title="Compter les ports autorisés distincts"
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
+```
+
+```bash title="Nombre d'entrées autorisées par port"
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn
+```
+
+Le premier `grep` garde les lignes autorisées ; le second extrait `dstport=…` ; `cut` ne conserve que le numéro. Ensuite, `sort -u` liste chaque port une fois, `wc -l` compte ces ports distincts, tandis que `uniq -c` compte les occurrences de chaque port **après le tri**. Une occurrence correspond ici à un champ trouvé dans le journal, pas forcément à une connexion distincte. Pour étudier une seule source *et* une seule action, ajoute le filtre `grep -F '|src=<IP>|'` avant l'extraction, en remplaçant `<IP>`.
+
+### Gabarits pour d'autres journaux ou fichiers texte
+
+Remplace les trois valeurs de départ : `FICHIER` est le chemin du fichier, `CRITERE` est le texte fixe qui doit figurer dans la ligne, et `MOTIF` est l'expression régulière à extraire. Par exemple, le critère pourrait être `ERROR` et le motif `code=[0-9]+` dans un journal d'application. Ces gabarits conservent la correspondance entière, avec son éventuel préfixe (`code=`) ; ajoute `cut -d= -f2` avant le tri si tu veux seulement la valeur d'un champ `clé=valeur`.
+
+```bash title="À adapter une fois"
+FICHIER='chemin/vers/fichier.log'
+CRITERE='texte-à-garder'
+MOTIF='expression-régulière-à-extraire'
+```
+
+```bash title="Lister les valeurs distinctes"
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u
+```
+
+```bash title="Compter les valeurs distinctes"
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u | wc -l
+```
+
+```bash title="Compter les occurrences par valeur"
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort | uniq -c | sort -rn
+```
+
+Si tu n'as **aucun critère de ligne**, commence directement par `grep -oE "$MOTIF" "$FICHIER"` et garde la fin du pipeline voulue (`sort -u`, `sort -u | wc -l` ou `sort | uniq -c | sort -rn`). Vérifie d'abord quelques correspondances avec `grep -oE "$MOTIF" "$FICHIER" | head` : un motif trop large fausse tous les comptes.
+
+Si tu veux compter des **lignes entières distinctes** au lieu d'une valeur extraite, utilise `grep -F "$CRITERE" "$FICHIER" | sort -u | wc -l`. Deux lignes qui diffèrent seulement par leur horodatage seront alors comptées séparément.
 
 ### Compter des lignes
 
