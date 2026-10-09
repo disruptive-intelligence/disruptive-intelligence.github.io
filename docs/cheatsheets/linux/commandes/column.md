@@ -52,6 +52,15 @@ grep -F '|action=allow|' firewall.log |
 
 Le comptage se fait **avant** `column` ; les colonnes rendent les résultats plus lisibles. Si seul le nombre de ports distincts t'intéresse, utilise [`sort -u | wc -l`](sort.md#ports-distincts-dun-journal-de-pare-feu) à la place.
 
+### Zeek HTTP : une vue lisible des requêtes
+
+```bash title="Colonnes choisies par nom, puis alignées"
+zeek-cut ts id.orig_h method uri status_code < http.log |
+  head -n 20 | column -t -s $'\t'
+```
+
+Le séparateur `$'\t'` représente une tabulation dans Bash. `head` limite l'entrée **avant** `column` ; pour parcourir tout le résultat, retire `head -n 20` et ajoute `| less -S` **après** `column`. Pour une [investigation Zeek complète](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog), conserve l'IP et le code avec l'URI.
+
 ## Autres exemples
 
 ```bash title="Fichiers délimités"

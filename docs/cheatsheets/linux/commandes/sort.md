@@ -48,6 +48,15 @@ sort -t '|' -k1,1 evenements.txt | column -t -s '|' | less -S
 
 Ce tri est chronologique seulement si les horodatages ont le même format ISO et le **même fuseau**. Si des événements sont collés sur une ligne, sépare-les d'abord avec [`sed`](sed.md#separer-des-evenements-vpn-colles). Trie **avant** `column`.
 
+### Zeek HTTP : classer les volumes et les valeurs distinctes
+
+```bash title="Sources les plus actives et codes les plus fréquents"
+zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head
+zeek-cut status_code < http.log | sort | uniq -c | sort -rn
+```
+
+Le premier `sort` rassemble les valeurs identiques pour `uniq -c` ; `sort -rn` classe ensuite les **comptes** décroissants. `zeek-cut uri < http.log | sort -u` répond à une autre question : quelles URI distinctes ont été demandées ? Voir [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
 ## Autres exemples
 
 ```bash title="Texte, nombres, tailles"

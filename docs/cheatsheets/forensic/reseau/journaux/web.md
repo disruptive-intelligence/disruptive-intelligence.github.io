@@ -4,7 +4,7 @@ title: "Logs web"
 
 # Logs web
 
-Les journaux d'accès d'un serveur web (Apache, Nginx, IIS) : une ligne par requête. Qui a frappé, quelle URL, avec quel résultat.
+Les journaux d'accès d'un serveur web (Apache, Nginx, IIS) et le `http.log` de Zeek : qui a fait quelle requête, vers quelle ressource, avec quel résultat. Les commandes pour le format « combined » et celles pour Zeek ne partagent pas les mêmes positions de champs.
 
 Les incontournables : `awk` · `grep -E` · `sort | uniq -c` · `/var/log/apache2/access.log` · `/var/log/nginx/access.log`
 { .kw-cs-top }
@@ -114,6 +114,93 @@ Le corps des POST (identifiants testés) n'est pas journalisé par défaut : on 
 
 Pour comprendre : [Logs web : Brute Force Web, corps POST / PUT](../../../../library/it/reseau/analyse-des-journaux-reseau-network-log-analysis/07-logs-web.md)
 { .kw-cs-meta }
+
+## Zeek / Bro : analyser `http.log`
+
+Le format texte Zeek standard est délimité par des **tabulations** et commence par des métadonnées `#separator`, `#fields` et `#types`. Une exportation JSON demande un traitement différent. Vérifie les champs de **ton** fichier avant d'employer des numéros de colonnes : le schéma peut varier.
+
+```bash title="Vérifier le format et les positions"
+head -n 8 http.log
+awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log
+```
+
+Dans un `http.log` dont `#fields` confirme l'ordre ci-dessous :
+
+| Position | Champ Zeek | Sens |
+|---|---|---|
+| `$1` | `ts` | Horodatage Unix |
+| `$3` · `$4` | `id.orig_h` · `id.orig_p` | IP et port du client |
+| `$5` · `$6` | `id.resp_h` · `id.resp_p` | IP et port du serveur |
+| `$8` | `method` | Méthode HTTP |
+| `$10` | `uri` | Ressource demandée |
+| `$12` | `user_agent` | Client HTTP déclaré |
+| `$15` | `status_code` | Code de réponse |
+
+`zeek-cut` lit l'en-tête et sélectionne les **noms** de champs ; c'est le choix le plus sûr pour un journal Zeek standard. Pour afficher les requêtes utiles à l'enquête :
+
+```bash title="Client, méthode, URI, code : première vue"
+zeek-cut ts id.orig_h method uri status_code < http.log | head -n 20
+zeek-cut ts id.orig_h method uri status_code < http.log | head -n 20 | column -t -s $'\t'
+```
+
+Si `zeek-cut` n'est pas installé **et que les positions ci-dessus sont confirmées**, écarte les lignes de métadonnées :
+
+```bash title="Variante awk à positions vérifiées"
+awk -F '\t' 'BEGIN {OFS="\t"} !/^#/ {print $3, $8, $10, $15}' http.log | head -n 20 | column -t -s $'\t'
+```
+
+### Mesurer l'activité et les réponses
+
+```bash title="IP sources les plus actives"
+zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head
+```
+
+```bash title="Méthodes et codes HTTP par fréquence"
+zeek-cut method < http.log | sort | uniq -c | sort -rn
+zeek-cut status_code < http.log | sort | uniq -c | sort -rn
+```
+
+Avec les positions vérifiées, `cut` donne les mêmes comptages. Le premier `grep` évite de compter `#fields`, `#types` et les autres métadonnées comme des événements :
+
+```bash title="Variantes cut pour un TSV à colonnes confirmées"
+grep -v '^#' http.log | cut -f3  | sort | uniq -c | sort -rn | head  # IP sources
+grep -v '^#' http.log | cut -f8  | sort | uniq -c | sort -rn         # méthodes
+grep -v '^#' http.log | cut -f15 | sort | uniq -c | sort -rn         # codes HTTP
+```
+
+| Code | Sens courant | À examiner |
+|---|---|---|
+| `200` | Réponse OK | URI accessible ; **ne prouve pas une compromission** |
+| `301` / `302` | Redirection | Destination suivante |
+| `401` | Authentification requise | Échecs répétés |
+| `403` | Accès refusé | Ressources interdites sollicitées |
+| `404` | Ressource introuvable | URI différentes et cadence des essais |
+| `500` | Erreur serveur | Requête associée et réponse applicative |
+
+### Examiner les URI accessibles et les outils déclarés
+
+```bash title="Réponses 200 : conserver le client et la ressource"
+zeek-cut id.orig_h method uri status_code < http.log |
+  awk -F '\t' '$4 == 200 {print $1, $2, $3, $4}'
+```
+
+```bash title="User-Agents contenant un nom d'outil"
+zeek-cut id.orig_h method uri user_agent status_code < http.log |
+  awk -F '\t' 'tolower($4) ~ /(nmap|nikto|sqlmap|gobuster|dirbuster)/ {print}'
+```
+
+`grep -iE 'nmap|nikto|sqlmap|gobuster|dirbuster' http.log` sert de recherche rapide sur toute la ligne, mais peut aussi trouver une correspondance dans l'URI ou un autre champ. Un User-Agent est déclaratif et peut être falsifié.
+
+```bash title="Examiner des requêtes HEAD vers des fichiers .nsf"
+zeek-cut id.orig_h method uri user_agent status_code < http.log |
+  awk -F '\t' '$2 == "HEAD" && $3 ~ /[.]nsf([?]|$)/ {print}'
+```
+
+Des requêtes `HEAD` vers de nombreuses URI `.nsf`, avec un User-Agent « Nmap Scripting Engine » et des `404`, suggèrent une reconnaissance automatisée. Croise l'IP, les horaires, la diversité des URI et les autres journaux avant de conclure. Un nombre élevé de `404` peut signaler une énumération ; un `200` indique seulement que le serveur a répondu avec ce code.
+
+**Parcours court SOC** : 1. classer les IP sources ; 2. compter méthodes et codes ; 3. regarder les URI associées aux `200` et aux `404` ; 4. examiner le User-Agent et la chronologie ; 5. recouper avec les journaux proxy, pare-feu et serveur. Pour des commandes génériques, voir [`awk`](../../../linux/commandes/awk.md), [`cut`](../../../linux/commandes/cut.md), [`grep`](../../../linux/commandes/grep.md), [`sort`](../../../linux/commandes/sort.md), [`uniq`](../../../linux/commandes/uniq.md) et [`column`](../../../linux/commandes/column.md).
+
+Référence du format : [Zeek, Log Formats and Inspection](https://docs.zeek.org/en/current/log-formats.html) et [champs du journal HTTP](https://docs.zeek.org/en/current/reference/logs/http.html).
 
 ## Vue d'ensemble
 

@@ -39,6 +39,18 @@ cut -d '|' -f 1,5,7,9 vpn.log           # exemple après vérification des posit
 
 Si les champs `srcuser`, `publicip` ou `status` ne sont pas toujours aux mêmes positions, utilise [`awk`](awk.md#vpn-construire-une-vue-lisible-sans-supposer-lordre-des-champs) pour chercher leurs noms.
 
+### Zeek HTTP : extraire des colonnes tabulées
+
+`cut -f` utilise les tabulations par défaut. Dans `http.log`, lis d'abord `grep '^#fields' http.log` : ces positions ne valent que si l'en-tête confirme `id.orig_h` en 3, `method` en 8 et `status_code` en 15.
+
+```bash title="IP, méthodes et codes par fréquence"
+grep -v '^#' http.log | cut -f3  | sort | uniq -c | sort -rn | head
+grep -v '^#' http.log | cut -f8  | sort | uniq -c | sort -rn
+grep -v '^#' http.log | cut -f15 | sort | uniq -c | sort -rn
+```
+
+Les lignes `#` sont des métadonnées Zeek, pas des requêtes. Pour éviter de dépendre des positions, utilise `zeek-cut id.orig_h < http.log`, puis les mêmes étapes de tri et comptage. Voir le [scénario HTTP complet](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
 ## Autres exemples
 
 ```bash title="Découper puis compter"

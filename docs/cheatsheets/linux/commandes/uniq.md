@@ -40,6 +40,15 @@ grep -oE 'src=[0-9.]+' firewall.log | cut -d '=' -f 2 |
 
 Adapte `src=` si ton format emploie `srcip=`. La regex trouve une **forme** d'adresse, pas une validation complète d'IPv4.
 
+### Zeek HTTP : compter les méthodes et les réponses
+
+```bash title="Répartition des méthodes et codes HTTP"
+zeek-cut method < http.log | sort | uniq -c | sort -rn
+zeek-cut status_code < http.log | sort | uniq -c | sort -rn
+```
+
+Pour la liste des URI différentes : `zeek-cut uri < http.log | sort -u`. Pour leur nombre, ajoute `| wc -l`. Un `404` fréquent est une piste d'énumération à examiner dans la [fiche Forensic réseau](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
 ## Autres exemples
 
 ```bash title="Doublons et valeurs isolées"

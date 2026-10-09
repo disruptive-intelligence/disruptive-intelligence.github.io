@@ -132,3 +132,22 @@ awk -F'|' '{
 Ce comptage suppose **un événement par ligne**. Si ce n'est pas le cas, passe d'abord par le `sed` de l'exemple VPN. Pour examiner la chronologie d'une source précise, conserve aussi l'horodatage et l'IP plutôt que de te limiter aux totaux.
 
 Voir les scénarios complets : [pare-feu et VPN dans Forensic réseau](../../forensic/reseau/journaux/pare-feu-vpn.md).
+
+### Zeek HTTP : filtrer et présenter des champs TSV
+
+Un `http.log` Zeek texte est séparé par des tabulations. Ses lignes `#fields` décrivent les colonnes : inspecte-les avant d'utiliser `$3`, `$8`, `$10` ou `$15`. `!/^#/` ignore les métadonnées.
+
+```bash title="Afficher les positions déclarées par Zeek"
+awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log
+```
+
+```bash title="Client, méthode, URI, code : positions confirmées"
+awk -F '\t' 'BEGIN {OFS="\t"} !/^#/ {print $3, $8, $10, $15}' http.log |
+  head -n 20 | column -t -s $'\t'
+```
+
+```bash title="Requêtes ayant reçu un code 200"
+awk -F '\t' '!/^#/ && $15 == 200 {print $3, $8, $10, $15}' http.log
+```
+
+Quand le schéma change, `zeek-cut id.orig_h method uri status_code < http.log` sélectionne les champs par **nom**. Tu peux ensuite filtrer sa sortie avec `awk -F '\t' '$4 == 200'`. Le scénario complet et ses précautions sont dans [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).

@@ -138,4 +138,20 @@ tail -F /var/log/auth.log | grep --line-buffered 'Failed password'
 
 `-n` indique la ligne du fichier ; `-C 2` montre les deux lignes voisines. `zgrep` lit les rotations compressées. Derrière `tail -F`, `--line-buffered` affiche les nouvelles correspondances sans attendre que le tampon se remplisse.
 
+### Zeek HTTP : inspecter le schéma et repérer un outil
+
+```bash title="En-tête puis recherche rapide"
+grep -m1 '^#fields' http.log
+grep -v '^#' http.log | grep -iE 'nmap|nikto|sqlmap|gobuster|dirbuster'
+```
+
+La seconde commande cherche sur **toute la ligne** : le motif peut se trouver dans l'URI, pas seulement dans `user_agent`. Pour cibler ce champ, extrais-le par nom :
+
+```bash title="Filtrer seulement le User-Agent"
+zeek-cut id.orig_h method uri user_agent status_code < http.log |
+  awk -F '\t' 'tolower($4) ~ /(nmap|nikto|sqlmap|gobuster|dirbuster)/ {print}'
+```
+
+Le User-Agent peut être falsifié. Voir l'[enquête Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
 À revoir aussi : [ports et actions dans la fiche SOC](../../forensic/reseau/journaux/pare-feu-vpn.md#lister-et-compter-les-ports-vises-dans-un-journal) et [gabarits réutilisables](../fondamentaux/texte-filtres.md#gabarits-pour-dautres-journaux-ou-fichiers-texte).

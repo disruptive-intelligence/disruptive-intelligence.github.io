@@ -19,7 +19,7 @@ Les incontournables : `grep` · `sed -n 's/…/…/p'` · `awk` · `sort | uniq 
 | [**Pare-feu, NetFlow et VPN**](pare-feu-vpn.md) | Filtrer par IP, port, action ; scans ; volumes sortants ; plus gros flux ; connexions VPN d'un utilisateur |
 | [**Proxy et DNS**](proxy-dns.md) | Requêtes bloquées, gros envois ; domaines interrogés, tunneling DNS, DGA, modifications sur un serveur DNS Windows |
 | [**IDS / IPS et WAF**](ids-waf.md) | Alertes par signature et par source ; attaques web par type ; ce que le WAF a laissé passer |
-| [**Logs web**](web.md) | IP les plus actives, URL, codes, User-Agents ; injections et traversées ; brute force sur une page de connexion |
+| [**Logs web**](web.md) | Apache/Nginx et Zeek `http.log` : IP, URI, méthodes, codes, User-Agents ; scans, injections et brute force |
 
 ## Vue d'ensemble : quelle source pour quelle question
 

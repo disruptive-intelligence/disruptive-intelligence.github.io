@@ -76,6 +76,17 @@ grep -vE '^\s*(#|$)' /etc/ssh/sshd_config
     Subsystem sftp /usr/lib/openssh/sftp-server
     ```
 
+### Fichier à colonnes tabulées : exemple Zeek
+
+Dans un `http.log` Zeek texte, les champs sont séparés par des tabulations et `#fields` indique leur ordre. Vérifie cet en-tête avant de choisir un numéro de colonne :
+
+```bash title="Inspecter puis compter les IP sources"
+grep -m1 '^#fields' http.log
+zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head
+```
+
+`zeek-cut` extrait par **nom de champ** ; pour un TSV générique, après vérification que l'IP est en colonne 3 : `grep -v '^#' fichier.tsv | cut -f3 | sort | uniq -c | sort -rn`. Pour filtrer plusieurs colonnes ou aligner l'affichage, voir [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
 ## Compter et trier
 
 ### Trier et compter les occurrences
