@@ -249,6 +249,44 @@ head -3 /etc/passwd | column -t -s:
 
 Pour remettre en lignes un export dont les événements sont collés, puis aligner les champs `|` et isoler les informations utiles, voir [l'exemple VPN de la fiche journaux réseau](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
 
+## Mettre en forme et trier un fichier texte
+
+### Aligner des champs délimités
+
+Regarde d'abord quelques lignes : `head -n 3 fichier.txt` ou `head -c 500 fichier.txt` si elles sont très longues. Si les champs sont séparés par `|`, affiche-les en tableau et parcours les lignes larges :
+
+```bash title="Afficher en colonnes"
+column -t -s '|' fichier.txt | less -S
+```
+
+Pour ne voir que certains champs, vérifie leur position sur une ligne, puis sélectionne-les **avant** d'aligner :
+
+```bash title="Garder les colonnes 1, 3 et 5"
+awk -F'|' '{print $1 "|" $3 "|" $5}' fichier.txt | column -t -s '|'
+```
+
+`awk -F'|'` découpe la ligne sur `|` ; `$1`, `$3` et `$5` désignent les champs choisis. Si l'ordre varie mais que les champs sont nommés (`clé=valeur`), cherche plutôt les **noms** comme dans [l'exemple VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
+
+### Trier avant d'aligner
+
+```bash title="Tri alphabétique, numérique et par première colonne"
+sort fichier.txt
+sort -n nombres.txt
+sort -t '|' -k1,1 evenements.txt | column -t -s '|' | less -S
+```
+
+`sort` compare le texte ; `sort -n` compare des nombres ; `-t '|' -k1,1` trie sur le premier champ. **Trie avant `column`** : l'alignement ajoute des espaces qui peuvent changer les clés de tri. Un tri textuel sur des horodatages ISO donne l'ordre chronologique seulement si leur format et leur fuseau horaire sont identiques.
+
+### Séparer des événements collés
+
+Si plusieurs événements commencent par `AAAA-MM-JJT` et sont séparés par **un espace** sur la même ligne, GNU `sed` peut remettre chaque événement sur sa propre ligne avant l'affichage :
+
+```bash title="Un événement par ligne, sans modifier le fichier"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' evenements.txt | column -t -s '|' | less -S
+```
+
+Vérifie que ce motif marque bien le début d'un événement dans ton fichier ; s'il possède déjà une ligne par événement, garde seulement `column -t -s '|' fichier.txt | less -S`. Le cas SOC complet figure dans [Journaux réseau — VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
+
 ## Enchaîner et enregistrer
 
 ### Envoyer la sortie dans un fichier

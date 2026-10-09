@@ -16,12 +16,16 @@ Les incontournables : `less` · `tail -f` · `find / -name` · `grep -rni` · `s
 ### Lire un fichier long
 
 ```bash title="Commande"
-less <fichier>   # / chercher, n suivant, G fin du fichier, q quitter
+less <fichier>           # / chercher, n suivant, G fin du fichier, q quitter
+less -S <fichier>        # évite le retour à la ligne pour les lignes très larges
+head -c 500 <fichier>    # aperçu des 500 premiers octets pour repérer le format
 ```
 
 ```bash title="Exemple"
-less /var/log/syslog
+less -S /var/log/syslog
 ```
+
+Dans `less -S`, les flèches gauche et droite permettent de parcourir une ligne large. Pour mettre des champs en colonnes ou trier le contenu, voir [Texte et filtres](texte-filtres.md#mettre-en-forme-et-trier-un-fichier-texte).
 
 Pour comprendre : [Administration Linux, ch. 3](../../../library/it/linux/administration-linux/01-partie-1-survivre-dans-le-terminal/03-chapitre-3-lire-le-contenu-des-fichiers.md)
 { .kw-cs-meta }

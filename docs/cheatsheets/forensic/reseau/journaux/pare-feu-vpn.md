@@ -33,9 +33,35 @@ Une IP d'IOC qui apparaît en `accept` : la connexion a eu lieu. Remonter ensuit
 Pour comprendre : [Pare-feu : champs des traffic logs, action, NAT](../../../../library/it/reseau/analyse-des-journaux-reseau-network-log-analysis/02-pare-feu.md)
 { .kw-cs-meta }
 
+### Lister et compter les ports visés dans un journal `|`
+
+Pour un export où chaque événement contient `|src=…|dstport=…|action=…|`, commence par vérifier les noms de champs avec `head -n 3 firewall.log`. Ici, `dstport` est le port visé ; `srcport` est le port source.
+
+```bash title="Ports visés : liste et nombre distincts"
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l
+```
+
+```bash title="Seulement les événements autorisés"
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
+```
+
+```bash title="Fréquence des événements autorisés par port"
+grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn
+```
+
+```bash title="Ports distincts autorisés pour une source"
+grep -F '|src=198.51.100.23|' firewall.log | grep -F '|action=allow|' | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+```
+
+Remplace cette adresse d'exemple par la source recherchée. Ne limite pas le calcul à `allow` quand tu veux compter **toutes les tentatives**. `sort -u` garde un exemplaire de chaque port ; `wc -l` compte les ports distincts ; `uniq -c` compte les lignes par port après le tri. Ces commandes concernent ce format à séparateurs `|` ; les journaux FortiGate ci-dessus emploient d'autres noms de champs et `action="accept"`.
+
+Pour adapter le même pipeline à d'autres fichiers texte : [gabarits Linux — Texte et filtres](../../../linux/fondamentaux/texte-filtres.md#gabarits-pour-dautres-journaux-ou-fichiers-texte).
+
 ### Repérer un scan de ports
 
-Pour extraire la liste et le nombre de ports visés par une source, ou limiter le calcul aux connexions autorisées, voir [Texte et filtres — ports distincts et actions](../../../linux/fondamentaux/texte-filtres.md#extraire-et-compter-des-ports-de-destination-distincts).
+Après la liste d'une source, compare plusieurs sources pour repérer un balayage vertical ou horizontal.
 
 ```bash title="Commande"
 sed -n 's/.*srcip=\([0-9.]*\).*dstport=\([0-9]*\).*/\1 \2/p' <journal> | sort -u | awk '{print $1}' | uniq -c | sort -rn | head   # ports distincts par source (scan vertical)
