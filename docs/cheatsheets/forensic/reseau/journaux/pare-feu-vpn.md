@@ -109,6 +109,47 @@ Pour comprendre : [NetFlow : attributs d'un flow, port scanning, C2, limites](..
 
 ## VPN
 
+### Rendre lisible un export VPN séparé par `|`
+
+Cet exemple concerne un export **différent du format FortiGate utilisé ailleurs sur cette page** : chaque événement commence par un horodatage ISO (`2021-04-29T…`), les champs sont séparés par `|`, et plusieurs événements peuvent avoir été collés sur une même ligne avec un espace entre eux. Vérifie le format avec `head -c 500 vpn.log` avant d'appliquer la séparation.
+
+```bash title="Remettre un événement par ligne (GNU sed)"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log
+```
+
+Le motif cherche **un espace suivi d'un nouvel horodatage**. Il ne modifie pas `vpn.log` : sans `-i`, `sed` écrit seulement le résultat dans le terminal. Si le fichier a déjà un événement par ligne, passe directement aux commandes suivantes sans cette étape.
+
+```bash title="Aligner les champs et parcourir le résultat"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | column -t -s '|' | less -S
+```
+
+`column` aligne les champs séparés par `|` ; dans `less -S`, utilise les flèches pour défiler horizontalement, `/mot` pour chercher et `q` pour quitter.
+
+Pour ne garder que l'horodatage, `srcuser`, `publicip` et `status`, cherche les **noms de champs** plutôt que de supposer qu'ils sont toujours en positions `$5`, `$7` et `$9` :
+
+```bash title="Vue SOC : heure, utilisateur, IP publique, résultat"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
+  awk -F'|' '{
+    ts=$1; user=ip=status="-"
+    for (i=2; i<=NF; i++) {
+      if ($i ~ /^srcuser=/) user=$i
+      else if ($i ~ /^publicip=/) ip=$i
+      else if ($i ~ /^status=/) status=$i
+    }
+    print ts "|" user "|" ip "|" status
+  }' | column -t -s '|'
+```
+
+Si les positions ont été **vérifiées sur ton fichier**, la forme courte `awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' | column -t -s '|'` convient aussi. Change les numéros si l'ordre des champs diffère.
+
+```bash title="Seulement les authentifications réussies"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | grep -E '(^|[|])status=success([|]|$)'
+```
+
+Remplace `success` par `failure` pour les échecs. Pour suivre l'ordre des tentatives puis un éventuel succès, garde les événements complets et leur horodatage ; avec des timestamps ISO dans **le même fuseau horaire**, tu peux ajouter `| sort | less -S` après la séparation. Si les fuseaux diffèrent, normalise d'abord les dates : un simple tri textuel ne donne pas forcément l'ordre chronologique.
+
+Pour adapter `sed`, `awk` et `column` à d'autres fichiers : [Linux — Texte et filtres](../../../linux/fondamentaux/texte-filtres.md).
+
 ### Retracer les connexions VPN d'un utilisateur
 
 ```bash title="Commande"

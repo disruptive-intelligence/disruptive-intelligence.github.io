@@ -247,6 +247,8 @@ head -3 /etc/passwd | column -t -s:
     bin     x  2  2  bin     /bin       /usr/sbin/nologin
     ```
 
+Pour remettre en lignes un export dont les événements sont collés, puis aligner les champs `|` et isoler les informations utiles, voir [l'exemple VPN de la fiche journaux réseau](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
+
 ## Enchaîner et enregistrer
 
 ### Envoyer la sortie dans un fichier
