@@ -8,7 +8,7 @@ cours:
 
 Découper, trier, compter et transformer la sortie d'une commande ou le contenu d'un fichier.
 
-Les incontournables : `cut` · `sort | uniq -c` · `sed` · `grep -v` · `awk` · `| tee`
+Les incontournables : `cut` · `sort | uniq -c` · `grep -oE` · `sort -u | wc -l` · `sed` · `awk` · `| tee`
 { .kw-cs-top }
 
 ## Extraire
@@ -92,6 +92,39 @@ cut -d' ' -f1 /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -3
         312 192.168.1.23
          41 192.168.1.40
     ```
+
+### Extraire et compter des ports de destination distincts
+
+Dans un journal de pare-feu où les champs sont écrits `clé=valeur` (par exemple `srcport=20036|dstport=443|action=allow`), **`dstport`** est le port visé ; `srcport` est le port utilisé par la source. Lis d'abord quelques lignes pour vérifier le nom du champ et le séparateur :
+
+```bash title="Repérer le format"
+head -n 3 firewall.log
+grep -oE 'dstport=[0-9]+' firewall.log | head
+```
+
+Puis garde seulement la valeur numérique, supprime les doublons et affiche la liste :
+
+```bash title="Lister les ports distincts"
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u
+```
+
+```bash title="Compter les ports distincts"
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l
+```
+
+`grep -oE` extrait chaque champ correspondant, `cut` retire `dstport=`, `sort -n -u` trie numériquement et ne garde qu'une ligne par port, puis `wc -l` compte ces lignes. Pour voir **combien d'entrées** concernent chaque port, utilise plutôt :
+
+```bash title="Fréquence par port"
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n | uniq -c | sort -rn
+```
+
+Si le journal contient plusieurs sources et que la question porte sur une seule, sélectionne d'abord ses lignes (ici, les champs sont séparés par `|`) :
+
+```bash title="Ports distincts pour une seule source"
+grep -F '|src=198.51.100.23|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+```
+
+Remplace `198.51.100.23` par la source recherchée. Ne filtre pas sur `action=deny` si tu veux compter **toutes les tentatives** : une connexion autorisée vise elle aussi un port. Pour un autre format de journal, adapte `src=` et `dstport=` aux noms de champs réellement présents.
 
 ### Compter des lignes
 

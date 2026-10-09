@@ -60,7 +60,10 @@ Avec **TigerVNC**, `:1` désigne l'affichage VNC 1, généralement sur le port `
 ```bash title="Client VNC"
 vncviewer serveur.example.net:1       # affichage 1
 vncviewer serveur.example.net::5901    # même serveur, port explicite
+vncviewer 192.0.2.21:1               # même syntaxe avec une adresse IP
 ```
+
+`192.0.2.21` est une adresse d'exemple : remplace-la par l'IP de ta machine cible.
 
 Si le serveur VNC est accessible par SSH, fais passer VNC dans un tunnel et ouvre **deux terminaux** :
 
