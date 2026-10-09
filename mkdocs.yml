@@ -116,7 +116,6 @@ nav:
       - 🆕 Quoi de neuf: nouveautes.md
   - 📋 Cheat sheets:
     - cheatsheets/index.md
-    - Accès distant (SSH, RDP, VNC): cheatsheets/acces-distant.md
     - 🔎 Que veux-tu faire ?: cheatsheets/besoins.md
     - 🔤 Par commande: cheatsheets/commandes.md
     - 🔁 Linux ↔ Windows: cheatsheets/linux-windows.md
@@ -194,6 +193,7 @@ nav:
                 - OU, ordinateurs et GPO: cheatsheets/windows/administration/active-directory/ou-ordinateurs-gpo.md
                 - Kerberos, DC et comptes de service: cheatsheets/windows/administration/active-directory/kerberos-dc.md
                 - Contrôles d'hygiène: cheatsheets/windows/administration/active-directory/hygiene.md
+    - 🔌 Accès distant (SSH, RDP, VNC): cheatsheets/acces-distant.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md
         - Linux:

@@ -970,6 +970,20 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset details.kw-cs-more > summary::after { background-color: var(--md-default-fg-color--light); }
 .md-typeset details.kw-cs-more .highlight { margin: 0 0 .6rem; }
 .md-typeset details.kw-cs-more pre > code { font-size: .7rem; }
+/* Cas concrets : une situation déjà rencontrée par menu, titre = la question posée. Même panneau que les exemples,
+   avec un filet de couleur à gauche ; s'applique aussi dans un besoin (.kw-cs-entry), où les menus sont d'ordinaire
+   de petits liens « Sortie ». */
+.md-typeset details.kw-cs-cas, .md-typeset .kw-cs-entry details.kw-cs-cas { margin: .45rem 0; padding: 0 .6rem; border: 1px solid var(--kw-line);
+  border-left: 3px solid var(--kw-link); border-radius: 8px; box-shadow: none; background: var(--kw-panel); font-size: .72rem; }
+.md-typeset details.kw-cs-cas > summary, .md-typeset .kw-cs-entry details.kw-cs-cas > summary { display: block; padding: .45rem 1.6rem .45rem .2rem;
+  background: transparent; border: 0; font-size: .72rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--md-default-fg-color); }
+.md-typeset details.kw-cs-cas > summary::before { display: none; }
+.md-typeset details.kw-cs-cas > summary::after, .md-typeset .kw-cs-entry details.kw-cs-cas > summary::after { left: auto; right: .3rem; top: .5rem;
+  width: 1rem; height: 1rem; background-color: var(--md-default-fg-color--light); }
+.md-typeset details.kw-cs-cas:focus-within { box-shadow: none; }
+.md-typeset details.kw-cs-cas .highlight, .md-typeset .kw-cs-entry details.kw-cs-cas > .highlight { margin: .2rem 0 .6rem; }
+.md-typeset details.kw-cs-cas pre > code, .md-typeset .kw-cs-entry details.kw-cs-cas pre > code { font-size: .7rem; color: inherit;
+  background: var(--md-code-bg-color); box-shadow: none; }
 .md-typeset .highlight .filename { font-size: .62rem; padding: .25rem .9rem; font-weight: 700; letter-spacing: .02em; color: var(--md-default-fg-color--light); }
 .md-typeset .kw-cs-meta { font-size: .7rem; color: var(--md-default-fg-color--light); margin: .3rem 0 0; }
 .md-typeset .kw-cs-top { font-size: .72rem; color: var(--md-default-fg-color--light); }
@@ -1216,7 +1230,7 @@ body[data-md-color-scheme="default"]::after {
 
 /* Cheat sheets : blocs de commandes sur fond noir, façon terminal (dans les deux thèmes). La portée se fait
    par la présence d'éléments propres aux cheat sheets dans la page. */
-.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) {
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more, .kw-cs-cas) {
   --md-code-bg-color: #0b0909;
   --md-code-fg-color: #e9e4e4;
   --md-code-hl-comment-color: #8d8484;
@@ -1232,10 +1246,10 @@ body[data-md-color-scheme="default"]::after {
   --md-code-hl-special-color: #ed4d5a;
   --md-code-hl-generic-color: #b8aeae;
 }
-.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset pre > code { border: 1px solid #241d1d; }
-.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .kw-cs-entry > .highlight:not(:first-of-type) pre > code {
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more, .kw-cs-cas) .md-typeset pre > code { border: 1px solid #241d1d; }
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more, .kw-cs-cas) .md-typeset .kw-cs-entry > .highlight:not(:first-of-type) pre > code {
   background: var(--md-code-bg-color); box-shadow: none; }
-.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more) .md-typeset .md-clipboard { color: #8d8484; }
+.md-main:has(.kw-cs-top, .kw-cs-meta, .kw-cs-more, .kw-cs-cas) .md-typeset .md-clipboard { color: #8d8484; }
 
 /* Images des notes (schémas, captures d'écran) : taille raisonnable, alignées à gauche, au lieu de toute la largeur du
    texte ; un clic ouvre l'image en grand (javascripts/images-zoom.js). Fond clair : les schémas à fond

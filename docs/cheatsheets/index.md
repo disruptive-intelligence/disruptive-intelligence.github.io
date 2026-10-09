@@ -8,8 +8,6 @@ et l'étape suivante. Les cours complets restent dans la [Bibliothèque](../libr
 
 [🔎 Que veux-tu faire ?](besoins.md){ .md-button .md-button--primary } [🔤 Par commande](commandes.md){ .md-button } [🔁 Linux ↔ Windows](linux-windows.md){ .md-button }
 
-Pour ouvrir une session sur une autre machine : [Accès distant — SSH, RDP et VNC](acces-distant.md).
-
 Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la commande** (« à quoi sert
 `tail` ? »). Les [conventions](conventions.md) expliquent comment se lit une fiche.
 
@@ -20,6 +18,7 @@ Deux portes d'entrée : **le besoin** (« lire la fin d'un fichier ») ou **la c
   [commandes clés](linux/commandes/index.md) (`find`, `grep`, `awk`, `sed`… décodées).
 - [Windows](windows/index.md) — [fondamentaux](windows/fondamentaux/index.md) (observer : processus, journaux, droits, registre)
   et [administration](windows/administration/index.md) (modifier, y compris Active Directory au quotidien).
+- [Accès distant](acces-distant.md) — SSH, RDP et VNC, depuis Linux ou Windows.
 
 ## Par métier
 

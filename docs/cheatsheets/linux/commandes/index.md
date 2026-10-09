@@ -17,7 +17,7 @@ où la commande sert et son équivalent Windows. Toutes les autres commandes : [
 - [`grep`](grep.md) — Affiche les lignes qui contiennent un motif — dans un fichier, dans tout un dossier ou dans la sortie d'une autre commande.
 - [`awk`](awk.md) — Découpe chaque ligne en champs et permet de filtrer, réarranger ou calculer — là où `cut` ne fait que découper.
 - [`sed`](sed.md) — Transforme du texte ligne par ligne : remplacer, supprimer, n'afficher qu'une partie — dans la sortie, ou dans le fichier avec `-i`.
-- [`cut`](cut.md) — Garde certains champs d'une ligne selon un séparateur ; utile pour retirer `dstport=` après extraction.
+- [`cut`](cut.md) — Garde certains champs ou caractères d'une ligne, selon un séparateur fixe.
 - [`sort`](sort.md) — Trie les lignes ou les champs, numériquement ou alphabétiquement, et supprime les doublons avec `-u`.
 - [`uniq`](uniq.md) — Regroupe ou compte les lignes identiques voisines, après un tri.
 - [`wc`](wc.md) — Compte les lignes, les mots, les octets ou les caractères d'un résultat.

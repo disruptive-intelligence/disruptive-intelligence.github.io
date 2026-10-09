@@ -3,80 +3,113 @@ title: "Accès distant — SSH, RDP et VNC"
 ---
 # Accès distant — SSH, RDP et VNC
 
-Pour ouvrir un terminal, choisis **SSH**. Pour un bureau graphique, choisis **RDP** si la machine cible le propose, ou **VNC** si elle héberge un serveur VNC. Remplace les noms de machine, d'utilisateur et les ports par ceux de ton environnement.
+Un terminal : **SSH**. Un bureau graphique : **RDP** si la cible le propose (Windows, ou Linux avec xrdp), **VNC** si elle héberge un serveur VNC.
 
-| Besoin | Depuis | Commande rapide |
-|---|---|---|
-| Terminal distant | Linux, macOS ou Windows avec OpenSSH | `ssh utilisateur@serveur.example.net` |
-| Bureau RDP | Windows | `mstsc /v:serveur.example.net` |
-| Bureau RDP | Linux avec FreeRDP | `xfreerdp3 /v:serveur.example.net /u:utilisateur` |
-| Bureau VNC | Linux avec TigerVNC | `vncviewer serveur.example.net:1` |
+Les incontournables : `ssh` · `ssh -J` · `mstsc /v:` · `xfreerdp3 /v:` · `vncviewer` · `ssh -L`
+{ .kw-cs-top }
 
-## SSH — terminal distant
+## SSH
 
-```bash title="Connexion"
-ssh utilisateur@serveur.example.net
-ssh -p 2222 utilisateur@serveur.example.net       # port SSH non standard
-ssh -i ~/.ssh/cle_ed25519 utilisateur@serveur.example.net  # clé privée
-ssh -J rebond.example.net utilisateur@interne.example.net   # via un bastion
+### Ouvrir un terminal sur une machine distante
+
+```bash title="Commande"
+ssh <utilisateur>@<machine>                              # -p <port> si le port n'est pas 22
+ssh -i <clé_privée> <utilisateur>@<machine>              # avec une clé
+ssh -J <bastion> <utilisateur>@<machine_interne>         # en rebondissant par un bastion
 ```
 
-Ces commandes fonctionnent aussi dans PowerShell avec le client OpenSSH installé ; adapte le chemin de la clé (`$HOME\.ssh\cle_ed25519`). Au premier accès, vérifie l'empreinte de la clé du serveur avant de l'accepter.
-
-## RDP — bureau graphique
-
-Sur **Windows**, `mstsc` est le client intégré :
-
-```bat title="Invite de commandes ou PowerShell"
-mstsc /v:serveur.example.net
-mstsc /v:serveur.example.net:3390
+```bash title="Exemple"
+ssh -p 2222 -i ~/.ssh/cle_ed25519 m.laurent@srv-web01.meridian.local
 ```
 
-La seconde ligne utilise un port RDP non standard (`3390`).
-
-Sur **Linux**, FreeRDP fournit le client `xfreerdp3` (ou `xfreerdp` selon la version installée) :
-
-```bash title="FreeRDP"
-xfreerdp3 /v:serveur.example.net /u:utilisateur /dynamic-resolution
-xfreerdp3 /v:serveur.example.net /u:'DOMAINE\utilisateur' /dynamic-resolution
+```bash title="Exemple 2"
+ssh -J rebond.meridian.local m.laurent@srv-db01.meridian.local   # srv-db01 n'est joignable que depuis rebond
 ```
 
-Sans `/p:`, le client demande le mot de passe sans le placer dans l'historique du shell. Vérifie le certificat du serveur lors de la première connexion ; n'utilise pas `/cert:ignore` par réflexe.
+Même syntaxe dans PowerShell avec le client OpenSSH (clé : `$HOME\.ssh\cle_ed25519`). Au premier accès, vérifier l'empreinte de la clé du serveur avant de l'accepter.
 
-**xrdp est le serveur RDP pour Linux**, pas le client. Sur une machine Debian ou Ubuntu avec un environnement graphique :
+Pour comprendre : [Administration Linux, ch. 18 : SSH](../library/it/linux/administration-linux/05-partie-5-linux-en-reseau/02-chapitre-18-ssh-se-connecter-a-distance.md)
+{ .kw-cs-meta }
 
-```bash title="Sur la machine Linux cible"
-sudo apt install xrdp
+## RDP
+
+![[cheatsheets/windows/administration/reseau#Ouvrir une session de bureau à distance (RDP)]]
+
+### Ouvrir un bureau RDP depuis Linux
+
+```bash title="Commande"
+xfreerdp3 /v:<machine> /u:<utilisateur> /dynamic-resolution    # xfreerdp selon la version de FreeRDP
+```
+
+```bash title="Exemple"
+xfreerdp3 /v:srv-fs01.meridian.local /u:'MERIDIAN\m.laurent' /dynamic-resolution   # compte de domaine
+```
+
+```bat title="Exemple 2"
+mstsc /v:srv-fs01.meridian.local:3390
+```
+
+Le second exemple, depuis Windows, vise un port RDP non standard. Sans `/p:`, le mot de passe est demandé et ne reste pas dans l'historique du shell. Vérifier le certificat du serveur à la première connexion ; pas de `/cert:ignore` par réflexe.
+
+Pour comprendre : [RDP et ses journaux](../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md)
+{ .kw-cs-meta }
+
+### Accepter des connexions RDP sur une machine Linux (xrdp)
+
+```bash title="Commande"
+sudo apt install xrdp                  # xrdp = le serveur RDP de Linux, pas un client
 sudo systemctl enable --now xrdp
 sudo systemctl status xrdp
 ```
 
-Le client `mstsc` ou `xfreerdp3` se connecte ensuite à cette machine. Le service écoute normalement sur `3389/tcp` ; limite son accès au réseau prévu (VPN ou bastion, par exemple).
-
-## VNC — bureau graphique
-
-Avec **TigerVNC**, `:1` désigne l'affichage VNC 1, généralement sur le port `5901` :
-
-```bash title="Client VNC"
-vncviewer serveur.example.net:1       # affichage 1
-vncviewer serveur.example.net::5901    # même serveur, port explicite
-vncviewer 192.0.2.21:1               # même syntaxe avec une adresse IP
+```bash title="Exemple"
+sudo ss -tlnp | grep 3389              # le service écoute sur 3389/tcp
 ```
 
-`192.0.2.21` est une adresse d'exemple : remplace-la par l'IP de ta machine cible.
+Debian ou Ubuntu avec un environnement graphique. `mstsc` ou `xfreerdp3` s'y connectent ensuite. Limiter l'accès au réseau prévu (VPN, bastion).
 
-Si le serveur VNC est accessible par SSH, fais passer VNC dans un tunnel et ouvre **deux terminaux** :
+## VNC
 
-```bash title="Terminal 1 — garder ouvert"
-ssh -N -L 5901:localhost:5901 utilisateur@serveur.example.net
+### Ouvrir un bureau VNC
+
+```bash title="Commande"
+vncviewer <machine>:<affichage>        # :1 = affichage 1 = port 5901 en général
+vncviewer <machine>::<port>            # deux-points doublés : le port lui-même
 ```
 
-```bash title="Terminal 2 — sur ton poste"
+```bash title="Exemple"
+vncviewer srv-lab01.meridian.local:1
+```
+
+```bash title="Exemple 2"
+vncviewer 192.0.2.21::5901             # même serveur par son IP, port explicite
+```
+
+Client TigerVNC.
+
+### Passer VNC dans un tunnel SSH
+
+```bash title="Commande"
+ssh -N -L <port_local>:localhost:<port_vnc> <utilisateur>@<machine>   # terminal 1, à garder ouvert
+vncviewer localhost::<port_local>                                    # terminal 2, sur ton poste
+```
+
+```bash title="Exemple"
+ssh -N -L 5901:localhost:5901 m.laurent@srv-lab01.meridian.local
 vncviewer localhost::5901
 ```
 
-Ici, le port VNC `5901` doit être celui du serveur cible. Si ton poste utilise déjà ce port, remplace seulement le **premier** `5901` du tunnel par un port local libre et utilise ce même port dans `vncviewer localhost::<port-local>`.
+Le second `5901` du tunnel est le port VNC de la cible. Si le port local est déjà pris, changer seulement le **premier** et le reporter dans `vncviewer`.
 
-Pour approfondir : [SSH dans la Bibliothèque](../library/it/linux/administration-linux/05-partie-5-linux-en-reseau/02-chapitre-18-ssh-se-connecter-a-distance.md) · [RDP et ses journaux](../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md).
+## Vue d'ensemble
 
-Références des commandes : [OpenSSH](https://man.openbsd.org/ssh.1), [Microsoft `mstsc`](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/mstsc), [FreeRDP](https://github.com/FreeRDP/FreeRDP/wiki/CommandLineInterface), [xrdp](https://github.com/neutrinolabs/xrdp), [TigerVNC `vncviewer`](https://tigervnc.org/doc/vncviewer.html).
+| Besoin | Depuis | Commande rapide | Port par défaut |
+|---|---|---|---|
+| Terminal distant | Linux, macOS, Windows avec OpenSSH | `ssh <utilisateur>@<machine>` | `22/tcp` |
+| Bureau RDP | Windows | `mstsc /v:<machine>` | `3389/tcp` |
+| Bureau RDP | Linux avec FreeRDP | `xfreerdp3 /v:<machine> /u:<utilisateur>` | `3389/tcp` |
+| Serveur RDP sur Linux | — | `sudo apt install xrdp` | `3389/tcp` |
+| Bureau VNC | Linux avec TigerVNC | `vncviewer <machine>:1` | `5900 + affichage` |
+| VNC chiffré | Linux | `ssh -N -L 5901:localhost:5901 …` | `22/tcp` |
+
+Références : [OpenSSH](https://man.openbsd.org/ssh.1) · [Microsoft `mstsc`](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/mstsc) · [FreeRDP](https://github.com/FreeRDP/FreeRDP/wiki/CommandLineInterface) · [xrdp](https://github.com/neutrinolabs/xrdp) · [TigerVNC `vncviewer`](https://tigervnc.org/doc/vncviewer.html)

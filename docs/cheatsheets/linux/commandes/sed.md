@@ -79,49 +79,34 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
     sed -E 's/(.*)@(.*)/\2 \1/' emails.txt                        # domaine, puis utilisateur
     ```
 
-## Cas concrets déjà rencontrés
+## Cas concrets
 
-### Séparer des événements VPN collés
+??? example kw-cs-cas "VPN : séparer des événements collés sur une même ligne"
+    ```bash
+    sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log            # un événement par ligne, vpn.log inchangé
+    sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
+      column -t -s '|' | less -S                                       # puis aligné et défilable
+    ```
+    Le motif : un espace suivi d'une date ISO ; `\1` remet la date capturée, `\n` crée la ligne (GNU sed). Vérifier avant avec `head -c 500 vpn.log` : si chaque événement a déjà sa ligne, inutile.
 
-Dans un export où chaque événement commence par une date ISO et où deux événements sont séparés par **un espace**, GNU `sed` peut insérer un retour à la ligne **avant** la date suivante :
+??? example kw-cs-cas "Pare-feu : extraire les ports avec `sed -n …p`"
+    ```bash
+    sed -nE 's/.*[|]dstport=([0-9]+).*/\1/p' firewall.log | sort -n -u   # -n + p : seulement les lignes où la substitution a réussi
+    ```
+    Même logique pour tout champ `clé=valeur` : adapter le nom du champ et le séparateur.
 
-```bash title="Un événement par ligne, sans modifier vpn.log"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log
-```
+??? example kw-cs-cas "Partager un extrait sans les adresses IP"
+    ```bash
+    sed -E 's/([0-9]{1,3}\.){3}[0-9]{1,3}/[IP]/g' firewall.log | head   # copie affichée, fichier inchangé
+    ```
+    La regex repère une forme IPv4, sans vérifier que chaque octet est entre 0 et 255.
 
-`-E` autorise les groupes `(…)` et `{n}` ; `\1` reprend la date capturée ; `\n` crée la nouvelle ligne ; `g` traite tous les débuts d'événement sur la ligne. Vérifie un extrait avec `head -c 500 vpn.log` avant de l'utiliser : si chaque événement a déjà sa ligne, cette transformation est inutile.
+??? example kw-cs-cas "Export Windows ou gros fichier : nettoyer et sélectionner avant d'analyser"
+    ```bash
+    sed 's/\r$//' export.txt | sed '/^[[:space:]]*$/d' | less   # sans fins de ligne Windows ni lignes vides
+    sed -n '1,20p' vpn.log                                      # les 20 premières lignes seulement
+    sed -n '/status=failure/p' vpn.log                          # lignes qui contiennent un échec
+    ```
+    Événements collés : les séparer d'abord pour traiter chacun.
 
-```bash title="Séparer, aligner, parcourir"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
-  column -t -s '|' | less -S
-```
-
-`sed` règle la **structure des lignes** ; [`column`](column.md) règle leur **présentation**. Dans `less -S`, les lignes larges défilent horizontalement.
-
-### Extraire un champ ou masquer une donnée
-
-Pour un journal de pare-feu avec des champs `|dstport=…|`, `-n` supprime l'affichage automatique ; le `p` final n'affiche que les lignes dont la substitution a réussi :
-
-```bash title="Ports de destination présents dans le journal"
-sed -nE 's/.*[|]dstport=([0-9]+).*/\1/p' firewall.log | sort -n -u
-```
-
-La même logique peut extraire un identifiant `clé=valeur` ; adapte **le nom du champ et son séparateur** au fichier observé. Pour partager un extrait sans publier les IP, vérifie le résultat à l'écran :
-
-```bash title="Masquer une IPv4 dans une copie affichée"
-sed -E 's/([0-9]{1,3}\.){3}[0-9]{1,3}/[IP]/g' firewall.log | head
-```
-
-Cette regex repère une forme IPv4 ; elle ne valide pas que chaque octet est compris entre 0 et 255. Sans `-i`, le fichier source ne change pas.
-
-### Nettoyer et sélectionner avant analyse
-
-```bash title="Préparer un export texte"
-sed 's/\r$//' export.txt | sed '/^[[:space:]]*$/d' | less
-sed -n '1,20p' vpn.log
-sed -n '/status=failure/p' vpn.log
-```
-
-La première commande enlève les fins de ligne Windows et les lignes vides **dans la sortie**. `sed -n '1,20p'` évite d'imprimer tout un gros fichier. Le dernier exemple cherche du texte dans chaque ligne ; si des événements sont collés, sépare-les d'abord pour analyser chaque événement individuellement.
-
-Voir aussi : [le scénario VPN de la fiche SOC](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par) et [les usages généraux dans Linux fondamentaux](../fondamentaux/texte-filtres.md#mettre-en-forme-et-trier-un-fichier-texte).
+Voir aussi : [Forensic › VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par) · [Séparer des événements collés](../fondamentaux/texte-filtres.md#separer-des-evenements-colles-sur-une-ligne)

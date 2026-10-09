@@ -35,41 +35,35 @@ Pour comprendre : [Pare-feu : champs des traffic logs, action, NAT](../../../../
 
 ### Lister et compter les ports visés dans un journal `|`
 
-Pour un export où chaque événement contient `|src=…|dstport=…|action=…|`, commence par vérifier les noms et les positions des champs. Ici, `dstport` est le port visé ; `srcport` est le port source.
-
-```bash title="Découvrir les champs du premier événement"
-head -n 3 firewall.log
-awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log
-head -n 1 firewall.log | tr '|' '\n' | nl -ba
+```bash title="Commande"
+head -n 1 <journal> | tr '|' '\n' | nl -ba                                         # repérer les champs du premier événement
+grep -oE 'dstport=[0-9]+' <journal> | cut -d= -f2 | sort -n -u                     # ports visés distincts (| wc -l : leur nombre)
+grep -F '|action=allow|' <journal> | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn   # ports autorisés, par fréquence
 ```
 
-Ces commandes supposent **un événement par ligne** et aucun `|` dans une valeur. `nl -ba` montre aussi les champs vides ; ni la numérotation ni le séparateur ne prouvent qu'un champ a toujours la même position dans tous les événements. Pour les exports VPN où des événements sont collés, sépare-les d'abord comme dans la section VPN ci-dessous. Le [gabarit Linux](../../../linux/fondamentaux/texte-filtres.md#inspecter-la-structure-avant-de-filtrer) montre les autres séparateurs.
-
-```bash title="Ports visés : liste et nombre distincts"
-grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u
-grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l
+```bash title="Exemple"
+grep -F '|src=198.51.100.23|' firewall.log | grep -F '|action=allow|' | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u   # ports autorisés pour une source
 ```
 
-```bash title="Seulement les événements autorisés"
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
-```
+Autre format que le FortiGate ci-dessus : champs séparés par `|`, `src=`, `dstport=` (port visé ; `srcport` = port source), `action=allow`. Un événement par ligne, pas de `|` dans une valeur. Pour compter **toutes les tentatives**, ne pas filtrer sur `allow`.
 
-```bash title="Fréquence des événements autorisés par port"
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn
-```
+??? example kw-cs-cas "Pare-feu `|` : combien de ports différents, et lesquels ont été autorisés ?"
+    ```bash
+    head -n 3 firewall.log                                                                     # le format
+    awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log   # $1, $2… et leur valeur
+    head -n 1 firewall.log | tr '|' '\n' | nl -ba                                              # idem, champs vides compris
+    grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u                          # ports visés
+    grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l                  # leur nombre
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u          # ports autorisés
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l  # leur nombre
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn   # entrées par port
+    ```
+    `sort -u` : chaque port une fois ; `wc -l` : combien ; `uniq -c` : combien de lignes par port. La position d'un champ peut changer d'un événement à l'autre : chercher par nom (`dstport=`) plutôt que par numéro.
 
-```bash title="Ports distincts autorisés pour une source"
-grep -F '|src=198.51.100.23|' firewall.log | grep -F '|action=allow|' | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
-```
-
-Remplace cette adresse d'exemple par la source recherchée. Ne limite pas le calcul à `allow` quand tu veux compter **toutes les tentatives**. `sort -u` garde un exemplaire de chaque port ; `wc -l` compte les ports distincts ; `uniq -c` compte les lignes par port après le tri. Ces commandes concernent ce format à séparateurs `|` ; les journaux FortiGate ci-dessus emploient d'autres noms de champs et `action="accept"`.
-
-Pour adapter le même pipeline à d'autres fichiers texte : [gabarits Linux — Texte et filtres](../../../linux/fondamentaux/texte-filtres.md#gabarits-pour-dautres-journaux-ou-fichiers-texte).
+Pour comprendre : [la même méthode sur d'autres fichiers (Linux › Texte et filtres)](../../../linux/fondamentaux/texte-filtres.md#compter-les-valeurs-distinctes-dun-champ)
+{ .kw-cs-meta }
 
 ### Repérer un scan de ports
-
-Après la liste d'une source, compare plusieurs sources pour repérer un balayage vertical ou horizontal.
 
 ```bash title="Commande"
 sed -n 's/.*srcip=\([0-9.]*\).*dstport=\([0-9]*\).*/\1 \2/p' <journal> | sort -u | awk '{print $1}' | uniq -c | sort -rn | head   # ports distincts par source (scan vertical)
@@ -145,23 +139,11 @@ Pour comprendre : [NetFlow : attributs d'un flow, port scanning, C2, limites](..
 
 ### Rendre lisible un export VPN séparé par `|`
 
-Cet exemple concerne un export **différent du format FortiGate utilisé ailleurs sur cette page** : chaque événement commence par un horodatage ISO (`2021-04-29T…`), les champs sont séparés par `|`, et plusieurs événements peuvent avoir été collés sur une même ligne avec un espace entre eux. Vérifie le format avec `head -c 500 vpn.log` avant d'appliquer la séparation.
-
-```bash title="Remettre un événement par ligne (GNU sed)"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log
+```bash title="Commande"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' <export> | column -t -s '|' | less -S   # un événement par ligne, champs alignés
 ```
 
-Le motif cherche **un espace suivi d'un nouvel horodatage**. Il ne modifie pas `vpn.log` : sans `-i`, `sed` écrit seulement le résultat dans le terminal. Si le fichier a déjà un événement par ligne, passe directement aux commandes suivantes sans cette étape.
-
-```bash title="Aligner les champs et parcourir le résultat"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | column -t -s '|' | less -S
-```
-
-`column` aligne les champs séparés par `|` ; dans `less -S`, utilise les flèches pour défiler horizontalement, `/mot` pour chercher et `q` pour quitter.
-
-Pour ne garder que l'horodatage, `srcuser`, `publicip` et `status`, cherche les **noms de champs** plutôt que de supposer qu'ils sont toujours en positions `$5`, `$7` et `$9` :
-
-```bash title="Vue SOC : heure, utilisateur, IP publique, résultat"
+```bash title="Exemple"
 sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
   awk -F'|' '{
     ts=$1; user=ip=status="-"
@@ -174,15 +156,20 @@ sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
   }' | column -t -s '|'
 ```
 
-Si les positions ont été **vérifiées sur ton fichier**, la forme courte `awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' | column -t -s '|'` convient aussi. Change les numéros si l'ordre des champs diffère.
+Autre format que le FortiGate ci-dessous : chaque événement commence par un horodatage ISO (`2021-04-29T…`), champs `|`, plusieurs événements parfois collés sur une ligne, séparés par un espace. Vérifier avec `head -c 500 vpn.log` ; déjà une ligne par événement : sauter le `sed`. Dans `less -S` : flèches pour défiler, `/mot` pour chercher, `q` pour quitter. L'exemple cherche les champs **par nom** (`srcuser`, `publicip`, `status`) : leur position peut varier ; `-` = champ absent.
 
-```bash title="Seulement les authentifications réussies"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | grep -E '(^|[|])status=success([|]|$)'
-```
+??? example kw-cs-cas "VPN `|` : ne garder que les réussites (ou les échecs), dans l'ordre"
+    ```bash
+    sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log                    # un événement par ligne (sans modifier vpn.log)
+    sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | column -t -s '|' | less -S
+    sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log | grep -E '(^|[|])status=success([|]|$)'   # failure pour les échecs
+    ```
+    Pour la chronologie (échecs puis succès), ajouter `| sort | less -S` après la séparation : correct seulement si tous les horodatages ISO sont dans le même fuseau.
 
-Remplace `success` par `failure` pour les échecs. Pour suivre l'ordre des tentatives puis un éventuel succès, garde les événements complets et leur horodatage ; avec des timestamps ISO dans **le même fuseau horaire**, tu peux ajouter `| sort | less -S` après la séparation. Si les fuseaux diffèrent, normalise d'abord les dates : un simple tri textuel ne donne pas forcément l'ordre chronologique.
-
-Pour adapter `sed`, `awk` et `column` à d'autres fichiers : [Linux — Texte et filtres](../../../linux/fondamentaux/texte-filtres.md).
+??? example kw-cs-cas "VPN `|` : heure, utilisateur, IP, résultat, positions déjà vérifiées"
+    ```bash
+    awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' vpn.log | column -t -s '|'   # plus court, si l'ordre des champs ne change pas
+    ```
 
 ### Retracer les connexions VPN d'un utilisateur
 
@@ -225,6 +212,8 @@ Pour comprendre : [VPN : remip et tunnelip, brute force, connexion VPN suspecte]
 | `remip` | IP publique du client VPN | Pays, réputation, plusieurs comptes depuis la même IP |
 | `tunnelip` | IP interne attribuée au client VPN | À rechercher ensuite comme `srcip` dans le pare-feu |
 | `user` | Compte VPN | Même compte depuis des pays éloignés en peu de temps |
+| `src=` / `dstport=` / `action=allow` (export `|`) | Mêmes informations, autre format | Chercher les champs par nom, pas par position |
+| `srcuser=` / `publicip=` / `status=` (export VPN `|`) | Compte, IP publique, résultat | Événements collés : les séparer d'abord |
 
 | Scénario | Pattern |
 |---|---|

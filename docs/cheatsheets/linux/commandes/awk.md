@@ -43,26 +43,22 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 - Par défaut, plusieurs espaces de suite comptent pour un seul séparateur (`cut -d' '`, lui, compte chaque espace).
 - `print $1, $2` sépare par un espace ; `print $1 $2` colle les deux champs.
 
-## Découvrir les colonnes d'un fichier
-
-Pour une première ligne de données à séparateur connu, affiche chaque position et sa valeur :
-
-```bash title="Numéros et valeurs, puis nombre de champs"
-awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log
-awk -F '\t' 'NR==1 {print NF; exit}' fichier.log
-```
-
-`$0` désigne la ligne entière, `$1` le premier champ, `$NF` le dernier. `NR==1` sélectionne la première ligne ; `exit` arrête la lecture aussitôt. `-F '\t'` définit `FS` (tabulation), tandis que `BEGIN {OFS="\t"}` fixe le séparateur de sortie pour `print $1, $2`. Avec `|`, remplace `-F '\t'` par `-F '|'` ; pour des espaces successifs, omets `-F`.
-
-```bash title="Extraire et compter le champ 3 d'un TSV simple"
-awk -F '\t' '{print $3}' fichier.log
-awk -F '\t' '{print $3}' fichier.log | sort -u | wc -l
-awk -F '\t' '{print $3}' fichier.log | sort | uniq -c | sort -rn
-```
-
-Ces commandes supposent **une entrée par ligne** et aucun séparateur interne non échappé. Numéroter les valeurs ne donne pas leurs noms : lis l'en-tête ou le schéma. Pour un CSV avec champs entre guillemets ou du JSON, prends un parseur adapté.
-
 ## Exemples
+
+??? example kw-cs-more "Découvrir les colonnes d'un fichier"
+    ```bash
+    awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log   # $1, $2… et leur valeur
+    awk -F '\t' 'NR==1 {print NF; exit}' fichier.log                                            # nombre de champs
+    ```
+    `NR==1` : la première ligne ; `exit` arrête la lecture. `-F '\t'` fixe `FS` ; `BEGIN {OFS="\t"}` fixe le séparateur de sortie. `|` : `-F '|'` ; espaces successifs : pas de `-F`.
+
+??? example kw-cs-more "Extraire et compter le champ 3 d'un TSV simple"
+    ```bash
+    awk -F '\t' '{print $3}' fichier.log                               # le champ
+    awk -F '\t' '{print $3}' fichier.log | sort -u | wc -l             # nombre de valeurs différentes
+    awk -F '\t' '{print $3}' fichier.log | sort | uniq -c | sort -rn   # occurrences par valeur
+    ```
+    Une entrée par ligne, pas de séparateur dans les valeurs. CSV à guillemets ou JSON : un parseur adapté.
 
 ??? example kw-cs-more "Afficher des colonnes"
     ```bash
@@ -101,83 +97,55 @@ Ces commandes supposent **une entrée par ligne** et aucun séparateur interne n
     cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}'   # comptes qui ont un shell, et lequel
     ```
 
-## Cas concrets déjà rencontrés
+## Cas concrets
 
-### VPN : construire une vue lisible sans supposer l'ordre des champs
+??? example kw-cs-cas "VPN : heure, utilisateur, IP publique, résultat, sans connaître l'ordre des champs"
+    ```bash
+    awk -F'|' '{
+      ts=$1; user=ip=status="-"
+      for (i=2; i<=NF; i++) {
+        if ($i ~ /^srcuser=/) user=$i
+        else if ($i ~ /^publicip=/) ip=$i
+        else if ($i ~ /^status=/) status=$i
+      }
+      print ts "|" user "|" ip "|" status
+    }' vpn.log | column -t -s '|'
+    ```
+    La boucle examine les `NF` champs et garde ceux qui portent le bon nom ; `-` = champ absent. Ordre connu et stable : `awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' vpn.log | column -t -s '|'`. Événements collés : [`sed`](sed.md#cas-concrets) d'abord.
 
-Dans un export `|` avec `srcuser=…`, `publicip=…` et `status=…`, les numéros de colonnes peuvent changer. Cherche plutôt chaque **nom de champ**. Si plusieurs événements sont collés sur une ligne, sépare-les d'abord avec [`sed`](sed.md#separer-des-evenements-vpn-colles).
+??? example kw-cs-cas "Pare-feu : combien de ports distincts chaque source a-t-elle visés ?"
+    ```bash
+    awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log   # vérifier le format
+    awk -F'|' '{
+      src=port=""
+      for (i=1; i<=NF; i++) {
+        if ($i ~ /^src=/) src=substr($i, 5)
+        else if ($i ~ /^dstport=/) port=substr($i, 9)
+      }
+      if (src != "" && port != "") print src, port
+    }' firewall.log | sort -u | awk '{n[$1]++} END {for (src in n) print n[src], src}' | sort -rn
+    ```
+    `substr($i, 5)` retire `src=`, `substr($i, 9)` retire `dstport=`. `sort -u` sur la paire « source port » : plusieurs connexions vers le même port ne comptent qu'une fois. Le cas complet : [Forensic › Pare-feu](../../forensic/reseau/journaux/pare-feu-vpn.md)
 
-```bash title="Heure, utilisateur, IP publique, résultat"
-awk -F'|' '{
-  ts=$1; user=ip=status="-"
-  for (i=2; i<=NF; i++) {
-    if ($i ~ /^srcuser=/) user=$i
-    else if ($i ~ /^publicip=/) ip=$i
-    else if ($i ~ /^status=/) status=$i
-  }
-  print ts "|" user "|" ip "|" status
-}' vpn.log | column -t -s '|'
-```
+??? example kw-cs-cas "VPN : combien de réussites et d'échecs ?"
+    ```bash
+    awk -F'|' '{
+      for (i=1; i<=NF; i++)
+        if ($i ~ /^status=/) n[$i]++
+    } END {
+      for (status in n) print n[status], status
+    }' vpn.log | sort -rn
+    ```
+    Un événement par ligne (sinon `sed` d'abord). Pour la chronologie d'une source, garder aussi horodatage et IP plutôt que des totaux.
 
-`NF` est le nombre de champs de la ligne ; la boucle les examine tous. Les valeurs `-` rendent visible un champ manquant. `column` aligne **après** l'extraction. Si l'ordre est connu et stable, `awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' vpn.log | column -t -s '|'` est plus court ; vérifie d'abord les positions.
+??? example kw-cs-cas "Zeek `http.log` : filtrer et présenter des colonnes"
+    ```bash
+    awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log   # positions déclarées
+    awk -F '\t' '!/^#/ {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' http.log         # valeurs de la 1re requête
+    awk -F '\t' 'BEGIN {OFS="\t"} !/^#/ {print $3, $8, $10, $15}' http.log |
+      head -n 20 | column -t -s $'\t'                                    # client, méthode, URI, code (positions Bro)
+    awk -F '\t' '!/^#/ && $15 == 200 {print $3, $8, $10, $15}' http.log  # réponses 200
+    ```
+    `#fields` commence par un libellé : le 1er nom correspond à `$1`. `!/^#/` saute les métadonnées. `$15` = `status_code` dans l'ancien Bro de l'exercice, `$17` dans Zeek actuel : vérifier, ou passer par les noms, `zeek-cut id.orig_h method uri status_code < http.log`, puis `awk -F '\t' '$4 == 200'`. Le cas complet : [Forensic › Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog)
 
-### Pare-feu : ports distincts par source
-
-Pour le format `|src=…|dstport=…|`, produis une paire « source port » par événement, supprime les paires répétées, puis compte les ports distincts de chaque source :
-
-```bash title="Vérifier les positions sur le premier événement"
-awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log
-```
-
-```bash title="Nombre de ports distincts par source"
-awk -F'|' '{
-  src=port=""
-  for (i=1; i<=NF; i++) {
-    if ($i ~ /^src=/) src=substr($i, 5)
-    else if ($i ~ /^dstport=/) port=substr($i, 9)
-  }
-  if (src != "" && port != "") print src, port
-}' firewall.log | sort -u | awk '{n[$1]++} END {for (src in n) print n[src], src}' | sort -rn
-```
-
-`substr($i, 5)` retire `src=` ; `substr($i, 9)` retire `dstport=`. `sort -u` agit sur la paire entière : plusieurs connexions vers le même port par la même source ne comptent qu'une fois. La sortie est classée par nombre de ports décroissant.
-
-### Compter des réussites et des échecs
-
-```bash title="Répartition par statut dans un export |"
-awk -F'|' '{
-  for (i=1; i<=NF; i++)
-    if ($i ~ /^status=/) n[$i]++
-} END {
-  for (status in n) print n[status], status
-}' vpn.log | sort -rn
-```
-
-Ce comptage suppose **un événement par ligne**. Si ce n'est pas le cas, passe d'abord par le `sed` de l'exemple VPN. Pour examiner la chronologie d'une source précise, conserve aussi l'horodatage et l'IP plutôt que de te limiter aux totaux.
-
-Voir les scénarios complets : [pare-feu et VPN dans Forensic réseau](../../forensic/reseau/journaux/pare-feu-vpn.md).
-
-### Zeek HTTP : filtrer et présenter des champs TSV
-
-Un `http.log` Zeek texte est séparé par des tabulations. Ses lignes `#fields` décrivent les colonnes : inspecte-les avant d'utiliser `$3`, `$8`, `$10` ou `$15`. `!/^#/` ignore les métadonnées.
-
-```bash title="Afficher les positions déclarées par Zeek"
-awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log
-```
-
-`#fields` contient un libellé de métadonnée avant les noms des champs : le premier nom correspond donc à `$1`, et non à `$2`. `NR==1` afficherait la ligne `#separator`, pas une requête. Pour numéroter les **valeurs** du premier événement :
-
-```bash title="Première requête, sans les métadonnées"
-awk -F '\t' '!/^#/ {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' http.log
-```
-
-```bash title="Client, méthode, URI, code : positions confirmées"
-awk -F '\t' 'BEGIN {OFS="\t"} !/^#/ {print $3, $8, $10, $15}' http.log |
-  head -n 20 | column -t -s $'\t'
-```
-
-```bash title="Requêtes ayant reçu un code 200"
-awk -F '\t' '!/^#/ && $15 == 200 {print $3, $8, $10, $15}' http.log
-```
-
-Quand le schéma change, `zeek-cut id.orig_h method uri status_code < http.log` sélectionne les champs par **nom**. Tu peux ensuite filtrer sa sortie avec `awk -F '\t' '$4 == 200'`. Le scénario complet et ses précautions sont dans [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+Voir aussi : [Forensic › Pare-feu et VPN](../../forensic/reseau/journaux/pare-feu-vpn.md) · [Repérer les champs d'un fichier](../fondamentaux/texte-filtres.md#reperer-les-champs-dun-fichier)
