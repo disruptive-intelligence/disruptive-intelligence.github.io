@@ -29,6 +29,7 @@ Modifier le système.
 ## [Commandes clés](commandes/index.md)
 
 Les commandes aux options innombrables, décodées : [`find`](commandes/find.md), [`grep`](commandes/grep.md),
-[`awk`](commandes/awk.md), [`sed`](commandes/sed.md), [`tar`](commandes/tar.md), [`ps`](commandes/ps.md),
-[`systemctl`](commandes/systemctl.md), [`journalctl`](commandes/journalctl.md), [`ss`](commandes/ss.md),
-[`ip`](commandes/ip.md).
+[`awk`](commandes/awk.md), [`sed`](commandes/sed.md), [`cut`](commandes/cut.md), [`sort`](commandes/sort.md),
+[`uniq`](commandes/uniq.md), [`wc`](commandes/wc.md), [`column`](commandes/column.md), [`less`](commandes/less.md),
+[`tar`](commandes/tar.md), [`ps`](commandes/ps.md), [`systemctl`](commandes/systemctl.md),
+[`journalctl`](commandes/journalctl.md), [`ss`](commandes/ss.md), [`ip`](commandes/ip.md).

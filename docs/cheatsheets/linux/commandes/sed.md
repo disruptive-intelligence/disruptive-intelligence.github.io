@@ -78,3 +78,50 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
     sed -E 's/^([^:]+):.*/\1/' /etc/passwd                        # garde ce qui précède le premier « : »
     sed -E 's/(.*)@(.*)/\2 \1/' emails.txt                        # domaine, puis utilisateur
     ```
+
+## Cas concrets déjà rencontrés
+
+### Séparer des événements VPN collés
+
+Dans un export où chaque événement commence par une date ISO et où deux événements sont séparés par **un espace**, GNU `sed` peut insérer un retour à la ligne **avant** la date suivante :
+
+```bash title="Un événement par ligne, sans modifier vpn.log"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log
+```
+
+`-E` autorise les groupes `(…)` et `{n}` ; `\1` reprend la date capturée ; `\n` crée la nouvelle ligne ; `g` traite tous les débuts d'événement sur la ligne. Vérifie un extrait avec `head -c 500 vpn.log` avant de l'utiliser : si chaque événement a déjà sa ligne, cette transformation est inutile.
+
+```bash title="Séparer, aligner, parcourir"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' vpn.log |
+  column -t -s '|' | less -S
+```
+
+`sed` règle la **structure des lignes** ; [`column`](column.md) règle leur **présentation**. Dans `less -S`, les lignes larges défilent horizontalement.
+
+### Extraire un champ ou masquer une donnée
+
+Pour un journal de pare-feu avec des champs `|dstport=…|`, `-n` supprime l'affichage automatique ; le `p` final n'affiche que les lignes dont la substitution a réussi :
+
+```bash title="Ports de destination présents dans le journal"
+sed -nE 's/.*[|]dstport=([0-9]+).*/\1/p' firewall.log | sort -n -u
+```
+
+La même logique peut extraire un identifiant `clé=valeur` ; adapte **le nom du champ et son séparateur** au fichier observé. Pour partager un extrait sans publier les IP, vérifie le résultat à l'écran :
+
+```bash title="Masquer une IPv4 dans une copie affichée"
+sed -E 's/([0-9]{1,3}\.){3}[0-9]{1,3}/[IP]/g' firewall.log | head
+```
+
+Cette regex repère une forme IPv4 ; elle ne valide pas que chaque octet est compris entre 0 et 255. Sans `-i`, le fichier source ne change pas.
+
+### Nettoyer et sélectionner avant analyse
+
+```bash title="Préparer un export texte"
+sed 's/\r$//' export.txt | sed '/^[[:space:]]*$/d' | less
+sed -n '1,20p' vpn.log
+sed -n '/status=failure/p' vpn.log
+```
+
+La première commande enlève les fins de ligne Windows et les lignes vides **dans la sortie**. `sed -n '1,20p'` évite d'imprimer tout un gros fichier. Le dernier exemple cherche du texte dans chaque ligne ; si des événements sont collés, sépare-les d'abord pour analyser chaque événement individuellement.
+
+Voir aussi : [le scénario VPN de la fiche SOC](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par) et [les usages généraux dans Linux fondamentaux](../fondamentaux/texte-filtres.md#mettre-en-forme-et-trier-un-fichier-texte).

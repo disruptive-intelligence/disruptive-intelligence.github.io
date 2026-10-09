@@ -11,6 +11,8 @@ Découper, trier, compter et transformer la sortie d'une commande ou le contenu 
 Les incontournables : `cut` · `sort | uniq -c` · `grep -oE` · `sort -u | wc -l` · `sed` · `awk` · `| tee`
 { .kw-cs-top }
 
+Pour approfondir une commande avec davantage de cas concrets : [`grep`](../commandes/grep.md), [`sed`](../commandes/sed.md), [`awk`](../commandes/awk.md), [`cut`](../commandes/cut.md), [`sort`](../commandes/sort.md), [`uniq`](../commandes/uniq.md), [`wc`](../commandes/wc.md), [`column`](../commandes/column.md) et [`less`](../commandes/less.md).
+
 ## Extraire
 
 ### Extraire une colonne

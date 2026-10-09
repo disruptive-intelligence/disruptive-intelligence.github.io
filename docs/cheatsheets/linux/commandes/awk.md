@@ -80,3 +80,55 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
     last | awk '{print $1}' | sort | uniq -c | sort -rn     # connexions par utilisateur
     cat /etc/passwd | grep -v "false\|nologin" | tr ":" " " | awk '{print $1, $NF}'   # comptes qui ont un shell, et lequel
     ```
+
+## Cas concrets déjà rencontrés
+
+### VPN : construire une vue lisible sans supposer l'ordre des champs
+
+Dans un export `|` avec `srcuser=…`, `publicip=…` et `status=…`, les numéros de colonnes peuvent changer. Cherche plutôt chaque **nom de champ**. Si plusieurs événements sont collés sur une ligne, sépare-les d'abord avec [`sed`](sed.md#separer-des-evenements-vpn-colles).
+
+```bash title="Heure, utilisateur, IP publique, résultat"
+awk -F'|' '{
+  ts=$1; user=ip=status="-"
+  for (i=2; i<=NF; i++) {
+    if ($i ~ /^srcuser=/) user=$i
+    else if ($i ~ /^publicip=/) ip=$i
+    else if ($i ~ /^status=/) status=$i
+  }
+  print ts "|" user "|" ip "|" status
+}' vpn.log | column -t -s '|'
+```
+
+`NF` est le nombre de champs de la ligne ; la boucle les examine tous. Les valeurs `-` rendent visible un champ manquant. `column` aligne **après** l'extraction. Si l'ordre est connu et stable, `awk -F'|' '{print $1 "|" $5 "|" $7 "|" $9}' vpn.log | column -t -s '|'` est plus court ; vérifie d'abord les positions.
+
+### Pare-feu : ports distincts par source
+
+Pour le format `|src=…|dstport=…|`, produis une paire « source port » par événement, supprime les paires répétées, puis compte les ports distincts de chaque source :
+
+```bash title="Nombre de ports distincts par source"
+awk -F'|' '{
+  src=port=""
+  for (i=1; i<=NF; i++) {
+    if ($i ~ /^src=/) src=substr($i, 5)
+    else if ($i ~ /^dstport=/) port=substr($i, 9)
+  }
+  if (src != "" && port != "") print src, port
+}' firewall.log | sort -u | awk '{n[$1]++} END {for (src in n) print n[src], src}' | sort -rn
+```
+
+`substr($i, 5)` retire `src=` ; `substr($i, 9)` retire `dstport=`. `sort -u` agit sur la paire entière : plusieurs connexions vers le même port par la même source ne comptent qu'une fois. La sortie est classée par nombre de ports décroissant.
+
+### Compter des réussites et des échecs
+
+```bash title="Répartition par statut dans un export |"
+awk -F'|' '{
+  for (i=1; i<=NF; i++)
+    if ($i ~ /^status=/) n[$i]++
+} END {
+  for (status in n) print n[status], status
+}' vpn.log | sort -rn
+```
+
+Ce comptage suppose **un événement par ligne**. Si ce n'est pas le cas, passe d'abord par le `sed` de l'exemple VPN. Pour examiner la chronologie d'une source précise, conserve aussi l'horodatage et l'IP plutôt que de te limiter aux totaux.
+
+Voir les scénarios complets : [pare-feu et VPN dans Forensic réseau](../../forensic/reseau/journaux/pare-feu-vpn.md).

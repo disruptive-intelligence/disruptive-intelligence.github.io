@@ -97,3 +97,45 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
     grep -B 2 "segfault" /var/log/kern.log           # 2 lignes avant
     grep -C 5 "Accepted password" /var/log/auth.log  # 5 lignes autour
     ```
+
+## Cas concrets déjà rencontrés
+
+### Journal de pare-feu : filtrer avant d'extraire
+
+Dans cet export, les champs sont séparés par `|` : `src=…|dstport=…|action=…`. Vérifie d'abord avec `head -n 3 firewall.log`. Les deux premiers `grep -F` gardent les **lignes** voulues ; `grep -oE` ne garde que le **champ** `dstport`.
+
+```bash title="Ports autorisés pour une source (adresse d'exemple)"
+grep -F '|src=198.51.100.23|' firewall.log |
+  grep -F '|action=allow|' |
+  grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+```
+
+```bash title="Combien de ports différents ?"
+grep -F '|action=allow|' firewall.log |
+  grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
+```
+
+`-F` cherche le texte tel quel : `|` n'est pas interprété comme une alternative regex. `-oE` trouve le motif numérique et affiche seulement ce morceau. `cut` retire `dstport=` ; le tri retire les doublons avant le comptage. Pour **toutes** les tentatives, retire le filtre `action=allow` : une tentative peut aussi être autorisée.
+
+### VPN : isoler les événements réussis ou échoués
+
+Si plusieurs événements sont collés sur une ligne, sépare-les d'abord avec [`sed`](sed.md#separer-des-evenements-vpn-colles). Dans un export déjà à raison d'un événement par ligne :
+
+```bash title="Champ status exact dans un export à séparateur |"
+grep -E '(^|[|])status=success([|]|$)' vpn.log
+grep -E '(^|[|])status=failure([|]|$)' vpn.log
+```
+
+Les frontières `(^|[|])` et `([|]|$)` évitent de confondre `status=success` avec un champ ou une valeur plus longue. Pour un autre format, adapte le séparateur et le nom du champ.
+
+### Chercher dans de gros journaux
+
+```bash title="Contexte, rotation et suivi"
+grep -n -C 2 'Failed password' /var/log/auth.log | less -S
+zgrep -h 'Failed password' /var/log/auth.log.*.gz | head
+tail -F /var/log/auth.log | grep --line-buffered 'Failed password'
+```
+
+`-n` indique la ligne du fichier ; `-C 2` montre les deux lignes voisines. `zgrep` lit les rotations compressées. Derrière `tail -F`, `--line-buffered` affiche les nouvelles correspondances sans attendre que le tampon se remplisse.
+
+À revoir aussi : [ports et actions dans la fiche SOC](../../forensic/reseau/journaux/pare-feu-vpn.md#lister-et-compter-les-ports-vises-dans-un-journal) et [gabarits réutilisables](../fondamentaux/texte-filtres.md#gabarits-pour-dautres-journaux-ou-fichiers-texte).

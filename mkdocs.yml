@@ -149,6 +149,12 @@ nav:
                 - grep: cheatsheets/linux/commandes/grep.md
                 - awk: cheatsheets/linux/commandes/awk.md
                 - sed: cheatsheets/linux/commandes/sed.md
+                - cut: cheatsheets/linux/commandes/cut.md
+                - sort: cheatsheets/linux/commandes/sort.md
+                - uniq: cheatsheets/linux/commandes/uniq.md
+                - wc: cheatsheets/linux/commandes/wc.md
+                - column: cheatsheets/linux/commandes/column.md
+                - less: cheatsheets/linux/commandes/less.md
             - Processus, services et journaux:
                 - ps: cheatsheets/linux/commandes/ps.md
                 - systemctl: cheatsheets/linux/commandes/systemctl.md
