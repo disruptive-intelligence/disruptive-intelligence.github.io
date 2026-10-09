@@ -20,6 +20,17 @@ cut -d '<séparateur>' -f <numéros> <fichier>   # ou : <commande> | cut -d '=' 
 | `-c 1-10` | Dix premiers caractères (selon l'encodage et la locale) |
 | `--complement` | Tous les champs sauf ceux demandés (GNU) |
 
+## Repérer les positions avant `-f`
+
+Sur une ligne tabulée simple, mets les champs à la verticale et numérote-les ; avec `awk`, affiche aussi `$1`, `$2`… directement :
+
+```bash title="Première ligne d'un TSV"
+head -n 1 fichier.tsv | tr '\t' '\n' | nl -ba
+awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.tsv
+```
+
+Si le journal comporte des métadonnées `#` comme Zeek, remplace `head -n 1` par `grep -m1 -v '^#'`. `nl -ba` numérote les lignes vides, utiles pour voir un champ vide. Ces méthodes ne décodent ni le JSON ni un CSV avec séparateurs entre guillemets.
+
 ## Cas concrets déjà rencontrés
 
 ### Enlever `dstport=` après extraction

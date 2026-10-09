@@ -13,6 +13,34 @@ Les incontournables : `cut` · `sort | uniq -c` · `grep -oE` · `sort -u | wc -
 
 Pour approfondir une commande avec davantage de cas concrets : [`grep`](../commandes/grep.md), [`sed`](../commandes/sed.md), [`awk`](../commandes/awk.md), [`cut`](../commandes/cut.md), [`sort`](../commandes/sort.md), [`uniq`](../commandes/uniq.md), [`wc`](../commandes/wc.md), [`column`](../commandes/column.md) et [`less`](../commandes/less.md).
 
+## Inspecter la structure avant de filtrer
+
+Repère d'abord le **séparateur**, puis numérote les champs sur une ligne représentative. Ces deux méthodes conviennent à un fichier simple avec **un événement par ligne** :
+
+```bash title="Numéroter les champs de la première ligne"
+awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log
+head -n 1 fichier.log | tr '\t' '\n' | nl -ba
+```
+
+`awk` affiche les valeurs avec leurs numéros `$1`, `$2`… ; `tr` met chaque champ sur une ligne et `nl -ba` numérote aussi les champs vides. Adapte `\t` au séparateur réel :
+
+| Format simple | `awk` | `tr` |
+|---|---|---|
+| Tabulations (TSV) | `-F '\t'` | `tr '\t' '\n'` |
+| Barre verticale (`|`) | `-F '|'` | `tr '|' '\n'` |
+| Virgules sans guillemets (CSV simple) | `-F ','` | `tr ',' '\n'` |
+| Deux-points | `-F ':'` | `tr ':' '\n'` |
+| Espaces multiples | Sans `-F` | Préférer `awk` |
+
+```bash title="Compter, extraire et classer un champ tabulé"
+awk -F '\t' 'NR==1 {print NF; exit}' fichier.log
+awk -F '\t' '{print $3}' fichier.log
+awk -F '\t' '{print $3}' fichier.log | sort -u | wc -l
+awk -F '\t' '{print $3}' fichier.log | sort | uniq -c | sort -rn
+```
+
+`NF` compte les champs de la ligne ; `NR` est son numéro. `sort -u | wc -l` compte les **valeurs différentes** ; `sort | uniq -c | sort -rn` classe les valeurs par **nombre d'occurrences**. Numéroter les valeurs ne révèle pas leurs noms : consulte l'en-tête ou le schéma. Pour un vrai CSV avec virgules entre guillemets ou un fichier JSON, utilise un parseur adapté.
+
 ## Extraire
 
 ### Extraire une colonne
@@ -82,10 +110,11 @@ Dans un `http.log` Zeek texte, les champs sont séparés par des tabulations et 
 
 ```bash title="Inspecter puis compter les IP sources"
 grep -m1 '^#fields' http.log
+awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d = %s\n", i-1, $i; exit}' http.log
 zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head
 ```
 
-`zeek-cut` extrait par **nom de champ** ; pour un TSV générique, après vérification que l'IP est en colonne 3 : `grep -v '^#' fichier.tsv | cut -f3 | sort | uniq -c | sort -rn`. Pour filtrer plusieurs colonnes ou aligner l'affichage, voir [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+La première ligne de `http.log` est une métadonnée, donc `NR==1` ne numérote **pas** les champs d'une requête. Pour inspecter les valeurs de la première requête : `grep -m1 -v '^#' http.log | tr '\t' '\n' | nl -ba`. `zeek-cut` extrait par **nom de champ** ; pour un TSV générique, après vérification que l'IP est en colonne 3 : `grep -v '^#' fichier.tsv | cut -f3 | sort | uniq -c | sort -rn`. Pour filtrer plusieurs colonnes ou aligner l'affichage, voir [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
 
 ## Compter et trier
 

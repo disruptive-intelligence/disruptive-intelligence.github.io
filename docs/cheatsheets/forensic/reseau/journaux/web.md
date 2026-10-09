@@ -124,6 +124,15 @@ head -n 8 http.log
 awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log
 ```
 
+La première ligne n'est généralement **pas** une requête. Pour comparer le schéma avec les valeurs du **premier événement**, saute les métadonnées `#` :
+
+```bash title="Numéroter les valeurs de la première requête"
+awk -F '\t' '!/^#/ {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' http.log
+grep -m1 -v '^#' http.log | tr '\t' '\n' | nl -ba
+```
+
+La variante `tr` met chaque champ à la verticale ; `nl -ba` garde la numérotation des champs vides. Les positions ne sont que des repères : `#fields` donne leurs **noms**. Pour réutiliser cette inspection sur un autre format, voir [Linux : inspecter la structure avant de filtrer](../../../linux/fondamentaux/texte-filtres.md#inspecter-la-structure-avant-de-filtrer).
+
 Dans un `http.log` dont `#fields` confirme l'ordre ci-dessous :
 
 | Position | Champ Zeek | Sens |

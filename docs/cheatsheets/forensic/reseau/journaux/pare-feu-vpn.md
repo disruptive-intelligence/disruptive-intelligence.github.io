@@ -35,7 +35,15 @@ Pour comprendre : [Pare-feu : champs des traffic logs, action, NAT](../../../../
 
 ### Lister et compter les ports visés dans un journal `|`
 
-Pour un export où chaque événement contient `|src=…|dstport=…|action=…|`, commence par vérifier les noms de champs avec `head -n 3 firewall.log`. Ici, `dstport` est le port visé ; `srcport` est le port source.
+Pour un export où chaque événement contient `|src=…|dstport=…|action=…|`, commence par vérifier les noms et les positions des champs. Ici, `dstport` est le port visé ; `srcport` est le port source.
+
+```bash title="Découvrir les champs du premier événement"
+head -n 3 firewall.log
+awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log
+head -n 1 firewall.log | tr '|' '\n' | nl -ba
+```
+
+Ces commandes supposent **un événement par ligne** et aucun `|` dans une valeur. `nl -ba` montre aussi les champs vides ; ni la numérotation ni le séparateur ne prouvent qu'un champ a toujours la même position dans tous les événements. Pour les exports VPN où des événements sont collés, sépare-les d'abord comme dans la section VPN ci-dessous. Le [gabarit Linux](../../../linux/fondamentaux/texte-filtres.md#inspecter-la-structure-avant-de-filtrer) montre les autres séparateurs.
 
 ```bash title="Ports visés : liste et nombre distincts"
 grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u

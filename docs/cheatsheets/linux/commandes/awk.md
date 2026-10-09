@@ -19,7 +19,8 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 |---|---|
 | `-F':'` | Séparateur de champs (ici `:`) |
 | `$1`, `$2`… · `$0` · `$NF` | Champ 1, 2… · la ligne entière · le dernier champ |
-| `NR` · `NF` | Numéro de la ligne · nombre de champs de la ligne |
+| `NR` · `NF` | Numéro de la ligne en cours · nombre de champs de cette ligne |
+| `FS` · `OFS` | Séparateur des champs en entrée · séparateur des champs en sortie |
 | `{print $1, $3}` | Affiche les champs 1 et 3, séparés par un espace |
 | `$3 >= 1000` · `/motif/` · `$7 ~ /bash$/` | Condition : comparaison · ligne qui contient · champ qui correspond à une regex |
 | `!~` · `&&` · `||` | Ne correspond pas · ET · OU |
@@ -41,6 +42,25 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
 - Le programme se met entre **guillemets simples** : entre guillemets doubles, le shell remplace `$1` avant awk.
 - Par défaut, plusieurs espaces de suite comptent pour un seul séparateur (`cut -d' '`, lui, compte chaque espace).
 - `print $1, $2` sépare par un espace ; `print $1 $2` colle les deux champs.
+
+## Découvrir les colonnes d'un fichier
+
+Pour une première ligne de données à séparateur connu, affiche chaque position et sa valeur :
+
+```bash title="Numéros et valeurs, puis nombre de champs"
+awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log
+awk -F '\t' 'NR==1 {print NF; exit}' fichier.log
+```
+
+`$0` désigne la ligne entière, `$1` le premier champ, `$NF` le dernier. `NR==1` sélectionne la première ligne ; `exit` arrête la lecture aussitôt. `-F '\t'` définit `FS` (tabulation), tandis que `BEGIN {OFS="\t"}` fixe le séparateur de sortie pour `print $1, $2`. Avec `|`, remplace `-F '\t'` par `-F '|'` ; pour des espaces successifs, omets `-F`.
+
+```bash title="Extraire et compter le champ 3 d'un TSV simple"
+awk -F '\t' '{print $3}' fichier.log
+awk -F '\t' '{print $3}' fichier.log | sort -u | wc -l
+awk -F '\t' '{print $3}' fichier.log | sort | uniq -c | sort -rn
+```
+
+Ces commandes supposent **une entrée par ligne** et aucun séparateur interne non échappé. Numéroter les valeurs ne donne pas leurs noms : lis l'en-tête ou le schéma. Pour un CSV avec champs entre guillemets ou du JSON, prends un parseur adapté.
 
 ## Exemples
 
@@ -105,6 +125,10 @@ awk -F'|' '{
 
 Pour le format `|src=…|dstport=…|`, produis une paire « source port » par événement, supprime les paires répétées, puis compte les ports distincts de chaque source :
 
+```bash title="Vérifier les positions sur le premier événement"
+awk -F '|' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' firewall.log
+```
+
 ```bash title="Nombre de ports distincts par source"
 awk -F'|' '{
   src=port=""
@@ -139,6 +163,12 @@ Un `http.log` Zeek texte est séparé par des tabulations. Ses lignes `#fields` 
 
 ```bash title="Afficher les positions déclarées par Zeek"
 awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d %s\n", i-1, $i; exit}' http.log
+```
+
+`#fields` contient un libellé de métadonnée avant les noms des champs : le premier nom correspond donc à `$1`, et non à `$2`. `NR==1` afficherait la ligne `#separator`, pas une requête. Pour numéroter les **valeurs** du premier événement :
+
+```bash title="Première requête, sans les métadonnées"
+awk -F '\t' '!/^#/ {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' http.log
 ```
 
 ```bash title="Client, méthode, URI, code : positions confirmées"
