@@ -589,6 +589,64 @@
       url: https://fastscribe.io/
       type: Outil
       pourquoi: Podcasts transformés en texte
+  - nom: Test d'Einstein & LLM historiques
+    liens:
+    - nom: Machina Mirabilis (Michael Hla)
+      url: https://michaelhla.com/blog/machina-mirabilis.html
+      type: Rapport
+      pourquoi: Source primaire de l'expérience GPT-1900, un modèle entraîné sur des textes d'avant 1900 face à la relativité et aux quanta
+    - nom: GPT-1900 — dépôt GitHub
+      url: https://github.com/michaelhla/gpt1900
+      type: Code
+      pourquoi: Prompts d'évaluation, générations notées, registre des modèles et rapport technique archivé (octobre 2026)
+    - nom: "Nature — The Einstein test (Philip Ball)"
+      url: https://www.nature.com/articles/d41586-026-02804-x
+      type: Article
+      pourquoi: Synthèse de référence (9 septembre 2026) sur le test, GPT-1900, Talkie, Ranke-4B et le débat sur l'abduction
+    - nom: "OfficeChai — Hassabis : le test des données de 1911"
+      url: https://officechai.com/ai/a-test-of-agi-could-be-if-a-system-trained-till-1911-data-could-discover-general-relativity-google-deepmind-ceo-demis-hassabis/
+      type: Article
+      pourquoi: Compte rendu de la proposition de Demis Hassabis à l'India AI Summit (février 2026)
+    - nom: "Crypto Briefing — Hassabis et le test d'Einstein"
+      url: https://cryptobriefing.com/deepmind-hassabis-agi-einstein-test/
+      type: Article
+      pourquoi: Reprise (juin 2026) qui oppose le test aux définitions économiques de l'AGI
+    - nom: Owain Evans — Vintage Large Language Models
+      url: https://owainevans.github.io/talk-transcript.html
+      type: Conférence
+      pourquoi: L'exposé (décembre 2024) qui a nommé le champ des LLM historiques et ses usages
+    - nom: "OfficeChai — l'expérience de Hla"
+      url: https://officechai.com/ai/someone-built-an-llm-to-test-out-demis-hassabis-agi-definition-of-pre-1900-science-discovering-relativity/
+      type: Article
+      pourquoi: Résumé chiffré de GPT-1900 (avril 2026)
+    - nom: "CACM — The Einstein Test (Benrimoh et al.)"
+      url: https://cacm.acm.org/opinion/the-einstein-test-a-test-of-ais-ability-to-generate-transformative-science/
+      type: Tribune
+      pourquoi: Le seul protocole complet du test, rétrospectif et prospectif (avril 2026)
+    - nom: "Tom Zahavy — Position: LLMs can't jump"
+      url: https://icml.cc/virtual/2026/poster/67091
+      type: Recherche
+      pourquoi: Papier de position (ICML 2026) sur l'abduction qui manquerait aux modèles de langage
+    - nom: "Shalyt, Regev, Soljačić, Kaminer — Can AI Follow in Einstein's Footsteps?"
+      url: https://arxiv.org/abs/2607.27794
+      type: Recherche
+      pourquoi: Prépublication (juillet 2026) sur l'IA prédictive face à la construction de théories en physique
+    - nom: awesome-vintage-llms
+      url: https://github.com/entanglr/awesome-vintage-llms
+      type: Encyclopédie
+      pourquoi: Liste à jour des modèles historiques, articles, jeux de données et discussions
+    - nom: Talkie-1930
+      url: https://talkie-lm.com/introducing-talkie
+      type: Outil
+      pourquoi: Modèle de 13 milliards de paramètres arrêté en 1930 (Radford, Levine, Duvenaud), avec démonstration en ligne
+    - nom: Ranke-4B (History LLMs)
+      url: https://github.com/DGoettlich/history-llms
+      type: Outil
+      pourquoi: Modèles verrouillés en 1913, 1929, 1933, 1939 et 1946 (Universités de Zurich et de Cologne)
+    - nom: TypewriterLM — A Language Model from 1913
+      url: https://arxiv.org/abs/2606.02991
+      type: Recherche
+      pourquoi: Modèle de 7,24 milliards de paramètres et banc d'essai des fuites temporelles (EMNLP 2026)
   - nom: Régulation
     liens: []
 - id: learn
