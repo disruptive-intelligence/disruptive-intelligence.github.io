@@ -1414,3 +1414,12 @@ body[data-md-color-scheme="default"]::after {
 @media screen and (max-width: 59.9375em) {
   .md-typeset .kw-rg { grid-template-columns: 1fr; }
 }
+
+/* Ressources : recherche dédiée, résultats à la place des blocs par thème, rubriques filtrées sur place */
+.md-typeset .kw-rs-list .kw-tuto[hidden], .md-typeset .kw-rs-list .kw-chapter[hidden],
+.md-typeset .kw-rs-results[hidden], .md-typeset .kw-rs-browse[hidden], .md-typeset .kw-rs-count[hidden] { display: none; }
+.md-typeset .kw-rs-search { max-width: none; margin: 0 0 .6rem; }
+.md-typeset .kw-rs-search input.kw-rs-filter, .md-typeset .kw-mast__search input.kw-rs-filter { max-width: none; margin: 0; }
+.md-typeset .kw-rs-count { margin: .6rem 0 .2rem; font-size: .68rem; }
+.md-typeset .kw-rs-results { margin-top: .4rem; }
+.md-typeset span.kw-tuto__title { font-weight: 700; font-size: .78rem; line-height: 1.35; }

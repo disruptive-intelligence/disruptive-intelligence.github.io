@@ -983,65 +983,163 @@ hide:
 {body}"""
 
 
+RESSOURCES_LEAD = {
+    "cyber": "Renseignement sur la menace, vulnérabilités, forensic et référentiels : les sites à garder sous la main.",
+    "osint": "Boîtes à outils, formations, challenges et communautés pour enquêter en sources ouvertes.",
+    "ie": "Désinformation, défense, criminalité organisée et intelligence économique : revues et centres de recherche.",
+    "privacy": "Se protéger en ligne et accompagner les publics exposés : guides d'hygiène numérique et d'OPSEC.",
+    "tech": "Outils, systèmes et filières qui comptent : semi-conducteurs, spatial, robotique, actualité.",
+    "ia": "Sécurité de l'IA, recherche, outils et régulation : suivre l'IA au-delà des annonces.",
+    "learn": "Plateformes, CTF et cours pour pratiquer : cyber, Linux, conteneurs, programmation.",
+}
+
+
+def res_src(t, r=None):
+    return f"veille/ressources/{t['id']}/" + (f"{slug(r['nom'])}.md" if r else "index.md")
+
+
+def res_count(links):
+    return plural(len(links), "ressource") if links else "À compléter"
+
+
+def res_item(link, src, where=""):
+    """Une ressource : nom (lien externe), pourquoi, type · site ; data-search pour la recherche des Ressources.
+    where : « Thème · Rubrique » (liens), affiché dans les résultats de la page d'accueil."""
+    host = urlparse(link.get("url") or "").netloc.removeprefix("www.")
+    name = esc(link["nom"])
+    title = (f'<a class="kw-tuto__title" href="{esc(link["url"])}">{name}</a>' if link.get("url")
+             else f'<span class="kw-tuto__title">{name}</span>')
+    search = " ".join([link["nom"], link.get("type", ""), link.get("pourquoi", ""), host, re.sub(r"<[^>]+>", " ", where)])
+    tag = " · ".join(b for b in (esc(link.get("type", "")), esc(host), where) if b)
+    return (f'<div class="kw-tuto" data-search="{esc(search.lower())}" data-name="{esc(link["nom"].lower())}" '
+            f'data-type="{esc(link.get("type", ""))}">{title}'
+            + (f'<span class="kw-tuto__text">{esc(link["pourquoi"])}</span>' if link.get("pourquoi") else "")
+            + f'<span class="kw-tuto__tag">{tag}</span></div>')
+
+
+def res_filter(placeholder, label):
+    return (f'<input class="kw-cs-search kw-rs-filter" type="search" placeholder="{esc(placeholder)}" '
+            f'aria-label="{esc(label)}">')
+
+
+def res_eyebrow(t, src):
+    """« Ressources » (et « · Thème » sur une page de rubrique), en liens."""
+    up = lambda to: posixpath.relpath(to, posixpath.dirname(src))
+    theme = f' · [{esc(bare(t["label"]))}]({up(res_src(t))})' if src != res_src(t) else ""
+    return f'<span class="kw-eyebrow">[Ressources]({up(RESSOURCES_SRC)}){theme}</span>'
+
+
 def pages_ressources(themes):
+    """Ressources : une page par thème (rubriques en chapitres, ressources listées, filtre) et une par rubrique,
+    sur le modèle des domaines et rubriques de la Bibliothèque."""
     out = []
     for t in themes:
-        cards = ""
-        for r in t["rubriques"]:
-            links = r.get("liens") or []
-            rsrc = f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"
-            body = (f"# {r['nom']}\n\n<span class=\"kw-muted\">Ressources · {t['label']} · "
-                    f"{len(links)} lien{'s' if len(links) > 1 else ''}</span>\n\n")
-            if links:
-                body += "| Ressource | Type | Pourquoi |\n|---|---|---|\n" + "".join(
-                    f"| {('[' + l['nom'] + '](' + l['url'] + ')') if l.get('url') else l['nom']} "
-                    f"| <span class=\"kw-type\">{l.get('type', '')}</span> | {l.get('pourquoi', '')} |\n" for l in links)
-            else:
-                body += '!!! note "À compléter"\n    Aucune ressource pour l\'instant dans cette rubrique.\n'
+        tsrc = res_src(t)
+        rubs = t["rubriques"]
+        links = [l for r in rubs for l in (r.get("liens") or [])]
+        for r in rubs:
+            rsrc, lst = res_src(t, r), r.get("liens") or []
+            body = (f'---\ntitle: "{r["nom"]}"\nhide:\n  - footer\n---\n'
+                    f'<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n{res_eyebrow(t, rsrc)}\n\n# {r["nom"]}\n\n'
+                    f'<span class="kw-dom-stats">{res_count(lst)}</span>\n</div>\n\n')
+            body += ('<div class="kw-chapter__grid kw-chapter__grid--solo">' + "".join(res_item(l, rsrc) for l in lst)
+                     + "</div>\n" if lst else '!!! note "À compléter"\n    Aucune ressource pour l\'instant dans cette rubrique.\n')
             out.append((rsrc, body))
-            preview = " · ".join(l["nom"] for l in links[:3])
-            n = f"{len(links)} ressource{'s' if len(links) > 1 else ''}" if links else "À compléter"
-            cards += (f'<a class="kw-card" href="{slug(r["nom"])}/"><span class="kw-card__title">{esc(r["nom"])}</span>'
-                      f'<span class="kw-card__meta">{n}</span><span class="kw-card__text">{esc(preview)}</span></a>')
-        out.append((f"veille/ressources/{t['id']}/index.md",
-                    f"---\nhide:\n  - toc\n---\n# {t['label']} — Ressources\n\n"
-                    "Sites, pages et articles de référence, en complément des sources suivies par la veille.\n\n"
-                    f'<div class="kw-wiki">{cards}</div>\n'))
+        toc = " ".join(f'<a href="#{slug(r["nom"])}">{esc(r["nom"])}</a>' for r in rubs)
+        chapters = ""
+        for i, r in enumerate(rubs, 1):
+            lst = r.get("liens") or []
+            head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{i:02d}</span>\n\n'
+                    f'## [{esc(r["nom"])}]({slug(r["nom"])}.md){{#{slug(r["nom"])}}}\n\n'
+                    f'<span class="kw-chapter__meta">{res_count(lst)}</span>\n</header>\n')
+            grid = ('<div class="kw-chapter__grid">' + "".join(res_item(l, tsrc) for l in lst) + "</div>\n" if lst
+                    else '<div class="kw-chapter__grid"><span class="kw-muted">Aucune ressource pour l\'instant.</span></div>\n')
+            chapters += f'\n<article class="kw-chapter" markdown>\n{head}{grid}</article>\n'
+        out.append((tsrc, f"""---
+title: "{bare(t['label'])}"
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero" markdown>
+{res_eyebrow(t, tsrc)}
+
+# {t['label']}
+
+<p class="kw-dom-lead">{esc(RESSOURCES_LEAD.get(t['id'], ''))}</p>
+<span class="kw-dom-stats">{plural(len(links), "ressource")} · {plural(len(rubs), "rubrique")}</span>
+</div>
+
+<div class="kw-mast__search kw-rs-search">{res_filter(f"Filtrer {bare(t['label'])} : un nom, un type, un mot…", "Filtrer les ressources du thème")}</div>
+<p class="kw-rs-count kw-muted" hidden></p>
+
+<nav class="kw-dom-toc"><span>Sommaire</span>{toc}</nav>
+
+<div class="kw-rs-list" markdown>
+{chapters}
+</div>
+"""))
     out.append(page_ressources_index(themes))
     return out
 
 
 def page_ressources_index(themes):
-    """Page d'accueil de l'onglet Ressources : tous les thèmes et toutes leurs rubriques."""
+    """Accueil des Ressources, façon Bibliothèque : bandeau (date, compteurs, recherche, thèmes), pastilles de type,
+    puis un bloc par thème avec ses rubriques numérotées. La recherche montre les ressources trouvées à la place
+    des blocs (nom, type, pourquoi, site, thème et rubrique)."""
     src = RESSOURCES_SRC
+    today = date.today()
     total = sum(len(r.get("liens") or []) for t in themes for r in t["rubriques"])
-    body = ""
+    types = collections.Counter(l.get("type") for t in themes for r in t["rubriques"] for l in (r.get("liens") or [])
+                                if l.get("type"))
+    chips = "".join(f'<button type="button" class="kw-chip" data-type="{esc(k)}">{esc(k)}<span class="kw-count">{n}</span></button>'
+                    for k, n in types.most_common() if n >= 3)
+    nav = " ".join(f'<a href="#{t["id"]}">{esc(bare(t["label"]))}</a>' for t in themes)
+    hits = "".join(
+        res_item(l, src, f'<a href="{href(src, res_src(t))}">{esc(bare(t["label"]))}</a> · '
+                         f'<a href="{href(src, res_src(t, r))}">{esc(r["nom"])}</a>')
+        for t in themes for r in t["rubriques"] for l in (r.get("liens") or []))
+    doms = ""
     for t in themes:
-        base = f"veille/ressources/{t['id']}"
-        n = sum(len(r.get("liens") or []) for r in t["rubriques"])
-        cards = ""
-        for r in t["rubriques"]:
-            links = r.get("liens") or []
-            count = f"{len(links)} ressource{'s' if len(links) > 1 else ''}" if links else "À compléter"
-            preview = " · ".join(l["nom"] for l in links[:3])
-            cards += (f'<a class="kw-card" href="{href(src, base + "/" + slug(r["nom"]) + ".md")}">'
-                      f'<span class="kw-card__title">{esc(r["nom"])}</span>'
-                      f'<span class="kw-card__meta">{count}</span>'
-                      f'<span class="kw-card__text">{esc(preview)}</span></a>')
-        body += (f"\n## {t['label']} <span class=\"kw-muted\">· {n}</span>\n\n"
-                 f'<a class="kw-more-link" href="{href(src, base + "/index.md")}">Tout le thème →</a>\n\n'
-                 f'<div class="kw-wiki">{cards}</div>\n')
+        rubs = t["rubriques"]
+        n = sum(len(r.get("liens") or []) for r in rubs)
+        items = "".join(
+            f'<a class="kw-domblock__rub" href="{href(src, res_src(t, r))}"><span class="kw-domblock__num">{i:02d}</span>'
+            f'<span class="kw-domblock__name">{esc(r["nom"])}</span>'
+            f'<span class="kw-domblock__desc">{esc(" · ".join(l["nom"] for l in (r.get("liens") or [])[:3]))}</span>'
+            f'<span class="kw-tuto__tag">{res_count(r.get("liens") or [])}</span></a>'
+            for i, r in enumerate(rubs, 1))
+        doms += (section_bar(bare(t["label"]), anchor=t["id"])
+                 + '<div class="kw-domblock"><div class="kw-domblock__intro">'
+                 f'<a class="kw-domblock__title" href="{href(src, res_src(t))}">{esc(t["label"])}</a>'
+                 f'<p>{esc(RESSOURCES_LEAD.get(t["id"], ""))}</p>'
+                 f'<span class="kw-dom-stats">{plural(n, "ressource")} · {plural(len(rubs), "rubrique")}</span>'
+                 f'<a class="kw-domblock__cta" href="{href(src, res_src(t))}">Explorer {esc(bare(t["label"]))} →</a></div>'
+                 f'<div class="kw-domblock__rubs">{items}</div></div>\n')
     return src, f"""---
+title: Ressources
 hide:
   - toc
+  - footer
 ---
-# 🧭 Ressources
+<div class="kw-mast">
+<div class="kw-mast__top"><span>{WEEKDAYS[today.weekday()].capitalize()} {fr_date(today)}</span><span class="kw-mast__count">{total} ressources · {len(themes)} thèmes</span></div>
+<h1 class="kw-mast__title">🧭 Ressources</h1>
+<p class="kw-mast__lead">Sites, outils, formations et lectures de référence, en complément des sources suivies par la veille.
+La Bibliothèque garde mes notes ; ici, les meilleures adresses des autres.</p>
+<div class="kw-mast__search">{res_filter("Chercher une ressource : un nom, un sujet, un site (Unit 42, Kerberos, CTF…)", "Chercher dans les ressources")}</div>
+<nav class="kw-mast__nav">{nav}</nav>
+</div>
+<p class="kw-an-label">Par type</p><div class="kw-subjects kw-types">{chips}</div>
 
-Sites, outils, formations et lectures de référence, en complément des sources suivies par la veille.
-{total} ressources, {len(themes)} thèmes.
+<div class="kw-rs-results" hidden>
+<p class="kw-rs-count kw-muted"></p>
+<div class="kw-chapter__grid kw-rs-list">{hits}</div>
+</div>
 
-{resources_carousel(themes, src)}
-{body}"""
+<div class="kw-rs-browse">
+{doms}</div>
+"""
 
 
 def resources_carousel(themes, src):

@@ -76,6 +76,7 @@ extra_javascript:
   - javascripts/nav-lazy.js            # flèche du menu : déroule sur place sans changer de page
   - javascripts/cheatsheets.js         # cheat sheets : filtre des besoins
   - javascripts/analyses.js            # analyses : filtre et sujets
+  - javascripts/ressources.js          # ressources : recherche dédiée et types
   - javascripts/images-zoom.js         # images des notes : agrandissement au clic
 
 plugins:
