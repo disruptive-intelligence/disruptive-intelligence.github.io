@@ -168,7 +168,8 @@ def load_content(docs_dir):
             it = dict(src=src, title=str(meta.get("title", f.stem)), date=d, theme=meta.get("theme"),
                       themes=list(meta.get("themes") or []), author=meta.get("author"), body=body,
                       kind=kind, events=[str(e) for e in meta.get("events") or []],
-                      tags=[str(x) for x in meta.get("tags") or []])
+                      tags=[str(x) for x in meta.get("tags") or []],
+                      rubriques=[str(x) for x in meta.get("rubriques") or []])
             if kind == "veille":
                 it["headlines"] = [re.sub(r"\s+", " ", h).strip() for h in re.findall(r"^### ▸ (.+)$", body, re.M)]
                 ess = re.search(r"^!!! abstract \"L'essentiel\"\s*\n\n((?: {4}[-*] .+\n?)+)", body, re.M)
@@ -495,6 +496,8 @@ Les éditions du **Morning Intelligence Brief** : les événements retenus, leur
 """
 
 
+ALL_ANALYSES_SRC = "analyses/toutes/index.md"   # toutes les analyses, ordre chronologique
+
 THEME_LEAD = {
     "ia": "Modèles, agents et course à la frontière : capacités, risques, sécurité et gouvernance de l'IA.",
     "cyber": "Incidents, menaces, renseignement et défense : ce que disent les rapports et la recherche.",
@@ -505,6 +508,201 @@ THEME_LEAD = {
 
 def plural(n, word):
     return f"{n} {word}{'s' if n > 1 else ''}"
+
+
+# ---------------------------------------------------------------- rubriques des analyses et dossiers
+
+# Six grandes rubriques au même rang (les quatre thèmes + Renseignement & OSINT, Criminalité, justice & droit),
+# chacune déclinée en sous-rubriques : data/rubriques.yml.
+RUB = {"by_id": {}, "sections": [], "by_sec": {}}
+
+
+def load_rubriques(root, items):
+    """Charge les rubriques et range chaque analyse ou dossier : sous-rubriques du front matter (`rubriques`),
+    sinon de la table `classement` ; la première fixe la grande rubrique (`section`), sinon le thème.
+    Un identifiant inconnu est ignoré (jamais bloquant)."""
+    data = load_yaml(root / "data" / "rubriques.yml", {}) or {}
+    sections, by_id = [], {}
+    for sd in data.get("sections") or []:
+        key = str(sd["id"])
+        sec = {"id": key, "label": sd.get("label") or THEMES.get(key, key), "lead": sd.get("lead") or THEME_LEAD.get(key, ""),
+               "src": f"analyses/theme-{key}/index.md", "rubriques": []}
+        for r in sd.get("rubriques") or []:
+            r = dict(r, section=key, src=f"analyses/rubrique-{r['id']}/index.md")
+            by_id[r["id"]] = r
+            sec["rubriques"].append(r)
+        sections.append(sec)
+    for key in THEMES:                                   # un thème absent du fichier reste une rubrique
+        if not any(sec["id"] == key for sec in sections):
+            sections.append({"id": key, "label": THEMES[key], "lead": THEME_LEAD.get(key, ""),
+                             "src": f"analyses/theme-{key}/index.md", "rubriques": []})
+    RUB.update(by_id=by_id, sections=sections, by_sec={sec["id"]: sec for sec in sections})
+    table = data.get("classement") or {}
+    for it in items["analysis"] + items["dossier"]:
+        ids = it.get("rubriques") or table.get(Path(it["src"]).stem) or []
+        it["rubriques"] = [str(i) for i in ids if str(i) in by_id]
+        first = by_id[it["rubriques"][0]] if it["rubriques"] else None
+        it["section"] = first["section"] if first else (it.get("theme") or (it.get("themes") or ["ia"])[0])
+
+
+def section_label(it):
+    sec = RUB["by_sec"].get(it.get("section") or it.get("theme"))
+    return sec["label"] if sec else THEMES.get(it.get("theme"), "")
+
+
+def kicker(it):
+    """Surtitre d'une analyse : sa sous-rubrique principale, sinon sa grande rubrique."""
+    if it.get("rubriques"):
+        return RUB["by_id"][it["rubriques"][0]]["label"]
+    return bare(section_label(it))
+
+
+def rub_items(rid, lst):
+    return [it for it in lst if rid in it.get("rubriques", [])]
+
+
+def section_items(key, lst):
+    return [it for it in lst if it.get("section") == key]
+
+
+def section_crossings(key, lst):
+    """Analyses rangées ailleurs mais classées aussi dans une sous-rubrique de cette rubrique."""
+    own = {r["id"] for r in RUB["by_sec"][key]["rubriques"]}
+    return [it for it in lst if it.get("section") != key and own & set(it.get("rubriques", []))]
+
+
+def subnav(sec, analyses, src, show_empty=False):
+    """Sous-rubriques en ligne de texte, à la manière d'un menu de section de journal."""
+    links = []
+    for r in sec["rubriques"]:
+        n = len(rub_items(r["id"], analyses))
+        if n:
+            links.append(f'<a href="{href(src, r["src"])}">{esc(r["label"])}<sup>{n}</sup></a>')
+        elif show_empty:
+            links.append(f'<span class="kw-subnav__empty" title="Rubrique à venir">{esc(r["label"])}</span>')
+    return f'<nav class="kw-subnav">{"".join(links)}</nav>' if links else ""
+
+
+def rub_group(num, title, lead, lst, src):
+    """Un groupe d'une page de rubrique : intitulé, phrase, puis ses analyses."""
+    head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{num:02d}</span>\n\n## {title}\n\n'
+            + (f'<p class="kw-chapter__text">{esc(lead)}</p>\n' if lead else "")
+            + f'<span class="kw-chapter__meta">{plural(len(lst), "analyse")}</span>\n</header>\n')
+    grid = '<div class="kw-chapter__grid">' + "".join(analysis_item(it, src) for it in lst) + "</div>\n"
+    return f'\n<article class="kw-chapter" markdown>\n{head}{grid}</article>\n'
+
+
+def page_section(sec, items):
+    """Page d'une grande rubrique : menu des sous-rubriques, puis ses analyses groupées par sous-rubrique,
+    enfin les croisements (analyses rangées ailleurs qui touchent aussi au sujet)."""
+    src = sec["src"]
+    analyses = items["analysis"]
+    mine = section_items(sec["id"], analyses)
+    cross = section_crossings(sec["id"], analyses)
+    groups, placed = [], set()
+    for r in sec["rubriques"]:
+        lst = [it for it in mine if it["rubriques"] and it["rubriques"][0] == r["id"]]
+        placed.update(id(it) for it in lst)
+        if lst:
+            groups.append((f"[{esc(r['label'])}]({posixpath.relpath(r['src'], posixpath.dirname(src))})", r.get("lead", ""), lst))
+    rest = [it for it in mine if id(it) not in placed]
+    if rest:
+        groups.append(("Autres analyses", "", rest))
+    if cross:
+        groups.append(("Croisements", "Analyses rangées dans une autre rubrique qui éclairent aussi celle-ci.", cross))
+    sections = "".join(rub_group(i, t, l, lst, src) for i, (t, l, lst) in enumerate(groups, 1))
+    stats = plural(len(mine), "analyse") + (f" · {len(cross)} en croisement" if cross else "")
+    if mine:
+        stats += f" · {duration(sum(it['minutes'] for it in mine))} de lecture · dernière le {fr_date(mine[0]['date'])}"
+    lst = mine + cross
+    return src, f"""---
+title: "{bare(sec['label'])}"
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero kw-dom-hero--cat" markdown>
+<span class="kw-eyebrow">[Analyses](../index.md)</span>
+
+# {sec['label']}
+
+<p class="kw-dom-lead">{esc(sec["lead"])}</p>
+<span class="kw-dom-stats">{stats}</span>
+</div>
+
+{subnav(sec, lst, src, show_empty=True)}
+
+{analyses_filter("Filtrer : un mot, un auteur, un sujet…")}
+{type_chips(lst)}{tag_chips(lst, 12)}
+
+<div class="kw-an-list" markdown>
+{sections or '<p class="kw-muted">Aucune analyse pour l&#39;instant : la rubrique est suivie dans la veille.</p>'}
+</div>
+"""
+
+
+def page_rubrique(r, items):
+    """Page d'une sous-rubrique : ses analyses (filtre, natures, sujets) puis ses dossiers."""
+    src = r["src"]
+    sec = RUB["by_sec"][r["section"]]
+    lst = rub_items(r["id"], items["analysis"])
+    dossiers = rub_items(r["id"], items["dossier"])
+    stats = plural(len(lst), "analyse") + (f" · {plural(len(dossiers), 'dossier')}" if dossiers else "")
+    if lst:
+        stats += f" · {duration(sum(it['minutes'] for it in lst))} de lecture · dernière le {fr_date(lst[0]['date'])}"
+    body = (f'{analyses_filter("Filtrer : un mot, un auteur, un sujet…")}\n{type_chips(lst)}{tag_chips(lst, 12)}\n\n'
+            f'<div class="kw-chapter__grid kw-chapter__grid--solo kw-an-list">{"".join(analysis_item(it, src) for it in lst)}</div>\n'
+            if lst else '<p class="kw-muted">Aucune analyse pour l\'instant dans cette rubrique : elle est suivie dans la veille.</p>\n')
+    if dossiers:
+        body += "\n" + section_bar("Dossiers") + dossier_cards(items, src, dossiers)
+    return src, f"""---
+title: "{bare(r['label'])}"
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero kw-dom-hero--cat" markdown>
+<span class="kw-eyebrow">[Analyses](../index.md) · [{esc(bare(sec['label']))}](../theme-{sec['id']}/index.md)</span>
+
+# {r['label']}
+
+<p class="kw-dom-lead">{esc(r.get("lead", ""))}</p>
+<span class="kw-dom-stats">{stats}</span>
+</div>
+
+{body}"""
+
+
+def page_all_analyses(items):
+    """Toutes les analyses, de la plus récente à la plus ancienne, groupées par mois."""
+    src = ALL_ANALYSES_SRC
+    analyses = items["analysis"]
+    months = {}
+    for it in analyses:
+        months.setdefault(f"{MOIS[it['date'].month - 1].capitalize()} {it['date'].year}", []).append(it)
+    groups = "".join(rub_group(i, esc(m), "", lst, src) for i, (m, lst) in enumerate(months.items(), 1))
+    return src, f"""---
+title: Toutes les analyses
+hide:
+  - toc
+  - footer
+---
+<div class="kw-dom-hero kw-dom-hero--cat" markdown>
+<span class="kw-eyebrow">[Analyses](../index.md)</span>
+
+# 🗓️ Toutes les analyses
+
+<p class="kw-dom-lead">Toutes les analyses publiées, de la plus récente à la plus ancienne.</p>
+<span class="kw-dom-stats">{plural(len(analyses), "analyse")} · {duration(sum(it["minutes"] for it in analyses))} de lecture</span>
+</div>
+
+{analyses_filter("Filtrer : un mot, un auteur, un sujet…")}
+{type_chips(analyses)}
+
+<div class="kw-an-list" markdown>
+{groups}
+</div>
+"""
 
 
 def analysis_who(it):
@@ -541,28 +739,17 @@ def type_chips(analyses):
 
 
 def analysis_item(it, src):
-    """Une analyse dans une grille : titre, thèse, auteur · date · durée ; data-search pour le filtre."""
+    """Une analyse dans une grille : rubrique, titre, thèse, auteur · date · durée ; data-search pour le filtre."""
     thesis = it["summary"] if len(it["summary"]) <= 170 else it["summary"][:170].rsplit(" ", 1)[0] + " …"
+    rubs = " ".join(RUB["by_id"][r]["label"] for r in it.get("rubriques", []) if r in RUB["by_id"])
     search = " ".join([clean_title(it["title"]), it["summary"], analysis_who(it), it.get("organization", ""),
-                       THEMES.get(it["theme"], "")] + it["tags"]).lower()
+                       THEMES.get(it["theme"], ""), section_label(it), rubs] + it["tags"]).lower()
     tag = meta_line(doc_type_label(it), analysis_who(it), f'{it["date"].day} {short_month(it["date"])} {it["date"].year}',
                     f'{it["minutes"]} min')
     return (f'<div class="kw-tuto" data-search="{esc(search)}" data-type="{esc(it.get("doc_type", ""))}">'
+            f'<span class="kw-tuto__kicker">{esc(kicker(it))}</span>'
             f'<a class="kw-tuto__title" href="{href(src, it["src"])}">{esc(clean_title(it["title"]))}</a>'
             f'<span class="kw-tuto__text">{esc(thesis)}</span><span class="kw-tuto__tag">{tag}</span></div>')
-
-
-def analysis_chapter(num, key, lst, src, link=True):
-    label = THEMES[key]
-    title = f"[{esc(label)}]({posixpath.relpath(f'analyses/theme-{key}/index.md', posixpath.dirname(src))})" if link else esc(label)
-    minutes = sum(it["minutes"] for it in lst)
-    meta = plural(len(lst), "analyse") + (f" · {duration(minutes)} de lecture" if minutes else "")
-    head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{num:02d}</span>\n\n## {title}\n\n'
-            f'<p class="kw-chapter__text">{esc(THEME_LEAD.get(key, ""))}</p>\n<span class="kw-chapter__meta">{meta}</span>\n</header>\n')
-    grid = ('<div class="kw-chapter__grid">' + "".join(analysis_item(it, src) for it in lst) + "</div>\n" if lst
-            else '<div class="kw-chapter__grid"><span class="kw-muted">Aucune analyse pour l\'instant : le thème est '
-                 "suivi dans la veille.</span></div>\n")
-    return f'\n<article class="kw-chapter" markdown>\n{head}{grid}</article>\n'
 
 
 def tag_chips(analyses, limit=12):
@@ -579,62 +766,108 @@ def analyses_filter(placeholder):
             'aria-label="Filtrer les analyses">')
 
 
-def pages_analyses(items):
-    out, src = [], "analyses/index.md"
+def an_row(it, src, with_kicker=True):
+    """Une analyse en ligne (présentation du fil) : sous-rubrique, titre, thèse, nature · auteur · date · durée."""
+    thesis = it["summary"] if len(it["summary"]) <= 200 else it["summary"][:200].rsplit(" ", 1)[0] + " …"
+    mins = str(it["minutes"]) + " min"
+    first = it["rubriques"][0] if it.get("rubriques") else ""
+    return (f'<a class="kw-row" data-sub="{first}" href="{href(src, it["src"])}">'
+            + (f'<span class="kw-sec__kicker">{esc(kicker(it))}</span>' if with_kicker else "") +
+            f'<span class="kw-row__title">{esc(clean_title(it["title"]))}</span><span class="kw-sec__text">{esc(thesis)}</span>'
+            f'<span class="kw-sec__meta">{meta_line(doc_type_label(it), analysis_who(it), fr_date(it["date"]), mins)}</span></a>')
+
+
+def section_groups(sec, analyses):
+    """Analyses d'une rubrique groupées par sous-rubrique principale (sans sous-rubrique : à la fin)."""
+    mine = section_items(sec["id"], analyses)
+    groups = [(r, [it for it in mine if it["rubriques"] and it["rubriques"][0] == r["id"]]) for r in sec["rubriques"]]
+    groups = [(r, lst) for r, lst in groups if lst]
+    rest = [it for it in mine if not it["rubriques"]]
+    return groups + ([(None, rest)] if rest else [])
+
+
+def g_primary(sec, analyses):
+    """Analyses d'une rubrique et, pour chaque sous-rubrique, celles dont c'est la sous-rubrique principale."""
+    mine = section_items(sec["id"], analyses)
+    by_sub = {r["id"]: [it for it in mine if it["rubriques"] and it["rubriques"][0] == r["id"]] for r in sec["rubriques"]}
+    return mine, by_sub
+
+
+def g_more(sec, mine):
+    return (f'<button type="button" class="kw-som__more" data-open="{sec["id"]}">Déplier les {plural(len(mine), "analyse")} ↓</button>'
+            if mine else "")
+
+
+def g_panel(sec, analyses, src):
+    """La rubrique dépliée en pleine largeur : ses analyses en lignes, par sous-rubrique (ancres data-subanchor)."""
+    mine = section_items(sec["id"], analyses)
+    if not mine:
+        return ""
+    inner = "".join((f'<div class="kw-index__sub" data-subanchor="{r["id"]}"><a href="{href(src, r["src"])}">{esc(r["label"])}</a></div>'
+                     if r else '<div class="kw-index__sub">Autres analyses</div>')
+                    + "".join(an_row(it, src, False) for it in lst) for r, lst in section_groups(sec, analyses))
+    return (f'<div class="kw-som__panel" data-panel="{sec["id"]}" hidden><div class="kw-som__phead">'
+            f'<a class="kw-index__title" href="{href(src, sec["src"])}">{esc(sec["label"])}</a>'
+            f'<button type="button" class="kw-som__close">Replier ✕</button></div>{inner}</div>')
+
+
+def g_head(sec, src):
+    return (f'<a class="kw-som__title" href="{href(src, sec["src"])}">{esc(sec["label"])}</a>'
+            f'<span class="kw-som__lead">{esc(sec["lead"])}</span>')
+
+
+def home_rubriques(analyses, src):
+    """Les rubriques sur l'accueil des analyses : deux par ligne, chacune découpée en colonnes de sous-rubriques
+    (deux titres chacune). L'en-tête d'une sous-rubrique déplie la rubrique en pleine largeur directement sur elle ;
+    le bouton du bas la déplie en entier (analyses en lignes, par sous-rubrique)."""
+    cards = ""
+    for sec in RUB["sections"]:
+        mine, by_sub = g_primary(sec, analyses)
+        filled = [r for r in sec["rubriques"] if by_sub[r["id"]]]
+        empty = [r for r in sec["rubriques"] if not by_sub[r["id"]]]
+        colsub = "".join(f'<div class="kw-rg__col">'
+                         + f'<button type="button" class="kw-rg__label" data-open="{sec["id"]}" data-sub="{r["id"]}" '
+                           f'title="Déplier la rubrique sur cette sous-rubrique">{esc(r["label"])} <sup>{len(by_sub[r["id"]])}</sup></button>'
+                         + "".join(f'<a href="{href(src, it["src"])}"><span class="kw-som__t">{esc(clean_title(it["title"]))}</span>'
+                                   f'<span class="kw-som__d">{fr_date(it["date"])}</span></a>' for it in by_sub[r["id"]][:2])
+                         + "</div>" for r in filled)
+        cards += (f'<div class="kw-rg__card"><div class="kw-rg__head">{g_head(sec, src)}</div>'
+                  + (f'<div class="kw-rg__cols">{colsub}</div>' if colsub else '<p class="kw-som__empty">Rubrique à venir : suivie dans la veille.</p>')
+                  + (f'<span class="kw-rg__soon">À venir : {" · ".join(esc(r["label"]) for r in empty)}</span>' if empty else "")
+                  + g_more(sec, mine) + "</div>")
+    panels = "".join(g_panel(sec, analyses, src) for sec in RUB["sections"])
+    return (f'<div class="kw-gwrap"><div class="kw-rg">{cards}</div>'
+            f'<div class="kw-som__panels">{panels}</div></div>\n')
+
+
+def page_analyses_home(items):
+    src = "analyses/index.md"
     analyses = items["analysis"]
     minutes = sum(it["minutes"] for it in analyses)
-    used = [k for k in THEMES if any(it["theme"] == k for it in analyses)]
     last = analyses[0] if analyses else None
-    # une page par thème
-    for key, label in THEMES.items():
-        lst = [it for it in analyses if it["theme"] == key]
-        if not lst:
-            continue
-        tsrc = f"analyses/theme-{key}/index.md"
-        out.append((tsrc, f"""---
-title: "{bare(label)}"
-hide:
-  - toc
-  - footer
----
-<div class="kw-dom-hero kw-dom-hero--cat" markdown>
-<span class="kw-eyebrow">[Analyses](../index.md)</span>
-
-# {label}
-
-<p class="kw-dom-lead">{esc(THEME_LEAD.get(key, ""))}</p>
-<span class="kw-dom-stats">{plural(len(lst), "analyse")} · {duration(sum(it["minutes"] for it in lst))} de lecture · dernière le {fr_date(lst[0]["date"])}</span>
-</div>
-
-{analyses_filter("Filtrer : un mot, un auteur, un sujet…")}
-{type_chips(lst)}{tag_chips(lst, 12)}
-
-<div class="kw-chapter__grid kw-chapter__grid--solo kw-an-list">{"".join(analysis_item(it, tsrc) for it in lst)}</div>
-"""))
-    # accueil des analyses
-    nav = " ".join(f'<a href="#{slug(bare(THEMES[k]))}">{esc(bare(THEMES[k]))}</a>' for k in THEMES) + (
-        f' <a href="#dossiers">Dossiers</a>' if items["dossier"] else "")
+    nav = " ".join(f'<a href="{href(src, sec["src"])}">{esc(bare(sec["label"]))}</a>' for sec in RUB["sections"]) + (
+        f' <a href="{href(src, ALL_ANALYSES_SRC)}">Toutes les analyses</a>'
+        + (f' <a href="#dossiers">Dossiers</a>' if items["dossier"] else ""))
     une = ""
     if last:
         ess = "".join(f"<li>{esc(p)}</li>" for p in last.get("essentials") or [])
-        une = (section_bar("À la une")
+        une = (section_bar("À la une", more=("Toutes les analyses →", href(src, ALL_ANALYSES_SRC)))
                + '<div class="kw-une">'
-               f'<a class="kw-une__main" href="{href(src, last["src"])}"><span class="kw-tuto__tag">{esc(bare(THEMES.get(last["theme"], "")))} · '
+               f'<a class="kw-une__main" href="{href(src, last["src"])}"><span class="kw-tuto__tag">{esc(kicker(last))} · '
                f'{meta_line(doc_type_label(last), analysis_who(last))} · {last["minutes"]} min</span><span class="kw-une__title">{esc(clean_title(last["title"]))}</span>'
                f'<span class="kw-une__text">{esc(last["summary"])}</span>'
                + (f'<ol class="kw-une__points">{ess}</ol>' if ess else "")
                + f'<span class="kw-une__meta">Analyse du {fr_date(last["date"])} · Lire →</span></a>'
                '<div class="kw-une__side"><span class="kw-une__label">Analyses précédentes</span>'
                + "".join(f'<a class="kw-une__item" href="{href(src, it["src"])}"><span class="kw-une__date">'
-                         f'{fr_date(it["date"])} · {esc(bare(THEMES.get(it["theme"], "")))}</span>'
+                         f'{fr_date(it["date"])} · {esc(kicker(it))}</span>'
                          f'<span>{esc(clean_title(it["title"]))}</span></a>' for it in analyses[1:5])
                + "</div></div>\n")
-    chapters = "".join(analysis_chapter(i, key, [it for it in analyses if it["theme"] == key], src, key in used)
-                       for i, key in enumerate(THEMES, 1))
-    dossiers = section_bar("Les dossiers", anchor="dossiers", more=("Tous les dossiers →", href(src, "dossiers/index.md")))
-    dossiers += dossier_cards(items, src) if items["dossier"] else (
-        '<p class="kw-muted">Pas encore de dossier : un dossier croise plusieurs analyses pour mettre un sujet en perspective.</p>\n')
-    out.append((src, f"""---
+    results = "".join(analysis_item(it, src) for it in analyses)
+    dossiers = section_bar("Le dernier dossier", anchor="dossiers", more=("Tous les dossiers →", href(src, "dossiers/index.md")))
+    dossiers += dossier_cards(items, src, items["dossier"][:1]) if items["dossier"] else (
+        '<p class="kw-muted">Pas encore de dossier : un dossier croise plusieurs sources pour mettre un sujet en perspective.</p>\n')
+    return src, f"""---
 title: Analyses
 hide:
   - toc
@@ -647,12 +880,24 @@ hide:
 <div class="kw-mast__search">{analyses_filter("Filtrer les analyses : un mot, un auteur, un sujet (DGFiP, AGI, ANSSI…)")}</div>
 <nav class="kw-mast__nav">{nav}</nav>
 </div>
-{une}{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}
-{section_bar("Par thème")}
-<div class="kw-an-list" markdown>
-{chapters}
-</div>
-{dossiers}"""))
+<div class="kw-an-results" hidden><div class="kw-chapter__grid kw-chapter__grid--solo kw-an-list">{results}</div></div>
+<div class="kw-an-home">
+{une}
+{section_bar("Les rubriques")}{home_rubriques(analyses, src)}
+{dossiers}</div>
+{section_bar("Explorer")}<p class="kw-an-label">Par nature de document</p>{type_chips(analyses)}<p class="kw-an-label">Par sujet</p>{tag_chips(analyses)}"""
+
+
+def pages_analyses(items):
+    out = []
+    analyses = items["analysis"]
+    for sec in RUB["sections"]:
+        out.append(page_section(sec, items))
+    for r in RUB["by_id"].values():                       # sous-rubrique vide : pas de page
+        if rub_items(r["id"], analyses + items["dossier"]):
+            out.append(page_rubrique(r, items))
+    out.append(page_all_analyses(items))
+    out.append(page_analyses_home(items))
     return out
 
 
@@ -670,23 +915,49 @@ def related_analyses(src, items, limit=3):
     return near, dossiers
 
 
-def dossier_cards(items, src):
-    """Dossiers en cartes larges : thèmes, date, phrase, puis les analyses croisées, numérotées et cliquables."""
+def dossier_sources(body):
+    """Sources externes d'un dossier, lues dans « Sources de synthèse » : entrées **[S1]** … avec un lien web."""
+    m = re.search(r"^## Sources de synthèse\s*\n(.*?)(?=^## |\Z)", body, re.M | re.S)
+    out = []
+    for line in (m.group(1).splitlines() if m else []):
+        e = re.match(r"^- \*\*\[S\d+\]\*\*\s*(.*)$", line.strip())
+        link = e and re.search(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", e.group(1))
+        if not link:
+            continue
+        title = re.sub(r"[*`]", "", link.group(1)).strip()
+        out.append({"title": title[:1].upper() + title[1:], "url": link.group(2),
+                    "who": e.group(1)[:link.start()].strip().rstrip(",").strip()})
+    return out
+
+
+def dossier_cards(items, src, dossiers=None, limit=6):
+    """Dossiers en cartes larges : rubrique, date, phrase, puis ce qu'il croise : les sources en ligne
+    de son corpus quand il en a, sinon les analyses du site qu'il cite."""
     by_slug = {Path(it["src"]).stem: it for it in items["analysis"]}
     out = ""
-    for d in items["dossier"]:
-        cited = [by_slug[s] for s in d.get("cites", []) if s in by_slug]
-        steps = "".join(f'<li><a href="{href(src, c["src"])}">{esc(clean_title(c["title"]))}</a>'
-                        f'<span class="kw-note-meta">{esc(doc_type_label(c) or analysis_who(c))}</span></li>' for c in cited)
+    for d in items["dossier"] if dossiers is None else dossiers:
+        sources = dossier_sources(d.get("body", ""))
+        if sources:
+            label, count = "Les sources croisées", plural(len(sources), "source")
+            steps = "".join(f'<li><a href="{esc(x["url"])}" rel="noopener">{esc(x["title"])}</a>'
+                            + (f'<span class="kw-note-meta">{esc(x["who"])}</span>' if x["who"] else "") + "</li>"
+                            for x in sources[:limit])
+            if len(sources) > limit:
+                steps += f'<li class="kw-muted">et {plural(len(sources) - limit, "autre source")}</li>'
+        else:
+            cited = [by_slug[x] for x in d.get("cites", []) if x in by_slug]
+            label, count = "Les analyses croisées", plural(len(cited), "analyse") if cited else ""
+            steps = "".join(f'<li><a href="{href(src, c["src"])}">{esc(clean_title(c["title"]))}</a>'
+                            f'<span class="kw-note-meta">{esc(doc_type_label(c) or analysis_who(c))}</span></li>' for c in cited)
         out += (f'<div class="kw-dossier-card"><div class="kw-dossier-card__head">'
-                f'<span class="kw-ed__label">Dossier · {esc(themes_label(d))}</span>'
+                f'<span class="kw-ed__label">Dossier · {esc(section_label(d) or themes_label(d))}</span>'
                 f'<a class="kw-dossier-card__title" href="{href(src, d["src"])}">{esc(d["title"])}</a>'
-                f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser les analyses pour mettre les enjeux en perspective.")}</span>'
+                f'<span class="kw-card__text">{esc(d.get("summary") or "Croiser plusieurs sources pour mettre les enjeux en perspective.")}</span>'
                 f'<span class="kw-dom-stats">{fr_date(d["date"])} · {d.get("minutes", 0)} min de lecture'
-                + (f" · croise {plural(len(cited), 'analyse')}" if cited else "") + "</span>"
+                + (f" · croise {count}" if count else "") + "</span>"
                 f'<a class="kw-domblock__cta" href="{href(src, d["src"])}">Lire le dossier →</a></div>'
-                + (f'<div class="kw-dossier-card__cites"><span class="kw-une__label">Les analyses croisées</span>'
-                   f'<ol class="kw-course__steps">{steps}</ol></div>' if cited else "") + "</div>")
+                + (f'<div class="kw-dossier-card__cites"><span class="kw-une__label">{label}</span>'
+                   f'<ol class="kw-course__steps">{steps}</ol></div>' if steps else "") + "</div>")
     return f'<div class="kw-dossiers">{out}</div>\n'
 
 
@@ -1414,7 +1685,8 @@ def decorate_document(markdown, page):
     d = meta.get("date")
     d = d if isinstance(d, date) else date.fromisoformat(str(d))
     if kind == "analysis":
-        label = "Analyse · " + THEMES.get(meta.get("theme"), "") + (
+        doc0 = next((it for it in STATE.get("items", {}).get("analysis", []) if it["src"] == page.file.src_uri), {})
+        label = "Analyse · " + (section_label(doc0) if doc0 else THEMES.get(meta.get("theme"), "")) + (
             f" · {doc_type_label({'doc_type': str(meta['document_type'])})}" if meta.get("document_type") else "")
         who = meta_line(meta.get("author"), meta.get("organization"))
     else:
@@ -1435,6 +1707,13 @@ def decorate_document(markdown, page):
                           f'({m["date"].day} {short_month(m["date"])})</a>')
     if follow:
         head = head.replace("</div>\n", f'<span class="kw-doc-head__follow">Dans la veille : {" · ".join(follow)}</span></div>\n', 1)
+    doc = next((it for it in STATE.get("items", {}).get("dossier" if kind == "dossier" else "analysis", [])
+                if it["src"] == page.file.src_uri), None)
+    rubs = [RUB["by_id"][r] for r in (doc or {}).get("rubriques", []) if r in RUB["by_id"]]
+    if rubs:
+        here = page.file.src_uri
+        head = head.replace("</div>\n", '<span class="kw-doc-head__follow">Rubriques : ' + " · ".join(
+            f'<a href="{href(here, r["src"])}">{esc(bare(r["label"]))}</a>' for r in rubs) + "</span></div>\n", 1)
     rubrics = library_matches(meta.get("title", ""), meta.get("tags") or [])
     if rubrics:
         here = page.file.src_uri
@@ -1510,12 +1789,19 @@ def build_nav(items, themes, threads=None):
     if months:
         veille.append({"🗄️ Archives": [{m: lst} for m, lst in months.items()]})
 
-    analyses = ["analyses/index.md"]
-    for key, label in THEMES.items():
-        lst = [it for it in items["analysis"] if it["theme"] == key]
-        if lst:
-            analyses.append({label: [f"analyses/theme-{key}/index.md"]
-                             + [{clean_title(it["title"]): it["src"]} for it in lst]})
+    analyses = ["analyses/index.md", {"🗓️ Toutes les analyses": ALL_ANALYSES_SRC}]
+    for sec in RUB["sections"]:
+        mine = section_items(sec["id"], items["analysis"])
+        children, placed = [sec["src"]], set()
+        for r in sec["rubriques"]:                       # sous-rubriques : leurs analyses principales
+            lst = [it for it in mine if it["rubriques"] and it["rubriques"][0] == r["id"]]
+            placed.update(id(it) for it in lst)
+            if lst:
+                children.append({r["label"]: [r["src"]] + [{clean_title(it["title"]): it["src"]} for it in lst]})
+            elif rub_items(r["id"], items["analysis"] + items["dossier"]):
+                children.append({r["label"]: r["src"]})
+        children += [{clean_title(it["title"]): it["src"]} for it in mine if id(it) not in placed]
+        analyses.append({sec["label"]: children if len(children) > 1 else sec["src"]})   # rubrique vide : un simple lien
 
     # Dossiers : dans l'onglet Analyses, après les thèmes (moins fréquents que les analyses)
     analyses.append({"🗂️ Dossiers": ["dossiers/index.md"] + [{it["title"]: it["src"]} for it in items["dossier"]]})
@@ -3003,6 +3289,7 @@ def on_config(config):
         if s["event"]:
             STATE["mentions"].setdefault(s["event"], []).append(s)
     STATE["items"] = items
+    load_rubriques(root, items)
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
     link_formats(library)
     STATE["library"] = library

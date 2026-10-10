@@ -1,0 +1,113 @@
+# Rubriques des analyses et des dossiers, façon sections d'un journal.
+#
+# Six grandes rubriques, toutes au même rang : les quatre thèmes du contrat partagé avec veille-agent
+# (ia | cyber | tech | geo-ie, libellés repris du portail si absents) et deux rubriques propres au site.
+# Chacune se décline en sous-rubriques.
+#
+# Une analyse ou un dossier reçoit ses sous-rubriques par le champ `rubriques` de son front matter
+# (liste d'identifiants), à défaut par la table `classement` en fin de fichier. La PREMIÈRE sous-rubrique
+# fixe la grande rubrique où l'analyse est rangée ; les suivantes la font aussi apparaître ailleurs
+# (« Croisements »). Sans sous-rubrique, l'analyse est rangée dans son thème. Un identifiant inconnu est
+# ignoré, jamais bloquant.
+
+sections:
+- id: ia
+  rubriques:
+  - id: ia-modeles-capacites
+    label: Modèles & capacités
+    lead: Ce que savent faire les modèles, ce qu'on mesure et ce qu'on ignore encore de leur fonctionnement.
+  - id: ia-agents
+    label: Agents
+    lead: Systèmes qui agissent, outils, autonomie et collectifs d'agents.
+  - id: ia-frontiere
+    label: Frontière & trajectoires
+    lead: AGI, superintelligence, automatisation de la recherche et course à la frontière.
+  - id: ia-risques-surete
+    label: Risques, sûreté & sécurité
+    lead: Alignement, coopération, perte de contrôle et sécurisation des systèmes d'IA.
+  - id: ia-gouvernance
+    label: Gouvernance & régulation
+    lead: Règles, institutions et choix politiques qui encadrent le développement de l'IA.
+- id: cyber
+  label: 🛡️ CTI
+  lead: "Cyber Threat Intelligence : acteurs, modes opératoires, état de la menace et incidents documentés."
+  rubriques:
+  - id: cyber-menaces-cti
+    label: Menaces & CTI
+    lead: Acteurs, modes opératoires, écosystèmes criminels et état de la menace (Cyber Threat Intelligence).
+  - id: cyber-incidents
+    label: Incidents & fuites
+    lead: Attaques et fuites documentées, ce qu'elles révèlent des défaillances.
+- id: renseignement
+  label: 🔎 Renseignement & OSINT
+  lead: Collecte et analyse en sources ouvertes, et protection face à cette collecte (OPSEC).
+  rubriques:
+  - id: rens-osint
+    label: OSINT & SOCMINT
+    lead: Méthodes et outils du renseignement en sources ouvertes et sur les réseaux sociaux.
+  - id: rens-opsec
+    label: OPSEC
+    lead: "Protéger personnes, unités, données et opérations face à la collecte adverse : identité, biométrie, technologies de confidentialité."
+- id: justice
+  label: ⚖️ Criminalité, justice & droit
+  lead: Criminalité numérique, enquête et preuve, cadre juridique.
+  rubriques:
+  - id: justice-criminalite
+    label: Criminalité numérique
+    lead: Formes, acteurs et économie de la criminalité en ligne.
+  - id: justice-enquete
+    label: Enquête & preuve
+    lead: Investigation, preuve numérique et coopération judiciaire.
+  - id: justice-droit
+    label: Droit & régulation
+    lead: Textes, jurisprudence et libertés publiques.
+- id: tech
+  rubriques:
+  - id: tech-semi-conducteurs
+    label: Semi-conducteurs
+    lead: Puces, fonderies, chaînes d'approvisionnement et contrôles à l'export.
+  - id: tech-quantique
+    label: Quantique
+    lead: Calcul, communications et cryptographie post-quantiques.
+  - id: tech-spatial
+    label: Spatial
+    lead: Constellations, lanceurs, observation et usages militaires de l'espace.
+  - id: tech-infrastructures
+    label: Infrastructures & réseaux
+    lead: Câbles, cloud, centres de données, énergie et dépendances critiques.
+  - id: tech-emergentes
+    label: Technologies émergentes
+    lead: Technologies de rupture et de confidentialité, robotique, drones, biotechnologies.
+- id: geo-ie
+  rubriques:
+  - id: geo-influence
+    label: Influence & guerre cognitive
+    lead: Manipulation de l'information, ingérences et conflits de perception.
+  - id: geo-souverainete
+    label: Souveraineté & puissance
+    lead: Dépendances, autonomie stratégique et rapports de force technologiques.
+  - id: geo-intelligence-economique
+    label: Intelligence économique
+    lead: Protection et conquête des positions économiques, sécurité économique et normes.
+
+classement:
+  commission-europeenne-jrc-et-europol-prospective-des-technologies-de-confidentialite: [rens-opsec, cyber-menaces-cti, justice-enquete]
+  criminologie-et-cybersecurite-continuum-crime-securite: [justice-criminalite, cyber-menaces-cti]
+  dark-web-et-renseignement-sur-la-menace: [cyber-menaces-cti, rens-osint]
+  europol-rapport-iocta-2026-sur-l-industrialisation-de-la-cybercriminalite: [cyber-menaces-cti, justice-criminalite]
+  from-agi-to-asi: [ia-frontiere]
+  fuites-de-donnees-dans-l-etat-ce-que-revele-le-premier-bilan-de-reactiv: [cyber-incidents]
+  guerre-cognitive-et-guerre-cognitique-analyse-critique-du-rapport-de-patrice-cardot: [geo-influence]
+  ia-enquete-penale-et-vie-privee-inde-union-europeenne: [justice-enquete, ia-gouvernance]
+  introduction-to-social-media-intelligence-socmint: [rens-osint, geo-influence]
+  iris-souverainete-numerique-du-mot-d-ordre-a-la-methode: [geo-souverainete]
+  menaces-cyber-en-europe-le-bruit-des-ddos-le-poids-des-dependances: [cyber-menaces-cti]
+  piratage-de-la-dgfip-identifiants-voles-reseau-ouvert-supervision-aveugle: [cyber-incidents]
+  recommandations-de-securite-pour-un-systeme-dia-generative: [ia-risques-surete]
+  reconnaissance-faciale-partielle-un-angle-mort-de-lopsec-des-forces-de-securite: [rens-opsec, rens-osint]
+  solipsistic-superintelligence-is-unlikely-to-be-cooperative: [ia-risques-surete]
+  the-rise-and-fall-of-agent-civilizations: [ia-agents, ia-risques-surete]
+  une-direction-de-la-douleur-dans-les-llm-resultats-solides-interpretation-ouverte: [ia-modeles-capacites]
+  we-must-pace-the-frontier: [ia-gouvernance, ia-frontiere]
+  autonomie-des-systemes-dia-risques-et-mecanismes-de-controle: [ia-agents, ia-risques-surete]
+  le-test-deinstein-une-ia-peut-elle-redecouvrir-la-relativite: [ia-frontiere, ia-modeles-capacites]
