@@ -1,5 +1,5 @@
 ---
-title: "Europol : Terrorisme dans l'UE en 2025, moins d'attaques recensées mais une menace plus diffuse"
+title: "Europol : terrorisme dans l'UE en 2025, moins d'attaques recensées mais une menace plus diffuse"
 date: 2026-10-11
 kind: analysis
 theme: "geo-ie"
@@ -19,7 +19,7 @@ tags:
   - "Europol"
 ---
 
-# Europol : Terrorisme dans l'UE en 2025, moins d'attaques recensées mais une menace plus diffuse
+# Europol : terrorisme dans l'UE en 2025, moins d'attaques recensées mais une menace plus diffuse
 
 ## Métadonnées
 
@@ -162,6 +162,7 @@ Recherches effectuées le **2026-10-11**. Les constats ci-dessous proviennent de
 
 Le TE-SAT privilégie la photographie policière européenne. D'autres travaux précisent ce que l'on peut inférer des parcours de mineurs, des espaces en ligne et des interventions publiques, sans fournir une mesure indépendante de toutes les attaques non détectées.
 
+- **La France vue par son parquet antiterroriste.** Dans un [entretien publié par l'École nationale de la magistrature](https://www.enm.justice.fr/mineurs-mis-en-examen-infraction-terroriste-pnat) vers juin 2026, le procureur antiterroriste Olivier Christen dresse le bilan 2025 du PNAT : **trois attentats déjoués**, une attaque mortelle à Puget-sur-Argens le **31 mai 2025**, une menace djihadiste qui représente **88 %** des procédures suivies, et **22 mineurs** mis en examen pour une infraction terroriste, soit **20 %** des personnes mises en examen et le tiers des procédures ouvertes dans l'année. Ces chiffres confirment, pour la France, le rajeunissement que décrit le TE-SAT. Ils montrent aussi qu'on ne compte pas la même chose selon la source : la France déclare **14 attaques** à Europol pour 2025, toutes catégories et issues confondues, quand le PNAT parle de trois attentats déjoués dans son propre périmètre de saisine. Les deux séries ne sont ni additionnables ni contradictoires.
 - **Prévention des mineurs.** [AIVD — « A web of hate »](https://english.aivd.nl/documents/2025/04/03/a-web-of-hate), **3 avril 2025**, décrit aux Pays-Bas des mineurs actifs dans des milieux djihadistes et d'extrême droite en ligne. [Le pôle européen de prévention de la radicalisation — conclusions sur les mineurs](https://home-affairs.ec.europa.eu/whats-new/publications/conclusions-paper-preventing-radicalisation-among-minors_en), **11 décembre 2025**, insiste sur l'interaction de vulnérabilités personnelles, de réseaux et d'exploitation numérique : l'exposition en ligne ne suffit pas à elle seule à prédire un passage à l'acte.
 - **Action sur les écosystèmes violents.** [Europol — Project COMPASS](https://www.europol.europa.eu/how-we-work/operations/project-compass), résultats annoncés le **26 février 2026** puis opération signalée le **24 juillet 2026**, combine enquêtes, coopération entre unités antiterroristes, lutte contre l'exploitation des mineurs et prévention. Ce périmètre transversal confirme l'utilité opérationnelle du sujet *The Com*, sans rendre tous les actes du réseau terroristes.
 - **Politique européenne.** [Commission européenne — « ProtectEU: Agenda to prevent and counter terrorism »](https://home-affairs.ec.europa.eu/news/protecteu-commission-presents-new-counterterrorism-agenda-2026-02-26_en), **26 février 2026**, propose prévention, sécurité en ligne, recherche technologique, coopération judiciaire et financière. Ces mesures sont des **propositions de politique publique**, pas des preuves d'efficacité déjà mesurée.

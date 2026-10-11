@@ -1,5 +1,5 @@
 ---
-title: "Europol : Réseaux criminels en Europe : opportunisme systémique et limites du démantèlement"
+title: "Europol : réseaux criminels en Europe, opportunisme systémique et limites du démantèlement"
 date: 2026-10-11
 kind: analysis
 theme: "geo-ie"
@@ -19,7 +19,7 @@ tags:
   - "Europol"
 ---
 
-# Europol : Réseaux criminels en Europe : opportunisme systémique et limites du démantèlement
+# Europol : réseaux criminels en Europe, opportunisme systémique et limites du démantèlement
 
 ## Métadonnées
 
@@ -154,6 +154,7 @@ Recherches effectuées le 2026-10-11. Les éléments suivants proviennent de sou
 
 - **Origine du dispositif.** [Europol — « Decoding the EU's most threatening criminal networks »](https://www.europol.europa.eu/publication-events/main-reports/decoding-eus-most-threatening-criminal-networks), avril 2024, établit la première cartographie et la grille ABCD. La deuxième édition compare des réseaux retenus à deux dates plutôt qu'une cohorte suivie dans un cadre statistique public entièrement stabilisé.
 - **Mandat et comparabilité.** [Conseil de l'UE — Conclusions sur la cartographie des réseaux criminels les plus menaçants](https://data.consilium.europa.eu/doc/document/ST-11153-2024-INIT/en/pdf), 14 juin 2024, demande une actualisation biennale, des investigations financières et le développement de méthodes et d'une définition commune pour mieux comparer les menaces. Le besoin d'harmonisation était donc reconnu avant le rapport 2026.
+- **Évaluation stratégique de référence.** L'[EU-SOCTA 2025 d'Europol, *The changing DNA of serious and organised crime*](https://www.europol.europa.eu/publication-events/main-reports/changing-dna-of-serious-and-organised-crime), mars 2025, est l'évaluation quadriennale qui fixe les priorités européennes de lutte contre la criminalité organisée. Elle annonçait déjà les thèmes que la cartographie de 2026 décline réseau par réseau : criminalité de plus en plus en ligne, accélérée par l'IA, recours à des services criminels et à de jeunes exécutants, et usage de réseaux criminels comme relais par des acteurs étatiques hostiles. Le rapport de 2026 en est la mise à l'épreuve sur un échantillon de réseaux ; il ne constitue pas une source indépendante de cette évaluation, puisque les deux documents proviennent de la même agence.
 
 ### Compléments sur le sujet
 

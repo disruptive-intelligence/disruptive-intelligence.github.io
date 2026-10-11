@@ -196,6 +196,7 @@ Le principal changement observable après le **12 septembre 2026** est daté : l
 
 - [Le Grand Continent — traduction commentée](https://legrandcontinent.eu/fr/2026/09/12/dario-amodei-appelle-a-ralentir-le-developpement-de-lia-texte-integral/), **12 septembre 2026** : retrouver les notes éditoriales et leurs liens, absents du fichier textuel.
 - [Dario Amodei — essai anglais original](https://darioamodei.com/post/we-must-pace-the-frontier), **septembre 2026** : comparer directement les engagements revendiqués et leur formulation originale.
+- [Analyse du site — *We Must Pace the Frontier*](../analyses/we-must-pace-the-frontier.md) : lecture du texte anglais intégral, sans l'appareil éditorial du Grand Continent.
 - [METR et Redwood Research — enquête OAI-HF](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/), **26 août 2026** : examiner résultats, périmètre et limites de l'investigation indépendante.
 - [Brundage et collègues — *Frontier AI Auditing*](https://arxiv.org/abs/2601.11699), **janvier-février 2026** : évaluer les conditions méthodologiques d'un audit approfondi.
 - [Anthropic — partenariat d'évaluation intégrée avec Accenture](https://www.anthropic.com/news/accenture-embedded-evaluation), **18 septembre 2026** : suivre l'exécution du premier volet annoncé.

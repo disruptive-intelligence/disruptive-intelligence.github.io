@@ -6,6 +6,7 @@ theme: "ia"
 slug: "ia-et-criminalistique-numerique-usages-specialises-agi-hypothetique-et-exigences-de-preuve"
 author: "Eyric Phillyp Williams"
 organization: "Middle Georgia State University"
+document_type: "preprint"
 source_file: "inbox/2026_Williams_0914103857.pdf"
 source_url: "https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf"
 rubriques:
@@ -168,6 +169,7 @@ La date exacte de diffusion du travail de Williams n'est pas établie ; la créa
 ### Cadre juridique et éthique
 
 - **États-Unis, témoignage d'expert.** La [Federal Rule of Evidence 702, texte et amendement de 2023](https://www.govinfo.gov/content/pkg/USCODE-2023-title28/pdf/USCODE-2023-title28-app-federalru-dup2-rule702.pdf), encadre la recevabilité d'un témoignage d'expert devant les juridictions fédérales, notamment par l'examen des méthodes fiables et de leur application fiable aux faits. Elle ne déclare pas automatiquement recevable ou irrecevable tout résultat d'IA ; d'autres règles et les droits des États peuvent s'ajouter.
+- **Angleterre et pays de Galles, code statutaire.** Le [code de pratique du *Forensic Science Regulator*, version 2](https://www.gov.uk/government/publications/forensic-science-activities-statutory-code-of-practice-version-2), en vigueur depuis le **2 octobre 2025** après une première version statutaire du 2 octobre 2023, s'impose aux activités de digital forensics qu'il énumère (codes DIG) et fait des **méthodes validées** un élément du système qualité. C'est un exemple net d'exigence de validation devenue obligation légale. *Inférence :* un outil d'IA employé dans ces activités devrait satisfaire la même exigence de validation que tout autre logiciel, ce qui donne un cadre concret aux préoccupations de Williams.
 - **Union européenne, usages de police.** Le [règlement (UE) 2024/1689 dans sa version consolidée du 27 juillet 2026](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R1689-20260727), annexe III, point 6(c), classe parmi les usages à haut risque certains systèmes destinés à évaluer la fiabilité des preuves au cours d'enquêtes ou de poursuites pénales. Son article 113, dans cette version, reporte au **2 décembre 2027** l'application des sections 1 à 3 du chapitre III pour ces systèmes relevant de l'annexe III. Cette qualification dépend de la finalité précise du système ; elle ne couvre pas indistinctement chaque outil de tri forensique.
 
 ### Pour aller plus loin

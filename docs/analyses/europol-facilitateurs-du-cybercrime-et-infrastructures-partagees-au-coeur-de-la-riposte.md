@@ -1,5 +1,5 @@
 ---
-title: "Europol : Comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles."
+title: "Europol : comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles"
 date: 2026-10-11
 kind: analysis
 theme: "cyber"
@@ -18,7 +18,7 @@ tags:
   - "cryptomonnaies"
 ---
 
-# Europol : Comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles.
+# Europol : comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles
 
 ## Métadonnées
 
@@ -156,15 +156,15 @@ Les opérations publiques permettent de préciser la nature des services visés,
 
 ### Vérification des affirmations de la source
 
-| Affirmation ou terme de la transcription | Résultat de la vérification extérieure |
-| --- | --- |
-| Épisode du podcast Europol lié à l'IOCTA 2026 | **Confirmé.** La [page officielle de l'épisode (31 juillet 2026 ; mise à jour le 13 août)](https://www.europol.europa.eu/media-press/europol-podcast/episode-23-how-cybercrime-enablers-are-facilitating-crime) donne ces dates, le format *S04E01* et les deux intervenants. Le PDF lui-même ne donne pas ce jour de publication. |
-| « First VPN » | **Confirmé** par la [police néerlandaise (21 mai 2026)](https://www.politie.nl/en/news/2026/mei/21/first-vpn-criminal-vpn-service-taken-offline.html). L'opération est antérieure au podcast. |
-| « SOCKS escorts » | **Transcription erronée du nom.** La graphie officielle est **SocksEscort**, selon le [ministère américain de la Justice (12 mars 2026)](https://www.justice.gov/usao-edca/pr/authorities-dismantle-global-malicious-proxy-service-deployed-malware-and-defrauded). L'opération est antérieure au podcast. |
-| 0,1 % d'un million de messages donnerait 10 000 victimes | **Erreur arithmétique :** 1 000 000 × 0,001 = **1 000**. De plus, un taux de réponse ne mesure pas nécessairement les victimes effectives. |
-| « 99 % » de communications ou d'infrastructures criminelles chiffrées ; pertes mondiales annuelles de « 10 000 milliards » | **Non vérifiables en l'état.** La transcription ne définit ni population, ni période, ni méthode, et les sources primaires consultées ici ne corroborent pas ces grandeurs telles qu'énoncées. Ce ne sont pas des statistiques établies par ce PDF. |
-| Tor serait principalement criminel | **Non établi.** La transcription ne donne aucune répartition des usages ; le [Tor Project — « Tor Browser and malware », page consultée le 11 octobre 2026](https://support.torproject.org/abuse/ransomware/) documente aussi ses usages par journalistes, lanceurs d'alerte, défenseurs des droits et forces de l'ordre. L'existence de ces usages civils ne chiffre pas leur proportion. |
-| Une criminalité « purement par IA » apparaîtrait prochainement ; « norme » de mitigation en 24 heures | **Prévision et proposition insuffisamment définies**, respectivement. Aucune série de cas ou définition opérationnelle n'est fournie dans l'épisode ; la réponse sur les 24 heures n'établit ni norme en vigueur ni résultat mesuré. |
+| Affirmation du document | Verdict | Source de la vérification |
+| --- | --- | --- |
+| Épisode du podcast Europol lié à l'IOCTA 2026. | **Confirmé.** Mise en ligne le **31 juillet 2026**, mise à jour le 13 août, format *S04E01*, mêmes intervenants ; le PDF ne donne pas ce jour. | [Europol — page officielle de l'épisode](https://www.europol.europa.eu/media-press/europol-podcast/episode-23-how-cybercrime-enablers-are-facilitating-crime). |
+| Opération contre « First VPN ». | **Confirmé.** Opération des 19 et 20 mai 2026, antérieure au podcast. | [Police néerlandaise, 21 mai 2026](https://www.politie.nl/en/news/2026/mei/21/first-vpn-criminal-vpn-service-taken-offline.html). |
+| Opération contre « SOCKS escorts ». | **Confirmé, nom mal transcrit.** La graphie officielle est **SocksEscort** ; opération antérieure au podcast. | [Ministère américain de la Justice, 12 mars 2026](https://www.justice.gov/usao-edca/pr/authorities-dismantle-global-malicious-proxy-service-deployed-malware-and-defrauded). |
+| 0,1 % d'un million de messages donnerait 10 000 victimes. | **Contredit (erreur de calcul).** 1 000 000 × 0,001 = **1 000** ; un taux de réponse ne mesure pas non plus les victimes effectives. | Calcul direct à partir de la transcription (p. 3). |
+| « 99 % » des communications ou infrastructures criminelles chiffrées ; « 10 000 milliards » de pertes mondiales annuelles. | **Non établi.** Ni population, ni période, ni méthode ; les sources primaires consultées ne corroborent pas ces grandeurs telles qu'énoncées. | Transcription, p. 2, 8 ; aucune source primaire retrouvée. |
+| Tor serait principalement criminel. | **Non établi.** Aucune répartition des usages n'est fournie ; les usages par journalistes, lanceurs d'alerte et défenseurs des droits sont documentés, sans que leur proportion soit chiffrée. | [Tor Project, page consultée le 11 octobre 2026](https://support.torproject.org/abuse/ransomware/). |
+| Une criminalité « purement par IA » apparaîtrait prochainement ; « norme » de mitigation en 24 heures. | **Non établi.** Prévision sans série de cas ni définition opérationnelle ; la réponse sur les 24 heures n'établit ni norme en vigueur ni résultat mesuré. | Transcription, p. 3, 7, 11. |
 
 ### Contrepoints et critiques
 
