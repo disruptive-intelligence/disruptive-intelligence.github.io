@@ -1,5 +1,5 @@
 ---
-title: "CERTFR : Fuites de données dans l’État : ce que révèle le premier bilan de REACTIV"
+title: "CERT-FR : Fuites de données dans l’État : ce que révèle le premier bilan de REACTIV"
 date: 2026-09-30
 kind: analysis
 document_type: rapport
@@ -23,7 +23,7 @@ events:
   - evt-505123c8-a2a8-464e-91fd-37b311e52f57
 ---
 
-# CERTFR : Fuites de données dans l’État : ce que révèle le premier bilan de REACTIV
+# CERT-FR : Fuites de données dans l’État : ce que révèle le premier bilan de REACTIV
 
 ## Métadonnées
 
