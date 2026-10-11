@@ -6,6 +6,7 @@ theme: "cyber"
 slug: "europol-fraude-en-ligne-industrialisee-fermes-de-sim-et-attaques-par-relais"
 organization: "Europol"
 source_file: "inbox/Transcript-how-online-fraud-schemes-are-becoming-a-growing-threat.pdf"
+source_url: "https://www.europol.europa.eu/media-press/europol-podcast/episode-26-how-online-fraud-schemes-are-becoming-a-growing-threat"
 rubriques:
   - "cyber-menaces-cti"
   - "justice-criminalite"
