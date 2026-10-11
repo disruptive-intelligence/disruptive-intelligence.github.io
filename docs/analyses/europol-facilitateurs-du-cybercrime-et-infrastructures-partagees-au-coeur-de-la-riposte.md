@@ -1,11 +1,12 @@
 ---
-title: "Europol : facilitateurs du cybercrime et infrastructures partagées au cœur de la riposte"
+title: "Europol : Comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles."
 date: 2026-10-11
 kind: analysis
 theme: "cyber"
 slug: "europol-facilitateurs-du-cybercrime-et-infrastructures-partagees-au-coeur-de-la-riposte"
 organization: "Europol"
 source_file: "inbox/Transcript-how-cybercrime-enablers-are-facilitating-crime.pdf"
+source_url: "https://www.europol.europa.eu/media-press/europol-podcast/episode-23-how-cybercrime-enablers-are-facilitating-crime"
 rubriques:
   - "cyber-menaces-cti"
   - "justice-enquete"
@@ -17,7 +18,7 @@ tags:
   - "cryptomonnaies"
 ---
 
-# Europol : facilitateurs du cybercrime et infrastructures partagées au cœur de la riposte
+# Europol : Comment les acteurs et les services facilitant la cybercriminalité contribuent aux activités criminelles.
 
 ## Métadonnées
 
