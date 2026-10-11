@@ -160,7 +160,7 @@ La bibliographie privilégie des communiqués d'Europol relatifs aux opérations
 
 ## État de l'art et regards extérieurs
 
-Recherches effectuées le 2026-10-08.
+Recherches effectuées le 2026-10-08 et complétées le 2026-10-11. Ces constats extérieurs ne modifient pas les sections précédentes, fondées sur le seul PDF.
 
 ### Travaux de référence
 
@@ -180,12 +180,12 @@ Trois prolongements aident à lire les exemples du rapport comme des **chaînes 
 
 La vérification publique confirme plusieurs chiffres opérationnels, tout en laissant des unités et des méthodes non réconciliées.
 
-| Affirmation de l'IOCTA 2026 | Vérification externe | Appréciation |
+| Affirmation du document | Verdict | Source de la vérification |
 | --- | --- | --- |
-| 13 842 puis 23 593 signalements de sextorsion financière de mineurs aux premiers semestres 2024 et 2025 (p. 31). | Le [NCMEC (4 septembre 2025)](https://us.missingkids.org/blog/2025/spike-in-online-crimes-against-children-a-wake-up-call) donne exactement ces valeurs. | **Confirmé pour les signalements au NCMEC** ; ce n'est pas une incidence européenne. |
-| Plus de 1,8 million de comptes Kidflix, environ 80 000 vidéos, 79 arrestations et 39 enfants protégés (p. 33). | [Europol (2 avril 2025)](https://www.europol.europa.eu/media-press/newsroom/news/global-crackdown-kidflix-major-child-sexual-exploitation-platform-almost-two-million-users) confirme l'ordre de grandeur des utilisateurs, les 79 arrestations et les 39 enfants. Son communiqué parle toutefois de 91 000 vidéos uniques mises en ligne et de 72 000 vidéos sur le serveur saisi. | **Partiellement confirmé** ; les chiffres de vidéos ont des définitions ou périmètres différents que les sources ne permettent pas de réconcilier avec certitude. |
-| Plus de 120 marques de rançongiciel actives en 2025 (p. 23). | Le [PDF officiel d'Europol (2026)](https://www.europol.europa.eu/cms/sites/default/files/documents/IOCTA-2026.pdf) donne ce chiffre, sans liste publique exhaustive ni règle de dédoublonnage. | **Non vérifiable indépendamment** avec les éléments publiés ; « marques » ne signifie pas « groupes ». |
-| Au moins 40 000 SIM et plus de 49 millions de comptes liés à la ferme de SIM (p. 19). | L'[IOCTA 2026 (2026)](https://www.europol.europa.eu/cms/sites/default/files/documents/IOCTA-2026.pdf) rapporte les résultats d'enquête, sans jeu de données public permettant d'auditer le total des comptes. | **Chiffre attribué à Europol**, non vérifié de façon indépendante ; aucun décompte de victimes uniques n'en découle. |
+| 13 842 puis 23 593 signalements de sextorsion financière de mineurs aux premiers semestres 2024 et 2025 (p. 31). | **Confirmé pour les signalements au NCMEC** ; ce n'est pas une incidence européenne. | [NCMEC (4 septembre 2025)](https://us.missingkids.org/blog/2025/spike-in-online-crimes-against-children-a-wake-up-call). |
+| Plus de 1,8 million de comptes Kidflix, environ 80 000 vidéos, 79 arrestations et 39 enfants protégés (p. 33). | **Partiellement confirmé.** Utilisateurs, arrestations et enfants concordent ; le communiqué parle de 91 000 vidéos uniques mises en ligne et de 72 000 sur le serveur saisi, périmètres que les sources ne permettent pas de réconcilier. | [Europol (2 avril 2025)](https://www.europol.europa.eu/media-press/newsroom/news/global-crackdown-kidflix-major-child-sexual-exploitation-platform-almost-two-million-users). |
+| Plus de 120 marques de rançongiciel actives en 2025 (p. 23). | **Non établi indépendamment** : pas de liste publique ni de règle de dédoublonnage ; « marques » ne signifie pas « groupes ». | [PDF officiel d'Europol (2026)](https://www.europol.europa.eu/cms/sites/default/files/documents/IOCTA-2026.pdf). |
+| Au moins 1 200 équipements, 40 000 SIM et plus de 49 millions de comptes liés à la ferme de SIM (p. 19). | **Confirmé par la police nationale qui a mené l'opération** : 1 200 boîtiers, 40 000 SIM et environ 50 millions de comptes créés selon son estimation. Il s'agit de la même enquête, pas d'un audit indépendant ; aucun décompte de victimes uniques n'en découle. | [Police lettone (17 octobre 2025)](https://www.vp.gov.lv/en/article/international-operation-simcartel-state-police-dismantles-it-infrastructure-used-online-fraud-five-latvian-nationals-arrested). |
 
 ### Contrepoints et critiques
 
@@ -196,6 +196,8 @@ Sur l'accès aux communications chiffrées, le [Comité européen de la protecti
 ### Évolutions depuis la publication
 
 Deux annonces postérieures au **28 avril 2026** renforcent certains mécanismes décrits sans prouver leur prévalence générale. L'[opération AudiA6 annoncée par Europol le 11 juin 2026](https://www.europol.europa.eu/media-press/newsroom/news/ransomware-gangs-cut-eur-336-million-audia6-crypto-laundering-pipeline) matérialise le rôle d'un prestataire de blanchiment utilisé par plusieurs réseaux ; ses montants restent ceux d'une enquête et d'une période passée. Le [bilan annuel publié par le NCMEC le 25 juin 2026](https://banner.missingkids.org/blog/2026/ncmec-releases-new-sextortion-data-2025) prolonge la série semestrielle utilisée par le rapport jusqu'à la fin de 2025, sans constituer une mesure européenne indépendante.
+
+Europol a ensuite décliné l'IOCTA en épisodes de podcast avec ses responsables de l'EC3, mis en ligne le 31 juillet 2026 et analysés sur ce site : [les facilitateurs du cybercrime](../analyses/europol-facilitateurs-du-cybercrime-et-infrastructures-partagees-au-coeur-de-la-riposte.md), [la fraude en ligne et les fermes de SIM](../analyses/europol-fraude-en-ligne-industrialisee-fermes-de-sim-et-attaques-par-relais.md) et [l'évolution des rançongiciels](../analyses/europol-rancongiciels-extorsion-de-donnees-et-alliances-criminelles.md). Plusieurs opérations ont depuis illustré la stratégie de « frapper les facilitateurs » que décrit le rapport : la [mise hors ligne du service First VPN les 19 et 20 mai 2026](https://www.politie.nl/en/news/2026/mei/21/first-vpn-criminal-vpn-service-taken-offline.html), présenté comme utilisé par des groupes de rançongiciel, puis l'[opération contre le groupe KillSec annoncée le 1er octobre 2026](https://www.europol.europa.eu/media-press/newsroom/news/teenager-suspected-of-leading-killsec-ransomware-group-law-enforcement-seizes-servers-and-leak-site), avec trois arrestations et huit perquisitions dans quatre pays européens. Ce sont des résultats d'opérations ; leur effet durable sur les marchés criminels reste à mesurer.
 
 ### Cadre juridique et éthique
 
