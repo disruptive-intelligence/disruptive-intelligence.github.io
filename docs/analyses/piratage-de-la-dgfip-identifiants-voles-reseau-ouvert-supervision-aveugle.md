@@ -1,5 +1,5 @@
 ---
-title: "Analyse — Piratage de la DGFiP : identifiants volés, réseau ouvert, supervision aveugle"
+title: "ANSSI : Piratage de la DGFiP : identifiants volés, réseau ouvert, supervision aveugle"
 date: 2026-09-29
 kind: analysis
 document_type: rapport
@@ -20,7 +20,7 @@ events:
   - evt-505123c8-a2a8-464e-91fd-37b311e52f57
 ---
 
-# Analyse — Piratage de la DGFiP : identifiants volés, réseau ouvert, supervision aveugle
+# ANSSI : Piratage de la DGFiP : identifiants volés, réseau ouvert, supervision aveugle
 
 ## Métadonnées
 

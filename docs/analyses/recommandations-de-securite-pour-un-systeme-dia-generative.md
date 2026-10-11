@@ -1,5 +1,5 @@
 ---
-title: Analyse — Recommandations de sécurité pour un système d’IA générative
+title: "ANSSI : Recommandations de sécurité pour un système d’IA générative"
 date: 2026-09-05
 kind: analysis
 document_type: guide
@@ -7,7 +7,7 @@ theme: ia
 slug: recommandations-de-securite-pour-un-systeme-dia-generative
 author: ANSSI
 ---
-# Analyse — *Recommandations de sécurité pour un système d’IA générative*
+# ANSSI : *Recommandations de sécurité pour un système d’IA générative*
 
 > **Convention :** **[Source]** = information explicitement présentée dans le guide ; **[Position de l’ANSSI]** = recommandation, appréciation ou principe de précaution formulé par l’ANSSI ; **[Analyse]** = interprétation produite dans la présente analyse. Les éléments cités sont rapportés d’après le document et n’ont pas été vérifiés indépendamment.
 

@@ -1,5 +1,5 @@
 ---
-title: Analyse — Solipsistic Superintelligence is Unlikely to be Cooperative
+title: "Google DeepMind : Solipsistic Superintelligence is Unlikely to be Cooperative"
 date: 2026-09-05
 kind: analysis
 document_type: recherche
@@ -7,7 +7,7 @@ theme: ia
 slug: solipsistic-superintelligence-is-unlikely-to-be-cooperative
 author: Google DeepMind
 ---
-# Analyse — *Solipsistic Superintelligence is Unlikely to be Cooperative*
+# Google DeepMind : *Solipsistic Superintelligence is Unlikely to be Cooperative*
 
 > **Convention :** **[Source]** = contenu explicitement présenté dans le document ; **[Position des auteurs]** = thèse, jugement ou recommandation des auteurs ; **[Analyse]** = interprétation produite dans la présente analyse. Les résultats cités restent « rapportés par le document » et ne sont pas considérés ici comme vérifiés indépendamment.
 
