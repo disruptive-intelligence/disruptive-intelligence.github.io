@@ -1,22 +1,23 @@
 ---
-title: "Analyse — IA et criminalistique numérique : usages spécialisés, AGI hypothétique et exigences de preuve"
+title: "Analyse — IA et digital forensics : usages spécialisés, AGI hypothétique et exigences de preuve"
 date: 2026-10-11
 kind: analysis
-theme: "cyber"
+theme: "ia"
 slug: "ia-et-criminalistique-numerique-usages-specialises-agi-hypothetique-et-exigences-de-preuve"
 author: "Eyric Phillyp Williams"
 organization: "Middle Georgia State University"
 source_file: "inbox/2026_Williams_0914103857.pdf"
+source_url: "https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf"
 rubriques:
-  - "justice-enquete"
   - "ia-risques-surete"
+  - "justice-enquete"
 tags:
-  - "criminalistique numérique"
+  - "digital forensics"
   - "intelligence artificielle"
   - "preuve numérique"
 ---
 
-# Analyse — IA et criminalistique numérique : usages spécialisés, AGI hypothétique et exigences de preuve
+# Analyse — IA et digital forensics : usages spécialisés, AGI hypothétique et exigences de preuve
 
 ## Métadonnées
 
@@ -24,14 +25,14 @@ tags:
 - **Auteur :** Eyric Phillyp Williams.
 - **Date :** 2026, sans jour ni mois de publication indiqués dans le texte. Les métadonnées du PDF donnent une création le 14 septembre 2026, ce qui ne suffit pas à établir la date de diffusion.
 - **Affiliation et nature :** travail de recherche soumis à la School of Computing de Middle Georgia State University dans le cadre d'un doctorat en technologies de l'information ; la page de titre ne mentionne ni revue ni évaluation par les pairs.
-- **Source originale :** `inbox/2026_Williams_0914103857.pdf` (15 pages PDF, dont trois pages de références ; pagination interne de 1 à 14 après la couverture). Aucune URL publique du document original n'est imprimée.
-- **Périmètre :** revue narrative et analyse thématique d'études publiées entre 2015 et 2025 sur l'IA appliquée aux enquêtes et à la criminalistique numériques, surtout dans les services d'enquête.
+- **Source originale :** `inbox/2026_Williams_0914103857.pdf` (15 pages PDF, dont trois pages de références ; pagination interne de 1 à 14 après la couverture). [Version publique du document](https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf), communiquée par l'utilisateur ; aucune URL publique n'est imprimée dans le PDF.
+- **Périmètre :** revue narrative et analyse thématique d'études publiées entre 2015 et 2025 sur l'IA appliquée aux enquêtes et au digital forensics, surtout dans les services d'enquête.
 
 ## Repères pour comprendre le document
 
 Une enquête numérique ne se résume pas à trouver un fichier intéressant : il faut acquérir et préserver les données, expliquer les choix de tri, relier les traces à une hypothèse et permettre à un tiers de contrôler le raisonnement. Williams oppose les systèmes entraînés pour une tâche précise à une intelligence artificielle générale (AGI), envisagée comme capable de transférer son raisonnement entre tâches. **Cette opposition est le cadre choisi par l'auteur**, et non la preuve qu'une AGI opérationnelle a été évaluée en laboratoire. Les définitions ci-dessous sont des repères pédagogiques tirés du contexte de la source ; les termes « IA forte » et « IA faible » reprennent sa terminologie.
 
-- **Criminalistique numérique** — recherche, acquisition, préservation et analyse de traces provenant d'appareils ou de services numériques, en vue d'une enquête (p. 1-2).
+- **Digital forensics** — recherche, acquisition, préservation et analyse de traces provenant d'appareils ou de services numériques, en vue d'une enquête (p. 1-2).
 - **Artefact numérique** — élément exploitable d'une source numérique, par exemple une métadonnée de fichier, un journal ou une trace produite par un appareil (p. 1-3).
 - **Triage** — sélection initiale des données à examiner en priorité ; un classement utile ne constitue pas à lui seul une preuve interprétée et validée (p. 2, 7-10).
 - **IA spécialisée ou « faible »** — système limité à des fonctions définies, comme classer des artefacts ou rapprocher des fichiers (p. 1, 3, 8-10).
@@ -54,7 +55,7 @@ Pour la veille, l'intérêt tient à cette séparation entre promesse technique 
 
 ## Thèse principale
 
-La thèse de Williams est que le recours actuel à l'IA spécialisée et le faible rôle de l'AGI en criminalistique numérique s'expliquent conjointement par la disponibilité de tâches et de données bien définies, et par des obstacles de validation, de transparence, de ressources et de responsabilité. Il s'agit d'une **synthèse interprétative de publications**, et non d'une comparaison expérimentale entre deux systèmes (p. 2, 4-5, 10-11).
+La thèse de Williams est que le recours actuel à l'IA spécialisée et le faible rôle de l'AGI en digital forensics s'expliquent conjointement par la disponibilité de tâches et de données bien définies, et par des obstacles de validation, de transparence, de ressources et de responsabilité. Il s'agit d'une **synthèse interprétative de publications**, et non d'une comparaison expérimentale entre deux systèmes (p. 2, 4-5, 10-11).
 
 L'auteur emploie parfois « AGI » pour évoquer des systèmes émergents présentant quelques traits de raisonnement général, tout en reconnaissant l'absence d'AGI pleinement opérationnelle dans le domaine (p. 1). Cette extension de vocabulaire rend la frontière avec les modèles polyvalents contemporains difficile à tester et impose de lire les capacités d'AGI mentionnées comme des hypothèses.
 
@@ -134,7 +135,7 @@ Recherches effectuées le 2026-10-11. Les éléments qui suivent proviennent de 
 
 ### Travaux de référence
 
-- **IA forte et criminalistique.** [Fähndrich et al. — « Digital forensics and strong AI: A structured literature review »](https://www.xn--fhndrich-0za.de/res/faehndrich2023c.pdf), article accepté le 4 août 2023, pose déjà la question des propriétés d'une IA utilisable en criminalistique, dont l'explicabilité et la robustesse. Il constitue un précédent proche de Williams. Sa démarche et son champ ne sont pas identiques, mais sa présence nuance toute affirmation d'absence de revue antérieure sur le rapprochement entre IA forte et criminalistique numérique.
+- **IA forte et digital forensics.** [Fähndrich et al. — « Digital forensics and strong AI: A structured literature review »](https://www.xn--fhndrich-0za.de/res/faehndrich2023c.pdf), article accepté le 4 août 2023, pose déjà la question des propriétés d'une IA utilisable pour l'analyse de traces numériques, dont l'explicabilité et la robustesse. Il constitue un précédent proche de Williams. Sa démarche et son champ ne sont pas identiques, mais sa présence nuance toute affirmation d'absence de revue antérieure sur le rapprochement entre IA forte et digital forensics.
 - **Explication des sorties.** [NIST — « Four Principles of Explainable Artificial Intelligence »](https://www.nist.gov/publications/four-principles-explainable-artificial-intelligence), 29 septembre 2021, distingue production d'une explication, intelligibilité pour le destinataire, fidélité au fonctionnement du système et connaissance de ses limites. Ces principes éclairent la notion d'« explicabilité » invoquée par Williams sans démontrer l'admissibilité d'un outil donné.
 
 ### Compléments sur le sujet
@@ -157,7 +158,7 @@ La revue laisse de côté la traduction opérationnelle des exigences qu'elle id
 
 ### Contrepoints et critiques
 
-- **Une revue antérieure existe.** [Fähndrich et al., 2023](https://www.xn--fhndrich-0za.de/res/faehndrich2023c.pdf) examinent déjà les thèmes d'« IA forte » en criminalistique. Williams peut apporter un autre assemblage de questions — entraînement, droit et contraintes d'organisation — mais ne peut être lu comme ouvrant un sujet totalement vierge. Ce contrepoint porte sur le cadrage bibliographique, pas sur la valeur de ses quatre thèmes.
+- **Une revue antérieure existe.** [Fähndrich et al., 2023](https://www.xn--fhndrich-0za.de/res/faehndrich2023c.pdf) examinent déjà les thèmes d'« IA forte » en digital forensics. Williams peut apporter un autre assemblage de questions — entraînement, droit et contraintes d'organisation — mais ne peut être lu comme ouvrant un sujet totalement vierge. Ce contrepoint porte sur le cadrage bibliographique, pas sur la valeur de ses quatre thèmes.
 - **Explicabilité seule insuffisante.** Les [quatre principes du NIST, 2021](https://www.nist.gov/publications/four-principles-explainable-artificial-intelligence) rappellent qu'une explication doit aussi être fidèle et connaître les limites du système. Une justification convaincante en langage naturel ne prouve donc pas à elle seule que l'outil a produit un résultat exact ou qu'une conclusion résiste à la contradiction.
 
 ### Évolutions depuis la publication
