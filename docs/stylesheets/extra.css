@@ -1423,3 +1423,38 @@ body[data-md-color-scheme="default"]::after {
 .md-typeset .kw-rs-count { margin: .6rem 0 .2rem; font-size: .68rem; }
 .md-typeset .kw-rs-results { margin-top: .4rem; }
 .md-typeset span.kw-tuto__title { font-weight: 700; font-size: .78rem; line-height: 1.35; }
+
+/* ---- Cartes mentales des cheat sheets (docs/javascripts/mindmaps.js) ---- */
+.md-typeset .kw-mindmap {
+  margin: 1rem 0 1.6rem; border: 1px solid var(--kw-line); border-radius: 12px; background: var(--kw-panel);
+}
+.md-typeset .kw-mindmap svg.markmap {             /* plus précis que le .markmap de la bibliothèque */
+  --markmap-text-color: var(--md-default-fg-color);
+  --markmap-a-color: var(--kw-link);
+  --markmap-a-hover-color: var(--md-accent-fg-color);
+  --markmap-code-bg: var(--kw-soft);
+  --markmap-code-color: var(--md-default-fg-color);
+  --markmap-circle-open-bg: var(--md-default-bg-color);
+  --markmap-highlight-bg: var(--kw-soft);
+  --markmap-font: 400 14px/1.35 Inter, system-ui, sans-serif;
+}
+.md-typeset .kw-mindmap:not(.kw-mindmap--ready) { padding: .4rem 1rem; }   /* sans JS : la liste */
+.md-typeset .kw-mindmap__bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;
+  padding: .55rem .7rem; border-bottom: 1px solid var(--kw-line);
+}
+.md-typeset .kw-mindmap__btn {
+  font: 500 .68rem/1 Inter, sans-serif; color: var(--md-default-fg-color--light); cursor: pointer;
+  padding: .4rem .65rem; border: 1px solid var(--kw-line); border-radius: 999px; background: transparent;
+}
+.md-typeset .kw-mindmap__btn:hover { color: var(--kw-link); border-color: var(--kw-link); }
+.md-typeset .kw-mindmap__hint { margin-left: auto; font-size: .62rem; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-mindmap__stage { height: 560px; }
+.md-typeset .kw-mindmap__stage svg { display: block; width: 100%; height: 100%; cursor: grab; }
+.md-typeset .kw-mindmap__stage code { font-size: .78em; padding: .05em .3em; border-radius: 4px; }
+.md-typeset .kw-mindmap:fullscreen { display: flex; flex-direction: column; border: 0; border-radius: 0; background: var(--md-default-bg-color); }
+.md-typeset .kw-mindmap:fullscreen .kw-mindmap__stage { flex: 1; height: auto !important; }
+@media (max-width: 600px) {
+  .md-typeset .kw-mindmap__stage { height: 320px; }
+  .md-typeset .kw-mindmap__hint { display: none; }
+}
