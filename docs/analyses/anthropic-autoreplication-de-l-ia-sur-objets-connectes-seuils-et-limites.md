@@ -1,5 +1,5 @@
 ---
-title: "Anthropic : des IA qui se répliquent sur des objets connectés, un seuil pas encore franchi"
+title: "Anthropic : vers des IA qui s’auto-répliquent sur des objets connectés, l’ARA en perspective"
 date: 2026-10-12
 kind: analysis
 theme: "ia"
@@ -19,7 +19,7 @@ tags:
   - "cybersécurité"
 ---
 
-# Anthropic : des IA qui se répliquent sur des objets connectés, un seuil pas encore franchi
+# Anthropic : vers des IA qui s’auto-répliquent sur des objets connectés, l’ARA en perspective
 
 ## Métadonnées
 
