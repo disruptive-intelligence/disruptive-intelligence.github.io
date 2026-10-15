@@ -6,7 +6,7 @@ theme: "geo-ie"
 slug: "afa-anticorruption-en-2025-de-la-mesure-des-faits-aux-controles-cibles"
 organization: "Agence française anticorruption"
 document_type: "rapport"
-source_file: "inbox/Rapport d'activité 2025 AFA.pdf"
+source_file: "inbox/geo-ie/Rapport d'activité 2025 AFA.pdf"
 source_url: "https://www.agence-francaise-anticorruption.gouv.fr/files/files/Rapports%20d%27activit%C3%A9/2025/Rapport%20d%27activit%C3%A9%202025%20AFA.pdf"
 rubriques:
   - "justice-criminalite"
@@ -27,7 +27,7 @@ tags:
 - **Éditeur et rédaction :** Agence française anticorruption (AFA) ; l’éditorial est signé par sa directrice Isabelle Jégouzo, sans que celle-ci soit présentée comme l’autrice unique du rapport (p. 1-2, 69).
 - **Période couverte :** principalement l’activité de 2025, avec des rappels 2016-2024 et plusieurs développements arrêtés en 2026. La date de publication n’est pas inscrite explicitement ; le fichier PDF porte une date technique de création au 3 juillet 2026, qui ne prouve pas la date de mise en ligne.
 - **Support :** rapport institutionnel de 72 pages PDF, dont 68 pages de contenu numérotées. Les renvois « p. » ci-dessous correspondent à la pagination imprimée, décalée de deux pages par rapport au PDF.
-- **Original analysé :** `inbox/Rapport d'activité 2025 AFA.pdf`. La couverture porte les identités visuelles de la République française et de l’AFA ; le document donne le site général de l’Agence, mais pas une adresse précise de téléchargement de ce rapport (couverture, p. 69-70).
+- **Original analysé :** `inbox/geo-ie/Rapport d'activité 2025 AFA.pdf`. La couverture porte les identités visuelles de la République française et de l’AFA ; le document donne le site général de l’Agence, mais pas une adresse précise de téléchargement de ce rapport (couverture, p. 69-70).
 - **Thématique principale :** mesure des atteintes à la probité, prévention et contrôle des dispositifs anticorruption dans les secteurs public et privé, alertes, criminalité organisée et coopération internationale.
 
 ## Repères pour comprendre le document

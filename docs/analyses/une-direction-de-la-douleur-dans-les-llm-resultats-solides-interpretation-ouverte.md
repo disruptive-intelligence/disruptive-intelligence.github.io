@@ -13,7 +13,7 @@ tags:
   - sécurité de l'IA
   - conscience artificielle
   - modèles ouverts
-source_file: inbox/2609.16247v1.pdf
+source_file: inbox/ia/2609.16247v1.pdf
 source_url: https://arxiv.org/html/2609.16247v1
 ---
 
@@ -26,7 +26,7 @@ source_url: https://arxiv.org/html/2609.16247v1
 - **Date :** document daté du 12 septembre 2026, déposé sur arXiv le 14 septembre 2026 (catégorie cs.AI, version 1) (p. 1).
 - **Statut :** préprint sans relecture par les pairs, présenté comme un « travail en cours » susceptible d'être modifié (p. 1).
 - **Financement :** bourse du Future Impact Group et subvention du Digital Sentience Consortium (p. 23).
-- **Support :** PDF conservé dans `inbox/2609.16247v1.pdf` ; code, données et résultats publiés dans un dépôt GitHub (p. 23).
+- **Support :** PDF conservé dans `inbox/ia/2609.16247v1.pdf` ; code, données et résultats publiés dans un dépôt GitHub (p. 23).
 - **Périmètre :** l'existence, dans 25 modèles de langage ouverts, d'une représentation interne propre à la douleur, et ses effets sur le comportement de ces modèles.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi aux pages. La dernière section confronte ces constats à des sources extérieures citées et datées.
 

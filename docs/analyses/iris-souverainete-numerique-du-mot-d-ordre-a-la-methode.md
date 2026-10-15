@@ -14,7 +14,7 @@ tags:
   - cybersécurité
   - infrastructures numériques
   - politique industrielle
-source_file: inbox/IRIS_ObsNumerique_2026_10_souverainete_numerique_Note_FR.pdf
+source_file: inbox/geo-ie/IRIS_ObsNumerique_2026_10_souverainete_numerique_Note_FR.pdf
 source_url: https://www.iris-france.org/wp-content/uploads/2026/10/ObsNumerique_2026_10_souverainete_numerique_Note_FR.pdf
 ---
 
@@ -22,7 +22,7 @@ source_url: https://www.iris-france.org/wp-content/uploads/2026/10/ObsNumerique_
 
 ## Métadonnées
 
-- **Document :** *Souveraineté numérique : du mot d’ordre à la méthode*, note de l’Observatoire géopolitique du numérique et des technologies émergentes de l’IRIS, octobre 2026. Le PDF original, `inbox/IRIS_ObsNumerique_2026_10_souverainete_numerique_Note_FR.pdf`, compte dix pages, dont sept pages de texte numérotées de 1 à 7.
+- **Document :** *Souveraineté numérique : du mot d’ordre à la méthode*, note de l’Observatoire géopolitique du numérique et des technologies émergentes de l’IRIS, octobre 2026. Le PDF original, `inbox/geo-ie/IRIS_ObsNumerique_2026_10_souverainete_numerique_Note_FR.pdf`, compte dix pages, dont sept pages de texte numérotées de 1 à 7.
 - **Auteures :** Thaima Samman, avocate, fondatrice du cabinet Samman et membre du conseil d’administration de l’IRIS ; Anca Caruntu, directrice senior des affaires publiques au cabinet Samman (couverture et page de présentation).
 - **Publication :** l’IRIS présente la note sous la marque de son Observatoire ; la page de présentation précise qu’elle avait été publiée auparavant dans *La Revue politique et parlementaire*. La date de cette première publication n’est pas indiquée dans le PDF (page de présentation).
 - **Date et objet :** octobre 2026 ; proposition d’une méthode de souveraineté numérique pour la France et l’Europe, centrée sur la cyberdéfense, la cybersécurité, le choix d’infrastructures et de technologies, ainsi que les compétences (couverture ; p. 1-7).

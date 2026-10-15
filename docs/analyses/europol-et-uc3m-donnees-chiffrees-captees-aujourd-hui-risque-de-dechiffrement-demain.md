@@ -6,7 +6,7 @@ theme: "cyber"
 slug: "europol-et-uc3m-donnees-chiffrees-captees-aujourd-hui-risque-de-dechiffrement-demain"
 organization: "Europol et Universidad Carlos III de Madrid (UC3M)"
 document_type: "rapport"
-source_file: "inbox/Harvest-now-decrypt-later.pdf"
+source_file: "inbox/tech/Harvest-now-decrypt-later.pdf"
 source_url: "https://www.europol.europa.eu/publications-events/publications/harvest-now-decrypt-later"
 rubriques:
   - "cyber-menaces-cti"
@@ -27,7 +27,7 @@ tags:
 - **Titre original :** *Harvest now, decrypt later*.
 - **Auteurs et éditeurs :** rapport conjoint d'Europol et de l'Universidad Carlos III de Madrid (UC3M), dont les deux logos figurent sur la couverture ; il est présenté comme un travail du groupe consultatif de recherche et développement lié au centre européen de lutte contre la cybercriminalité d'Europol. Aucune liste d'auteurs individuels du rapport n'est fournie (p. 1, 3, 40).
 - **Publication :** 2026 ; la [notice d'Europol](https://www.europol.europa.eu/publications-events/publications/harvest-now-decrypt-later) date la mise en ligne du **7 octobre 2026**. ISBN `978-92-9414-153-8`, DOI `10.2813/1882350` imprimés p. 40.
-- **Source originale :** `inbox/Harvest-now-decrypt-later.pdf`, 40 pages PDF. [Version publique sur le site d'Europol](https://www.europol.europa.eu/publications-events/publications/harvest-now-decrypt-later).
+- **Source originale :** `inbox/tech/Harvest-now-decrypt-later.pdf`, 40 pages PDF. [Version publique sur le site d'Europol](https://www.europol.europa.eu/publications-events/publications/harvest-now-decrypt-later).
 - **Périmètre :** scénario de collecte actuelle de contenus chiffrés en vue d'un déchiffrement ultérieur, faisabilité selon TLS, SSH et OpenPGP, profils de cibles et mesures de migration cryptographique (p. 2-5, 16-36).
 - **Nature de la preuve :** analyse technique et scénarios prospectifs ; le rapport ne présente pas une campagne HNDL avérée à grande échelle (p. 14, 35).
 

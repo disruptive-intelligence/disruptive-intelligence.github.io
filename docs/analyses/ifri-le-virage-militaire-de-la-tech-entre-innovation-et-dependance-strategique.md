@@ -16,7 +16,7 @@ tags:
   - intelligence artificielle
   - souveraineté numérique
   - industrie de défense
-source_file: "inbox/ifri_pajot_roucy-rochegonde_virage_militaire_tech_2026.pdf"
+source_file: "inbox/geo-ie/ifri_pajot_roucy-rochegonde_virage_militaire_tech_2026.pdf"
 source_url: "https://www.ifri.org/sites/default/files/2026-09/ifri_pajot_roucy-rochegonde_virage_militaire_tech_2026.pdf"
 ---
 
@@ -27,7 +27,7 @@ source_url: "https://www.ifri.org/sites/default/files/2026-09/ifri_pajot_roucy-r
 - **Titre original :** *Le virage militaire de la tech. Les algorithmes en ordre de bataille*.
 - **Auteurs :** Benjamin Pajot et Laure de Roucy-Rochegonde.
 - **Publication :** septembre 2026, collection *Études de l’Ifri*, Centre géopolitique des technologies, Institut français des relations internationales (Ifri), ISBN 979-10-373-1275-4.
-- **Source analysée :** `inbox/ifri_pajot_roucy-rochegonde_virage_militaire_tech_2026.pdf` ; 48 pages PDF, dont deux pages finales blanches. Les numéros de page cités ci-dessous sont ceux imprimés dans le document.
+- **Source analysée :** `inbox/geo-ie/ifri_pajot_roucy-rochegonde_virage_militaire_tech_2026.pdf` ; 48 pages PDF, dont deux pages finales blanches. Les numéros de page cités ci-dessous sont ceux imprimés dans le document.
 - **Périmètre :** rapprochement des entreprises technologiques et des armées, principalement aux États-Unis, puis effets stratégiques et démocratiques pour l’Europe.
 - **Méthode de cette fiche :** les sections allant jusqu’aux « Cinq éléments essentiels » rendent compte du seul document. Les sources externes sont réservées à la section finale.
 

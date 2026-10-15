@@ -5,7 +5,7 @@ kind: analysis
 theme: "cyber"
 slug: "europol-facilitateurs-du-cybercrime-et-infrastructures-partagees-au-coeur-de-la-riposte"
 organization: "Europol"
-source_file: "inbox/Transcript-how-cybercrime-enablers-are-facilitating-crime.pdf"
+source_file: "inbox/cyber/cybercriminalite/Transcript-how-cybercrime-enablers-are-facilitating-crime.pdf"
 source_url: "https://www.europol.europa.eu/media-press/europol-podcast/episode-23-how-cybercrime-enablers-are-facilitating-crime"
 rubriques:
   - "cyber-menaces-cti"
@@ -26,7 +26,7 @@ tags:
 - **Éditeur et format :** **Europol**, transcription officielle du *Europol Podcast*, issue d'une session d'experts en direct liée à l'**IOCTA 2026** ; **12 pages**. Ce sont des propos oraux, non un rapport de recherche autonome (p. 1, 11-12).
 - **Intervenants :** **Edvardas Šileris**, directeur du Centre européen de lutte contre la cybercriminalité (**EC3**) ; **Marijn Schuurbiers**, responsable des opérations à EC3 ; animation par **Carlota**, sans autre identification imprimée. Ces rôles sont ceux présentés dans la transcription (p. 1, 3).
 - **Date :** la transcription ne donne pas de jour de publication ni de date précise d'enregistrement. Elle renvoie à l'édition **2026** de l'IOCTA et contient une note signalant une transcription automatisée éditée, susceptible d'erreurs mineures (p. 1, 12).
-- **Original :** `inbox/Transcript-how-cybercrime-enablers-are-facilitating-crime.pdf`. Aucune URL publique précise de l'original ni DOI n'est imprimé dans ce fichier (p. 1-12).
+- **Original :** `inbox/cyber/cybercriminalite/Transcript-how-cybercrime-enablers-are-facilitating-crime.pdf`. Aucune URL publique précise de l'original ni DOI n'est imprimé dans ce fichier (p. 1-12).
 - **Portée :** présentation des services qui facilitent le cybercrime, de l'usage criminel de technologies légitimes et des pistes policières ou réglementaires proposées par les intervenants. Les montants mondiaux et les perspectives sur l'IA sont des déclarations orales, sans méthode de calcul fournie ici (p. 2-11).
 
 ## Repères pour comprendre le document

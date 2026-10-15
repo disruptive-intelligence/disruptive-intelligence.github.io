@@ -14,7 +14,7 @@ tags:
   - authentification multifacteur
   - fuite de données
   - supervision
-source_file: inbox/20260923_NP_TLPCLEAR_ANSSI_Rapport_incident_DGFIP.pdf
+source_file: inbox/cyber/incidents-cti/20260923_NP_TLPCLEAR_ANSSI_Rapport_incident_DGFIP.pdf
 source_url: https://cyber.gouv.fr/actualites/lanssi-publie-le-rapport-dincident-sur-les-cyberattaques-ayant-touche-la-dgfip/
 events:
   - evt-505123c8-a2a8-464e-91fd-37b311e52f57
@@ -28,7 +28,7 @@ events:
 - **Éditeur :** Agence nationale de la sécurité des systèmes d'information (ANSSI), dont le logo figure en page de titre avec le bloc « République française » ; référence n° 3033/ANSSI/SDO/NP. Aucun rédacteur n'est nommé.
 - **Date :** 23 septembre 2026 (p. 1). Selon la page de publication de l'ANSSI, le rapport a été remis au Premier ministre le 24 septembre et rendu public le 29 septembre 2026.
 - **Diffusion :** version publique marquée **TLP:CLEAR**, anonymisée (comptes et adresses IP renommés) et caviardée : plusieurs passages sont masqués par des bandeaux noirs (p. 2, 4-5, 7-8, 17-20).
-- **Support :** PDF conservé dans `inbox/20260923_NP_TLPCLEAR_ANSSI_Rapport_incident_DGFIP.pdf`, publié sur cyber.gouv.fr.
+- **Support :** PDF conservé dans `inbox/cyber/incidents-cti/20260923_NP_TLPCLEAR_ANSSI_Rapport_incident_DGFIP.pdf`, publié sur cyber.gouv.fr.
 - **Périmètre :** deux exfiltrations de données de la DGFiP, l'une depuis l'application E-Contact (revendiquée le 12 août 2026), l'autre depuis le serveur professionnel de données cadastrales (revendiquée le 13 août), et les défaillances qui les ont permises.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi aux pages. La dernière section confronte ces constats à des sources extérieures citées et datées.
 

@@ -14,7 +14,7 @@ tags:
   - infrastructures criminelles
   - exploitation sexuelle des enfants
   - intelligence artificielle
-source_file: inbox/IOCTA-2026.pdf
+source_file: inbox/cyber/cybercriminalite/IOCTA-2026.pdf
 source_url: https://www.europol.europa.eu/cms/sites/default/files/documents/IOCTA-2026.pdf
 ---
 
@@ -22,7 +22,7 @@ source_url: https://www.europol.europa.eu/cms/sites/default/files/documents/IOCT
 
 ## Métadonnées
 
-- **Document :** *The evolving threat landscape. How encryption, proxies and AI are expanding cybercrime — Internet Organised Crime Threat Assessment (IOCTA) 2026*, rapport institutionnel de 43 pages. Original conservé dans `inbox/IOCTA-2026.pdf`.
+- **Document :** *The evolving threat landscape. How encryption, proxies and AI are expanding cybercrime — Internet Organised Crime Threat Assessment (IOCTA) 2026*, rapport institutionnel de 43 pages. Original conservé dans `inbox/cyber/cybercriminalite/IOCTA-2026.pdf`.
 - **Auteur et éditeur :** Europol, Agence de l'Union européenne pour la coopération des services répressifs. Le logo figure sur la couverture ; la page de crédits demande de citer Europol et l'Office des publications de l'Union européenne (p. 1-2). Catherine De Bolle signe l'avant-propos en tant que directrice exécutive, sans être présentée comme l'auteure de tout le rapport (p. 6).
 - **Date :** 2026 sur la couverture et la page de crédits ; le mois et le jour de publication ne sont pas imprimés. DOI 10.2813/5737847, ISBN 978-92-9414-096-8 (p. 1-2).
 - **Périmètre :** facilitateurs de la cybercriminalité, fraude en ligne, cyberattaques et exploitation sexuelle des enfants en ligne, vus principalement depuis les enquêtes et le renseignement criminel relatifs à 2025 (p. 4-9, 38).

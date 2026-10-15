@@ -14,7 +14,7 @@ tags:
   - police judiciaire
   - protection des données
   - intelligence artificielle
-source_file: inbox/Horizon-scanning-emerging-privacy-enhancement-tech.pdf
+source_file: inbox/tech/Horizon-scanning-emerging-privacy-enhancement-tech.pdf
 source_url: https://publications.jrc.ec.europa.eu/repository/handle/JRC143326
 ---
 
@@ -22,7 +22,7 @@ source_url: https://publications.jrc.ec.europa.eu/repository/handle/JRC143326
 
 ## Métadonnées
 
-- **Document :** *Horizon scanning on emerging privacy enhancement technologies — A participatory technology foresight exercise developed by the JRC and Europol to support policy makers and law enforcement agencies*, rapport de 2026. L'original de 180 pages PDF est conservé dans `inbox/Horizon-scanning-emerging-privacy-enhancement-tech.pdf` ; le corps du rapport va jusqu'à la p. 69 imprimée, suivi des références et d'une longue annexe de signaux.
+- **Document :** *Horizon scanning on emerging privacy enhancement technologies — A participatory technology foresight exercise developed by the JRC and Europol to support policy makers and law enforcement agencies*, rapport de 2026. L'original de 180 pages PDF est conservé dans `inbox/tech/Horizon-scanning-emerging-privacy-enhancement-tech.pdf` ; le corps du rapport va jusqu'à la p. 69 imprimée, suivi des références et d'une longue annexe de signaux.
 - **Auteurs :** Sigita Trainauskiene, João Farinha et Alexandra de Maleville (JRC), Mark Wittfoth et Diederik Don (Europol), selon la couverture et la liste des auteurs (couverture, p. 4).
 - **Éditeurs :** Centre commun de recherche (JRC) de la Commission européenne et Europol, avec publication par l'Office des publications de l'Union européenne ; les deux institutions figurent sur la couverture et dans les crédits (couverture, p. de crédits). Le texte précise que ses contenus ne constituent pas nécessairement une position officielle de la Commission (p. de crédits).
 - **Date et identifiants :** 2026 ; le jour de parution n'est pas indiqué dans le PDF. Référence JRC143326 ; ISBN PDF 978-92-68-42189-5 ; DOI PDF 10.2760/6084454 (p. de crédits).

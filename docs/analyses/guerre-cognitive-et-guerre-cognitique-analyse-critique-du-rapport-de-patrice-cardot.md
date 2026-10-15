@@ -16,7 +16,7 @@ author: Patrice Cardot
 - **Sous-titre :** *Analyse intégrée des mécanismes neurobiologiques et informationnels*.
 - **Auteur :** Patrice Cardot.
 - **Date indiquée :** juillet 2026, sur la couverture. Le fichier PDF compte 138 pages ; ses métadonnées indiquent une modification le 31 août 2026, ce qui ne suffit pas à établir une nouvelle date de publication.
-- **Source / support :** PDF fourni dans `inbox/IA_EPGE_Guerre-cognitive-et-guerre-cognitique-Analyse-integree-des-mecanismes-neurobiologiques-et-informationnels.pdf`. Un organisme éditeur et une URL de publication ne sont pas indiqués clairement dans le document consulté ; « EPGE » figure dans le nom du fichier, sans preuve éditoriale supplémentaire.
+- **Source / support :** PDF fourni dans `inbox/ia/IA_EPGE_Guerre-cognitive-et-guerre-cognitique-Analyse-integree-des-mecanismes-neurobiologiques-et-informationnels.pdf`. Un organisme éditeur et une URL de publication ne sont pas indiqués clairement dans le document consulté ; « EPGE » figure dans le nom du fichier, sans preuve éditoriale supplémentaire.
 - **Thématique principale :** conflits hybrides, influence informationnelle, neurotechnologies et protection de l'autonomie mentale.
 - **Méthode de la présente analyse :** lecture de la source uniquement, sans vérification externe des études, programmes, normes ou incidents cités. Les numéros de page renvoient à la pagination visible du PDF.
 

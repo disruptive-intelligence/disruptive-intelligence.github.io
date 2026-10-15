@@ -13,7 +13,7 @@ tags:
   - biométrie
   - forces spéciales
   - vie privée
-source_file: inbox/Cyber_LinkedIn_CentralOSINTAgency_Reconnaissance_Faciale_Partielle.txt
+source_file: inbox/renseignement-osint/Cyber_LinkedIn_CentralOSINTAgency_Reconnaissance_Faciale_Partielle.txt
 source_url: https://www.linkedin.com/feed/update/urn:li:share:7512131051511709696/
 ---
 
@@ -25,7 +25,7 @@ source_url: https://www.linkedin.com/feed/update/urn:li:share:751213105151170969
 - **Nature :** témoignages de praticien, sans méthode publiée ; les images jointes n’ont pas pu être consultées (LinkedIn exige un compte).
 - **Sources mobilisées :** à la demande de l’utilisateur, l’analyse ne se limite pas aux posts. Elle s’appuie dès le corps du texte sur les évaluations du NIST, la recherche en biométrie périoculaire et en comparaison faciale, les enquêtes d’AlgorithmWatch et de Bellingcat, les décisions de la CNIL et d’autres autorités, le droit français de l’anonymat et les politiques d’armées étrangères. Chaque apport extérieur est lié à sa source et daté ; les affirmations propres à l’auteur des posts sont signalées comme telles.
 - **Thème :** identification de personnels de sécurité à partir de visages partiellement masqués, et conséquences pour l’OPSEC.
-- **Source conservée :** `inbox/Cyber_LinkedIn_CentralOSINTAgency_Reconnaissance_Faciale_Partielle.txt`.
+- **Source conservée :** `inbox/renseignement-osint/Cyber_LinkedIn_CentralOSINTAgency_Reconnaissance_Faciale_Partielle.txt`.
 
 ## Repères pour comprendre le document
 

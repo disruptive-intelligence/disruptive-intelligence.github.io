@@ -7,7 +7,7 @@ slug: "ifri-deftech-europeenne-organiser-l-alliance-entre-industrie-et-startups"
 author: "Alexandre Papaemmanuel et Laure de Roucy-Rochegonde"
 organization: "Institut français des relations internationales (Ifri)"
 document_type: "rapport"
-source_file: "inbox/ifri_papaemmanuel_roucy-rochegonde_europe_deftech_2026.pdf"
+source_file: "inbox/geo-ie/ifri_papaemmanuel_roucy-rochegonde_europe_deftech_2026.pdf"
 source_url: "https://www.ifri.org/sites/default/files/2026-02/ifri_papaemmanuel_roucy-rochegonde_europe_deftech_2026.pdf"
 rubriques:
   - "geo-souverainete"
@@ -29,7 +29,7 @@ tags:
 - **Éditeur et collection :** Institut français des relations internationales (Ifri), *Briefings de l’Ifri* ; les logos du Centre géopolitique des technologies et du Centre des études de sécurité figurent en couverture (couverture, p. 13).
 - **Date :** 16 février 2026, imprimée en couverture et reprise dans la citation recommandée par l’éditeur (couverture, p. 13).
 - **Support :** note de 16 pages PDF, dont 13 pages de texte numérotées. Les renvois « p. » ci-dessous suivent la pagination imprimée, qui commence à la deuxième page PDF.
-- **Original analysé :** `inbox/ifri_papaemmanuel_roucy-rochegonde_europe_deftech_2026.pdf`. Le document imprime l’adresse générale `Ifri.org`, sans lien direct vers son propre PDF (p. 15).
+- **Original analysé :** `inbox/geo-ie/ifri_papaemmanuel_roucy-rochegonde_europe_deftech_2026.pdf`. Le document imprime l’adresse générale `Ifri.org`, sans lien direct vers son propre PDF (p. 15).
 - **Thématique :** articulation entre startups de défense, industriels établis et puissance publique pour développer des capacités européennes associant logiciel, IA, matériel et production de masse.
 
 ## Repères pour comprendre le document

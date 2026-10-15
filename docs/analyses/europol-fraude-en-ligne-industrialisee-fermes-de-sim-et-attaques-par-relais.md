@@ -5,7 +5,7 @@ kind: analysis
 theme: "cyber"
 slug: "europol-fraude-en-ligne-industrialisee-fermes-de-sim-et-attaques-par-relais"
 organization: "Europol"
-source_file: "inbox/Transcript-how-online-fraud-schemes-are-becoming-a-growing-threat.pdf"
+source_file: "inbox/cyber/cybercriminalite/Transcript-how-online-fraud-schemes-are-becoming-a-growing-threat.pdf"
 source_url: "https://www.europol.europa.eu/media-press/europol-podcast/episode-26-how-online-fraud-schemes-are-becoming-a-growing-threat"
 rubriques:
   - "cyber-menaces-cti"
@@ -26,7 +26,7 @@ tags:
 - **Éditeur et support :** **Europol**, transcription officielle de l'épisode 4 de la saison 4 du *Europol Podcast*, enregistré lors d'une session d'experts liée à l'**IOCTA** ; **12 pages**. Il s'agit d'un échange oral et de questions-réponses, pas d'un rapport de recherche (p. 1, 9-12).
 - **Intervenants :** **Jorge Rosal Cosano**, présenté comme responsable d'équipe à Europol, et **Carlota**, animatrice dont le nom complet n'est pas indiqué dans le PDF (p. 1).
 - **Date :** aucun jour de publication ni d'enregistrement n'est imprimé dans la transcription, qui se rapporte à l'édition courante de l'IOCTA (p. 1-2, 11-12). L'épisode a été mis en ligne le **31 juillet 2026**, après une session d'experts annoncée pour le 14 juillet (voir la vérification ci-dessous).
-- **Original :** `inbox/Transcript-how-online-fraud-schemes-are-becoming-a-growing-threat.pdf`. Le fichier ne fournit ni URL publique précise du PDF ni DOI (p. 1-12).
+- **Original :** `inbox/cyber/cybercriminalite/Transcript-how-online-fraud-schemes-are-becoming-a-growing-threat.pdf`. Le fichier ne fournit ni URL publique précise du PDF ni DOI (p. 1-12).
 - **Fiabilité du support :** Europol précise que la transcription est issue d'un traitement automatisé, édité pour l'accessibilité, et qu'elle peut comporter des erreurs (p. 12). Les cas techniques décrits oralement doivent donc être lus avec cette réserve.
 
 ## Repères pour comprendre le document

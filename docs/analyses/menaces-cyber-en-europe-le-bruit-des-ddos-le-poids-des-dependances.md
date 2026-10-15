@@ -14,7 +14,7 @@ tags:
   - cyberespionnage
   - chaîne d'approvisionnement
   - manipulation de l'information
-source_file: inbox/ENISA Threat Landscape 2026_Final.pdf
+source_file: inbox/cyber/panoramas-menaces/ENISA Threat Landscape 2026_Final.pdf
 source_url: https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026
 ---
 
@@ -22,7 +22,7 @@ source_url: https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026
 
 ## Métadonnées
 
-- **Document :** *ENISA Threat Landscape 2026*, rapport institutionnel de 101 pages, marqué TLP:CLEAR. Le PDF original est conservé dans `inbox/ENISA Threat Landscape 2026_Final.pdf`.
+- **Document :** *ENISA Threat Landscape 2026*, rapport institutionnel de 101 pages, marqué TLP:CLEAR. Le PDF original est conservé dans `inbox/cyber/panoramas-menaces/ENISA Threat Landscape 2026_Final.pdf`.
 - **Auteur et éditeur :** ENISA, Agence de l'Union européenne pour la cybersécurité, comme l'indiquent la couverture et la page de crédits (p. 1-2).
 - **Date :** septembre 2026 sur la couverture ; le jour exact n'y est pas indiqué. ISBN 978-92-9204-807-5 ; DOI 10.2824/0806036 (p. 1, 3).
 - **Périmètre :** incidents concernant les États membres et organisations établies dans l'UE entre le 1er janvier et le 31 décembre 2025 ; 8 257 incidents réunis principalement à partir de sources ouvertes et de contributions anonymisées (p. 9).

@@ -7,7 +7,7 @@ slug: "ia-et-criminalistique-numerique-usages-specialises-agi-hypothetique-et-ex
 author: "Eyric Phillyp Williams"
 organization: "Middle Georgia State University"
 document_type: "preprint"
-source_file: "inbox/2026_Williams_0914103857.pdf"
+source_file: "inbox/ia/2026_Williams_0914103857.pdf"
 source_url: "https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf"
 rubriques:
   - "ia-risques-surete"
@@ -26,7 +26,7 @@ tags:
 - **Auteur :** Eyric Phillyp Williams.
 - **Date :** 2026, sans jour ni mois de publication indiqués dans le texte. Les métadonnées du PDF donnent une création le 14 septembre 2026, ce qui ne suffit pas à établir la date de diffusion.
 - **Affiliation et nature :** travail de recherche soumis à la School of Computing de Middle Georgia State University dans le cadre d'un doctorat en technologies de l'information ; la page de titre ne mentionne ni revue ni évaluation par les pairs.
-- **Source originale :** `inbox/2026_Williams_0914103857.pdf` (15 pages PDF, dont trois pages de références ; pagination interne de 1 à 14 après la couverture). [Version publique du document](https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf), communiquée par l'utilisateur ; aucune URL publique n'est imprimée dans le PDF.
+- **Source originale :** `inbox/ia/2026_Williams_0914103857.pdf` (15 pages PDF, dont trois pages de références ; pagination interne de 1 à 14 après la couverture). [Version publique du document](https://comp.mga.edu/static/media/doctoralpapers/2026_Williams_0914103857.pdf), communiquée par l'utilisateur ; aucune URL publique n'est imprimée dans le PDF.
 - **Périmètre :** revue narrative et analyse thématique d'études publiées entre 2015 et 2025 sur l'IA appliquée aux enquêtes et au digital forensics, surtout dans les services d'enquête.
 
 ## Repères pour comprendre le document

@@ -14,7 +14,7 @@ tags:
   - enquête pénale
   - Inde
   - RGPD
-source_file: inbox/IA_Forensic.pdf
+source_file: inbox/ia/IA_Forensic.pdf
 ---
 
 # Analyse — IA, enquête pénale et vie privée : un comparatif Inde-UE qui manque sa cible
@@ -25,7 +25,7 @@ source_file: inbox/IA_Forensic.pdf
 - **Auteurs :** Saloni Mishra (Manav Rachna University, Faridabad), Yamini Atreya (maîtresse de conférences, faculté de droit, Manav Rachna University) et Sumit Dalal (maître de conférences, informatique, Bennett University, Greater Noida), Inde (p. 367).
 - **Support :** publié sous le titre *Minnesota Journal of Business Law and Entrepreneurship*, « Volume 2026, No. 3 », ISSN 1540-3270, sur le site kommerstad.org. Le lien entre ce site et la revue du même nom de l'Université du Minnesota n'est pas établi (voir la section externe).
 - **Date :** 2026 ; le PDF a été créé le 13 juillet 2026 et les notes citent des pages consultées jusqu'au 16 mai 2026.
-- **Fichier :** PDF conservé dans `inbox/IA_Forensic.pdf`.
+- **Fichier :** PDF conservé dans `inbox/ia/IA_Forensic.pdf`.
 - **Périmètre :** usages de l'IA et des technologies dans l'enquête pénale, atteintes à la vie privée, cadres juridiques indien (article 21 de la Constitution, loi DPDP de 2023) et européen (RGPD), jurisprudence et recommandations.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi à la pagination de la revue. La dernière section confronte le document à des sources extérieures, notamment juridiques.
 

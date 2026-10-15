@@ -13,7 +13,7 @@ tags:
   - ransomware
   - courtiers d'accès initial
   - cybercriminalité
-source_file: inbox/Cyber_Dark_Web_Intelligence.pdf
+source_file: inbox/renseignement-osint/Cyber_Dark_Web_Intelligence.pdf
 source_url: https://www.researchgate.net/publication/404397293_Dark_Web_Threat_Intelligence_Monitoring_Cybercriminal_Activities_and_Emerging_Cyber_Threats
 ---
 
@@ -25,7 +25,7 @@ source_url: https://www.researchgate.net/publication/404397293_Dark_Web_Threat_I
 - **Auteur :** Abdullah Abid Ali, présenté en note comme étudiant du Punjab University College of Information Technology (PUCIT), avec une adresse de contact sur la plateforme de soumission papercept.net (p. 1). Les remerciements mentionnent un superviseur du PUCIT (p. 5).
 - **Date :** aucune date dans le PDF ni dans ses métadonnées ; mise en ligne sur ResearchGate, dont l'adresse a été communiquée par l'utilisateur.
 - **Financement :** « ce travail n'a été soutenu par aucune organisation » (p. 1).
-- **Support :** PDF conservé dans `inbox/Cyber_Dark_Web_Intelligence.pdf`. Ni revue, ni conférence, ni procédure de relecture ne sont indiquées.
+- **Support :** PDF conservé dans `inbox/renseignement-osint/Cyber_Dark_Web_Intelligence.pdf`. Ni revue, ni conférence, ni procédure de relecture ne sont indiquées.
 - **Périmètre :** l'écosystème du dark web, les activités cybercriminelles qui s'y déploient, les cadres d'analyse et outils de surveillance, les menaces émergentes et les stratégies défensives des organisations.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi aux pages. La dernière section confronte ces constats à des sources extérieures citées et datées.
 

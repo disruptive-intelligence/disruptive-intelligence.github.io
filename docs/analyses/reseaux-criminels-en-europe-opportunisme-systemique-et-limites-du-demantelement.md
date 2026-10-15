@@ -6,7 +6,7 @@ theme: "geo-ie"
 slug: "reseaux-criminels-en-europe-opportunisme-systemique-et-limites-du-demantelement"
 organization: "Europol"
 document_type: "rapport"
-source_file: "inbox/Blueprint-of-criminal-opportunism.pdf"
+source_file: "inbox/justice-criminalite/Blueprint-of-criminal-opportunism.pdf"
 source_url: "https://www.europol.europa.eu/publication-events/main-reports/blueprint-of-criminal-opportunism"
 rubriques:
   - "justice-criminalite"
@@ -26,7 +26,7 @@ tags:
 - **Titre original :** *Decoding the EU's Most Threatening Criminal Networks — Issue 2: The Blueprint of Criminal Opportunism*.
 - **Éditeur et auteur collectif :** Europol, Agence de l'Union européenne pour la coopération des services répressifs ; la couverture porte son logo et aucune signature d'auteur individuel n'est donnée pour le rapport. La préface est signée Jürgen Ebner, directeur exécutif par intérim (p. 1-2, 6).
 - **Publication :** 2026 ; la [notice officielle d'Europol](https://www.europol.europa.eu/publication-events/main-reports/blueprint-of-criminal-opportunism) date la publication du 26 juin 2026. DOI imprimé : `10.2813/3596319` (p. 2).
-- **Source originale :** `inbox/Blueprint-of-criminal-opportunism.pdf`, 54 pages PDF. [Version publique du rapport](https://www.europol.europa.eu/publication-events/main-reports/blueprint-of-criminal-opportunism).
+- **Source originale :** `inbox/justice-criminalite/Blueprint-of-criminal-opportunism.pdf`, 54 pages PDF. [Version publique du rapport](https://www.europol.europa.eu/publication-events/main-reports/blueprint-of-criminal-opportunism).
 - **Périmètre :** deuxième cartographie des réseaux criminels jugés les plus menaçants pour l'UE, à partir des contributions des États membres, de pays partenaires et d'informations opérationnelles détenues par Europol ; comparaison avec la première édition de 2024 (p. 48-49).
 
 ## Repères pour comprendre le document

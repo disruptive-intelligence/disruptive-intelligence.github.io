@@ -6,7 +6,7 @@ theme: "geo-ie"
 slug: "europol-terrorisme-dans-l-ue-en-2025-moins-d-attaques-recensees-mais-une-menace-plus-diffuse"
 organization: "Europol"
 document_type: "rapport"
-source_file: "inbox/EU-TE-SAT-2026.pdf"
+source_file: "inbox/justice-criminalite/EU-TE-SAT-2026.pdf"
 source_url: "https://www.europol.europa.eu/publication-events/main-reports/european-union-terrorism-situation-and-trend-report-2026-eu-te-sat"
 rubriques:
   - "justice-criminalite"
@@ -26,7 +26,7 @@ tags:
 - **Titre original :** *European Union Terrorism Situation and Trend Report 2026* (EU TE-SAT 2026).
 - **Auteur et éditeur :** Europol, agence de l'Union européenne pour la coopération des services répressifs ; son logo figure sur la couverture. Les statistiques judiciaires et le volet législatif sont fournis par Eurojust, mais le rapport n'attribue pas de signature individuelle (p. 1-2, 5).
 - **Publication :** 2026 ; la [notice officielle d'Europol](https://www.europol.europa.eu/publication-events/main-reports/european-union-terrorism-situation-and-trend-report-2026-eu-te-sat) indique le **13 juillet 2026**. DOI imprimé : `10.2813/5264545` (p. 2).
-- **Source originale :** `inbox/EU-TE-SAT-2026.pdf`, 58 pages PDF. [Page officielle de l'édition 2026](https://www.europol.europa.eu/publication-events/main-reports/european-union-terrorism-situation-and-trend-report-2026-eu-te-sat).
+- **Source originale :** `inbox/justice-criminalite/EU-TE-SAT-2026.pdf`, 58 pages PDF. [Page officielle de l'édition 2026](https://www.europol.europa.eu/publication-events/main-reports/european-union-terrorism-situation-and-trend-report-2026-eu-te-sat).
 - **Périmètre :** attaques, arrestations et procédures judiciaires pour terrorisme dans l'UE en **2025**, complétées par des cas d'extrémisme violent et une appréciation des menaces futures (p. 5, 17-25, 44-46).
 - **Méthode :** consolidation des déclarations des États membres, éléments qualitatifs des partenaires d'Europol et données judiciaires communiquées à Eurojust ; les faits sont comptés selon leur qualification en droit national (p. 5).
 

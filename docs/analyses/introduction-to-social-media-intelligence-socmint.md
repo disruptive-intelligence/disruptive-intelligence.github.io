@@ -14,7 +14,7 @@ tags:
   - analyse de réseaux
   - police prédictive
   - guerre cognitive
-source_file: inbox/SOCMINT_Introduction.pdf
+source_file: inbox/renseignement-osint/SOCMINT_Introduction.pdf
 source_url: https://osnadocs.ub.uni-osnabrueck.de/handle/ds-2026060115121
 events:
   - evt-cbf05b13-4f93-4826-becd-a6738da658c4
@@ -30,7 +30,7 @@ events:
 - **Auteur :** Apl. Prof. Dr. Dr. K. Saalbach ; seule l'initiale du prénom figure sur la page de titre.
 - **Affiliation :** « Geostrategy and Geopolitics, Department 1, 49069 Osnabrueck », sous le logo de l'Université d'Osnabrück (p. 1).
 - **Date :** 1er juin 2026.
-- **Support :** PDF conservé dans `inbox/SOCMINT_Introduction.pdf` ; notice de dépôt institutionnel communiquée par l'utilisateur. Aucune procédure de relecture par les pairs n'est indiquée.
+- **Support :** PDF conservé dans `inbox/renseignement-osint/SOCMINT_Introduction.pdf` ; notice de dépôt institutionnel communiquée par l'utilisateur. Aucune procédure de relecture par les pairs n'est indiquée.
 - **Périmètre :** renseignement issu des médias sociaux dans la sécurité intérieure, la police, l'antiterrorisme et le militaire, avec une ouverture finale sur la sûreté des agents d'IA.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi aux pages imprimées. La dernière section confronte ces constats à des sources extérieures citées et datées.
 

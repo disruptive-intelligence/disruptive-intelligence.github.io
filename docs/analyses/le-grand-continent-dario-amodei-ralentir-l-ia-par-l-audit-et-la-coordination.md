@@ -8,7 +8,7 @@ events:
   - evt-c3400a1a-790a-40e7-96e0-5d03e8e598b5
 organization: "Le Grand Continent"
 document_type: "essai"
-source_file: "inbox/IA_Antropic_M-Amodei_Texte_GrandContinent_RalentirIA.txt"
+source_file: "inbox/ia/IA_Antropic_M-Amodei_Texte_GrandContinent_RalentirIA.txt"
 source_url: "https://legrandcontinent.eu/fr/2026/09/12/dario-amodei-appelle-a-ralentir-le-developpement-de-lia-texte-integral/"
 rubriques:
   - "ia-gouvernance"
@@ -28,7 +28,7 @@ tags:
 - **Titre original du support :** « Dario Amodei appelle à ralentir le développement de l’IA (texte intégral) » ; le texte traduit est présenté sous le titre anglais *We Must Pace the Frontier* (l. 1-8).
 - **Attributions :** l'introduction et les commentaires sont signés **Le Grand Continent** ; le long essai à la première personne est présenté comme un texte de **Dario Amodei**, cofondateur et directeur général d'Anthropic. Le fichier seul ne permet pas d'authentifier l'original anglais ni chaque note de traduction (l. 5-8, 26-30, 152-182).
 - **Date et support indiqués :** **12 septembre 2026**, rubrique « Puissances de l'IA » du Grand Continent. L'adresse de la page n'est pas conservée dans le fichier (l. 1-8).
-- **Source locale :** `inbox/IA_Antropic_M-Amodei_Texte_GrandContinent_RalentirIA.txt` ; transcription textuelle de 182 lignes, comprenant présentation éditoriale, traduction commentée et liste de références.
+- **Source locale :** `inbox/ia/IA_Antropic_M-Amodei_Texte_GrandContinent_RalentirIA.txt` ; transcription textuelle de 182 lignes, comprenant présentation éditoriale, traduction commentée et liste de références.
 - **Périmètre :** proposition de ralentir la progression des modèles d'IA avancés par évaluations intégrées, coordination entre démocraties et négociation internationale ; les récits d'incidents et prévisions de dommages sont des affirmations à vérifier, pas des faits établis par cette seule transcription.
 
 ## Repères pour comprendre le document

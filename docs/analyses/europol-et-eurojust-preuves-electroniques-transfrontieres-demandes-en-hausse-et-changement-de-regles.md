@@ -6,7 +6,7 @@ theme: "cyber"
 slug: "europol-et-eurojust-preuves-electroniques-transfrontieres-demandes-en-hausse-et-changement-de-regles"
 organization: "Europol et Eurojust"
 document_type: "rapport"
-source_file: "inbox/SIRIUS-Electronic-Evidence-Situation-Report-2025.pdf"
+source_file: "inbox/justice-criminalite/SIRIUS-Electronic-Evidence-Situation-Report-2025.pdf"
 source_url: "https://doi.org/10.2813/4169376"
 rubriques:
   - "justice-enquete"
@@ -26,7 +26,7 @@ tags:
 - **Titre original :** *SIRIUS Electronic Evidence Situation Report 2025* (couverture, p. 1-2).
 - **Éditeurs :** **Europol et Eurojust**, par le projet commun SIRIUS ; la couverture porte le logo du projet et les deux agences se déclarent coéditrices. Le financement européen ne signifie pas que le texte exprime la position de l'Union européenne (p. 2-3).
 - **Date :** **juillet 2026**, La Haye, pour l'édition intitulée « 2025 ». Les volumes agrégés décrivent **2024** et les questionnaires et entretiens ont été conduits en **2025** (p. 2-3, 11, 18-19).
-- **Original :** `inbox/SIRIUS-Electronic-Evidence-Situation-Report-2025.pdf`, **96 pages**. DOI imprimé : [`10.2813/4169376`](https://doi.org/10.2813/4169376) ; ISBN `978-92-9414-154-5`, ISSN `3094-6786` (p. 3).
+- **Original :** `inbox/justice-criminalite/SIRIUS-Electronic-Evidence-Situation-Report-2025.pdf`, **96 pages**. DOI imprimé : [`10.2813/4169376`](https://doi.org/10.2813/4169376) ; ISBN `978-92-9414-154-5`, ISSN `3094-6786` (p. 3).
 - **Méthode :** enquêtes auprès de **227** policiers dont **197** de l'UE, contributions de **63** autorités judiciaires de l'UE et **22** hors UE, entretiens avec **12** fournisseurs et une association ; compilation des rapports de transparence de **huit** fournisseurs pour les données 2024 (p. 18-19).
 - **Périmètre :** accès transfrontière aux données détenues par les services en ligne, pour les enquêtes et poursuites pénales. Les chiffres sur huit fournisseurs sont ceux d'un **échantillon**, pas l'ensemble des demandes européennes (p. 11-12, 19, 76-79).
 

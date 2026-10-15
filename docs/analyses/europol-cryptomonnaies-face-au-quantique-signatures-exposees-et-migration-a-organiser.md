@@ -6,7 +6,7 @@ theme: "tech"
 slug: "europol-cryptomonnaies-face-au-quantique-signatures-exposees-et-migration-a-organiser"
 organization: "Europol"
 document_type: "rapport"
-source_file: "inbox/Quantum-computing-cryptocurrencies.pdf"
+source_file: "inbox/tech/Quantum-computing-cryptocurrencies.pdf"
 source_url: "https://doi.org/10.2813/9406240"
 rubriques:
   - "tech-quantique"
@@ -27,7 +27,7 @@ tags:
 - **Titre original :** *Quantum Computing and Cryptocurrencies — Bridging Technical Expertise and Decision-Making* (couverture, p. 1).
 - **Éditeur et attribution :** **Europol**, via son Centre européen de lutte contre la cybercriminalité (**EC3**) ; aucun auteur individuel n'est nommé dans le rapport (couverture, p. 3, 22).
 - **Publication :** **2026**, Office des publications de l'Union européenne. ISBN `978-92-9414-127-9`, DOI [`10.2813/9406240`](https://doi.org/10.2813/9406240). Le document imprimé ne précise pas un jour de publication (p. 22).
-- **Source originale :** `inbox/Quantum-computing-cryptocurrencies.pdf`, **22 pages PDF**. L'adresse DOI est imprimée p. 22.
+- **Source originale :** `inbox/tech/Quantum-computing-cryptocurrencies.pdf`, **22 pages PDF**. L'adresse DOI est imprimée p. 22.
 - **Nature et périmètre :** rapport de prospective technique et de recommandations publiques sur la menace quantique pour les cryptomonnaies, de la sécurité des portefeuilles aux contraintes de migration des protocoles (p. 3-5, 10-21).
 - **Statut des preuves :** l'étude synthétise des travaux et scénarios ; elle ne présente ni attaque quantique observée contre Bitcoin ou Ethereum ni date certaine d'apparition d'une machine capable de casser leurs signatures (p. 9-11, 19-20).
 

@@ -5,7 +5,7 @@ kind: analysis
 theme: "cyber"
 slug: "europol-rancongiciels-extorsion-de-donnees-et-alliances-criminelles"
 organization: "Europol"
-source_file: "inbox/Transcript-how-ransomware-is-evolving.pdf"
+source_file: "inbox/cyber/cybercriminalite/Transcript-how-ransomware-is-evolving.pdf"
 source_url: "https://www.europol.europa.eu/media-press/europol-podcast/episode-25-how-ransomware-is-evolving"
 rubriques:
   - "cyber-menaces-cti"
@@ -25,7 +25,7 @@ tags:
 - **Auteur et intervenants :** transcription officielle du podcast Europol ; entretien animé par Gabby avec Michaël De Laet, chef d'équipe au Centre européen de lutte contre la cybercriminalité (EC3). La transcription ne donne pas le nom complet de l'animatrice (p. 1-2).
 - **Date de publication :** non indiquée dans le PDF, qui évoque le rapport IOCTA 2026 et des observations de 2025-2026 (p. 1-3). La page officielle de l'épisode date sa mise en ligne du **31 juillet 2026** (voir la vérification ci-dessous).
 - **Support et méthode :** transcription éditée d'une session d'experts en direct, sur douze pages ; elle avertit que la transcription automatisée peut contenir des erreurs (p. 1, 12).
-- **Original :** `inbox/Transcript-how-ransomware-is-evolving.pdf`. La page officielle de l'épisode, vérifiée séparément dans l'état de l'art, est indiquée dans le lien « Original » du portail.
+- **Original :** `inbox/cyber/cybercriminalite/Transcript-how-ransomware-is-evolving.pdf`. La page officielle de l'épisode, vérifiée séparément dans l'état de l'art, est indiquée dans le lien « Original » du portail.
 - **Thématique principale :** transformation de l'économie du rançongiciel, méthodes d'extorsion et réponse policière.
 
 ## Repères pour comprendre le document

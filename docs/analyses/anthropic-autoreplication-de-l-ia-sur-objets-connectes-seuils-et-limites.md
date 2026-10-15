@@ -7,7 +7,7 @@ slug: "anthropic-autoreplication-de-l-ia-sur-objets-connectes-seuils-et-limites"
 author: "William Zhou, Daniel Freeman"
 organization: "Anthropic"
 document_type: "rapport"
-source_file: "inbox/Frontier Red Team.docx"
+source_file: "inbox/ia/Frontier Red Team.docx"
 source_url: "https://www.anthropic.com/research/self-replicating-ai"
 rubriques:
   - "ia-risques-surete"
@@ -27,7 +27,7 @@ tags:
 - **Auteurs indiqués :** William Zhou et Daniel Freeman. Le billet est présenté comme une publication de la Frontier Red Team d’Anthropic par son intitulé et son adresse imprimée ; le fichier Word lui-même ne porte pas de logo institutionnel (p. 1).
 - **Date indiquée :** 12 octobre 2026 (p. 1).
 - **Support :** copie Word d’un billet de recherche, avec figures et tableau partiellement conservés. Les renvois « Aside » et « Read more » subsistent dans la copie ; les numéros de page cités ici sont ceux de l’export PDF en lecture du DOCX, sur 14 pages.
-- **Original :** `inbox/Frontier Red Team.docx`. L’adresse publique imprimée sur la première page est <https://www.anthropic.com/research/self-replicating-ai> (p. 1).
+- **Original :** `inbox/ia/Frontier Red Team.docx`. L’adresse publique imprimée sur la première page est <https://www.anthropic.com/research/self-replicating-ai> (p. 1).
 - **Thématique principale :** possibilité qu’un agent d’IA installe son inférence sur des machines compromises et propage des copies de lui-même ; évaluation de capacités, extrapolations et défense.
 
 ## Repères pour comprendre le document

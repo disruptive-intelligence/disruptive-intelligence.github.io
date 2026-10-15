@@ -15,7 +15,7 @@ tags:
   - infostealer
   - authentification multifacteur
   - administration publique
-source_file: inbox/CERTFR-2026-CTI-006.pdf
+source_file: inbox/cyber/incidents-cti/CERTFR-2026-CTI-006.pdf
 source_url: https://www.cert.ssi.gouv.fr/cti/CERTFR-2026-CTI-006/
 events:
   - evt-6b42289b-6f48-4cd7-8d3f-0ceedab5f17c
@@ -30,7 +30,7 @@ events:
 - **Document :** *REACTIV. Point de situation. Septembre 2026*, 10 pages, dont une couverture, une quatrième de couverture et une page presque vide.
 - **Éditeur :** Agence nationale de la sécurité des systèmes d'information (ANSSI), dont le logo figure en couverture avec le bloc « République française » et celui du CERT-FR ; l'adresse de l'ANSSI clôt le document (p. 10). Aucun rédacteur n'est nommé.
 - **Date :** « Septembre 2026 », sans jour précis (p. 1). Le CERT-FR l'a mis en ligne le 30 septembre 2026 sous la référence CERTFR-2026-CTI-006, dans sa série de rapports sur la menace et les incidents.
-- **Support :** PDF conservé dans `inbox/CERTFR-2026-CTI-006.pdf`.
+- **Support :** PDF conservé dans `inbox/cyber/incidents-cti/CERTFR-2026-CTI-006.pdf`.
 - **Périmètre :** les violations de données qui ont touché les services de l'État depuis le 1er août 2026, dans le cadre de l'opération REACTIV lancée par le Premier ministre le 1er septembre.
 - **Méthode de la fiche :** jusqu'aux « Cinq éléments essentiels », seule la lecture du PDF fonde les constats, avec renvoi aux pages. La dernière section confronte ces constats à des sources extérieures citées et datées.
 

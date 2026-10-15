@@ -17,7 +17,7 @@ author: Anthropic · Dario Amodei
 - **Sous-titre :** non indiqué.
 - **Auteur indiqué :** Dario Amodei ; attribution non authentifiée à partir du fichier seul.
 - **Date de publication indiquée :** septembre 2026, sans jour précis.
-- **Source / support de publication :** transcription anglaise dans `inbox/IA_Antropic_M-Amodei_FullTexte_RalentirIA.txt`. Aucune URL ni indication explicite du support de publication n’est conservée.
+- **Source / support de publication :** transcription anglaise dans `inbox/ia/IA_Antropic_M-Amodei_FullTexte_RalentirIA.txt`. Aucune URL ni indication explicite du support de publication n’est conservée.
 - **Thématique principale :** gouvernance du développement des IA de pointe, alignement, audit indépendant et coordination géopolitique.
 - **Mode d’analyse :** source seule, sans recherche Internet ni croisement avec l’autre document présent dans le dépôt.
 - **Date d’analyse :** 12 septembre 2026.
