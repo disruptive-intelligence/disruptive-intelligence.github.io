@@ -27,6 +27,15 @@ Date de rédaction : 2026-10-14
 - **[A1]** `analyses/IA_Google-DeepMind_From-AGI-to-ASI_analyse.md`
 - **[A2]** `analyses/IA_Antropic_M-Amodei_FullTexte_RalentirIA_analyse.md`
 
+Sélection de sources externes déterminantes ; l’annexe examine les 41 liens conservés dans l’article de départ et les pièces complémentaires.
+
+- **[S1]** Jean-Christophe Budin, [« Distillation IA : la Chine accusée, mais qui ne distille pas ? »](https://www.askthisguy.com/fr/blog/ai-distillation/), article de départ, 13 octobre 2026.
+- **[S2]** Google, [rapport technique *Gemini 2.5*](https://storage.googleapis.com/deepmind-media/gemini/gemini_v2_5_report.pdf), 2025 : distillation des modèles Flash et de taille inférieure.
+- **[S3]** Microsoft Research, [*Orca*](https://arxiv.org/abs/2306.02707), 2023 : apprentissage à partir de millions de réponses de modèles OpenAI.
+- **[S4]** Anthropic, [rapport de renseignement sur les abus](https://www.anthropic.com/threat-intelligence-report-september-2026), 10 septembre 2026 : campagnes attribuées à plusieurs laboratoires chinois.
+- **[S5]** OpenAI, [rapport sur une campagne de distillation coordonnée](https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign/), 30 septembre 2026 : méthode d’extraction de traces et tentatives observées.
+- **[S6]** Commission européenne, [lignes directrices sur les obligations applicables aux modèles d’IA à usage général](https://ai-act-service-desk.ec.europa.eu/sites/default/files/2025-07/guidelines_on_the_scope_of_the_obligations_for_generalpurpose_ai_models_established_by_regulation_1cx2atxgq79us4n3x8jfgyy1qlm_118340-3.pdf), 2025 : calcul pertinent pour un modèle distillé.
+
 ## Périmètre et méthode
 
 Ce dossier part de l’[article de Jean-Christophe Budin du 13 octobre 2026](https://www.askthisguy.com/fr/blog/ai-distillation/) transmis par l’utilisateur. Ses **41 hyperliens conservés dans le texte transmis** ont été examinés un par un ; l’annexe indique ce que chacun permet effectivement d’établir. Les affirmations importantes ont été recoupées avec des publications scientifiques, les textes des entreprises concernées, des documents publics américains, des textes juridiques officiels et deux analyses déjà présentes dans ce dépôt. Certaines pages de presse n’étaient accessibles qu’en partie : elles restent signalées comme telles et ne portent pas seules les conclusions du dossier. L’arrêt de la recherche est fixé au **14 octobre 2026**.
