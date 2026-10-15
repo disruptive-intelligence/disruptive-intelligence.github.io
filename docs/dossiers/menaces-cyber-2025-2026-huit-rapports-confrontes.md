@@ -33,7 +33,7 @@ Analyses internes effectivement mobilisées :
 
 [A1] apporte la lecture critique du panorama ENISA ; [A2] éclaire le fonctionnement des marchés et services de la cybercriminalité.
 
-Huit rapports originaux consultés directement, dont les sept nouveaux documents réunis avec l’ENISA dans `inbox/cyber/panoramas-menaces/` :
+Huit rapports du corpus examinés, dont les sept nouveaux documents réunis avec l’ENISA dans `inbox/cyber/panoramas-menaces/` :
 
 - **[S1]** [ENISA, *Threat Landscape 2026*](https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026), septembre 2026 ; 101 pages, faits principalement observés en 2025.
 - **[S2]** [ANSSI / CERT-FR, *Panorama de la cybermenace 2025*](https://cyber.gouv.fr/nous-connaitre/publications/panoramas-de-la-cybermenace/panorama-de-la-cybermenace-2025/), mars 2026 ; 60 pages.
