@@ -13,7 +13,7 @@ tags:
   - gouvernance cyber
   - police
   - renseignement
-source_file: inbox/cyber/cybercriminalite/Cyber_Criminology_Cybersecurity_Nexus.pdf
+source_file: inbox/Cyber_Criminology_Cybersecurity_Nexus.pdf
 source_url: https://doi.org/10.61424/ijlss.v3i2.921
 ---
 
@@ -23,7 +23,7 @@ source_url: https://doi.org/10.61424/ijlss.v3i2.921
 
 - **Document :** *Strengthening the Nexus between Criminology and Cybersecurity*, article de recherche, 15 pages (p. 75-89).
 - **Auteur :** Fosu Bora, Ghana Police Service (quartier général national de la police, Accra) et Accra Metropolitan University (p. 75).
-- **Support :** *International Journal of Law and Societal Studies* (IJLSS), vol. 3, n° 2, Bluemark Publishers ; revue mensuelle en accès ouvert, avec des frais de publication de 55 dollars selon la page de l'article. PDF conservé dans `inbox/cyber/cybercriminalite/Cyber_Criminology_Cybersecurity_Nexus.pdf`.
+- **Support :** *International Journal of Law and Societal Studies* (IJLSS), vol. 3, n° 2, Bluemark Publishers ; revue mensuelle en accès ouvert, avec des frais de publication de 55 dollars selon la page de l'article. PDF conservé dans `inbox/Cyber_Criminology_Cybersecurity_Nexus.pdf`.
 - **Dates :** accepté le 9 mai 2026, publié le 5 juillet 2026 (p. 75).
 - **Déclarations :** aucun conflit d'intérêts ni financement ; les opinions n'engagent pas la police ghanéenne (p. 87).
 - **Périmètre :** relations entre cybercriminalité et cybersécurité, comme champs de recherche et comme domaines d'action publique, à partir d'exemples australiens, britanniques et canadiens.
