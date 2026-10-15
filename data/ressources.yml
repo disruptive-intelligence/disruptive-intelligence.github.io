@@ -4,6 +4,7 @@
 #     url: https://...          (facultatif)
 #     type: Blog | Cours | CTF | Outil | Guide | Article | Plateforme | Encyclopédie | ...
 #     pourquoi: Une phrase sur l'intérêt de la ressource
+#     ajoute_le: 'AAAA-MM-JJ'  (date d'ajout au site, pour « Derniers ajouts »)
 # Une rubrique sans lien affiche « À compléter ».
 - id: cyber
   label: 🛡️ Cyber
@@ -14,6 +15,7 @@
       url: https://www.sciencedirect.com/science/article/abs/pii/S0920548926000644
       type: Recherche
       pourquoi: Revue scientifique sur la classification des activités des groupes APT et les contre-mesures associées
+      ajoute_le: '2026-10-15'
     - nom: Wiz Threats — Threat actors
       url: https://threats.wiz.io/all-actors
       type: Encyclopédie
@@ -124,6 +126,7 @@
       url: https://arxiv.org/html/2308.14016v1
       type: Recherche
       pourquoi: Revue des usages d'ATT&CK en analyse comportementale, CTI, red teaming et évaluation défensive
+      ajoute_le: '2026-10-15'
     - nom: MITRE ATT&CK
       url: https://attack.mitre.org/
       type: Référentiel
@@ -238,6 +241,7 @@
       url: https://fr.digitalcourses.afp.com/
       type: Cours
       pourquoi: Parcours en français sur la recherche, la vérification et la géolocalisation de contenus numériques
+      ajoute_le: '2026-10-15'
     - nom: University of London — Cyber Crime
       url: https://www.london.ac.uk/study/courses/moocs/cyber-crime
       type: Cours
@@ -264,6 +268,7 @@
       url: https://osintindustries.ctfd.io/
       type: CTF
       pourquoi: Défis réguliers d'enquête OSINT fondés sur des scénarios réalistes
+      ajoute_le: '2026-10-15'
     - nom: Bellingcat Challenges
       url: https://challenge.bellingcat.com/
       type: CTF
@@ -402,6 +407,7 @@
       url: https://hacktricks.wiki/en/privacy/index.html
       type: Guide
       pourquoi: Index de techniques de protection de l'identité et d'OPSEC offensive
+      ajoute_le: '2026-10-15'
     - nom: DCSA — OPSEC Awareness
       url: https://securityawareness.dcsa.mil/opsec/index.htm
       type: Guide
@@ -559,6 +565,7 @@
       url: https://www.askthisguy.com/fr/blog/ai-distillation/
       type: Article
       pourquoi: Analyse des usages de la distillation et des accusations entre laboratoires d'IA
+      ajoute_le: '2026-10-15'
     - nom: OWASP GenAI
       url: https://genai.owasp.org/
       type: Référentiel
@@ -577,10 +584,12 @@
       url: https://www.askthisguy.com/fr/blog/internal-company-chatbot/
       type: Guide
       pourquoi: Cadrage d'un assistant documentaire interne, du RAG aux droits d'accès et à l'évaluation
+      ajoute_le: '2026-10-15'
     - nom: Ask This Guy — RAG et LLM en local
       url: https://www.askthisguy.com/fr/blog/llm-local-enterprise-sovereignty-illusion/
       type: Article
       pourquoi: Arbitrages de coût, d'infrastructure et de souveraineté pour déployer une IA sur site
+      ajoute_le: '2026-10-15'
   - nom: Actualité IA
     liens:
     - nom: MIT Technology Review
@@ -692,10 +701,12 @@
       url: https://courses.redteamleaders.com/catalog
       type: Cours
       pourquoi: Formations et laboratoires pratiques de cybersécurité offensive et défensive
+      ajoute_le: '2026-10-15'
     - nom: SOCRadar University — Cours
       url: https://university.socradar.io/courses
       type: Cours
       pourquoi: Catalogue de formation de SOCRadar sur la CTI et la gestion du risque numérique
+      ajoute_le: '2026-10-15'
     - nom: Hack The Box
       url: https://www.hackthebox.com/
       type: Cours

@@ -1002,15 +1002,17 @@ def res_count(links):
     return plural(len(links), "ressource") if links else "À compléter"
 
 
-def res_item(link, src, where=""):
+def res_item(link, src, where="", added=None):
     """Une ressource : nom (lien externe), pourquoi, type · site ; data-search pour la recherche des Ressources.
-    where : « Thème · Rubrique » (liens), affiché dans les résultats de la page d'accueil."""
+    where : « Thème · Rubrique » (liens), affiché dans les résultats de la page d'accueil.
+    added : date d'ajout au site, affichée dans la sélection des derniers ajouts."""
     host = urlparse(link.get("url") or "").netloc.removeprefix("www.")
     name = esc(link["nom"])
     title = (f'<a class="kw-tuto__title" href="{esc(link["url"])}">{name}</a>' if link.get("url")
              else f'<span class="kw-tuto__title">{name}</span>')
     search = " ".join([link["nom"], link.get("type", ""), link.get("pourquoi", ""), host, re.sub(r"<[^>]+>", " ", where)])
-    tag = " · ".join(b for b in (esc(link.get("type", "")), esc(host), where) if b)
+    tag = " · ".join(b for b in (f"Ajouté le {fr_date(added)}" if added else "",
+                                 esc(link.get("type", "")), esc(host), where) if b)
     return (f'<div class="kw-tuto" data-search="{esc(search.lower())}" data-name="{esc(link["nom"].lower())}" '
             f'data-type="{esc(link.get("type", ""))}">{title}'
             + (f'<span class="kw-tuto__text">{esc(link["pourquoi"])}</span>' if link.get("pourquoi") else "")
@@ -1094,7 +1096,19 @@ def page_ressources_index(themes):
                                 if l.get("type"))
     chips = "".join(f'<button type="button" class="kw-chip" data-type="{esc(k)}">{esc(k)}<span class="kw-count">{n}</span></button>'
                     for k, n in types.most_common() if n >= 3)
-    nav = " ".join(f'<a href="#{t["id"]}">{esc(bare(t["label"]))}</a>' for t in themes)
+    recent = sorted(
+        ((date.fromisoformat(str(l["ajoute_le"])), t, r, l)
+         for t in themes for r in t["rubriques"] for l in (r.get("liens") or []) if l.get("ajoute_le")),
+        key=lambda row: row[0], reverse=True)[:12]
+    recent_cards = "".join(
+        res_item(l, src, f'<a href="{href(src, res_src(t))}">{esc(bare(t["label"]))}</a> · '
+                         f'<a href="{href(src, res_src(t, r))}">{esc(r["nom"])}</a>', added=day)
+        for day, t, r, l in recent)
+    recent_block = (section_bar("Derniers ajouts", anchor="derniers-ajouts")
+                    + '<p class="kw-muted">Dates d’ajout à cette sélection, non de publication des sources.</p>'
+                    + f'<div class="kw-chapter__grid">{recent_cards}</div>') if recent else ""
+    nav = (('<a href="#derniers-ajouts">Derniers ajouts</a> ' if recent else "")
+           + " ".join(f'<a href="#{t["id"]}">{esc(bare(t["label"]))}</a>' for t in themes))
     hits = "".join(
         res_item(l, src, f'<a href="{href(src, res_src(t))}">{esc(bare(t["label"]))}</a> · '
                          f'<a href="{href(src, res_src(t, r))}">{esc(r["nom"])}</a>')
@@ -1138,6 +1152,7 @@ La Bibliothèque garde mes notes ; ici, les meilleures adresses des autres.</p>
 </div>
 
 <div class="kw-rs-browse">
+{recent_block}
 {doms}</div>
 """
 
