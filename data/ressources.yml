@@ -10,6 +10,10 @@
   rubriques:
   - nom: Threat intel & acteurs
     liens:
+    - nom: Profiling APT groups — revue systématique
+      url: https://www.sciencedirect.com/science/article/abs/pii/S0920548926000644
+      type: Recherche
+      pourquoi: Revue scientifique sur la classification des activités des groupes APT et les contre-mesures associées
     - nom: Wiz Threats — Threat actors
       url: https://threats.wiz.io/all-actors
       type: Encyclopédie
@@ -116,6 +120,10 @@
       pourquoi: 'Analyse du registre Windows : hives, logs, acquisition'
   - nom: Référentiels & gouvernance
     liens:
+    - nom: MITRE ATT&CK — State of the Art and Way Forward
+      url: https://arxiv.org/html/2308.14016v1
+      type: Recherche
+      pourquoi: Revue des usages d'ATT&CK en analyse comportementale, CTI, red teaming et évaluation défensive
     - nom: MITRE ATT&CK
       url: https://attack.mitre.org/
       type: Référentiel
@@ -226,6 +234,10 @@
       pourquoi: S'entraîner à l'analyse d'entités sanctionnées et de structures liées à des États
   - nom: Formations
     liens:
+    - nom: AFP — Investigation numérique
+      url: https://fr.digitalcourses.afp.com/
+      type: Cours
+      pourquoi: Parcours en français sur la recherche, la vérification et la géolocalisation de contenus numériques
     - nom: University of London — Cyber Crime
       url: https://www.london.ac.uk/study/courses/moocs/cyber-crime
       type: Cours
@@ -248,6 +260,10 @@
       pourquoi: Modules de formation
   - nom: Challenges
     liens:
+    - nom: OSINT Industries — CTF
+      url: https://osintindustries.ctfd.io/
+      type: CTF
+      pourquoi: Défis réguliers d'enquête OSINT fondés sur des scénarios réalistes
     - nom: Bellingcat Challenges
       url: https://challenge.bellingcat.com/
       type: CTF
@@ -382,6 +398,10 @@
   rubriques:
   - nom: Guides
     liens:
+    - nom: HackTricks — Offensive Privacy & OPSEC
+      url: https://hacktricks.wiki/en/privacy/index.html
+      type: Guide
+      pourquoi: Index de techniques de protection de l'identité et d'OPSEC offensive
     - nom: DCSA — OPSEC Awareness
       url: https://securityawareness.dcsa.mil/opsec/index.htm
       type: Guide
@@ -535,6 +555,10 @@
   rubriques:
   - nom: Sécurité de l'IA
     liens:
+    - nom: Ask This Guy — Distillation des modèles d'IA
+      url: https://www.askthisguy.com/fr/blog/ai-distillation/
+      type: Article
+      pourquoi: Analyse des usages de la distillation et des accusations entre laboratoires d'IA
     - nom: OWASP GenAI
       url: https://genai.owasp.org/
       type: Référentiel
@@ -547,6 +571,16 @@
       url: https://github.com/mo0ogly/openclaw-killchain-analysis
       type: Cours
       pourquoi: Support de cours (PDF dans le dépôt)
+  - nom: IA en entreprise
+    liens:
+    - nom: Ask This Guy — Chatbot interne en entreprise
+      url: https://www.askthisguy.com/fr/blog/internal-company-chatbot/
+      type: Guide
+      pourquoi: Cadrage d'un assistant documentaire interne, du RAG aux droits d'accès et à l'évaluation
+    - nom: Ask This Guy — RAG et LLM en local
+      url: https://www.askthisguy.com/fr/blog/llm-local-enterprise-sovereignty-illusion/
+      type: Article
+      pourquoi: Arbitrages de coût, d'infrastructure et de souveraineté pour déployer une IA sur site
   - nom: Actualité IA
     liens:
     - nom: MIT Technology Review
@@ -654,6 +688,14 @@
   rubriques:
   - nom: Plateformes cyber
     liens:
+    - nom: Red Team Leaders — Catalogue de cours
+      url: https://courses.redteamleaders.com/catalog
+      type: Cours
+      pourquoi: Formations et laboratoires pratiques de cybersécurité offensive et défensive
+    - nom: SOCRadar University — Cours
+      url: https://university.socradar.io/courses
+      type: Cours
+      pourquoi: Catalogue de formation de SOCRadar sur la CTI et la gestion du risque numérique
     - nom: Hack The Box
       url: https://www.hackthebox.com/
       type: Cours
