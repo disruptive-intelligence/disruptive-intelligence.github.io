@@ -26,14 +26,14 @@ Date de rédaction : 2026-10-15
 
 ## Sources de synthèse
 
-Analyses internes effectivement mobilisées :
+Analyses du site mobilisées :
 
-- **[A1]** `analyses/Cyber_ENISA_Threat_Landscape_2026_analyse.md`
-- **[A2]** `analyses/Cyber_Europol_IOCTA_2026_analyse.md`
+- **[A1]** [Analyse — ENISA : rapport sur le panorama des menaces cyber, édition 2026](../analyses/menaces-cyber-en-europe-le-bruit-des-ddos-le-poids-des-dependances.md)
+- **[A2]** [Analyse — Europol : rapport IOCTA 2026 sur l'industrialisation de la cybercriminalité](../analyses/europol-rapport-iocta-2026-sur-l-industrialisation-de-la-cybercriminalite.md)
 
 [A1] apporte la lecture critique du panorama ENISA ; [A2] éclaire le fonctionnement des marchés et services de la cybercriminalité.
 
-Huit rapports du corpus examinés, dont les sept nouveaux documents réunis avec l’ENISA dans `inbox/cyber/panoramas-menaces/` :
+Huit rapports du corpus examinés :
 
 - **[S1]** [ENISA, *Threat Landscape 2026*](https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026), septembre 2026 ; 101 pages, faits principalement observés en 2025.
 - **[S2]** [ANSSI / CERT-FR, *Panorama de la cybermenace 2025*](https://cyber.gouv.fr/nous-connaitre/publications/panoramas-de-la-cybermenace/panorama-de-la-cybermenace-2025/), mars 2026 ; 60 pages.
@@ -198,21 +198,19 @@ Le panorama 2025–2026 dessine moins une nouvelle famille unique d’attaques q
 
 L’enjeu le plus robuste est de **préserver un chemin de confiance vérifiable** : savoir où sont les systèmes exposés, quels comptes et fournisseurs peuvent les administrer, comment une compromission sera reconnue, et avec quelles identités, données et sauvegardes l’organisation pourra réellement repartir. Les outils d’IA ajoutent de la vitesse et une surface de permissions à ce problème ; les données disponibles ne justifient pas encore de leur attribuer la majorité des intrusions. [Synthèse transversale — S2–S8, S10]
 
-## Analyses utilisées et provenance détaillée
+## Analyses et sources détaillées
 
 - **[A1] [ENISA : panorama des menaces cyber 2026](../analyses/menaces-cyber-en-europe-le-bruit-des-ddos-le-poids-des-dependances.md)** — analyse interne du rapport [S1], mobilisée pour les précautions de dénominateur, DDoS, NIS2 et impact. La relecture directe de [S1], p. 7–19 et 83–95, confirme ces points.
 - **[A2] [Europol : IOCTA 2026](../analyses/europol-rapport-iocta-2026-sur-l-industrialisation-de-la-cybercriminalite.md)** — analyse interne du rapport [S9], mobilisée pour l’économie des accès, des services criminels et des marques de rançongiciel. Les développements sur les huit rapports ne sont pas attribués à Europol.
 
-Fichiers originaux conservés dans le dépôt privé après le classement de l’inbox :
-
-- **[S1]** `inbox/cyber/panoramas-menaces/ENISA Threat Landscape 2026_Final.pdf` — ENISA, septembre 2026.
-- **[S2]** `inbox/cyber/panoramas-menaces/CERTFR-2026-CTI-002.pdf` — ANSSI / CERT-FR, *Panorama de la cybermenace 2025*.
-- **[S3]** `inbox/cyber/panoramas-menaces/TLP-CLEAR-CERT-EU-TLR-2025-Year-V1.pdf` — CERT-EU.
-- **[S4]** `inbox/cyber/panoramas-menaces/m-trends-2026-en.pdf` — Google Cloud / Mandiant.
-- **[S5]** `inbox/cyber/panoramas-menaces/eset-apt-activity-report-q4-2025-q1-2026.pdf` — ESET Research.
-- **[S6]** `inbox/cyber/panoramas-menaces/Microsoft-Digital-Defense-Report-2026-v1.1.pdf` — Microsoft.
-- **[S7]** `inbox/cyber/panoramas-menaces/CrowdStrike 2026 Global Threat Report.pdf` — CrowdStrike ; impression locale en images, vérification complémentaire sur les pages officielles liées en tête.
-- **[S8]** `inbox/cyber/panoramas-menaces/2026-dbir-data-breach-investigations-report.pdf` — Verizon.
-- **[S9]** [Europol, page officielle de l’IOCTA 2026](https://www.europol.europa.eu/publications-events/main-reports/internet-organised-crime-threat-assessment) ; original local `inbox/cyber/cybercriminalite/IOCTA-2026.pdf`.
+- **[S1]** [ENISA, *Threat Landscape 2026*](https://www.enisa.europa.eu/publications/enisa-threat-landscape-2026) — panorama des incidents concernant l’Union européenne en 2025.
+- **[S2]** [ANSSI / CERT-FR, *Panorama de la cybermenace 2025*](https://cyber.gouv.fr/nous-connaitre/publications/panoramas-de-la-cybermenace/panorama-de-la-cybermenace-2025/) — incidents portés à la connaissance de l’Agence en France.
+- **[S3]** [CERT-EU, *Threat Landscape Report 2025*](https://cert.europa.eu/publications/threat-intelligence/tlr2025) — menace touchant les institutions de l’UE et leur écosystème.
+- **[S4]** [Google Cloud / Mandiant, *M-Trends 2026*](https://www.gstatic.com/security-marketing/m-trends-2026-en.pdf) — enseignements des enquêtes de réponse à incident.
+- **[S5]** [ESET Research, *APT Activity Report, Q4 2025–Q1 2026*](https://www.welivesecurity.com/en/eset-research/eset-apt-activity-report-q4-2025-q1-2026/) — campagnes APT sélectionnées.
+- **[S6]** [Microsoft, *Digital Defense Report 2026*](https://www.microsoft.com/en-us/security/security-insider/threat-landscape/2026-digital-defense-report) — observations issues de ses services et enquêtes.
+- **[S7]** [CrowdStrike, *2026 Global Threat Report*](https://www.crowdstrike.com/en-us/global-threat-report/) — renseignement propriétaire ; principaux chiffres également vérifiés dans le [communiqué officiel](https://www.crowdstrike.com/en-us/press-releases/2026-crowdstrike-global-threat-report/).
+- **[S8]** Verizon, [page du *2026 Data Breach Investigations Report*](https://www.verizon.com/business/fr-fr/resources/reports/dbir/) et [PDF du rapport](https://www.verizon.com/business/resources/T343/reports/2026-dbir-data-breach-investigations-report.pdf) — incidents et violations confirmées.
+- **[S9]** [Europol, page officielle de l’IOCTA 2026](https://www.europol.europa.eu/publications-events/main-reports/internet-organised-crime-threat-assessment) — organisation des services criminels.
 - **[S10]** [CISA, *Known Exploited Vulnerabilities Catalog*](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) ; catalogue vivant, utilisé comme référence de priorisation, sans extrapolation de ses chiffres à une fréquence d’attaque.
 - **[S11]** CERT Polska, [rapport du 30 janvier 2026](https://cert.pl/en/posts/2026/01/incident-report-energy-sector-2025/) et [complément du 8 août 2026](https://cert.pl/en/posts/2026/08/incident-follow-up-report-energy-sector-2025/) ; vérification ponctuelle des effets et de l’attribution de l’incident polonais.
