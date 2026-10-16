@@ -30,7 +30,12 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102} -ErrorAction Silent
     01/10/2026 23:20:11  Le journal d'audit a été effacé. Sujet : … Nom du compte : adm.martin …
     ```
 
-Un **1102** donne le compte qui a effacé le journal Security ; un **104** dit quel autre journal a été effacé. Un **1100** apparaît aussi lors d'un arrêt ou redémarrage normal : le croiser avec 1074, 6005, 6006, 6008. Avec l'audit des processus, un 4688 `wevtutil.exe cl Security` juste avant confirme l'effacement. Les événements déjà envoyés au SIEM restent consultables.
+Un **1102** donne le compte qui a effacé le journal Security ; un **104** dit quel autre journal a été effacé. Un **1100** apparaît aussi lors d'un arrêt ou redémarrage normal : le croiser avec 1074, 6005, 6006, 6008. Avec l'audit des processus, un 4688 `wevtutil.exe cl Security` juste avant confirme l'effacement. Un attaquant vise aussi le journal de Sysmon (`wevtutil cl Microsoft-Windows-Sysmon/Operational`) : un **104** dans System, et le Sysmon 1 de `wevtutil.exe` s'il a été envoyé avant l'effacement. Les événements déjà envoyés au SIEM restent consultables.
+
+```text title="Wazuh (DQL)"
+rule.mitre.id: T1070.001
+data.win.eventdata.commandLine: *wevtutil* and data.win.eventdata.commandLine: *cl*
+```
 
 Pour comprendre : [Manipulation des journaux : 1102, 104, 1100](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/09-manipulation-des-journaux.md) · [Effacer un filtre ou effacer un journal](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#effacer-un-filtre-vs-effacer-un-journal)
 { .kw-cs-meta }
@@ -40,7 +45,7 @@ Pour comprendre : [Manipulation des journaux : 1102, 104, 1100](../../../../libr
 | Event ID | Journal | Signification | À retenir |
 |---|---|---|---|
 | **1102** | Journaux Windows → Security | Journal Security effacé | Donne le compte qui a effacé |
-| **104** | Journaux Windows → System (Microsoft-Windows-Eventlog) | Autre journal effacé | Dit quel journal (System, PowerShell/Operational…) |
+| **104** | Journaux Windows → System (Microsoft-Windows-Eventlog) | Autre journal effacé | Dit quel journal (System, PowerShell/Operational, Sysmon/Operational…) |
 | **1100** | Journaux Windows → Security | Service de journalisation arrêté | Aussi lors d'un arrêt normal : croiser avec 1074, 6005, 6006, 6008 |
 | **4688** | Journaux Windows → Security | Processus créé | `wevtutil.exe cl Security` juste avant un 1102 confirme l'effacement |
 

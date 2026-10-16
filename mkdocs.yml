@@ -180,6 +180,7 @@ nav:
                 - Services, tâches et comptes: cheatsheets/windows/fondamentaux/logs/persistance.md
                 - Pare-feu et Defender: cheatsheets/windows/fondamentaux/logs/pare-feu-defender.md
                 - Effacement des traces: cheatsheets/windows/fondamentaux/logs/effacement.md
+                - Sysmon et requêtes SIEM: cheatsheets/windows/fondamentaux/logs/sysmon.md
             - Droits et identités: cheatsheets/windows/fondamentaux/droits.md
             - Registre: cheatsheets/windows/fondamentaux/registre.md
         - Administration:

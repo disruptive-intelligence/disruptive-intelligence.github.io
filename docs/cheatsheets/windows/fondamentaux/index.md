@@ -87,10 +87,18 @@ Comprendre et observer un système Windows : identité de la machine, processus,
             - 7045 / 4697 : service installé
             - 4698 : tâche planifiée créée
             - 4720 / 4732 : compte créé / ajouté à un groupe
+            - [1033 / 1034](logs/persistance.md#retrouver-les-logiciels-installes-ou-desinstalles) : logiciel installé / désinstallé (MSI)
         - [Pare-feu et Defender](logs/pare-feu-defender.md)
             - 2004 / 2005 : règle de pare-feu
             - 1116 : menace détectée · 5001 : protection coupée
         - [Effacement](logs/effacement.md) : 1102 (Security) · 104 (System)
+        - [Sysmon et requêtes SIEM](logs/sysmon.md)
+            - 1 : processus · 3 : réseau · 22 : DNS
+            - [10 vers lsass.exe](logs/sysmon.md#reperer-un-acces-a-la-memoire-de-lsass) : vol d'identifiants
+            - [Binaire renommé](logs/sysmon.md#demasquer-un-binaire-renomme) : `OriginalFileName`
+            - [Reconnaissance](logs/sysmon.md#reperer-une-reconnaissance-du-poste-et-du-domaine) : `net user`, `nltest /dclist`
+            - [PowerShell encodé](logs/sysmon.md#decoder-une-commande-powershell-encodee) : Base64 UTF-16LE
+            - Wazuh : `rule.groups: sysmon_event1`
     - [Droits et identités](droits.md)
         - Identité
             - [SID, groupes, privilèges](droits.md#voir-mon-sid-mes-groupes-et-mes-privileges) : `whoami /user /groups /priv`

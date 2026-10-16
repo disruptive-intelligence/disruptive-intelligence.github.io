@@ -4,9 +4,9 @@ title: "Services, tâches et comptes"
 
 # Services, tâches et comptes
 
-Ce qu'un attaquant installe pour rester : services, tâches planifiées, comptes créés ou ajoutés à un groupe d'administration.
+Ce qu'un attaquant installe pour rester : services, tâches planifiées, comptes créés ou ajoutés à un groupe d'administration, logiciels installés.
 
-Les incontournables : `7045` · `4697` · `4698` · `TaskScheduler/Operational` · `4720` · `4732`
+Les incontournables : `7045` · `4697` · `4698` · `TaskScheduler/Operational` · `4720` · `4732` · `1033`
 { .kw-cs-top }
 
 ## Services et tâches planifiées
@@ -119,6 +119,36 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624} | Where-Object { $_
 Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et patterns SOC](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md) — Voir aussi : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }
 
+## Logiciels installés
+
+### Retrouver les logiciels installés ou désinstallés
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='MsiInstaller'; Id=1033,1034,11707,11724}   # installé, désinstallé, installation réussie, désinstallation réussie
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='MsiInstaller'; Id=1033} -MaxEvents 5 |
+    Select-Object TimeCreated, @{n='Produit';e={$_.Properties[0].Value}}, @{n='Compte';e={$_.UserId}}
+```
+
+??? example "Sortie"
+    ```text
+    TimeCreated          Produit                                      Compte
+    -----------          -------                                      ------
+    02/10/2026 08:19:15  XMR Helper 2.1                               S-1-5-21-…-1104
+    01/10/2026 17:02:40  Notepad++: Text Editor                       S-1-5-21-…-500
+    ```
+
+Le **1033** (Windows Installer installed the product) donne le nom et la version du produit, et le compte qui a lancé l'installation. Seules les installations **MSI** sont tracées : un `.exe` copié puis lancé n'en laisse aucune. Un logiciel inattendu installé juste avant une alerte (CPU, connexion sortante) : remonter au processus avec [Sysmon 1](sysmon.md#demasquer-un-binaire-renomme).
+
+```text title="Wazuh (DQL)"
+rule.groups: "windows" and data.win.system.eventID: 1033
+```
+
+Pour comprendre : [Threat hunting avec l'EDR : lab 1](../../../../library/cyber/detection/threat-hunting-avec-l-edr/04-labs-chasse-aux-menaces-dans-wazuh.md#lab-1-malware-de-minage) — Voir aussi : [lister les logiciels installés](../../administration/logiciels.md#lister-les-logiciels-installes)
+{ .kw-cs-meta }
+
 ## Vue d'ensemble
 
 | Thème | Event ID | Journal | Signification |
@@ -136,5 +166,6 @@ Pour comprendre : [Gestion des comptes : 4720, 4732, cycle de vie d'un compte et
 | Comptes | **4723** / **4724** | Journaux Windows → Security | Mot de passe changé / réinitialisé |
 | Groupes | **4732** / **4728** / **4756** | Journaux Windows → Security | Membre ajouté à un groupe local / global / universel |
 | Groupes | **4733** / **4729** / **4757** | Journaux Windows → Security | Membre retiré d'un groupe local / global / universel |
+| Logiciels | **1033** / **1034** | Journaux Windows → Application (MsiInstaller) | Produit installé / désinstallé par Windows Installer (11707 / 11724 : opération réussie) |
 
 Patterns : 7045 avec un binaire dans un dossier inscriptible + démarrage automatique + LocalSystem ; 4698 puis 200/201 puis 4699 (tâche créée, exécutée, effacée) ; 4720 → 4732 Administrateurs → 4624 du nouveau compte.

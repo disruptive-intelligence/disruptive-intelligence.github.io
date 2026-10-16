@@ -195,4 +195,4 @@ Les journaux utiles en investigation, leur nom pour `Get-WinEvent -FilterHashtab
 | Journaux des applications et des services → Microsoft → Windows → PowerShell → Operational | `Microsoft-Windows-PowerShell/Operational` | 4104, 4103 | [Processus et PowerShell](processus-powershell.md) |
 | Journaux des applications et des services → Microsoft → Windows → Windows Firewall With Advanced Security → Firewall | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 2004, 2005, 2003 | [Pare-feu et Defender](pare-feu-defender.md) |
 | Journaux des applications et des services → Microsoft → Windows → Windows Defender → Operational | `Microsoft-Windows-Windows Defender/Operational` | 1116, 1117, 5001, 5007 | [Pare-feu et Defender](pare-feu-defender.md) |
-| Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | `Microsoft-Windows-Sysmon/Operational` | 1, 3, 11, 13, 22 | [Processus et PowerShell](processus-powershell.md) |
+| Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational | `Microsoft-Windows-Sysmon/Operational` | 1, 3, 11, 13, 22 | [Sysmon et requêtes SIEM](sysmon.md) |

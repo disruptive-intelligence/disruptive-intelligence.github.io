@@ -92,7 +92,7 @@
           liens: ["MTTD, MTTC, MTTR"]
         - label: 🎯 Threat hunting
           description: "Chercher les attaquants que les alertes n'ont pas vus : hypothèses, TTP et IOC."
-          notes: [Threat hunting — introduction et méthodes]
+          notes: [Threat hunting — introduction et méthodes, Threat hunting avec l'EDR]
           liens: [Outils de threat hunting, EDR & XDR — détection, analyse et règles]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
