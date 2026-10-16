@@ -11,7 +11,7 @@ Pour chaque note :
   - rubrique = dossiers du coffre (libellés de data/bibliotheque.yml sans emoji ni numéro), ou --to dom/cat ;
   - titre = nom du fichier (la note prévue de même nom, « : » s'écrivant « - »), ou --title ;
   - propriétés Obsidian lues : format, provenance, niveau, objectif, prerequis, termes, rubrique ;
-  - syntaxe Obsidian convertie hors du code : [[Note]] et [[#Titre]] -> vrais liens, ![[image]] et images
+  - syntaxe Obsidian convertie hors du code : [[Note]], [[#Titre]] et [[Note#Titre]] (page et ancre du titre) -> vrais liens, ![[image]] et images
     locales -> copiées dans docs/library/assets/, liens locaux introuvables -> texte ;
   - titres : le titre de tête laisse la place au titre de la page, les autres « # » descendent d'un niveau ;
   - note de plus de SPLIT_AT caractères -> dossier <slug>/ : index.md (présentation + sommaire)
@@ -29,6 +29,7 @@ import collections
 import datetime
 import difflib
 import json
+import os
 import posixpath
 import re
 import shutil
@@ -37,7 +38,7 @@ import sys
 import tempfile
 import unicodedata
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import quote, unquote
 
 import yaml
 from markdown.extensions.toc import slugify as toc_slugify, unique as toc_unique
@@ -81,6 +82,7 @@ CHEAT_TITLE = re.compile(r"(?i)cheat.?sheet|aide-m[ée]moire")   # une fiche de 
 TITLE_NOISE = {"htb", "cours", "complet", "note", "notes", "fiche", "les", "des", "une", "pour", "dans", "avec",
                "aux", "sur", "the", "and", "version", "complete", "vfull", "synthese"}
 LINK_MARK = "@@"       # lien interne provisoire « @@library/…/page.md#ancre », rendu relatif page par page
+XREF = "xref:"         # [[Note#Titre]] : « …/index.md#xref:Titre », résolu en page + ancre une fois tout écrit
 
 
 def slug(text):
@@ -439,7 +441,8 @@ class Converter:
             if not note.strip():                              # [[#Titre]] : ancre dans la note
                 return f"[{label}](#{github_slug(heading)})"
             page = self.note_link(note)
-            return f"[{label}]({LINK_MARK}{page})" if page else label
+            frag = f"#{XREF}{quote(heading.strip())}" if heading.strip() else ""
+            return f"[{label}]({LINK_MARK}{page}{frag})" if page else label
 
         def local(m):
             bang, label, target = m.group(1), m.group(2), m.group(3)
@@ -882,6 +885,55 @@ def finish_links(body, path, anchors):
     return re.sub(r"\]\(#([^)\s]+)\)", anchor, body)
 
 
+def resolve_xrefs():
+    """[[Note#Titre]] vers une note découpée : le lien vise la page qui porte ce titre, avec son ancre
+    (titre devenu page -> la page ; titre introuvable -> l'accueil de la note)."""
+    marked = re.compile(r"\]\(([^)\s#]+)#" + re.escape(XREF) + r"([^)\s]+)\)")
+    cache = {}
+
+    def targets(entry):
+        if entry not in cache:
+            pages = sorted(entry.parent.rglob("*.md")) if entry.name == "index.md" else [entry]
+            found = {}
+            for page in pages:
+                text = page.read_text(encoding="utf-8")
+                meta = re.match(r"---\n(.*?)\n---\n", text, re.S)
+                title = (yaml.safe_load(meta.group(1)) or {}).get("title", "") if meta else ""
+                if title and page != entry:
+                    for key in (github_slug(title), toc_slugify(title, "-")):
+                        found.setdefault(key, (page, ""))
+                shield = Shield()
+                for key, (_, real) in anchor_map([(page, shield.hide(text))], shield).items():
+                    found.setdefault(key, (page, real))
+            cache[entry] = found
+        return cache[entry]
+
+    for path in LIBRARY.rglob("*.md"):
+        text = path.read_text(encoding="utf-8")
+        if XREF not in text:
+            continue
+
+        def fix(m):
+            entry = (path.parent / m.group(1)).resolve()
+            heading = unquote(m.group(2))
+            found = targets(entry) if entry.is_file() else {}
+            keys = [github_slug(heading), toc_slugify(heading, "-")]
+            hit = next((found[k] for k in keys if k in found), None)
+            if not hit:
+                near = guess_anchor(keys[0], {k: v for k, v in found.items() if k})
+                hit = near
+            if not hit:
+                print(f"RENVOI SANS TITRE : {path.relative_to(DOCS)} -> {heading}")
+                return f"]({m.group(1)})"
+            page, real = hit
+            rel = os.path.relpath(page, path.parent).replace(os.sep, "/")
+            return f"]({rel}{'#' + real if real else ''})"
+
+        new = marked.sub(fix, text)
+        if new != text:
+            path.write_text(new, encoding="utf-8", newline="\n")
+
+
 def front(meta):
     return "---\n" + yaml.safe_dump(meta, allow_unicode=True, sort_keys=False, width=1000) + "---\n\n"
 
@@ -1210,6 +1262,7 @@ def main(argv=None):
             if image.name not in used:                   # image qu'aucune page n'utilise plus
                 image.unlink()
                 print(f"IMAGE RETIRÉE : {image.name}")
+    resolve_xrefs()
     try:
         for page, note in write_revisions(vault, tree, index):
             print(f"RÉVISION : docs/{page}  [{note}]")

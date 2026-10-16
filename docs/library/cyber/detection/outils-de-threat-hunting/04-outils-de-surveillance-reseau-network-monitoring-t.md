@@ -1,6 +1,6 @@
 ---
 title: Outils de surveillance réseau — Network Monitoring Tools
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/Outils de threat hunting.md
+source: Cyber/06 Détection & réponse/Threat hunting/Outils de threat hunting.md
 note: Outils de threat hunting
 up:
 - - Outils de threat hunting

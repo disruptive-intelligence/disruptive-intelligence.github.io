@@ -165,6 +165,8 @@ IOA:
 
 Les IOCs permettent notamment de retrouver des menaces connues, tandis que les IOAs et TTPs favorisent la recherche de comportements plus durables.
 
+Comparaison détaillée : [IOC vs IOA](../threat-hunting-avec-l-edr/01-importance-of-edr-data-for-threat-hunting.md#7-ioc-vs-ioa) (étape 4) et la fiche [IOC, IOA, TTP](../../notions/ioc-ioa-ttp.md).
+
 ## 4. Rôle du Threat Hunter
 
 Le Threat Hunter analyse les données de sécurité pour identifier des activités qui n'ont pas été détectées automatiquement.

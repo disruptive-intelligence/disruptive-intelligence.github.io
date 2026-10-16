@@ -36,7 +36,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'} 
 
 Sysmon n'est pas installé par défaut (`sysmon64 -accepteula -i config.xml`). Ce qu'il journalise dépend entièrement de sa **configuration** : un Event ID absent veut souvent dire « non configuré », pas « rien ne s'est passé ».
 
-Pour comprendre : [Outils de collecte de données : Sysmon](../../../../library/cyber/outils/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool.md)
+Pour comprendre : [Outils de collecte de données : Sysmon](../../../../library/cyber/detection/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool.md)
 { .kw-cs-meta }
 
 ## Chasser avec Sysmon

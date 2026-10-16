@@ -1,6 +1,6 @@
 ---
 title: Data Collection and Log Integration for XDR
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/EDR & XDR — détection, analyse et règles.md
+source: Cyber/06 Détection & réponse/Threat hunting/EDR & XDR — détection, analyse et règles.md
 note: EDR & XDR — détection, analyse et règles
 up:
 - - EDR & XDR — détection, analyse et règles
@@ -168,7 +168,9 @@ Exemples :
     
 - les informations de géolocalisation des IP ;
     
-- les informations associées aux utilisateurs et à leur identité.
+- les informations associées aux utilisateurs et à leur identité ;
+    
+- le contexte de l'environnement : criticité et rôle de l'endpoint.
     
 
 Exemple :
@@ -182,6 +184,19 @@ Network Event
 IP Reputation + Geolocation + User Context
              ↓
       XDR Investigation
+```
+
+
+Côté endpoint :
+
+```
+Suspicious Process
+        ↓
+EDR Telemetry
+        ↓
+User + Endpoint + File Hash + IP Reputation
+        ↓
+Contextualized Investigation
 ```
 
 

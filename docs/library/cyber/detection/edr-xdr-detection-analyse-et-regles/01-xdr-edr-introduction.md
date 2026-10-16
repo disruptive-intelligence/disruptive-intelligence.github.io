@@ -1,6 +1,6 @@
 ---
 title: XDR/EDR Introduction
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/EDR & XDR — détection, analyse et règles.md
+source: Cyber/06 Détection & réponse/Threat hunting/EDR & XDR — détection, analyse et règles.md
 note: EDR & XDR — détection, analyse et règles
 up:
 - - EDR & XDR — détection, analyse et règles
@@ -26,12 +26,15 @@ Un EDR surveille les activités des endpoints afin d'identifier des comportement
 
 |Fonctionnalité|Description|
 |---|---|
+|Real-Time Monitoring|Surveillance continue des activités endpoint|
 |File & Process Monitoring|Surveillance des fichiers, processus et activités système|
 |Behavioral Analysis|Identification de comportements inhabituels ou malveillants|
 |Malware Detection|Détection et isolation de malwares|
 |IOC Detection|Recherche d'indicateurs connus : hashes, IP, domaines, etc.|
 |Event Log Analysis|Analyse des événements système et de sécurité|
 |Threat Intelligence Integration|Enrichissement des détections avec des renseignements CTI|
+|Machine Learning|Analyse automatisée pour identifier certaines menaces|
+|Incident Investigation|Reconstruction des activités et des chaînes d'attaque|
 |Response Capabilities|Actions de confinement et de remédiation|
 |Network Monitoring|Visibilité sur certaines connexions réseau associées aux endpoints|
 |Data Protection & Encryption|Fonctionnalités complémentaires de protection des données selon la solution|
@@ -74,13 +77,22 @@ Le Behavioral Analysis est particulièrement utile pour identifier une applicati
 
 Selon les fonctionnalités de la solution :
 
-- Host Isolation : isoler un endpoint du réseau.
+- Host Isolation : isoler un endpoint du réseau pour limiter une éventuelle propagation.
     
 - Process Termination : arrêter un processus malveillant.
     
 - File Quarantine : mettre un fichier en quarantaine.
     
 - Remediation : neutraliser ou supprimer certains artefacts malveillants.
+    
+- Network Blocking : bloquer certaines communications lorsque cette capacité est disponible.
+    
+- Remote Investigation : approfondir l'analyse à distance.
+    
+- Automated Response : déclencher des actions prédéfinies selon les détections et policies.
+    
+
+Certaines actions peuvent être exécutées automatiquement ; d'autres nécessitent une intervention ou une validation humaine.
     
 
 Précision : l'EDR ne garantit pas une visibilité complète sur tous les événements d'un système. La télémétrie et les capacités de réponse dépendent de l'agent, du système d'exploitation et de la configuration.

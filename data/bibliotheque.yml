@@ -91,9 +91,8 @@
           notes: [Réponse à incident, Réponse à incident — synthèse]
           liens: ["MTTD, MTTC, MTTR"]
         - label: 🎯 Threat hunting
-          description: "Chercher les attaquants que les alertes n'ont pas vus : hypothèses, TTP et IOC."
-          notes: [Threat hunting — introduction et méthodes, Threat hunting avec l'EDR]
-          liens: [Outils de threat hunting, EDR & XDR — détection, analyse et règles]
+          description: "Chercher les attaquants que les alertes n'ont pas vus. Un parcours en quatre étapes : la démarche, les outils, les EDR et XDR, puis la chasse avec l'EDR et ses labs."
+          notes: [Threat hunting — introduction et méthodes, Outils de threat hunting, "EDR & XDR — détection, analyse et règles", Threat hunting avec l'EDR]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
@@ -135,10 +134,7 @@
         - label: 🛡️ Solutions de sécurité
           description: "Les grandes briques de défense et leur rôle."
           notes: [Solutions de sécurité]
-        - label: 🎯 EDR, XDR & threat hunting
-          description: "Les outils de la chasse aux menaces et les plateformes de détection sur les postes et au-delà."
-          notes: [Outils de threat hunting, EDR & XDR — détection, analyse et règles]
-          liens: [Threat hunting — introduction et méthodes]
+          liens: [Outils de threat hunting, "EDR & XDR — détection, analyse et règles"]
     - id: concepts
       label: 💡 Concepts
       description: Les fondamentaux — vocabulaire, familles d'attaques, fonctionnement des systèmes.

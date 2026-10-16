@@ -5,9 +5,9 @@ format: cours
 revue: '2026-10-16'
 ---
 
-Ce cours présente le threat hunting : chercher de façon proactive les attaquants qui ont échappé aux contrôles. Il couvre le rôle et les compétences de l'équipe, puis les grandes méthodes : approche centrée sur l'adversaire (TTP, MITRE ATT&CK), approche par hypothèse et approche par IOC.
+*Parcours Threat hunting — étape 1 sur 4.* Ce cours présente le threat hunting : chercher de façon proactive les attaquants qui ont échappé aux contrôles. Il couvre le rôle et les compétences de l'équipe, puis les grandes méthodes : approche centrée sur l'adversaire (TTP, MITRE ATT&CK), approche par hypothèse et approche par IOC.
 
-Les outils sont traités dans [Outils de threat hunting](../../outils/outils-de-threat-hunting/index.md) et les solutions de détection sur les postes dans [EDR & XDR — détection, analyse et règles](../../outils/edr-xdr-detection-analyse-et-regles/index.md).
+Suite du parcours : [Outils de threat hunting](../outils-de-threat-hunting/index.md) (étape 2), [EDR & XDR — détection, analyse et règles](../edr-xdr-detection-analyse-et-regles/index.md) (étape 3), puis [Threat hunting avec l'EDR](../threat-hunting-avec-l-edr/index.md) et ses labs (étape 4).
 
 ## Sommaire
 

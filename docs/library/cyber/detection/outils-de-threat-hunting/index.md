@@ -1,13 +1,13 @@
 ---
 title: Outils de threat hunting
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/Outils de threat hunting.md
+source: Cyber/06 Détection & réponse/Threat hunting/Outils de threat hunting.md
 format: cours
 revue: '2026-10-16'
 ---
 
-Ce cours passe en revue les outils du threat hunter, par catégorie : collecte (Sysmon, Winlogbeat, NXLog, Graylog), analyse (Splunk, Elastic, LogRhythm), surveillance réseau (Wireshark, Snort, Zeek…), EDR, renseignement sur la menace, puis leur intégration et leur automatisation.
+*Parcours Threat hunting — étape 2 sur 4.* Ce cours passe en revue les outils du threat hunter, par catégorie : collecte (Sysmon, Winlogbeat, NXLog, Graylog), analyse (Splunk, Elastic, LogRhythm), surveillance réseau (Wireshark, Snort, Zeek…), EDR, renseignement sur la menace, puis leur intégration et leur automatisation.
 
-La démarche est présentée dans [Threat hunting — introduction et méthodes](../../detection/threat-hunting-introduction-et-methodes/index.md) ; les EDR et XDR sont approfondis dans [EDR & XDR — détection, analyse et règles](../edr-xdr-detection-analyse-et-regles/index.md).
+Avant : [Threat hunting — introduction et méthodes](../threat-hunting-introduction-et-methodes/index.md) (étape 1). Ensuite : les EDR et XDR, fonctionnalités et produits, dans [EDR & XDR — détection, analyse et règles](../edr-xdr-detection-analyse-et-regles/index.md) (étape 3).
 
 ## Sommaire
 

@@ -1,6 +1,6 @@
 ---
 title: Threat Management and Analysis — EDR/XDR
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/EDR & XDR — détection, analyse et règles.md
+source: Cyber/06 Détection & réponse/Threat hunting/EDR & XDR — détection, analyse et règles.md
 note: EDR & XDR — détection, analyse et règles
 up:
 - - EDR & XDR — détection, analyse et règles

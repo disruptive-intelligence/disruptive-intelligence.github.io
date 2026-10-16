@@ -301,5 +301,21 @@ class RevisionTests(VaultCase):
         self.assertIn("## Cryptographie — questions", page)
 
 
+class CrossReferenceTests(unittest.TestCase):
+    def test_heading_link_to_split_note_targets_its_page_and_anchor(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            library = Path(tmp) / "library"
+            (library / "a").mkdir(parents=True)
+            (library / "a" / "index.md").write_text("---\ntitle: A\n---\n\nSommaire\n", encoding="utf-8")
+            (library / "a" / "01-intro.md").write_text("---\ntitle: Intro\n---\n\n## 3. Data Enrichment\n\ntexte\n", encoding="utf-8")
+            page = library / "b.md"
+            page.write_text("[x](a/index.md#xref:3.%20Data%20Enrichment) · [y](a/index.md#xref:Intro) · "
+                            "[z](a/index.md#xref:Inconnu)\n", encoding="utf-8")
+            with mock.patch.object(imp, "LIBRARY", library), mock.patch.object(imp, "DOCS", Path(tmp)):
+                imp.resolve_xrefs()
+            self.assertEqual(page.read_text(encoding="utf-8"),
+                             "[x](a/01-intro.md#3-data-enrichment) · [y](a/01-intro.md) · [z](a/index.md)\n")
+
+
 if __name__ == "__main__":
     unittest.main()

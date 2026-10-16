@@ -26,15 +26,7 @@ Principaux usages :
 
 ## 1. Data Collection
 
-Les EDR collectent différents types de télémétrie.
-
-|Source|Informations collectées|
-|---|---|
-|Process Activity|Exécutions, command lines, relations parent/enfant|
-|File Activity|Création, modification ou suppression de fichiers|
-|Network Connections|Connexions et destinations associées aux processus|
-|System Events|Activités et modifications du système|
-|User Activity|Comptes et comportements utilisateurs observables|
+Les EDR collectent différents types de télémétrie : processus, fichiers, connexions réseau, événements système et activité des utilisateurs. Le détail est à l'étape 3 : [sources de la télémétrie EDR](../edr-xdr-detection-analyse-et-regles/07-data-collection-and-analysis-with-edr.md#1-edr-telemetry-sources-de-donnees).
 
 ### Real-Time Monitoring
 
@@ -46,27 +38,7 @@ Précision : un EDR observe principalement les endpoints sur lesquels son agent 
 
 ### Data Enrichment
 
-L'enrichissement consiste à ajouter des informations contextuelles aux événements collectés :
-
-- Threat Intelligence : réputation d'une IP, d'un domaine ou d'un hash.
-    
-- User Context : identité et privilèges associés à un compte.
-    
-- Environmental Context : criticité et rôle de l'endpoint.
-    
-
-Exemple :
-
-```
-Suspicious Process
-        ↓
-EDR Telemetry
-        ↓
-User + Endpoint + File Hash + IP Reputation
-        ↓
-Contextualized Investigation
-```
-
+Ajouter du contexte aux événements : réputation (Threat Intelligence), identité et privilèges du compte, criticité et rôle de l'endpoint. Détail et exemples : [Data Enrichment](../edr-xdr-detection-analyse-et-regles/03-data-collection-and-log-integration-for-xdr.md#3-data-enrichment) (étape 3).
 
 ### Event Correlation
 
@@ -151,28 +123,15 @@ Une chronologie cohérente nécessite des timestamps fiables et une télémétri
 
 Un IOC est un artefact technique pouvant indiquer une activité malveillante ou une compromission.
 
-Exemples :
+Types d'IOC, démarche de recherche et limites : voir [l'approche IOC-Based](../threat-hunting-introduction-et-methodes/05-ioc-based-approach.md) (étape 1).
 
-- File Hash : hash de malware connu.
-    
-- IP Address : adresse associée à une infrastructure malveillante.
-    
-- Domain / URL : destination suspecte.
-    
-- File Path : emplacement associé à un artefact malveillant.
-    
+Dans l'EDR, l'IOC hunting apporte surtout :
 
-### IOC Hunting
-
-Processus :
-
-1. Collecter les événements endpoint.
+- l'identification rapide de menaces déjà documentées ;
     
-2. Comparer les données aux IOCs connus.
+- la recherche historique d'IOCs dans les endpoints ;
     
-3. Identifier les correspondances.
-    
-4. Analyser les résultats pour comprendre l'origine et l'étendue de la menace.
+- l'enrichissement continu via les bases de Threat Intelligence.
     
 
 ```
@@ -185,19 +144,6 @@ Identify Matching Endpoints
 Validate & Investigate
 ```
 
-
-### Avantages et limites
-
-- Identification rapide de menaces déjà documentées.
-    
-- Recherche historique d'IOCs dans les endpoints.
-    
-- Enrichissement continu via les bases de Threat Intelligence.
-    
-
-Cependant, les attaquants peuvent modifier rapidement leurs IP, domaines et hashes.
-
-IOC Match ≠ Confirmed Compromise. Une correspondance doit être vérifiée dans son contexte.
 
 ## 6. IOA — Indicators of Attack
 

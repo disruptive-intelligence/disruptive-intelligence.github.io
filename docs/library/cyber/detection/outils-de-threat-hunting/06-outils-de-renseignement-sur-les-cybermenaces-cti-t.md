@@ -1,6 +1,6 @@
 ---
 title: Outils de renseignement sur les cybermenaces — CTI Tools
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/Outils de threat hunting.md
+source: Cyber/06 Détection & réponse/Threat hunting/Outils de threat hunting.md
 note: Outils de threat hunting
 up:
 - - Outils de threat hunting
@@ -122,7 +122,7 @@ Les renseignements peuvent être transmis au :
 - Security Management : priorisation des risques.
     
 
-Complément technique : les standards STIX et TAXII peuvent faciliter la représentation et l'échange automatisé de Threat Intelligence. Leur utilisation dépend des plateformes et intégrations disponibles.
+Complément technique : les standards STIX et TAXII peuvent faciliter la représentation et l'échange automatisé de Threat Intelligence. Leur utilisation dépend des plateformes et intégrations disponibles. Voir [IoC Databases & Sharing Standards](../threat-hunting-introduction-et-methodes/05-ioc-based-approach.md#3-ioc-databases-sharing-standards) (étape 1).
 
 Les informations partagées doivent conserver leur contexte, leur niveau de confiance et leurs restrictions de diffusion.
 

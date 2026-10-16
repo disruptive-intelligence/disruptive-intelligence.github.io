@@ -124,14 +124,7 @@ La Response regroupe les actions destinées à contenir ou neutraliser une menac
 
 ### Incident Response & Isolation
 
-|Action|Fonction|
-|---|---|
-|Device Isolation|Isoler un endpoint du réseau pour limiter une éventuelle propagation|
-|Process Termination|Arrêter un processus malveillant|
-|Network Blocking|Bloquer certaines communications lorsque cette capacité est disponible|
-|Automated Response|Déclencher des actions prédéfinies selon les détections et policies|
-
-Certaines actions peuvent être exécutées automatiquement ; d'autres nécessitent une intervention ou une validation humaine.
+Isolation de l'endpoint, arrêt de processus, blocage réseau, réponse automatisée : voir [les capacités de réponse d'un EDR](../edr-xdr-detection-analyse-et-regles/01-xdr-edr-introduction.md#edr-response-capabilities) (étape 3).
 
 ### Quarantine & Remediation
 

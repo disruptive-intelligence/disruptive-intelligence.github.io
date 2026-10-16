@@ -70,6 +70,20 @@
     - note: OSINT & cryptoactifs
       pourquoi: Enquêter sur la blockchain.
 
+- id: threat-hunting
+  domaine: cyber
+  titre: Chasser les menaces (threat hunting)
+  description: Chercher les attaquants que les alertes n'ont pas vus, de la démarche aux labs dans un SIEM.
+  etapes:
+    - note: Threat hunting — introduction et méthodes
+      pourquoi: La démarche — rôle du hunter, approches par l'adversaire, par hypothèse et par IOC, cycle de vie d'un hunt.
+    - note: Outils de threat hunting
+      pourquoi: Les outils par catégorie — collecte, analyse, réseau, EDR, CTI — et leur automatisation.
+    - note: EDR & XDR — détection, analyse et règles
+      pourquoi: Ce que font un EDR et un XDR, les produits du marché, l'analyse des détections et les règles personnalisées.
+    - note: Threat hunting avec l'EDR
+      pourquoi: Chasser dans la télémétrie EDR, puis trois labs Wazuh — minage, PowerShell encodé, reconnaissance.
+
 - id: conteneurs
   domaine: it
   titre: Conteneurs, de Docker à Kubernetes

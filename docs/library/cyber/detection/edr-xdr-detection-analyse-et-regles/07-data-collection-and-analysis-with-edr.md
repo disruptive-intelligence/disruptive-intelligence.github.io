@@ -1,6 +1,6 @@
 ---
 title: Data Collection and Analysis with EDR
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/EDR & XDR — détection, analyse et règles.md
+source: Cyber/06 Détection & réponse/Threat hunting/EDR & XDR — détection, analyse et règles.md
 note: EDR & XDR — détection, analyse et règles
 up:
 - - EDR & XDR — détection, analyse et règles
@@ -33,6 +33,8 @@ La visibilité dépend de l'agent, de la configuration et des événements effec
 |Scheduled Tasks|Activités liées aux tâches planifiées|Rechercher des mécanismes de Persistence|
 |URL Activity|URLs associées aux activités des processus|Investiguer des destinations suspectes|
 |Network Activity|Connexions et communications observées|Rechercher des C2 ou transferts suspects|
+|System Events|Activités et modifications du système|Repérer des changements de configuration suspects|
+|User Activity|Comptes et comportements utilisateurs observables|Relier une activité à un compte|
 
 Les exemples utilisent SentinelOne Deep Visibility, accessible depuis le menu `Visibility`.
 ![xdr-edr-threat-analysis-custom-rule-data-collection-and-analysis-with-edr-1](../../../assets/edr-xdr-detection-analyse-et-regles-xdr-edr-threat-analysis-custom-rule-data-collection-and-analysis-with-edr-1.png){ width="465" }

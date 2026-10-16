@@ -6,9 +6,9 @@ provenance: LetsDefend
 revue: '2026-10-16'
 ---
 
-Ce cours montre comment exploiter la télémétrie EDR pour chasser : collecte, enrichissement, analyse, IOC et IOA, puis les fonctions de l'EDR (détection, investigation, réponse, reprise) et une hypothèse de mouvement latéral. Il se termine par trois labs dans Wazuh (minage, PowerShell encodé, reconnaissance et effacement de journaux).
+*Parcours Threat hunting — étape 4 sur 4.* Ce cours montre comment exploiter la télémétrie EDR pour chasser : collecte, enrichissement, analyse, IOC et IOA, puis les fonctions de l'EDR (détection, investigation, réponse, reprise) et une hypothèse de mouvement latéral. Il se termine par trois labs dans Wazuh (minage, PowerShell encodé, reconnaissance et effacement de journaux).
 
-La démarche générale est dans [Threat hunting — introduction et méthodes](../threat-hunting-introduction-et-methodes/index.md) ; les produits et les règles personnalisées dans [EDR & XDR — détection, analyse et règles](../../outils/edr-xdr-detection-analyse-et-regles/index.md).
+Il s'appuie sur les étapes précédentes : la démarche dans [Threat hunting — introduction et méthodes](../threat-hunting-introduction-et-methodes/index.md), les outils dans [Outils de threat hunting](../outils-de-threat-hunting/index.md), les produits et les règles personnalisées dans [EDR & XDR — détection, analyse et règles](../edr-xdr-detection-analyse-et-regles/index.md).
 
 ## Sommaire
 

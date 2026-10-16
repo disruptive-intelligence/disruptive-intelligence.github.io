@@ -54,3 +54,21 @@ library/it/windows/windows-fiche-cyber/08-processus-et-services/index.html: libr
 library/it/windows/windows-fiche-cyber/09-modele-de-securite-et-secrets/index.html: library/it/windows/windows-fiche-cyber/09-approfondir-modele-de-securite-et-secrets.md
 library/it/windows/windows-fiche-cyber/10-registre-persistance-et-outils/index.html: library/it/windows/windows-fiche-cyber/10-approfondir-registre-persistance-et-outils.md
 library/it/windows/windows-fiche-cyber/11-uac-et-protections/index.html: library/it/windows/windows-fiche-cyber/11-approfondir-uac-et-protections.md
+# Parcours Threat hunting (16 octobre 2026) : Outils de threat hunting et EDR & XDR passent de Outils & solutions à Détection & réponse
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/01-xdr-edr-introduction/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/01-xdr-edr-introduction.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/02-common-xdr-edr-products/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/02-common-xdr-edr-products.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/03-data-collection-and-log-integration-for-xdr/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/03-data-collection-and-log-integration-for-xdr.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/04-fondamentaux-de-la-threat-analysis/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/04-fondamentaux-de-la-threat-analysis.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/05-threat-detection-and-classification-with-edr-xdr/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/05-threat-detection-and-classification-with-edr-xdr.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/06-threat-management-and-analysis-edr-xdr/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/06-threat-management-and-analysis-edr-xdr.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/07-data-collection-and-analysis-with-edr/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/07-data-collection-and-analysis-with-edr.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/08-creating-custom-edr-rules-and-policies/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/08-creating-custom-edr-rules-and-policies.md
+library/cyber/outils/edr-xdr-detection-analyse-et-regles/index.html: library/cyber/detection/edr-xdr-detection-analyse-et-regles/index.md
+library/cyber/outils/outils-de-threat-hunting/01-categories-doutils-de-threat-hunting/index.html: library/cyber/detection/outils-de-threat-hunting/01-categories-doutils-de-threat-hunting.md
+library/cyber/outils/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool/index.html: library/cyber/detection/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool.md
+library/cyber/outils/outils-de-threat-hunting/03-outils-d-analyse-de-donnees-data-analysis-tools/index.html: library/cyber/detection/outils-de-threat-hunting/03-outils-d-analyse-de-donnees-data-analysis-tools.md
+library/cyber/outils/outils-de-threat-hunting/04-outils-de-surveillance-reseau-network-monitoring-t/index.html: library/cyber/detection/outils-de-threat-hunting/04-outils-de-surveillance-reseau-network-monitoring-t.md
+library/cyber/outils/outils-de-threat-hunting/05-outils-edr-endpoint-detection-response/index.html: library/cyber/detection/outils-de-threat-hunting/05-outils-edr-endpoint-detection-response.md
+library/cyber/outils/outils-de-threat-hunting/06-outils-de-renseignement-sur-les-cybermenaces-cti-t/index.html: library/cyber/detection/outils-de-threat-hunting/06-outils-de-renseignement-sur-les-cybermenaces-cti-t.md
+library/cyber/outils/outils-de-threat-hunting/07-integration-et-automatisation-des-outils-de-threat/index.html: library/cyber/detection/outils-de-threat-hunting/07-integration-et-automatisation-des-outils-de-threat.md
+library/cyber/outils/outils-de-threat-hunting/index.html: library/cyber/detection/outils-de-threat-hunting/index.md

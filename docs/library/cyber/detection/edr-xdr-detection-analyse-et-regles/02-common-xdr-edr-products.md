@@ -1,6 +1,6 @@
 ---
 title: Common XDR/EDR Products
-source: Cyber/10 Outils & solutions/EDR, XDR & threat hunting/EDR & XDR — détection, analyse et règles.md
+source: Cyber/06 Détection & réponse/Threat hunting/EDR & XDR — détection, analyse et règles.md
 note: EDR & XDR — détection, analyse et règles
 up:
 - - EDR & XDR — détection, analyse et règles
@@ -38,6 +38,21 @@ CrowdStrike Falcon est une plateforme de sécurité endpoint, principalement adm
 ### Intérêt en Threat Hunting
 
 CrowdStrike Falcon permet d'associer les activités endpoint à des renseignements CTI afin de mieux comprendre les comportements malveillants.
+
+Il permet notamment de :
+
+- rechercher des processus suspects ;
+    
+- analyser les comportements associés à une attaque ;
+    
+- corréler les activités de plusieurs endpoints ;
+    
+- exploiter la Threat Intelligence pour orienter les investigations ;
+    
+- déclencher des actions de réponse.
+    
+
+L'intérêt principal est de combiner Endpoint Telemetry + Behavioral Detection + Threat Intelligence pour identifier des menaces non détectées par les mécanismes de protection classiques.
 
 L'architecture cloud facilite la gestion centralisée, mais un agent léger ne garantit pas un impact nul sur les performances.
 
@@ -102,6 +117,38 @@ Elle s'appuie sur des fonctionnalités de protection endpoint, de détection com
     
 - Advanced Hunting : recherche de comportements suspects dans la télémétrie de sécurité.
     
+- Microsoft Security Integration : intégration avec Microsoft 365 et les autres solutions de sécurité Microsoft.
+    
+
+### Utilisation en Threat Hunting
+
+MDE permet notamment de :
+
+- rechercher des événements suspects sur les endpoints ;
+    
+- analyser les processus, fichiers et connexions réseau ;
+    
+- investiguer les alertes et incidents ;
+    
+- corréler les activités endpoint avec d'autres signaux Microsoft ;
+    
+- effectuer des actions de remédiation.
+    
+
+Advanced Hunting utilise KQL (Kusto Query Language) pour interroger la télémétrie de sécurité.
+
+Exemple illustratif :
+
+```
+DeviceProcessEvents
+| where FileName =~ "powershell.exe"
+| project Timestamp, DeviceName, AccountName,
+          ProcessCommandLine, InitiatingProcessFileName
+```
+
+
+Cette requête recherche les événements d'exécution de `powershell.exe` dans les données disponibles. Elle ne détecte pas, à elle seule, une activité malveillante.
+    
 
 ### EDR vs XDR chez Microsoft
 
@@ -163,10 +210,28 @@ SentinelOne est une plateforme de sécurité proposant des capacités EDR et XDR
     
 - Third-Party Integrations : connexion avec d'autres solutions de sécurité.
     
+- Continuous Monitoring : collecte et suivi des activités système.
+    
+- Threat Intelligence Integration : enrichissement des détections.
+    
+- Cross-Platform Support : prise en charge de Windows, macOS et Linux.
+    
 
 ### Intérêt en Threat Hunting
 
 SentinelOne aide les analystes à comprendre la progression d'une activité malveillante grâce à la visualisation des événements liés à une attaque.
+
+Il permet :
+
+- d'analyser des comportements suspects ;
+    
+- de reconstruire une séquence d'attaque ;
+    
+- d'identifier des activités de malware ;
+    
+- de rechercher des événements similaires sur d'autres endpoints ;
+    
+- d'isoler et de remédier aux menaces selon les fonctionnalités disponibles.
 
 Les fonctionnalités d'automatisation contribuent à réduire les tâches répétitives et à accélérer certaines réponses.
 
