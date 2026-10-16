@@ -25,7 +25,7 @@
       groups:
         - label: 🧭 Menace cyber
           description: "Qui attaque, comment et pourquoi : les acteurs, leurs écosystèmes et l'état de la menace."
-          notes: [CTI — les fondamentaux, Cyber Threat Intelligence — analyser et réduire l'incertitude, APT — menaces persistantes avancées, APT — synthèse, Panorama de la cybermenace — état de l'art, Cartographie des écosystèmes cybercriminels, Dark Web]
+          notes: [CTI — les fondamentaux, Cyber Threat Intelligence — analyser et réduire l'incertitude, APT — menaces persistantes avancées, APT — synthèse, Panorama de la cybermenace — état de l'art, Cartographie des écosystèmes cybercriminels, Dark Web, CTI pour la détection (CTI for Detection)]
         - label: 🧪 Méthodes d'analyse
           description: "Les modèles et techniques qui structurent l'analyse et la mettent à l'épreuve."
           notes: [Modèles d'analyse de la menace, Red teaming analytique]
@@ -83,13 +83,17 @@
       mots: [SOC, supervision, réponse à incident, incident de sécurité, threat hunting, MITRE, ATT&CK, kill chain, EDR, SIEM]
       groups:
         - label: 🛰️ Détection & SOC
-          description: "Voir les attaques : journaux, détection, investigation, threat hunting."
+          description: "Voir les attaques : journaux, détection, investigation."
           notes: [Analyste SOC]
           liens: ["Analyse des journaux d'événements Windows (Event Logs)", "Analyse des journaux réseau (Network Log Analysis)", Modèles d'analyse de la menace]
         - label: 🚨 Réponse à incident
           description: "Contenir, éradiquer, rétablir, puis en tirer les leçons."
           notes: [Réponse à incident, Réponse à incident — synthèse]
           liens: ["MTTD, MTTC, MTTR"]
+        - label: 🎯 Threat hunting
+          description: "Chercher les attaquants que les alertes n'ont pas vus : hypothèses, TTP et IOC."
+          notes: [Threat hunting — introduction et méthodes]
+          liens: [Outils de threat hunting, EDR & XDR — détection, analyse et règles]
     - id: vulnerabilites
       label: 🩹 Vulnérabilités & MCS
       description: Connaître, prioriser et corriger les vulnérabilités ; maintenir la sécurité dans la durée.
@@ -131,6 +135,10 @@
         - label: 🛡️ Solutions de sécurité
           description: "Les grandes briques de défense et leur rôle."
           notes: [Solutions de sécurité]
+        - label: 🎯 EDR, XDR & threat hunting
+          description: "Les outils de la chasse aux menaces et les plateformes de détection sur les postes et au-delà."
+          notes: [Outils de threat hunting, EDR & XDR — détection, analyse et règles]
+          liens: [Threat hunting — introduction et méthodes]
     - id: concepts
       label: 💡 Concepts
       description: Les fondamentaux — vocabulaire, familles d'attaques, fonctionnement des systèmes.
