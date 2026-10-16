@@ -1,5 +1,5 @@
 ---
-title: "Europol : digital forensic en Europe, les lacunes qui fragilisent la preuve numérique"
+title: "Europol : digital forensics en Europe, les lacunes qui fragilisent la preuve numérique"
 date: 2026-10-16
 kind: analysis
 theme: "cyber"
@@ -11,7 +11,7 @@ rubriques:
   - "justice-enquete"
   - "justice-droit"
 tags:
-  - "digital forensic"
+  - "digital forensics"
   - "preuve numérique"
   - "chaîne de conservation"
   - "interopérabilité"
@@ -19,7 +19,7 @@ tags:
   - "intelligence artificielle"
 ---
 
-# Europol : digital forensic en Europe, les lacunes qui fragilisent la preuve numérique
+# Europol : digital forensics en Europe, les lacunes qui fragilisent la preuve numérique
 
 ## Métadonnées
 
@@ -34,7 +34,7 @@ tags:
 
 Le rapport examine une **chaîne de preuve**, depuis la collecte d'une donnée jusqu'à son interprétation et sa présentation au tribunal. Un outil capable d'extraire un fichier ne garantit donc ni la fiabilité de l'analyse, ni sa reprise par une autre équipe, ni sa recevabilité juridique. Europol reprend une définition du NIST qui lie l'examen technique à l'autorisation légale, à la traçabilité des manipulations, à la validation des outils et à la possibilité de répéter les opérations (p. 5). Les définitions courtes ci-dessous servent à lire le rapport ; elles ne constituent pas un glossaire juridique exhaustif.
 
-- **Digital forensic** — ensemble de méthodes d'identification, de collecte, d'examen et d'interprétation des traces numériques dans une enquête ; le rapport insiste sur la procédure qui rend le résultat vérifiable (p. 5).
+- **Digital forensics** — ensemble de méthodes d'identification, de collecte, d'examen et d'interprétation des traces numériques dans une enquête ; le rapport insiste sur la procédure qui rend le résultat vérifiable (p. 5).
 - **Preuve numérique** — donnée provenant d'un appareil, d'un service ou d'un réseau et susceptible d'étayer un fait ; son utilité dépend de sa provenance et de son interprétation (p. 3, 10-11).
 - **Acquisition** — opération consistant à obtenir les données d'un support ou d'un service ; elle se distingue de leur analyse ultérieure. Le cadre EVFF pour véhicules, par exemple, analyse des images mais ne réalise pas leur acquisition (p. 16).
 - **Chaîne de conservation (*chain of custody*)** — historique documenté des personnes et opérations ayant eu accès à une preuve, afin d'en contrôler l'intégrité et la provenance (p. 10-11).
@@ -48,7 +48,7 @@ Le rapport examine une **chaîne de preuve**, depuis la collecte d'une donnée j
 
 ## Résumé exécutif
 
-**Europol dresse une cartographie des lacunes du digital forensic européen.** Les autorités doivent analyser davantage de terminaux, de données cloud, de véhicules, d'objets connectés et de transactions en cryptomonnaies, alors que les outils sont coûteux, parfois non interopérables et inégalement accessibles. Le rapport propose une réponse collective : hiérarchiser les besoins, soutenir des outils européens, partager les services, harmoniser les formats et tester les solutions de manière indépendante (p. 3, 5-12, 23-24).
+**Europol dresse une cartographie des lacunes du digital forensics européen.** Les autorités doivent analyser davantage de terminaux, de données cloud, de véhicules, d'objets connectés et de transactions en cryptomonnaies, alors que les outils sont coûteux, parfois non interopérables et inégalement accessibles. Le rapport propose une réponse collective : hiérarchiser les besoins, soutenir des outils européens, partager les services, harmoniser les formats et tester les solutions de manière indépendante (p. 3, 5-12, 23-24).
 
 La faiblesse décrite est autant **organisationnelle que technique**. Des outils développés dans une unité peuvent manquer de documentation, de maintenance ou de diffusion ; les utilisateurs peuvent ignorer des solutions déjà disponibles. Les formats propriétaires imposent des conversions, et chaque pays peut refaire ses propres tests. Europol recommande un catalogue commun, des composants modulaires, des référentiels de compétences et un éventuel organisme européen d'essai des outils (p. 5-12).
 
@@ -60,7 +60,7 @@ Ce texte est une **analyse de besoins et un programme d'action**, pas un audit r
 
 La séquence éclaire le lien entre la feuille de route européenne et plusieurs projets encore en cours au moment de la publication.
 
-- **24 juin 2025 :** la Commission adopte sa feuille de route sur l'accès licite et effectif aux données, dont le digital forensic, la standardisation et l'analyse par IA sont trois volets (p. 4).
+- **24 juin 2025 :** la Commission adopte sa feuille de route sur l'accès licite et effectif aux données, dont le digital forensics, la standardisation et l'analyse par IA sont trois volets (p. 4).
 - **Été 2026 :** Europol indique avoir testé avec Eurojust à son siège une nouvelle approche de formation aux preuves issues de la blockchain, *The [Block]Chain of Evidence* ; aucune évaluation chiffrée n'est fournie (p. 15).
 - **Septembre 2026, annoncé :** lancement envisagé du *JRC Security Campus*, cité comme possible lieu de rencontre pour les communautés de développeurs (p. 9).
 - **16 octobre 2026 :** mise en ligne du rapport selon sa page officielle ; ses crédits imprimés ne donnent que l'année 2026 (p. 25).
@@ -147,7 +147,7 @@ La lecture transversale de l'analyse est que le verrou essentiel se situe **entr
 
 ## Sources et références mentionnées
 
-La bibliographie mêle **textes institutionnels, normes, projets européens et travaux académiques**. La feuille de route de la Commission du 24 juin 2025 structure le diagnostic (p. 4) ; le NIST fournit la définition reprise du digital forensic (p. 5) ; ISO/IEC 27037 et 27042, CEN-CENELEC CWA 17865:2022 et ETSI servent de repères pour l'acquisition, l'analyse et l'interopérabilité (p. 7-12). Europol cite aussi FREETOOL, Tools4LEAs/EACTDA, Hansken, EVFF, ECTEG, le règlement européen sur l'IA et le RGPD (p. 5-8, 14, 16-17, 20). Cette liste situe les propositions ; elle ne vaut pas vérification indépendante de chaque avantage revendiqué.
+La bibliographie mêle **textes institutionnels, normes, projets européens et travaux académiques**. La feuille de route de la Commission du 24 juin 2025 structure le diagnostic (p. 4) ; le NIST fournit la définition reprise du digital forensics (p. 5) ; ISO/IEC 27037 et 27042, CEN-CENELEC CWA 17865:2022 et ETSI servent de repères pour l'acquisition, l'analyse et l'interopérabilité (p. 7-12). Europol cite aussi FREETOOL, Tools4LEAs/EACTDA, Hansken, EVFF, ECTEG, le règlement européen sur l'IA et le RGPD (p. 5-8, 14, 16-17, 20). Cette liste situe les propositions ; elle ne vaut pas vérification indépendante de chaque avantage revendiqué.
 
 ## Cinq éléments essentiels à retenir
 
@@ -163,7 +163,7 @@ Recherches effectuées le **2026-10-16**. Cette section confronte le rapport à 
 
 ### Travaux de référence
 
-- **Feuille de route européenne.** La [Commission européenne — *Roadmap for lawful and effective access to data for law enforcement*](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52025DC0349), 24 juin 2025, prévoit le développement du digital forensic, des formats communs et d'outils d'IA, et appelle Europol à renforcer son rôle de centre d'expertise à partir de 2026. Cela confirme que le rapport s'inscrit dans une politique annoncée, non dans une décision qui aurait déjà doté chaque pays d'une plateforme commune.
+- **Feuille de route européenne.** La [Commission européenne — *Roadmap for lawful and effective access to data for law enforcement*](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52025DC0349), 24 juin 2025, prévoit le développement du digital forensics, des formats communs et d'outils d'IA, et appelle Europol à renforcer son rôle de centre d'expertise à partir de 2026. Cela confirme que le rapport s'inscrit dans une politique annoncée, non dans une décision qui aurait déjà doté chaque pays d'une plateforme commune.
 - **Essais indépendants d'outils.** Le [NIST — programme *Computer Forensic Tool Testing*](https://csrc.nist.gov/Projects/mobile-forensics/cftt), consulté le 16 octobre 2026, publie une méthode d'essai reposant sur spécifications, procédures, critères et jeux de test. Son existence montre qu'une validation structurée est réalisable ; elle ne prouve pas qu'un organisme européen unique soit toujours la meilleure forme de gouvernance.
 - **Normes de manipulation.** L'[ISO — ISO/IEC 27037:2012](https://www.iso.org/standard/44381.html), 2012, couvre identification, collecte, acquisition et conservation des preuves numériques. Elle confirme l'existence d'un socle général, tandis que les cas cloud, IoT et véhicules du rapport interrogent son application à des données réparties et à des interfaces changeantes.
 
@@ -174,13 +174,16 @@ Le rapport décrit des besoins ; les projets suivants aident à distinguer **cap
 - **Une plateforme européenne encore exploratoire.** Le [NFI (Pays-Bas) — projet EU DFaaS autour de Hansken](https://www.hansken.nl/latest/news/2026/02/09/european-dfaas-exploration-strengthening-cross-border-digital-investigations), 9 février 2026, indique explorer la faisabilité d'une plateforme ouverte pour les enquêtes transfrontières. Son enquête rapide évoque de très grands volumes et des échanges fréquents entre États, mais ne publie pas dans cette page un échantillon permettant d'en généraliser les pourcentages. La plateforme européenne reste un **projet étudié**, alors que Hansken existe déjà dans l'écosystème néerlandais.
 - **Des outils européens disponibles sous conditions.** [EACTDA — *Tools4LEAs*](https://www.tools4leas.eu/index.html), consulté le 16 octobre 2026, présente des outils sans coût de licence pour les praticiens publics européens, accessibles aux utilisateurs validés par son portail. Ce fait nuance l'idée d'une absence de solutions européennes ; il confirme simultanément que disponibilité, accès, support et adoption sont quatre questions distinctes.
 - **La formation sur véhicules se modularise.** [ECTEG — *Vehicular Forensics project*](https://www.ecteg.eu/projects/vehicular-forensics/), consulté le 16 octobre 2026, distingue un module automobile annoncé pour un pilote en octobre 2026, un module drones en développement et un module horodatage-géolocalisation prévu pour mars 2027. Ces étapes sont plus précises que l'annonce globale « début 2027 » du rapport ; un pilote ne signifie pas que tout le cursus soit opérationnel.
+- **La clé « fabricant » rejoint un chantier européen ouvert.** La suggestion d'Europol n'est pas isolée : la [Commission prépare une feuille de route technologique sur le chiffrement](https://home-affairs.ec.europa.eu/policies/internal-security/lawful-access-data/encryption_en), confiée à un groupe d'experts qui doit conclure en 2026, et veut doter Europol de nouvelles capacités de déchiffrement « après 2030 ». Le débat de fond est ancien : dans [*Keys Under Doormats* (2015)](https://dspace.mit.edu/handle/1721.1/102271), quinze cryptographes, dont Harold Abelson, Ross Anderson et Steven Bellovin, soutiennent qu'un accès exceptionnel imposé par la loi accroît la complexité des systèmes, crée des cibles de grande valeur pour les attaquants et fragilise la sécurité de tous les utilisateurs. Leur argument porte sur le séquestre de clés à grande échelle ; il ne dit rien de l'efficacité des alternatives comme l'exploitation ciblée de vulnérabilités, que le rapport juge lui-même fragile.
+- **La fiabilité des outils d'analyse blockchain se plaide déjà.** Faute de références sur les deux affaires françaises, le précédent public le plus net est américain. Dans l'affaire *Sterlingov* (mélangeur Bitcoin Fog), la défense contestait la fiabilité de Chainalysis Reactor ; le juge fédéral du district de Columbia a admis ces analyses comme preuves après une audience de recevabilité début 2024, selon le [cabinet Stout (1er octobre 2024)](https://www.stout.com/en/insights/article/judicial-scrutiny-chainalysis), et l'accusé a été condamné puis [sentencé à plus de douze ans de prison en novembre 2024](https://www.justice.gov/usao-dc/pr/operator-bitcoin-fog-sentenced-more-12-years-prison-running-notorious-darknet). Ce précédent montre l'inverse de ce que le rapport décrit pour la France : un outil commercial accepté. Les deux cas ne se contredisent pas : la recevabilité dépend de la façon dont l'enquêteur interprète et explique les sorties, ce qui confirme le besoin de formation sur les méthodes souligné par Europol.
+- **Un modèle de validation obligatoire existe déjà en Europe.** En Angleterre et au pays de Galles, le [code de pratique statutaire du *Forensic Science Regulator*](https://www.gov.uk/government/publications/forensic-science-activities-statutory-code-of-practice-version-2), dans sa version 2 en vigueur depuis le 2 octobre 2025, s'applique aux activités de digital forensics qu'il énumère et fait des méthodes validées une exigence du système qualité. C'est une voie différente de l'organisme européen d'essai proposé par Europol : chaque laboratoire valide et se fait accréditer, sous le contrôle d'un régulateur. Elle montre qu'une obligation de validation est praticable, sans trancher entre test centralisé et validation répartie.
 - **Le contrôle de la preuve ne se résume pas à l'outil.** La [directive (UE) 2016/680](https://eur-lex.europa.eu/eli/dir/2016/680/oj), 27 avril 2016, fournit le cadre spécifique aux traitements de données personnelles par les autorités compétentes à des fins pénales. Les journaux, droits d'accès, durées de conservation et échanges préconisés par Europol doivent être appréciés dans ce cadre et dans ses transpositions nationales, au-delà de la seule performance des logiciels.
 
 ### Vérification des affirmations de la source
 
 | Affirmation du document | Verdict | Source de la vérification |
 | --- | --- | --- |
-| La feuille de route de juin 2025 fait du digital forensic et de l'IA deux axes d'action européens (p. 4). | **Confirmé.** La communication les inscrit parmi ses actions, avec des échéances et responsabilités. | [Commission européenne, 24 juin 2025](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52025DC0349). |
+| La feuille de route de juin 2025 fait du digital forensics et de l'IA deux axes d'action européens (p. 4). | **Confirmé.** La communication les inscrit parmi ses actions, avec des échéances et responsabilités. | [Commission européenne, 24 juin 2025](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52025DC0349). |
 | Un modèle de DFaaS européen pourrait s'inspirer de Hansken (p. 14). | **Nuancé.** Hansken existe ; le service européen commun est encore en étude de faisabilité. | [NFI/Hansken, 9 février 2026](https://www.hansken.nl/latest/news/2026/02/09/european-dfaas-exploration-strengthening-cross-border-digital-investigations). |
 | Des outils Tools4LEAs peuvent être mis à disposition des autorités européennes (p. 5-8). | **Confirmé sous conditions d'accès.** Le portail les réserve aux utilisateurs publics validés ; le site ne documente pas à lui seul leur couverture fonctionnelle. | [EACTDA, consulté le 16 octobre 2026](https://www.tools4leas.eu/index.html). |
 | La formation ECTEG sur les véhicules devait être disponible début 2027 (p. 17). | **Nuancé.** La page du projet distingue plusieurs modules et pilotes s'étalant d'octobre 2026 à mars 2027. | [ECTEG, consulté le 16 octobre 2026](https://www.ecteg.eu/projects/vehicular-forensics/). |
@@ -206,3 +209,6 @@ La [directive (UE) 2016/680](https://eur-lex.europa.eu/eli/dir/2016/680/oj), 27 
 - [NFI/Hansken — exploration EU DFaaS](https://www.hansken.nl/research-and-development/exploring-european-dfaas), consulté le 16 octobre 2026 : état du projet de plateforme partagée, à distinguer d'un service déjà déployé.
 - [ECTEG — *Vehicular Forensics project*](https://www.ecteg.eu/projects/vehicular-forensics/), consulté le 16 octobre 2026 : modules et calendrier de formation sur les véhicules et drones.
 - [EACTDA — *Tools4LEAs*](https://www.tools4leas.eu/index.html), consulté le 16 octobre 2026 : accès et développement d'outils destinés aux praticiens européens.
+- [Analyse du site — Williams, IA et digital forensics](../analyses/ia-et-criminalistique-numerique-usages-specialises-agi-hypothetique-et-exigences-de-preuve.md) : les exigences de validation et de recevabilité des outils d'IA, vues par une revue de littérature.
+- [Analyse du site — Europol et Eurojust, preuves électroniques transfrontières](../analyses/europol-et-eurojust-preuves-electroniques-transfrontieres-demandes-en-hausse-et-changement-de-regles.md) : l'autre versant de la chaîne de preuve, l'obtention des données auprès des fournisseurs.
+- [Analyse du site — JRC et Europol, technologies de confidentialité](../analyses/commission-europeenne-jrc-et-europol-prospective-des-technologies-de-confidentialite.md) : le débat sur l'accès légal aux données chiffrées, dans lequel s'inscrit la piste de la clé fabricant.
