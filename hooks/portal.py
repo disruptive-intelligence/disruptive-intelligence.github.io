@@ -2688,6 +2688,53 @@ def cs_entry_commands(body, known=()):
     return res
 
 
+CS_SORTIE = re.compile(r'^\?\?\?\+?\s+\w+\s+"Sortie"')
+CS_EVENT_IDS = re.compile(r"\b(?:Id|EventI[dD]|EventCode)\s*[=:]\s*(\d+(?:\s*,\s*\d+)*)")
+CS_LOGNAME = re.compile(r"LogName\s*=\s*'([^']+)'")
+CS_INLINE = re.compile(r"`([^`]+)`|\*\*([^*]+)\*\*")
+CS_NUMBER = re.compile(r"(?<![\w.:/-])\d{3,5}(?![\w.:/-])")
+
+
+def cs_entry_terms(body):
+    """Termes de recherche de chaque besoin (même ordre que cs_entry_commands) : event ID, ports et autres
+    nombres du texte et des commentaires, `code` et **gras** du texte, Id=… et LogName='…' des commandes.
+    Les sorties (blocs « Sortie ») et les renvois (Ensuite, Pour comprendre) n'en donnent pas."""
+    out, fence, sortie = [], False, False
+    for line in body.split("\n"):
+        if sortie:
+            if not line.strip() or line.startswith((" ", "\t")):
+                if line.lstrip().startswith("```"):
+                    fence = not fence
+                continue
+            sortie = False
+        if line.lstrip().startswith("```"):
+            fence = not fence
+            continue
+        m = None if fence else HEADING.match(line)
+        if m and len(m.group(1)) <= 3:
+            if len(m.group(1)) == 3:
+                out.append([])
+            elif out:
+                out.append(None)                   # titre de groupe : la suite n'est plus au besoin précédent
+            continue
+        if not out or out[-1] is None:
+            continue
+        terms = out[-1]
+        if fence:
+            terms += [i for g in CS_EVENT_IDS.findall(line) for i in re.findall(r"\d+", g)]
+            terms += CS_LOGNAME.findall(line)
+            comment = re.search(r"(?:^|\s)#\s(.*)$", line)
+            if comment:
+                terms += CS_NUMBER.findall(comment.group(1))
+        elif CS_SORTIE.match(line.strip()):
+            sortie = True
+        elif not line.startswith(("Ensuite", "Pour comprendre", "Pour approfondir", "Références")):
+            text = MD_LINK.sub("]", line)
+            terms += [a or b for a, b in CS_INLINE.findall(text)]
+            terms += CS_NUMBER.findall(CS_INLINE.sub(" ", text))
+    return [list(dict.fromkeys(t)) for t in out if t is not None]
+
+
 def cs_command_index(pages, order, known):
     """{commande: {"main": [(besoin, src)], "also": [(besoin, src)]}} sur les fiches de l'onglet,
     dans l'ordre du menu ; les fiches commande (méta « commande ») n'y participent pas."""
@@ -2731,12 +2778,16 @@ def page_cs_needs(pages, order, known=()):
         lines = []
         if meta.get("besoin"):
             lines.append(f'- [{esc(meta["besoin"])}]({posixpath.relpath(src, CS_DIR)})')
-        for g, n, prim, sec in cs_entry_commands(text, known):
+        entries = cs_entry_commands(text, known)
+        terms = cs_entry_terms(text)
+        terms = terms if len(terms) == len(entries) else [[] for _ in entries]
+        for (g, n, prim, sec), extra in zip(entries, terms):
             chips = " ".join(f"<code>{esc(c)}</code>" for c in prim)
             lines.append(f"- {cs_need_link(n, src, CS_NEEDS)}"
                          + (f' <span class="kw-note-meta">{esc(g)}</span>' if g else "")
                          + (f' <span class="kw-cs-cmds">{chips}</span>' if chips else "")
-                         + (f' <span class="kw-cs-hidden">{esc(" ".join(sec))}</span>' if sec else ""))
+                         + (f' <span class="kw-cs-hidden">{esc(" ".join(sec))}</span>' if sec else "")
+                         + (f' <span class="kw-cs-terms">{esc(" · ".join(extra))}</span>' if extra else ""))
         if lines:
             body += f'\n<div class="kw-cs-needgroup" markdown>\n\n## {" › ".join(cs_trail(src, pages))}\n\n' + "\n".join(lines) + "\n\n</div>\n"
     total = body.count("\n- [")
@@ -2746,10 +2797,10 @@ hide:
 ---
 # 🔎 Que veux-tu faire ?
 
-Tous les besoins de toutes les cheat sheets ({total}). Tape un mot ou une commande : `pid`, `hosts`, `port`,
-`cron`, `tail`, `ss`… Pour partir d'une commande : [🔤 Par commande](commandes.md).
+Tous les besoins de toutes les cheat sheets ({total}). Tape un mot, une commande ou un event ID : `pid`,
+`hosts`, `port`, `cron`, `tail`, `ss`, `4624`… Pour partir d'une commande : [🔤 Par commande](commandes.md).
 
-<input class="kw-cs-search" type="search" placeholder="Filtrer les besoins ou les commandes…" aria-label="Filtrer les besoins" data-scope=".kw-cs-needgroup">
+<input class="kw-cs-search" type="search" placeholder="Filtrer : besoin, commande, event ID…" aria-label="Filtrer les besoins" data-scope=".kw-cs-needgroup">
 {body}"""
 
 
