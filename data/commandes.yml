@@ -296,6 +296,9 @@ rsync:
 scp:
   fait: Copie des fichiers vers ou depuis une autre machine par SSH.
   cmd: scp <fichier> <utilisateur>@<hôte>:<chemin>
+ssh:
+  fait: Ouvre un terminal sur une machine distante, chiffré (SSH).
+  cmd: ssh <utilisateur>@<hôte>
 sed:
   fait: Remplace ou supprime du texte, ligne par ligne.
   powershell: (Get-Content <fichier>) -replace '<ancien>', '<nouveau>'
@@ -395,6 +398,9 @@ usermod:
   fait: Modifie un compte (groupes, shell, verrouillage).
   cmd: net localgroup <groupe> <utilisateur> /add
   powershell: Add-LocalGroupMember -Group <groupe> -Member <utilisateur>
+vncviewer:
+  fait: Ouvre un bureau graphique distant VNC (client TigerVNC).
+  cmd: vncviewer.exe <hôte>:<affichage>
 visudo:
   fait: Modifie les droits sudo en vérifiant la syntaxe.
 w:
@@ -408,6 +414,9 @@ wget:
   fait: Télécharge un fichier.
   cmd: curl.exe -O <url>
   powershell: Invoke-WebRequest <url> -OutFile <fichier>
+xfreerdp3:
+  fait: Ouvre un bureau Windows distant en RDP depuis Linux (FreeRDP).
+  cmd: mstsc /v:<hôte>
 zgrep:
   fait: Cherche un motif dans des fichiers compressés (.gz).
 zip:
