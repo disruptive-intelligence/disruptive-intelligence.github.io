@@ -60,7 +60,7 @@
       label: 🧬 Forensic
       description: Collecter et analyser les traces d'un incident sur disque, en mémoire et dans les journaux.
       mots: [forensic, forensique, investigation numérique, preuve numérique, enquête pénale, criminologie]
-      notes: [Investigation numérique (forensic)]
+      notes: [Investigation numérique (forensic), DFIR avec l'EDR]
     - id: hardening
       label: 🧱 Hardening
       description: Réduire la surface d'attaque des systèmes, des identités et des applications.
@@ -89,7 +89,7 @@
         - label: 🚨 Réponse à incident
           description: "Contenir, éradiquer, rétablir, puis en tirer les leçons."
           notes: [Réponse à incident, Réponse à incident — synthèse]
-          liens: ["MTTD, MTTC, MTTR"]
+          liens: ["MTTD, MTTC, MTTR", Réponse à incident sous Windows (Windows Incident Response), DFIR avec l'EDR]
         - label: 🎯 Threat hunting
           description: "Chercher les attaquants que les alertes n'ont pas vus. Un parcours en quatre étapes : la démarche, les outils, les EDR et XDR, puis la chasse avec l'EDR et ses labs."
           notes: [Threat hunting — introduction et méthodes, Outils de threat hunting, "EDR & XDR — détection, analyse et règles", Threat hunting avec l'EDR]
@@ -178,7 +178,7 @@
           notes: [Ligne de commande Windows, PowerShell, CMD — aide-mémoire]
         - label: 🔍 Journaux & investigation
           description: "Ce que Windows enregistre, et comment le lire."
-          notes: ["Analyse des journaux d'événements Windows (Event Logs)"]
+          notes: ["Analyse des journaux d'événements Windows (Event Logs)", Réponse à incident sous Windows (Windows Incident Response)]
     - id: active-directory
       label: 🏰 Active Directory
       description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.

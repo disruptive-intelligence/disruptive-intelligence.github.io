@@ -93,7 +93,10 @@ Comprendre et observer un système Windows : identité de la machine, processus,
             - 1116 : menace détectée · 5001 : protection coupée
         - [Effacement](logs/effacement.md) : 1102 (Security) · 104 (System)
         - [Sysmon et requêtes SIEM](logs/sysmon.md)
-            - 1 : processus · 3 : réseau · 22 : DNS
+            - 1 : processus · 3 : réseau · 11 : fichier · 13 : registre · 22 : DNS
+            - [Journal exporté](logs/sysmon.md#lire-un-journal-sysmon-exporte) : `Get-WinEvent -Path … -FilterXPath`
+            - [Chaîne des parents](logs/sysmon.md#remonter-la-chaine-des-processus-parents) : `ParentProcessId`
+            - [Clé Run](logs/sysmon.md#reperer-une-persistance-par-cle-run) : Sysmon 13
             - [10 vers lsass.exe](logs/sysmon.md#reperer-un-acces-a-la-memoire-de-lsass) : vol d'identifiants
             - [Binaire renommé](logs/sysmon.md#demasquer-un-binaire-renomme) : `OriginalFileName`
             - [Reconnaissance](logs/sysmon.md#reperer-une-reconnaissance-du-poste-et-du-domaine) : `net user`, `nltest /dclist`

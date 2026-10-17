@@ -4,9 +4,9 @@ title: "Sysmon et requêtes SIEM"
 
 # Sysmon et requêtes SIEM
 
-Ce que Sysmon enregistre et comment le chasser : processus, connexions, requêtes DNS, binaires renommés, accès à LSASS, reconnaissance du domaine, PowerShell encodé ; les mêmes recherches en PowerShell et dans Wazuh.
+Ce que Sysmon enregistre et comment le chasser : processus, connexions, requêtes DNS, fichiers créés, clés Run, chaîne des parents, binaires renommés, accès à LSASS, reconnaissance du domaine, PowerShell encodé ; sur la machine, dans un journal exporté (`.evtx`) et dans Wazuh.
 
-Les incontournables : `Sysmon 1` · `Sysmon 3` · `Sysmon 22` · `Sysmon 10` · `OriginalFileName` · `rule.groups: sysmon_event1`
+Les incontournables : `Sysmon 1` · `Sysmon 3` · `Sysmon 11` · `Sysmon 13` · `Sysmon 22` · `Get-WinEvent -Path` · `OriginalFileName` · `rule.groups: sysmon_event1`
 { .kw-cs-top }
 
 ## Lire Sysmon
@@ -37,6 +37,36 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'} 
 Sysmon n'est pas installé par défaut (`sysmon64 -accepteula -i config.xml`). Ce qu'il journalise dépend entièrement de sa **configuration** : un Event ID absent veut souvent dire « non configuré », pas « rien ne s'est passé ».
 
 Pour comprendre : [Outils de collecte de données : Sysmon](../../../../library/cyber/detection/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool.md)
+{ .kw-cs-meta }
+
+### Lire un journal Sysmon exporté
+
+```powershell title="Commande"
+Get-WinEvent -Path 'C:\Cas\sysmon.evtx' -FilterXPath "*[System[EventID=3]]"                                             # un Event ID
+Get-WinEvent -Path 'C:\Cas\sysmon.evtx' -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationPort']='22']]"   # + la valeur d'un champ
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path 'C:\Cas\sysmon.evtx' -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='203.0.113.50']]" |
+    ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Where-Object Name -eq 'Image' | Select-Object -ExpandProperty '#text' }
+```
+
+??? example "Sortie"
+    ```text
+    C:\Windows\Temp\plink.exe
+    ```
+
+Un `.evtx` exporté (copie d'un poste, pièce d'enquête) se lit hors de la machine : `-Path` remplace `-FilterHashtable @{LogName=…}`. Le filtre XPath vise un **champ** (`EventData[Data[@Name='…']='…']`) : l'égalité doit être exacte. Pour lire un champ, passer par le XML de l'événement (`[xml]$_.ToXml()`). Dans l'Observateur d'événements : *Open Saved Log…*, puis *Filter Current Log…* (Event ID) et *Find…* (`CTRL + F`) pour une valeur.
+
+??? example "Cas concret : quel processus communique avec l'IP signalée par la CTI ?"
+    ```powershell
+    # Sysmon 3 vers l'IP, puis le champ Image : ici un client SSH (port 22) lancé depuis C:\Windows\Temp = tunnel sortant
+    Get-WinEvent -Path 'C:\Users\LetsDefend\Desktop\sysmon.evtx' -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='<IP>']]" |
+        ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Where-Object Name -eq 'Image' | Select-Object -ExpandProperty '#text' }
+    ```
+    [Lab DFIR avec l'EDR, question 1](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-1-le-processus-qui-communique-avec-lip-signalee-par-la-cti)
+
+Pour comprendre : [Lab — analyse d'un journal Sysmon exporté](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md) · [Lire, filtrer et exporter les journaux](lire.md)
 { .kw-cs-meta }
 
 ## Chasser avec Sysmon
@@ -171,6 +201,101 @@ rule.groups: windows and rule.mitre.id: T1087.001
 Pour comprendre : [Threat hunting avec l'EDR : lab 3](../../../../library/cyber/detection/threat-hunting-avec-l-edr/04-labs-chasse-aux-menaces-dans-wazuh.md#lab-3-reconnaissance-et-effacement-des-journaux) · [Comptes, groupes et DC : nltest](../../administration/active-directory/kerberos-dc.md)
 { .kw-cs-meta }
 
+### Retrouver qui a créé un fichier
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=11}   # FileCreate : fichier créé et processus créateur
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=11} -MaxEvents 500 |
+    Where-Object Message -match 'TargetFilename:.*\\Startup\\' | Select-Object -First 1 -ExpandProperty Message
+```
+
+??? example "Sortie"
+    ```text
+    File created:
+    ProcessId: 4632
+    Image: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    TargetFilename: C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ncat.ps1
+    User: TESTPC\admin
+    ```
+
+Le **11** relie un fichier (`TargetFilename`) au processus qui l'a créé (`ProcessId`, `Image`). Dossiers à surveiller : **Startup** (exécuté à chaque ouverture de session, T1547.001), `%TEMP%`, `Downloads`, `C:\Users\Public`.
+
+??? example "Cas concret : quel processus a déposé un script dans le dossier Démarrage ?"
+    ```powershell
+    Get-WinEvent -Path 'C:\Users\LetsDefend\Desktop\sysmon.evtx' -FilterXPath "*[System[EventID=11] and EventData[Data[@Name='TargetFilename']='C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\ncat.ps1']]" |
+        Select-Object -ExpandProperty Message   # lire ProcessId et Image
+    ```
+    [Lab DFIR avec l'EDR, question 2](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-2-le-processus-qui-depose-un-script-dans-le-dossier-demarrage)
+
+### Remonter la chaîne des processus parents
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} |
+    Where-Object Message -match 'ProcessId: 8264\r?\n'   # le Sysmon 1 du parent, par son ProcessId
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} -MaxEvents 1000 |
+    Where-Object Message -like '*procdump.zip*' |
+    ForEach-Object { $d = @{}; ([xml]$_.ToXml()).Event.EventData.Data | ForEach-Object { $d[$_.Name] = $_.'#text' }
+                     [pscustomobject]@{ Image = $d.Image; ParentProcessId = $d.ParentProcessId; ParentImage = $d.ParentImage } }
+```
+
+??? example "Sortie"
+    ```text
+    Image                          ParentProcessId ParentImage
+    -----                          --------------- -----------
+    C:\Windows\SysWOW64\curl.exe   8264            C:\Windows\SysWOW64\cmd.exe
+    ```
+
+Méthode : Sysmon 1 de l'activité suspecte → `ParentProcessId` → Sysmon 1 de ce parent → son `ParentImage`, jusqu'à un processus qui explique l'entrée. Lecture du sommet de la chaîne : serveur web (`httpd.exe`, `w3wp.exe`) = application web exploitée ; `WINWORD.EXE` / `EXCEL.EXE` = document piégé ; `explorer.exe` = lancement par l'utilisateur. Un `ProcessId` est réutilisé par Windows : vérifier aussi l'heure, ou suivre le `ProcessGuid` / `ParentProcessGuid`, uniques.
+
+??? example "Cas concret : qui a lancé le cmd.exe qui a téléchargé procdump.zip ?"
+    ```powershell
+    # 1. le téléchargement (curl) et son ParentProcessId
+    Get-WinEvent -Path 'C:\Users\LetsDefend\Desktop\sysmon.evtx' | Where-Object { $_.Id -eq 1 -and $_.Message -like '*procdump.zip*' } |
+        Select-Object -ExpandProperty Message
+    # 2. le Sysmon 1 du cmd.exe parent, puis son ParentImage : httpd.exe (Apache) = commandes passées par l'application web
+    Get-WinEvent -Path 'C:\Users\LetsDefend\Desktop\sysmon.evtx' -FilterXPath "*[System[EventID=1] and EventData[Data[@Name='ProcessId']='<ParentProcessId>']]" |
+        Select-Object -ExpandProperty Message
+    ```
+    [Lab DFIR avec l'EDR, questions 3 et 4](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-4-le-parent-du-cmdexe-qui-a-lance-le-telechargement)
+
+### Repérer une persistance par clé Run
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=12,13,14} |
+    Where-Object Message -match 'TargetObject:.*\\CurrentVersion\\Run'   # registre : clé créée/supprimée, valeur écrite, renommée
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=13} -MaxEvents 500 |
+    Where-Object Message -match 'TargetObject:.*\\CurrentVersion\\Run' | Select-Object -First 1 -ExpandProperty Message
+```
+
+??? example "Sortie"
+    ```text
+    Registry value set:
+    RuleName: technique_id=T1547.001,technique_name=Registry Run Keys / Start Folder
+    EventType: SetValue
+    Image: C:\Windows\system32\reg.exe
+    TargetObject: HKU\S-1-5-21-…-1001\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\RvcX App
+    Details: C:\windows\temp\rvcx.exe
+    ```
+
+Le **13** donne la clé (`TargetObject`), le programme qui sera lancé (`Details`) et l'outil qui l'a écrit (`Image`). Sous HKCU, la clé apparaît avec le SID de l'utilisateur (`HKU\S-1-5-21-…`). Un programme dans `C:\Windows\Temp` ajouté à `Run` par `reg.exe` : persistance (T1547.001). Voir aussi [ce qui démarre avec Windows](../registre.md).
+
+??? example "Cas concret : quel programme est lancé à chaque démarrage ?"
+    ```powershell
+    # Sysmon 13 sous ...\CurrentVersion\Run : lire Details (le programme) et Image (qui l'a écrit)
+    Get-WinEvent -Path 'C:\Users\LetsDefend\Desktop\sysmon.evtx' -FilterXPath "*[System[EventID=13]]" |
+        Where-Object Message -match 'CurrentVersion\\Run' | Select-Object -ExpandProperty Message
+    ```
+    [Lab DFIR avec l'EDR, question 5](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-5-le-programme-lance-a-chaque-demarrage-cle-run)
+
 ### Repérer un accès à la mémoire de LSASS
 
 ```powershell title="Commande"
@@ -221,25 +346,48 @@ Pour comprendre : [Processus et PowerShell](processus-powershell.md#retrouver-le
 
 Tous dans Journaux des applications et des services → Microsoft → Windows → Sysmon → Operational.
 
-| Event ID | Événement | À retenir en chasse |
+| Event ID | Événement | Intérêt |
 |---|---|---|
-| **1** | Processus créé | Chemin, ligne de commande, parent, hash, `OriginalFileName` : la base de toute chasse |
-| **2** | Date de création d'un fichier modifiée | Timestomping : un attaquant vieillit son fichier |
-| **3** | Connexion réseau | Processus → IP:port ; pivot vers le pare-feu et la CTI |
-| **5** | Processus terminé | Durée de vie d'un processus (avec le 1) |
-| **6** | Pilote chargé | Pilote non signé ou vulnérable (BYOVD) |
-| **7** | Image (DLL) chargée | DLL chargée depuis un dossier inhabituel (sideloading) ; très bavard |
-| **8** | CreateRemoteThread | Injection de code dans un autre processus |
-| **10** | Accès à un processus | Vers `lsass.exe` : vol d'identifiants |
-| **11** | Fichier créé | Charge déposée dans `%TEMP%`, `Downloads`, dossier de démarrage |
-| **12 / 13 / 14** | Registre : clé créée ou supprimée / valeur écrite / renommée | Persistance (`Run`, `RunOnce`, services) |
-| **15** | Flux de données alternatif créé | `Zone.Identifier` : fichier venu d'Internet |
-| **17 / 18** | Pipe nommé créé / connecté | Outils de post-exploitation et mouvements latéraux |
-| **19 / 20 / 21** | WMI : filtre / consommateur / liaison | Persistance par abonnement WMI |
-| **22** | Requête DNS | Domaine résolu **et** processus demandeur |
-| **23 / 26** | Fichier supprimé (archivé / seulement détecté) | Nettoyage de traces |
-| **25** | Altération de processus | Process hollowing, herpaderping |
-| **255** | Erreur Sysmon | Sysmon en difficulté ou altéré |
+| **1** | Process Creation | Processus exécutés et leur contexte : chemin, ligne de commande, parent, hash, `OriginalFileName` ; la base de toute chasse |
+| **2** | File Creation Time Changed | Timestamps de fichiers modifiés (timestomping : un attaquant vieillit son fichier) |
+| **3** | Network Connection | Connexions réseau d'un processus : IP et port de destination ; pivot vers le pare-feu et la CTI |
+| **4** | Sysmon Service State Changed | Changements d'état du service Sysmon (arrêt = perte de visibilité) |
+| **5** | Process Terminated | Fin d'exécution d'un processus ; durée de vie avec le 1 |
+| **6** | Driver Loaded | Pilotes chargés : non signé ou vulnérable (BYOVD) |
+| **7** | Image Loaded | DLL et modules chargés par un processus : DLL depuis un dossier inhabituel (sideloading) ; très bavard |
+| **8** | CreateRemoteThread | Thread créé dans un autre processus : injection de code |
+| **9** | RawAccessRead | Accès direct à un volume ou un disque (lecture hors du système de fichiers) |
+| **10** | ProcessAccess | Accès d'un processus à un autre : vers `lsass.exe`, vol d'identifiants |
+| **11** | File Create | Fichiers créés et processus créateur : charge déposée dans `%TEMP%`, `Downloads`, dossier Startup |
+| **12** | Registry Event (Object create and delete) | Clés et valeurs du registre créées ou supprimées |
+| **13** | Registry Value Set | Valeurs écrites : persistance (`Run`, `RunOnce`, services) |
+| **14** | Registry Object Renamed | Clés et valeurs renommées |
+| **15** | File Create Stream Hash | Flux de données alternatifs (ADS) : `Zone.Identifier` = fichier venu d'Internet |
+| **16** | Sysmon Configuration Change | Configuration de Sysmon modifiée (règles affaiblies ?) |
+| **17** | Pipe Created | Named Pipes créés : outils de post-exploitation |
+| **18** | Pipe Connected | Connexions à des Named Pipes : mouvements latéraux |
+| **19** | WMI Event Filter | Filtre WMI : persistance par abonnement WMI |
+| **20** | WMI Event Consumer | Consommateur WMI : l'action exécutée |
+| **21** | WMI Consumer-to-Filter | Liaison filtre ↔ consommateur : l'abonnement actif |
+| **22** | DNS Query | Requêtes DNS **et** processus demandeur |
+| **23** | FileDelete | Fichiers supprimés, avec archivage si configuré : nettoyage de traces |
+| **24** | Clipboard Change | Modifications du presse-papiers |
+| **25** | Process Tampering | Altérations de processus : process hollowing, herpaderping |
+| **26** | FileDeleteDetected | Fichiers supprimés, sans archivage |
+| **27** | FileBlockExecutable | Création d'exécutables PE bloquée |
+| **28** | FileBlockShredding | Destruction sécurisée de fichiers bloquée |
+| **29** | FileExecutableDetected | Nouveaux exécutables PE détectés |
+| **255** | Error | Sysmon en difficulté ou altéré |
+
+| Type d'analyse | Event IDs |
+|---|---|
+| Processus | 1, 5, 7, 8, 10, 25 |
+| Réseau | 3, 22 |
+| Fichiers | 2, 11, 15, 23, 26, 27, 28, 29 |
+| Persistance | 12 – 14, 17 – 21 |
+| Intégrité de la surveillance | 4, 16, 255 |
+
+Sysmon n'enregistre pas tous ces événements par défaut : leur présence dépend de la version et de la configuration. Pour comprendre : [Principaux Sysmon Event IDs](../../../../library/cyber/forensic/dfir-avec-l-edr/01-dfir-with-edr-configuring-edr-tools-for-effective.md#principaux-sysmon-event-ids)
 
 | Chercher dans Wazuh | Requête DQL |
 |---|---|

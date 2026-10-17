@@ -1937,7 +1937,7 @@ def library_nav(library):
         nav.append({dom["label"]: [dom_src(dom)] + cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": fiches_src + [note_nav(n) for n in fiches]}] if fiches else [])
     # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
-    return nav + revision_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
+    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
 
 
 def category_nav(cat):
@@ -2523,6 +2523,7 @@ hide:
 <a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {len(all_notes)} notes publiées : un mot, une commande, un acteur.</span></a>
 <a class="kw-card" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">📖 Glossaire & notions</span><span class="kw-card__text">{glossary_count} définitions de A à Z et {len(fiches)} fiches notions pour aller à l'essentiel.</span></a>
 {revision_card(src)}
+{labs_card(src)}
 <a class="kw-card" href="{href(src, "cheatsheets/index.md")}"><span class="kw-card__title">📋 Cheat sheets</span><span class="kw-card__text">La commande et un exemple qui marche, quand on est sur le poste.</span></a>
 </div>
 
@@ -2993,7 +2994,7 @@ def page_revision_index():
     body = ""
     for domain, lst in by_domain.items():
         body += f"\n## {domain}\n\n" + '<ul class="kw-notes">' + "".join(
-            f'<li class="is-done"><a href="{posixpath.relpath(r["src"], REVISION_DIR)}">{esc(r["label"])}</a>'
+            f'<li class="is-done"><a href="{href(REVISION_INDEX, r["src"])}">{esc(r["label"])}</a>'
             f'<span class="kw-note-meta">{r["questions"]} questions</span></li>' for r in lst) + "</ul>\n"
     return REVISION_INDEX, f"""# 📝 Révision
 
@@ -3015,6 +3016,75 @@ def decorate_revision(markdown, page):
     if cat:
         head += f'<br><span class="kw-muted">Rubrique : [{esc(cat["label"])}]({rel(cat["src"])})</span>'
     return head + "\n\n" + markdown
+
+
+# ---------------------------------------------------------------- labs
+
+LABS_DIR = "library/labs"
+LABS_INDEX = f"{LABS_DIR}/index.md"
+LAB_TITLE = re.compile(r"(?i)^labs?\b")
+
+
+def load_labs(docs_dir, library):
+    """Parties « Lab… » des cours (page dont le titre commence par Lab, écrite par scripts/import_notes.py) :
+    recensées sur une page de la Bibliothèque, sans quitter leur cours."""
+    notes = {n["src"]: (n, d, c) for d in library for c in d["categories"] for n in c["notes"] if n["imported"]}
+    out = []
+    for f in sorted((docs_dir / "library").rglob("*.md")):
+        src = f.relative_to(docs_dir).as_posix()
+        if src.startswith((REVISION_DIR + "/", LABS_DIR + "/")) or f.name == "index.md":
+            continue
+        body, meta = get_data(f.read_text(encoding="utf-8"))
+        title = str(meta.get("title") or "")
+        if not LAB_TITLE.match(title):
+            continue
+        folder = posixpath.dirname(src)
+        while folder.startswith("library/") and f"{folder}/index.md" not in notes:
+            folder = posixpath.dirname(folder)
+        if f"{folder}/index.md" not in notes:
+            continue
+        note, dom, cat = notes[f"{folder}/index.md"]
+        out.append({"title": title, "src": src, "note": note, "domain": dom["label"], "cat": cat,
+                    "questions": len(re.findall(r"(?m)^#{2,4} Question\b", body))})
+    order = [c["src"] for d in library for c in d["categories"]]
+    return sorted(out, key=lambda l: order.index(l["cat"]["src"]) if l["cat"]["src"] in order else len(order))
+
+
+def labs_nav():
+    return [{"🧪 Labs": LABS_INDEX}] if STATE.get("labs") else []
+
+
+def labs_card(src):
+    labs = STATE.get("labs") or []
+    if not labs:
+        return ""
+    total = sum(l["questions"] for l in labs)
+    return (f'<a class="kw-card" href="{href(src, LABS_INDEX)}"><span class="kw-card__title">🧪 Labs</span>'
+            f'<span class="kw-card__text">{len(labs)} labs pratiqués, {total} questions avec la démarche, '
+            f'les requêtes et les réponses.</span></a>')
+
+
+def page_labs_index():
+    by_domain = {}
+    for lab in STATE.get("labs") or []:
+        by_domain.setdefault(lab["domain"], []).append(lab)
+    body = ""
+    for domain, lst in by_domain.items():
+        items = []
+        for lab in lst:
+            bits = [b for b in (lab["note"].get("provenance"), lab["cat"]["label"],
+                                f'{lab["questions"]} questions' if lab["questions"] else "") if b]
+            items.append(f'<li class="is-done"><a href="{href(LABS_INDEX, lab["src"])}">'
+                         f'{esc(lab["note"]["title"])}</a> — {esc(lab["title"])}'
+                         f'<span class="kw-note-meta">{esc(" · ".join(bits))}</span></li>')
+        body += f"\n## {domain}\n\n" + '<ul class="kw-notes">' + "".join(items) + "</ul>\n"
+    return LABS_INDEX, f"""# 🧪 Labs
+
+Les labs que j'ai pratiqués (LetsDefend, Hack The Box…) : pour chaque question, la démarche, la requête ou
+la commande, ce qu'il faut lire et la réponse, repliée. Chaque lab reste dans son cours ; cette page les
+regroupe. Les commandes qui resservent sont reprises en cas concrets dans les
+[cheat sheets]({posixpath.relpath("cheatsheets/index.md", LABS_DIR)}).
+{body}"""
 
 
 LIBRARY_SEARCH_SRC = "library/recherche.md"
@@ -3409,6 +3479,7 @@ def on_config(config):
     STATE["notes_by_src"] = {n["src"]: n for d in library for c in d["categories"] for n in c["notes"]}
     STATE["note_urls"] = {url_of(src): n["title"] for src, n in STATE["notes_by_src"].items() if n["imported"]}
     STATE["revisions"] = load_revisions(docs_dir, library)
+    STATE["labs"] = load_labs(docs_dir, library)
     glossary = add_fiche_terms(glossary, library)
     glossary = add_course_terms(glossary, library, docs_dir)
     STATE["resumes"] = {str(k): str(v) for k, v in (load_yaml(root / "data" / "resumes.yml", {}) or {}).items()}
@@ -3432,6 +3503,8 @@ def on_config(config):
     pages.append(page_home(items, themes, glossary))
     if STATE["revisions"]:
         pages.append(page_revision_index())
+    if STATE["labs"]:
+        pages.append(page_labs_index())
     pages.append(glossary_data(glossary))
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
