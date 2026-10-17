@@ -175,6 +175,7 @@ nav:
             - Journaux et événements:
                 - cheatsheets/windows/fondamentaux/logs/index.md
                 - Lire, filtrer et exporter: cheatsheets/windows/fondamentaux/logs/lire.md
+                - Requêtes XML de l'Observateur: cheatsheets/windows/fondamentaux/logs/requetes-xml.md
                 - Ouvertures de session et RDP: cheatsheets/windows/fondamentaux/logs/sessions-rdp.md
                 - Processus et PowerShell: cheatsheets/windows/fondamentaux/logs/processus-powershell.md
                 - Services, tâches et comptes: cheatsheets/windows/fondamentaux/logs/persistance.md

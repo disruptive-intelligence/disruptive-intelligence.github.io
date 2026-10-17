@@ -3,7 +3,7 @@ title: Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event
 source: IT/02 Windows/Journaux & investigation/Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil).md
 format: cours
 provenance: HTB Academy
-revue: '2026-10-17'
+revue: '2026-10-18'
 ---
 
 Ce cours apprend à repérer une activité malveillante dans les journaux Windows : anatomie d'un événement, ouvertures de session (4624, Logon Types, Logon ID), requêtes XML dans l'Observateur d'événements et Event IDs utiles ; puis, avec Sysmon, trois détections pas à pas : DLL hijacking, injection de PowerShell non managé et vol d'identifiants dans LSASS.
@@ -515,11 +515,15 @@ Attention : l'Event ID 7 peut générer un volume de logs important. En producti
 
 #### Lab Scenario — calc.exe / WININET.dll
 https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+https://hijacklibs.net/#calc.exe
 Exemple de détournement impliquant :
 
 - `calc.exe`, un exécutable Windows légitime ;
 - `WININET.dll`, une bibliothèque normalement fournie par Windows ;
 - une DLL de démonstration renommée `WININET.dll`.
+
+https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin
+En suivant les étapes requises, qui impliquent de renommer `reflective_dll.x64.dll` en `WININET.dll`, de déplacer `calc.exe` de `C:\Windows\System32` avec `WININET.dll` vers un répertoire accessible en écriture (comme le dossier `Desktop`), et d'exécuter `calc.exe`, nous réussissons. Au lieu de l'application Calculatrice, une [MessageBox](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxa) s'affiche.
 
 ![DLL detournables par calc.exe (dont WININET.dll)](../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-21.png)
 
@@ -624,8 +628,9 @@ L'injection est réalisée avec le projet PSInject, via `Invoke-PSInject`, en ci
 
 ```
 powershell -ep bypass 
-Import-Module .\Invoke-PSInject.ps1 
-Invoke-PSInject -ProcId [Process ID of spoolsv.exe] -PoshCode "V3JpdGUtSG9zdCAiSGVsbG8sIEd1cnU5OSEi"
+Set-Location "C:\Tools\PSInject"
+Import-Module .\Invoke-PSInject.ps1
+Invoke-PSInject -ProcId (Get-Process spoolsv).Id -PoshCode "V3JpdGUtSG9zdCAiSGVsbG8sIEd1cnU5OSEi"
 ```
 
 
@@ -690,6 +695,8 @@ Deux commandes sont présentées :
 Selon la configuration et les protections Windows, les résultats peuvent comprendre des hashes ou d'autres informations d'authentification.
 
 Sa sortie montre notamment un compte `Administrator` et des valeurs de hash, tandis que certains champs de mots de passe apparaissent comme `(null)`.
+
+![image-22](../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-image-22.png)
 
 L'accès à LSASS et la réussite de l'extraction dépendent des privilèges et des mécanismes de protection en place.
 

@@ -75,6 +75,10 @@ Comprendre et observer un système Windows : identité de la machine, processus,
             - [Par ID et période](logs/lire.md#filtrer-par-identifiant-et-par-periode) : `Get-WinEvent -FilterHashtable`
             - [Exporter](logs/lire.md#exporter-un-journal-pour-lanalyser-ailleurs) : `wevtutil epl`
             - [Politique d'audit](logs/lire.md#voir-la-politique-daudit-active) : `auditpol /get /category:*`
+        - [Requêtes XML](logs/requetes-xml.md)
+            - [Quand passer au XML](logs/requetes-xml.md#savoir-quand-passer-au-xml) : un champ de l'onglet Details
+            - [Un champ](logs/requetes-xml.md#un-champ-egal-a-une-valeur) : `EventData[Data[@Name='…']='…']`
+            - [Une session](logs/requetes-xml.md#suivre-une-session-par-son-logon-id) : `TargetLogonId` → `SubjectLogonId`
         - [Sessions et RDP](logs/sessions-rdp.md)
             - 4624 / 4625 : session ouverte / échouée
             - 4672 : session admin
