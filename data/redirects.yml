@@ -72,3 +72,5 @@ library/cyber/outils/outils-de-threat-hunting/05-outils-edr-endpoint-detection-r
 library/cyber/outils/outils-de-threat-hunting/06-outils-de-renseignement-sur-les-cybermenaces-cti-t/index.html: library/cyber/detection/outils-de-threat-hunting/06-outils-de-renseignement-sur-les-cybermenaces-cti-t.md
 library/cyber/outils/outils-de-threat-hunting/07-integration-et-automatisation-des-outils-de-threat/index.html: library/cyber/detection/outils-de-threat-hunting/07-integration-et-automatisation-des-outils-de-threat.md
 library/cyber/outils/outils-de-threat-hunting/index.html: library/cyber/detection/outils-de-threat-hunting/index.md
+# PowerShell (17 octobre 2026) : Partie IX ajoutée, les annexes passent en 10
+library/it/windows/powershell/09-annexes/index.html: library/it/windows/powershell/10-annexes.md

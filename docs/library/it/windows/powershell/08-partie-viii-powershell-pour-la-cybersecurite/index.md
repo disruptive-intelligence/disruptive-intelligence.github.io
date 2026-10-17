@@ -9,7 +9,7 @@ up:
 
 > **Pourquoi la cybersécurité arrive en dernier.** On ne peut repérer une **anomalie** que si on connaît la **normale**. Grâce aux parties précédentes, tu sais désormais à quoi ressemble un système sain : quels services tournent, quels comptes existent, quelles tâches sont planifiées, quelles connexions sont attendues. Cette partie applique ces compétences au **diagnostic**, à la **détection** et au **durcissement** — dans une optique défensive (blue team), jamais offensive.
 >
-> On distingue clairement quatre postures : **administration** (gérer), **diagnostic** (comprendre un problème), **défense** (durcir, surveiller) et **investigation** (trier après un incident). PowerShell sert les quatre.
+> On distingue clairement quatre postures : **administration** (gérer), **diagnostic** (comprendre un problème), **défense** (durcir, surveiller) et **investigation** (comprendre après un incident). PowerShell sert les quatre. Cette partie couvre surtout les trois premières ; l'investigation a sa propre partie, optionnelle (Partie IX).
 
 ---
 

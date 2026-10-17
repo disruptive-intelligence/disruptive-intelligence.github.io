@@ -63,6 +63,8 @@ Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 }
 >
 > C'est un piège conceptuel majeur en défense : conclure « aucun 4688 → aucun processus suspect créé » est un **faux négatif**. Le bon réflexe est celui du Ch.35 sur le 4104 : avant d'interpréter une absence, **vérifier que la journalisation est configurée**. Un journal muet peut signifier « rien ne s'est passé »… ou « on n'écoutait pas ».
 
+> **➡️ Pour aller plus loin :** ce tableau te donne les identifiants. Le Ch.37 (Partie IX, optionnelle) t'apprend à lire leurs **champs** (`LogonType`, codes d'échec, `LogonId`) et à les corréler avec Sysmon pour reconstituer une attaque.
+
 ### Détecter une attaque par brute-force
 
 Un cas d'école, qui réunit filtrage, regroupement et seuil :

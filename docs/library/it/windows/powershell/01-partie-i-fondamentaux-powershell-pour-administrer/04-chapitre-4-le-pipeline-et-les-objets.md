@@ -41,7 +41,7 @@ $svc.DisplayName     # "Spouleur d'impression"
 
 `$svc` n'est pas du texte : c'est un objet service, dont on lit les propriétés avec un point `.`.
 
-> **⚠️ Compatibilité 5.1 — propriété `StartType`.** La propriété `StartType` sur l'objet renvoyé par `Get-Service` a été **ajoutée à PowerShell 6+**. En **Windows PowerShell 5.1**, `(Get-Service Spooler).StartType` peut être vide. Les exemples de ce cours qui utilisent `$svc.StartType` supposent donc PowerShell 7 (le plus courant aujourd'hui). **Pour obtenir le type de démarrage de façon portable 5.1 ET 7**, passe par CIM (que le cours détaille au Ch.11) :
+> **⚠️ Compatibilité 5.1 — propriété `StartType`.** La propriété `StartType` sur l'objet renvoyé par `Get-Service` a été **ajoutée à PowerShell 6+**. En **Windows PowerShell 5.1**, `(Get-Service Spooler).StartType` peut être vide. Les exemples de ce cours qui utilisent `$svc.StartType` supposent donc PowerShell 7, la version que le Ch.1 t'a fait installer. **Pour obtenir le type de démarrage de façon portable 5.1 ET 7**, passe par CIM (que le cours détaille au Ch.11) :
 > ```powershell
 > Get-CimInstance Win32_Service -Filter "Name='Spooler'" |
 >     Select-Object Name, State, StartMode    # StartMode = Auto / Manual / Disabled
@@ -80,7 +80,8 @@ La sortie liste :
 # Les services en cours d'exécution
 Get-Service | Where-Object { $_.Status -eq "Running" }
 
-# Les services démarrés automatiquement mais actuellement arrêtés (anomalie !)
+# Les services démarrés automatiquement mais actuellement arrêtés
+# (un point à examiner, pas forcément une panne : on verra pourquoi au Ch.11)
 Get-Service | Where-Object { $_.StartType -eq "Automatic" -and $_.Status -eq "Stopped" }
 
 # Les processus consommant plus de 200 Mo
@@ -195,7 +196,7 @@ $x = Get-Service    # rien ne s'affiche, mais $x contient tous les services
 
 ## 💡 Exercices
 
-**Guidé :** Liste les services arrêtés dont le démarrage est `Automatic` (une anomalie fréquente), triés par nom, et affiche `Name` + `DisplayName`.
+**Guidé :** Liste les services arrêtés dont le démarrage est `Automatic` (un point à examiner, pas forcément une panne), triés par nom, et affiche `Name` + `DisplayName`.
 
 **Autonome :** Affiche les 5 processus les plus gourmands en mémoire avec une colonne calculée « RAM(Mo) », puis exporte le résultat complet (tous les processus, pas seulement 5) en CSV.
 

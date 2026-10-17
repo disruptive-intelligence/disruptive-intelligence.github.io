@@ -23,7 +23,7 @@ C'est ce troisième point qui nous intéresse le plus. Tout ce que tu peux faire
 
 ### Un aperçu de ce qu'on va pouvoir faire
 
-Avant même d'apprendre la syntaxe, tape ces commandes pour voir la puissance de l'outil. Ne cherche pas encore à tout comprendre — c'est une bande-annonce :
+Avant même d'apprendre la syntaxe, tape ces commandes pour voir la puissance de l'outil. Ne cherche pas encore à tout comprendre — c'est une bande-annonce. (Si tu n'as jamais ouvert PowerShell : menu Démarrer, tape « PowerShell », puis Entrée. On détaille un peu plus bas.)
 
 ```powershell
 Get-Service                     # Tous les services Windows et leur état
@@ -93,9 +93,17 @@ Il existe **deux** versions qui coexistent, et c'est important de le comprendre 
 | Basé sur | .NET Framework | .NET (Core) |
 | Modules AD, GPO, DNS Server… | ✅ Oui (via RSAT) | ✅ Oui (compatibilité) |
 
-**Pour ce cours :** Windows PowerShell 5.1, déjà présent sur ton Windows, suffit pour la quasi-totalité du contenu. C'est aussi souvent la seule version disponible sur les serveurs en production. Les points spécifiques à PowerShell 7 sont signalés `[⚡ PS7+]`.
-
-> **Où télécharger PowerShell 7 :** sur le dépôt officiel [github.com/PowerShell/PowerShell](https://github.com/PowerShell/PowerShell). Utile surtout si tu veux les nouveautés du langage ou travailler aussi sous Linux/Mac.
+> **🎯 La consigne pour ce cours : installe PowerShell 7 et apprends avec.**
+>
+> Ouvre la console PowerShell déjà présente sur ton Windows (la 5.1) et tape :
+> ```powershell
+> winget install --id Microsoft.PowerShell --source winget
+> ```
+> Ferme la console, puis ouvre **PowerShell 7** (dans le menu Démarrer, cherche « PowerShell 7 », ou utilise Windows Terminal, voir plus bas). Pour vérifier la version : `$PSVersionTable.PSVersion` doit afficher `7.x`.
+>
+> **Pourquoi ce choix ?** Les exemples du cours sont écrits pour PowerShell 7, et c'est la version activement développée. Tu évites ainsi les petites différences de comportement entre versions pendant que tu apprends.
+>
+> **Ce qu'il faut savoir quand même :** la 5.1 reste installée et tu la croiseras partout en entreprise, notamment sur les serveurs. La quasi-totalité de ce cours fonctionne aussi en 5.1, et les rares différences sont signalées dans le texte. Si un jour une commande d'administration se comporte bizarrement en 7, relance-la depuis la 5.1 (`powershell.exe`) : c'est le bon réflexe de dépannage.
 
 ### PowerShell vs CMD
 
@@ -108,15 +116,56 @@ Beaucoup de commandes CMD et d'exécutables classiques (`ipconfig`, `ping`, `who
 
 ### Ouvrir PowerShell (et en administrateur)
 
-- Menu Démarrer → tape "PowerShell" → **Windows PowerShell**
+- Menu Démarrer → tape « PowerShell 7 » (ou « Windows PowerShell » pour la 5.1)
 - Pour les opérations d'administration : **clic droit → Exécuter en tant qu'administrateur**
-- Recommandé : **Windows Terminal** (depuis le Microsoft Store), qui regroupe PowerShell, CMD et WSL dans une fenêtre à onglets
+- Recommandé : **Windows Terminal**, déjà installé sur Windows 11 (sur Windows 10, il est dans le Microsoft Store). Il regroupe PowerShell, CMD et WSL dans une fenêtre à onglets. Une fois PowerShell 7 installé, choisis-le comme profil par défaut : *Paramètres → Démarrage → Profil par défaut → PowerShell*.
 
 > **🔑 Quand faut-il être administrateur ?** Lire est souvent possible sans privilèges (`Get-Service`, `Get-Process`). **Modifier** le système (arrêter un service, écrire dans `HKLM:`, lire le journal Security) nécessite en général une console élevée. Chaque fois que c'est le cas, ce cours l'indique avec `[🔑 Admin]`. Pour vérifier rapidement si ta console est élevée, une astuce : `net session` renvoie une erreur "Accès refusé" si tu n'es **pas** administrateur.
 
+### Les trois gestes de base : se déplacer, créer un fichier, interrompre
+
+Avant d'écrire ton premier script, trois gestes que personne ne pense à expliquer, et sur lesquels tous les débutants butent.
+
+**Geste 1 — Savoir où tu es, et te déplacer.** La console travaille toujours **dans un dossier** : le « dossier courant ». Il est affiché au début de chaque ligne, dans l'invite : `PS C:\Users\toi>` signifie que tu es dans `C:\Users\toi`.
+
+```powershell
+Get-Location                  # Où suis-je ? (alias : pwd)
+Get-ChildItem                 # Qu'y a-t-il ici ? (alias : ls, dir)
+Set-Location C:\Windows       # Aller dans un dossier (alias : cd)
+Set-Location ..               # Remonter d'un niveau
+Set-Location ~                # Revenir à ton dossier personnel
+```
+
+
+Crée maintenant ton dossier de travail pour tout le cours, et va dedans :
+
+```powershell
+New-Item -ItemType Directory -Path "$HOME\Labs\PowerShell"   # $HOME = ton dossier personnel
+Set-Location "$HOME\Labs\PowerShell"
+```
+
+
+> **Astuce :** tape `Set-Location $HOME\La` puis appuie sur `Tab` : PowerShell complète le chemin tout seul. La tab-complétion (détaillée plus bas) marche aussi sur les dossiers.
+
+**Geste 2 — Créer un fichier de script sans tomber dans le piège.** Le piège classique du débutant : écrire un script dans le Bloc-notes et l'enregistrer sous `poste.ps1`… que Windows enregistre en réalité sous **`poste.ps1.txt`**. Comme l'Explorateur masque les extensions par défaut, tu vois « poste.ps1 », et rien ne fonctionne. La parade : **crée le fichier depuis PowerShell**, puis ouvre-le pour l'éditer.
+
+```powershell
+New-Item -ItemType File -Name poste.ps1    # crée le fichier vide, avec la bonne extension
+notepad .\poste.ps1                        # l'ouvre dans le Bloc-notes
+# ou, si tu as installé VS Code (recommandé, voir plus bas) :
+code .\poste.ps1
+```
+
+
+Le Bloc-notes ouvre un fichier qui existe déjà : quand tu enregistres, il garde son nom exact. Pour vérifier les vrais noms, fais confiance à `Get-ChildItem`, qui affiche toujours l'extension complète. Et rends-toi service une fois pour toutes : dans l'Explorateur, *Affichage → Afficher → Extensions de noms de fichiers*.
+
+**Geste 3 — Interrompre une commande.** Tôt ou tard, tu lanceras une commande qui tourne sans fin (essaie `Get-ChildItem C:\ -Recurse`, qui parcourt tout le disque). Pour l'arrêter : **`Ctrl+C`**. C'est aussi la sortie de secours si l'invite affiche **`>>`** au lieu de `PS C:\...>` : la console attend la suite d'une commande incomplète (un guillemet ou une accolade pas refermés). `Ctrl+C` abandonne et te rend la main.
+
+> **Deux réflexes clavier en prime :** la **flèche du haut** rappelle les commandes précédentes (inutile de retaper), et `Clear-Host` (alias `cls`) nettoie l'écran.
+
 ### Ton premier script
 
-Crée un dossier de travail et un fichier `poste.ps1` :
+Dans ton dossier `Labs\PowerShell`, crée `poste.ps1` comme on vient de le voir, et écris-y :
 
 ```powershell
 # poste.ps1 — Premières infos sur la machine
@@ -126,14 +175,14 @@ Write-Output "Date        : $(Get-Date)"
 ```
 
 
-Pour le lancer :
+Enregistre, reviens dans la console (toujours dans le même dossier), et lance-le :
 
 ```powershell
 .\poste.ps1
 ```
 
 
-Le `.\` devant le nom dit à PowerShell « exécute le script du dossier courant » (comme `./` en Bash). C'est une mesure de sécurité : PowerShell ne lance pas un script juste parce qu'on tape son nom.
+Le `.\` devant le nom dit à PowerShell « exécute le script du dossier courant » (comme `./` en Bash). C'est une mesure de sécurité : PowerShell ne lance pas un script juste parce qu'on tape son nom. C'est aussi pour ça que le geste 1 compte : si tu n'es pas dans le bon dossier, `.\poste.ps1` ne trouvera rien.
 
 Tu obtiens probablement une **erreur rouge** parlant de politique d'exécution. C'est le prochain point.
 
@@ -157,6 +206,59 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 | `Unrestricted` / `Bypass` | Tout passe (à éviter) |
 
 > **⚠️ Point technique important — l'Execution Policy n'est PAS une barrière de sécurité.** C'est un **garde-fou anti-erreur**, pas une protection contre un attaquant. Elle empêche un double-clic accidentel de lancer un script, mais elle se contourne trivialement — par exemple `powershell -ExecutionPolicy Bypass -File script.ps1`, ou en copiant-collant le contenu du script dans la console. Ne compte jamais dessus pour te protéger d'un code malveillant. Les vraies protections d'exécution (contrôle applicatif App Control/WDAC ou AppLocker, qui déclenche le Constrained Language Mode, et signature de code) sont vues en Partie VIII. Retiens : `RemoteSigned` en `CurrentUser` est le bon réglage **de confort** pour apprendre. En entreprise, cette politique est généralement imposée par GPO.
+
+### Lire un message d'erreur rouge
+
+Tu viens de croiser ta première erreur rouge. Tu vas en voir des centaines : c'est **normal**, et ce n'est presque jamais grave (surtout avec des commandes `Get-*`, qui ne modifient rien). Une erreur n'est pas un échec, c'est PowerShell qui t'explique ce qui ne va pas. Encore faut-il savoir la lire.
+
+Provoque une erreur volontairement, avec une faute de frappe dans un nom de service :
+
+```powershell
+Get-Service -Name Spoolr
+```
+
+
+En **PowerShell 7**, l'erreur est courte :
+
+```
+Get-Service: Cannot find any service with service name 'Spoolr'.
+```
+
+
+En **Windows PowerShell 5.1**, elle est plus bavarde (le texte exact varie selon la langue de Windows) :
+
+```
+Get-Service : Impossible de trouver un service assorti du nom « Spoolr ».
+Au caractère Ligne:1 : 1
++ Get-Service -Name Spoolr
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Spoolr:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,...
+```
+
+
+**La méthode de lecture, en trois questions :**
+
+1. **Quoi ?** Lis la **première ligne en entier**. Avant les deux-points : la commande qui a échoué. Après : la cause, en clair. Dans 90 % des cas, la réponse est là.
+2. **Où ?** Dans un script, l'erreur indique la ligne et la position (`Ligne:12` / `line:12`), et souligne le passage fautif avec `~~~~`. Va directement voir cette ligne.
+3. **Quel genre de problème ?** Quelques messages reviennent sans cesse, apprends à les reconnaître :
+
+| Le message contient… | Cause probable | Que faire |
+|---|---|---|
+| « n'est pas reconnu » / *is not recognized* | Faute de frappe dans la commande, ou module absent | Vérifie l'orthographe, puis `Get-Command <nom>` |
+| « Impossible de trouver » / *Cannot find* | Le nom donné n'existe pas (service, fichier, utilisateur…) | Vérifie le nom avec la commande `Get-*` correspondante |
+| « Accès refusé » / *Access is denied* | Droits insuffisants | Relance la console **en administrateur** |
+| « l'exécution de scripts est désactivée » / *running scripts is disabled* | Execution Policy | Voir la section précédente |
+
+**Relire une erreur passée :** PowerShell garde toutes les erreurs de la session dans la variable `$Error`. La plus récente est `$Error[0]`. En PowerShell 7, `Get-Error` affiche **tous** les détails de la dernière erreur : pratique quand le message court ne suffit pas.
+
+```powershell
+$Error[0]        # la dernière erreur
+Get-Error        # [⚡ PS7+] le détail complet de la dernière erreur
+```
+
+
+> **Le bon réflexe :** une erreur rouge, on la **lit**, en entier, avant de faire quoi que ce soit d'autre. La tentation du débutant est de la survoler et de retaper la commande au hasard. Prends dix secondes pour lire la première ligne : elle te fait presque toujours gagner dix minutes. Au Ch.8, on apprendra à **gérer** les erreurs dans un script ; ici, on apprend juste à les **comprendre**.
 
 ### Les commentaires
 
@@ -230,6 +332,15 @@ Install-Module -Name <NomDuModule> -Scope CurrentUser
 poste.ps1        # ❌ "terme non reconnu"
 .\poste.ps1      # ✅
 
+# Ne pas être dans le bon dossier
+.\poste.ps1      # ❌ "non reconnu" alors que le fichier existe → vérifie avec Get-Location
+
+# Le script enregistré en poste.ps1.txt par le Bloc-notes
+Get-ChildItem    # ✅ affiche le vrai nom, extension comprise
+
+# L'invite affiche >> et plus rien ne répond
+# → commande incomplète (guillemet ou accolade non fermés) : Ctrl+C pour sortir
+
 # Utiliser les options Linux avec les alias
 ls -la           # ❌
 Get-ChildItem -Force   # ✅
@@ -243,10 +354,15 @@ Get-ChildItem -Force   # ✅
 
 **Guidé :** Ouvre PowerShell, lance `Get-Command -Verb Get | Measure-Object` pour compter combien de cmdlets `Get-*` existent sur ta machine. Puis `Get-Command -Noun Service` pour voir toutes les commandes liées aux services.
 
+**Guidé (erreurs) :** Provoque trois erreurs différentes : une commande mal orthographiée (`Get-Servise`), un nom inexistant (`Get-Service -Name Spoolr`), et un dossier inexistant (`Set-Location C:\Nulle\Part`). Pour chacune, applique la méthode : *quoi ?*, *où ?*, *quel genre ?*. Puis affiche la dernière avec `$Error[0]`.
+
 **Autonome :** Utilise `Get-Help` pour trouver comment lister uniquement les services *arrêtés* avec `Get-Service`. (Indice : `Get-Help Get-Service -Examples`.)
 
 ## ✅ Tu sais maintenant...
 
+- Installer PowerShell 7 et savoir pourquoi on apprend avec
+- Te déplacer (`Get-Location`, `Set-Location`), créer un script sans le piège du `.txt`, interrompre une commande avec `Ctrl+C`
+- Lire un message d'erreur rouge : *quoi ?*, *où ?*, *quel genre ?*, et le retrouver avec `$Error[0]`
 - Ce qu'est PowerShell (shell + langage + outil d'administration)
 - La convention `Verbe-Nom` et pourquoi elle rend PowerShell prédictible
 - Le trio `Get-Command` / `Get-Help` / `Get-Member` pour tout découvrir

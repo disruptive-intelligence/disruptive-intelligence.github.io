@@ -2,7 +2,7 @@
 title: PowerShell
 source: IT/02 Windows/Ligne de commande/PowerShell.md
 format: cours
-revue: '2026-08-21'
+revue: '2026-10-17'
 ---
 
 *De zéro à l'automatisation, l'Active Directory et la cybersécurité — Guide pour débutant absolu*
@@ -22,13 +22,14 @@ L'idée directrice tient en une phrase :
 
 > **On n'apprend pas PowerShell puis l'administration. On apprend PowerShell EN administrant.**
 
-À la fin, tu ne diras pas seulement « je sais écrire quelques scripts ». Tu diras : « je comprends PowerShell et son pipeline objet ; je sais administrer un poste ou un serveur Windows — services, processus, fichiers, permissions, utilisateurs, tâches, registre, réseau ; automatiser Active Directory ; comprendre et manipuler des GPO ; administrer plusieurs machines à distance ; interroger une API REST et Microsoft Graph ; produire des scripts robustes ; et utiliser tout ça comme base pour le diagnostic et la cybersécurité Windows. »
+À la fin, tu ne diras pas seulement « je sais écrire quelques scripts ». Tu diras : « je comprends PowerShell et son pipeline objet ; je sais administrer un poste ou un serveur Windows — services, processus, fichiers, permissions, utilisateurs, tâches, registre, réseau ; automatiser Active Directory ; comprendre et manipuler des GPO ; administrer plusieurs machines à distance ; interroger une API REST et Microsoft Graph ; produire des scripts robustes ; et utiliser tout ça comme base pour le diagnostic, la cybersécurité et une première investigation sur une machine Windows. »
 
 Ce cours **n'est pas** :
 
 - un cours complet d'Active Directory, de Windows Server, de réseau ou de GPO (ce sont des cours à part entière ; ici, **PowerShell reste le fil rouge** et on apprend à *piloter* ces technologies)
 - un cours de développement .NET
 - un cours de cybersécurité offensive (la partie sécurité est **défensive** : diagnostic, triage, durcissement)
+- un cours complet de forensique (la Partie IX est une **initiation** à l'investigation : collecte, chaîne de preuve, analyse de journaux)
 
 Le niveau final visé est **junior solide / intermédiaire débutant** en administration Windows PowerShell — pas expert Microsoft. Le cours te donne les fondations pour approfondir ensuite séparément AD, Windows Server, Entra ID, la cybersécurité Windows, etc.
 
@@ -55,8 +56,8 @@ Deux **réflexes** sont martelés dans tout le cours — ce sont les meilleures 
 | Parcours | Chapitres | Objectif |
 |----------|-----------|----------|
 | **🎯 Fondamentaux & poste local** | Parties I-II (Ch.1-14) | Être autonome sur un poste Windows, comprendre PowerShell |
-| **🔧 Administrateur Windows** | Parties I-VI (Ch.1-31) | Administrer postes, serveurs, réseau, AD, GPO, à distance |
-| **🚀 Complet** | Tout | + industrialisation et cybersécurité |
+| **🔧 Administrateur Windows** | Parties I-VI (Ch.1-32) | Administrer postes, serveurs, réseau, AD, GPO, à distance |
+| **🚀 Complet** | Tout | + industrialisation, cybersécurité et initiation à l'investigation numérique |
 
 ---
 
@@ -68,7 +69,9 @@ PowerShell fonctionne partout, mais **toutes les cmdlets ne sont pas disponibles
 |---------|----------------------|------------------------|
 | **I → III** (Ch.1-18) | Poste local, réseau du poste | **Windows 10 ou 11** (ce que tu as déjà) |
 | **IV → V** (Ch.19-28) | Active Directory, GPO, DNS/DHCP/SMB serveur | **Une VM Windows Server** (contrôleur de domaine) |
-| **VI** (Ch.29-34) | Machines distantes, API | Idéalement 2 machines (un client + un serveur) |
+| **VI** (Ch.29-32) | Machines distantes, API | Idéalement 2 machines (un client + un serveur) |
+| **VII → VIII** (Ch.33-35) | Industrialisation, sécurité | Windows 10 ou 11 (le lab pour les exemples AD) |
+| **IX** (Ch.36-37) | Investigation | Windows 10 ou 11 + droits admin, Sysmon, une clé USB ou un second disque pour la collecte |
 
 **Le lab idéal (facultatif mais recommandé pour les parties IV+) :** trois machines virtuelles sur ton PC (avec VirtualBox, VMware Workstation, ou Hyper-V) :
 
@@ -86,7 +89,7 @@ PowerShell fonctionne partout, mais **toutes les cmdlets ne sont pas disponibles
 
 > **Important :** ce cours n'est **pas** un tutoriel d'installation de lab (monter un domaine AD est un sujet à part entière). Mais garde en tête cette distinction : si tu tapes `Get-ADUser` sur ton Windows 11 personnel sans domaine ni RSAT, ça ne marchera pas — et c'est normal. Chaque chapitre te signale l'environnement et les droits nécessaires.
 
-**Windows PowerShell 5.1 vs PowerShell 7 :** les deux coexistent (on détaille au Ch.1). Pour la majorité de ce cours, la version intégrée à Windows (5.1) suffit. Les rares points spécifiques à PowerShell 7 sont signalés par le marqueur `[⚡ PS7+]`. Les opérations nécessitant des droits administrateur sont signalées par `[🔑 Admin]`, et celles spécifiques à Windows Server par `[🖥️ Server]`.
+**Windows PowerShell 5.1 vs PowerShell 7 :** les deux coexistent. **On apprend avec PowerShell 7**, que le Ch.1 te fait installer en une commande. La quasi-totalité du cours fonctionne aussi avec la 5.1 intégrée à Windows. Les points spécifiques à PowerShell 7 sont signalés par le marqueur `[⚡ PS7+]`. Les opérations nécessitant des droits administrateur sont signalées par `[🔑 Admin]`, et celles spécifiques à Windows Server par `[🖥️ Server]`.
 
 ---
 
@@ -196,6 +199,11 @@ Reviens ici dès qu'un terme te semble flou.
 34. [Diagnostic, logs et triage](08-partie-viii-powershell-pour-la-cybersecurite/01-chapitre-34-diagnostic-logs-et-triage.md)
 35. [Sécurité de l'exécution et durcissement](08-partie-viii-powershell-pour-la-cybersecurite/02-chapitre-35-securite-de-l-execution-et-durcissemen.md)
 
+**PARTIE IX — INITIATION À L'INVESTIGATION NUMÉRIQUE** *(optionnelle)*
+
+36. [Collecter sans détruire : acquisition et chaîne de preuve](09-partie-ix-initiation-a-l-investigation-numerique/01-chapitre-36-collecter-sans-detruire.md)
+37. [Analyser : journaux, Sysmon et timeline](09-partie-ix-initiation-a-l-investigation-numerique/02-chapitre-37-analyser-journaux-sysmon-et-timeline.md)
+
 **ANNEXES**
 
 ---
@@ -245,4 +253,7 @@ Reviens ici dès qu'un terme te semble flou.
 - [Partie VIII — PowerShell pour la cybersécurité](08-partie-viii-powershell-pour-la-cybersecurite/index.md)
     - [Chapitre 34 — Diagnostic, logs et triage](08-partie-viii-powershell-pour-la-cybersecurite/01-chapitre-34-diagnostic-logs-et-triage.md)
     - [Chapitre 35 — Sécurité de l'exécution et durcissement](08-partie-viii-powershell-pour-la-cybersecurite/02-chapitre-35-securite-de-l-execution-et-durcissemen.md)
-- [Annexes](09-annexes.md)
+- [Partie IX — Initiation à l'investigation numérique](09-partie-ix-initiation-a-l-investigation-numerique/index.md)
+    - [Chapitre 36 — Collecter sans détruire](09-partie-ix-initiation-a-l-investigation-numerique/01-chapitre-36-collecter-sans-detruire.md)
+    - [Chapitre 37 — Analyser : journaux, Sysmon et timeline](09-partie-ix-initiation-a-l-investigation-numerique/02-chapitre-37-analyser-journaux-sysmon-et-timeline.md)
+- [Annexes](10-annexes.md)

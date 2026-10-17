@@ -82,6 +82,9 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 ### Sécurité & triage
 `Get-WinEvent`, `Get-FileHash`, `Get-AuthenticodeSignature`, `Set-AuthenticodeSignature`, `Get-Item -Stream`
 
+### Investigation (Partie IX)
+`Start-Transcript` / `Stop-Transcript`, `wevtutil epl` (export de journal), `Get-FileHash`, `Get-WinEvent -Path` et `-FilterHashtable @{ Path = … }` (analyse hors ligne), `Get-WinEvent -ListLog *Sysmon*`, `Get-DnsClientCache`, `Get-NetNeighbor`, `Get-TimeZone`
+
 ---
 
 ## Annexe C — Event IDs de référence
@@ -103,6 +106,26 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 | 7045 | System | Nouveau service installé |
 | 7040 | System | Type de démarrage d'un service modifié |
 | 4104 | PowerShell/Operational | Bloc de script exécuté (Script Block Logging) |
+| 4697 | Security | Service installé (persistance) |
+| 4698 | Security | Tâche planifiée créée (persistance) |
+| 4768 / 4769 | Security (contrôleur de domaine) | Ticket Kerberos demandé : authentification / accès à un service |
+| 4771 | Security (contrôleur de domaine) | Pré-authentification Kerberos échouée |
+| 6005 / 6006 | System | Démarrage / arrêt propre (service de journalisation) |
+| 6008 | System | Arrêt précédent inattendu |
+| 1074 | System | Arrêt ou redémarrage demandé (par qui, pourquoi) |
+| 104 | System | Un journal (autre que Security) a été effacé |
+
+**`LogonType` des événements 4624 / 4625** (Ch.37) : 2 = au clavier · 3 = réseau (partage, remoting) · 4 = tâche planifiée · 5 = service · 7 = déverrouillage · 8 = réseau, mot de passe remis non haché à la machine (pas forcément en clair sur le réseau) · 9 = `runas /netonly` · 10 = RDP · 11 = identifiants en cache.
+
+**Sysmon** (journal `Microsoft-Windows-Sysmon/Operational`, Ch.37) :
+
+| Event ID | Signification | Clé de corrélation |
+|----------|--------------|--------------------|
+| 1 | Création de processus | `ProcessGuid`, `ParentProcessGuid`, `LogonId` |
+| 3 | Connexion réseau | `ProcessGuid` |
+| 11 | Création de fichier | `ProcessGuid` |
+| 13 | Valeur de registre modifiée | `ProcessGuid` |
+| 22 | Requête DNS | `ProcessGuid` |
 
 ---
 
@@ -126,6 +149,8 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 | `Invoke-Pester` | Standard | 5.1 / 7 | Pester |
 | `ForEach-Object -Parallel` | Standard | **7 uniquement** | intégré |
 | Opérateur ternaire `? :` | Standard | **7 uniquement** | intégré |
+| Exporter un journal (`wevtutil epl`) | **Admin** (pour Security) | 5.1 / 7 | exécutable natif |
+| Installer Sysmon | **Admin** | Intégré à Windows 11 24H2+, sinon Sysinternals | outil séparé |
 
 > **Note sur la compatibilité des modules Windows en PowerShell 7.** Les modules d'administration Windows n'ont pas tous le même statut en PS7. Certains sont **nativement compatibles** ; d'autres (historiquement liés à Windows PowerShell) sont chargés via la **couche de compatibilité Windows PowerShell** : PS7 les exécute en réalité dans une session Windows PowerShell 5.1 en arrière-plan et **sérialise** les objets échangés — ce qui fonctionne dans la grande majorité des cas, mais peut entraîner des **limitations** (objets « désérialisés » sans leurs méthodes, quelques différences de comportement). En pratique, pour ce cours : `ActiveDirectory`, `DnsServer`, `DhcpServer`, `GroupPolicy`, `ServerManager` fonctionnent en 7, parfois via cette couche de compatibilité. En cas de comportement inattendu sur un objet renvoyé par un de ces modules, vérifie s'il n'est pas désérialisé (un `Get-Member` montrera des types préfixés `Deserialized.`) et, au besoin, exécute la commande depuis une console Windows PowerShell 5.1. La liste exacte évolue : consulte la matrice de compatibilité Microsoft si un module précis pose problème.
 
@@ -154,6 +179,10 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 | WinRM « toujours chiffré » | affirmation brute | nuancer (Kerberos domaine / NTLM-HTTPS hors domaine) |
 | `LastLogonDate` exact | s'y fier à la minute | approximatif (réplication différée) |
 | Permissions fichiers | ne voir que SMB ou que NTFS | l'intersection des deux gagne |
+| Identifier un processus | par son PID (recyclé par Windows) | par son `ProcessGuid` (Sysmon) |
+| Comparer des identifiants | `"0x1a2c" -eq 6700` (hexadécimal contre décimal) | `[Convert]::ToInt32("0x1a2c", 16) -eq 6700` |
+| Trier une timeline | heures locales de machines différentes | tout convertir en UTC avant de trier |
+| Interpréter un journal vide | « rien ne s'est passé » | chercher un effacement (1102 / 104), vérifier l'audit |
 
 ---
 
@@ -218,7 +247,7 @@ Ce cours t'a donné les fondations PowerShell pour piloter Windows. Pour aller p
 - **Windows Server** (rôles avancés, clustering, stockage)
 - **Réseau Windows** (routage, VLAN, VPN)
 - **Entra ID / Microsoft 365 / Intune** (identité et gestion cloud)
-- **Cybersécurité Windows / Digital Forensics** (investigation approfondie)
+- **Cybersécurité Windows / Digital Forensics** (investigation approfondie : imagerie disque, analyse de la mémoire avec Volatility, artefacts Windows ; la Partie IX en est l'initiation)
 - **PowerShell avancé** (classes, DSC, modules binaires, CI/CD)
 
 ---
@@ -235,6 +264,7 @@ Tu es parti de zéro et tu sais maintenant :
 - **Administrer à distance et via API** : Remoting nuancé, authentification/tokens, REST, Microsoft Graph
 - **Industrialiser** : modules, secrets, idempotence, `-WhatIf`, tests
 - **Défendre** : diagnostic, triage, journalisation, durcissement
+- **Investiguer** *(Partie IX, optionnelle)* : collecter sans détruire, garantir l'intégrité des preuves, analyser des journaux hors ligne, corréler et reconstituer une chronologie
 
 Et surtout, tu as acquis les **deux réflexes** qui te rendront autonome bien au-delà de ce cours : **explorer avec `Get-Member`** tout objet inconnu, et **observer avant d'agir** (`Get`/`Test` → `Set`/`New`/`Remove`, puis `-WhatIf`).
 

@@ -158,7 +158,7 @@ C'est la synthèse défensive de tout le cours : tes compétences d'administrati
 ## 💬 Questions d'entretien typiques
 
 - **Qu'est-ce qui sécurise vraiment l'exécution de scripts (pas l'Execution Policy) ?** → Le contrôle applicatif (App Control/WDAC, recommandé ; ou AppLocker) qui bascule le code non approuvé en Constrained Language Mode, plus la signature de code — imposés par GPO.
-- **À quoi sert le Script Block Logging ?** → Journaliser le code PowerShell réellement exécuté (Event 4104), même obfusqué — clé pour détecter les usages malveillants.
+- **À quoi sert le Script Block Logging ?** → Journaliser le code PowerShell réellement traité par le moteur (Event 4104), souvent sous sa forme décodée — clé pour détecter les usages malveillants, sans être infaillible.
 - **Qu'est-ce qu'AMSI ?** → Une interface qui laisse l'antivirus inspecter le code à l'exécution, y compris en mémoire (contre les attaques fileless).
 - **Comment déléguer une action précise sans donner les pleins droits ?** → JEA (Just Enough Administration), qui expose juste les commandes nécessaires via un endpoint contraint.
 
