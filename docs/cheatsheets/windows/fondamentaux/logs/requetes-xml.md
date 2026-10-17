@@ -22,7 +22,7 @@ Les incontournables : `Filter Current Log → XML` · `Edit query manually` · `
 
 Règle simple : dès que le critère est **dans l'onglet Details** de l'événement (pas dans les colonnes de la liste), il faut du XML.
 
-Pour comprendre : [Requêtes XML personnalisées dans l'Observateur d'événements](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil.md#4-custom-xml-queries-event-viewer)
+Pour comprendre : [Requêtes XML personnalisées dans l'Observateur d'événements](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/01-windows-event-logs-finding-evil-windows-event-logs.md#4-custom-xml-queries-event-viewer)
 { .kw-cs-meta }
 
 ## Écrire une requête
@@ -204,7 +204,7 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
       </Query>
     </QueryList>
     ```
-    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab Windows Event Logs & Finding Evil, question 1](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil.md)
+    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab Windows Event Logs & Finding Evil, question 1](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-lab-journaux-windows-et-requetes-xml.md#question-1-le-processus-qui-a-modifie-les-parametres-daudit)
 
 ??? example "Cas concret : ce processus a-t-il modifié l'audit d'un fichier précis ?"
     ```xml
@@ -219,7 +219,7 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
       and EventData[Data[@Name='Image']='C:\Windows\System32\spoolsv.exe'
                 and Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll']]
     ```
-    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil.md#3-detection-example-2-unmanaged-powershell-c-injection).
+    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/02-analyser-avec-sysmon-et-les-journaux-d-evenements.md#3-detection-example-2-unmanaged-powershell-c-injection).
 
 ## Pièges
 
