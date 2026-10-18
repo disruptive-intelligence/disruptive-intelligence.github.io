@@ -6,8 +6,8 @@
   "use strict";
 
   var KEY = "kw-bv-variante2";
-  var LABELS = [["actuelle", "Actuelle"], ["e", "E · Rubriques et détail"], ["f", "F · Mosaïque"],
-                ["g", "G · Mosaïque puis détail"], ["h", "H · Détail, mosaïque latérale"], ["i", "I · Domaine, bandeau, détail"]];
+  var LABELS = [["actuelle", "Actuelle"], ["e", "E · Rubriques et détail"], ["i", "I · Domaine, bandeau, détail"],
+                ["j", "J · Domaine puis E"], ["k", "K · Onglets de domaine"], ["l", "L · E + bandeau de sous-rubriques"]];
   var FORMATS = { cours: "Cours", synthese: "Synthèse", fiche: "Fiche notion", "aide-memoire": "Aide-mémoire",
                   atelier: "Atelier", ressources: "Ressources", revision: "Révision" };
 
@@ -373,6 +373,148 @@
     return wrap;
   }
 
+  // ---------------------------------------------------------------- mix E + I (J, K, L), palette neutre
+  /* Liste verticale de rubriques façon E ; onPick(u) au clic ; renvoie {nav, items}. */
+  function rubricList(units, onPick, domLabel) {
+    var nav = el("nav", "kw-bv-nlist"); nav.setAttribute("aria-label", "Rubriques");
+    if (domLabel) nav.appendChild(el("p", "kw-bv-eside-dom", domLabel));
+    var items = [];
+    units.forEach(function (u) {
+      var b = el("button", "kw-bv-nitem"); b.type = "button";
+      b.appendChild(el("span", "kw-bv-eicon", u.head.e || "•"));
+      b.appendChild(el("span", "kw-bv-elabel", u.head.t));
+      b.appendChild(el("span", "kw-bv-ecount", String(notesCount(u))));
+      b.addEventListener("click", function () { items.forEach(function (x) { x.setAttribute("aria-current", x === b ? "true" : "false"); }); onPick(u); });
+      items.push(b); nav.appendChild(b);
+    });
+    return { nav: nav, items: items };
+  }
+  /* Sélecteur mobile équivalent à la liste. */
+  function rubricPick(units, onPick) {
+    var s = el("select", "kw-bv-epick"); s.setAttribute("aria-label", "Choisir une rubrique");
+    units.forEach(function (u, i) { var o = el("option", "", u.head.t); o.value = String(i); s.appendChild(o); });
+    s.addEventListener("change", function () { onPick(units[parseInt(s.value, 10)], parseInt(s.value, 10)); });
+    return s;
+  }
+  /* Disposition E (liste à gauche, détail à droite) pour une liste d'unités. */
+  function eLayout(root, units, domLabel, detailFn) {
+    var box = el("div", "kw-bv-e kw-bv-nlayout");
+    var main = el("div", "kw-bv-emain");
+    var list, pick;
+    function show(u, i) {
+      main.textContent = ""; main.appendChild((detailFn || detail)(root, u));
+      if (i === undefined) i = units.indexOf(u);
+      pick.value = String(i);
+      list.items.forEach(function (x, k) { x.setAttribute("aria-current", k === i ? "true" : "false"); });
+    }
+    list = rubricList(units, function (u) { show(u); }, domLabel);
+    pick = rubricPick(units, show);
+    box.appendChild(pick); box.appendChild(list.nav); box.appendChild(main);
+    if (units.length) show(units[0], 0);
+    return box;
+  }
+  function domainHead(d) {
+    var nn = 0, pp = 0, rr = 0;
+    d.c.forEach(function (c) { var k = notesOf(c).length; if (k) { rr++; nn += k; pp += catPages(c); } });
+    return plural(rr, "rubrique") + " · " + plural(nn, "note") + " · " + plural(pp, "page");
+  }
+
+  // J · grandes tuiles de domaine (I), puis E
+  function domainThenE(root, doms) {
+    var wrap = el("div", "kw-bv-neutral kw-bv-j");
+    var out = el("div");
+    if (doms.length > 1) {
+      var row = el("div", "kw-bv-idoms"); var tiles = [];
+      doms.forEach(function (d) {
+        var b = el("button", "kw-bv-idom"); b.type = "button"; b.setAttribute("aria-pressed", "false");
+        b.appendChild(el("span", "kw-bv-tileicon", d.e || "•"));
+        var txt = el("span", "kw-bv-idomtext");
+        txt.appendChild(el("span", "kw-bv-tiletitle", d.t)); txt.appendChild(el("span", "kw-bv-meta", domainHead(d)));
+        b.appendChild(txt);
+        b.addEventListener("click", function () { press(tiles, b); out.textContent = ""; out.appendChild(eLayout(root, unitsOf(d))); });
+        tiles.push(b); row.appendChild(b);
+      });
+      wrap.appendChild(row);
+      press(tiles, tiles[0]);
+    }
+    out.appendChild(eLayout(root, unitsOf(doms[0])));
+    wrap.appendChild(out);
+    return wrap;
+  }
+
+  // K · onglets de domaine soulignés, puis E
+  function domainTabsThenE(root, doms) {
+    var wrap = el("div", "kw-bv-neutral kw-bv-k");
+    var out = el("div");
+    if (doms.length > 1) {
+      var bar = el("div", "kw-bv-ktabs"); var tabs = [];
+      doms.forEach(function (d) {
+        var b = el("button", "kw-bv-ktab"); b.type = "button"; b.setAttribute("aria-pressed", "false");
+        b.appendChild(el("span", "", (d.e ? d.e + " " : "") + d.t));
+        b.appendChild(el("span", "kw-bv-meta", domainHead(d)));
+        b.addEventListener("click", function () { press(tabs, b); out.textContent = ""; out.appendChild(eLayout(root, unitsOf(d))); });
+        tabs.push(b); bar.appendChild(b);
+      });
+      wrap.appendChild(bar);
+      press(tabs, tabs[0]);
+    }
+    out.appendChild(eLayout(root, unitsOf(doms[0])));
+    wrap.appendChild(out);
+    return wrap;
+  }
+
+  // L · E avec, dans le détail, un bandeau de sous-rubriques qui filtre les cours
+  function detailWithStrip(root, u) {
+    var named = u.groups.filter(function (g) { return g.t; });
+    if (named.length < 2) return detail(root, u);
+    var box = el("div", "kw-bv-detail");
+    var head = el("header", "kw-bv-ehead");
+    var h = el("h2", "kw-bv-etitle"); h.appendChild(link(root, u.head, "", (u.head.e ? u.head.e + " " : "") + u.head.t));
+    head.appendChild(h);
+    head.appendChild(el("span", "kw-bv-meta kw-bv-headmeta", plural(notesCount(u), "note") + " · " + plural(u.pages, "page")));
+    if (u.head.d) head.appendChild(el("p", "kw-bv-edesc", u.head.d));
+    box.appendChild(head);
+    var strip = el("div", "kw-bv-lstrip"); var chips = [];
+    var body = el("div");
+    function render(sel) {
+      body.textContent = "";
+      u.groups.forEach(function (g) {
+        if (sel && g !== sel) return;
+        if (g.t) {
+          body.appendChild(el("h3", "kw-bv-egroup", (g.e ? g.e + " " : "") + g.t));
+          if (g.d) body.appendChild(el("p", "kw-bv-egroupdesc", g.d));
+        }
+        var grid = el("div", "kw-bv-ecards");
+        g.n.forEach(function (n) {
+          var card = el("article", "kw-bv-ecard");
+          card.appendChild(link(root, n, "kw-bv-ecardtitle"));
+          var m = meta(n); if (m) card.appendChild(el("span", "kw-bv-meta", m));
+          if (n.r) card.appendChild(el("p", "kw-bv-ecardtext", n.r));
+          var t = tocToggle(root, n); if (t) card.appendChild(t);
+          grid.appendChild(card);
+        });
+        body.appendChild(grid);
+      });
+    }
+    [null].concat(u.groups.filter(function (g) { return g.t; })).forEach(function (g) {
+      var b = el("button", "kw-bv-lchip"); b.type = "button";
+      b.textContent = g ? (g.e ? g.e + " " : "") + g.t + " · " + g.n.length : "Tout · " + notesCount(u);
+      b.addEventListener("click", function () { press(chips, b); render(g); });
+      chips.push(b); strip.appendChild(b);
+    });
+    press(chips, chips[0]);
+    box.appendChild(strip); box.appendChild(body);
+    render(null);
+    return box;
+  }
+  function eWithStrip(root, doms) {
+    var wrap = el("div", "kw-bv-neutral kw-bv-l");
+    var units = [];
+    doms.forEach(function (d) { units = units.concat(unitsOf(d)); });
+    wrap.appendChild(eLayout(root, units, "", detailWithStrip));
+    return wrap;
+  }
+
   // ---------------------------------------------------------------- page « Filtrer par titre »
   function facets(root, doms, params) {
     var rows = [];
@@ -474,10 +616,10 @@
       document.body.classList.toggle("kw-bv-on", v !== "actuelle");
       panel.textContent = "";
       if (v === "e") panel.appendChild(masterDetail(root, doms));
-      if (v === "f") panel.appendChild(mosaic(root, doms));
-      if (v === "g") panel.appendChild(mosaicThenDetail(root, doms));
-      if (v === "h") panel.appendChild(sideMosaic(root, doms));
       if (v === "i") panel.appendChild(domainStrip(root, doms));
+      if (v === "j") panel.appendChild(domainThenE(root, doms));
+      if (v === "k") panel.appendChild(domainTabsThenE(root, doms));
+      if (v === "l") panel.appendChild(eWithStrip(root, doms));
       remember(v);
     }
     LABELS.forEach(function (l) {
