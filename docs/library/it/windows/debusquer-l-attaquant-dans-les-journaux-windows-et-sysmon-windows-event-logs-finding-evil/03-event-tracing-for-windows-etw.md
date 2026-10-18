@@ -13,7 +13,7 @@ Elle fournit une télémétrie particulièrement utile en Threat Hunting, Threat
 
 Contrairement à une analyse limitée aux journaux Windows traditionnels, ETW permet d'exploiter des événements provenant de composants Windows, d'applications et de pilotes, en User Mode comme en Kernel Mode.
 
-## 1. ETW Fundamentals
+## 1. Les fondamentaux d'ETW
 
 ETW est un mécanisme de journalisation et de traçage haute performance intégré au système d'exploitation Windows.
 
@@ -32,7 +32,7 @@ Selon les fournisseurs activés, ETW peut fournir des informations sur :
 
 Ces données permettent de détecter des comportements suspects et de reconstruire le déroulement d'un incident.
 
-### ETW vs Windows Event Logs
+### ETW ou journaux d'événements Windows
 
 | Technologie        | Rôle                                                                                           |
 | ------------------ | ---------------------------------------------------------------------------------------------- |
@@ -42,7 +42,7 @@ Ces données permettent de détecter des comportements suspects et de reconstrui
 
 Point essentiel : tous les événements ETW ne sont pas automatiquement visibles dans Event Viewer. Certains sont disponibles uniquement dans des sessions de tracing spécifiques.
 
-## 2. ETW Architecture & Components
+## 2. Architecture et composants d'ETW
 
 ETW repose sur un modèle Publish / Subscribe, dans lequel les fournisseurs produisent des événements et les sessions organisent leur collecte.
 
@@ -59,9 +59,9 @@ Threat Hunting / DFIR Analysis
 ```
 
 
-Architecture ETW (Microsoft) : providers, sessions, controller, trace files, consumer
+![Architecture ETW (Microsoft) : providers, sessions, controller, trace files, consumer](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-35.png)
 
-### Controllers
+### Contrôleurs (controllers)
 
 Les Controllers gèrent les sessions de tracing.
 
@@ -74,7 +74,7 @@ Ils permettent notamment de :
 
 Exemple : Un contrôleur largement utilisé est l'utilitaire intégré « logman.exe », qui facilite la gestion des activités ETW.
 
-### Providers
+### Fournisseurs (providers)
 
 Les ETW Providers sont les composants qui génèrent les événements.
 
@@ -91,7 +91,7 @@ Quatre types :
 
 ETW peut également être étendu grâce à des Custom Providers développés pour des besoins spécifiques.
 
-### ETW Sessions
+### Sessions ETW
 
 Une ETW Session collecte les événements provenant d'un ou plusieurs fournisseurs activés.
 
@@ -99,7 +99,7 @@ Elle détermine notamment les paramètres de collecte, les filtres et le mode de
 
 Certaines sessions fonctionnent en temps réel, tandis que d'autres enregistrent des traces destinées à une analyse ultérieure.
 
-### Consumers
+### Consommateurs (consumers)
 
 Les Consumers récupèrent les événements collectés pour les analyser ou les traiter.
 
@@ -108,7 +108,7 @@ Deux modes importants :
 - Real-Time Consumption : traitement des événements au fur et à mesure de leur génération.
 - ETL Analysis : consultation des événements enregistrés dans des fichiers `.etl`.
 
-### Channels
+### Canaux (channels)
 
 Les ETW Channels organisent certains événements selon leur destination ou leur finalité.
 
@@ -116,7 +116,7 @@ Ils facilitent l'exploitation des événements par Windows Event Logging.
 
 Tous les providers ou événements ETW ne disposent cependant pas d'un canal exploitable directement depuis Event Viewer.
 
-### ETL Files
+### Fichiers ETL
 
 Les fichiers `.etl` (Event Trace Log) permettent d'enregistrer des traces ETW sur disque.
 
@@ -189,7 +189,7 @@ La sortie fournit différentes informations :
 | Provideur : Level       | Décrit niveau de l'événement, indiquant s'il filtre le événements d'avertissement, d'information, critiques ou tous les événements. |
 | Provider : Keywords Any | Mots-clés créent un filtre basé sur le type d'événement généré par le fournisseur                                                   |
 
-### Provider Filtering
+### Filtrage des providers
 
 Pour chaque provider associé, la configuration peut préciser :
 
@@ -204,9 +204,9 @@ La session `EventLog-System` contient notamment des fournisseurs tels que :
 
 Intérêt DFIR : identifier une session pertinente peut permettre de découvrir une source de télémétrie utile à une investigation.
 
-## 4. Découverte des ETW Provider
+## 4. Découvrir les providers ETW
 
-### Lister les Providers disponibles
+### Lister les providers disponibles
 
 ```
 logman.exe query providers
@@ -229,7 +229,7 @@ logman.exe query providers | findstr "Winlogon"
 Exemple de fournisseurs identifiés :
 ![image-39](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-image-39.png)
 
-### Inspecter Metadata des Providers
+### Inspecter les métadonnées des providers
 
 ```
 logman.exe query providers Microsoft-Windows-Winlogon
@@ -252,15 +252,15 @@ Métadonnées affichées :
 - Les Keywords et Levels peuvent être utilisés pour sélectionner les catégories d'événements pertinentes lors d'une collecte.
 - Les mots-clés `Microsoft-Windows-Winlogon/Diagnostic` et `Microsoft-Windows-Winlogon/Operational` font référence aux journaux d'événements générés par ce fournisseur.
 
-## 5. GUI pour l'analyse ETW
+## 5. Interfaces graphiques pour l'analyse ETW
 
 Outre Logman, plusieurs outils permettent d'examiner les sessions et fournisseurs ETW.
 
-### Performance Monitor
+### Analyseur de performances (Performance Monitor)
 
 L'outil Windows Performance Monitor (`perfmon`), Analyseur de performances, permet de consulter les sessions de tracing.
 
-Recherche de l'application Performance Monitor
+![Recherche de l'application Performance Monitor](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-36.png)
 
 Il est possible de :
 
@@ -271,7 +271,7 @@ Il est possible de :
 - modifier certaines configurations ;
 - créer des sessions personnalisées via les ensembles de collecteurs définis par l'utilisateur, en optant pour la catégorie « Défini par l'utilisateur ».
 
-Performance Monitor : sessions de suivi d'evenements en cours
+![Performance Monitor : sessions de suivi d'evenements en cours](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-37.png)
 
 ### ETW Explorer
 
@@ -279,7 +279,7 @@ EtwExplorer permet d'examiner les métadonnées des fournisseurs ETW, notamment 
 
 Projet : [EtwExplorer — GitHub](https://github.com/zodiacon/EtwExplorer).
 
-ETW Explorer : recherche des providers PowerShell et de leurs GUID
+![ETW Explorer : recherche des providers PowerShell et de leurs GUID](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-38.png)
 
 ### Autres outils
 
@@ -288,11 +288,11 @@ ETW Explorer : recherche des providers PowerShell et de leurs GUID
 
 Ces outils n'offrent pas tous les mêmes fonctionnalités : l'exploration des fournisseurs, la gestion des sessions et la consommation des événements sont des opérations distinctes.
 
-## 6. Providers ETW utile pour la Threat Hunting
+## 6. Providers ETW utiles pour le threat hunting
 
 ETW permet d'exploiter des fournisseurs spécialisés selon les activités recherchées.
 
-### Process, File & Registry Monitoring
+### Surveillance des processus, fichiers et registre
 
 | Provider                          | Utilisation                                                                                                                                                                                                                                                                                                |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -301,7 +301,7 @@ ETW permet d'exploiter des fournisseurs spécialisés selon les activités reche
 | Microsoft-Windows-Kernel-Registry | Rechercher des modifications du registre liées à la Persistence ou utile pour les scénarios de détection liés aux modifications des clés de registre, souvent associées à des mécanismes de persistance, à l'installation de logiciels malveillants ou à des modifications de la configuration du système. |
 | Microsoft-Windows-DotNETRuntime   | Examiner les activités du runtime .NET, identifier les anomalies dans l'exécution des applications .NET, l'exploitation potentielle de vulnérabilités .NET ou le chargement malveillant d'assemblys .NET.                                                                                                  |
 
-### Network & Remote Access Monitoring
+### Surveillance du réseau et des accès distants
 
 | Provider                                               | Utilisation                                                                      |
 | ------------------------------------------------------ | -------------------------------------------------------------------------------- |
@@ -313,7 +313,7 @@ ETW permet d'exploiter des fournisseurs spécialisés selon les activités reche
 | WinRM                                                  | Rechercher des activités de gestion ou d'exécution à distance suspectes          |
 | Microsoft-Windows-TerminalServices-LocalSessionManager | Investiguer les sessions Remote Desktop et Terminal Services                     |
 
-### Execution & Security Monitoring
+### Surveillance de l'exécution et de la sécurité
 
 | Provider                               | Utilisation                                                                         |
 | -------------------------------------- | ----------------------------------------------------------------------------------- |
@@ -368,7 +368,7 @@ Le support mentionne également l'existence de recherches sur les mécanismes pe
 
 Intérêt défensif : ce fournisseur illustre que certaines données de sécurité avancées sont accessibles uniquement à des composants disposant des privilèges et protections nécessaires.
 
-## 8. ETW for DFIR — Investigation Workflow
+## 8. ETW pour le DFIR — démarche d'investigation
 
 ```
 Identify Hunting Hypothesis
@@ -398,7 +398,7 @@ DFIR Investigation
 - Provider Configuration : les mots-clés, niveaux et filtres déterminent la couverture.
 - Restricted Access : certains fournisseurs nécessitent des autorisations spécifiques.
 
-## 9. Synthèse — ETW vs Sysmon
+## 9. Synthèse — ETW ou Sysmon
 
 | Critère       | ETW                                                                   | Sysmon                                                    |
 | ------------- | --------------------------------------------------------------------- | --------------------------------------------------------- |

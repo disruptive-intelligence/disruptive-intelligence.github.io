@@ -1,5 +1,5 @@
 ---
-title: Windows Event Logs & Finding Evil — Windows Event Logs
+title: Les journaux d'événements Windows
 source: IT/02 Windows/Journaux & investigation/Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil).md
 note: Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
 up:
@@ -11,7 +11,7 @@ Les Windows Event Logs sont des journaux natifs de Windows qui enregistrent les 
 
 Ils constituent une source essentielle pour le SOC, le Threat Hunting et le DFIR, notamment pour analyser les authentifications, modifications système, activités suspectes et tentatives d'effacement de traces.
 
-## 1. Windows Event Logging Basics
+## 1. Les bases de la journalisation Windows
 
 Les journaux Windows peuvent être consultés avec Event Viewer (`eventvwr.msc`) ou exploités par programmation avec la Windows Event Log API.
 
@@ -35,7 +35,7 @@ Event Viewer peut également ouvrir des fichiers de journaux sauvegardés au for
 
 ![Fichier .evtx ouvert dans Saved Logs (evenements Sysmon)](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-03.png)
 
-## 2. Anatomy of a Windows Event
+## 2. Anatomie d'un événement Windows
 
 Chaque événement Windows contient des métadonnées permettant de comprendre son origine et son contexte.
 
@@ -55,7 +55,7 @@ Chaque événement Windows contient des métadonnées permettant de comprendre s
 
 ![Niveaux Information et Error du journal Application](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-04.png)
 
-### Event ID & Provider
+### Event ID et fournisseur (provider)
 
 Un Event ID identifie un type d'événement dans le contexte de son fournisseur.
 
@@ -81,7 +81,7 @@ L'onglet `Details` permet d'examiner les données structurées, notamment :
 
 Important : un Event ID ne doit pas être interprété indépendamment de son Provider et de son journal.
 
-## 3. Windows Security Event 4624 — Successful Logon
+## 3. Événement de sécurité 4624 — ouverture de session réussie
 
 L'Event ID 4624 indique qu'une session de connexion a été créée avec succès sur une machine Windows.
 
@@ -95,7 +95,7 @@ Il fournit notamment :
 
 ![Event 4624 : connexion reussie de SYSTEM, Logon Type 5](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-08.png)
 
-### Logon Types courants
+### Types d'ouverture de session (Logon Types) courants
 
 | Logon Type | Signification                               |
 | ---------- | ------------------------------------------- |
@@ -114,7 +114,7 @@ Il indique une session de type Service Logon.
 
 Cela ne prouve pas, à lui seul, qu'un nouveau service a été installé. Pour comprendre l'activité, il faut corréler cet événement avec d'autres logs.
 
-### Logon ID Correlation
+### Corrélation par Logon ID
 
 Le Logon ID permet de rapprocher certains événements associés à une même session sur une machine.
 
@@ -126,7 +126,7 @@ Cette valeur correspond couramment à la session Local System.
 
 Attention : il faut distinguer `SubjectLogonId` et `TargetLogonId`, qui représentent des rôles différents selon les événements. Leur utilisation dans une recherche doit être adaptée au schéma du log.
 
-## 4. Custom XML Queries — Event Viewer
+## 4. Requêtes XML personnalisées dans l'Observateur d'événements
 
 Event Viewer permet de créer des filtres XML pour effectuer des recherches plus précises.
 
@@ -174,7 +174,7 @@ Il est également possible de créer des filtres dans l'interface graphique et d
 
 Analyse progressive de plusieurs événements Windows liés à un même contexte.
 
-### Event ID 4907 — Auditing Settings Changed on Object
+### Event ID 4907 — paramètres d'audit modifiés sur un objet
 
 L'Event ID 4907 est généré lorsque les paramètres d'audit d'un objet Windows sont modifiés, notamment sa SACL (System Access Control List).
 
@@ -209,7 +209,7 @@ Ils permettent d'examiner les changements apportés au descripteur de sécurité
 
 `SetupHost.exe` est associé à des opérations de configuration Windows. Son nom est cohérent avec une activité d'installation, mais un nom de processus légitime ne garantit pas qu'une activité soit saine.
 
-### Event ID 4672 — Special Privileges Assigned to New Logon
+### Event ID 4672 — privilèges spéciaux attribués à une nouvelle session
 
 ![Events 4624 Logon puis 4672 Special Logon](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-13.png)
 
@@ -243,9 +243,9 @@ Cette séquence permet d'étudier les modifications d'audit et le contexte de co
 
 Un Event 4672 associé à SYSTEM peut être parfaitement normal. De même, la présence successive de ces événements ne suffit pas à confirmer une compromission.
 
-## 6. Useful Windows Event IDs
+## 6. Event IDs Windows utiles
 
-### System Logs — Services, Shutdown & Restart
+### Journal System — services, arrêt et redémarrage
 
 | Event ID | Événement                    | Intérêt                                                     |
 | -------- | ---------------------------- | ----------------------------------------------------------- |
@@ -260,7 +260,7 @@ L'Event 7045 est un événement du journal System, pas du journal Security.
 
 Ces événements permettent notamment d'investiguer des redémarrages inhabituels, l'installation de services suspects et certaines modifications pouvant soutenir la Persistence.
 
-### Security Logs — Authentication & Privileges
+### Journal Security — authentification et privilèges
 
 | Event ID | Événement                          | Intérêt                                                   |
 | -------- | ---------------------------------- | --------------------------------------------------------- |
@@ -273,7 +273,7 @@ Ces événements permettent notamment d'investiguer des redémarrages inhabituel
 
 Les Events `4624`, `4625`, `4648`, `4771` et `4776` sont particulièrement utiles pour rechercher des activités suspectes d'authentification et de Lateral Movement.
 
-### Security Logs — Persistence & Account Changes
+### Journal Security — persistance et modifications de comptes
 
 | Event ID | Événement               | Intérêt                                            |
 | -------- | ----------------------- | -------------------------------------------------- |
@@ -285,7 +285,7 @@ Les Events `4624`, `4625`, `4648`, `4771` et `4776` sont particulièrement utile
 
 Les Scheduled Tasks peuvent être utilisées légitimement pour l'administration, mais également comme mécanismes de Persistence.
 
-### Security Logs — Audit & Object Access
+### Journal Security — audit et accès aux objets
 
 | Event ID | Événement                        | Intérêt                                         |
 | -------- | -------------------------------- | ----------------------------------------------- |
@@ -298,7 +298,7 @@ L'Event `4656` signale une demande de handle, pas nécessairement un accès effe
 
 Les Events `1102`, `4719` et `4907` peuvent révéler des tentatives de modification ou de suppression des traces d'audit, mais doivent être contextualisés.
 
-### Security Logs — Network Shares & Filtering
+### Journal Security — partages réseau et filtrage
 
 | Event ID | Événement                                     | Intérêt                                                                  |
 | -------- | --------------------------------------------- | ------------------------------------------------------------------------ |
@@ -309,7 +309,7 @@ Les Events `1102`, `4719` et `4907` peuvent révéler des tentatives de modifica
 
 Ces événements peuvent soutenir les investigations liées aux accès SMB, aux partages non autorisés et aux communications suspectes.
 
-### Microsoft Defender Antivirus Logs
+### Journaux de Microsoft Defender Antivirus
 
 Les événements suivants relèvent du journal Microsoft-Windows-Windows Defender/Operational, et non du journal Security :
 
@@ -323,7 +323,7 @@ Les événements suivants relèvent du journal Microsoft-Windows-Windows Defende
 
 La distinction Detection / Remediation Started / Remediation Succeeded / Remediation Failed est essentielle : détecter un malware ne garantit pas qu'il ait été neutralisé.
 
-## 7. Windows Event Logs — Threat Hunting Workflow
+## 7. Journaux Windows — démarche de threat hunting
 
 ```
 Suspicious Activity

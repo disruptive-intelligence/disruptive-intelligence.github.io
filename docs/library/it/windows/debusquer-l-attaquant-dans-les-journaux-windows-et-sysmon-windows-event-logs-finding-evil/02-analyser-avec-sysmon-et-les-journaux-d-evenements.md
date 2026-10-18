@@ -15,7 +15,7 @@ Cette section présente l'utilisation de Sysmon et des Windows Event Logs pour d
 
 L'objectif est de transformer des événements système en indicateurs exploitables pour le Threat Hunting et le DFIR.
 
-## 1. Sysmon Basics
+## 1. Les bases de Sysmon
 
 Sysmon (System Monitor) est un outil Microsoft Sysinternals qui surveille les activités Windows et les enregistre dans les journaux d'événements.
 
@@ -31,7 +31,7 @@ Sysmon repose sur trois composants :
 
 Le service et son driver restent actifs après un redémarrage lorsque Sysmon est installé et configuré pour fonctionner automatiquement.
 
-### Native Windows Logs vs Sysmon
+### Journaux Windows natifs ou Sysmon
 
 | Événement | Source           | Utilisation                             |
 | --------- | ---------------- | --------------------------------------- |
@@ -63,7 +63,7 @@ sysmon.exe -c filename.xml
 ```
 
 
-### Sysmon XML Configuration
+### Configuration XML de Sysmon
 
 Sysmon utilise un fichier XML pour définir quels événements enregistrer ou exclure selon leurs attributs : processus, chemin, adresse IP, type d'événement, etc.
 
@@ -74,11 +74,11 @@ Deux configurations communautaires sont citées :
 
 Précision : Sysmon est un outil de collecte et de surveillance, pas une solution EDR complète avec toutes les fonctionnalités de réponse.
 
-## 2. Detection Example 1 — DLL Hijacking
+## 2. Détection n° 1 — DLL hijacking
 
 Le DLL Hijacking consiste à exploiter le mécanisme de recherche et de chargement des DLL de Windows pour faire charger une bibliothèque contrôlée par l'attaquant à la place de celle attendue.
 
-### Sysmon Event ID 7 — Image Loaded
+### Sysmon Event ID 7 — chargement d'image (Image Loaded)
 
 L'Event ID `7` enregistre les chargements de modules, notamment de DLL.
 
@@ -141,7 +141,7 @@ Puis consulter :
 
 Attention : l'Event ID 7 peut générer un volume de logs important. En production, une sélection adaptée des événements est généralement préférable.
 
-### Lab Scenario — calc.exe / WININET.dll
+### Scénario du lab — calc.exe / WININET.dll
 https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
 https://hijacklibs.net/#calc.exe
 Exemple de détournement impliquant :
@@ -163,7 +163,7 @@ Lors de l'exécution, la DLL contrôlée par le test est chargée et affiche une
 
 La DLL utilisée provient d'un exemple de Reflective DLL, bien que le DLL Hijacking ne nécessite pas de DLL réfléchissante.
 
-### Detection & Investigation
+### Détection et investigation
 
 L'analyse consiste à filtrer les événements Sysmon sur `Event ID 7`, puis à rechercher `calc.exe`.
 
@@ -204,9 +204,9 @@ Ces critères peuvent alimenter une règle de détection.
 
 Précisions : `Image` désigne le processus qui charge la DLL, pas nécessairement son processus parent. Une DLL non signée ou située hors de `System32` n'est pas automatiquement malveillante ; les trois indicateurs doivent être interprétés ensemble.
 
-## 3. Detection Example 2 — Unmanaged PowerShell / C# Injection
+## 3. Détection n° 2 — PowerShell non managé / injection C#
 
-### Managed Code & CLR
+### Code managé et CLR
 
 Le langage C# utilise généralement l'environnement d'exécution .NET, notamment le Common Language Runtime (CLR).
 
@@ -219,7 +219,7 @@ Deux DLL sont particulièrement importantes :
 
 Leur présence est normale dans certains processus qui utilisent .NET.
 
-### Process Hacker — Managed Process Identification
+### Process Hacker — repérer un processus managé
 
 Process Hacker permet d'examiner les processus actifs.
 
@@ -248,7 +248,7 @@ Cette inspection permet d'identifier la présence du runtime .NET dans un proces
 - La présence de « Microsoft .NET Runtime... », `clr.dll` et `clrjit.dll` devrait attirer notre attention. Ces 2 DLL sont utilisées lorsque du code C# est exécuté dans le cadre du runtime pour exécuter le bytecode.
 - Si nous observons ces DLL chargées dans des processus qui ne les requièrent généralement pas, cela suggère une potentielle attaque [execute-assembly](https://www.cobaltstrike.com/blog/cobalt-strike-3-11-the-snake-that-eats-its-tail/) ou [d'injection PowerShell non managée](https://www.youtube.com/watch?v=7tvfb9poTKg&ab_channel=RaphaelMudge).
 
-### Lab Scenario — Injection into spoolsv.exe
+### Scénario du lab — injection dans spoolsv.exe
 
 Exemple : une injection de code PowerShell dans `spoolsv.exe`, le processus Windows associé au Print Spooler.
 
@@ -278,7 +278,7 @@ Après l'injection :
 
 ![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-windows-event-logs-32.png)
 
-### Detection Logic
+### Logique de détection
 
 ```
 spoolsv.exe
@@ -303,7 +303,7 @@ Cette technique de hunting peut contribuer à détecter :
 
 Limite : un processus natif peut légitimement héberger le CLR. La présence de `clr.dll` doit être corrélée au contexte du processus, aux modules chargés et aux autres événements disponibles.
 
-## 4. Detection Example 3 — Credential Dumping
+## 4. Détection n° 3 — vol d'identifiants (credential dumping)
 
 Le Credential Dumping consiste à extraire des secrets d'authentification depuis un système compromis.
 
@@ -328,7 +328,7 @@ Sa sortie montre notamment un compte `Administrator` et des valeurs de hash, tan
 
 L'accès à LSASS et la réussite de l'extraction dépendent des privilèges et des mécanismes de protection en place.
 
-### Sysmon Event ID 10 — ProcessAccess
+### Sysmon Event ID 10 — accès à un processus (ProcessAccess)
 
 Pour détecter les tentatives d'accès suspectes à LSASS, on utilise Sysmon Event ID 10.
 
@@ -363,7 +363,7 @@ TargetUser  : NT AUTHORITY\SYSTEM
 
 Cette activité est suspecte, car un exécutable peu connu provenant d'un dossier utilisateur accède à un processus sensible.
 
-### Detection Indicators
+### Indicateurs de détection
 
 - Unexpected Source Process : programme inhabituel accédant à LSASS.
 - Suspicious File Location : exécutable provenant d'un dossier comme `Downloads`.
@@ -402,7 +402,7 @@ L'analyse doit intégrer l'identité du processus, son chemin, ses droits d'acc�
 | Unmanaged PowerShell / C# Injection | Sysmon 7           | Chargement inattendu de `clr.dll` / `clrjit.dll`                   |
 | Credential Dumping                  | Sysmon 10          | Processus suspect accédant à `lsass.exe`                           |
 
-### Investigation Workflow
+### Démarche d'investigation
 
 ```
 Sysmon Telemetry

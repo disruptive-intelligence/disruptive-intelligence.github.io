@@ -143,7 +143,7 @@ Console administrateur. `-Oldest` est obligatoire pour lire un `.etl`. Une trace
 
 `perfmon` → **Ensembles de collecteurs de données** → **Sessions de suivi d'événements** : les sessions actives ; double-clic pour leurs providers et paramètres. **Défini par l'utilisateur** → *Nouveau* → *Ensemble de collecteurs de données* : créer sa propre session sans ligne de commande. Pour parcourir les providers, leurs GUID et leurs événements : EtwExplorer.
 
-Pour comprendre : [GUI pour l'analyse ETW](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-event-tracing-for-windows-etw.md#5-gui-pour-lanalyse-etw)
+Pour comprendre : [GUI pour l'analyse ETW](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-event-tracing-for-windows-etw.md#5-interfaces-graphiques-pour-lanalyse-etw)
 { .kw-cs-meta }
 
 ## Vue d'ensemble
@@ -174,4 +174,4 @@ Pour comprendre : [GUI pour l'analyse ETW](../../../../library/it/windows/debusq
 | Microsoft-Windows-CodeIntegrity · Security-Mitigations | Contrôles d'intégrité du code, mesures d'atténuation |
 | Microsoft-Windows-Threat-Intelligence | Restreint : réservé aux processus protégés (antivirus, EDR) |
 
-ETW ou Sysmon ? Sysmon livre des événements prêts à lire dans un journal ; ETW donne accès à bien plus de sources, plus brutes, à collecter soi-même. Voir [ETW vs Sysmon](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-event-tracing-for-windows-etw.md#9-synthese-etw-vs-sysmon) et la cheat sheet [Sysmon et requêtes SIEM](sysmon.md).
+ETW ou Sysmon ? Sysmon livre des événements prêts à lire dans un journal ; ETW donne accès à bien plus de sources, plus brutes, à collecter soi-même. Voir [ETW vs Sysmon](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-event-tracing-for-windows-etw.md#9-synthese-etw-ou-sysmon) et la cheat sheet [Sysmon et requêtes SIEM](sysmon.md).

@@ -12,9 +12,9 @@ Les journaux Windows sont détaillés dans [Analyse des journaux d'événements 
 
 ## Sommaire
 
-- [Windows Event Logs & Finding Evil — Windows Event Logs](01-windows-event-logs-finding-evil-windows-event-logs.md)
+- [Les journaux d'événements Windows](01-les-journaux-d-evenements-windows.md)
 - [Analyser avec Sysmon et les journaux d'événements](02-analyser-avec-sysmon-et-les-journaux-d-evenements.md)
 - [Event Tracing for Windows (ETW)](03-event-tracing-for-windows-etw.md)
-- [Windows Event Logs & Finding Evil — Leveraging ETW](04-windows-event-logs-finding-evil-leveraging-etw.md)
-- [Lab 1 — Windows Event Logging Basics](05-lab-1-windows-event-logging-basics.md)
+- [Tirer parti d'ETW](04-tirer-parti-d-etw.md)
+- [Lab 1 — Les bases des journaux d'événements Windows](05-lab-1-les-bases-des-journaux-d-evenements-windows.md)
 - [Lab 2 — Analyser avec Sysmon](06-lab-2-analyser-avec-sysmon.md)
