@@ -221,6 +221,8 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
     ```
     Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/02-analyser-avec-sysmon-et-les-journaux-d-evenements.md#3-detection-example-2-unmanaged-powershell-c-injection).
 
+    Pour relever le SHA256 d'une DLL, ouvrir l'événement Sysmon 7 correspondant : `ImageLoaded` donne la DLL chargée, et `Hashes` contient sa valeur `SHA256=…`. Dans le lab `WININET.dll`, vérifier `ImageLoaded` avant de copier ce hash ; `Image` désigne le processus qui l'a chargée.
+
 ## Pièges
 
 | Piège | Ce qui se passe | Parade |
