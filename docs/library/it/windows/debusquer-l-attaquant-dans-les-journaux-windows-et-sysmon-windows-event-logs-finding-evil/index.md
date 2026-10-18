@@ -18,3 +18,4 @@ Les journaux Windows sont détaillés dans [Analyse des journaux d'événements 
 - [Tirer parti d'ETW](04-tirer-parti-d-etw.md)
 - [Lab 1 — Les bases des journaux d'événements Windows](05-lab-1-les-bases-des-journaux-d-evenements-windows.md)
 - [Lab 2 — Analyser avec Sysmon](06-lab-2-analyser-avec-sysmon.md)
+- [Lab 3 — Travailler avec ETW](07-lab-3-travailler-avec-etw.md)

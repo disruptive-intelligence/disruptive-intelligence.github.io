@@ -3127,7 +3127,8 @@ def page_labs_index():
         items = []
         for lab in lst:
             bits = [b for b in (lab["note"].get("provenance"), lab["cat"]["label"],
-                                f'{lab["questions"]} questions' if lab["questions"] else "En cours") if b]
+                                f'{lab["questions"]} question{"s" if lab["questions"] > 1 else ""}'
+                                if lab["questions"] else "En cours") if b]
             status_class = "is-done" if lab["questions"] else "is-todo"
             items.append(f'<li class="{status_class}"><a href="{href(LABS_INDEX, lab["src"])}">'
                          f'{esc(lab["note"]["title"])}</a> — {esc(lab["title"])}'
