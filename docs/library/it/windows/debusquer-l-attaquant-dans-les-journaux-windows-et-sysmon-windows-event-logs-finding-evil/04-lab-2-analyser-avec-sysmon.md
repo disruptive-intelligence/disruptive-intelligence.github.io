@@ -55,12 +55,12 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 1. Relever le PID du Print Spooler dans Process Hacker ou avec PowerShell :
 
-```powershell
-Get-Process spoolsv | Select-Object Id, ProcessName
-```
+    ```powershell
+    Get-Process spoolsv | Select-Object Id, ProcessName
+    ```
 
 
-   ![HTB WELFE lab-10](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-10.png)
+    ![HTB WELFE lab-10](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-10.png)
 
 2. Depuis `C:\Tools\PSInject`, exécuter l'essai décrit dans le cours avec `Invoke-PSInject` en ciblant ce PID. Dans Process Hacker, comparer les modules de `spoolsv.exe` avant et après l'essai.
 
@@ -94,8 +94,8 @@ Get-Process spoolsv | Select-Object Id, ProcessName
 **Énoncé HTB Academy.** Reproduire l'essai avec les outils de `C:\Tools\Mimikatz` et relever le hash NTLM du compte `Administrator`.
 
 1. Ouvrir `AgentEXE` depuis ce dossier, puis examiner la sortie Mimikatz obtenue dans le lab. Repérer la session du compte `Administrator`.
-2. Dans la section `msv`, distinguer la ligne `NTLM` de `SHA1` et des champs `Password`. La capture du cours ci-dessous montre où lire cette valeur ; le hash y est masqué.
+2. Dans la section `msv`, distinguer la ligne `NTLM` de `SHA1` et des champs `Password`. La capture du lab montre où lire la valeur demandée ; les hashes y sont partiellement masqués.
 
-    ![image-22](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-image-22.png)
+    ![HTB WELFE lab-15](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-15.png)
 
 3. Pour l'angle détection, consulter les événements Sysmon `10` et vérifier les champs `SourceImage` et `TargetImage` lorsqu'un processus accède à `lsass.exe`. Cet événement atteste un accès entre processus, pas à lui seul une extraction réussie.
