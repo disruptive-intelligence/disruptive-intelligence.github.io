@@ -2386,7 +2386,7 @@ def pages_library(library):
             if cat.get("description"):
                 body += f'<p class="kw-dom-lead">{esc(cat["description"])}</p>\n'
             body += (f'<span class="kw-dom-stats">{stats}{" · mis à jour le " + update if update else ""}</span>\n'
-                     "</div>\n\n")
+                     "</div>\n\n") + variants_box(src, f"{dom['id']}/{cat['id']}")
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
                 groups = grouped(listed)
@@ -2516,7 +2516,7 @@ hide:
   - footer
 ---
 {masthead}
-{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
+{variants_box(src)}{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
 <div class="kw-courses">{paths}</div>
 {section_bar("Les outils")}
 <div class="kw-libgrid">
@@ -3436,6 +3436,51 @@ des glossaires de mes cours ; « Dans les cours » mène à la définition dans 
 {body}"""
 
 
+# ---------------------------------------------------------------- variantes de la Bibliothèque (aperçu)
+
+TREE_JSON = "assets/bibliotheque-arbre.json"
+
+
+def library_tree(docs_dir, library):
+    """assets/bibliotheque-arbre.json : domaines > rubriques > sous-rubriques > notes > parties > chapitres,
+    lu par javascripts/bibliotheque-variantes.js (explorateur, sommaire détaillé, filtres)."""
+    def walk(folder):
+        out = []
+        for p in sorted(folder.iterdir()):
+            if p.name == "index.md":
+                continue
+            if p.is_dir() and (p / "index.md").exists():
+                _, meta = get_data((p / "index.md").read_text(encoding="utf-8"))
+                out.append({"t": str(meta.get("title") or p.name), "u": url_of((p / "index.md").relative_to(docs_dir).as_posix()),
+                            "c": walk(p)})
+            elif p.suffix == ".md":
+                _, meta = get_data(p.read_text(encoding="utf-8"))
+                out.append({"t": str(meta.get("title") or p.stem), "u": url_of(p.relative_to(docs_dir).as_posix())})
+        return out
+
+    doms = []
+    for d in library:
+        cats = []
+        for c in d["categories"]:
+            groups = []
+            for label, notes in grouped([n for n in c["notes"] if n["imported"]]):
+                items = []
+                for n in notes:
+                    kids = walk(docs_dir / posixpath.dirname(n["src"])) if n["src"].endswith("/index.md") else []
+                    items.append({"t": n["title"], "u": url_of(n["src"]), "f": n.get("format") or "",
+                                  "p": n.get("provenance") or "", "m": n.get("minutes") or 0, "c": kids})
+                groups.append({"t": bare(label) if label else "", "n": items})
+            cats.append({"id": f"{d['id']}/{c['id']}", "t": bare(c["label"]), "u": url_of(c["src"]), "g": groups})
+        doms.append({"id": d["id"], "t": bare(d["label"]), "u": url_of(dom_src(d)), "c": cats})
+    return TREE_JSON, json.dumps(doms, ensure_ascii=False, separators=(",", ":"))
+
+
+def variants_box(src, scope=""):
+    """Conteneur des variantes (aperçu) : sélecteur Actuelle / A / B / C, rempli par le script."""
+    return (f'<div class="kw-bv" data-root="{href(src, "index.md")}" data-scope="{scope}" '
+            f'data-json="{posixpath.relpath(TREE_JSON, posixpath.dirname(src))}"></div>\n\n')
+
+
 def glossary_data(glossary):
     """assets/glossary.json : lu par javascripts/glossary-tooltips.js pour les infobulles."""
     url = url_of(GLOSSARY_SRC)
@@ -3562,6 +3607,7 @@ def on_config(config):
     if STATE["labs"]:
         pages.append(page_labs_index())
     pages.append(glossary_data(glossary))
+    pages.append(library_tree(docs_dir, library))
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
     pages += [page_explorer(items["veille"]), explorer_data(items["veille"]),
