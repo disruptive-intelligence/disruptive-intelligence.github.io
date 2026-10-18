@@ -4,7 +4,7 @@ title: "Lire, filtrer et exporter"
 
 # Lire, filtrer et exporter
 
-Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; l'exporter, voir la politique d'audit, l'agrandir.
+Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; analyser un dossier de `.evtx` exportés ; l'exporter, voir la politique d'audit, l'agrandir.
 
 Les incontournables : `eventvwr.msc` · `Get-WinEvent -FilterHashtable` · `wevtutil` · `auditpol /get`
 { .kw-cs-top }
@@ -104,6 +104,38 @@ Lecture de `@{…}` : une condition par paire `clé=valeur`, séparées par `;` 
 Pour comprendre : [Filtrer avec Get-WinEvent (provider, ID, période)](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#get-winevent) · [Event Viewer, wevtutil ou Get-WinEvent](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#event-viewer-vs-wevtutil-vs-get-winevent)
 { .kw-cs-meta }
 
+### Découvrir les propriétés d'un événement
+
+```powershell title="Commande"
+Get-WinEvent -LogName <journal> -MaxEvents 1 | Get-Member      # noms des propriétés et méthodes
+Get-WinEvent -LogName <journal> -MaxEvents 1 | Format-List *    # propriétés et leurs valeurs
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path .\smb_bi_auth_conn_spoolsample.evtx -MaxEvents 1 | Format-List *
+```
+
+??? example "Sortie (raccourcie)"
+    ```text
+    Message      : Un objet de partage réseau a été ajouté.…
+    Id           : 5142
+    ProviderName : Microsoft-Windows-Security-Auditing
+    LogName      : Security
+    MachineName  : PC-01
+    TimeCreated  : …
+    Properties   : {…}
+    ```
+
+| Besoin | Commande |
+|---|---|
+| Découvrir les propriétés d'un objet | `Get-Member` |
+| Afficher toutes les propriétés et leurs valeurs | `Format-List *` |
+| Choisir quelques propriétés | `Select-Object` |
+| Explorer les champs XML propres à l'événement | `.ToXml()` ([Voir les champs d'un événement](#voir-les-champs-dun-evenement)) |
+
+Pour comprendre : [Découvrir les propriétés d'un événement](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#decouvrir-les-proprietes-dun-evenement)
+{ .kw-cs-meta }
+
 ### Voir les champs d'un événement
 
 ```powershell title="Commande"
@@ -130,7 +162,11 @@ $e = Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operation
 
 `Name` : le nom exact du champ, à réutiliser dans les filtres ; `#text` : sa valeur. C'est la même liste que l'onglet **Details → XML View** de l'Observateur.
 
-```powershell title="Exemple 2 — un seul champ"
+```powershell title="Exemple 2 — tous les champs, colonnes Name et Value"
+([xml]$e.ToXml()).Event.EventData.Data | Select-Object Name, @{Name='Value'; Expression={ $_.'#text' }}
+```
+
+```powershell title="Exemple 3 — un seul champ"
 (([xml]$e.ToXml()).Event.EventData.Data | Where-Object Name -eq 'DestinationIp').'#text'
 ```
 
@@ -225,6 +261,73 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 `-like '*mot*'` : contient « mot » (`*` = n'importe quoi). `-match 'clr\.dll'` : même idée avec une expression régulière. Toujours filtrer d'abord par journal et ID (`-FilterHashtable`), puis chercher le mot : sinon tout le journal est lu.
 
 Ensuite : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ouvertures-de-session)
+{ .kw-cs-meta }
+
+## Analyser des journaux exportés
+
+### Lire tous les journaux d'un dossier
+
+```powershell title="Commande"
+Get-WinEvent -Path "<dossier>\*.evtx"
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path "C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Lateral Movement\*.evtx" |
+    Select-Object TimeCreated, Id, ProviderName, Message | Format-Table -AutoSize
+```
+
+```powershell title="Exemple 2 — dossier et sous-dossiers"
+Get-ChildItem -Path . -Recurse -Filter "*.evtx" |
+    ForEach-Object { Get-WinEvent -Path $_.FullName -ErrorAction SilentlyContinue } |
+    Select-Object TimeCreated, Id, ProviderName, Message
+```
+
+`.\*.evtx` : tous les `.evtx` du dossier courant. `-ErrorAction SilentlyContinue` : un fichier vide ou illisible n'arrête pas la boucle.
+
+### Voir quels Event IDs contient un journal
+
+```powershell title="Commande"
+Get-WinEvent -Path "<dossier>\*.evtx" | Group-Object Id | Select-Object Name, Count | Sort-Object Count -Descending
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path ".\*.evtx" | Where-Object ProviderName -eq 'Microsoft-Windows-Sysmon' |
+    Group-Object Id | Select-Object Name, Count | Sort-Object Count -Descending
+```
+
+??? example "Sortie"
+    ```text
+    Name Count
+    ---- -----
+    1      412
+    3      127
+    11      58
+    13      31
+    ```
+
+`Name` = l'Event ID, `Count` = le nombre d'événements. Fonctionne aussi avec `-LogName <journal>`. Le premier réflexe face à un journal inconnu, avant de chercher.
+
+### Chercher un mot ou un Event ID dans tout un dossier
+
+```powershell title="Commande"
+Get-WinEvent -Path "<dossier>\*.evtx" |
+    Where-Object { $_.Id -eq <id> -and $_.Message -like '*<mot>*' } | Format-List TimeCreated, Id, Message
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Message -like "*PRINT*" } | Format-List TimeCreated, Id, Message
+```
+
+```powershell title="Exemple 2 — un partage réseau ajouté (5142), gardé dans une variable"
+$events = Get-WinEvent -Path ".\*.evtx" | Where-Object { $_.Id -eq 5142 -and $_.Message -like "*PRINT*" }
+$events.Count
+$events | Format-List TimeCreated, Id, Message
+```
+
+Sans connaître l'Event ID, chercher d'abord le mot seul : la sortie donne la date, l'Event ID et le message. `-and` : les deux conditions doivent être vraies ; `-in 1,3` : l'un ou l'autre ID. Stocker dans `$events` évite de relire tous les fichiers à chaque essai.
+
+Pour comprendre : [Analyser un dossier de fichiers .evtx](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-dossier-de-fichiers-evtx)
 { .kw-cs-meta }
 
 ## Exporter et configurer

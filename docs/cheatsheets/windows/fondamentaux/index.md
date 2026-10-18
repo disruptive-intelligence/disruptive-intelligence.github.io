@@ -73,7 +73,9 @@ Comprendre et observer un système Windows : identité de la machine, processus,
     - [Journaux et événements](logs/index.md)
         - [Lire et filtrer](logs/lire.md)
             - [Par ID et période](logs/lire.md#filtrer-par-identifiant-et-par-periode) : `Get-WinEvent -FilterHashtable`
+            - [Propriétés d'un événement](logs/lire.md#decouvrir-les-proprietes-dun-evenement) : `Get-Member` · `Format-List *`
             - [Champs d'un événement](logs/lire.md#voir-les-champs-dun-evenement) : `([xml]$e.ToXml()).Event.EventData.Data`
+            - [Dossier de .evtx](logs/lire.md#lire-tous-les-journaux-dun-dossier) : `Get-WinEvent -Path .\*.evtx` · `Group-Object Id`
             - [Exporter](logs/lire.md#exporter-un-journal-pour-lanalyser-ailleurs) : `wevtutil epl`
             - [Politique d'audit](logs/lire.md#voir-la-politique-daudit-active) : `auditpol /get /category:*`
         - [Requêtes XML](logs/requetes-xml.md)

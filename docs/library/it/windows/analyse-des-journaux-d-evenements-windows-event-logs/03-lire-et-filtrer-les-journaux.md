@@ -544,6 +544,52 @@ Get-WinEvent -LogName 'System' -MaxEvents 50 |
 |`LevelDisplayName`|Niveau : Information, Warning, Error, etc.|
 |`Message`|Description de l'événement|
 
+#### Découvrir les propriétés d'un événement
+
+Avant de filtrer, regarder à quoi ressemble un événement. Ici sur un fichier exporté, mais `-LogName` fonctionne de la même façon.
+
+Les noms des propriétés (sans leurs valeurs) :
+
+```powershell
+Get-WinEvent -Path .\smb_bi_auth_conn_spoolsample.evtx -MaxEvents 1 |
+    Get-Member
+```
+
+
+- `Get-Member` liste ce que contient l'objet : propriétés (`Id`, `TimeCreated`, `Message`…) et méthodes (`ToXml()`…).
+
+Les propriétés **et** leurs valeurs, pour observer le contenu réel d'un événement :
+
+```powershell
+Get-WinEvent -Path .\smb_bi_auth_conn_spoolsample.evtx -MaxEvents 1 |
+    Format-List *
+```
+
+
+- Le `*` signifie « toutes les propriétés ».
+
+Les champs propres à cet événement (ceux de l'onglet **Details**), avec leurs valeurs :
+
+```powershell
+$event = Get-WinEvent -Path .\smb_bi_auth_conn_spoolsample.evtx -MaxEvents 1
+$xml = [xml]$event.ToXml()
+
+$xml.Event.EventData.Data |
+    Select-Object Name, @{Name='Value'; Expression={ $_.'#text' }}
+```
+
+
+- `@{Name='Value'; Expression={ $_.'#text' }}` : crée une colonne `Value` qui affiche la valeur de chaque champ (détail dans [Extraire les champs d'un événement avec .ToXml()](#extraire-les-champs-dun-evenement-avec-toxml)).
+
+#### Le réflexe à adopter en forensic
+
+|Besoin|Commande|
+|---|---|
+|Découvrir les propriétés d'un objet|`Get-Member`|
+|Afficher toutes les propriétés et leurs valeurs|`Format-List *`|
+|Choisir quelques propriétés|`Select-Object`|
+|Explorer les champs XML propres à l'événement|`.ToXml()`|
+
 #### Lire la commande, brique par brique
 
 Une commande `Get-WinEvent` est une chaîne de briques reliées par `|` (le *pipe*) : chaque brique reçoit les événements de la précédente, les transforme et les passe à la suivante.
@@ -610,6 +656,143 @@ Get-WinEvent -Path 'C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Execution\exec_sysmon_
 
 - `-Path` désigne le fichier à analyser : ici des événements Sysmon Event ID 1 (création de processus).
 - L'analyse porte directement sur la preuve exportée, hors de la machine d'origine : Sysmon n'a pas besoin d'être encore actif sur le poste analysé.
+
+### Analyser un dossier de fichiers .evtx
+
+Cas typique en forensic : un dossier de journaux exportés, sans savoir à l'avance lequel contient l'événement recherché.
+
+#### Lire tous les fichiers du dossier
+
+Depuis le dossier courant :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx"
+```
+
+
+Ou avec le chemin complet du dossier :
+
+```powershell
+Get-WinEvent -Path "C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Lateral Movement\*.evtx"
+```
+
+
+- `*.evtx` : tous les fichiers dont le nom se termine par `.evtx`.
+- Un seul fichier : `Get-WinEvent -Path "CHEMIN_DU_FICHIER.evtx"`.
+
+Avec les colonnes utiles :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Select-Object TimeCreated, Id, ProviderName, Message |
+    Format-Table -AutoSize
+```
+
+
+#### Voir quels Event IDs contient le dossier
+
+Avant de chercher, compter les Event IDs présents :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Group-Object Id |
+    Select-Object Name, Count |
+    Sort-Object Count -Descending
+```
+
+
+- `Group-Object Id` : regroupe les événements par Event ID ; `Name` = l'Event ID, `Count` = le nombre d'événements.
+
+Limité à Sysmon :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object ProviderName -eq 'Microsoft-Windows-Sysmon' |
+    Group-Object Id |
+    Select-Object Name, Count
+```
+
+
+Dossier **et** sous-dossiers :
+
+```powershell
+Get-ChildItem -Path . -Recurse -Filter "*.evtx" |
+    ForEach-Object {
+        Get-WinEvent -Path $_.FullName -ErrorAction SilentlyContinue
+    } |
+    Where-Object ProviderName -eq 'Microsoft-Windows-Sysmon' |
+    Group-Object Id |
+    Select-Object Name, Count
+```
+
+
+- `Get-ChildItem -Recurse -Filter "*.evtx"` : liste les fichiers `.evtx` du dossier et de tous ses sous-dossiers.
+- `$_.FullName` : le chemin complet de chaque fichier trouvé.
+- `-ErrorAction SilentlyContinue` : passe au fichier suivant sans s'arrêter si un fichier est vide ou illisible.
+
+#### Filtrer par Event ID
+
+Un seul Event ID, par exemple 5142 (partage réseau ajouté, journal Security) :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Id -eq 5142 } |
+    Select-Object TimeCreated, Id, Message
+```
+
+
+Plusieurs Event IDs :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Id -in 1,3 } |
+    Select-Object TimeCreated, Id, ProviderName, Message |
+    Format-Table -AutoSize
+```
+
+
+#### Chercher un mot dans tous les événements
+
+Par exemple, le partage `PRINT` :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Message -like "*PRINT*" } |
+    Format-List TimeCreated, Id, Message
+```
+
+
+- Fonctionne même sans connaître l'Event ID pertinent : la sortie donne la date, l'Event ID et le message de chaque événement trouvé.
+
+Le même mot, dans un Event ID précis :
+
+```powershell
+Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Id -eq 5142 -and $_.Message -like "*PRINT*" } |
+    Format-List TimeCreated, Id, Message
+```
+
+
+- `-and` : les deux conditions doivent être vraies.
+
+#### Stocker les résultats pour les examiner ensuite
+
+```powershell
+$events = Get-WinEvent -Path ".\*.evtx" |
+    Where-Object { $_.Id -eq 5142 }
+```
+
+
+Puis, sans relire les fichiers :
+
+```powershell
+$events.Count                                      # combien d'événements trouvés
+$events | Select-Object TimeCreated, Id, Message   # vue en tableau
+$events | Format-List TimeCreated, Id, Message     # message complet
+```
+
+
+- Une fois les événements dans `$events`, chercher dans le message le champ utile (par exemple le nom du partage réseau).
 ### Filtrer selon le Provider
 Exemple :
 

@@ -94,7 +94,7 @@ Un `.evtx` exporté (copie d'un poste, pièce d'enquête) se lit hors de la mach
     ```
     [Lab DFIR avec l'EDR, question 1](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-1-le-processus-qui-communique-avec-lip-signalee-par-la-cti)
 
-Pour comprendre : [Lab — analyse d'un journal Sysmon exporté](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md) · [Lire, filtrer et exporter les journaux](lire.md)
+Pour comprendre : [Lab — analyse d'un journal Sysmon exporté](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md) · [Lire, filtrer et exporter les journaux](lire.md) · [Tout un dossier de .evtx](lire.md#lire-tous-les-journaux-dun-dossier)
 { .kw-cs-meta }
 
 ## Chasser avec Sysmon
