@@ -427,7 +427,8 @@ System Log
 
 ## `Get-WinEvent`
 
-- Cmdlet PowerShell destiné à consulter les Windows Event Logs.
+- Cmdlet PowerShell destiné à consulter les Windows Event Logs, les journaux Sysmon et certains événements issus de l'infrastructure ETW.
+- En threat hunting et en DFIR, elle automatise les recherches sur de gros volumes de journaux, de façon reproductible.
 - Peut fonctionner sur :
     - machine locale ;
     - machine distante.
@@ -436,6 +437,14 @@ System Log
     - XPath ;
     - XML queries ;
     - pipeline PowerShell.
+
+Ses principales capacités :
+
+- Log Discovery : identifier les journaux et fournisseurs disponibles.
+- Event Retrieval : récupérer des événements locaux, distants ou archivés (`.evtx`).
+- Event Filtering : filtrer par Event ID, date, fournisseur ou contenu.
+- XML / XPath Analysis : rechercher des champs précis dans les événements.
+- Event Correlation : rapprocher plusieurs événements pour reconstruire une activité suspecte.
 ### Lister les journaux
 
 ```powershell
@@ -451,6 +460,61 @@ Get-WinEvent -ListLog *
 wevtutil el
 ```
 
+
+Avec les propriétés utiles :
+
+```powershell
+Get-WinEvent -ListLog * |
+    Select-Object LogName, RecordCount, IsClassicLog, IsEnabled, LogMode, LogType |
+    Format-Table -AutoSize
+```
+
+
+![Get-WinEvent ListLog](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-get-winevent-listlog.png)
+
+|Propriété|Description|
+|---|---|
+|`LogName`|Nom du journal|
+|`RecordCount`|Nombre d'événements enregistrés|
+|`IsClassicLog`|Indique si le journal utilise l'ancienne infrastructure de journalisation|
+|`IsEnabled`|Indique si le journal est activé|
+|`LogMode`|Mode de conservation des événements|
+|`LogType`|Catégorie du journal|
+
+#### Mode de journalisation
+
+- Circular : les événements anciens peuvent être écrasés lorsque la limite de stockage est atteinte.
+    
+- Retain : les événements existants sont conservés lorsque le journal atteint sa limite.
+    
+- AutoBackup : archivage automatique lorsque le journal est plein, selon sa configuration.
+    
+
+#### Types de journaux
+
+Les journaux peuvent être classés notamment en :
+
+- Administrative : événements destinés à l'administration et à la résolution de problèmes.
+    
+- Operational : événements détaillant les opérations d'un composant.
+    
+- Analytic : traces destinées à une analyse approfondie.
+    
+- Debug : événements particulièrement détaillés, généralement utilisés pour le diagnostic.
+    
+
+Les journaux Analytic et Debug ne sont pas nécessairement activés ou accessibles par défaut.
+
+### Lister les fournisseurs
+
+```powershell
+Get-WinEvent -ListProvider * | Format-Table -AutoSize
+```
+
+
+Cette commande liste les Providers disponibles et les journaux auxquels ils écrivent (`LogLinks`). Un même fournisseur peut publier des événements dans plusieurs journaux.
+
+![Get-WinEvent ListProvider](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-get-winevent-listprovider.png)
 ### Lire un journal
 Exemple :
 
@@ -460,8 +524,53 @@ Get-WinEvent -LogName System
 
 
 → retourne les événements du journal `System`.
+
+Les 50 plus récents, avec les colonnes utiles :
+
+```powershell
+Get-WinEvent -LogName 'System' -MaxEvents 50 |
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message |
+    Format-Table -AutoSize
+```
+
+
+![Get-WinEvent System MaxEvents](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-get-winevent-system-maxevents.png)
+
+|Propriété|Fonction|
+|---|---|
+|`TimeCreated`|Date et heure de l'événement|
+|`ID`|Event ID|
+|`ProviderName`|Fournisseur ayant généré l'événement|
+|`LevelDisplayName`|Niveau : Information, Warning, Error, etc.|
+|`Message`|Description de l'événement|
+
+Le même principe vaut pour un journal d'application, par exemple `Microsoft-Windows-WinRM/Operational` (administration et exécution à distance) :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -MaxEvents 30 |
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message
+```
+
+
+Par défaut, `Get-WinEvent` lit du plus récent au plus ancien. `-Oldest` inverse l'ordre, pour commencer par les premiers événements disponibles :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -Oldest -MaxEvents 30
+```
+
+
+### Lire un fichier .evtx exporté
+
+```powershell
+Get-WinEvent -Path 'C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Execution\exec_sysmon_1_lolbin_pcalua.evtx' -MaxEvents 5 |
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message
+```
+
+
+- `-Path` désigne le fichier à analyser : ici des événements Sysmon Event ID 1 (création de processus).
+- L'analyse porte directement sur la preuve exportée, hors de la machine d'origine : Sysmon n'a pas besoin d'être encore actif sur le poste analysé.
 ### Filtrer selon le Provider
-Exemple du cours :
+Exemple :
 
 ```powershell
 Get-WinEvent -LogName System |
@@ -481,7 +590,7 @@ System Events
 ```
 
 
-Le résultat de ton screenshot montre justement des événements du provider :
+La capture montre des événements du provider :
 
 ```text
 Service Control Manager
@@ -634,6 +743,41 @@ System Log → Filter → Retrieve
 
 → sur de gros journaux, `FilterHashtable` est généralement beaucoup plus efficace.
 
+#### Exemple : processus et connexions Sysmon (1 et 3)
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Microsoft-Windows-Sysmon/Operational'
+    ID = 1,3
+} | Select-Object TimeCreated, ID, ProviderName, Message
+```
+
+
+Un processus créé (Sysmon 1) qui établit aussitôt une connexion réseau (Sysmon 3) peut signaler un C2, surtout si le processus ou la destination sont inhabituels :
+
+```text
+Sysmon Event ID 1
+Process Creation
+        ↓
+Sysmon Event ID 3
+Network Connection
+        ↓
+Investigate Potential C2
+```
+
+
+Event 1 + Event 3 ≠ Confirmed C2 : beaucoup d'applications légitimes font exactement cela.
+
+`FilterHashtable` accepte aussi un fichier exporté, avec la clé `Path` :
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = 'C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Execution\sysmon_mshta_sharpshooter_stageless_meterpreter.evtx'
+    ID = 1,3
+}
+```
+
+
 ---
 
 ### Filtrer par Provider
@@ -683,6 +827,353 @@ Relevant Event IDs
 → Focused Investigation
 ```
 
+
+Une plage précise, ici du 28 mai au 2 juin 2023 inclus :
+
+```powershell
+$startDate = (Get-Date -Year 2023 -Month 5 -Day 28).Date
+$endDate   = (Get-Date -Year 2023 -Month 6 -Day 3).Date
+
+Get-WinEvent -FilterHashtable @{
+    LogName   = 'Microsoft-Windows-Sysmon/Operational'
+    ID        = 1,3
+    StartTime = $startDate
+    EndTime   = $endDate
+}
+```
+
+
+La borne de fin au 3 juin à minuit couvre intégralement la journée du 2 juin. En DFIR : réduire l'analyse à la période où l'activité suspecte a été observée.
+
+---
+
+### Extraire les champs d'un événement avec .ToXml()
+
+Les événements Windows peuvent être représentés en XML, ce qui facilite l'extraction de champs spécifiques.
+
+La méthode :
+
+```
+$event.ToXml()
+```
+
+
+permet d'obtenir la représentation XML d'un événement.
+
+#### Exemple : enquêter sur une IP suspecte
+
+Scénario : rechercher les connexions Sysmon vers l'adresse IP :
+
+`203.0.113.10` (adresse d'exemple)
+
+On lit les événements Sysmon ID 3 et on en extrait plusieurs champs XML :
+
+|Champ XML|Description|
+|---|---|
+|`SourceIp`|Adresse IP source|
+|`DestinationIp`|Adresse IP de destination|
+|`ProcessGuid`|Identifiant Sysmon du processus|
+|`ProcessId`|PID du processus|
+
+Exemple condensé :
+
+```
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Microsoft-Windows-Sysmon/Operational'
+    ID = 3
+} | ForEach-Object {
+    $event = $_
+    $data = ([xml]$event.ToXml()).Event.EventData.Data
+
+    $fields = @{}
+    foreach ($item in $data) {
+        $fields[$item.Name] = $item.'#text'
+    }
+
+    if ($fields['DestinationIp'] -eq '203.0.113.10') {
+        [PSCustomObject]@{
+            SourceIp      = $fields['SourceIp']
+            DestinationIp = $fields['DestinationIp']
+            ProcessGuid   = $fields['ProcessGuid']
+            ProcessId     = $fields['ProcessId']
+        }
+    }
+}
+```
+
+
+Cette recherche identifie les connexions vers l'IP sélectionnée et permet de retrouver les processus associés.
+
+#### Pourquoi le ProcessGuid
+
+Le `ProcessGuid` est particulièrement utile pour corréler les événements Sysmon.
+
+Il permet notamment de relier :
+
+```
+Sysmon Event ID 3
+Network Connection
+       ↓
+ProcessGuid
+       ↓
+Sysmon Event ID 1
+Process Creation
+       ↓
+Executable / Command Line / Parent
+```
+
+
+Le `ProcessGuid` est généralement plus fiable qu'un PID seul pour corréler des événements sur une période, puisque les PIDs peuvent être réutilisés.
+
+### Filtrer avec -FilterXml
+
+Le paramètre `-FilterXml` permet d'exécuter une requête XML structurée sur les Windows Event Logs.
+
+#### Exemple : chargement des DLL du runtime .NET
+
+Cas du chargement, inattendu dans certains processus, des DLL du runtime .NET :
+
+- `clr.dll`
+    
+- `mscoree.dll`
+    
+
+Ces bibliothèques sont associées à l'exécution du runtime .NET.
+
+On recherche leurs chargements avec Sysmon Event ID 7 — Image Loaded.
+
+Une requête XML peut sélectionner les événements de cette catégorie :
+
+```
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[System[(EventID=7)]]
+    </Select>
+  </Query>
+</QueryList>
+'@
+
+Get-WinEvent -FilterXml $Query |
+    Where-Object {
+        $_.Message -match '\\(clr|mscoree)\.dll\b'
+    } |
+    Select-Object TimeCreated, ID, Message
+```
+
+
+L'exemple conserve uniquement les événements faisant référence aux DLL recherchées.
+
+On peut aussi mettre les DLL dans la condition XML elle-même : il faut alors donner le chemin complet enregistré dans `ImageLoaded`, pas seulement le nom du fichier.
+
+#### Investigation
+
+L'analyste peut ainsi identifier :
+
+- le processus ayant chargé la DLL ;
+    
+- le chemin du module ;
+    
+- le compte utilisateur ;
+    
+- le `ProcessGuid` ;
+    
+- les signatures et hashes, lorsqu'ils sont disponibles.
+    
+
+Charger une bibliothèque .NET est normal pour un processus utilisant le CLR. La détection devient pertinente lorsque ce chargement est inattendu dans le contexte du processus.
+
+### Filtrer avec -FilterXPath
+
+Le paramètre `-FilterXPath` permet d'utiliser directement une expression XPath pour sélectionner certains événements.
+
+#### Exemple 1 : acceptation de la licence Sysinternals
+
+Rechercher une exécution de `reg.exe` qui modifie la clé :
+
+`HKCU\Software\Sysinternals`
+
+avec la valeur :
+
+`EulaAccepted`
+
+Cette opération peut correspondre à l'acceptation automatisée de la licence d'un outil Sysinternals.
+
+La requête filtre les événements Sysmon Process Creation sur les champs :
+
+- `Image` : `C:\Windows\System32\reg.exe`
+    
+- `CommandLine` : commande modifiant la valeur `EulaAccepted`.
+    
+
+L'objectif est de rechercher une exécution spécifique de `reg.exe` dans la télémétrie.
+
+L'observation de cette activité peut fournir un indice d'utilisation ou de préparation d'outils Sysinternals, mais ne démontre pas à elle seule une activité malveillante.
+
+#### Exemple 2 : connexions vers une IP
+
+Pour rechercher directement les événements Sysmon ID 3 vers une adresse IP précise :
+
+```
+Get-WinEvent `
+    -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[(EventID=3)] and EventData[Data[@Name='DestinationIp']='203.0.113.10']]"
+```
+
+
+La requête sélectionne les événements respectant simultanément :
+
+- `EventID = 3`
+    
+- `DestinationIp = 203.0.113.10`
+    
+
+Avantage : filtrer directement pendant la lecture des journaux permet d'éviter de récupérer inutilement tous les événements avant de les examiner.
+
+### Filtrer sur les propriétés d'un événement
+
+`Get-WinEvent` retourne des objets PowerShell disposant de nombreuses propriétés exploitables.
+
+#### Afficher toutes les propriétés
+
+```
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Microsoft-Windows-Sysmon/Operational'
+    ID = 1
+} -MaxEvents 1 | Select-Object -Property *
+```
+
+
+Cette commande affiche l'ensemble des propriétés de l'objet retourné.
+
+On retrouve notamment :
+
+- `Message`
+    
+- `Id`
+    
+- `TimeCreated`
+    
+- `ProviderName`
+    
+- `RecordId`
+    
+- `MachineName`
+    
+- `Properties`
+    
+
+Pour un événement Sysmon ID 1, le message détaillé peut inclure :
+
+|Champ|Utilisation|
+|---|---|
+|`Image`|Exécutable lancé|
+|`CommandLine`|Arguments du processus|
+|`User`|Compte associé|
+|`IntegrityLevel`|Niveau d'intégrité|
+|`ProcessGuid`|Identifiant unique Sysmon du processus|
+|`ParentProcessGuid`|Identifiant Sysmon du processus parent|
+|`ParentImage`|Chemin du processus parent|
+|`ParentCommandLine`|Ligne de commande du parent|
+
+#### Exemple : PowerShell encodé suspect
+
+Recherche :
+
+```
+Get-WinEvent -FilterHashtable @{
+    LogName = 'Microsoft-Windows-Sysmon/Operational'
+    ID = 1
+} | Where-Object {
+    $_.Properties[21].Value -like '*-enc*'
+} | Format-List
+```
+
+
+#### Lire le pipeline
+
+- `Where-Object` : filtre les événements récupérés.
+    
+- `$_` : représente l'événement actuellement traité.
+    
+- `.Properties[21].Value` : correspond à `ParentCommandLine` dans le schéma Sysmon utilisé par le lab.
+    
+- `-like '*-enc*'` : recherche la chaîne `-enc` n'importe où dans la valeur.
+    
+- `Format-List` : affiche les événements correspondants sous forme de liste détaillée.
+    
+
+Le paramètre PowerShell `-EncodedCommand`, souvent abrégé en `-enc`, permet d'exécuter une commande encodée.
+
+Il peut être utilisé pour obfusquer des scripts malveillants, mais également dans des outils d'automatisation légitimes.
+
+#### Ce que montre le lab
+
+L'exemple montre des processus tels que :
+
+```
+powershell.exe
+   ├── csc.exe
+   └── chcp.com
+```
+
+
+Leurs événements Sysmon comportent une ParentCommandLine contenant `-EncodedCommand`.
+
+Point important : le filtre recherche la ligne de commande du parent, et pas nécessairement celle du processus enfant.
+
+Par ailleurs, l'utilisation de `.Properties[21]` est dépendante de la structure et de la version de l'événement. Dans une investigation réutilisable, il est préférable d'extraire le champ XML nommé `ParentCommandLine`.
+
+### Choisir sa méthode de filtrage
+
+|Méthode|Utilisation|
+|---|---|
+|`-LogName`|Lire un journal Windows précis|
+|`-Path`|Analyser un fichier EVTX exporté|
+|`-MaxEvents`|Limiter le nombre d'événements retournés|
+|`-Oldest`|Lire les événements des plus anciens vers les plus récents|
+|`-FilterHashtable`|Filtrer efficacement par journal, Event ID et dates|
+|`-FilterXml`|Utiliser une requête XML structurée|
+|`-FilterXPath`|Rechercher des événements selon des champs XML|
+|`Where-Object`|Appliquer des conditions supplémentaires aux objets récupérés|
+|`.ToXml()`|Extraire les champs détaillés d'un événement|
+
+### Démarche de threat hunting avec Get-WinEvent
+
+```
+Identify Hunting Hypothesis
+          ↓
+Select Relevant Event Logs
+          ↓
+Choose Event IDs / Time Range
+          ↓
+Apply Hashtable / XML / XPath Filters
+          ↓
+Extract Relevant Event Fields
+          ↓
+Correlate ProcessGuid / Timestamps
+          ↓
+Investigate Suspicious Behavior
+```
+
+
+#### Points essentiels
+
+- `Get-WinEvent` permet d'automatiser l'analyse des journaux Windows et Sysmon avec PowerShell.
+    
+- `FilterHashtable` est particulièrement pratique pour les recherches par Event ID et période.
+    
+- `FilterXml` et `FilterXPath` permettent d'effectuer des recherches plus précises dans les champs des événements.
+    
+- `ProcessGuid` facilite la corrélation entre exécutions de processus et connexions réseau.
+    
+- `ParentCommandLine` peut révéler des scripts ou commandes associés à l'origine d'une activité.
+    
+- Les résultats doivent être contextualisés : une commande encodée, une connexion réseau ou un chargement de DLL ne constituent pas automatiquement une compromission.
+    
+
+L'intérêt de `Get-WinEvent` est de transformer les journaux Windows en données interrogeables et corrélables, ce qui permet de passer d'une recherche manuelle dans Event Viewer à des investigations DFIR et Threat Hunting reproductibles.
 
 ---
 
