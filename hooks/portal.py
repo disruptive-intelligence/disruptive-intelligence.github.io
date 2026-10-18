@@ -1937,7 +1937,7 @@ def library_nav(library):
         nav.append({dom["label"]: [dom_src(dom)] + cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": fiches_src + [note_nav(n) for n in fiches]}] if fiches else [])
     # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
-    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
+    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"🔎 Filtrer par titre": FILTER_SRC}, {"📖 Glossaire & notions": glossary}]
 
 
 def category_nav(cat):
@@ -2386,7 +2386,7 @@ def pages_library(library):
             if cat.get("description"):
                 body += f'<p class="kw-dom-lead">{esc(cat["description"])}</p>\n'
             body += (f'<span class="kw-dom-stats">{stats}{" · mis à jour le " + update if update else ""}</span>\n'
-                     "</div>\n\n") + variants_box(src, f"{dom['id']}/{cat['id']}")
+                     "</div>\n\n") + quick_filter(src, f"{dom['id']}/{cat['id']}") + variants_box(src, f"{dom['id']}/{cat['id']}")
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
                 groups = grouped(listed)
@@ -2516,7 +2516,7 @@ hide:
   - footer
 ---
 {masthead}
-{variants_box(src)}{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
+{quick_filter(src)}{variants_box(src)}{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
 <div class="kw-courses">{paths}</div>
 {section_bar("Les outils")}
 <div class="kw-libgrid">
@@ -3458,6 +3458,11 @@ def library_tree(docs_dir, library):
                 out.append({"t": str(meta.get("title") or p.stem), "u": url_of(p.relative_to(docs_dir).as_posix())})
         return out
 
+    def icon(label):
+        m = re.match(r"^\W+", str(label))
+        return m.group(0).strip() if m else ""
+
+    resumes = STATE.get("resumes", {})
     doms = []
     for d in library:
         cats = []
@@ -3468,11 +3473,41 @@ def library_tree(docs_dir, library):
                 for n in notes:
                     kids = walk(docs_dir / posixpath.dirname(n["src"])) if n["src"].endswith("/index.md") else []
                     items.append({"t": n["title"], "u": url_of(n["src"]), "f": n.get("format") or "",
-                                  "p": n.get("provenance") or "", "m": n.get("minutes") or 0, "c": kids})
-                groups.append({"t": bare(label) if label else "", "n": items})
-            cats.append({"id": f"{d['id']}/{c['id']}", "t": bare(c["label"]), "u": url_of(c["src"]), "g": groups})
-        doms.append({"id": d["id"], "t": bare(d["label"]), "u": url_of(dom_src(d)), "c": cats})
+                                  "p": n.get("provenance") or "", "m": n.get("minutes") or 0,
+                                  "r": n.get("resume") or resumes.get(n["title"], ""), "c": kids})
+                groups.append({"t": bare(label) if label else "", "e": icon(label) if label else "",
+                               "d": c.get("group_desc", {}).get(label, "") if label else "", "n": items})
+            cats.append({"id": f"{d['id']}/{c['id']}", "t": bare(c["label"]), "e": icon(c["label"]),
+                         "d": str(c.get("description") or ""), "u": url_of(c["src"]), "g": groups})
+        doms.append({"id": d["id"], "t": bare(d["label"]), "e": icon(d["label"]), "u": url_of(dom_src(d)), "c": cats})
     return TREE_JSON, json.dumps(doms, ensure_ascii=False, separators=(",", ":"))
+
+
+FILTER_SRC = "library/filtrer.md"
+
+
+def quick_filter(src, scope=""):
+    """Petit champ « Filtrer par titre » : mène à la page de filtre, pré-remplie (et limitée à la rubrique)."""
+    hidden = f'<input type="hidden" name="rubrique" value="{esc(scope)}">' if scope else ""
+    return (f'<form class="kw-bv-quick" action="{href(src, FILTER_SRC)}" method="get">'
+            '<input type="search" name="titre" placeholder="Filtrer par titre : un cours, un chapitre, un lab…" '
+            f'aria-label="Filtrer les pages par titre">{hidden}<button type="submit">Filtrer</button></form>\n\n')
+
+
+def page_filter():
+    return FILTER_SRC, f"""---
+title: Filtrer par titre
+hide:
+  - toc
+---
+
+# 🔎 Filtrer par titre
+
+Toutes les pages de la Bibliothèque (cours, chapitres, labs), filtrées par un mot du titre, par domaine,
+rubrique, type, format ou provenance. Pour chercher dans le texte des notes : [Rechercher dans mes notes]({posixpath.relpath(LIBRARY_SEARCH_SRC, "library")}).
+
+<div class="kw-bv-find" data-root="{href(FILTER_SRC, "index.md")}" data-json="{posixpath.relpath(TREE_JSON, url_of(FILTER_SRC))}"></div>
+"""
 
 
 def variants_box(src, scope=""):
@@ -3608,6 +3643,7 @@ def on_config(config):
         pages.append(page_labs_index())
     pages.append(glossary_data(glossary))
     pages.append(library_tree(docs_dir, library))
+    pages.append(page_filter())
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
     pages += [page_explorer(items["veille"]), explorer_data(items["veille"]),
