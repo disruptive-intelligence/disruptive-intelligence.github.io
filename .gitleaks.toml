@@ -35,3 +35,12 @@ regexes = [
   '''\buser:pass\b''',
   '''sk_live_(?:abc123|secret)\.\.\.''',
 ]
+
+# Faux positif dans l'historique : nom de la clé localStorage du sélecteur de variantes de la Bibliothèque
+# (aperçu d'octobre 2026, fichier supprimé depuis).
+[[allowlists]]
+description = "Clé localStorage de l'ancien sélecteur de variantes"
+condition = "AND"
+paths = ['''^docs/javascripts/bibliotheque-variantes\.js$''']
+regexTarget = "line"
+regexes = ['''var KEY = "kw-bv-variante\d*";''']
