@@ -940,6 +940,17 @@ def front(meta):
     return "---\n" + yaml.safe_dump(meta, allow_unicode=True, sort_keys=False, width=1000) + "---\n\n"
 
 
+NUMBERED = re.compile(r"(?i)^(?:partie|part|chapitre|chapter)\s+[IVXLC\d]+\s*[—–:.-]\s*")
+
+
+def strip_numbers(nodes):
+    """Propriété Obsidian « numeros: non » : la note garde « Partie I — … » / « Chapitre 3 — … » pour que
+    l'import reconnaisse son plan, mais les titres publiés (pages, menu, fil d'Ariane) n'ont pas de numéro."""
+    for node in nodes:
+        node["title"] = NUMBERED.sub("", node["title"]) or node["title"]
+        strip_numbers(node["children"])
+
+
 def build(vault, rel, tree, title=None, to=None, index=None):
     """Convertit une note ; renvoie (pages {chemin docs/: contenu}, images, remarques)."""
     source = vault / rel
@@ -985,6 +996,8 @@ def build(vault, rel, tree, title=None, to=None, index=None):
         pre, nodes = structure(body, shield)
         if len(nodes) < 2 and not any(n["children"] for n in nodes):
             pre, nodes = structure(body, shield, sections_only=True)
+        if str(props.get("numeros", "")).strip().lower() in ("non", "false", "no"):
+            strip_numbers(nodes)                       # « Partie I — » / « Chapitre 3 — » : plan gardé, titres sans numéro
     if not split or not nodes:
         pages.append((entry, body, meta))
     else:
