@@ -116,6 +116,15 @@ class ConversionTests(VaultCase):
 
 
 class HeadingTests(VaultCase):
+    def test_short_labs_keep_separate_pages(self):
+        nodes = [
+            {"title": "Lab 1 — Windows Event Logging Basics",
+             "lines": ["# Lab 1 — Windows Event Logging Basics", "Une première démarche."], "children": []},
+            {"title": "Lab 2 — Sysmon", "lines": ["# Lab 2 — Sysmon", "En cours de rédaction."],
+             "children": []},
+        ]
+        self.assertEqual(len(imp.merge_small(nodes, [], imp.Shield())), 2)
+
     def test_first_heading_kept_when_not_the_note_title(self):
         pages, _ = self.build(f"{SCRIPTING}/Bash.md", "# Définitions de base\n\nTexte.\n\n## Concept\n\nSuite.\n")
         body = pages["library/it/scripting/bash.md"]

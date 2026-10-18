@@ -14,4 +14,5 @@ Les journaux Windows sont détaillés dans [Analyse des journaux d'événements 
 
 - [Windows Event Logs & Finding Evil — Windows Event Logs](01-windows-event-logs-finding-evil-windows-event-logs.md)
 - [Analyser avec Sysmon et les journaux d'événements](02-analyser-avec-sysmon-et-les-journaux-d-evenements.md)
-- [Lab — journaux Windows et requêtes XML](03-lab-journaux-windows-et-requetes-xml.md)
+- [Lab 1 — Windows Event Logging Basics](03-lab-1-windows-event-logging-basics.md)
+- [Lab 2 — Analyser avec Sysmon](04-lab-2-analyser-avec-sysmon.md)

@@ -18,6 +18,7 @@ veille/2026/09/20260922_morning-intelligence-brief.html: veille/2026/09/2026-09-
 veille/2026/09/20260923_morning-intelligence-brief.html: veille/2026/09/2026-09-23.md
 veille/2026/09/20260924_morning-intelligence-brief.html: veille/2026/09/2026-09-24.md
 # Bibliothèque réorganisée (1er octobre 2026) : anciennes adresses des notes et rubriques déplacées ou renommées
+library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-lab-journaux-windows-et-requetes-xml/index.html: library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-lab-1-windows-event-logging-basics.md
 library/cyber/cryptographie/cryptographie/index.html: library/revision/cryptographie.md
 library/cyber/cti/contre-ingerence-et-guerre-informationnelle/index.html: library/cyber/cti/guerre-informationnelle-et-operations-d-influence-l2i/index.md
 library/cyber/cti/cyber-threat-intelligence-cti/index.html: library/cyber/cti/cti-les-fondamentaux/index.md

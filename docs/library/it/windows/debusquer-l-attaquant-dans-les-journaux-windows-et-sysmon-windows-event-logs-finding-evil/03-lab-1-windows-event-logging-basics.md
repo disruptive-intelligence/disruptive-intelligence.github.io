@@ -1,5 +1,5 @@
 ---
-title: Lab — journaux Windows et requêtes XML
+title: Lab 1 — Windows Event Logging Basics
 source: IT/02 Windows/Journaux & investigation/Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil).md
 note: Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
 up:

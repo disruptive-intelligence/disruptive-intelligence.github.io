@@ -3110,9 +3110,12 @@ def labs_card(src):
     if not labs:
         return ""
     total = sum(l["questions"] for l in labs)
+    practised = sum(bool(l["questions"]) for l in labs)
+    in_progress = len(labs) - practised
+    pending = f" {in_progress} en cours." if in_progress else ""
     return (f'<a class="kw-card" href="{href(src, LABS_INDEX)}"><span class="kw-card__title">🧪 Labs</span>'
-            f'<span class="kw-card__text">{len(labs)} labs pratiqués, {total} questions avec la démarche, '
-            f'les requêtes et les réponses.</span></a>')
+            f'<span class="kw-card__text">{practised} labs pratiqués, {total} questions avec la démarche, '
+            f'les requêtes et les réponses.{pending}</span></a>')
 
 
 def page_labs_index():
@@ -3124,14 +3127,15 @@ def page_labs_index():
         items = []
         for lab in lst:
             bits = [b for b in (lab["note"].get("provenance"), lab["cat"]["label"],
-                                f'{lab["questions"]} questions' if lab["questions"] else "") if b]
-            items.append(f'<li class="is-done"><a href="{href(LABS_INDEX, lab["src"])}">'
+                                f'{lab["questions"]} questions' if lab["questions"] else "En cours") if b]
+            status_class = "is-done" if lab["questions"] else "is-todo"
+            items.append(f'<li class="{status_class}"><a href="{href(LABS_INDEX, lab["src"])}">'
                          f'{esc(lab["note"]["title"])}</a> — {esc(lab["title"])}'
                          f'<span class="kw-note-meta">{esc(" · ".join(bits))}</span></li>')
         body += f"\n## {domain}\n\n" + '<ul class="kw-notes">' + "".join(items) + "</ul>\n"
     return LABS_INDEX, f"""# 🧪 Labs
 
-Les labs que j'ai pratiqués (LetsDefend, Hack The Box…) : pour chaque question, la démarche, la requête ou
+Les labs pratiqués ou en cours (LetsDefend, Hack The Box…) : pour chaque question documentée, la démarche, la requête ou
 la commande, ce qu'il faut lire et la réponse, repliée. Chaque lab reste dans son cours ; cette page les
 regroupe. Les commandes qui resservent sont reprises en cas concrets dans les
 [cheat sheets]({posixpath.relpath("cheatsheets/index.md", LABS_DIR)}).

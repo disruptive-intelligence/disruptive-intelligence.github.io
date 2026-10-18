@@ -78,6 +78,7 @@ CHAPTER_TITLE = re.compile(r"(?i)^(chapitre|chapter|ch\.?|le[çc]on|lesson)\s*\d
 ANNEX_TITLE = re.compile(r"(?i)^annexes?\b")
 CONCLUSION_TITLE = re.compile(r"(?i)^(conclusion|fin du cours|synth[èe]se (finale|g[ée]n[ée]rale)|bilan)\b")
 CHEAT_TITLE = re.compile(r"(?i)cheat.?sheet|aide-m[ée]moire")   # une fiche de rappel reste d'un seul tenant
+LAB_TITLE = re.compile(r"(?i)^labs?\b")
 # Mots ignorés pour reconnaître le titre de tête d'une note (« # Cours complet de scripting Bash » = « Bash »)
 TITLE_NOISE = {"htb", "cours", "complet", "note", "notes", "fiche", "les", "des", "une", "pour", "dans", "avec",
                "aux", "sur", "the", "and", "version", "complete", "vfull", "synthese"}
@@ -811,7 +812,8 @@ def merge_small(nodes, pre, shield):
                 node["lines"] += [""] + c["lines"]
             node["children"] = []
         chapter = kind_of(node["title"]) in ("chapter", "annex", "part")
-        if node["children"] or size(node, shield) >= (MIN_CHAPTER if chapter else MIN_SECTION):
+        keep_lab = LAB_TITLE.match(node["title"]) and size(node, shield) > 0
+        if node["children"] or keep_lab or size(node, shield) >= (MIN_CHAPTER if chapter else MIN_SECTION):
             out.append(node)
             continue
         host = out[-1] if out else None

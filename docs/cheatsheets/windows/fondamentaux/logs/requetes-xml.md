@@ -204,7 +204,7 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
       </Query>
     </QueryList>
     ```
-    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab Windows Event Logs & Finding Evil, question 1](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-lab-journaux-windows-et-requetes-xml.md#question-1-le-processus-qui-a-modifie-les-parametres-daudit)
+    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab 1 — Windows Event Logging Basics, question 1](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/03-lab-1-windows-event-logging-basics.md#question-1-le-processus-qui-a-modifie-les-parametres-daudit)
 
 ??? example "Cas concret : ce processus a-t-il modifié l'audit d'un fichier précis ?"
     ```xml
