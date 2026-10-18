@@ -4,7 +4,7 @@ title: "Lire, filtrer et exporter"
 
 # Lire, filtrer et exporter
 
-Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, en extraire les champs ; l'exporter, voir la politique d'audit, l'agrandir.
+Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; l'exporter, voir la politique d'audit, l'agrandir.
 
 Les incontournables : `eventvwr.msc` · `Get-WinEvent -FilterHashtable` · `wevtutil` · `auditpol /get`
 { .kw-cs-top }
@@ -99,22 +99,62 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date
 
 `-FilterHashtable` filtre côté journal : beaucoup plus rapide qu'un `Where-Object` après coup.
 
+Lecture de `@{…}` : une condition par paire `clé=valeur`, séparées par `;` ; toutes doivent être vraies ; `Id=4624,4625` = 4624 **ou** 4625. Clés utiles : `LogName` ou `Path` (fichier `.evtx`), `ProviderName`, `Id`, `Level` (2 erreur, 3 avertissement), `StartTime`, `EndTime`.
+
 Pour comprendre : [Filtrer avec Get-WinEvent (provider, ID, période)](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#get-winevent) · [Event Viewer, wevtutil ou Get-WinEvent](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#event-viewer-vs-wevtutil-vs-get-winevent)
 { .kw-cs-meta }
+
+### Voir les champs d'un événement
+
+```powershell title="Commande"
+$e = Get-WinEvent -FilterHashtable @{LogName='<journal>'; Id=<id>} -MaxEvents 1
+([xml]$e.ToXml()).Event.EventData.Data
+```
+
+```powershell title="Exemple"
+$e = Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=3} -MaxEvents 1
+([xml]$e.ToXml()).Event.EventData.Data
+```
+
+??? example "Sortie"
+    ```text
+    Name            #text
+    ----            -----
+    ProcessGuid     {52ff3419-a7bc-647b-1901-000000001000}
+    ProcessId       2480
+    Image           C:\Windows\System32\svchost.exe
+    SourceIp        192.168.1.15
+    DestinationIp   203.0.113.10
+    DestinationPort 443
+    ```
+
+`Name` : le nom exact du champ, à réutiliser dans les filtres ; `#text` : sa valeur. C'est la même liste que l'onglet **Details → XML View** de l'Observateur.
+
+```powershell title="Exemple 2 — un seul champ"
+(([xml]$e.ToXml()).Event.EventData.Data | Where-Object Name -eq 'DestinationIp').'#text'
+```
 
 ### Extraire les champs d'un événement
 
 ```powershell title="Commande"
 Get-WinEvent -FilterHashtable @{LogName='<journal>'; Id=<id>} | ForEach-Object {
-    $x = [xml]$_.ToXml(); $d = @{}; $x.Event.EventData.Data | ForEach-Object { $d[$_.Name] = $_.'#text' }
-    [pscustomobject]@{ Heure = $_.TimeCreated; Champ1 = $d['<NomDuChamp>'] } }
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+    [pscustomobject]@{
+        Heure  = $_.TimeCreated
+        Champ1 = ($data | Where-Object Name -eq '<NomDuChamp1>').'#text'
+        Champ2 = ($data | Where-Object Name -eq '<NomDuChamp2>').'#text'
+    }
+}
 ```
 
 ```powershell title="Exemple"
 Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-2)} | ForEach-Object {
-    $x = [xml]$_.ToXml(); $d = @{}; $x.Event.EventData.Data | ForEach-Object { $d[$_.Name] = $_.'#text' }
-    [pscustomobject]@{ Compte = $d['TargetUserName']; Source = $d['IpAddress'] } } |
-    Group-Object Source | Sort-Object Count -Descending | Select-Object -First 3 Count, Name
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+    [pscustomobject]@{
+        Compte = ($data | Where-Object Name -eq 'TargetUserName').'#text'
+        Source = ($data | Where-Object Name -eq 'IpAddress').'#text'
+    }
+} | Group-Object Source | Sort-Object Count -Descending | Select-Object -First 3 Count, Name
 ```
 
 ??? example "Sortie"
@@ -125,6 +165,64 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date
        12 192.168.1.15
         4 -
     ```
+
+```powershell title="Exemple 2 — les derniers processus lancés et leur parent (Sysmon 1)"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} -MaxEvents 10 | ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+    [pscustomobject]@{
+        Heure       = $_.TimeCreated
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        CommandLine = ($data | Where-Object Name -eq 'CommandLine').'#text'
+        ParentImage = ($data | Where-Object Name -eq 'ParentImage').'#text'
+    }
+} | Format-List
+```
+
+Lecture : `ForEach-Object` traite chaque événement (`$_`) ; `[xml]$_.ToXml()` lit son XML ; `.Event.EventData.Data` donne la liste des champs ; `Where-Object Name -eq '…'` en choisit un ; `.'#text'` en prend la valeur ; `[pscustomobject]@{…}` fabrique une ligne de tableau. Le nom des champs se lit avec [Voir les champs d'un événement](#voir-les-champs-dun-evenement).
+
+Pour comprendre : [Extraire les champs avec .ToXml(), pas à pas](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#pas-a-pas-du-xml-au-champ-voulu)
+{ .kw-cs-meta }
+
+### Lire un champ par son numéro
+
+```powershell title="Commande"
+$e = Get-WinEvent -FilterHashtable @{LogName='<journal>'; Id=<id>} -MaxEvents 1
+for ($i = 0; $i -lt $e.Properties.Count; $i++) { "$i : $($e.Properties[$i].Value)" }
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} |
+    Where-Object { $_.Properties[21].Value -like '*-enc*' } | Format-List TimeCreated, Message
+```
+
+??? example "Sortie de la commande (Sysmon 1, raccourcie)"
+    ```text
+    0 : -
+    1 : 2023-06-03 20:51:08.538
+    2 : 52ff3419-a7bc-647b-1901-000000001000
+    3 : 2480
+    4 : C:\Windows\System32\SecurityHealthHost.exe
+    ...
+    10 : C:\Windows\System32\SecurityHealthHost.exe {08728914-3F57-4D52-9E31-49DAECA5A80A} -Embedding
+    ...
+    20 : C:\Windows\System32\svchost.exe
+    21 : C:\Windows\system32\svchost.exe -k DcomLaunch -p
+    ```
+
+`Properties` = les valeurs de l'onglet **Details**, dans l'ordre, numérotées à partir de 0. Sysmon 1 : 4 `Image`, 10 `CommandLine`, 12 `User`, 20 `ParentImage`, 21 `ParentCommandLine`. Rapide à écrire, mais le numéro peut changer d'une version de Sysmon à l'autre : vérifier avec la boucle, ou passer par le nom du champ ([Extraire les champs d'un événement](#extraire-les-champs-dun-evenement)).
+
+### Chercher un mot dans le message
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='<journal>'; Id=<id>} | Where-Object { $_.Message -like '*<mot>*' }
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} |
+    Where-Object { $_.Message -like '*EulaAccepted*' } | Format-List TimeCreated, Message
+```
+
+`-like '*mot*'` : contient « mot » (`*` = n'importe quoi). `-match 'clr\.dll'` : même idée avec une expression régulière. Toujours filtrer d'abord par journal et ID (`-FilterHashtable`), puis chercher le mot : sinon tout le journal est lu.
 
 Ensuite : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ouvertures-de-session)
 { .kw-cs-meta }

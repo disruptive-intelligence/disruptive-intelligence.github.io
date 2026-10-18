@@ -544,6 +544,39 @@ Get-WinEvent -LogName 'System' -MaxEvents 50 |
 |`LevelDisplayName`|Niveau : Information, Warning, Error, etc.|
 |`Message`|Description de l'événement|
 
+#### Lire la commande, brique par brique
+
+Une commande `Get-WinEvent` est une chaîne de briques reliées par `|` (le *pipe*) : chaque brique reçoit les événements de la précédente, les transforme et les passe à la suivante.
+
+```text
+Get-WinEvent ...      récupère les événements
+   | Where-Object     garde seulement ceux qui respectent une condition
+   | Select-Object    choisit les colonnes à afficher
+   | Format-Table     met en forme à l'écran (toujours en dernier)
+```
+
+
+|Brique|Rôle|Exemple|
+|---|---|---|
+|Le pipe (barre verticale)|Passe le résultat à la commande suivante|voir le schéma ci-dessus|
+|`$_`|L'événement en cours de traitement, dans un `Where-Object { }` ou un `ForEach-Object { }`|`$_.Id`, `$_.Message`|
+|`Where-Object`|Filtre : garde un événement si la condition est vraie|`Where-Object { $_.Id -eq 7045 }`|
+|`Select-Object`|Garde certaines propriétés (colonnes)|`Select-Object TimeCreated, Id, Message`|
+|`ForEach-Object`|Exécute un bloc de code pour chaque événement|`ForEach-Object { $_.TimeCreated }`|
+|`Format-Table` / `Format-List`|Affiche en tableau / en liste détaillée|`Format-List` pour lire un `Message` en entier|
+|`` ` `` (accent grave, en fin de ligne)|Continue la commande à la ligne suivante|voir l'exemple 2 de `-FilterXPath`|
+
+Opérateurs de comparaison les plus utiles :
+
+|Opérateur|Sens|Exemple|
+|---|---|---|
+|`-eq`|égal à|`$_.Id -eq 4625`|
+|`-like`|ressemble à (avec `*` comme joker)|`$_.Message -like '*powershell*'`|
+|`-match`|contient le motif (expression régulière)|`$_.Message -match 'clr\.dll'`|
+|`-in`|fait partie de la liste|`$_.Id -in 1,3`|
+
+Un pipe en fin de ligne permet aussi de couper une longue commande sur plusieurs lignes, sans accent grave.
+
 Le même principe vaut pour un journal d'application, par exemple `Microsoft-Windows-WinRM/Operational` (administration et exécution à distance) :
 
 ```powershell
@@ -568,9 +601,12 @@ Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -Oldest -MaxEvents 3
 
 ```powershell
 Get-WinEvent -Path 'C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Execution\exec_sysmon_1_lolbin_pcalua.evtx' -MaxEvents 5 |
-    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message |
+    Format-Table -AutoSize
 ```
 
+
+![Get-WinEvent Path evtx](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-get-winevent-path-evtx.png)
 
 - `-Path` désigne le fichier à analyser : ici des événements Sysmon Event ID 1 (création de processus).
 - L'analyse porte directement sur la preuve exportée, hors de la machine d'origine : Sysmon n'a pas besoin d'être encore actif sur le poste analysé.
@@ -758,6 +794,31 @@ Get-WinEvent -FilterHashtable @{
 ```
 
 
+La même commande sur une seule ligne, mise en forme en tableau :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1,3} |
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message |
+    Format-Table -AutoSize
+```
+
+
+Lire la hashtable :
+
+- `@{ ... }` : une hashtable, c'est-à-dire une liste de paires `clé = valeur`.
+- Une paire par ligne, ou plusieurs paires sur une seule ligne séparées par `;`.
+- Toutes les conditions doivent être vraies en même temps (ET) : journal Sysmon **et** ID 1 ou 3.
+- `ID = 1,3` : une liste de valeurs, lue comme « 1 **ou** 3 ».
+
+|Clé|Ce qu'elle filtre|Exemple|
+|---|---|---|
+|`LogName`|Le journal|`LogName = 'Security'`|
+|`Path`|Un fichier `.evtx` exporté (à la place de `LogName`)|`Path = 'C:\Cas\sysmon.evtx'`|
+|`ProviderName`|Le fournisseur|`ProviderName = 'Service Control Manager'`|
+|`ID`|Un ou plusieurs Event IDs|`ID = 4624,4625`|
+|`Level`|Le niveau (2 = Error, 3 = Warning, 4 = Information)|`Level = 2`|
+|`StartTime` / `EndTime`|Le début / la fin de la période|`StartTime = (Get-Date).AddHours(-2)`|
+
 Un processus créé (Sysmon 1) qui établit aussitôt une connexion réseau (Sysmon 3) peut signaler un C2, surtout si le processus ou la destination sont inhabituels :
 
 ```text
@@ -854,16 +915,115 @@ La borne de fin au 3 juin à minuit couvre intégralement la journée du 2 juin.
 
 ### Extraire les champs d'un événement avec .ToXml()
 
-Les événements Windows peuvent être représentés en XML, ce qui facilite l'extraction de champs spécifiques.
+- Chaque événement Windows est stocké en XML : c'est ce qu'affiche l'onglet **Details → XML View** de l'Observateur d'événements.
+- `Message` est un texte fait pour être lu par un humain ; pour isoler **un** champ (une IP, un chemin, un compte), on passe par le XML.
+- `.ToXml()` renvoie le XML de l'événement ; `[xml]` le transforme en objet dans lequel PowerShell sait naviguer.
+- Pour comprendre en détail la structure XML d'un événement et d'un fichier EVTX : [documentation libevtx](https://github.com/libyal/libevtx/blob/main/documentation/Windows%20XML%20Event%20Log%20%28EVTX%29.asciidoc).
 
-La méthode :
+#### Pas à pas : du XML au champ voulu
 
+**Étape 1 — récupérer un seul événement** (Sysmon 3, connexion réseau) et le ranger dans une variable :
+
+```powershell
+$event = Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=3} -MaxEvents 1
 ```
+
+
+**Étape 2 — afficher son XML :**
+
+```powershell
 $event.ToXml()
 ```
 
 
-permet d'obtenir la représentation XML d'un événement.
+Sortie, raccourcie et mise en forme pour la lecture (valeurs d'exemple) :
+
+```xml
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="Microsoft-Windows-Sysmon" />
+    <EventID>3</EventID>
+    <TimeCreated SystemTime="2023-06-03T20:51:08.538Z" />
+    <Computer>PC-01</Computer>
+  </System>
+  <EventData>
+    <Data Name="ProcessGuid">{52ff3419-a7bc-647b-1901-000000001000}</Data>
+    <Data Name="ProcessId">2480</Data>
+    <Data Name="Image">C:\Windows\System32\svchost.exe</Data>
+    <Data Name="SourceIp">192.168.1.15</Data>
+    <Data Name="DestinationIp">203.0.113.10</Data>
+    <Data Name="DestinationPort">443</Data>
+  </EventData>
+</Event>
+```
+
+
+- `<System>` : l'en-tête commun à tous les événements (Event ID, heure, machine).
+- `<EventData>` : les champs propres à cet événement, chacun écrit `<Data Name="NomDuChamp">valeur</Data>`.
+
+**Étape 3 — transformer le texte en objet XML**, puis descendre dans l'arborescence avec des points, comme dans des dossiers :
+
+```powershell
+$xml = [xml]$event.ToXml()
+$xml.Event.System.EventID       # 3
+$xml.Event.EventData.Data       # la liste des champs
+```
+
+
+Sortie de la dernière ligne :
+
+```text
+Name            #text
+----            -----
+ProcessGuid     {52ff3419-a7bc-647b-1901-000000001000}
+ProcessId       2480
+Image           C:\Windows\System32\svchost.exe
+SourceIp        192.168.1.15
+DestinationIp   203.0.113.10
+DestinationPort 443
+```
+
+
+- `Name` : le nom du champ (l'attribut `Name="…"`).
+- `#text` : sa valeur (le texte entre les balises). À cause du `#`, on l'écrit entre guillemets : `.'#text'`.
+
+**Étape 4 — lire un seul champ :**
+
+```powershell
+($xml.Event.EventData.Data | Where-Object Name -eq 'DestinationIp').'#text'
+```
+
+
+```text
+203.0.113.10
+```
+
+
+**Étape 5 — faire la même chose pour chaque événement**, avec `ForEach-Object` :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=3} -MaxEvents 20 |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        [PSCustomObject]@{
+            Heure         = $_.TimeCreated
+            Image         = ($data | Where-Object Name -eq 'Image').'#text'
+            DestinationIp = ($data | Where-Object Name -eq 'DestinationIp').'#text'
+        }
+    }
+```
+
+
+```text
+Heure               Image                                   DestinationIp
+-----               -----                                   -------------
+03/06/2023 22:51:08 C:\Windows\System32\svchost.exe         203.0.113.10
+03/06/2023 22:50:44 C:\Program Files\Mozilla Firefox\fir... 198.51.100.7
+```
+
+
+- `$_` : l'événement en cours de traitement.
+- `[PSCustomObject]@{ … }` : fabrique une ligne de tableau avec les colonnes qu'on choisit.
 
 #### Exemple : enquêter sur une IP suspecte
 
@@ -908,6 +1068,64 @@ Get-WinEvent -FilterHashtable @{
 
 
 Cette recherche identifie les connexions vers l'IP sélectionnée et permet de retrouver les processus associés.
+
+Le même code, ligne par ligne :
+
+|Ligne|Ce qu'elle fait|
+|---|---|
+|`Get-WinEvent -FilterHashtable @{ … ID = 3 }`|Récupère toutes les connexions réseau Sysmon|
+|`ForEach-Object {`|Traite les événements un par un|
+|`$event = $_`|Donne un nom lisible à l'événement en cours|
+|`$data = ([xml]$event.ToXml()).Event.EventData.Data`|Récupère la liste des champs (étapes 2 à 4)|
+|`$fields = @{}`|Crée une hashtable vide, sorte de petit dictionnaire|
+|`foreach ($item in $data) { $fields[$item.Name] = $item.'#text' }`|Range chaque champ sous son nom : `$fields['DestinationIp']` donne alors directement la valeur|
+|`if ($fields['DestinationIp'] -eq '203.0.113.10') {`|Ne garde que les connexions vers l'IP recherchée|
+|`[PSCustomObject]@{ … }`|Affiche les quatre champs utiles|
+
+#### Autres exemples avec .ToXml()
+
+Les derniers processus lancés (Sysmon 1), avec leur ligne de commande et leur parent :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1} -MaxEvents 10 |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        [PSCustomObject]@{
+            Heure       = $_.TimeCreated
+            Image       = ($data | Where-Object Name -eq 'Image').'#text'
+            CommandLine = ($data | Where-Object Name -eq 'CommandLine').'#text'
+            ParentImage = ($data | Where-Object Name -eq 'ParentImage').'#text'
+        }
+    } | Format-List
+```
+
+
+Les comptes visés par des échecs de connexion (Security 4625) sur les dernières 24 heures :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4625; StartTime=(Get-Date).AddHours(-24)} |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        [PSCustomObject]@{
+            Compte    = ($data | Where-Object Name -eq 'TargetUserName').'#text'
+            LogonType = ($data | Where-Object Name -eq 'LogonType').'#text'
+            IpSource  = ($data | Where-Object Name -eq 'IpAddress').'#text'
+        }
+    } | Group-Object Compte | Sort-Object Count -Descending | Select-Object Count, Name
+```
+
+
+```text
+Count Name
+----- ----
+  198 Administrator
+    3 j.martin
+```
+
+
+- `Group-Object Compte` regroupe les lignes par compte et les compte ; `Sort-Object Count -Descending` met les plus touchés en tête.
+- Beaucoup d'échecs sur un seul compte : force brute. Quelques échecs sur beaucoup de comptes : password spraying (voir [Brute Force vs Password Spraying](04-authentification-et-ouvertures-de-session.md#brute-force-vs-password-spraying)).
+- Même méthode pour n'importe quel événement : relever le nom du champ dans la vue XML, puis `Where-Object Name -eq 'NomDuChamp'`.
 
 #### Pourquoi le ProcessGuid
 
@@ -970,7 +1188,70 @@ Get-WinEvent -FilterXml $Query |
 
 L'exemple conserve uniquement les événements faisant référence aux DLL recherchées.
 
+#### Lire la requête
+
+- `$Query = @'` … `'@` : une *here-string*, qui range un texte de plusieurs lignes dans une variable, tel quel. Le `'@` de fin doit être **seul en début de ligne**, sans espace devant, sinon PowerShell attend la suite.
+- `<QueryList>` et `<Query Id="0" Path="…">` : l'enveloppe de la requête et le journal interrogé.
+- `<Select Path="…">*[System[(EventID=7)]]</Select>` : la condition, ici « tous les événements dont l'Event ID vaut 7 ». Elle s'écrit en XPath (détaillé dans [Filtrer avec -FilterXPath](#filtrer-avec-filterxpath)).
+- `Get-WinEvent -FilterXml $Query` : exécute la requête ; seuls les Sysmon 7 sont renvoyés.
+- `Where-Object { $_.Message -match '\\(clr|mscoree)\.dll\b' }` : affine sur le texte du message.
+    - `-match` cherche un motif (expression régulière) n'importe où dans le texte.
+    - `\\` : une barre oblique inverse `\` (doublée, car `\` a un sens spécial dans un motif).
+    - `(clr|mscoree)` : `clr` **ou** `mscoree`.
+    - `\.dll` : le texte `.dll` (le point est lui aussi protégé par `\`).
+    - `\b` : fin de mot, pour ne pas attraper `clr.dll.mui` par exemple.
+
+#### Mettre les DLL dans la requête
+
 On peut aussi mettre les DLL dans la condition XML elle-même : il faut alors donner le chemin complet enregistré dans `ImageLoaded`, pas seulement le nom du fichier.
+
+```powershell
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[System[(EventID=7)]
+        and EventData[(Data[@Name='ImageLoaded']='C:\Windows\System32\mscoree.dll'
+                    or Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll')]]
+    </Select>
+  </Query>
+</QueryList>
+'@
+
+Get-WinEvent -FilterXml $Query |
+    Select-Object TimeCreated, ID, Message
+```
+
+
+- Le tri est fait par le journal lui-même, sans passer par `Where-Object` : plus rapide sur un gros journal.
+- L'égalité est **exacte** : chemin complet, tel qu'il apparaît dans la vue XML. Pas de joker `*` ni de « contient » dans une requête XML : pour une recherche partielle, revenir à `Where-Object`, comme dans l'exemple précédent.
+
+#### Réutiliser une requête de l'Observateur d'événements
+
+`-FilterXml` accepte exactement la requête affichée par l'Observateur :
+
+1. Observateur d'événements → clic droit sur le journal → *Filter Current Log…* ; régler le filtre (Event ID, période…).
+2. Onglet **XML** : la requête complète s'affiche ; la copier.
+3. La coller entre `@'` et `'@`, puis lancer `Get-WinEvent -FilterXml $Query`.
+
+Par exemple, le filtre « Event ID 4625, dernières 24 heures » du journal Security donne :
+
+```powershell
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">*[System[(EventID=4625) and TimeCreated[timediff(@SystemTime) &lt;= 86400000]]]</Select>
+  </Query>
+</QueryList>
+'@
+
+Get-WinEvent -FilterXml $Query | Measure-Object
+```
+
+
+- `timediff(@SystemTime) &lt;= 86400000` : « il y a moins de 86 400 000 millisecondes », soit 24 heures.
+- `&lt;` est l'écriture XML de `<` (le symbole `<` seul ouvrirait une balise).
+- `Measure-Object` compte les événements renvoyés.
 
 #### Investigation
 
@@ -1014,6 +1295,21 @@ La requête filtre les événements Sysmon Process Creation sur les champs :
 
 L'objectif est de rechercher une exécution spécifique de `reg.exe` dans la télémétrie.
 
+Les champs `Image` et `CommandLine` dans la vue XML d'un événement Sysmon 1 :
+
+![Sysmon 1 vue XML EventData](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-sysmon-1-vue-xml-eventdata.png)
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=1] and EventData[Data[@Name='Image']='C:\Windows\System32\reg.exe']]" |
+    Where-Object { $_.Message -like '*EulaAccepted*' } |
+    Format-List TimeCreated, Message
+```
+
+
+- `-FilterXPath` : le journal ne renvoie que les lancements de `reg.exe` (égalité exacte sur `Image`).
+- `Where-Object` : garde ceux dont le message (qui contient la `CommandLine`) mentionne `EulaAccepted`. XPath ne sait pas chercher un mot **à l'intérieur** d'une valeur : on filtre d'abord large avec XPath, puis on affine avec PowerShell.
+
 L'observation de cette activité peut fournir un indice d'utilisation ou de préparation d'outils Sysinternals, mais ne démontre pas à elle seule une activité malveillante.
 
 #### Exemple 2 : connexions vers une IP
@@ -1036,6 +1332,64 @@ La requête sélectionne les événements respectant simultanément :
 
 Avantage : filtrer directement pendant la lecture des journaux permet d'éviter de récupérer inutilement tous les événements avant de les examiner.
 
+#### Lire une expression XPath
+
+```text
+*[ System[EventID=3]  and  EventData[ Data[@Name='DestinationIp'] = '203.0.113.10' ] ]
+│  └─ en-tête : Event ID 3         └─ le champ nommé DestinationIp vaut 203.0.113.10
+└─ n'importe quel événement…
+```
+
+
+À lire comme une phrase : « tout événement (`*`) dont l'en-tête (`System`) porte l'Event ID 3 **et** dont le champ (`Data`) nommé (`@Name`) `DestinationIp` vaut `203.0.113.10` ».
+
+- `[ … ]` : se lit « dont… » ; c'est une condition.
+- `System[ … ]` : conditions sur l'en-tête, pour `EventID`, `TimeCreated`, `Level`, `Provider`, `Computer`.
+- `EventData[ … ]` : conditions sur tous les autres champs, ceux de l'onglet **Details**.
+- `@Name` : l'attribut `Name` de la balise `<Data Name="…">`.
+- `and` / `or` : combiner des conditions ; des parenthèses pour les grouper.
+- Guillemets : doubles autour de toute l'expression, simples autour des valeurs.
+- Les noms de champs respectent la casse : `DestinationIp`, pas `destinationip`.
+
+#### D'autres exemples, du plus simple au plus précis
+
+|Je cherche…|Journal|Expression XPath|
+|---|---|---|
+|Les créations de processus|Sysmon|`*[System[EventID=1]]`|
+|Les créations de processus ou les connexions réseau|Sysmon|`*[System[(EventID=1 or EventID=3)]]`|
+|Les lancements de PowerShell|Sysmon|`*[System[EventID=1] and EventData[Data[@Name='Image']='C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe']]`|
+|Les connexions sortantes en RDP (port 3389)|Sysmon|`*[System[EventID=3] and EventData[Data[@Name='DestinationPort']='3389']]`|
+|Les échecs de connexion sur le compte `Administrator`|Security|`*[System[EventID=4625] and EventData[Data[@Name='TargetUserName']='Administrator']]`|
+|Les services installés dans les dernières 24 heures|System|`*[System[EventID=7045 and TimeCreated[timediff(@SystemTime) <= 86400000]]]`|
+
+Chaque expression se place après `-FilterXPath`, avec le journal correspondant :
+
+```powershell
+Get-WinEvent -LogName 'Security' `
+    -FilterXPath "*[System[EventID=4625] and EventData[Data[@Name='TargetUserName']='Administrator']]" `
+    -MaxEvents 10
+```
+
+
+- Dans `-FilterXPath`, `<=` s'écrit tel quel. `&lt;=` ne sert que dans une requête XML complète (`-FilterXml`, Observateur d'événements).
+- Avec un fichier exporté, remplacer `-LogName '…'` par `-Path 'C:\Cas\sysmon.evtx'`.
+
+#### Relier une connexion à son processus
+
+Une fois le `ProcessGuid` relevé dans un Sysmon 3, on retrouve la création du processus (Sysmon 1) qui porte le même identifiant :
+
+```powershell
+$guid = '{52ff3419-a7bc-647b-1901-000000001000}'    # ProcessGuid relevé dans le Sysmon 3
+
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=1] and EventData[Data[@Name='ProcessGuid']='$guid']]" |
+    Format-List TimeCreated, Message
+```
+
+
+- Entre guillemets doubles, PowerShell remplace `$guid` par sa valeur avant d'envoyer l'expression.
+- Le `Message` du Sysmon 1 donne alors l'exécutable, sa ligne de commande et son parent (voir [Pourquoi le ProcessGuid](#pourquoi-le-processguid)).
+
 ### Filtrer sur les propriétés d'un événement
 
 `Get-WinEvent` retourne des objets PowerShell disposant de nombreuses propriétés exploitables.
@@ -1055,19 +1409,12 @@ Cette commande affiche l'ensemble des propriétés de l'objet retourné.
 On retrouve notamment :
 
 - `Message`
-    
 - `Id`
-    
 - `TimeCreated`
-    
 - `ProviderName`
-    
 - `RecordId`
-    
 - `MachineName`
-    
 - `Properties`
-    
 
 Pour un événement Sysmon ID 1, le message détaillé peut inclure :
 
@@ -1130,6 +1477,67 @@ Point important : le filtre recherche la ligne de commande du parent, et pas né
 
 Par ailleurs, l'utilisation de `.Properties[21]` est dépendante de la structure et de la version de l'événement. Dans une investigation réutilisable, il est préférable d'extraire le champ XML nommé `ParentCommandLine`.
 
+#### Trouver le bon numéro de propriété
+
+- `Properties` contient les valeurs de `EventData`, **dans l'ordre** de la vue XML, numérotées à partir de 0.
+- Pour connaître le numéro d'un champ, afficher toutes les valeurs d'un événement avec leur numéro :
+
+```powershell
+$e = Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1} -MaxEvents 1
+for ($i = 0; $i -lt $e.Properties.Count; $i++) { "$i : $($e.Properties[$i].Value)" }
+```
+
+
+Sortie (raccourcie, valeurs d'exemple) :
+
+```text
+0 : -
+1 : 2023-06-03 20:51:08.538
+2 : 52ff3419-a7bc-647b-1901-000000001000
+3 : 2480
+4 : C:\Windows\System32\SecurityHealthHost.exe
+...
+10 : C:\Windows\System32\SecurityHealthHost.exe {08728914-3F57-4D52-9E31-49DAECA5A80A} -Embedding
+11 : C:\Windows\system32\
+12 : PC-01\Administrator
+...
+20 : C:\Windows\System32\svchost.exe
+21 : C:\Windows\system32\svchost.exe -k DcomLaunch -p
+```
+
+
+- `for ($i = 0; …; $i++)` : une boucle qui compte de 0 jusqu'au nombre de propriétés.
+- `"$i : $($e.Properties[$i].Value)"` : affiche le numéro puis la valeur ; `$( … )` calcule une expression à l'intérieur d'un texte.
+- Pour un Sysmon 1 : 4 = `Image`, 10 = `CommandLine`, 12 = `User`, 20 = `ParentImage`, 21 = `ParentCommandLine` (même ordre que dans la vue XML).
+
+Exemple : les processus lancés depuis un dossier `Temp` (`Image` = propriété 4) :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1} |
+    Where-Object { $_.Properties[4].Value -like '*\Temp\*' } |
+    Select-Object TimeCreated, @{Name='Image'; Expression={ $_.Properties[4].Value }}
+```
+
+
+- `@{Name='Image'; Expression={ … }}` : crée une colonne `Image` dont la valeur est calculée pour chaque événement.
+
+#### La même recherche avec le nom du champ
+
+La recherche `-enc` sans numéro de propriété, en lisant le champ `ParentCommandLine` par son nom (méthode de `.ToXml()`) :
+
+```powershell
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=1} |
+    Where-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        ($data | Where-Object Name -eq 'ParentCommandLine').'#text' -like '*-enc*'
+    } |
+    Format-List TimeCreated, Message
+```
+
+
+- Plus long à écrire, mais le résultat ne dépend plus de la position du champ, qui peut changer d'une version de Sysmon à l'autre.
+- `Properties[n]` reste pratique pour une recherche rapide, une fois le numéro vérifié avec la boucle ci-dessus.
+
 ### Choisir sa méthode de filtrage
 
 |Méthode|Utilisation|
@@ -1143,6 +1551,49 @@ Par ailleurs, l'utilisation de `.Properties[21]` est dépendante de la structure
 |`-FilterXPath`|Rechercher des événements selon des champs XML|
 |`Where-Object`|Appliquer des conditions supplémentaires aux objets récupérés|
 |`.ToXml()`|Extraire les champs détaillés d'un événement|
+
+#### Une même recherche, quatre écritures
+
+Les connexions réseau (Sysmon 3) vers `203.0.113.10` :
+
+```powershell
+# 1. Where-Object sur le texte du message
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=3} |
+    Where-Object { $_.Message -like '*203.0.113.10*' }
+
+# 2. .ToXml() : lecture du champ DestinationIp
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=3} |
+    Where-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        ($data | Where-Object Name -eq 'DestinationIp').'#text' -eq '203.0.113.10'
+    }
+
+# 3. -FilterXPath : le journal ne renvoie que les bons événements
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='203.0.113.10']]"
+
+# 4. -FilterXml : la même condition dans une requête complète
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[System[EventID=3] and EventData[Data[@Name='DestinationIp']='203.0.113.10']]
+    </Select>
+  </Query>
+</QueryList>
+'@
+Get-WinEvent -FilterXml $Query
+```
+
+
+|Écriture|Avantage|Limite|
+|---|---|---|
+|1. `Where-Object` sur `Message`|La plus simple ; recherche partielle possible avec `*`|Lente : tous les Sysmon 3 sont lus ; trouve aussi l'IP quand elle est en **source**|
+|2. `.ToXml()`|Champ exact ; recherche partielle possible avec `-like`|Lente : tous les Sysmon 3 sont lus puis convertis|
+|3. `-FilterXPath`|Rapide ; champ exact ; une seule ligne|Égalité exacte seulement, pas de joker|
+|4. `-FilterXml`|Comme 3, et copiable depuis l'Observateur ; plusieurs journaux ou exclusions (`<Suppress>`) possibles|Plus long à écrire|
+
+Règle pratique : filtrer le plus possible côté journal (`-FilterHashtable`, `-FilterXPath`, `-FilterXml`), puis affiner avec `Where-Object`.
 
 ### Démarche de threat hunting avec Get-WinEvent
 

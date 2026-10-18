@@ -160,11 +160,33 @@ Ou plus simple : *Open Saved Log…*, puis le filtre XML habituel sur le journal
 ### Filtrer avec -FilterXPath
 
 ```powershell title="Commande"
-Get-WinEvent -LogName 'Security' -FilterXPath "*[System[EventID=4907] and EventData[Data[@Name='SubjectLogonId']='0x3e7']]"
+Get-WinEvent -LogName '<journal>' -FilterXPath "*[…]"
 Get-WinEvent -Path 'C:\Cas\sysmon.evtx' -FilterXPath "*[System[EventID=7]]"      # journal exporté
 ```
 
 ```powershell title="Exemple"
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='203.0.113.10']]"
+```
+
+```text title="Lire l'expression"
+*[ System[EventID=3]  and  EventData[ Data[@Name='DestinationIp'] = '203.0.113.10' ] ]
+│  └─ en-tête : Event ID 3         └─ le champ nommé DestinationIp vaut 203.0.113.10
+└─ n'importe quel événement…
+```
+
+`[…]` se lit « dont… ». Guillemets doubles autour de l'expression, simples autour des valeurs. Dans `-FilterXPath`, `<` et `>` s'écrivent tels quels (`&lt;` / `&gt;` seulement dans une requête XML complète). Un `$variable` entre les guillemets doubles est remplacé par sa valeur.
+
+| Je cherche… | Journal | Expression |
+|---|---|---|
+| Créations de processus | `Microsoft-Windows-Sysmon/Operational` | `*[System[EventID=1]]` |
+| Processus ou connexions réseau | `Microsoft-Windows-Sysmon/Operational` | `*[System[(EventID=1 or EventID=3)]]` |
+| Lancements de PowerShell | `Microsoft-Windows-Sysmon/Operational` | `*[System[EventID=1] and EventData[Data[@Name='Image']='C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe']]` |
+| Connexions sortantes en RDP | `Microsoft-Windows-Sysmon/Operational` | `*[System[EventID=3] and EventData[Data[@Name='DestinationPort']='3389']]` |
+| Échecs de connexion d'un compte | `Security` | `*[System[EventID=4625] and EventData[Data[@Name='TargetUserName']='Administrator']]` |
+| Services installés ces dernières 24 h | `System` | `*[System[EventID=7045 and TimeCreated[timediff(@SystemTime) <= 86400000]]]` |
+
+```powershell title="Exemple 2 — lire un champ des résultats"
 Get-WinEvent -LogName 'Security' -FilterXPath "*[System[EventID=4907]]" |
     ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Where-Object Name -eq 'ProcessName' | ForEach-Object '#text' } |
     Sort-Object -Unique
@@ -176,19 +198,67 @@ Get-WinEvent -LogName 'Security' -FilterXPath "*[System[EventID=4907]]" |
     C:\Windows\WinSxS\amd64_microsoft-windows-servicingstack_…\TiWorker.exe
     ```
 
-`-FilterXPath` prend la partie `*[…]` ; `-FilterXml` prend une requête `<QueryList>` complète (copiée de l'Observateur). Pour lire un champ, passer par le XML de l'événement (`[xml]$_.ToXml()`).
+Pour comprendre : [Lire une expression XPath](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#lire-une-expression-xpath) · [Voir les champs d'un événement](lire.md#voir-les-champs-dun-evenement)
+{ .kw-cs-meta }
 
-```powershell title="Exemple 2 — une requête de l'Observateur réutilisée telle quelle"
-$q = @'
-<QueryList><Query Id="0" Path="Security">
-  <Select Path="Security">*[System[EventID=4907]]</Select>
-</Query></QueryList>
+### Réutiliser une requête de l'Observateur avec -FilterXml
+
+```powershell title="Commande"
+$Query = @'
+<QueryList> … requête copiée depuis l'onglet XML de l'Observateur … </QueryList>
 '@
-Get-WinEvent -FilterXml $q -MaxEvents 5 | Select-Object TimeCreated, Id
+Get-WinEvent -FilterXml $Query
 ```
 
-Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sysmon-exporte) · [Filtrer par identifiant et par période](lire.md#filtrer-par-identifiant-et-par-periode)
-{ .kw-cs-meta }
+```powershell title="Exemple"
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">*[System[(EventID=4625) and TimeCreated[timediff(@SystemTime) &lt;= 86400000]]]</Select>
+  </Query>
+</QueryList>
+'@
+Get-WinEvent -FilterXml $Query | Measure-Object | Select-Object Count
+```
+
+??? example "Sortie"
+    ```text
+    Count
+    -----
+      214
+    ```
+
+```powershell title="Exemple 2 — chargement du runtime .NET (Sysmon 7)"
+$Query = @'
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[System[(EventID=7)]
+        and EventData[(Data[@Name='ImageLoaded']='C:\Windows\System32\mscoree.dll'
+                    or Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll')]]
+    </Select>
+  </Query>
+</QueryList>
+'@
+Get-WinEvent -FilterXml $Query | Select-Object TimeCreated, Id, Message
+```
+
+`-FilterXPath` prend seulement la partie `*[…]` ; `-FilterXml` prend la requête `<QueryList>` complète, telle que l'affiche l'onglet **XML** de *Filter Current Log…*. `@'` … `'@` range un texte de plusieurs lignes dans la variable, tel quel : le `'@` final doit être seul en **début** de ligne.
+
+### Affiner ce que le XML ne sait pas faire
+
+```powershell title="Commande"
+Get-WinEvent -LogName '<journal>' -FilterXPath "*[…]" | Where-Object { $_.Message -like '*<mot>*' }
+```
+
+```powershell title="Exemple"
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=1] and EventData[Data[@Name='Image']='C:\Windows\System32\reg.exe']]" |
+    Where-Object { $_.Message -like '*EulaAccepted*' } |
+    Format-List TimeCreated, Message
+```
+
+Le XML ne connaît que l'égalité exacte : on sélectionne large côté journal (ici, tous les `reg.exe`), puis `Where-Object` cherche le mot à l'intérieur du texte (ici, la `CommandLine` qui accepte la licence Sysinternals).
 
 ## Cas concrets
 
@@ -275,6 +345,28 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
 
     `mscoree.dll` puis `clr.dll` chargés par un programme signent l'exécution de code .NET. Pour un outil d'administration connu, c'est normal ; pour un exécutable inconnu, lancé depuis un dossier utilisateur, c'est une piste. Le détail des méthodes .NET appelées passe par ETW (voir [ETW et logman](etw.md)).
 
+??? example "Cas concret : quel processus a contacté cette IP (Sysmon 3, puis Sysmon 1) ?"
+    ```powershell
+    # 1. Les connexions vers l'IP, avec le ProcessGuid du processus
+    Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+        -FilterXPath "*[System[EventID=3] and EventData[Data[@Name='DestinationIp']='203.0.113.10']]" |
+        ForEach-Object {
+            $data = ([xml]$_.ToXml()).Event.EventData.Data
+            [pscustomobject]@{
+                Heure       = $_.TimeCreated
+                Image       = ($data | Where-Object Name -eq 'Image').'#text'
+                ProcessGuid = ($data | Where-Object Name -eq 'ProcessGuid').'#text'
+            }
+        }
+
+    # 2. La création de ce processus : ligne de commande et parent
+    $guid = '{52ff3419-a7bc-647b-1901-000000001000}'
+    Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+        -FilterXPath "*[System[EventID=1] and EventData[Data[@Name='ProcessGuid']='$guid']]" |
+        Format-List TimeCreated, Message
+    ```
+    Le `ProcessGuid` relie les événements Sysmon d'un même processus ; plus sûr qu'un PID, qui peut être réutilisé. [Le cours : relier une connexion à son processus](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#relier-une-connexion-a-son-processus)
+
 ## Pièges
 
 | Piège | Ce qui se passe | Parade |
@@ -286,6 +378,9 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
 | Heure locale dans `@SystemTime` | Décalage d'1 à 2 h | Convertir en UTC (`Z`) |
 | Champ dans `System` cherché dans `EventData` (ou l'inverse) | Aucun résultat | `EventID`, `TimeCreated`, `Level` : `System` ; le reste : `EventData` |
 | Retour à l'onglet *Filter* après édition manuelle | Impossible | Garder ses requêtes dans un fichier texte |
+| `'@` précédé d'espaces dans une here-string | PowerShell attend la suite (`>>`) | `'@` seul, en tout début de ligne |
+| `&lt;` dans `-FilterXPath` | Requête invalide | `<` en clair dans `-FilterXPath` ; `&lt;` seulement dans `-FilterXml` et l'Observateur |
+| Guillemets simples autour d'une expression qui contient `$guid` | La variable n'est pas remplacée | Guillemets doubles autour de l'expression, simples autour des valeurs |
 
 ## Vue d'ensemble
 
@@ -300,4 +395,5 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
 | Exclure | `<Suppress Path="…">*[…]</Suppress>` |
 | Plusieurs journaux | plusieurs `<Select Path="…">` dans la même `<Query>` |
 | Journal exporté | `Path="file://C:\…\fichier.evtx"` |
-| En PowerShell | `Get-WinEvent -FilterXPath "*[…]"` / `-FilterXml $requete` |
+| En PowerShell | `Get-WinEvent -LogName '…' -FilterXPath "*[…]"` / `-FilterXml $Query` |
+| « Contient » (le XML ne sait pas) | XPath large, puis `Where-Object { $_.Message -like '*mot*' }` |
