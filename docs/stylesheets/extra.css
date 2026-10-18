@@ -1690,3 +1690,13 @@ body[data-md-color-scheme="default"]::after {
 }
 .kw-bv-emain, .kw-bv-hmain { min-width: 0; }
 .kw-bv-ktabs, .kw-bv-lstrip { overflow-y: hidden; scrollbar-width: thin; }
+/* M : bandeau de navigation collant dans le détail */
+.kw-bv-mstrip { position: sticky; top: 2.35rem; z-index: 2; background: var(--md-default-bg-color); padding-top: .6rem; box-shadow: 0 -.6rem 0 var(--md-default-bg-color); }
+.md-typeset .kw-bv-detail .kw-bv-egroup { scroll-margin-top: 6.5rem; }
+@media (max-width: 44.9375em) {
+  .kw-bv-idoms { grid-template-columns: 1fr 1fr; gap: .45rem; }
+  .kw-bv-idom { flex-direction: column; align-items: flex-start; gap: .3rem; padding: .65rem .7rem; }
+  .kw-bv-idom .kw-bv-tileicon { font-size: 1.4rem; }
+  .kw-bv-idom .kw-bv-tiletitle { font-size: .9rem; }
+  .kw-bv-idom .kw-bv-meta { font-size: .6rem; line-height: 1.35; }
+}

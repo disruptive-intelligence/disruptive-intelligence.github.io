@@ -6,8 +6,8 @@
   "use strict";
 
   var KEY = "kw-bv-variante2";
-  var LABELS = [["actuelle", "Actuelle"], ["e", "E · Rubriques et détail"], ["i", "I · Domaine, bandeau, détail"],
-                ["j", "J · Domaine puis E"], ["k", "K · Onglets de domaine"], ["l", "L · E + bandeau de sous-rubriques"]];
+  var LABELS = [["actuelle", "Actuelle"], ["j", "J · Domaine puis E"], ["l", "L · E + bandeau (filtre)"],
+                ["m", "M · J + bandeau de navigation"]];
   var FORMATS = { cours: "Cours", synthese: "Synthèse", fiche: "Fiche notion", "aide-memoire": "Aide-mémoire",
                   atelier: "Atelier", ressources: "Ressources", revision: "Révision" };
 
@@ -419,8 +419,46 @@
     return plural(rr, "rubrique") + " · " + plural(nn, "note") + " · " + plural(pp, "page");
   }
 
-  // J · grandes tuiles de domaine (I), puis E
-  function domainThenE(root, doms) {
+  // M · détail avec bandeau de navigation : toutes les sous-rubriques restent affichées,
+  // le bandeau (collant) fait défiler jusqu'à l'une d'elles et souligne celle en cours de lecture.
+  var spy = null;
+  function detailWithNav(root, u) {
+    var named = u.groups.filter(function (g) { return g.t; });
+    var box = detail(root, u);
+    if (named.length < 2) return box;
+    var heads = Array.prototype.slice.call(box.querySelectorAll(".kw-bv-egroup"));
+    var strip = el("nav", "kw-bv-lstrip kw-bv-mstrip"); strip.setAttribute("aria-label", "Sous-rubriques");
+    var chips = [];
+    heads.forEach(function (h, k) {
+      h.id = "kw-bv-sr-" + k;
+      var g = named[k];
+      var b = el("button", "kw-bv-lchip"); b.type = "button";
+      b.textContent = (g.e ? g.e + " " : "") + g.t + " · " + g.n.length;
+      b.addEventListener("click", function () {
+        press(chips, b);
+        h.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      chips.push(b); strip.appendChild(b);
+    });
+    press(chips, chips[0]);
+    box.querySelector(".kw-bv-ehead").insertAdjacentElement("afterend", strip);
+    if (spy) spy.disconnect();
+    if ("IntersectionObserver" in window) {
+      spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var k = heads.indexOf(e.target);
+            if (k >= 0) { press(chips, chips[k]); chips[k].scrollIntoView({ block: "nearest", inline: "nearest" }); }
+          }
+        });
+      }, { rootMargin: "-25% 0px -65% 0px" });
+      heads.forEach(function (h) { spy.observe(h); });
+    }
+    return box;
+  }
+
+  // J · grandes tuiles de domaine (I), puis E ; M : la même chose avec le bandeau de navigation
+  function domainThenE(root, doms, detailFn) {
     var wrap = el("div", "kw-bv-neutral kw-bv-j");
     var out = el("div");
     if (doms.length > 1) {
@@ -431,13 +469,13 @@
         var txt = el("span", "kw-bv-idomtext");
         txt.appendChild(el("span", "kw-bv-tiletitle", d.t)); txt.appendChild(el("span", "kw-bv-meta", domainHead(d)));
         b.appendChild(txt);
-        b.addEventListener("click", function () { press(tiles, b); out.textContent = ""; out.appendChild(eLayout(root, unitsOf(d))); });
+        b.addEventListener("click", function () { press(tiles, b); out.textContent = ""; out.appendChild(eLayout(root, unitsOf(d), "", detailFn)); });
         tiles.push(b); row.appendChild(b);
       });
       wrap.appendChild(row);
       press(tiles, tiles[0]);
     }
-    out.appendChild(eLayout(root, unitsOf(doms[0])));
+    out.appendChild(eLayout(root, unitsOf(doms[0]), "", detailFn));
     wrap.appendChild(out);
     return wrap;
   }
@@ -620,6 +658,7 @@
       if (v === "j") panel.appendChild(domainThenE(root, doms));
       if (v === "k") panel.appendChild(domainTabsThenE(root, doms));
       if (v === "l") panel.appendChild(eWithStrip(root, doms));
+      if (v === "m") panel.appendChild(domainThenE(root, doms, detailWithNav));
       remember(v);
     }
     LABELS.forEach(function (l) {
