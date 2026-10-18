@@ -27,6 +27,8 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 4. Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `7` puis utiliser **Find** sur `calc.exe`. Dans l'événement retenu, comparer `Image` (l'exécutable du bureau), `ImageLoaded` (la DLL du bureau) et `Hashes` (son SHA256).
 
+    ![HTB WELFE lab-14](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-14.png)
+
 5. Pour cibler directement ce chargement de DLL, utiliser le filtre XML :
 
 ```xml
