@@ -39,6 +39,34 @@ Sysmon n'est pas installé par défaut (`sysmon64 -accepteula -i config.xml`). C
 Pour comprendre : [Outils de collecte de données : Sysmon](../../../../library/cyber/detection/outils-de-threat-hunting/02-outils-de-collecte-de-donnees-data-collection-tool.md)
 { .kw-cs-meta }
 
+### Configurer ce que Sysmon collecte
+
+```powershell title="Commande"
+sysmon64 -c                                   # affiche la configuration active (console administrateur)
+sysmon64 -c C:\Outils\sysmonconfig.xml        # applique une nouvelle configuration, sans réinstaller
+```
+
+```xml title="Exemple — enregistrer tous les chargements de DLL (Event ID 7)"
+<ImageLoad onmatch="exclude">
+</ImageLoad>
+```
+
+```powershell title="Exemple 2 — vérifier que les Event ID 7 remontent"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=7} -MaxEvents 5 | Select-Object TimeCreated, Id
+```
+
+Chaque type d'événement a son bloc dans le XML (`ProcessCreate`, `NetworkConnect`, `ImageLoad`…) avec un attribut `onmatch` :
+
+| Bloc | Sans règle à l'intérieur | Avec des règles |
+|---|---|---|
+| `onmatch="include"` | **Rien** n'est enregistré | Seul ce qui correspond est enregistré |
+| `onmatch="exclude"` | **Tout** est enregistré | Tout, sauf ce qui correspond |
+
+Beaucoup de configurations de départ (dont SwiftOnSecurity) livrent `ImageLoad` en `include` vide : aucun Event ID 7. Pour voir les chargements de DLL (DLL hijacking, runtime .NET dans un processus inattendu), passer `ImageLoad` en `exclude`, puis recharger la configuration avec `sysmon64 -c`. C'est très bavard : sur un lab, ou avec des exclusions ciblées (DLL signées Microsoft, processus connus) en production.
+
+Pour comprendre : [Configurer la collecte (ImageLoad)](../../../../library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)
+{ .kw-cs-meta }
+
 ### Lire un journal Sysmon exporté
 
 ```powershell title="Commande"

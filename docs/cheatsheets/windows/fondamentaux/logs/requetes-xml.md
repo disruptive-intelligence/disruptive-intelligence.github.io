@@ -22,7 +22,7 @@ Les incontournables : `Filter Current Log → XML` · `Edit query manually` · `
 
 Règle simple : dès que le critère est **dans l'onglet Details** de l'événement (pas dans les colonnes de la liste), il faut du XML.
 
-Pour comprendre : [Requêtes XML personnalisées dans l'Observateur d'événements](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/01-les-journaux-d-evenements-windows.md#4-requetes-xml-personnalisees-dans-lobservateur-devenements)
+Pour comprendre : [Requêtes XML personnalisées dans l'Observateur d'événements](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#requetes-xml-personnalisees)
 { .kw-cs-meta }
 
 ## Écrire une requête
@@ -204,7 +204,7 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
       </Query>
     </QueryList>
     ```
-    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab 1 — Les bases des journaux d'événements Windows, question 1](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/05-lab-1-les-bases-des-journaux-d-evenements-windows.md#question-1-le-processus-qui-a-modifie-les-parametres-daudit)
+    4624 → `TargetLogonId` → 4907 de la même session → champ `ProcessName`. [Lab 1 — Les bases des journaux d'événements Windows, question 1](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/14-lab-1-les-bases-des-journaux-d-evenements-windows.md#question-1-le-processus-qui-a-modifie-les-parametres-daudit)
 
 ??? example "Cas concret : ce processus a-t-il modifié l'audit d'un fichier précis ?"
     ```xml
@@ -247,7 +247,7 @@ Pour comprendre : [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sy
     </QueryList>
     ```
 
-    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/02-analyser-avec-sysmon-et-les-journaux-d-evenements.md#3-detection-n-2-powershell-non-manage-injection-c).
+    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/03-reperer-du-powershell-non-manage.md#3-detection-n-2-powershell-non-manage-injection-c).
 
     Pour relever le SHA256 d'une DLL, ouvrir l'événement Sysmon 7 correspondant : `ImageLoaded` donne la DLL chargée, et `Hashes` contient sa valeur `SHA256=…`. Dans le lab `WININET.dll`, vérifier `ImageLoaded` avant de copier ce hash ; `Image` désigne le processus qui l'a chargée.
 

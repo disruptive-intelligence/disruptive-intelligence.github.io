@@ -1,9 +1,11 @@
 ---
 title: Lab 1 — Les bases des journaux d'événements Windows
-source: IT/02 Windows/Journaux & investigation/Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil).md
-note: Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
+source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
+note: Journaux Windows, Sysmon et ETW
 up:
-- - Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
+- - Journaux Windows, Sysmon et ETW
+  - ../index.md
+- - Labs
   - index.md
 ---
 
@@ -15,11 +17,11 @@ Analyse du journal Security d'une machine HTB dans l'Observateur d'événements 
 
 1. Dans le journal `Security`, filtrer sur l'Event ID `4624` et retrouver l'événement à l'heure indiquée.
 
-    ![HTB WELFE lab-01](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-01.png)
+    ![HTB WELFE lab-01](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-01.png)
 
 2. Dans ses détails, relever le `TargetLogonId` : ici `0x3e7`.
 
-    ![HTB WELFE lab-02](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-02.png)
+    ![HTB WELFE lab-02](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-02.png)
 
 3. Filtrer les événements `4907` de cette session dans une fenêtre de 30 minutes avec une requête XML :
 
@@ -47,11 +49,11 @@ Analyse du journal Security d'une machine HTB dans l'Observateur d'événements 
 
 `Path` choisit le journal `Security` ; `System` limite l'Event ID et l'heure (en UTC) ; `EventData` compare le `SubjectLogonId` au `TargetLogonId` relevé dans le 4624.
 
-![HTB WELFE lab-03](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-03.png)
+![HTB WELFE lab-03](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-03.png)
 
 4. Lire le champ `ProcessName` dans l'événement `4907` retenu.
 
-    ![HTB WELFE lab-04](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-04.png)
+    ![HTB WELFE lab-04](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-04.png)
 
 En complément, cette commande liste les `ProcessName` de tous les événements `4907` ; elle ne reprend ni la fenêtre horaire ni le Logon ID du filtre XML.
 
@@ -67,7 +69,7 @@ Sort-Object -Unique
 ```
 
 
-![HTB WELFE lab-05](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-05.png)
+![HTB WELFE lab-05](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-05.png)
 
 ## Question 2 — L'audit d'une DLL précise a-t-il été modifié ?
 
@@ -75,7 +77,7 @@ Sort-Object -Unique
 
 1. Utiliser **Find** pour repérer la DLL, puis comparer le `ProcessName` à celui trouvé dans la question 1.
 
-![HTB WELFE lab-06](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-06.png)
+![HTB WELFE lab-06](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-06.png)
 
 2. Filtrer directement les événements `4907` sur le chemin exact de la DLL :
 
@@ -98,4 +100,4 @@ Sort-Object -Unique
 
 `System` sélectionne l'Event ID `4907` ; `EventData` limite les résultats à `ObjectName`, le chemin de la DLL. Dans l'événement trouvé, vérifier `ProcessName` et lire l'heure affichée.
 
-![HTB WELFE lab-07](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-07.png)
+![HTB WELFE lab-07](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-07.png)

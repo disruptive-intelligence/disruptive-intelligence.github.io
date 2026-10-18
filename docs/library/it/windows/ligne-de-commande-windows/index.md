@@ -2,7 +2,7 @@
 title: Ligne de commande Windows
 source: IT/02 Windows/Ligne de commande/Ligne de commande Windows.md
 format: cours
-revue: '2026-05-10'
+revue: '2026-10-18'
 ---
 
 *CMD et PowerShell pour naviguer, diagnostiquer et administrer Windows*

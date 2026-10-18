@@ -2,7 +2,7 @@
 title: Windows — fiche cyber
 source: IT/02 Windows/Comprendre Windows/Windows — fiche cyber.md
 format: synthese
-revue: '2026-10-04'
+revue: '2026-10-18'
 ---
 
 > Fiche intermédiaire orientée compréhension (eJPT / Hack The Box).

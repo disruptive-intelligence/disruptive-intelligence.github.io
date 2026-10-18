@@ -1,9 +1,11 @@
 ---
 title: Lab 3 — Travailler avec ETW
-source: IT/02 Windows/Journaux & investigation/Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil).md
-note: Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
+source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
+note: Journaux Windows, Sysmon et ETW
 up:
-- - Débusquer l'attaquant dans les journaux Windows et Sysmon (Windows Event Logs & Finding Evil)
+- - Journaux Windows, Sysmon et ETW
+  - ../index.md
+- - Labs
   - index.md
 ---
 
@@ -13,7 +15,7 @@ Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement d
 
 1. Dans la configuration Sysmon du lab, régler `ImageLoad` sur `onmatch="exclude"` sans règle d'exclusion pour enregistrer les chargements de DLL.
 
-    ![HTB WELFE lab-16](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-16.png)
+    ![HTB WELFE lab-16](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-16.png)
 
 2. Appliquer le fichier de configuration depuis `C:\Tools\Sysmon` et vérifier que Sysmon confirme sa mise à jour.
 
@@ -22,11 +24,11 @@ Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement d
     ```
 
 
-    ![HTB WELFE lab-17](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-17.png)
+    ![HTB WELFE lab-17](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-17.png)
 
 3. Exécuter `Seatbelt.exe TokenPrivileges` depuis `C:\Tools\GhostPack Compiled Binaries`.
 
-    ![HTB WELFE lab-18](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-18.png)
+    ![HTB WELFE lab-18](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-18.png)
 
 4. Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `7` pour retrouver le chargement de `mscoree.dll` par `Seatbelt.exe` :
 
@@ -49,7 +51,7 @@ Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement d
 
     `Image` désigne le processus et `ImageLoaded` la DLL. Cet événement montre l'initialisation .NET, pas encore les méthodes exécutées.
 
-    ![HTB WELFE lab-19](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-19.png)
+    ![HTB WELFE lab-19](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-19.png)
 
 5. Lancer SilkETW avec le provider `Microsoft-Windows-DotNETRuntime` et les keywords utilisés dans le cours. La trace est écrite dans `C:\Windows\Temp\etw.json`.
 
@@ -58,11 +60,11 @@ Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement d
     ```
 
 
-    ![HTB WELFE lab-20](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-20.png)
+    ![HTB WELFE lab-20](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-20.png)
 
 6. Pendant que SilkETW collecte, relancer `Seatbelt.exe TokenPrivileges`, puis arrêter la collecte.
 
-    ![HTB WELFE lab-21](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-21.png)
+    ![HTB WELFE lab-21](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-21.png)
 
 7. Dans le fichier JSON, chercher `ManagedInteropMethodName` avec PowerShell plutôt que de parcourir manuellement la trace :
 
@@ -74,6 +76,6 @@ Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement d
     ```
 
 
-    ![HTB WELFE lab-22](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-22.png)
+    ![HTB WELFE lab-22](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-22.png)
 
 La recherche retourne les noms distincts présents dans toute la trace. Pour attribuer un événement à cette exécution de Seatbelt, il faut le replacer dans son contexte (heure et processus), et ne pas se fonder sur le seul nom d'une méthode.
