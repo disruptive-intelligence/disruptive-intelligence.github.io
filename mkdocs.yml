@@ -79,7 +79,7 @@ extra_javascript:
   - javascripts/analyses.js            # analyses : filtre et sujets
   - javascripts/ressources.js          # ressources : recherche dédiée et types
   - javascripts/images-zoom.js         # images des notes : agrandissement au clic
-  - javascripts/bibliotheque-variantes.js   # Bibliothèque : variantes de navigation (aperçu)
+  - javascripts/bibliotheque.js             # Bibliothèque : domaines, rubriques et détail ; page Filtrer par titre
 
 plugins:
   - search:
