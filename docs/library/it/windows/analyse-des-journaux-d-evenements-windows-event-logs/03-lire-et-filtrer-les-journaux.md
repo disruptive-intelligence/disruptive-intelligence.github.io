@@ -548,14 +548,19 @@ Le même principe vaut pour un journal d'application, par exemple `Microsoft-Win
 
 ```powershell
 Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -MaxEvents 30 |
-    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message |
+    Format-Table -AutoSize
 ```
 
+
+![Get-WinEvent WinRM MaxEvents](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-get-winevent-winrm-maxevents.png)
 
 Par défaut, `Get-WinEvent` lit du plus récent au plus ancien. `-Oldest` inverse l'ordre, pour commencer par les premiers événements disponibles :
 
 ```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -Oldest -MaxEvents 30
+Get-WinEvent -LogName 'Microsoft-Windows-WinRM/Operational' -Oldest -MaxEvents 30 |
+    Select-Object TimeCreated, ID, ProviderName, LevelDisplayName, Message |
+    Format-Table -AutoSize
 ```
 
 
