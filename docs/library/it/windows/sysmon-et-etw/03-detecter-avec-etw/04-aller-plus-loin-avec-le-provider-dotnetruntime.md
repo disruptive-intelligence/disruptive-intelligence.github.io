@@ -1,9 +1,9 @@
 ---
 title: Aller plus loin avec le provider DotNETRuntime
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec ETW
   - index.md
@@ -53,7 +53,7 @@ Ensuite, nous pouvons procéder à une nouvelle simulation de l'attaque pour év
 
 Après avoir exécuté Seatbelt et collecté les événements ETW, le fichier `etw.json` (qui inclut les données du fournisseur `Microsoft-Windows-DotNETRuntime`) contient davantage d'informations sur l'assemblage chargé, notamment des noms de méthodes.
 
-![etw.json : evenements DotNETRuntime de Seatbelt avec les noms de methodes](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-46.png)
+![etw.json : evenements DotNETRuntime de Seatbelt avec les noms de methodes](../../../../assets/sysmon-et-etw-htb-windows-event-logs-46.png)
 
 Cette visibilité est plus détaillée qu'un simple événement Sysmon signalant le chargement de `clr.dll`.
 

@@ -2,7 +2,7 @@
 title: Windows en profondeur
 source: IT/02 Windows/Comprendre Windows/Windows en profondeur.md
 format: cours
-revue: '2026-10-18'
+revue: '2026-10-04'
 revision: library/revision/windows.md
 ---
 

@@ -1,9 +1,9 @@
 ---
 title: Lab 2 — Analyser avec Sysmon
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Labs
   - index.md
@@ -17,19 +17,19 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 1. Dans `C:\Tools\Reflective DLLInjection`, renommer `reflective_dll.x64.dll` en `WININET.dll`.
 
-    ![HTB WELFE lab-13](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-13.png)
+    ![HTB WELFE lab-13](../../../../assets/sysmon-et-etw-htb-welfe-lab-13.png)
 
 2. Copier `calc.exe` depuis `C:\Windows\System32` vers un dossier modifiable, ici le bureau, et y placer aussi `WININET.dll`.
 
-    ![HTB WELFE lab-08](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-08.png)
+    ![HTB WELFE lab-08](../../../../assets/sysmon-et-etw-htb-welfe-lab-08.png)
 
 3. Exécuter la copie de `calc.exe`. La boîte de dialogue confirme que la DLL de démonstration a été chargée.
 
-    ![HTB WELFE lab-09](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-09.png)
+    ![HTB WELFE lab-09](../../../../assets/sysmon-et-etw-htb-welfe-lab-09.png)
 
 4. Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `7` puis utiliser **Find** sur `calc.exe`. Dans l'événement retenu, comparer `Image` (l'exécutable du bureau), `ImageLoaded` (la DLL du bureau) et `Hashes` (son SHA256).
 
-    ![HTB WELFE lab-14](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-14.png)
+    ![HTB WELFE lab-14](../../../../assets/sysmon-et-etw-htb-welfe-lab-14.png)
 
 5. Pour cibler directement ce chargement de DLL, utiliser le filtre XML :
 
@@ -62,11 +62,11 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
     ```
 
 
-    ![HTB WELFE lab-10](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-10.png)
+    ![HTB WELFE lab-10](../../../../assets/sysmon-et-etw-htb-welfe-lab-10.png)
 
 2. Depuis `C:\Tools\PSInject`, exécuter l'essai décrit dans le cours avec `Invoke-PSInject` en ciblant ce PID. Dans Process Hacker, comparer les modules de `spoolsv.exe` avant et après l'essai.
 
-    ![HTB WELFE lab-11](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-11.png)
+    ![HTB WELFE lab-11](../../../../assets/sysmon-et-etw-htb-welfe-lab-11.png)
 
 3. Dans les événements Sysmon `7`, la requête utilisée pendant le lab cible `spoolsv.exe` et le chargement de `clr.dll` :
 
@@ -89,7 +89,7 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 `Image` désigne le processus et `ImageLoaded` la DLL chargée. Ce filtre documente bien l'observation de `clr.dll` ; pour répondre à l'énoncé sur `clrjit.dll`, relever le `SHA256=` dans `Hashes` de l'événement correspondant à **cette** DLL, sans confondre les deux fichiers.
 
-![HTB WELFE lab-12](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-12.png)
+![HTB WELFE lab-12](../../../../assets/sysmon-et-etw-htb-welfe-lab-12.png)
 
 ## Question 3 — Credential dumping : LSASS
 
@@ -98,6 +98,6 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 1. Ouvrir `AgentEXE` depuis ce dossier, puis examiner la sortie Mimikatz obtenue dans le lab. Repérer la session du compte `Administrator`.
 2. Dans la section `msv`, distinguer la ligne `NTLM` de `SHA1` et des champs `Password`. La capture du lab montre où lire la valeur demandée ; les hashes y sont partiellement masqués.
 
-    ![HTB WELFE lab-15](../../../../assets/journaux-windows-sysmon-et-etw-htb-welfe-lab-15.png)
+    ![HTB WELFE lab-15](../../../../assets/sysmon-et-etw-htb-welfe-lab-15.png)
 
 3. Pour l'angle détection, consulter les événements Sysmon `10` et vérifier les champs `SourceImage` et `TargetImage` lorsqu'un processus accède à `lsass.exe`. Cet événement atteste un accès entre processus, pas à lui seul une extraction réussie.

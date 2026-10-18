@@ -14,7 +14,13 @@ up:
     - applications ;
     - services ;
     - drivers ;
-    - mécanismes de sécurité.
+    - mécanismes de sécurité ;
+    - certains fournisseurs ETW (Event Tracing for Windows).
+- Ils sont une source essentielle pour le SOC, le threat hunting et le DFIR : authentifications, modifications système, activités suspectes, tentatives d'effacement de traces.
+- On les consulte avec l'Observateur d'événements (`eventvwr.msc`) ou par programmation, avec la Windows Event Log API.
+
+![Recherche Windows : ouvrir Event Viewer](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-01.png)
+
 ## Stockage des Event Logs
 
 Les journaux Windows sont généralement stockés dans :
@@ -50,6 +56,10 @@ Outils possibles :
 - PowerShell ;
 - `wevtutil` ;
 - outils DFIR / SIEM.
+
+Un `.evtx` sauvegardé (copie d'un autre poste, pièce d'enquête) s'ouvre aussi dans l'Observateur : *Open Saved Log…*, il apparaît alors dans la section **Saved Logs**.
+
+![Fichier .evtx ouvert dans Saved Logs (evenements Sysmon)](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-03.png)
 ## Windows Logs
 Les journaux Windows principaux sont :
 
@@ -60,6 +70,8 @@ Les journaux Windows principaux sont :
 - Forwarded Events : Journaux transférés depuis d'autres ordinateurs du même réseau.
 
 ![|273x270](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-windows-event-log-analysis-007.webp)
+
+![Windows Logs : Application, Security, Setup, System et Forwarded Events](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-02.png)
 ### Application
 
 - Contient les événements générés par les applications.

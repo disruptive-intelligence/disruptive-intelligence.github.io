@@ -1,9 +1,9 @@
 ---
 title: Repérer du PowerShell non managé
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec Sysmon
   - index.md
@@ -30,9 +30,9 @@ Process Hacker permet d'examiner les processus actifs.
 
 Un processus comme `powershell.exe` peut apparaître comme Managed (.NET).
 
-![Liste des processus dans Process Hacker](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-26.png)
+![Liste des processus dans Process Hacker](../../../../assets/sysmon-et-etw-htb-windows-event-logs-26.png)
 
-![Infobulle de powershell.exe : processus manage (.NET)](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-27.png)
+![Infobulle de powershell.exe : processus manage (.NET)](../../../../assets/sysmon-et-etw-htb-windows-event-logs-27.png)
 
 Depuis :
 
@@ -46,7 +46,7 @@ clrjit.dll
 ```
 
 
-![Modules clr.dll et clrjit.dll (Microsoft .NET Runtime)](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-28.png)
+![Modules clr.dll et clrjit.dll (Microsoft .NET Runtime)](../../../../assets/sysmon-et-etw-htb-windows-event-logs-28.png)
 
 Cette inspection permet d'identifier la présence du runtime .NET dans un processus.
 
@@ -69,7 +69,7 @@ Invoke-PSInject -ProcId (Get-Process spoolsv).Id -PoshCode "V3JpdGUtSG9zdCAiSGVs
 
 Avant l'injection, le processus ne présente pas les caractéristiques d'un processus .NET managé.
 
-![spoolsv.exe avant l'injection : processus non manage](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-29.png)
+![spoolsv.exe avant l'injection : processus non manage](../../../../assets/sysmon-et-etw-htb-windows-event-logs-29.png)
 
 Après l'injection :
 
@@ -77,11 +77,11 @@ Après l'injection :
 - Les modules associés au CLR deviennent observables.
 - Sysmon Event ID `7` enregistre le chargement de `clr.dll`.
 
-![spoolsv.exe apres l'injection : processus manage par .NET](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-30.png)
+![spoolsv.exe apres l'injection : processus manage par .NET](../../../../assets/sysmon-et-etw-htb-windows-event-logs-30.png)
 
-![Modules de spoolsv.exe dans Process Hacker](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-31.png)
+![Modules de spoolsv.exe dans Process Hacker](../../../../assets/sysmon-et-etw-htb-windows-event-logs-31.png)
 
-![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-32.png)
+![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../../../assets/sysmon-et-etw-htb-windows-event-logs-32.png)
 
 ### Logique de détection
 

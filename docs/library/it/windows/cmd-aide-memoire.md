@@ -2,7 +2,7 @@
 title: CMD — aide-mémoire
 source: IT/02 Windows/Ligne de commande/CMD — aide-mémoire.md
 format: aide-memoire
-revue: '2026-10-18'
+revue: '2026-04-13'
 ---
 
 #### CMD

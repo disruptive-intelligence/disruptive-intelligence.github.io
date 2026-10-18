@@ -111,6 +111,22 @@ La vue XML est particulièrement intéressante pour l’analyse technique car el
 
 ![Vue Details en affichage convivial|428x275](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-event-log-analysis-09.png)
 ![Vue Details en XML|432x251](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-event-log-analysis-10.png)
+
+### Exemple : Application → SideBySide → Event ID 35
+
+![Erreur SideBySide, Event ID 35](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-05.png)
+
+- Cet événement décrit une erreur de génération du contexte d'activation d'une application, liée ici à une incompatibilité d'architecture.
+- L'onglet `Details` donne les données structurées de l'en-tête (`System`), notamment :
+    - `SystemTime` : timestamp ;
+    - `EventRecordID` : numéro de l'enregistrement ;
+    - `ProcessID` : identifiant du processus associé ;
+    - `ThreadID` : identifiant du thread ;
+    - `Computer` : machine source.
+
+![Onglet Details de l'Event 35 : provider, version, level, date de creation](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-06.png)
+
+![Details : SystemTime, EventRecordID, ProcessID, ThreadID, Computer](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-07.png)
 ## Filtrage dans Event Viewer
 
 ### Filter Current Log
@@ -168,6 +184,125 @@ Exemple :
 
 ![Evenements correspondant aux IDs et a la plage de dates|582x166](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-event-log-analysis-24.png)
 Très utile en Incident Response lorsqu’une fenêtre temporelle de compromission est déjà connue.
+## Requêtes XML personnalisées
+
+Event Viewer permet de créer des filtres XML pour effectuer des recherches plus précises.
+
+Chemin :
+
+`Event Viewer → Filter Current Log → XML → Edit Query Manually`
+
+### Objectif
+
+Dans cet exemple, la recherche porte sur :
+
+`SubjectLogonId = 0x3E7`
+
+![Filtre XML du journal Security sur SubjectLogonId 0x3E7](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-09.png)
+
+L'objectif est de retrouver des événements associés à ce contexte de session afin de reconstruire une séquence d'activités.
+
+Exemple de filtre XML :
+
+```
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">
+      *[EventData[Data[@Name='SubjectLogonId']='0x3e7']]
+    </Select>
+  </Query>
+</QueryList>
+```
+
+
+Ce filtre sélectionne les événements du journal `Security` possédant le champ `SubjectLogonId` avec la valeur indiquée.
+
+Il ne récupère pas automatiquement tous les événements de la session si ceux-ci utilisent d'autres champs, notamment `TargetLogonId`.
+
+### Intérêt DFIR
+
+- Réduire le volume d'événements à examiner.
+- Rechercher les opérations associées à un contexte utilisateur.
+- Corréler authentifications, changements de privilèges et modifications système.
+- Reconstituer une Event Timeline.
+
+Il est également possible de créer des filtres dans l'interface graphique et d'en examiner ensuite la représentation XML.
+
+Gabarits prêts à l'emploi (Event ID, période, champ, plusieurs champs, session, exclusion) : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
+
+### Exemple d'investigation : 4907, 4624 et 4672
+
+Analyse progressive de plusieurs événements Windows liés à un même contexte.
+
+#### Event ID 4907 — paramètres d'audit modifiés sur un objet
+
+L'Event ID 4907 est généré lorsque les paramètres d'audit d'un objet Windows sont modifiés, notamment sa SACL (System Access Control List).
+
+![Event 4907 : modification des parametres d'audit, Logon ID 0x3E7](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-11.png)
+
+La SACL définit quelles tentatives d'accès à un objet doivent être journalisées.
+
+Elle est constituée d'ACE (Access Control Entries) pouvant spécifier :
+
+- les comptes ou groupes concernés ;
+- les opérations à auditer ;
+- les accès réussis, échoués ou les deux.
+
+Distinction : la SACL contrôle l'audit des accès, tandis que la DACL contrôle principalement les autorisations d'accès.
+
+#### Analyse
+
+Les détails de l'Event 4907 montrent :
+
+| Champ         | Information                                          |
+| ------------- | ---------------------------------------------------- |
+| Process Name  | `SetupHost.exe`                                      |
+| Object Type   | File                                                 |
+| Object Name   | Objet associé au boot manager                        |
+| OldSd / NewSd | Descripteurs de sécurité avant et après modification |
+
+![Details de l'Event 4907 : ObjectType File, ProcessName SetupHost.exe, OldSd / NewSd](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-12.png)
+
+Les champs `OldSd` et `NewSd` utilisent le format SDDL (Security Descriptor Definition Language).
+
+Ils permettent d'examiner les changements apportés au descripteur de sécurité.
+
+`SetupHost.exe` est associé à des opérations de configuration Windows. Son nom est cohérent avec une activité d'installation, mais un nom de processus légitime ne garantit pas qu'une activité soit saine.
+
+#### Event ID 4672 — privilèges spéciaux attribués à une nouvelle session
+
+![Events 4624 Logon puis 4672 Special Logon](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-13.png)
+
+L'Event ID 4672 indique que des privilèges sensibles ont été attribués au token d'une nouvelle session de connexion.
+
+Exemple :
+
+`SeDebugPrivilege`
+
+![Event 4672 : SYSTEM avec SeAssignPrimaryTokenPrivilege, SeDebugPrivilege](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-14.png)
+
+Ce privilège peut permettre à un processus disposant des autorisations nécessaires d'interagir avec d'autres processus de manière privilégiée.
+
+#### Corrélation
+
+```
+Event 4907
+Audit Configuration Modified
+          ↓
+Event 4624
+Successful Logon
+          ↓
+Event 4672
+Special Privileges Assigned
+          ↓
+Timeline & Contextual Investigation
+```
+
+
+Cette séquence permet d'étudier les modifications d'audit et le contexte de connexion privilégiée.
+
+Un Event 4672 associé à SYSTEM peut être parfaitement normal. De même, la présence successive de ces événements ne suffit pas à confirmer une compromission.
+
 ## Effacer un filtre vs effacer un journal
 Deux opérations à ne pas confondre :
 
@@ -629,3 +764,31 @@ New Service
 La puissance de ces outils vient donc moins de la simple lecture d’un `.evtx` que de la capacité à **réduire rapidement des dizaines de milliers d’événements à ceux qui sont pertinents pour l’investigation**.
 
 Source des captures : [Hack The Box Academy - Event Log Analysis](https://academy.hackthebox.com/app/module/387/section/4529)
+
+## Démarche de threat hunting dans les journaux
+
+```
+Suspicious Activity
+        ↓
+Identify Relevant Event IDs
+        ↓
+Collect Windows Event Logs
+        ↓
+Filter by Time / User / Host
+        ↓
+Correlate Logon IDs & Events
+        ↓
+Reconstruct Event Timeline
+        ↓
+Investigate Suspicious Behavior
+```
+
+
+### Bonnes pratiques
+
+- Baseline : connaître les comportements normaux des systèmes et utilisateurs.
+- Centralized Logging : collecter les événements dans un SIEM ou une infrastructure centralisée.
+- Log Correlation : rapprocher plusieurs Event IDs et sources de données.
+- Time Synchronization : synchroniser les horloges pour faciliter l'analyse chronologique.
+- Audit Configuration : activer les politiques d'audit nécessaires à la production des événements recherchés.
+- Alert Tuning : adapter les règles de détection à l'environnement pour limiter les False Positives.

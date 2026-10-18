@@ -1,9 +1,9 @@
 ---
 title: 'Explorer ETW : logman et interfaces'
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Comprendre ETW
   - index.md
@@ -24,7 +24,7 @@ logman.exe query -ets
 
 Cette commande affiche les sessions ETW actives.
 
-![image-36](../../../../assets/journaux-windows-sysmon-et-etw-image-36.png)
+![image-36](../../../../assets/sysmon-et-etw-image-36.png)
 
 Sur une machine équipée de Sysmon, plusieurs sessions sont présentes, notamment :
 
@@ -51,7 +51,7 @@ logman.exe query "EventLog-System" -ets
 ```
 
 
-![image-37](../../../../assets/journaux-windows-sysmon-et-etw-image-37.png)
+![image-37](../../../../assets/sysmon-et-etw-image-37.png)
 
 La sortie fournit différentes informations :
 
@@ -97,7 +97,7 @@ Cette commande affiche les fournisseurs ETW disponibles sur le système, accompa
 
 Windows dispose d'un très grand nombre de fournisseurs. Windows 10 en intègre plus d'un millier.
 
-![image-38](../../../../assets/journaux-windows-sysmon-et-etw-image-38.png)
+![image-38](../../../../assets/sysmon-et-etw-image-38.png)
 
 Pour filtrer les résultats :
 
@@ -107,7 +107,7 @@ logman.exe query providers | findstr "Winlogon"
 
 
 Exemple de fournisseurs identifiés :
-![image-39](../../../../assets/journaux-windows-sysmon-et-etw-image-39.png)
+![image-39](../../../../assets/sysmon-et-etw-image-39.png)
 
 ### Inspecter les métadonnées des providers
 
@@ -117,7 +117,7 @@ logman.exe query providers Microsoft-Windows-Winlogon
 
 
 Cette commande permet d'examiner les métadonnées du fournisseur.
-![image-40](../../../../assets/journaux-windows-sysmon-et-etw-image-40.png)
+![image-40](../../../../assets/sysmon-et-etw-image-40.png)
 
 Métadonnées affichées :
 
@@ -140,7 +140,7 @@ Outre Logman, plusieurs outils permettent d'examiner les sessions et fournisseur
 
 L'outil Windows Performance Monitor (`perfmon`), Analyseur de performances, permet de consulter les sessions de tracing.
 
-![Recherche de l'application Performance Monitor](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-36.png)
+![Recherche de l'application Performance Monitor](../../../../assets/sysmon-et-etw-htb-windows-event-logs-36.png)
 
 Il est possible de :
 
@@ -151,7 +151,7 @@ Il est possible de :
 - modifier certaines configurations ;
 - créer des sessions personnalisées via les ensembles de collecteurs définis par l'utilisateur, en optant pour la catégorie « Défini par l'utilisateur ».
 
-![Performance Monitor : sessions de suivi d'evenements en cours](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-37.png)
+![Performance Monitor : sessions de suivi d'evenements en cours](../../../../assets/sysmon-et-etw-htb-windows-event-logs-37.png)
 
 ### ETW Explorer
 
@@ -159,7 +159,7 @@ EtwExplorer permet d'examiner les métadonnées des fournisseurs ETW, notamment 
 
 Projet : [EtwExplorer — GitHub](https://github.com/zodiacon/EtwExplorer).
 
-![ETW Explorer : recherche des providers PowerShell et de leurs GUID](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-38.png)
+![ETW Explorer : recherche des providers PowerShell et de leurs GUID](../../../../assets/sysmon-et-etw-htb-windows-event-logs-38.png)
 
 ### Autres outils
 

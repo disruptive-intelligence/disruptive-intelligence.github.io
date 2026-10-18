@@ -1,9 +1,9 @@
 ---
 title: Repérer le chargement d'assemblies .NET
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec ETW
   - index.md
@@ -88,15 +88,15 @@ Cette commande affiche les privilèges du token associé au processus, notamment
 
 `SeDebugPrivilege`, `SeImpersonatePrivilege`, `SeBackupPrivilege`, etc., accompagnés de leur état.
 
-![image-42](../../../../assets/journaux-windows-sysmon-et-etw-image-42.png)
+![image-42](../../../../assets/sysmon-et-etw-image-42.png)
 
 Dans le lab, l'exécution de `Seatbelt.exe` entraîne le chargement de bibliothèques .NET observables via Sysmon Event ID 7.
 
 En supposant que Sysmon est configuré de manière appropriée pour journaliser les événements de chargement d'image (ID d'événement 7), l'exécution de 'Seatbelt.exe' déclencherait le chargement de DLL clés liées à .NET telles que 'clr.dll' et 'mscoree.dll'.
 
-![Sysmon Event 7 : chargement d'image par Seatbelt.exe](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-44.png)
+![Sysmon Event 7 : chargement d'image par Seatbelt.exe](../../../../assets/sysmon-et-etw-htb-windows-event-logs-44.png)
 
-![Sysmon Event 7 : second chargement de DLL .NET par Seatbelt.exe](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-45.png)
+![Sysmon Event 7 : second chargement de DLL .NET par Seatbelt.exe](../../../../assets/sysmon-et-etw-htb-windows-event-logs-45.png)
 
 ### Limites de Sysmon
 

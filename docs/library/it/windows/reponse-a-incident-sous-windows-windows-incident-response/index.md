@@ -2,7 +2,7 @@
 title: Réponse à incident sous Windows (Windows Incident Response)
 source: IT/02 Windows/Journaux & investigation/Réponse à incident sous Windows (Windows Incident Response).md
 format: cours
-revue: '2026-10-18'
+revue: '2026-10-17'
 ---
 
 Ce cours suit la réponse à incident sur un poste Windows : les six phases (préparation, identification, périmètre, éradication, rétablissement, leçons apprises), une procédure de l'alerte à la réponse, les trois questions à se poser (malware actif, communication suspecte, persistance) et des outils gratuits pour y répondre.

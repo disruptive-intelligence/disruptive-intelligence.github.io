@@ -1,9 +1,9 @@
 ---
 title: Repérer un DLL hijacking
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec Sysmon
   - index.md
@@ -37,44 +37,11 @@ Signed       : true
 ```
 
 
-![Sysmon Event 7 : mmc.exe charge psapi.dll, signee](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-20.png)
+![Sysmon Event 7 : mmc.exe charge psapi.dll, signee](../../../../assets/sysmon-et-etw-htb-windows-event-logs-20.png)
 
 L'événement indique que `mmc.exe` a chargé `psapi.dll`, signée par Microsoft.
 
-### Configuration de la collecte
-
-Dans la configuration SwiftOnSecurity, on modifie le comportement de `ImageLoad` pour enregistrer tous les chargements :
-
-![Configuration d'origine : ImageLoad en include, sans regle](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-16.png)
-
-```
-<ImageLoad onmatch="exclude">
-</ImageLoad>
-```
-
-
-![Configuration modifiee : ImageLoad en exclude](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-17.png)
-
-Avec aucune condition d'exclusion, ce réglage permet de journaliser tous les événements de cette catégorie.
-
-À l'inverse, `onmatch="include"` sans condition d'inclusion ne sélectionne aucun événement.
-
-Appliquer la configuration :
-
-```
-sysmon.exe -c sysmonconfig-export.xml
-```
-
-
-![Chargement de sysmonconfig-export.xml, configuration validee](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-18.png)
-
-Puis consulter :
-
-`Event Viewer → Applications and Services Logs → Microsoft → Windows → Sysmon → Operational`
-
-![Journal Sysmon avec des evenements 7 Image loaded](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-19.png)
-
-Attention : l'Event ID 7 peut générer un volume de logs important. En production, une sélection adaptée des événements est généralement préférable.
+La collecte des Event ID 7 doit être activée dans la configuration Sysmon : voir [Configurer la collecte (ImageLoad)](01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload).
 
 ### Scénario du lab — calc.exe / WININET.dll
 https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
@@ -88,13 +55,13 @@ Exemple de détournement impliquant :
 https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin
 En suivant les étapes requises, qui impliquent de renommer `reflective_dll.x64.dll` en `WININET.dll`, de déplacer `calc.exe` de `C:\Windows\System32` avec `WININET.dll` vers un répertoire accessible en écriture (comme le dossier `Desktop`), et d'exécuter `calc.exe`, nous réussissons. Au lieu de l'application Calculatrice, une [MessageBox](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxa) s'affiche.
 
-![DLL detournables par calc.exe (dont WININET.dll)](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-21.png)
+![DLL detournables par calc.exe (dont WININET.dll)](../../../../assets/sysmon-et-etw-htb-windows-event-logs-21.png)
 
 Dans le lab, `calc.exe` est copié depuis `System32` vers le bureau, avec la DLL de démonstration.
 
 Lors de l'exécution, la DLL contrôlée par le test est chargée et affiche une MessageBox à la place du comportement attendu de la Calculatrice.
 
-![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-22.png)
+![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../../../assets/sysmon-et-etw-htb-windows-event-logs-22.png)
 
 La DLL utilisée provient d'un exemple de Reflective DLL, bien que le DLL Hijacking ne nécessite pas de DLL réfléchissante.
 
@@ -102,7 +69,7 @@ La DLL utilisée provient d'un exemple de Reflective DLL, bien que le DLL Hijack
 
 L'analyse consiste à filtrer les événements Sysmon sur `Event ID 7`, puis à rechercher `calc.exe`.
 
-![Filter Current Log : Sysmon/Operational, Event ID 7](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-23.png)
+![Filter Current Log : Sysmon/Operational, Event ID 7](../../../../assets/sysmon-et-etw-htb-windows-event-logs-23.png)
 
 | Critère    | Chargement légitime                            | Chargement suspect du lab                   |
 | ---------- | ---------------------------------------------- | ------------------------------------------- |
@@ -112,11 +79,11 @@ L'analyse consiste à filtrer les événements Sysmon sur `Event ID 7`, puis à 
 
 - En faisant un Find, on retrouve notre calc.exe détourné
 
-![Chargement suspect : calc.exe charge WININET.dll non signee](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-24.png)
+![Chargement suspect : calc.exe charge WININET.dll non signee](../../../../assets/sysmon-et-etw-htb-windows-event-logs-24.png)
 
 - En comparaison avec notre calc.exe original, on peut voir des path et des IoC pertinentes à dégager de tout ça.
 
-![Chargement legitime : calc.exe charge wininet.dll signee](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-25.png)
+![Chargement legitime : calc.exe charge wininet.dll signee](../../../../assets/sysmon-et-etw-htb-windows-event-logs-25.png)
 
 Trois indicateurs ressortent :
 

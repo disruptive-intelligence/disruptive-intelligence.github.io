@@ -1,9 +1,9 @@
 ---
 title: Repérer une relation parent-enfant anormale
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec ETW
   - index.md
@@ -33,11 +33,11 @@ spoolsv.exe
 
 Ces relations sont suspectes, car une calculatrice ou un service d'impression n'a normalement pas vocation à lancer de telles commandes dans les scénarios présentés.
 
-![Relation normale : spoolsv.exe et son enfant conhost.exe](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-40.png)
+![Relation normale : spoolsv.exe et son enfant conhost.exe](../../../../assets/sysmon-et-etw-htb-windows-event-logs-40.png)
 
 - Samir Bousseaden a partagé une carte mentale (mind map) pertinente présentant les relations parent-enfant courantes, qui peut être consultée [ici](https://twitter.com/SBousseaden/status/1195373669930983424).
 
-![Carte mentale des relations parent-enfant courantes des processus Windows, par Samir Bousseaden (@SBousseaden)](../../../../assets/journaux-windows-sysmon-et-etw-ejeyi8vxyai3gra.jpg)
+![Carte mentale des relations parent-enfant courantes des processus Windows, par Samir Bousseaden (@SBousseaden)](../../../../assets/sysmon-et-etw-ejeyi8vxyai3gra.jpg)
 
 *Carte : Samir Bousseaden ([@SBousseaden](https://twitter.com/SBousseaden/status/1195373669930983424)).*
 
@@ -45,7 +45,7 @@ Ces relations sont suspectes, car une calculatrice ou un service d'impression n'
 
 Process Hacker permet de visualiser les processus actifs sous forme d'arborescence.
 
-![Process Hacker : arborescence des processus](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-39.png)
+![Process Hacker : arborescence des processus](../../../../assets/sysmon-et-etw-htb-windows-event-logs-39.png)
 
 L'analyste peut notamment examiner :
 

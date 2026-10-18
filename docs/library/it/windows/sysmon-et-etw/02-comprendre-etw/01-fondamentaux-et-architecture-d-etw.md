@@ -1,9 +1,9 @@
 ---
 title: Fondamentaux et architecture d'ETW
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Comprendre ETW
   - index.md
@@ -55,7 +55,7 @@ Threat Hunting / DFIR Analysis
 ```
 
 
-![Architecture ETW (Microsoft) : providers, sessions, controller, trace files, consumer](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-35.png)
+![Architecture ETW (Microsoft) : providers, sessions, controller, trace files, consumer](../../../../assets/sysmon-et-etw-htb-windows-event-logs-35.png)
 
 ### Contrôleurs (controllers)
 

@@ -1,9 +1,9 @@
 ---
 title: Repérer un accès à LSASS
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec Sysmon
   - index.md
@@ -30,7 +30,7 @@ Selon la configuration et les protections Windows, les résultats peuvent compre
 
 Sa sortie montre notamment un compte `Administrator` et des valeurs de hash, tandis que certains champs de mots de passe apparaissent comme `(null)`.
 
-![image-22](../../../../assets/journaux-windows-sysmon-et-etw-image-22.png)
+![image-22](../../../../assets/sysmon-et-etw-image-22.png)
 
 L'accès à LSASS et la réussite de l'extraction dépendent des privilèges et des mécanismes de protection en place.
 
@@ -40,7 +40,7 @@ Pour détecter les tentatives d'accès suspectes à LSASS, on utilise Sysmon Eve
 
 Cet événement permet d'observer les accès entre processus.
 
-![Documentation Sysmon de l'Event ID 10 ProcessAccess](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-33.png)
+![Documentation Sysmon de l'Event ID 10 ProcessAccess](../../../../assets/sysmon-et-etw-htb-windows-event-logs-33.png)
 
 Champs pertinents :
 
@@ -65,7 +65,7 @@ TargetUser  : NT AUTHORITY\SYSTEM
 ```
 
 
-![Sysmon Event 10 : AgentEXE.exe accede a lsass.exe](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-34.png)
+![Sysmon Event 10 : AgentEXE.exe accede a lsass.exe](../../../../assets/sysmon-et-etw-htb-windows-event-logs-34.png)
 
 Cette activité est suspecte, car un exécutable peu connu provenant d'un dossier utilisateur accède à un processus sensible.
 

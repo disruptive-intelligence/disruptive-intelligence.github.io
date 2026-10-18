@@ -22,16 +22,21 @@ Exemple :
 
 Un événement contient généralement plusieurs champs :
 
-```
-Event ID
-Provider / Source
-Timestamp
-Computer
-User
-Level
-Event Data
-```
+| Champ             | Description                                                         |
+| ----------------- | ------------------------------------------------------------------- |
+| Log Name          | Journal contenant l'événement                                       |
+| Source / Provider | Composant ayant généré l'événement                                  |
+| Event ID          | Identifiant du type d'événement                                     |
+| Task Category     | Catégorie fonctionnelle de l'événement                              |
+| Level             | Niveau : Information, Warning, Error, Critical ou Verbose           |
+| Keywords          | Indicateurs de classification, comme Audit Success ou Audit Failure |
+| User              | Compte associé à l'événement, lorsqu'il est renseigné               |
+| OpCode            | Opération spécifique décrite par l'événement                        |
+| Logged            | Date et heure de l'enregistrement (timestamp)                       |
+| Computer          | Machine ayant généré l'événement                                    |
+| XML Data          | Représentation structurée des champs et données supplémentaires (Event Data) |
 
+![Niveaux Information et Error du journal Application](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-04.png)
 
 > ⚠️ Un Event ID n’est pas forcément **globalement unique dans tout Windows**. Sa signification doit être interprétée avec son **Provider / Source et son journal**.
 

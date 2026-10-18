@@ -1,9 +1,9 @@
 ---
 title: Installer et configurer Sysmon
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec Sysmon
   - index.md
@@ -48,7 +48,7 @@ sysmon.exe -i -accepteula -h md5,sha256,imphash -l -n
 ```
 
 
-![Installation et demarrage de Sysmon v13.33](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-15.png)
+![Installation et demarrage de Sysmon v13.33](../../../../assets/sysmon-et-etw-htb-windows-event-logs-15.png)
 
 Pour appliquer ensuite un fichier XML de configuration :
 
@@ -67,3 +67,38 @@ Deux configurations communautaires sont citées :
 - [Sysmon Modular](https://github.com/olafhartong/sysmon-modular?utm_source=chatgpt.com) : approche modulaire.
 
 Précision : Sysmon est un outil de collecte et de surveillance, pas une solution EDR complète avec toutes les fonctionnalités de réponse.
+
+## Configurer la collecte (ImageLoad)
+
+Dans la configuration SwiftOnSecurity, on modifie le comportement de `ImageLoad` pour enregistrer tous les chargements :
+
+![Configuration d'origine : ImageLoad en include, sans regle](../../../../assets/sysmon-et-etw-htb-windows-event-logs-16.png)
+
+```
+<ImageLoad onmatch="exclude">
+</ImageLoad>
+```
+
+
+![Configuration modifiee : ImageLoad en exclude](../../../../assets/sysmon-et-etw-htb-windows-event-logs-17.png)
+
+Avec aucune condition d'exclusion, ce réglage permet de journaliser tous les événements de cette catégorie.
+
+À l'inverse, `onmatch="include"` sans condition d'inclusion ne sélectionne aucun événement.
+
+Appliquer la configuration :
+
+```
+sysmon.exe -c sysmonconfig-export.xml
+```
+
+
+![Chargement de sysmonconfig-export.xml, configuration validee](../../../../assets/sysmon-et-etw-htb-windows-event-logs-18.png)
+
+Puis consulter :
+
+`Event Viewer → Applications and Services Logs → Microsoft → Windows → Sysmon → Operational`
+
+![Journal Sysmon avec des evenements 7 Image loaded](../../../../assets/sysmon-et-etw-htb-windows-event-logs-19.png)
+
+Attention : l'Event ID 7 peut générer un volume de logs important. En production, une sélection adaptée des événements est généralement préférable.

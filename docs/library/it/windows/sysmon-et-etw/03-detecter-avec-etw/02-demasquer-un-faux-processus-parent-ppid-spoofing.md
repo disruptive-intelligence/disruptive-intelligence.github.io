@@ -1,9 +1,9 @@
 ---
 title: Démasquer un faux processus parent (PPID spoofing)
-source: IT/02 Windows/Journaux & investigation/Journaux Windows, Sysmon et ETW.md
-note: Journaux Windows, Sysmon et ETW
+source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
+note: Sysmon et ETW
 up:
-- - Journaux Windows, Sysmon et ETW
+- - Sysmon et ETW
   - ../index.md
 - - Détecter avec ETW
   - index.md
@@ -44,7 +44,7 @@ spoolsv.exe
 ```
 
 
-![Sysmon Event 1 : cmd.exe affiche spoolsv.exe comme parent](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-41.png)
+![Sysmon Event 1 : cmd.exe affiche spoolsv.exe comme parent](../../../../assets/sysmon-et-etw-htb-windows-event-logs-41.png)
 
 Cependant, le processus ayant réellement initié la création est `powershell.exe`.
 
@@ -74,11 +74,11 @@ SilkETW.exe -t user -pn Microsoft-Windows-Kernel-Process -ot file -p C:\Windows\
 | `-ot file` | Écriture dans un fichier                |
 | `-p`       | Chemin du fichier de sortie             |
 
-![SilkETW collectant le provider Microsoft-Windows-Kernel-Process](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-42.png)
+![SilkETW collectant le provider Microsoft-Windows-Kernel-Process](../../../../assets/sysmon-et-etw-htb-windows-event-logs-42.png)
 
 Après une nouvelle simulation, le fichier `etw.json` (qui inclut les données du fournisseur `Microsoft-Windows-Kernel-Process`) permet de retrouver des informations indiquant que `powershell.exe` est à l'origine de la création de `cmd.exe`.
 
-![etw.json : recherche du PID dans les evenements Kernel-Process](../../../../assets/journaux-windows-sysmon-et-etw-htb-windows-event-logs-43.png)
+![etw.json : recherche du PID dans les evenements Kernel-Process](../../../../assets/sysmon-et-etw-htb-windows-event-logs-43.png)
 
 ```
               Process Creation

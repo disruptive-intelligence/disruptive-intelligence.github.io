@@ -145,6 +145,10 @@ Service
 
 ![Evenement 4624 de type 5 genere par services.exe](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-authentication-event-logs-03.png)
 
+Exemple : un 4624 du compte `SYSTEM` en Logon Type 5 (Service Logon, `LogonProcessName` = `Advapi`). Il ne prouve pas, à lui seul, qu'un nouveau service a été installé : le corréler avec d'autres journaux (7045, 4697).
+
+![Details de l'Event 4624 : TargetUserName SYSTEM, LogonType 5, LogonProcessName Advapi](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-10.png)
+
 ---
 
 ### Logon Type 10 — RemoteInteractive
@@ -213,6 +217,17 @@ Target Host
 ![Filtre du journal Security sur Event ID 4624](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-authentication-event-logs-01.png)
 
 ![Resultats Audit Success pour Event ID 4624](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-authentication-event-logs-02.png)
+
+Le 4624 fournit aussi le **Logon ID** (identifiant de la session créée) et le **Logon Process** (mécanisme de connexion).
+
+![Event 4624 : connexion reussie de SYSTEM, Logon Type 5](../../../assets/analyse-des-journaux-d-evenements-windows-event-logs-htb-windows-event-logs-08.png)
+
+## Logon ID : relier les événements d'une session
+
+- Le Logon ID rapproche les événements d'une même session sur une machine.
+- `0x3E7` correspond couramment à la session Local System.
+- Le `TargetLogonId` d'un 4624 (session créée) se retrouve en `SubjectLogonId` dans les événements produits par cette session (4672, 4907, 4688…). Les deux champs ont des rôles différents : adapter la recherche au schéma de chaque événement.
+- En pratique : une requête XML sur ce Logon ID (voir [Requêtes XML personnalisées](03-lire-et-filtrer-les-journaux.md#requetes-xml-personnalisees)).
 
 ---
 

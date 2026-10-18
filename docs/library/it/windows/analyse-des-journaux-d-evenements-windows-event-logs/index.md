@@ -21,3 +21,4 @@ revue: '2026-10-18'
 - [Windows Defender](11-windows-defender.md)
 - [Exécution PowerShell](12-execution-powershell.md)
 - [Synthèse : verrouillage et patterns SOC](13-synthese-verrouillage-et-patterns-soc.md)
+- [Lab 1 — Les bases des journaux d'événements Windows](14-lab-1-les-bases-des-journaux-d-evenements-windows.md)
