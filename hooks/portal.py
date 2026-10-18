@@ -1937,7 +1937,7 @@ def library_nav(library):
         nav.append({dom["label"]: [dom_src(dom)] + cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": fiches_src + [note_nav(n) for n in fiches]}] if fiches else [])
     # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
-    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"📖 Glossaire & notions": glossary}]
+    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"🔎 Filtrer par titre": FILTER_SRC}, {"📖 Glossaire & notions": glossary}]
 
 
 def category_nav(cat):
@@ -2291,11 +2291,18 @@ def note_item(n, src):
             + f'<span class="kw-tuto__tag">{tag}</span></div>')
 
 
-def chapter(num, title_md, text, meta, notes, src):
-    """Un chapitre : numéro, titre, phrase et compte à gauche ; les notes en grille à droite."""
-    head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{num:02d}</span>\n\n'
-            f"## {title_md}\n\n" + (f'<p class="kw-chapter__text">{esc(text)}</p>\n' if text else "")
-            + (f'<span class="kw-chapter__meta">{meta}</span>\n' if meta else "") + "</header>\n")
+def chapter(num, title_md, text, meta, notes, src, title_html=None):
+    """Un chapitre : numéro, titre, phrase et compte à gauche ; les notes en grille à droite.
+    title_html : titre en HTML brut, hors du sommaire de la page (liste de secours des pages de rubrique, masquée
+    par le script : ses titres ne doivent pas être suivis par navigation.tracking)."""
+    if title_html:
+        head = (f'<header class="kw-chapter__head"><span class="kw-chapter__num">{num:02d}</span>'
+                f"<h2>{title_html}</h2>" + (f'<p class="kw-chapter__text">{esc(text)}</p>' if text else "")
+                + (f'<span class="kw-chapter__meta">{meta}</span>' if meta else "") + "</header>\n")
+    else:
+        head = (f'<header class="kw-chapter__head" markdown>\n<span class="kw-chapter__num">{num:02d}</span>\n\n'
+                f"## {title_md}\n\n" + (f'<p class="kw-chapter__text">{esc(text)}</p>\n' if text else "")
+                + (f'<span class="kw-chapter__meta">{meta}</span>\n' if meta else "") + "</header>\n")
     grid = '<div class="kw-chapter__grid">' + "".join(note_item(n, src) for n in notes) + "</div>\n"
     return f'\n<article class="kw-chapter" markdown>\n{head}{grid}</article>\n'
 
@@ -2380,26 +2387,28 @@ def pages_library(library):
             src = cat["src"]
             update = last_update(cat["notes"])
             stats = lib_stats(cat["notes"])
-            body = (f'---\ntitle: "{bare(cat["label"])}"\nhide:\n  - footer\n---\n<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n'
+            body = (f'---\ntitle: "{bare(cat["label"])}"\nhide:\n  - toc\n  - footer\n---\n<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n'
                     f'<span class="kw-eyebrow">[Bibliothèque · {esc(bare(dom["label"]))}]'
                     f'({posixpath.relpath(dom_src(dom), posixpath.dirname(src))})</span>\n\n# {cat["label"]}\n\n')
             if cat.get("description"):
                 body += f'<p class="kw-dom-lead">{esc(cat["description"])}</p>\n'
             body += (f'<span class="kw-dom-stats">{stats}{" · mis à jour le " + update if update else ""}</span>\n'
-                     "</div>\n\n")
+                     "</div>\n\n") + quick_filter(src, f"{dom['id']}/{cat['id']}") + library_box(src, f"{dom['id']}/{cat['id']}")
+            body += '<div class="kw-bv-fallback" markdown>\n\n'      # liste générée : masquée quand le script a pris le relais
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
                 groups = grouped(listed)
                 for i, (label, notes) in enumerate(groups, 1):
                     notes = notes + cat["links"].get(label, []) if label else notes
                     if label:
-                        title = f"[{esc(label)}]({posixpath.relpath(group_src(cat, label), posixpath.dirname(src))})"
-                        body += chapter(i, title, cat["group_desc"].get(label, ""), lib_stats(notes), notes, src)
+                        title = f'<a href="{href(src, group_src(cat, label))}">{esc(label)}</a>'
+                        body += chapter(i, "", cat["group_desc"].get(label, ""), lib_stats(notes), notes, src, title_html=title)
                         out.append(page_group(dom, cat, label, notes))
                     else:
                         body += '<div class="kw-chapter__grid kw-chapter__grid--solo">' + "".join(note_item(n, src) for n in notes) + "</div>\n\n"
             else:
                 body += "Pas encore de cours dans cette rubrique.\n\n"
+            body += "</div>\n\n"
             if cat["links"].get(None):
                 body += ("\n## Voir aussi\n\n" + '<div class="kw-chapter__grid kw-chapter__grid--solo">'
                          + "".join(note_item(n, src) for n in cat["links"][None]) + "</div>\n\n")
@@ -2442,12 +2451,12 @@ def section_bar(label, anchor=None, more=None):
 
 
 def page_library_index(library, themes, glossary_count):
-    """Accueil de la Bibliothèque : bandeau (date, compteurs, recherche, rubriques), note à la une et dernières
-    mises à jour, parcours en cartes à étapes, un bloc par domaine avec ses rubriques numérotées, outils."""
+    """Accueil de la Bibliothèque : en-tête compact (compteurs, champ filtrer / chercher, liens), navigation par
+    domaine, rubrique et sous-rubrique (javascripts/bibliotheque.js), parcours en cartes à étapes, outils. Sans JS,
+    la note à la une et les blocs de domaine (kw-bv-fallback) restent affichés."""
     src = "library/index.md"
     all_notes = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"]]
     hours = round(sum(n.get("minutes") or 0 for n in all_notes) / 60)
-    today = date.today()
     cat_of = {n["src"]: c for d in library for c in d["categories"] for n in c["notes"]}
     recent = sorted((n for n in all_notes if n.get("revue")), key=lambda n: (n["revue"], n.get("minutes") or 0), reverse=True)
     resume = lambda n: n.get("resume") or STATE.get("resumes", {}).get(n["title"], "")
@@ -2455,16 +2464,16 @@ def page_library_index(library, themes, glossary_count):
         f' <a href="#parcours">Parcours</a> <a href="{href(src, GLOSSARY_SRC)}">Glossaire</a>'
         + (f' <a href="{href(src, REVISION_INDEX)}">Révision</a>' if STATE.get("revisions") else "")
         + f' <a href="{href(src, "cheatsheets/index.md")}">Cheat sheets</a>')
+    # en-tête compact : titre et compteurs, un seul champ (Entrée = filtrer les titres ; second bouton = texte intégral)
     masthead = (
-        '<div class="kw-mast">'
-        f'<div class="kw-mast__top"><span>{WEEKDAYS[today.weekday()].capitalize()} {fr_date(today)}</span>'
+        '<div class="kw-mast kw-mast--lib">'
+        '<div class="kw-mast__head"><h1 class="kw-mast__title">📚 Bibliothèque</h1>'
         f'<span class="kw-mast__count">{len(all_notes)} notes en ligne · {hours} h de lecture</span></div>'
-        '<h1 class="kw-mast__title">📚 Bibliothèque</h1>'
-        '<p class="kw-mast__lead">Le savoir de référence : mes cours, synthèses et fiches, repris d\'Obsidian au fil de '
-        "l'eau. La veille raconte ce qui <b>se passe</b> ; la Bibliothèque garde ce qui <b>dure</b>.</p>"
         f'<form class="kw-mast__search" action="{href(src, LIBRARY_SEARCH_SRC)}" method="get">'
-        '<input type="search" name="mots" placeholder="Chercher dans toutes les notes…" title="Par exemple : kerberoasting, nmap -sV, Lazarus" '
-        'aria-label="Chercher dans les notes"><button type="submit">Rechercher</button></form>'
+        '<input type="search" name="mots" placeholder="Un cours, un chapitre, un lab, une commande…" '
+        'title="Par exemple : Sysmon, kerberoasting, nmap -sV" aria-label="Chercher dans la Bibliothèque">'
+        f'<button type="submit" formaction="{href(src, FILTER_SRC)}">Filtrer les titres</button>'
+        '<button type="submit">Chercher dans le texte</button></form>'
         f'<nav class="kw-mast__nav">{nav}</nav></div>')
     une = ""
     if recent:
@@ -2516,7 +2525,8 @@ hide:
   - footer
 ---
 {masthead}
-{une}{doms}{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
+{library_box(src)}<div class="kw-bv-fallback">{une}{doms}</div>
+{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
 <div class="kw-courses">{paths}</div>
 {section_bar("Les outils")}
 <div class="kw-libgrid">
@@ -3436,6 +3446,86 @@ des glossaires de mes cours ; « Dans les cours » mène à la définition dans 
 {body}"""
 
 
+# ---------------------------------------------------------------- variantes de la Bibliothèque (aperçu)
+
+TREE_JSON = "assets/bibliotheque-arbre.json"
+
+
+def library_tree(docs_dir, library):
+    """assets/bibliotheque-arbre.json : domaines > rubriques > sous-rubriques > notes > parties > chapitres,
+    lu par javascripts/bibliotheque-variantes.js (explorateur, sommaire détaillé, filtres)."""
+    def walk(folder):
+        out = []
+        for p in sorted(folder.iterdir()):
+            if p.name == "index.md":
+                continue
+            if p.is_dir() and (p / "index.md").exists():
+                _, meta = get_data((p / "index.md").read_text(encoding="utf-8"))
+                out.append({"t": str(meta.get("title") or p.name), "u": url_of((p / "index.md").relative_to(docs_dir).as_posix()),
+                            "c": walk(p)})
+            elif p.suffix == ".md":
+                _, meta = get_data(p.read_text(encoding="utf-8"))
+                out.append({"t": str(meta.get("title") or p.stem), "u": url_of(p.relative_to(docs_dir).as_posix())})
+        return out
+
+    def icon(label):
+        m = re.match(r"^\W+", str(label))
+        return m.group(0).strip() if m else ""
+
+    resumes = STATE.get("resumes", {})
+    doms = []
+    for d in library:
+        cats = []
+        for c in d["categories"]:
+            groups = []
+            for label, notes in grouped([n for n in c["notes"] if n["imported"]]):
+                items = []
+                for n in notes:
+                    kids = walk(docs_dir / posixpath.dirname(n["src"])) if n["src"].endswith("/index.md") else []
+                    items.append({"t": n["title"], "u": url_of(n["src"]), "f": n.get("format") or "",
+                                  "p": n.get("provenance") or "", "m": n.get("minutes") or 0,
+                                  "r": n.get("resume") or resumes.get(n["title"], ""), "c": kids})
+                groups.append({"t": bare(label) if label else "", "e": icon(label) if label else "",
+                               "d": c.get("group_desc", {}).get(label, "") if label else "", "n": items})
+            cats.append({"id": f"{d['id']}/{c['id']}", "t": bare(c["label"]), "e": icon(c["label"]),
+                         "d": str(c.get("description") or ""), "u": url_of(c["src"]), "g": groups})
+        doms.append({"id": d["id"], "t": bare(d["label"]), "e": icon(d["label"]), "u": url_of(dom_src(d)), "c": cats})
+    return TREE_JSON, json.dumps(doms, ensure_ascii=False, separators=(",", ":"))
+
+
+FILTER_SRC = "library/filtrer.md"
+
+
+def quick_filter(src, scope=""):
+    """Petit champ « Filtrer par titre » : mène à la page de filtre, pré-remplie (et limitée à la rubrique)."""
+    hidden = f'<input type="hidden" name="rubrique" value="{esc(scope)}">' if scope else ""
+    return (f'<form class="kw-bv-quick" action="{href(src, FILTER_SRC)}" method="get">'
+            '<input type="search" name="titre" placeholder="Filtrer par titre : un cours, un chapitre, un lab…" '
+            f'aria-label="Filtrer les pages par titre">{hidden}<button type="submit">Filtrer</button></form>\n\n')
+
+
+def page_filter():
+    return FILTER_SRC, f"""---
+title: Filtrer par titre
+hide:
+  - toc
+---
+
+# 🔎 Filtrer par titre
+
+Toutes les pages de la Bibliothèque (cours, chapitres, labs), filtrées par un mot du titre, par domaine,
+rubrique, type, format ou provenance. Pour chercher dans le texte des notes : [Rechercher dans mes notes]({posixpath.relpath(LIBRARY_SEARCH_SRC, "library")}).
+
+<div class="kw-bv-find" data-root="{href(FILTER_SRC, "index.md")}" data-json="{posixpath.relpath(TREE_JSON, url_of(FILTER_SRC))}"></div>
+"""
+
+
+def library_box(src, scope=""):
+    """Conteneur de la navigation (javascripts/bibliotheque.js) : tout le domaine, ou une rubrique (scope « dom/cat »)."""
+    return (f'<div class="kw-bv" data-root="{href(src, "index.md")}" data-scope="{scope}" '
+            f'data-json="{posixpath.relpath(TREE_JSON, posixpath.dirname(src))}"></div>\n\n')
+
+
 def glossary_data(glossary):
     """assets/glossary.json : lu par javascripts/glossary-tooltips.js pour les infobulles."""
     url = url_of(GLOSSARY_SRC)
@@ -3562,6 +3652,8 @@ def on_config(config):
     if STATE["labs"]:
         pages.append(page_labs_index())
     pages.append(glossary_data(glossary))
+    pages.append(library_tree(docs_dir, library))
+    pages.append(page_filter())
     pages += pages_threads(threads)
     pages += pages_weeks(items["veille"], threads)
     pages += [page_explorer(items["veille"]), explorer_data(items["veille"]),
