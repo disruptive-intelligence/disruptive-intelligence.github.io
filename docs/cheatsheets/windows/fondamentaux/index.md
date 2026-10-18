@@ -106,6 +106,10 @@ Comprendre et observer un système Windows : identité de la machine, processus,
             - [Reconnaissance](logs/sysmon.md#reperer-une-reconnaissance-du-poste-et-du-domaine) : `net user`, `nltest /dclist`
             - [PowerShell encodé](logs/sysmon.md#decoder-une-commande-powershell-encodee) : Base64 UTF-16LE
             - Wazuh : `rule.groups: sysmon_event1`
+        - [ETW et logman](logs/etw.md)
+            - [Sessions actives](logs/etw.md#lister-les-sessions-etw-actives) : `logman query -ets`
+            - [Providers](logs/etw.md#trouver-un-provider) : `logman query providers`
+            - [Trace .etl](logs/etw.md#creer-une-trace-larreter-la-relire) : `logman create trace` · `Get-WinEvent -Path -Oldest`
     - [Droits et identités](droits.md)
         - Identité
             - [SID, groupes, privilèges](droits.md#voir-mon-sid-mes-groupes-et-mes-privileges) : `whoami /user /groups /priv`

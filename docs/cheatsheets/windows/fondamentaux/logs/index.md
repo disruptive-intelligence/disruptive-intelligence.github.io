@@ -24,6 +24,7 @@ Les incontournables : `Get-WinEvent -FilterHashtable` · `wevtutil` · `eventvwr
 | [**Pare-feu et Defender**](pare-feu-defender.md) | Les règles de pare-feu ajoutées ou modifiées, le pare-feu désactivé ; les détections de Defender, sa désactivation et ses exclusions. |
 | [**Effacement des traces**](effacement.md) | Journaux effacés et journalisation arrêtée. |
 | [**Sysmon et requêtes SIEM**](sysmon.md) | Les Event IDs Sysmon pour chasser (processus, DNS, réseau, fichiers, clés Run, LSASS, binaires renommés, reconnaissance), un journal exporté (`.evtx`) et les mêmes recherches dans Wazuh. |
+| [**ETW et logman**](etw.md) | Les sessions de trace actives et leurs providers, trouver un provider et ses mots-clés, enregistrer et relire une trace `.etl`. |
 
 ## Tous les besoins
 
@@ -35,6 +36,7 @@ Les incontournables : `Get-WinEvent -FilterHashtable` · `wevtutil` · `eventvwr
 - [Pare-feu et Defender](pare-feu-defender.md) — [Retracer les changements du pare-feu](pare-feu-defender.md#retracer-les-changements-du-pare-feu) · [Retracer les détections et l'altération de Defender](pare-feu-defender.md#retracer-les-detections-et-lalteration-de-defender)
 - [Effacement des traces](effacement.md) — [Repérer un effacement de journal](effacement.md#reperer-un-effacement-de-journal)
 - [Sysmon et requêtes SIEM](sysmon.md) — [Vérifier que Sysmon tourne et lire ses événements](sysmon.md#verifier-que-sysmon-tourne-et-lire-ses-evenements) · [Lire un journal Sysmon exporté](sysmon.md#lire-un-journal-sysmon-exporte) · [Retrouver les requêtes DNS d'un processus](sysmon.md#retrouver-les-requetes-dns-dun-processus) · [Retrouver les connexions réseau d'un processus](sysmon.md#retrouver-les-connexions-reseau-dun-processus) · [Démasquer un binaire renommé](sysmon.md#demasquer-un-binaire-renomme) · [Repérer une reconnaissance du poste et du domaine](sysmon.md#reperer-une-reconnaissance-du-poste-et-du-domaine) · [Retrouver qui a créé un fichier](sysmon.md#retrouver-qui-a-cree-un-fichier) · [Remonter la chaîne des processus parents](sysmon.md#remonter-la-chaine-des-processus-parents) · [Repérer une persistance par clé Run](sysmon.md#reperer-une-persistance-par-cle-run) · [Repérer un accès à la mémoire de LSASS](sysmon.md#reperer-un-acces-a-la-memoire-de-lsass) · [Décoder une commande PowerShell encodée](sysmon.md#decoder-une-commande-powershell-encodee)
+- [ETW et logman](etw.md) — [Lister les sessions ETW actives](etw.md#lister-les-sessions-etw-actives) · [Inspecter une session](etw.md#inspecter-une-session) · [Trouver un provider](etw.md#trouver-un-provider) · [Lire les métadonnées d'un provider](etw.md#lire-les-metadonnees-dun-provider) · [Créer une trace, l'arrêter, la relire](etw.md#creer-une-trace-larreter-la-relire) · [Voir les sessions dans l'Analyseur de performances](etw.md#voir-les-sessions-dans-lanalyseur-de-performances)
 
 ## Vue d'ensemble : quel événement pour quoi
 
