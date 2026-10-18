@@ -178,7 +178,7 @@
           notes: [Ligne de commande Windows, PowerShell, CMD — aide-mémoire]
         - label: 🔍 Journaux & investigation
           description: "Ce que Windows enregistre, et comment le lire."
-          notes: ["Analyse des journaux d'événements Windows (Event Logs)", "Journaux Windows, Sysmon et ETW", Réponse à incident sous Windows (Windows Incident Response)]
+          notes: ["Analyse des journaux d'événements Windows (Event Logs)", "Sysmon et ETW", Réponse à incident sous Windows (Windows Incident Response)]
     - id: active-directory
       label: 🏰 Active Directory
       description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.
