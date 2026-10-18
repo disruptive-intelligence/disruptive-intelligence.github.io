@@ -13,15 +13,21 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 **Énoncé HTB Academy.** Reproduire le détournement de DLL et relever le SHA256 de la `WININET.dll` chargée par `calc.exe`.
 
-1. Dans `C:\Tools\Reflective DLLInjection`, renommer `reflective_dll.x64.dll` en `WININET.dll`. Copier `calc.exe` depuis `C:\Windows\System32` et placer les deux fichiers dans un dossier modifiable, ici le bureau.
+1. Dans `C:\Tools\Reflective DLLInjection`, renommer `reflective_dll.x64.dll` en `WININET.dll`.
+
+    ![HTB WELFE lab-13](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-13.png)
+
+2. Copier `calc.exe` depuis `C:\Windows\System32` vers un dossier modifiable, ici le bureau, et y placer aussi `WININET.dll`.
 
     ![HTB WELFE lab-08](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-08.png)
 
-2. Exécuter la copie de `calc.exe`. La boîte de dialogue confirme que la DLL de démonstration a été chargée.
+3. Exécuter la copie de `calc.exe`. La boîte de dialogue confirme que la DLL de démonstration a été chargée.
 
     ![HTB WELFE lab-09](../../../assets/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil-htb-welfe-lab-09.png)
 
-3. Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `7`, puis rechercher `WININET.dll` avec **Find** ou cibler son chemin avec ce filtre XML :
+4. Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `7` puis utiliser **Find** sur `calc.exe`. Dans l'événement retenu, comparer `Image` (l'exécutable du bureau), `ImageLoaded` (la DLL du bureau) et `Hashes` (son SHA256).
+
+5. Pour cibler directement ce chargement de DLL, utiliser le filtre XML :
 
 ```xml
 <QueryList>
