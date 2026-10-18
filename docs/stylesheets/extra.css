@@ -1608,3 +1608,48 @@ body[data-md-color-scheme="default"]::after {
   .kw-bv-tiles { grid-template-columns: 1fr 1fr; }
   .md-typeset .kw-bv-quick { margin: .4rem 0 1rem; }
 }
+/* ---------------------------------------------------------------- mix G, H, I */
+.kw-bv-tile[aria-pressed="true"] { border-color: var(--kw-link); background: linear-gradient(160deg, var(--kw-soft) 40%, var(--kw-panel)); }
+.kw-bv-tile[aria-pressed="true"]::after { content: ""; position: absolute; left: 1rem; right: 1rem; bottom: 0; height: 3px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, var(--kw-link), var(--md-accent-fg-color)); }
+.md-typeset .kw-bv-domtitle--small { font-size: .78rem; text-transform: uppercase; letter-spacing: .07em; opacity: .75; margin: 1rem 0 .5rem; }
+.kw-bv-headmeta { display: block; margin: 0 0 .3rem !important; }
+/* G : tuiles plus basses, détail encadré sous la mosaïque */
+.kw-bv-tiles--compact .kw-bv-tile { min-height: 6.8rem; padding: .75rem; }
+.kw-bv-gdetail { margin-top: 1.1rem; padding: 1rem 1.1rem; border: 1px solid var(--kw-line); border-radius: .9rem; background: var(--kw-panel);
+  scroll-margin-top: 4.5rem; position: relative; overflow: hidden; }
+.kw-bv-gdetail::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--kw-link), var(--md-accent-fg-color)); }
+/* tuile compacte (H, I) */
+.kw-bv-tile--mini { min-height: 0; padding: .55rem .6rem; display: grid; grid-template-columns: 1.6rem 1fr auto; align-items: center; gap: .1rem .4rem; }
+.kw-bv-tile--mini .kw-bv-tileicon { font-size: 1.15rem; grid-row: span 1; }
+.kw-bv-tile--mini .kw-bv-tiletitle { font-size: .74rem; font-weight: 700; line-height: 1.25; }
+.kw-bv-tile--mini .kw-bv-meta { font-size: .64rem; }
+/* H : mosaïque latérale */
+.kw-bv-h { display: grid; grid-template-columns: 19rem 1fr; gap: 1.3rem; align-items: start; }
+.kw-bv-hside { position: sticky; top: 4rem; max-height: calc(100vh - 5rem); overflow-y: auto; padding-right: .3rem; }
+.kw-bv-minis { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; margin-bottom: .4rem; }
+.kw-bv-minis .kw-bv-tile--mini { grid-template-columns: 1.4rem 1fr; }
+.kw-bv-minis .kw-bv-tile--mini .kw-bv-meta { grid-column: 2; }
+/* I : domaines, bandeau, détail */
+.kw-bv-idoms { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .7rem; margin-bottom: .8rem; }
+.kw-bv-idom { display: flex; align-items: center; gap: .8rem; text-align: left; font: inherit; cursor: pointer; padding: .9rem 1rem; border-radius: .9rem;
+  border: 1px solid var(--kw-line); color: var(--md-default-fg-color); background: linear-gradient(135deg, var(--kw-panel) 50%, var(--kw-soft)); position: relative; overflow: hidden; }
+.kw-bv-idom .kw-bv-tileicon { font-size: 2rem; }
+.kw-bv-idomtext { display: flex; flex-direction: column; gap: .15rem; }
+.kw-bv-idom .kw-bv-tiletitle { font-size: 1.05rem; }
+.kw-bv-idom .kw-bv-meta { margin: 0; }
+.kw-bv-idom:hover, .kw-bv-idom[aria-pressed="true"] { border-color: var(--kw-link); }
+.kw-bv-idom[aria-pressed="true"]::after { content: ""; position: absolute; inset: auto 1rem 0 1rem; height: 3px; border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, var(--kw-link), var(--md-accent-fg-color)); }
+.kw-bv-istrip { display: flex; gap: .45rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .1rem .1rem .5rem; margin-bottom: .6rem; }
+.kw-bv-istrip .kw-bv-tile--mini { flex: 0 0 auto; min-width: 11rem; scroll-snap-align: start; }
+.kw-bv-idetail { padding-top: .2rem; }
+@media (max-width: 59.9375em) {
+  .kw-bv-h { grid-template-columns: 1fr; }
+  .kw-bv-hside { position: static; max-height: none; }
+  .kw-bv-minis { grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); }
+}
+@media (max-width: 44.9375em) {
+  .kw-bv-tiles--compact { grid-template-columns: 1fr 1fr; }
+  .kw-bv-gdetail { padding: .8rem; }
+}

@@ -6,7 +6,8 @@
   "use strict";
 
   var KEY = "kw-bv-variante2";
-  var LABELS = [["actuelle", "Actuelle"], ["d", "D · Étagères"], ["e", "E · Rubriques et détail"], ["f", "F · Mosaïque"]];
+  var LABELS = [["actuelle", "Actuelle"], ["e", "E · Rubriques et détail"], ["f", "F · Mosaïque"],
+                ["g", "G · Mosaïque puis détail"], ["h", "H · Détail, mosaïque latérale"], ["i", "I · Domaine, bandeau, détail"]];
   var FORMATS = { cours: "Cours", synthese: "Synthèse", fiche: "Fiche notion", "aide-memoire": "Aide-mémoire",
                   atelier: "Atelier", ressources: "Ressources", revision: "Révision" };
 
@@ -235,6 +236,143 @@
     return wrap;
   }
 
+  // ---------------------------------------------------------------- briques communes des mix (G, H, I)
+  /* Unités affichées : les rubriques d'un domaine, ou les sous-rubriques sur une page de rubrique. */
+  function unitsOf(dom) {
+    if (dom.c.length > 1) return dom.c.filter(function (c) { return notesOf(c).length; })
+                                  .map(function (c) { return { head: c, groups: c.g, pages: catPages(c), dom: dom }; });
+    var c = dom.c[0];
+    return c.g.map(function (g) {
+      return { head: { t: g.t || c.t, e: g.e || c.e, d: g.d, u: c.u }, groups: [{ t: "", d: "", n: g.n }],
+               pages: catPages({ g: [{ n: g.n }] }), dom: dom };
+    });
+  }
+  function notesCount(u) { var k = 0; u.groups.forEach(function (g) { k += g.n.length; }); return k; }
+
+  /* Panneau de détail façon E : en-tête, sous-rubriques, cartes de cours avec résumé et sommaire. */
+  function detail(root, u) {
+    var box = el("div", "kw-bv-detail");
+    var head = el("header", "kw-bv-ehead");
+    var h = el("h2", "kw-bv-etitle"); h.appendChild(link(root, u.head, "", (u.head.e ? u.head.e + " " : "") + u.head.t));
+    head.appendChild(h);
+    head.appendChild(el("span", "kw-bv-meta kw-bv-headmeta", plural(notesCount(u), "note") + " · " + plural(u.pages, "page")));
+    if (u.head.d) head.appendChild(el("p", "kw-bv-edesc", u.head.d));
+    box.appendChild(head);
+    u.groups.forEach(function (g) {
+      if (g.t) {
+        box.appendChild(el("h3", "kw-bv-egroup", (g.e ? g.e + " " : "") + g.t));
+        if (g.d) box.appendChild(el("p", "kw-bv-egroupdesc", g.d));
+      }
+      var grid = el("div", "kw-bv-ecards");
+      g.n.forEach(function (n) {
+        var card = el("article", "kw-bv-ecard");
+        card.appendChild(link(root, n, "kw-bv-ecardtitle"));
+        var m = meta(n); if (m) card.appendChild(el("span", "kw-bv-meta", m));
+        if (n.r) card.appendChild(el("p", "kw-bv-ecardtext", n.r));
+        var t = tocToggle(root, n); if (t) card.appendChild(t);
+        grid.appendChild(card);
+      });
+      box.appendChild(grid);
+    });
+    return box;
+  }
+
+  /* Tuile façon F ; « mini » : version compacte (icône, nom, nombre). */
+  function tile(u, onPick, mini, wide) {
+    var b = el("button", "kw-bv-tile" + (mini ? " kw-bv-tile--mini" : "") + (wide ? " kw-bv-tile--wide" : ""));
+    b.type = "button"; b.setAttribute("aria-pressed", "false");
+    b.appendChild(el("span", "kw-bv-tileicon", u.head.e || "•"));
+    b.appendChild(el("span", "kw-bv-tiletitle", u.head.t));
+    b.appendChild(el("span", "kw-bv-meta", mini ? String(notesCount(u)) : plural(notesCount(u), "note") + " · " + plural(u.pages, "page")));
+    if (!mini) {
+      var notes = []; u.groups.forEach(function (g) { notes = notes.concat(g.n); });
+      b.appendChild(el("span", "kw-bv-tilepeek", notes.slice(0, 3).map(function (n) { return n.t; }).join(" · ")));
+    }
+    b.addEventListener("click", onPick);
+    return b;
+  }
+  function press(tiles, active) { tiles.forEach(function (t) { t.setAttribute("aria-pressed", t === active ? "true" : "false"); }); }
+
+  // ---------------------------------------------------------------- G · Mosaïque puis détail
+  function mosaicThenDetail(root, doms) {
+    var wrap = el("div", "kw-bv-g");
+    var all = [], tiles = [];
+    var out = el("div", "kw-bv-gdetail");
+    doms.forEach(function (d) {
+      var units = unitsOf(d);
+      if (doms.length > 1 || d.c.length > 1) wrap.appendChild(el("h2", "kw-bv-domtitle kw-bv-domtitle--small", (d.e ? d.e + " " : "") + d.t));
+      var max = Math.max.apply(null, units.map(function (u) { return u.pages; }).concat([1]));
+      var grid = el("div", "kw-bv-tiles kw-bv-tiles--compact");
+      units.forEach(function (u) {
+        var t = tile(u, function () { press(tiles, t); out.textContent = ""; out.appendChild(detail(root, u));
+          out.scrollIntoView({ behavior: "smooth", block: "start" }); }, false, u.pages >= max * 0.45 && units.length > 2);
+        tiles.push(t); all.push(u); grid.appendChild(t);
+      });
+      wrap.appendChild(grid);
+    });
+    wrap.appendChild(out);
+    if (all.length) { press(tiles, tiles[0]); out.appendChild(detail(root, all[0])); }
+    return wrap;
+  }
+
+  // ---------------------------------------------------------------- H · Détail, mosaïque latérale
+  function sideMosaic(root, doms) {
+    var wrap = el("div", "kw-bv-h");
+    var side = el("nav", "kw-bv-hside"); side.setAttribute("aria-label", "Rubriques");
+    var main = el("div", "kw-bv-hmain");
+    var tiles = [], first = null;
+    doms.forEach(function (d) {
+      if (doms.length > 1 || d.c.length > 1) side.appendChild(el("p", "kw-bv-eside-dom", (d.e ? d.e + " " : "") + d.t));
+      var grid = el("div", "kw-bv-minis");
+      unitsOf(d).forEach(function (u) {
+        var t = tile(u, function () { press(tiles, t); main.textContent = ""; main.appendChild(detail(root, u)); }, true);
+        tiles.push(t); grid.appendChild(t);
+        if (!first) first = { t: t, u: u };
+      });
+      side.appendChild(grid);
+    });
+    wrap.appendChild(side); wrap.appendChild(main);
+    if (first) { press(tiles, first.t); main.appendChild(detail(root, first.u)); }
+    return wrap;
+  }
+
+  // ---------------------------------------------------------------- I · Domaine, bandeau, détail
+  function domainStrip(root, doms) {
+    var wrap = el("div", "kw-bv-i");
+    var domRow = el("div", "kw-bv-idoms");
+    var strip = el("div", "kw-bv-istrip");
+    var out = el("div", "kw-bv-idetail");
+    var domTiles = [];
+    function openDom(d, dt) {
+      press(domTiles, dt);
+      strip.textContent = ""; out.textContent = "";
+      var tiles = [];
+      unitsOf(d).forEach(function (u, k) {
+        var t = tile(u, function () { press(tiles, t); out.textContent = ""; out.appendChild(detail(root, u)); }, true);
+        tiles.push(t); strip.appendChild(t);
+        if (k === 0) { press(tiles, t); out.appendChild(detail(root, u)); }
+      });
+    }
+    if (doms.length > 1 || doms[0].c.length > 1) {
+      doms.forEach(function (d) {
+        var b = el("button", "kw-bv-idom");
+        b.type = "button"; b.setAttribute("aria-pressed", "false");
+        b.appendChild(el("span", "kw-bv-tileicon", d.e || "•"));
+        var txt = el("span", "kw-bv-idomtext");
+        txt.appendChild(el("span", "kw-bv-tiletitle", d.t));
+        var nn = 0, pp = 0; d.c.forEach(function (c) { nn += notesOf(c).length; pp += catPages(c); });
+        txt.appendChild(el("span", "kw-bv-meta", plural(d.c.length, "rubrique") + " · " + plural(nn, "note") + " · " + plural(pp, "page")));
+        b.appendChild(txt);
+        b.addEventListener("click", function () { openDom(d, b); });
+        domTiles.push(b); domRow.appendChild(b);
+      });
+      wrap.appendChild(domRow);
+    }
+    wrap.appendChild(strip); wrap.appendChild(out);
+    openDom(doms[0], domTiles[0]);
+    return wrap;
+  }
+
   // ---------------------------------------------------------------- page « Filtrer par titre »
   function facets(root, doms, params) {
     var rows = [];
@@ -335,9 +473,11 @@
       Object.keys(buttons).forEach(function (k) { buttons[k].setAttribute("aria-selected", k === v ? "true" : "false"); });
       document.body.classList.toggle("kw-bv-on", v !== "actuelle");
       panel.textContent = "";
-      if (v === "d") panel.appendChild(shelves(root, doms));
       if (v === "e") panel.appendChild(masterDetail(root, doms));
       if (v === "f") panel.appendChild(mosaic(root, doms));
+      if (v === "g") panel.appendChild(mosaicThenDetail(root, doms));
+      if (v === "h") panel.appendChild(sideMosaic(root, doms));
+      if (v === "i") panel.appendChild(domainStrip(root, doms));
       remember(v);
     }
     LABELS.forEach(function (l) {
