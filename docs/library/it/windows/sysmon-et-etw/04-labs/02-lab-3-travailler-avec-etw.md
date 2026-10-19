@@ -11,7 +11,7 @@ up:
 
 Ce lab reprend le scénario Seatbelt du cours : observer d'abord le chargement de `mscoree.dll` avec Sysmon, puis rechercher des noms de méthodes dans la trace `Microsoft-Windows-DotNETRuntime` collectée avec SilkETW.
 
-Méthode et variantes de recherche : [Retrouver les assemblies .NET avec un filtre XML](../03-detecter-avec-etw/03-reperer-le-chargement-d-assemblies-net.md#retrouver-les-assemblies-net-avec-un-filtre-xml).
+Méthode et variantes de recherche : [Repérer le chargement d'assemblies .NET › Les requêtes](../../reperer-le-chargement-d-assemblies-net.md#les-requetes).
 
 ## Question 1 — Suivre Seatbelt avec Sysmon et ETW
 

@@ -168,11 +168,11 @@ def read_props(path):
     return front_matter(path.read_text(encoding="utf-8-sig").replace("\r\n", "\n"))[0]
 
 
-FORMAT_NAMES = ("cours", "synthese", "fiche", "aide-memoire", "atelier", "ressources", "revision")
+FORMAT_NAMES = ("cours", "synthese", "fiche", "detection", "aide-memoire", "atelier", "ressources", "revision")
 
 
 def note_format(text, title, props, cat):
-    """cours (exhaustif) | synthese (parcours condensé) | fiche (une notion) | aide-memoire | atelier |
+    """cours (exhaustif) | synthese (parcours condensé) | fiche (une notion) | detection (repérer une attaque) | aide-memoire | atelier |
     ressources (liens) | revision (questions). Propriété « format » de la note, sinon règle automatique."""
     if props.get("format") in FORMAT_NAMES:
         return props["format"]
@@ -419,7 +419,8 @@ class Converter:
 
     def note_link(self, name):
         """Page publiée d'une note du coffre nommée dans un lien, ou None."""
-        key = slug(Path(unquote(name).strip()).stem)
+        path = Path(unquote(name).strip())
+        key = slug(path.stem if path.suffix.lower() == ".md" else path.name)   # « … .NET » n'est pas une extension
         return self.index.get(key)
 
     def convert(self, text, source, shield):

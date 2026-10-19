@@ -18,6 +18,4 @@ L'objectif est de transformer des événements système en indicateurs exploitab
 ## Dans cette partie
 
 - [Installer et configurer Sysmon](01-installer-et-configurer-sysmon.md)
-- [Repérer un DLL hijacking](02-reperer-un-dll-hijacking.md)
-- [Repérer du PowerShell non managé](03-reperer-du-powershell-non-manage.md)
-- [Repérer un accès à LSASS](04-reperer-un-acces-a-lsass.md)
+- [Trois détections avec Sysmon](02-trois-detections-avec-sysmon.md)

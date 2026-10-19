@@ -15,7 +15,7 @@ Trois exercices HTB Academy autour des chargements de DLL (Sysmon `7`) et de l'a
 
 **Énoncé HTB Academy.** Reproduire le détournement de DLL et relever le SHA256 de la `WININET.dll` chargée par `calc.exe`.
 
-Méthode et variantes de recherche : [Retrouver le DLL hijacking avec un filtre XML](../01-detecter-avec-sysmon/02-reperer-un-dll-hijacking.md#retrouver-le-dll-hijacking-avec-un-filtre-xml).
+Méthode et variantes de recherche : [Repérer un DLL hijacking › Les requêtes](../../reperer-un-dll-hijacking.md#les-requetes).
 
 1. Dans `C:\Tools\Reflective DLLInjection`, renommer `reflective_dll.x64.dll` en `WININET.dll`.
 
@@ -57,7 +57,7 @@ Méthode et variantes de recherche : [Retrouver le DLL hijacking avec un filtre 
 
 **Énoncé HTB Academy.** Reproduire l'injection avec PSInject et relever le SHA256 de `clrjit.dll` chargée par `spoolsv.exe`.
 
-Méthode et variantes de recherche : [Retrouver le CLR injecté avec un filtre XML](../01-detecter-avec-sysmon/03-reperer-du-powershell-non-manage.md#retrouver-le-clr-injecte-avec-un-filtre-xml).
+Méthode et variantes de recherche : [Repérer du PowerShell non managé › Les requêtes](../../reperer-du-powershell-non-manage.md#les-requetes).
 
 1. Relever le PID du Print Spooler dans Process Hacker ou avec PowerShell :
 
@@ -99,7 +99,7 @@ Méthode et variantes de recherche : [Retrouver le CLR injecté avec un filtre X
 
 **Énoncé HTB Academy.** Reproduire l'essai avec les outils de `C:\Tools\Mimikatz` et relever le hash NTLM du compte `Administrator`.
 
-Côté détection : [Retrouver les accès à LSASS avec un filtre XML](../01-detecter-avec-sysmon/04-reperer-un-acces-a-lsass.md#retrouver-les-acces-a-lsass-avec-un-filtre-xml).
+Côté détection : [Repérer un accès à LSASS › Les requêtes](../../reperer-un-acces-a-lsass.md#les-requetes).
 
 1. Ouvrir `AgentEXE` depuis ce dossier, puis examiner la sortie Mimikatz obtenue dans le lab. Repérer la session du compte `Administrator`.
 2. Dans la section `msv`, distinguer la ligne `NTLM` de `SHA1` et des champs `Password`. La capture du lab montre où lire la valeur demandée ; les hashes y sont partiellement masqués.

@@ -1991,7 +1991,7 @@ def nav_title(note):
     return note["title"]
 
 
-FORMAT_LABEL = {"synthese": "Synthèse", "cours": "Cours", "fiche": "Fiche notion", "aide-memoire": "Aide-mémoire",
+FORMAT_LABEL = {"synthese": "Synthèse", "cours": "Cours", "fiche": "Fiche notion", "detection": "Fiche détection", "aide-memoire": "Aide-mémoire",
                 "atelier": "Atelier", "ressources": "Ressources", "revision": "Révision"}
 
 
@@ -2174,7 +2174,7 @@ def pair_up(notes):
             course["pair"], s["paired"] = s, course
 
 
-FORMAT_PLURAL = {"cours": ("cours", "cours"), "synthese": ("synthèse", "synthèses"), "fiche": ("fiche", "fiches"),
+FORMAT_PLURAL = {"cours": ("cours", "cours"), "synthese": ("synthèse", "synthèses"), "fiche": ("fiche", "fiches"), "detection": ("fiche détection", "fiches détection"),
                  "aide-memoire": ("aide-mémoire", "aide-mémoire"), "atelier": ("atelier", "ateliers"),
                  "ressources": ("liste de ressources", "listes de ressources"), "revision": ("révision", "révisions")}
 

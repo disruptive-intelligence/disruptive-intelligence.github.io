@@ -317,7 +317,7 @@ Le XML ne connaît que l'égalité exacte : on sélectionne large côté journal
     </QueryList>
     ```
 
-    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir [la détection dans le cours](../../../../library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/03-reperer-du-powershell-non-manage.md#3-detection-n-2-powershell-non-manage-injection-c).
+    Un service natif qui charge le runtime .NET (`clr.dll`, `clrjit.dll`) est inhabituel : voir la fiche [Repérer du PowerShell non managé](../../../../library/it/windows/reperer-du-powershell-non-manage.md).
 
     Pour relever le SHA256 d'une DLL, ouvrir l'événement Sysmon 7 correspondant : `ImageLoaded` donne la DLL chargée, et `Hashes` contient sa valeur `SHA256=…`. Dans le lab `WININET.dll`, vérifier `ImageLoaded` avant de copier ce hash ; `Image` désigne le processus qui l'a chargée.
 

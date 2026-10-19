@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  var FORMATS = { cours: "Cours", synthese: "Synthèse", fiche: "Fiche notion", "aide-memoire": "Aide-mémoire",
+  var FORMATS = { cours: "Cours", synthese: "Synthèse", fiche: "Fiche notion", detection: "Fiche détection", "aide-memoire": "Aide-mémoire",
                   atelier: "Atelier", ressources: "Ressources", revision: "Révision" };
 
   function el(tag, cls, text) {
