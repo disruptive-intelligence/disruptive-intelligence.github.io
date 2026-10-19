@@ -6,9 +6,7 @@ provenance: HTB Academy
 revue: '2026-10-19'
 ---
 
-Un exécutable légitime charge une DLL placée par l'attaquant à la place de la bibliothèque attendue. Cette fiche montre comment le repérer dans les événements Sysmon `7` : où regarder, quelles requêtes lancer, quels indices retenir.
-
-Installer et configurer Sysmon : [Sysmon et ETW](sysmon-et-etw/index.md). Lecture des journaux et requêtes XML : [Analyse des journaux d'événements Windows (Event Logs)](analyse-des-journaux-d-evenements-windows-event-logs/index.md).
+Un exécutable légitime charge une DLL placée à côté de lui à la place de celle de Windows. Les étapes ci-dessous vont du plus large au plus précis : chacune se teste, puis s'affine.
 
 ## En bref
 
@@ -20,133 +18,42 @@ Installer et configurer Sysmon : [Sysmon et ETW](sysmon-et-etw/index.md). Lectur
 | Événement | Sysmon `7` — chargement d'image (Image Loaded) |
 | Indice clé | DLL système chargée hors de `System32`, non signée, par un exécutable lui aussi hors de sa place |
 
-## Comprendre l'attaque
+## Le principe
 
-Le DLL hijacking exploite le mécanisme de recherche et de chargement des DLL de Windows : l'exécutable cherche d'abord ses DLL dans son propre dossier. Une DLL du même nom placée à côté de lui est chargée à la place de celle de Windows.
+- Un exécutable cherche d'abord ses DLL dans son propre dossier : une DLL du même nom posée à côté de lui passe avant celle de `System32`.
+- Chaque chargement de DLL laisse un Sysmon `7`, si la collecte `ImageLoad` est activée ([Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
 
-### Scénario du lab — calc.exe / WININET.dll
+| Champ | Ce qu'il donne |
+|---|---|
+| `Image` | Le processus qui charge la DLL |
+| `ImageLoaded` | Le chemin de la DLL chargée |
+| `Signed` | `true` / `false` : DLL signée ou non |
+| `Hashes` | L'empreinte de la DLL (`SHA256=…`) |
 
-- `calc.exe`, un exécutable Windows légitime ;
-- `WININET.dll`, une bibliothèque normalement fournie par Windows ;
-- une DLL de démonstration renommée `WININET.dll`.
+## Chercher, étape par étape
 
-`calc.exe` est copié depuis `C:\Windows\System32` vers un dossier accessible en écriture (le bureau), avec la DLL de démonstration renommée `WININET.dll`. Au lancement de cette copie, la DLL de démonstration est chargée et affiche une [MessageBox](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxa) à la place de la Calculatrice.
+Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
-![DLL detournables par calc.exe (dont WININET.dll)](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-21.png)
+### 1. Garder les chargements de DLL
 
-![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-22.png)
-
-La DLL utilisée provient d'un exemple de Reflective DLL, mais le DLL hijacking ne nécessite pas de DLL réfléchissante.
-
-Ressources :
-
-- [Sysmon](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon) (Sysinternals) ;
-- [HijackLibs — calc.exe](https://hijacklibs.net/#calc.exe) : les DLL qu'un exécutable peut charger depuis son propre dossier ;
-- [ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin) : la DLL de démonstration du lab.
-
-## Les traces
-
-### Sysmon Event ID 7 — chargement d'image (Image Loaded)
-
-L'Event ID `7` enregistre les chargements de modules, notamment de DLL. Sa collecte doit être activée dans la configuration Sysmon : voir [Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload).
-
-| Champ       | Description                                 |
-| ----------- | ------------------------------------------- |
-| Image       | Chemin du processus qui charge la DLL       |
-| ImageLoaded | Chemin de la DLL chargée                    |
-| ProcessId   | PID du processus                            |
-| Signed      | Indication de signature numérique de la DLL |
-| Signature   | Informations sur le signataire              |
-| Hashes      | Empreintes de la DLL (`SHA256=…`)           |
-| User        | Compte associé au processus                 |
-
-Exemple légitime :
-
-```
-Image        : C:\Windows\System32\mmc.exe
-ImageLoaded  : C:\Windows\System32\psapi.dll
-Signed       : true
-```
-
-
-![Sysmon Event 7 : mmc.exe charge psapi.dll, signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-20.png)
-
-L'événement indique que `mmc.exe` a chargé `psapi.dll`, signée par Microsoft.
-
-### Le chargement détourné
-
-Filtrer les événements Sysmon sur l'Event ID `7`, puis utiliser *Find* sur `calc.exe`.
-
-![Filter Current Log : Sysmon/Operational, Event ID 7](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-23.png)
-
-- *Find* retrouve la copie détournée de `calc.exe` :
-
-![Chargement suspect : calc.exe charge WININET.dll non signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-24.png)
-
-- La comparaison avec le `calc.exe` d'origine fait ressortir les chemins et les IOC à relever :
-
-![Chargement legitime : calc.exe charge wininet.dll signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-25.png)
-
-| Critère    | Chargement légitime                            | Chargement suspect du lab                   |
-| ---------- | ---------------------------------------------- | ------------------------------------------- |
-| Exécutable | `calc.exe` dans un emplacement Windows attendu | `calc.exe` copié dans un dossier modifiable |
-| DLL        | `wininet.dll` depuis `System32`                | `WININET.dll` depuis le bureau              |
-| Signature  | DLL Microsoft signée                           | DLL non signée                              |
-
-## Les requêtes
-
-*Find* parcourt tout le journal à la recherche d'un mot. Le filtre XML (*Filter Current Log…* → onglet **XML** → *Edit query manually*) vise directement les champs de l'Event ID 7 : `Image`, `ImageLoaded`, `Signed`. Gabarits et pièges : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
-
-**La requête du lab** : quel processus a chargé la `WININET.dll` du bureau ?
-
-```xml
-<QueryList>
-  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
-    <Select Path="Microsoft-Windows-Sysmon/Operational">
-      *[
-        System[EventID=7]
-        and EventData[
-          Data[@Name='ImageLoaded']='C:\Users\Administrator\Desktop\WININET.dll'
-        ]
-      ]
-    </Select>
-  </Query>
-</QueryList>
-```
-
-
-- `System[EventID=7]` : seulement les chargements d'image.
-- `Data[@Name='ImageLoaded']` : la DLL chargée, chemin exact copié depuis la vue XML de l'événement (l'égalité est stricte).
-- Dans l'événement obtenu : `Image` = l'exécutable qui l'a chargée (la copie de `calc.exe`) ; `Signed` = `false` ; `Hashes` = l'empreinte `SHA256=…` de la DLL, un IOC à rechercher ensuite sur d'autres machines.
-
-### Dans un journal exporté (.evtx)
-
-Exemple : le journal Sysmon `DLLHijack.evtx`.
-
-#### Découvrir le contenu du fichier
-
-```powershell
-Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
-    Format-List TimeCreated, Id, ProviderName, Message
-```
-
-
-#### Filtrer sur l'Id 7
+Observateur : *Filter Current Log…* → Event ID `7`.
 
 ```powershell
 Get-WinEvent -FilterHashtable @{
-    Path = ".\DLLHijack.evtx"
+    Path = '<fichier>.evtx'
     Id   = 7
 } -MaxEvents 10 |
     Format-List TimeCreated, Message
 ```
 
 
-#### Filtrer une DLL à examiner
+### 2. Chercher une DLL précise
+
+Observateur : *Find* sur le nom de la DLL.
 
 ```powershell
 Get-WinEvent -FilterHashtable @{
-    Path = ".\DLLHijack.evtx"
+    Path = '<fichier>.evtx'
     Id   = 7
 } |
     Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
@@ -154,11 +61,13 @@ Get-WinEvent -FilterHashtable @{
 ```
 
 
-#### Réduire le bruit : filtrer sur un dossier (Temp en exemple)
+### 3. Réduire le bruit
+
+Les DLL chargées depuis un dossier (ici `Temp`) :
 
 ```powershell
 Get-WinEvent -FilterHashtable @{
-    Path = '.\DLLHijack.evtx'
+    Path = '<fichier>.evtx'
     Id   = 7
 } |
     Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
@@ -166,11 +75,11 @@ Get-WinEvent -FilterHashtable @{
 ```
 
 
-#### Chercher les DLL non signées
+Les DLL non signées, 20 premières :
 
 ```powershell
 Get-WinEvent -FilterHashtable @{
-    Path = '.\DLLHijack.evtx'
+    Path = '<fichier>.evtx'
     Id   = 7
 } |
 Where-Object { $_.Message -match 'Signed: false' } |
@@ -179,44 +88,11 @@ Format-List TimeCreated, Message
 ```
 
 
-- `Get-WinEvent` : récupère les événements Sysmon ID 7.
-- `Where-Object` : conserve ceux dont le message indique `Signed: false`.
-- `-match` : recherche une correspondance avec une expression régulière.
-- `Select-Object -First 20` : limite l'affichage aux 20 premiers résultats correspondants.
-- `Format-List` : affiche les événements sans tronquer le message comme pourrait le faire un tableau.
-
-#### Extraire les champs Image et ImageLoaded
-
-Cette commande :
-
-1. lit le fichier EVTX ;
-2. conserve les événements ID 7 ;
-3. convertit chaque événement en XML ;
-4. extrait les champs `Image` et `ImageLoaded` ;
-5. affiche les résultats sous forme d'objets PowerShell.
-
-```powershell
-Get-WinEvent -FilterHashtable @{
-    Path = '.\DLLHijack.evtx'
-    Id   = 7
-} -MaxEvents 10 |
-ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-
-    [pscustomobject]@{
-        Heure       = $_.TimeCreated
-        Image       = ($data | Where-Object Name -eq 'Image').'#text'
-        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-    }
-} | Format-List
-```
-
-
-On reprend la commande précédente, mais on stocke les résultats dans `$events` :
+### 4. Compter les couples processus / DLL
 
 ```powershell
 $events = Get-WinEvent -FilterHashtable @{
-    Path = '.\DLLHijack.evtx'
+    Path = '<fichier>.evtx'
     Id   = 7
 } | ForEach-Object {
     $data = ([xml]$_.ToXml()).Event.EventData.Data
@@ -226,83 +102,7 @@ $events = Get-WinEvent -FilterHashtable @{
         ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
     }
 }
-```
 
-
-Rappel :
-
-- `Image` = processus qui charge une DLL.
-- `ImageLoaded` = chemin de la DLL chargée.
-
-#### Compter les processus et les DLL différents
-
-Nombre de processus distincts :
-
-```powershell
-$events.Image | Sort-Object -Unique | Measure-Object
-```
-
-
-Nombre de DLL distinctes :
-
-```powershell
-$events.ImageLoaded | Sort-Object -Unique | Measure-Object
-```
-
-
-`Sort-Object -Unique` élimine les doublons, et `Measure-Object` compte les valeurs restantes.
-
-#### Voir chaque processus et son nombre d'apparitions
-
-```powershell
-$events |
-    Group-Object Image |
-    Sort-Object Count -Descending |
-    Select-Object Count, Name
-```
-
-
-Exemple fictif :
-
-```text
-Count Name
------ ----
-   25 C:\Windows\System32\svchost.exe
-   12 C:\Windows\System32\notepad.exe
-    4 C:\Tools\test.exe
-```
-
-
-Un processus peut apparaître plusieurs fois parce qu'il a chargé plusieurs DLL.
-
-Même chose pour `ImageLoaded` :
-
-```powershell
-$events |
-    Group-Object ImageLoaded |
-    Sort-Object Count -Descending |
-    Select-Object Count, Name
-```
-
-
-Exemple fictif :
-
-```text
-Count Name
------ ----
-   15 C:\Windows\System32\kernel32.dll
-    8 C:\Windows\System32\ntdll.dll
-    3 C:\Temp\test.dll
-```
-
-
-On voit immédiatement quelles DLL sont les plus fréquemment chargées.
-
-#### Bonus : compter les associations processus / DLL
-
-Très intéressant pour détecter un DLL hijacking :
-
-```powershell
 $events |
     Group-Object Image, ImageLoaded |
     Sort-Object Count -Descending |
@@ -310,49 +110,67 @@ $events |
 ```
 
 
-On obtient le nombre d'occurrences pour chaque association entre un processus et une DLL.
+Le détail (processus distincts, DLL distinctes, `Group-Object`) : [Analyser un fichier .evtx : l'exemple du DLL hijacking](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking).
 
-#### À retenir
+### 5. Cibler une DLL avec une requête XML
 
-| Ce que tu recherches | Commande |
-|---|---|
-| Nombre total d'événements Sysmon 7 récupérés | `$events.Count` |
-| Nombre de processus distincts | `$events.Image \| Sort-Object -Unique \| Measure-Object` |
-| Nombre de DLL distinctes | `$events.ImageLoaded \| Sort-Object -Unique \| Measure-Object` |
-| Nombre d'apparitions de chaque processus | `$events \| Group-Object Image` |
-| Nombre d'apparitions de chaque DLL | `$events \| Group-Object ImageLoaded` |
+Observateur : *Filter Current Log…* → onglet **XML** → *Edit query manually*.
 
-Chaque événement Sysmon ID 7 contient normalement un champ `Image` et un champ `ImageLoaded`, mais plusieurs événements peuvent concerner le même processus ou la même DLL. En forensic, `Group-Object` est particulièrement puissant.
-
-## Les indicateurs
-
-1. Exécutable hors de son emplacement (Unexpected Executable Path) : `calc.exe` s'exécute depuis un emplacement utilisateur modifiable. Il se trouve normalement dans System32, pas dans un répertoire accessible en écriture.
-2. DLL hors de son emplacement (Unexpected DLL Location) : `WININET.dll` est chargée depuis un emplacement inhabituel. Elle se trouve normalement dans System32 ; si `calc.exe` la charge ailleurs, c'est un détournement de DLL au sein de `calc.exe`.
-3. DLL non signée (Unsigned DLL) : la `WININET.dll` originale est signée par Microsoft, la DLL de démonstration ne l'est pas.
-
-```
-calc.exe — Unexpected Location
-          ↓
-Loads WININET.dll — User-Writable Directory
-          ↓
-Unsigned DLL
-          ↓
-Potential DLL Hijacking
+```xml
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[
+        System[EventID=7]
+        and EventData[
+          Data[@Name='ImageLoaded']='<chemin complet de la DLL>'
+        ]
+      ]
+    </Select>
+  </Query>
+</QueryList>
 ```
 
 
-Ces critères peuvent alimenter une règle de détection.
+Chemin exact, copié depuis la vue XML d'un événement : l'égalité est stricte. Gabarits : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
-## Les faux positifs
+## Ce qui doit alerter
 
-- `Image` désigne le processus qui charge la DLL, pas son processus parent.
-- Une DLL non signée ou située hors de `System32` n'est pas malveillante à elle seule : logiciels tiers, applications portables et outils internes chargent souvent leurs propres DLL non signées depuis leur dossier.
-- Les trois indicateurs se lisent ensemble : un nom de DLL système, chargée hors de `System32`, non signée, par un exécutable Windows copié ailleurs.
-- L'Event ID 7 est très volumineux : en production, la configuration Sysmon le restreint souvent, et le chargement recherché peut ne pas avoir été journalisé.
+- Un exécutable système qui tourne hors de `System32`, depuis un dossier modifiable.
+- Une DLL au nom de DLL Windows chargée hors de `System32`.
+- Une DLL non signée là où l'originale est signée par Microsoft.
 
-## Pour s'entraîner
+## À ne pas confondre
 
-- Lab pas à pas : [Sysmon et ETW › Labs › Question 1 — DLL hijacking : WININET.dll](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll).
-- Event IDs Sysmon et requêtes SIEM : cheat sheet [Sysmon](/cheatsheets/windows/fondamentaux/logs/sysmon/).
+- `Image` est le processus qui charge la DLL, pas son parent.
+- Logiciels tiers et applications portables chargent souvent leurs propres DLL non signées : un indice seul ne suffit pas, les trois ensemble oui.
+- En production, Sysmon `7` est souvent restreint : le chargement cherché peut ne pas avoir été journalisé.
+
+## Cas concret
+
+<details markdown="1">
+<summary>Lab HTB : calc.exe copié sur le bureau charge une fausse WININET.dll</summary>
+
+`calc.exe` est copié de `System32` vers le bureau, avec une DLL de démonstration renommée `WININET.dll`. Au lancement, la fausse DLL est chargée et affiche une MessageBox à la place de la Calculatrice.
+
+![DLL detournables par calc.exe (dont WININET.dll)](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-21.png)
+
+![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-22.png)
+
+Sysmon `7` filtré, puis *Find* sur `calc.exe` : la copie détournée, puis le chargement légitime pour comparer.
+
+![Chargement suspect : calc.exe charge WININET.dll non signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-24.png)
+
+![Chargement legitime : calc.exe charge wininet.dll signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-25.png)
+
+| Critère | Chargement légitime | Chargement suspect du lab |
+|---|---|---|
+| Exécutable | `calc.exe` dans `System32` | `calc.exe` copié sur le bureau |
+| DLL | `wininet.dll` depuis `System32` | `WININET.dll` depuis le bureau |
+| Signature | DLL Microsoft signée | DLL non signée |
+
+Lab pas à pas : [Sysmon et ETW › Labs › Question 1](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll). Ressources : [HijackLibs — calc.exe](https://hijacklibs.net/#calc.exe), [ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin).
+
+</details>
 
 Source des captures : [Hack The Box Academy - Windows Event Logs & Finding Evil](https://academy.hackthebox.com/app/module/216)

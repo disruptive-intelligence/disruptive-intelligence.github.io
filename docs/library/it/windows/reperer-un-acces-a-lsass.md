@@ -6,9 +6,7 @@ provenance: HTB Academy
 revue: '2026-10-19'
 ---
 
-Pour voler des identifiants, l'attaquant lit la mémoire de LSASS, le processus qui gère les authentifications Windows. Cette fiche montre comment repérer ces accès dans les événements Sysmon `10` et les distinguer des accès légitimes.
-
-Installer et configurer Sysmon : [Sysmon et ETW](sysmon-et-etw/index.md).
+Pour voler des identifiants, l'attaquant lit la mémoire de LSASS, le processus qui gère les authentifications Windows. Les étapes ci-dessous vont du plus large au plus précis : chacune se teste, puis s'affine.
 
 ## En bref
 
@@ -20,45 +18,71 @@ Installer et configurer Sysmon : [Sysmon et ETW](sysmon-et-etw/index.md).
 | Événement | Sysmon `10` — accès à un processus (ProcessAccess) |
 | Indice clé | Un exécutable inhabituel, lancé depuis un dossier utilisateur, qui ouvre `lsass.exe` |
 
-## Comprendre l'attaque
+## Le principe
 
-Le credential dumping consiste à extraire des secrets d'authentification d'un système compromis. Sous Windows, LSASS (Local Security Authority Subsystem Service) est une cible fréquente : il intervient dans la gestion des authentifications et des sessions de sécurité.
+- LSASS (Local Security Authority Subsystem Service) gère les authentifications et les sessions : ses secrets (hashes…) sont en mémoire.
+- Un outil comme Mimikatz (`privilege::debug`, puis `sekurlsa::logonpasswords`) ouvre `lsass.exe` pour les lire.
+- Trace : Sysmon `10`, qui enregistre les accès entre processus.
 
-### Mimikatz & LSASS
+| Champ | Ce qu'il donne |
+|---|---|
+| `SourceImage` | Le processus qui accède |
+| `TargetImage` | Le processus ciblé (`lsass.exe`) |
+| `SourceUser` / `TargetUser` | Les comptes des deux processus |
+| `GrantedAccess` | Les droits obtenus sur la cible |
 
-Mimikatz examine certaines informations d'authentification Windows. Deux commandes :
+## Chercher, étape par étape
 
-| Commande Mimikatz          | Fonction                                                           |
-| -------------------------- | ------------------------------------------------------------------ |
-| `privilege::debug`         | Tenter d'activer `SeDebugPrivilege`                                |
-| `sekurlsa::logonpasswords` | Examiner certains secrets liés aux sessions de connexion via LSASS |
+Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
-Selon la configuration et les protections Windows, les résultats peuvent comprendre des hashes ou d'autres informations d'authentification. Sa sortie montre ici un compte `Administrator` et des valeurs de hash, certains champs de mots de passe apparaissant comme `(null)`.
+### 1. Garder les accès entre processus
 
-![image-22](../../assets/reperer-un-acces-a-lsass-image-22.png)
+Observateur : *Filter Current Log…* → Event ID `10`.
 
-L'accès à LSASS et la réussite de l'extraction dépendent des privilèges et des mécanismes de protection en place.
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '<fichier>.evtx'
+    Id   = 10
+} -MaxEvents 10 |
+    Format-List TimeCreated, Message
+```
 
-## Les traces
 
-### Sysmon Event ID 10 — accès à un processus (ProcessAccess)
+Aucun événement 10 ? Vérifier que `ProcessAccess` est collecté dans la configuration Sysmon.
 
-L'Event ID 10 enregistre les accès entre processus : c'est lui qui signale un accès à LSASS.
+### 2. Chercher les accès à LSASS
 
-![Documentation Sysmon de l'Event ID 10 ProcessAccess](../../assets/reperer-un-acces-a-lsass-htb-windows-event-logs-33.png)
+Observateur : *Find* sur `lsass.exe`.
 
-| Champ         | Description                                                        |
-| ------------- | ------------------------------------------------------------------ |
-| SourceImage   | Processus à l'origine de l'accès                                   |
-| TargetImage   | Processus ciblé                                                    |
-| SourceUser    | Compte associé au processus source                                 |
-| TargetUser    | Compte associé au processus cible                                  |
-| GrantedAccess | Droits d'accès accordés au processus cible                         |
-| CallTrace     | Informations sur la chaîne d'appels, lorsqu'elles sont disponibles |
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '<fichier>.evtx'
+    Id   = 10
+} |
+    Where-Object { $_.Message -like "*lsass.exe*" } |
+    Format-List TimeCreated, Message
+```
 
-### Exemple — AgentEXE.exe → lsass.exe
 
-Un exécutable inhabituel, `AgentEXE.exe`, situé dans un répertoire `Downloads`, accède à `lsass.exe` :
+### 3. Lire qui accède
+
+Dans chaque résultat : `SourceImage` (qui), son dossier, `SourceUser` et `GrantedAccess` (avec quels droits).
+
+## Ce qui doit alerter
+
+- Un processus source inhabituel, lancé depuis un dossier comme `Downloads` ou `Temp`.
+- Une demande de droits sensibles sur `lsass.exe`, ou l'usage de `SeDebugPrivilege`.
+
+## À ne pas confondre
+
+- Composants d'authentification, antivirus et EDR accèdent légitimement à LSASS : les reconnaître avant de conclure.
+- `SourceUser` différent de `TargetUser`, ou `SeDebugPrivilege`, ne prouvent rien seuls.
+- Un Sysmon `10` est un accès, pas une extraction réussie.
+
+## Cas concret
+
+<details markdown="1">
+<summary>Lab HTB : AgentEXE.exe, depuis Downloads, accède à lsass.exe</summary>
 
 ```
 SourceImage : ...\Downloads\AgentEXE.exe
@@ -70,49 +94,12 @@ TargetUser  : NT AUTHORITY\SYSTEM
 
 ![Sysmon Event 10 : AgentEXE.exe accede a lsass.exe](../../assets/reperer-un-acces-a-lsass-htb-windows-event-logs-34.png)
 
-Cette activité est suspecte : un exécutable peu connu, venu d'un dossier utilisateur, accède à un processus sensible.
+Un exécutable peu connu, venu d'un dossier utilisateur, accède à un processus sensible. Côté attaque, la sortie Mimikatz : un compte `Administrator` et ses hashes.
 
-## Les requêtes
+![image-22](../../assets/reperer-un-acces-a-lsass-image-22.png)
 
-Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `10` (*Filter Current Log…*), puis utiliser *Find* sur `lsass.exe` : vérifier les champs `SourceImage` et `TargetImage` des événements où un processus accède à `lsass.exe`.
+Lab pas à pas : [Sysmon et ETW › Labs › Question 3](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
 
-- Dans chaque résultat, lire `SourceImage` (qui accède), `SourceUser` et `GrantedAccess` (avec quels droits).
-- Aucun événement 10 ? Vérifier que `ProcessAccess` est collecté dans la configuration Sysmon (même logique que [Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
-- Dans l'exemple, `AgentEXE.exe` lancé depuis `Downloads` ressort parmi les composants système qui accèdent habituellement à LSASS.
-
-Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
-
-## Les indicateurs
-
-- Processus source inattendu (Unexpected Source Process) : programme inhabituel accédant à LSASS.
-- Emplacement suspect (Suspicious File Location) : exécutable provenant d'un dossier comme `Downloads`.
-- Processus cible sensible (Sensitive Target Process) : accès à `lsass.exe`.
-- Accès privilégié (Privileged Process Access) : demande ou obtention de droits sensibles.
-- Privilège de débogage (Debug Privilege Usage) : éventuelle utilisation de `SeDebugPrivilege`.
-
-```
-Unknown Executable
-       ↓
-Access to lsass.exe
-       ↓
-Sysmon Event ID 10
-       ↓
-Investigate Credential Dumping
-```
-
-
-## Les faux positifs
-
-- Des processus légitimes accèdent à LSASS, notamment des composants d'authentification et des solutions antivirus / EDR  : les reconnaître avant de conclure.
-- `SourceUser` différent de `TargetUser` ne prouve pas une compromission.
-- La présence de `SeDebugPrivilege` ne prouve pas un vol d'identifiants, et toutes les techniques n'en ont pas besoin.
-- ProcessAccess ≠ extraction réussie : l'Event ID 10 signale un accès entre processus, pas nécessairement une extraction réussie.
-
-L'analyse intègre l'identité du processus, son chemin, ses droits d'accès et les événements associés.
-
-## Pour s'entraîner
-
-- Lab pas à pas : [Sysmon et ETW › Labs › Question 3 — Credential dumping : LSASS](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
-- Event IDs Sysmon et requêtes SIEM : cheat sheet [Sysmon](/cheatsheets/windows/fondamentaux/logs/sysmon/).
+</details>
 
 Source des captures : [Hack The Box Academy - Windows Event Logs & Finding Evil](https://academy.hackthebox.com/app/module/216)
