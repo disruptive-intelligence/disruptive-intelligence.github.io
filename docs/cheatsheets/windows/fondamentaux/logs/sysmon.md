@@ -324,6 +324,65 @@ Le **13** donne la clé (`TargetObject`), le programme qui sera lancé (`Details
     ```
     [Lab DFIR avec l'EDR, question 5](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-5-le-programme-lance-a-chaque-demarrage-cle-run)
 
+### Repérer un DLL hijacking dans un journal exporté
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = 7 } |
+    Where-Object { $_.Message -like "*<DLL>*" } | Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple — une DLL à examiner"
+Get-WinEvent -FilterHashtable @{
+    Path = ".\DLLHijack.evtx"
+    Id   = 7
+} |
+    Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
+    Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 2 — réduire le bruit : filtrer sur un dossier (Temp)"
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+    Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
+    Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 3 — les DLL non signées"
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+Where-Object { $_.Message -match 'Signed: false' } |
+Select-Object -First 20 |
+Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 4 — compter les associations processus / DLL"
+$events = Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} | ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+
+    [pscustomobject]@{
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
+    }
+}
+
+$events |
+    Group-Object Image, ImageLoaded |
+    Sort-Object Count -Descending |
+    Select-Object Count, Name
+```
+
+Sysmon 7 : `Image` = processus qui charge une DLL, `ImageLoaded` = chemin de la DLL chargée. Pour voir d'abord ce que contient le fichier : [Découvrir le contenu d'un fichier .evtx](lire.md#decouvrir-le-contenu-dun-fichier-evtx).
+
+Pour comprendre : [Repérer un DLL hijacking](../../../../library/it/windows/reperer-un-dll-hijacking.md) · [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking)
+{ .kw-cs-meta }
+
 ### Repérer un accès à la mémoire de LSASS
 
 ```powershell title="Commande"

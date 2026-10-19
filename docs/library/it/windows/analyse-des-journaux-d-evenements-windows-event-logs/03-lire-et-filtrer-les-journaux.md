@@ -657,6 +657,211 @@ Get-WinEvent -Path 'C:\Tools\chainsaw\EVTX-ATTACK-SAMPLES\Execution\exec_sysmon_
 - `-Path` désigne le fichier à analyser : ici des événements Sysmon Event ID 1 (création de processus).
 - L'analyse porte directement sur la preuve exportée, hors de la machine d'origine : Sysmon n'a pas besoin d'être encore actif sur le poste analysé.
 
+### Analyser un fichier .evtx : l'exemple du DLL hijacking
+
+Exemple : le journal Sysmon `DLLHijack.evtx`.
+
+#### Découvrir le contenu du fichier
+
+```powershell
+Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
+    Format-List TimeCreated, Id, ProviderName, Message
+```
+
+
+#### Filtrer sur l'Id 7
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = ".\DLLHijack.evtx"
+    Id   = 7
+} -MaxEvents 10 |
+    Format-List TimeCreated, Message
+```
+
+
+#### Filtrer une DLL à examiner
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = ".\DLLHijack.evtx"
+    Id   = 7
+} |
+    Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
+    Format-List TimeCreated, Message
+```
+
+
+#### Réduire le bruit : filtrer sur un dossier (Temp en exemple)
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+    Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
+    Format-List TimeCreated, Message
+```
+
+
+#### Chercher les DLL non signées
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+Where-Object { $_.Message -match 'Signed: false' } |
+Select-Object -First 20 |
+Format-List TimeCreated, Message
+```
+
+
+- `Get-WinEvent` : récupère les événements Sysmon ID 7.
+- `Where-Object` : conserve ceux dont le message indique `Signed: false`.
+- `-match` : recherche une correspondance avec une expression régulière.
+- `Select-Object -First 20` : limite l'affichage aux 20 premiers résultats correspondants.
+- `Format-List` : affiche les événements sans tronquer le message comme pourrait le faire un tableau.
+
+#### Extraire les champs Image et ImageLoaded
+
+Cette commande :
+
+1. lit le fichier EVTX ;
+2. conserve les événements ID 7 ;
+3. convertit chaque événement en XML ;
+4. extrait les champs `Image` et `ImageLoaded` ;
+5. affiche les résultats sous forme d'objets PowerShell.
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} -MaxEvents 10 |
+ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+
+    [pscustomobject]@{
+        Heure       = $_.TimeCreated
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
+    }
+} | Format-List
+```
+
+
+On reprend la commande précédente, mais on stocke les résultats dans `$events` :
+
+```powershell
+$events = Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} | ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+
+    [pscustomobject]@{
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
+    }
+}
+```
+
+
+Rappel :
+
+- `Image` = processus qui charge une DLL.
+- `ImageLoaded` = chemin de la DLL chargée.
+
+#### Compter les processus et les DLL différents
+
+Nombre de processus distincts :
+
+```powershell
+$events.Image | Sort-Object -Unique | Measure-Object
+```
+
+
+Nombre de DLL distinctes :
+
+```powershell
+$events.ImageLoaded | Sort-Object -Unique | Measure-Object
+```
+
+
+`Sort-Object -Unique` élimine les doublons, et `Measure-Object` compte les valeurs restantes.
+
+#### Voir chaque processus et son nombre d'apparitions
+
+```powershell
+$events |
+    Group-Object Image |
+    Sort-Object Count -Descending |
+    Select-Object Count, Name
+```
+
+
+Exemple fictif :
+
+```text
+Count Name
+----- ----
+   25 C:\Windows\System32\svchost.exe
+   12 C:\Windows\System32\notepad.exe
+    4 C:\Tools\test.exe
+```
+
+
+Un processus peut apparaître plusieurs fois parce qu'il a chargé plusieurs DLL.
+
+Même chose pour `ImageLoaded` :
+
+```powershell
+$events |
+    Group-Object ImageLoaded |
+    Sort-Object Count -Descending |
+    Select-Object Count, Name
+```
+
+
+Exemple fictif :
+
+```text
+Count Name
+----- ----
+   15 C:\Windows\System32\kernel32.dll
+    8 C:\Windows\System32\ntdll.dll
+    3 C:\Temp\test.dll
+```
+
+
+On voit immédiatement quelles DLL sont les plus fréquemment chargées.
+
+#### Bonus : compter les associations processus / DLL
+
+Très intéressant pour détecter un DLL hijacking :
+
+```powershell
+$events |
+    Group-Object Image, ImageLoaded |
+    Sort-Object Count -Descending |
+    Select-Object Count, Name
+```
+
+
+On obtient le nombre d'occurrences pour chaque association entre un processus et une DLL.
+
+#### À retenir
+
+| Ce que tu recherches | Commande |
+|---|---|
+| Nombre total d'événements Sysmon 7 récupérés | `$events.Count` |
+| Nombre de processus distincts | `$events.Image \| Sort-Object -Unique \| Measure-Object` |
+| Nombre de DLL distinctes | `$events.ImageLoaded \| Sort-Object -Unique \| Measure-Object` |
+| Nombre d'apparitions de chaque processus | `$events \| Group-Object Image` |
+| Nombre d'apparitions de chaque DLL | `$events \| Group-Object ImageLoaded` |
+
+Chaque événement Sysmon ID 7 contient normalement un champ `Image` et un champ `ImageLoaded`, mais plusieurs événements peuvent concerner le même processus ou la même DLL. En forensic, `Group-Object` est particulièrement puissant.
+
 ### Analyser un dossier de fichiers .evtx
 
 Cas typique en forensic : un dossier de journaux exportés, sans savoir à l'avance lequel contient l'événement recherché.

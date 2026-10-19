@@ -4,7 +4,7 @@ title: "Lire, filtrer et exporter"
 
 # Lire, filtrer et exporter
 
-Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; analyser un dossier de `.evtx` exportés ; l'exporter, voir la politique d'audit, l'agrandir.
+Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; découvrir, filtrer et compter un `.evtx` exporté ; analyser un dossier de `.evtx` ; l'exporter, voir la politique d'audit, l'agrandir.
 
 Les incontournables : `eventvwr.msc` · `Get-WinEvent -FilterHashtable` · `wevtutil` · `auditpol /get`
 { .kw-cs-top }
@@ -264,6 +264,116 @@ Ensuite : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ou
 { .kw-cs-meta }
 
 ## Analyser des journaux exportés
+
+### Découvrir le contenu d'un fichier .evtx
+
+```powershell title="Commande"
+Get-WinEvent -Path "<fichier>.evtx" -MaxEvents 5 | Format-List TimeCreated, Id, ProviderName, Message
+```
+
+```powershell title="Exemple"
+Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
+    Format-List TimeCreated, Id, ProviderName, Message
+```
+
+### Filtrer un fichier .evtx par Event ID
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = <id> } -MaxEvents 10 | Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple"
+Get-WinEvent -FilterHashtable @{
+    Path = ".\DLLHijack.evtx"
+    Id   = 7
+} -MaxEvents 10 |
+    Format-List TimeCreated, Message
+```
+
+### Filtrer un fichier .evtx sur un mot ou un dossier
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = <id> } |
+    Where-Object { $_.Message -like "*<mot>*" } | Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple — une DLL à examiner"
+Get-WinEvent -FilterHashtable @{
+    Path = ".\DLLHijack.evtx"
+    Id   = 7
+} |
+    Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
+    Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 2 — réduire le bruit : filtrer sur un dossier (Temp)"
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+    Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
+    Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 3 — les DLL non signées"
+Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} |
+Where-Object { $_.Message -match 'Signed: false' } |
+Select-Object -First 20 |
+Format-List TimeCreated, Message
+```
+
+`Where-Object` conserve les événements dont le message contient le texte cherché. `-match` : recherche une correspondance avec une expression régulière. `Select-Object -First 20` : limite l'affichage aux 20 premiers résultats. `Format-List` : affiche le message sans le tronquer, comme pourrait le faire un tableau.
+
+### Compter les valeurs d'un champ
+
+```powershell title="Commande"
+$events | Group-Object <Champ> | Sort-Object Count -Descending | Select-Object Count, Name
+```
+
+```powershell title="Exemple — processus et DLL d'un journal Sysmon 7"
+$events = Get-WinEvent -FilterHashtable @{
+    Path = '.\DLLHijack.evtx'
+    Id   = 7
+} | ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+
+    [pscustomobject]@{
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
+    }
+}
+
+$events |
+    Group-Object Image |
+    Sort-Object Count -Descending |
+    Select-Object Count, Name
+```
+
+??? example "Sortie (exemple fictif)"
+    ```text
+    Count Name
+    ----- ----
+       25 C:\Windows\System32\svchost.exe
+       12 C:\Windows\System32\notepad.exe
+        4 C:\Tools\test.exe
+    ```
+
+`$events` garde les champs extraits. `Sort-Object -Unique` élimine les doublons, et `Measure-Object` compte les valeurs restantes. `Group-Object` donne le nombre d'apparitions de chaque valeur.
+
+| Ce que tu recherches | Commande |
+|---|---|
+| Nombre total d'événements récupérés | `$events.Count` |
+| Nombre de processus distincts | `$events.Image \| Sort-Object -Unique \| Measure-Object` |
+| Nombre de DLL distinctes | `$events.ImageLoaded \| Sort-Object -Unique \| Measure-Object` |
+| Nombre d'apparitions de chaque processus | `$events \| Group-Object Image` |
+| Nombre d'apparitions de chaque DLL | `$events \| Group-Object ImageLoaded` |
+| Associations processus / DLL | `$events \| Group-Object Image, ImageLoaded` |
+
+Pour comprendre : [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking)
+{ .kw-cs-meta }
 
 ### Lire tous les journaux d'un dossier
 
