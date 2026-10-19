@@ -28,7 +28,7 @@ Quand le parent affiché est lui-même faux : [Démasquer un faux processus pare
 
 ## Chercher, étape par étape
 
-Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
+Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = '<dossier>\*.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
 ### 1. Sur la machine : l'arborescence des processus
 
@@ -110,7 +110,21 @@ Relation attendue : `spoolsv.exe` et son enfant `conhost.exe`.
 
 ![Carte mentale des relations parent-enfant courantes des processus Windows, par Samir Bousseaden (@SBousseaden)](../../assets/reperer-une-relation-parent-enfant-anormale-ejeyi8vxyai3gra.jpg)
 
-*Carte : Samir Bousseaden ([@SBousseaden](https://twitter.com/SBousseaden/status/1195373669930983424)).* Pas de question de lab dédiée dans le module.
+*Carte : Samir Bousseaden ([@SBousseaden](https://twitter.com/SBousseaden/status/1195373669930983424)).*
+
+</details>
+
+<details markdown="1">
+<summary>Skills Assessment : quel parent n'aurait pas dû lancer cmd.exe ? (C:\Logs\StrangePPID)</summary>
+
+```powershell
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\StrangePPID\*.evtx'; Id=1} |
+    Where-Object { $_.Message -like "*cmd.exe*" } |
+    Format-List
+```
+
+
+Dans chaque résultat : `ParentImage`, `Image`, `CommandLine`, `User` et `CurrentDirectory`. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 6.
 
 </details>
 

@@ -383,6 +383,32 @@ Sysmon 7 : `Image` = processus qui charge une DLL, `ImageLoaded` = chemin de la 
 Pour comprendre : [Repérer un DLL hijacking](../../../../library/it/windows/reperer-un-dll-hijacking.md) · [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking)
 { .kw-cs-meta }
 
+### Repérer une injection de thread
+
+```powershell title="Commande"
+Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=8} | Format-List
+```
+
+```powershell title="Exemple — tout un dossier de journaux exportés"
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\PowershellExec\*.evtx'; Id=8} | Format-List
+```
+
+Sysmon `8` (CreateRemoteThread) : un processus crée un thread dans un autre, signe d'injection de code. `SourceImage` = le processus qui injecte, `TargetImage` = la victime. Observateur : *Filter Current Log…* → `8`. Avec du PowerShell non managé, la victime est aussi celle qui charge `clrjit.dll` (Sysmon `7`).
+
+??? example "Cas concret : quel processus a injecté du code dans la victime du PowerShell non managé ?"
+    ```powershell
+    # 1. la victime : le processus, autre que powershell.exe, qui charge clrjit.dll
+    Get-WinEvent -Path "C:\Logs\PowershellExec\*.evtx" |
+        Where-Object { $_.Id -eq 7 -and $_.Message -match "clrjit.dll" } |
+        Select-Object -ExpandProperty Message
+    # 2. l'injecteur : le SourceImage du Sysmon 8 qui la vise
+    Get-WinEvent -FilterHashtable @{Path='C:\Logs\PowershellExec\*.evtx'; Id=8} | Format-List
+    ```
+    [Skills Assessment, questions 2 et 3](../../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#question-2-powershell-non-manage-le-processus-victime)
+
+Pour comprendre : [Repérer du PowerShell non managé](../../../../library/it/windows/reperer-du-powershell-non-manage.md#5-trouver-qui-a-injecte)
+{ .kw-cs-meta }
+
 ### Repérer un accès à la mémoire de LSASS
 
 ```powershell title="Commande"
@@ -403,7 +429,28 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
     GrantedAccess: 0x1010
     ```
 
+```powershell title="Exemple 2 — tout un dossier, sans les accès de svchost.exe"
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=10} |
+    Where-Object { $_.Message -match "lsass.exe" -and $_.Message -notmatch "svchost.exe" } |
+    Format-List
+```
+
 LSASS garde en mémoire des secrets d'authentification : un processus inconnu qui l'ouvre est un signe de vol d'identifiants (T1003.001). Les antivirus, EDR et outils de supervision y accèdent aussi : juger sur `SourceImage`, pas sur l'événement seul.
+
+??? example "Cas concret : qui a dumpé LSASS, et une connexion a-t-elle suivi ?"
+    ```powershell
+    # 1. l'accès à LSASS : le SourceImage lancé depuis un dossier utilisateur, et son heure
+    Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=10} |
+        Where-Object { $_.Message -match "lsass.exe" } | Format-List
+    # 2. les ouvertures de session après cette heure : lire le Logon Type
+    $dumpTime = Get-Date "AAAA-MM-JJ HH:MM:SS"
+    Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=4624} |
+        Where-Object { $_.TimeCreated -gt $dumpTime } | Format-List
+    ```
+    [Skills Assessment, questions 4 et 5](../../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#question-4-qui-a-dumpe-lsass)
+
+Pour comprendre : [Repérer un accès à LSASS](../../../../library/it/windows/reperer-un-acces-a-lsass.md)
+{ .kw-cs-meta }
 
 ### Décoder une commande PowerShell encodée
 

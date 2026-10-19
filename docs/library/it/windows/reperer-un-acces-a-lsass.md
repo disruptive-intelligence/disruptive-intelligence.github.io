@@ -33,7 +33,7 @@ Pour voler des identifiants, l'attaquant lit la mémoire de LSASS, le processus 
 
 ## Chercher, étape par étape
 
-Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
+Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = '<dossier>\*.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
 ### 1. Garder les accès entre processus
 
@@ -64,14 +64,45 @@ Get-WinEvent -FilterHashtable @{
 ```
 
 
+Pour écarter une partie des accès système :
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '<fichier>.evtx'
+    Id   = 10
+} |
+    Where-Object { $_.Message -match "lsass.exe" -and $_.Message -notmatch "svchost.exe" } |
+    Format-List
+```
+
+
 ### 3. Lire qui accède
 
-Dans chaque résultat : `SourceImage` (qui), son dossier, `SourceUser` et `GrantedAccess` (avec quels droits).
+Dans chaque résultat : `SourceImage` (qui), son dossier, `SourceUser` et `GrantedAccess` (avec quels droits). Relever l'heure (`TimeCreated`) de l'accès suspect.
+
+### 4. Et après ? Les connexions qui suivent
+
+Les identifiants volés servent ensuite à se connecter : garder les ouvertures de session (`4624`) postérieures à l'accès.
+
+```powershell
+$dumpTime = Get-Date "AAAA-MM-JJ HH:MM:SS"
+
+Get-WinEvent -FilterHashtable @{
+    Path = '<fichier>.evtx'
+    Id   = 4624
+} |
+    Where-Object { $_.TimeCreated -gt $dumpTime } |
+    Format-List
+```
+
+
+Lire le Logon Type et le compte : `5` (service, `SYSTEM`) est normal ; `2`, `3`, `9` ou `10` juste après un dump méritent d'être examinés ([Logon Types](analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md#logon-types)).
 
 ## Ce qui doit alerter
 
 - Un processus source inhabituel, lancé depuis un dossier comme `Downloads` ou `Temp`.
 - Une demande de droits sensibles sur `lsass.exe`, ou l'usage de `SeDebugPrivilege`.
+- Une connexion interactive, réseau ou RDP peu après l'accès à LSASS.
 
 ## À ne pas confondre
 
@@ -99,6 +130,22 @@ Un exécutable peu connu, venu d'un dossier utilisateur, accède à un processus
 ![image-22](../../assets/reperer-un-acces-a-lsass-image-22.png)
 
 Lab pas à pas : [Sysmon et ETW › Labs › Question 3](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
+
+</details>
+
+<details markdown="1">
+<summary>Skills Assessment : qui a dumpé LSASS, et une connexion a-t-elle suivi ? (C:\Logs\Dump)</summary>
+
+Les accès à LSASS du dossier, puis le processus lancé depuis un dossier utilisateur :
+
+```powershell
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=10} |
+    Where-Object { $_.Message -match "lsass.exe" } |
+    Format-List
+```
+
+
+Puis les `4624` postérieurs à l'heure de cet accès (étape 4), en lisant le Logon Type. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 4 et 5.
 
 </details>
 

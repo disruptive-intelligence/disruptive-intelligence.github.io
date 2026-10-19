@@ -28,7 +28,7 @@ Repérer d'abord une filiation anormale : [Repérer une relation parent-enfant a
 
 ## Chercher, étape par étape
 
-Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
+Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = '<dossier>\*.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
 ### 1. Garder les créations de processus
 

@@ -97,7 +97,14 @@ Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date
       214
     ```
 
-`-FilterHashtable` filtre côté journal : beaucoup plus rapide qu'un `Where-Object` après coup.
+```powershell title="Exemple 2 — les événements postérieurs à une heure précise"
+$dumpTime = Get-Date "AAAA-MM-JJ HH:MM:SS"
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=4624} |
+    Where-Object { $_.TimeCreated -gt $dumpTime } |
+    Format-List
+```
+
+`-FilterHashtable` filtre côté journal : beaucoup plus rapide qu'un `Where-Object` après coup. `$dumpTime` garde une heure relevée dans un autre événement ; `-gt` (*greater than*) garde ce qui vient après.
 
 Lecture de `@{…}` : une condition par paire `clé=valeur`, séparées par `;` ; toutes doivent être vraies ; `Id=4624,4625` = 4624 **ou** 4625. Clés utiles : `LogName` ou `Path` (fichier `.evtx`), `ProviderName`, `Id`, `Level` (2 erreur, 3 avertissement), `StartTime`, `EndTime`.
 
@@ -288,6 +295,10 @@ Get-WinEvent -FilterHashtable @{
     Id   = 7
 } -MaxEvents 10 |
     Format-List TimeCreated, Message
+```
+
+```powershell title="Exemple 2 — tous les .evtx d'un dossier"
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=10} | Format-List
 ```
 
 ### Filtrer un fichier .evtx sur un mot ou un dossier

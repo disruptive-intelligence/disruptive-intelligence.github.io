@@ -13,3 +13,4 @@ Les labs du module, question par question ; ils figurent aussi dans l'espace �
 
 - [Lab 2 — Analyser avec Sysmon](01-lab-2-analyser-avec-sysmon.md)
 - [Lab 3 — Travailler avec ETW](02-lab-3-travailler-avec-etw.md)
+- [Lab 4 — Évaluation finale (Skills Assessment)](03-lab-4-evaluation-finale-skills-assessment.md)

@@ -32,7 +32,7 @@ Un exécutable légitime charge une DLL placée à côté de lui à la place de 
 
 ## Chercher, étape par étape
 
-Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
+Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = '<dossier>\*.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
 ### 1. Garder les chargements de DLL
 
@@ -170,6 +170,22 @@ Sysmon `7` filtré, puis *Find* sur `calc.exe` : la copie détournée, puis le c
 | Signature | DLL Microsoft signée | DLL non signée |
 
 Lab pas à pas : [Sysmon et ETW › Labs › Question 1](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll). Ressources : [HijackLibs — calc.exe](https://hijacklibs.net/#calc.exe), [ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin).
+
+</details>
+
+<details markdown="1">
+<summary>Skills Assessment : quel processus a mené le DLL hijacking dans C:\Logs\DLLHijack ?</summary>
+
+Tout le dossier, Sysmon `7`, puis réduire le bruit (DLL non signées, puis le nom de la DLL suspecte) :
+
+```powershell
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\DLLHijack\*.evtx'; Id=7} |
+    Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
+    Format-List
+```
+
+
+Deux processus chargent la même DLL : comparer leur chemin et leur heure. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 1.
 
 </details>
 

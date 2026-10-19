@@ -15,7 +15,7 @@ Du code PowerShell ou C# est injecté dans un processus qui n'utilise pas .NET :
 | Technique | PowerShell non managé (Unmanaged PowerShell) / injection de code C# dans un processus |
 | MITRE ATT&CK | [T1055 — Process Injection](https://attack.mitre.org/techniques/T1055/), [T1059.001 — PowerShell](https://attack.mitre.org/techniques/T1059/001/) |
 | Journal | `Microsoft-Windows-Sysmon/Operational` |
-| Événement | Sysmon `7` — chargement d'image (Image Loaded) |
+| Événements | Sysmon `7` — chargement d'image (Image Loaded) ; Sysmon `8` — CreateRemoteThread (l'injecteur) |
 | Indice clé | `clr.dll` / `clrjit.dll` chargées par un processus natif qui n'utilise pas .NET |
 
 ## Le principe
@@ -26,7 +26,7 @@ Du code PowerShell ou C# est injecté dans un processus qui n'utilise pas .NET :
 
 ## Chercher, étape par étape
 
-Sur un journal exporté : `Path = '<fichier>.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
+Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = '<dossier>\*.evtx'`. Sur la machine elle-même : `LogName = 'Microsoft-Windows-Sysmon/Operational'` à la place de `Path`.
 
 ### 1. Sur la machine : repérer un processus managé
 
@@ -86,10 +86,25 @@ Observateur : *Filter Current Log…* → onglet **XML** → *Edit query manuall
 
 Les deux conditions doivent être vraies ensemble (`and`). Pour `clrjit.dll` : `…\v4.0.30319\clrjit.dll`. `Hashes` de l'événement : l'empreinte `SHA256=…` de la DLL. Gabarits : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
+### 5. Trouver qui a injecté
+
+L'injection laisse un Sysmon `8` (CreateRemoteThread) : un processus crée un thread dans un autre. Observateur : *Filter Current Log…* → Event ID `8`.
+
+```powershell
+Get-WinEvent -FilterHashtable @{
+    Path = '<fichier>.evtx'
+    Id   = 8
+} | Format-List
+```
+
+
+`SourceImage` = le processus qui injecte ; `TargetImage` = la victime, celle qui charge le CLR à l'étape 3.
+
 ## Ce qui doit alerter
 
 - `clr.dll` / `clrjit.dll` chargées par un service ou un processus natif (`spoolsv.exe`, par exemple).
 - Un processus qui devient *Managed (.NET)* dans Process Hacker alors qu'il ne l'était pas.
+- Un Sysmon `8` dont la cible (`TargetImage`) est ce même processus.
 
 ## À ne pas confondre
 
@@ -124,6 +139,29 @@ Après : Process Hacker le voit comme .NET, les modules du CLR apparaissent et S
 ![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-32.png)
 
 Requête XML du lab : `Image` = `C:\Windows\System32\spoolsv.exe`, `ImageLoaded` = `clr.dll`. Lab pas à pas : [Sysmon et ETW › Labs › Question 2](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-2-powershell-non-manage-spoolsvexe).
+
+</details>
+
+<details markdown="1">
+<summary>Skills Assessment : la victime, puis l'injecteur, dans C:\Logs\PowershellExec</summary>
+
+La victime : le processus, autre que `powershell.exe`, qui charge `clrjit.dll`.
+
+```powershell
+Get-WinEvent -Path "C:\Logs\PowershellExec\*.evtx" |
+    Where-Object { $_.Id -eq 7 -and $_.Message -match "clrjit.dll" } |
+    Select-Object -ExpandProperty Message
+```
+
+
+L'injecteur : le `SourceImage` du Sysmon `8` qui vise cette victime.
+
+```powershell
+Get-WinEvent -FilterHashtable @{Path='C:\Logs\PowershellExec\*.evtx'; Id=8} | Format-List
+```
+
+
+Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 2 et 3.
 
 </details>
 

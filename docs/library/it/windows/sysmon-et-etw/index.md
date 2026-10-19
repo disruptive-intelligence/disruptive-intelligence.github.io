@@ -24,3 +24,4 @@ Les bases (anatomie d'un événement, ouvertures de session, requêtes XML, Even
 - [Labs](04-labs/index.md)
     - [Lab 2 — Analyser avec Sysmon](04-labs/01-lab-2-analyser-avec-sysmon.md)
     - [Lab 3 — Travailler avec ETW](04-labs/02-lab-3-travailler-avec-etw.md)
+    - [Lab 4 — Évaluation finale (Skills Assessment)](04-labs/03-lab-4-evaluation-finale-skills-assessment.md)
