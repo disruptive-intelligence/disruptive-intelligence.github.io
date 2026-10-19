@@ -1,0 +1,35 @@
+# Alerte si le Morning Brief du jour manque encore après la routine cloud de 5 h UTC
+# et son rattrapage de 6 h UTC. Un échec de ce workflow envoie un e-mail (notifications
+# GitHub Actions du compte qui a modifié ce fichier en dernier). Ne publie rien.
+name: Veille du jour
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:        # bouton "Run workflow" pour vérifier à la main
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Brief du jour publié et en ligne
+        run: |
+          day=$(TZ=Europe/Paris date +%F)
+          file="docs/veille/${day:0:4}/${day:5:2}/${day}.md"
+          url="https://disruptive-intelligence.github.io/veille/${day:0:4}/${day:5:2}/${day}/"
+          if [ ! -f "$file" ]; then
+            echo "::error::Morning Brief du $day absent ($file) : ni la routine cloud ni son rattrapage n'ont publié."
+            exit 1
+          fi
+          for attempt in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url")
+            if [ "$code" = 200 ]; then echo "Brief du $day en ligne : $url"; exit 0; fi
+            sleep 60
+          done
+          echo "::error::$file est sur main mais $url répond $code (déploiement Pages ?)."
+          exit 1
