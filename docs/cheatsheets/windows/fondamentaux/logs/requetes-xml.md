@@ -258,16 +258,7 @@ Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
     Format-List TimeCreated, Message
 ```
 
-```powershell title="Exemple 2 — « dans un dossier Temp » et « non signée » (Sysmon 7, journal exporté)"
-Get-WinEvent -Path '.\DLLHijack.evtx' -FilterXPath "*[System[EventID=7]]" |
-    Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
-    Format-List TimeCreated, Message
-
-Get-WinEvent -Path '.\DLLHijack.evtx' -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='Signed']='false']]" |
-    Select-Object -First 20 | Format-List TimeCreated, Message
-```
-
-Le XML ne connaît que l'égalité exacte : on sélectionne large côté journal (ici, tous les `reg.exe`), puis `Where-Object` cherche le mot à l'intérieur du texte (ici, la `CommandLine` qui accepte la licence Sysinternals). « Commence par » ou « contient » (un dossier `Temp`) passe par `Where-Object` ; une valeur exacte (`Signed` = `false`) reste dans le XPath, plus rapide.
+Le XML ne connaît que l'égalité exacte : on sélectionne large côté journal (ici, tous les `reg.exe`), puis `Where-Object` cherche le mot à l'intérieur du texte (ici, la `CommandLine` qui accepte la licence Sysinternals).
 
 ## Cas concrets
 

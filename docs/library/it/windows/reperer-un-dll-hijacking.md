@@ -170,60 +170,6 @@ Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' -FilterXPath "*[Sys
 - Remplacer `wininet.dll` par une autre DLL listée par HijackLibs pour l'exécutable étudié.
 - Journaux exportés : `-Path 'C:\…\fichier.evtx'` à la place de `-LogName '…'`.
 
-**5. Dans un journal exporté (.evtx)** : la démarche complète quand on reçoit un fichier sans savoir quel processus est en cause.
-
-Découvrir le contenu du fichier :
-
-```powershell
-Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
-    Format-List TimeCreated, Id, ProviderName, Message
-```
-
-
-Filtrer sur l'Event ID 7 dès la lecture (la clé `Path` remplace `LogName`) :
-
-```powershell
-Get-WinEvent -FilterHashtable @{
-    Path = ".\DLLHijack.evtx"
-    Id   = 7
-} -MaxEvents 10 |
-    Format-List TimeCreated, Message
-```
-
-
-Réduire le bruit : une DLL à examiner, un dossier inhabituel (`Temp`), les DLL non signées.
-
-```powershell
-$id7 = Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 }
-
-$id7 | Where-Object { $_.Message -like "*NOM_DLL.dll*" }          | Format-List TimeCreated, Message
-$id7 | Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' }   | Format-List TimeCreated, Message
-$id7 | Where-Object { $_.Message -match 'Signed: false' } | Select-Object -First 20 | Format-List TimeCreated, Message
-```
-
-
-- `$id7` garde les événements en mémoire : chaque filtre suivant les relit sans rouvrir le fichier.
-- `-like '*ImageLoaded:*Temp\*'` : la ligne `ImageLoaded:` du message, suivie d'un chemin qui passe par `Temp\`.
-- `-match 'Signed: false'` : expression régulière ; `Select-Object -First 20` limite l'affichage.
-
-Compter les couples processus / DLL et lire d'abord les plus rares :
-
-```powershell
-$events = $id7 | ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-    [pscustomobject]@{
-        Image       = ($data | Where-Object Name -eq 'Image').'#text'
-        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-    }
-}
-
-$events | Group-Object Image, ImageLoaded | Sort-Object Count | Select-Object Count, Name
-```
-
-
-- Un exécutable copié hors de `System32` qui charge une DLL système depuis son propre dossier forme un couple rare : il remonte en tête.
-- Détail de chaque étape (compter les processus et les DLL distincts, `Group-Object`) : [Explorer un fichier .evtx inconnu, pas à pas](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas).
-
 ## Les indicateurs
 
 1. Exécutable hors de son emplacement (Unexpected Executable Path) : `calc.exe` s'exécute depuis un emplacement utilisateur modifiable. Il se trouve normalement dans System32, pas dans un répertoire accessible en écriture.
@@ -253,7 +199,6 @@ Ces critères peuvent alimenter une règle de détection.
 ## Pour s'entraîner
 
 - Lab pas à pas : [Sysmon et ETW › Labs › Question 1 — DLL hijacking : WININET.dll](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll).
-- Skill Assessment du module : trouver, dans les journaux de `C:\Logs\DLLHijack`, le processus qui a mené le DLL hijacking. Appliquer la requête 5 (découvrir, filtrer sur l'ID 7, réduire le bruit, compter les couples).
 - Event IDs Sysmon et requêtes SIEM : cheat sheet [Sysmon](/cheatsheets/windows/fondamentaux/logs/sysmon/).
 
 Source des captures : [Hack The Box Academy - Windows Event Logs & Finding Evil](https://academy.hackthebox.com/app/module/216)

@@ -116,28 +116,6 @@ Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
 
 - Dans l'exemple, `AgentEXE.exe` lancé depuis `Downloads` ressort ainsi.
 
-**3. Dans un journal exporté (.evtx)** : les accès à LSASS, regroupés par processus source.
-
-```powershell
-$id10 = Get-WinEvent -FilterHashtable @{ Path = '.\Sysmon.evtx'; Id = 10 }
-
-$id10 | Where-Object { $_.Message -like '*TargetImage:*lsass.exe*' } |
-    Select-Object -First 20 | Format-List TimeCreated, Message
-
-$id10 | ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-    [pscustomobject]@{
-        SourceImage = ($data | Where-Object Name -eq 'SourceImage').'#text'
-        TargetImage = ($data | Where-Object Name -eq 'TargetImage').'#text'
-    }
-} | Where-Object TargetImage -like '*\lsass.exe' |
-    Group-Object SourceImage | Sort-Object Count | Select-Object Count, Name
-```
-
-
-- Les composants système accèdent à LSASS souvent et régulièrement ; un exécutable vu une ou deux fois, depuis `Downloads` ou `Temp`, remonte en tête.
-- Démarche complète sur un `.evtx` : [Explorer un fichier .evtx inconnu, pas à pas](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas).
-
 Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
 ## Les indicateurs

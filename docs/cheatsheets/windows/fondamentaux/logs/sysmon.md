@@ -79,11 +79,6 @@ Get-WinEvent -Path 'C:\Cas\sysmon.evtx' -FilterXPath "*[System[EventID=3] and Ev
     ForEach-Object { ([xml]$_.ToXml()).Event.EventData.Data | Where-Object Name -eq 'Image' | Select-Object -ExpandProperty '#text' }
 ```
 
-```powershell title="Exemple 2 — découvrir le fichier, puis ne lire qu'un Event ID"
-Get-WinEvent -Path '.\DLLHijack.evtx' -MaxEvents 5 | Format-List TimeCreated, Id, ProviderName, Message
-Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 } -MaxEvents 10 | Format-List TimeCreated, Message
-```
-
 ??? example "Sortie"
     ```text
     C:\Windows\Temp\plink.exe
@@ -328,47 +323,6 @@ Le **13** donne la clé (`TargetObject`), le programme qui sera lancé (`Details
         Where-Object Message -match 'CurrentVersion\\Run' | Select-Object -ExpandProperty Message
     ```
     [Lab DFIR avec l'EDR, question 5](../../../../library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#question-5-le-programme-lance-a-chaque-demarrage-cle-run)
-
-### Repérer un DLL hijacking
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=7} |
-    Where-Object { $_.Message -match 'Signed: false' } | Format-List TimeCreated, Message   # DLL non signées
-```
-
-```powershell title="Exemple — dans un journal exporté, les couples processus / DLL les plus rares"
-$events = Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 } | ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-    [pscustomobject]@{
-        Image       = ($data | Where-Object Name -eq 'Image').'#text'
-        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-    }
-}
-$events | Group-Object Image, ImageLoaded | Sort-Object Count | Select-Object -First 10 Count, Name
-```
-
-??? example "Sortie (exemple fictif)"
-    ```text
-    Count Name
-    ----- ----
-        1 C:\Users\alice\Desktop\calc.exe, C:\Users\alice\Desktop\WININET.dll
-        1 C:\Users\alice\Desktop\calc.exe, C:\Windows\System32\kernel32.dll
-        3 C:\Program Files\App\app.exe, C:\Program Files\App\helper.dll
-    ```
-
-Un exécutable système copié hors de `System32` charge une DLL du même nom qu'une DLL Windows, depuis son propre dossier (T1574.001). Sysmon 7 (`Image` = le processus, `ImageLoaded` = la DLL) le montre : DLL système hors de `C:\Windows\`, non signée (`Signed: false`), exécutable hors de sa place. Pour réduire le bruit dans le message : une DLL (`-like "*NOM_DLL.dll*"`), un dossier (`-like '*ImageLoaded:*Temp\*'`). Les applications installées chargent aussi leurs propres DLL non signées : juger sur le couple, pas sur la signature seule.
-
-??? example "Cas concret : quel processus a mené le DLL hijacking dans un dossier de journaux exportés ?"
-    ```powershell
-    # 1. Découvrir le fichier, 2. garder les ID 7, 3. réduire le bruit, 4. compter les couples rares
-    Get-WinEvent -Path 'C:\Logs\DLLHijack\DLLHijack.evtx' -MaxEvents 5 | Format-List TimeCreated, Id, ProviderName, Message
-    $id7 = Get-WinEvent -FilterHashtable @{ Path = 'C:\Logs\DLLHijack\DLLHijack.evtx'; Id = 7 }
-    $id7 | Where-Object { $_.Message -match 'Signed: false' } | Select-Object -First 20 | Format-List TimeCreated, Message
-    ```
-    Puis le comptage des couples (exemple ci-dessus) : l'exécutable qui charge une DLL système depuis un dossier modifiable est la réponse. Skill Assessment du module HTB « Windows Event Logs & Finding Evil ».
-
-Pour comprendre : [Repérer un DLL hijacking](../../../../library/it/windows/reperer-un-dll-hijacking.md) · [Explorer un fichier .evtx inconnu, pas à pas](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas)
-{ .kw-cs-meta }
 
 ### Repérer un accès à la mémoire de LSASS
 

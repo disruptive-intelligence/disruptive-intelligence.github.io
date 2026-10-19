@@ -4,7 +4,7 @@ title: "Lire, filtrer et exporter"
 
 # Lire, filtrer et exporter
 
-Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; explorer un `.evtx` exporté (découvrir, filtrer, réduire le bruit, compter) et un dossier de `.evtx` ; l'exporter, voir la politique d'audit, l'agrandir.
+Ouvrir un journal, le lister, le lire, le filtrer par identifiant et par période, voir et extraire ses champs (`.ToXml()`, `Properties`), chercher un mot ; analyser un dossier de `.evtx` exportés ; l'exporter, voir la politique d'audit, l'agrandir.
 
 Les incontournables : `eventvwr.msc` · `Get-WinEvent -FilterHashtable` · `wevtutil` · `auditpol /get`
 { .kw-cs-top }
@@ -264,110 +264,6 @@ Ensuite : [retrouver les ouvertures de session](sessions-rdp.md#retrouver-les-ou
 { .kw-cs-meta }
 
 ## Analyser des journaux exportés
-
-### Découvrir le contenu d'un fichier .evtx
-
-```powershell title="Commande"
-Get-WinEvent -Path "<fichier>.evtx" -MaxEvents 5 | Format-List TimeCreated, Id, ProviderName, Message
-```
-
-```powershell title="Exemple"
-Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
-    Format-List TimeCreated, Id, ProviderName, Message
-```
-
-Premier geste face à un fichier reçu : quelques événements suffisent pour voir le fournisseur (`ProviderName`), les Event IDs et la forme du message. `Format-List` affiche le message en entier. Ensuite : [voir quels Event IDs il contient](#voir-quels-event-ids-contient-un-journal).
-
-### Filtrer un fichier .evtx par Event ID
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = <id> } | Format-List TimeCreated, Message
-```
-
-```powershell title="Exemple"
-Get-WinEvent -FilterHashtable @{
-    Path = ".\DLLHijack.evtx"
-    Id   = 7
-} -MaxEvents 10 |
-    Format-List TimeCreated, Message
-```
-
-Dans `-FilterHashtable`, la clé `Path` remplace `LogName` : le filtre s'applique pendant la lecture, plus vite qu'un `Where-Object` après coup. Plusieurs IDs : `Id = 1, 3`. Tout un dossier de `.evtx` : voir [Chercher un mot ou un Event ID dans tout un dossier](#chercher-un-mot-ou-un-event-id-dans-tout-un-dossier).
-
-### Réduire le bruit dans un .evtx
-
-```powershell title="Commande"
-Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = <id> } |
-    Where-Object { $_.Message -like '*<Champ>:*<valeur>*' } | Format-List TimeCreated, Message
-```
-
-```powershell title="Exemple — une DLL à examiner (Sysmon 7)"
-Get-WinEvent -FilterHashtable @{ Path = ".\DLLHijack.evtx"; Id = 7 } |
-    Where-Object { $_.Message -like "*NOM_DLL.dll*" } |
-    Format-List TimeCreated, Message
-```
-
-```powershell title="Exemple 2 — les DLL chargées depuis un dossier Temp"
-Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 } |
-    Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } |
-    Format-List TimeCreated, Message
-```
-
-```powershell title="Exemple 3 — les DLL non signées, 20 premières"
-Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 } |
-    Where-Object { $_.Message -match 'Signed: false' } |
-    Select-Object -First 20 |
-    Format-List TimeCreated, Message
-```
-
-`'*ImageLoaded:*Temp\*'` : la ligne `ImageLoaded:` du message, suivie d'un chemin qui passe par `Temp\` ; viser le nom du champ évite de ramasser un `Temp` présent ailleurs dans le message. `-match` : expression régulière. `Select-Object -First 20` : limite l'affichage. Message vide (Sysmon absent de la machine d'analyse) : passer par les champs, [Extraire les champs d'un événement](#extraire-les-champs-dun-evenement).
-
-### Compter les valeurs d'un champ pour repérer le rare
-
-```powershell title="Commande"
-$events = Get-WinEvent -FilterHashtable @{ Path = "<fichier>.evtx"; Id = <id> } | ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-    [pscustomobject]@{
-        Champ1 = ($data | Where-Object Name -eq '<NomDuChamp1>').'#text'
-        Champ2 = ($data | Where-Object Name -eq '<NomDuChamp2>').'#text'
-    }
-}
-$events | Group-Object Champ1 | Sort-Object Count | Select-Object Count, Name
-```
-
-```powershell title="Exemple — processus et DLL d'un journal Sysmon 7"
-$events = Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 } | ForEach-Object {
-    $data = ([xml]$_.ToXml()).Event.EventData.Data
-    [pscustomobject]@{
-        Image       = ($data | Where-Object Name -eq 'Image').'#text'
-        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-    }
-}
-$events.Image | Sort-Object -Unique | Measure-Object                          # processus distincts
-$events | Group-Object Image | Sort-Object Count -Descending | Select-Object Count, Name
-$events | Group-Object Image, ImageLoaded | Sort-Object Count | Select-Object Count, Name   # couples rares d'abord
-```
-
-??? example "Sortie de `Group-Object Image` (exemple fictif)"
-    ```text
-    Count Name
-    ----- ----
-       25 C:\Windows\System32\svchost.exe
-       12 C:\Windows\System32\notepad.exe
-        4 C:\Tools\test.exe
-    ```
-
-`$events` garde les champs extraits : chaque comptage suivant se fait sans relire le fichier. `Sort-Object -Unique | Measure-Object` : nombre de valeurs distinctes. `Group-Object` : regroupe et compte les valeurs identiques (un processus apparaît autant de fois qu'il a chargé de DLL). `Group-Object A, B` : compte les couples. `Sort-Object Count` (croissant) : les plus rares en tête, là où se cache l'anomalie.
-
-| Ce que tu recherches | Commande |
-|---|---|
-| Nombre d'événements récupérés | `$events.Count` |
-| Nombre de valeurs distinctes d'un champ | `$events.Image \| Sort-Object -Unique \| Measure-Object` |
-| Nombre d'apparitions de chaque valeur | `$events \| Group-Object Image` |
-| Couples de valeurs, les plus rares d'abord | `$events \| Group-Object Image, ImageLoaded \| Sort-Object Count` |
-
-Pour comprendre : [Explorer un fichier .evtx inconnu, pas à pas](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas) · Application : [Repérer un DLL hijacking](../../../../library/it/windows/reperer-un-dll-hijacking.md)
-{ .kw-cs-meta }
 
 ### Lire tous les journaux d'un dossier
 

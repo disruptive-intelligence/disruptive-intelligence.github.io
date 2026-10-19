@@ -234,35 +234,6 @@ Trois pièges propres à l'analyse hors ligne :
 
 > **S'entraîner sans attaquer son lab.** Des chercheurs publient des fichiers `.evtx` enregistrés pendant de vraies techniques d'attaque, par exemple le dépôt GitHub **EVTX-ATTACK-SAMPLES**. Ce ne sont que des journaux : ils s'ouvrent sans risque avec `Get-WinEvent -Path`, et chacun raconte une attaque que tu peux essayer de reconstituer.
 
-#### Exemple : un `.evtx` Sysmon inconnu, du survol au rare
-
-Quatre gestes qui servent pour n'importe quel journal exporté. Ici, un journal Sysmon dans lequel on cherche un DLL hijacking (Event ID 7, chargement de DLL) :
-
-```powershell
-# 1. Découvrir : quel fournisseur, quels Event IDs, quelle forme de message ?
-Get-WinEvent -Path ".\DLLHijack.evtx" -MaxEvents 5 |
-    Format-List TimeCreated, Id, ProviderName, Message
-
-# 2. Filtrer sur l'Event ID dès la lecture (clé Path)
-$id7 = Get-WinEvent -FilterHashtable @{ Path = '.\DLLHijack.evtx'; Id = 7 }
-
-# 3. Réduire le bruit : une DLL, un dossier inhabituel, les DLL non signées
-$id7 | Where-Object { $_.Message -like "*NOM_DLL.dll*" }        | Format-List TimeCreated, Message
-$id7 | Where-Object { $_.Message -like '*ImageLoaded:*Temp\*' } | Format-List TimeCreated, Message
-$id7 | Where-Object { $_.Message -match 'Signed: false' } | Select-Object -First 20 | Format-List TimeCreated, Message
-
-# 4. Compter : quels couples processus -> DLL sont rares ?
-$events = $id7 | ConvertTo-EventObject
-$events.Image       | Sort-Object -Unique | Measure-Object     # processus distincts
-$events.ImageLoaded | Sort-Object -Unique | Measure-Object     # DLL distinctes
-$events | Group-Object Image, ImageLoaded | Sort-Object Count | Select-Object Count, Name
-```
-
-
-- **Étape 3** lit le texte du message : rapide à écrire, mais vide si Sysmon n'est pas installé sur la machine d'analyse (piège 2 ci-dessus). L'étape 4 lit les **champs**, toujours présents.
-- **`Group-Object`** rassemble les événements identiques et les compte ; trié par `Count` croissant, il met en tête ce qui n'arrive qu'une ou deux fois. C'est le *stack counting* : en investigation, le rare est plus intéressant que le fréquent.
-- Même schéma pour d'autres questions : `Group-Object Id` (quels Event IDs ?), `Group-Object TargetUserName` sur des 4625 (quels comptes visés ?), `Group-Object ParentImage, Image` sur Sysmon 1 (quelles filiations ?).
-
 ### Corréler : les trois clés
 
 Corréler, c'est relier des événements de sources différentes qui parlent de la même chose. Trois clés le permettent :

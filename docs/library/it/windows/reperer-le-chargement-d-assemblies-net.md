@@ -161,25 +161,6 @@ Sort-Object -Unique
 
 - Résultat : les noms de méthodes distincts de toute la trace. Pour les attribuer à une exécution, les replacer dans leur contexte (heure, processus).
 
-**4. Dans un journal exporté (.evtx)** : quels exécutables initialisent .NET, les plus rares d'abord.
-
-```powershell
-Get-WinEvent -FilterHashtable @{ Path = '.\Sysmon.evtx'; Id = 7 } |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        [pscustomobject]@{
-            Image       = ($data | Where-Object Name -eq 'Image').'#text'
-            ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-        }
-    } |
-    Where-Object ImageLoaded -like '*\mscoree.dll' |
-    Group-Object Image | Sort-Object Count | Select-Object Count, Name
-```
-
-
-- Un outil comme Seatbelt, lancé une ou deux fois depuis un dossier d'outils, remonte en tête ; les applications .NET habituelles suivent avec des comptes élevés.
-- Démarche complète sur un `.evtx` : [Explorer un fichier .evtx inconnu, pas à pas](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas).
-
 Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
 ## Les indicateurs
