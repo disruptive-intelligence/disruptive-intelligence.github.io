@@ -98,60 +98,40 @@ Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/admini
     grep -C 5 "Accepted password" /var/log/auth.log  # 5 lignes autour
     ```
 
-## Cas concrets déjà rencontrés
+## Cas concrets
 
-### Journal de pare-feu : filtrer avant d'extraire
+??? example kw-cs-cas "Pare-feu : filtrer des lignes, puis extraire un champ"
+    Export `…|src=…|dstport=…|action=…|` : vérifier d'abord avec `head -n 3 firewall.log`.
+    ```bash
+    grep -F '|src=198.51.100.23|' firewall.log |      # lignes de cette source (adresse d'exemple)
+      grep -F '|action=allow|' |                      # … autorisées
+      grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u   # -o : seulement le champ dstport
+    grep -F '|action=allow|' firewall.log |
+      grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l   # combien de ports différents
+    ```
+    `-F` : texte tel quel, `|` n'y est pas une alternative regex. Toutes les tentatives : retirer le filtre `action=allow`.
 
-Dans cet export, les champs sont séparés par `|` : `src=…|dstport=…|action=…`. Vérifie d'abord avec `head -n 3 firewall.log`. Les deux premiers `grep -F` gardent les **lignes** voulues ; `grep -oE` ne garde que le **champ** `dstport`.
+??? example kw-cs-cas "VPN : ne garder que les événements réussis ou échoués"
+    ```bash
+    grep -E '(^|[|])status=success([|]|$)' vpn.log
+    grep -E '(^|[|])status=failure([|]|$)' vpn.log
+    ```
+    `(^|[|])` et `([|]|$)` : le champ exact, pas `status=successful`. Événements collés sur une ligne : [les séparer d'abord](sed.md#cas-concrets).
 
-```bash title="Ports autorisés pour une source (adresse d'exemple)"
-grep -F '|src=198.51.100.23|' firewall.log |
-  grep -F '|action=allow|' |
-  grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
-```
+??? example kw-cs-cas "Gros journaux : contexte, rotations compressées, suivi en direct"
+    ```bash
+    grep -n -C 2 'Failed password' /var/log/auth.log | less -S          # n° de ligne et 2 lignes autour
+    zgrep -h 'Failed password' /var/log/auth.log.*.gz | head             # dans les rotations .gz
+    tail -F /var/log/auth.log | grep --line-buffered 'Failed password'  # nouvelles lignes, sans attendre le tampon
+    ```
 
-```bash title="Combien de ports différents ?"
-grep -F '|action=allow|' firewall.log |
-  grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
-```
+??? example kw-cs-cas "Zeek `http.log` : repérer un outil dans le User-Agent"
+    ```bash
+    grep -m1 '^#fields' http.log                                         # ordre des champs
+    grep -v '^#' http.log | grep -iE 'nmap|nikto|sqlmap|gobuster|dirbuster'   # recherche rapide, toute la ligne
+    zeek-cut id.orig_h method uri user_agent status_code < http.log |
+      awk -F '\t' 'tolower($4) ~ /(nmap|nikto|sqlmap|gobuster|dirbuster)/ {print}'   # seulement dans user_agent
+    ```
+    La recherche rapide trouve aussi le mot dans l'URI. Un User-Agent peut être falsifié. Le cas complet : [Forensic › Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog)
 
-`-F` cherche le texte tel quel : `|` n'est pas interprété comme une alternative regex. `-oE` trouve le motif numérique et affiche seulement ce morceau. `cut` retire `dstport=` ; le tri retire les doublons avant le comptage. Pour **toutes** les tentatives, retire le filtre `action=allow` : une tentative peut aussi être autorisée.
-
-### VPN : isoler les événements réussis ou échoués
-
-Si plusieurs événements sont collés sur une ligne, sépare-les d'abord avec [`sed`](sed.md#separer-des-evenements-vpn-colles). Dans un export déjà à raison d'un événement par ligne :
-
-```bash title="Champ status exact dans un export à séparateur |"
-grep -E '(^|[|])status=success([|]|$)' vpn.log
-grep -E '(^|[|])status=failure([|]|$)' vpn.log
-```
-
-Les frontières `(^|[|])` et `([|]|$)` évitent de confondre `status=success` avec un champ ou une valeur plus longue. Pour un autre format, adapte le séparateur et le nom du champ.
-
-### Chercher dans de gros journaux
-
-```bash title="Contexte, rotation et suivi"
-grep -n -C 2 'Failed password' /var/log/auth.log | less -S
-zgrep -h 'Failed password' /var/log/auth.log.*.gz | head
-tail -F /var/log/auth.log | grep --line-buffered 'Failed password'
-```
-
-`-n` indique la ligne du fichier ; `-C 2` montre les deux lignes voisines. `zgrep` lit les rotations compressées. Derrière `tail -F`, `--line-buffered` affiche les nouvelles correspondances sans attendre que le tampon se remplisse.
-
-### Zeek HTTP : inspecter le schéma et repérer un outil
-
-```bash title="En-tête puis recherche rapide"
-grep -m1 '^#fields' http.log
-grep -v '^#' http.log | grep -iE 'nmap|nikto|sqlmap|gobuster|dirbuster'
-```
-
-La seconde commande cherche sur **toute la ligne** : le motif peut se trouver dans l'URI, pas seulement dans `user_agent`. Pour cibler ce champ, extrais-le par nom :
-
-```bash title="Filtrer seulement le User-Agent"
-zeek-cut id.orig_h method uri user_agent status_code < http.log |
-  awk -F '\t' 'tolower($4) ~ /(nmap|nikto|sqlmap|gobuster|dirbuster)/ {print}'
-```
-
-Le User-Agent peut être falsifié. Voir l'[enquête Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
-
-À revoir aussi : [ports et actions dans la fiche SOC](../../forensic/reseau/journaux/pare-feu-vpn.md#lister-et-compter-les-ports-vises-dans-un-journal) et [gabarits réutilisables](../fondamentaux/texte-filtres.md#gabarits-pour-dautres-journaux-ou-fichiers-texte).
+Voir aussi : [Forensic › Pare-feu](../../forensic/reseau/journaux/pare-feu-vpn.md#lister-et-compter-les-ports-vises-dans-un-journal) · [Compter les valeurs distinctes d'un champ](../fondamentaux/texte-filtres.md#compter-les-valeurs-distinctes-dun-champ)

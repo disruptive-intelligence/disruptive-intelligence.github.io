@@ -25,7 +25,7 @@ head -c 500 <fichier>    # aperçu des 500 premiers octets pour repérer le form
 less -S /var/log/syslog
 ```
 
-Dans `less -S`, les flèches gauche et droite permettent de parcourir une ligne large. Pour mettre des champs en colonnes ou trier le contenu, voir [Texte et filtres](texte-filtres.md#mettre-en-forme-et-trier-un-fichier-texte).
+Dans `less -S`, flèches gauche et droite pour parcourir une ligne large. Aligner les champs ou trier : [Texte et filtres](texte-filtres.md#afficher-en-tableau-aligne).
 
 Pour comprendre : [Administration Linux, ch. 3](../../../library/it/linux/administration-linux/01-partie-1-survivre-dans-le-terminal/03-chapitre-3-lire-le-contenu-des-fichiers.md)
 { .kw-cs-meta }

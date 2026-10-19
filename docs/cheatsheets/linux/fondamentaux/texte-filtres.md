@@ -11,20 +11,25 @@ Découper, trier, compter et transformer la sortie d'une commande ou le contenu 
 Les incontournables : `cut` · `sort | uniq -c` · `grep -oE` · `sort -u | wc -l` · `sed` · `awk` · `| tee`
 { .kw-cs-top }
 
-Pour approfondir une commande avec davantage de cas concrets : [`grep`](../commandes/grep.md), [`sed`](../commandes/sed.md), [`awk`](../commandes/awk.md), [`cut`](../commandes/cut.md), [`sort`](../commandes/sort.md), [`uniq`](../commandes/uniq.md), [`wc`](../commandes/wc.md), [`column`](../commandes/column.md) et [`less`](../commandes/less.md).
+Chaque commande en détail, avec ses cas concrets : [`grep`](../commandes/grep.md), [`sed`](../commandes/sed.md), [`awk`](../commandes/awk.md), [`cut`](../commandes/cut.md), [`sort`](../commandes/sort.md), [`uniq`](../commandes/uniq.md), [`wc`](../commandes/wc.md), [`column`](../commandes/column.md) et [`less`](../commandes/less.md).
 
-## Inspecter la structure avant de filtrer
+## Extraire
 
-Repère d'abord le **séparateur**, puis numérote les champs sur une ligne représentative. Ces deux méthodes conviennent à un fichier simple avec **un événement par ligne** :
+### Repérer les champs d'un fichier
 
-```bash title="Numéroter les champs de la première ligne"
-awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log
-head -n 1 fichier.log | tr '\t' '\n' | nl -ba
+```bash title="Commande"
+head -n 3 <fichier>                                # le format, le séparateur (head -c 500 si les lignes sont très longues)
+head -n 1 <fichier> | tr '<sép>' '\n' | nl -ba     # un champ par ligne, numéroté (champs vides compris)
+awk -F '<sép>' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' <fichier>   # $1, $2… et leur valeur
 ```
 
-`awk` affiche les valeurs avec leurs numéros `$1`, `$2`… ; `tr` met chaque champ sur une ligne et `nl -ba` numérote aussi les champs vides. Adapte `\t` au séparateur réel :
+```bash title="Exemple"
+awk -F '\t' 'NR==1 {for (i=1; i<=NF; i++) printf "$%d = %s\n", i, $i; exit}' fichier.log
+head -n 1 fichier.log | tr '\t' '\n' | nl -ba
+awk -F '\t' 'NR==1 {print NF; exit}' fichier.log   # nombre de champs (NF ; NR = numéro de ligne)
+```
 
-| Format simple | `awk` | `tr` |
+| Séparateur | `awk` | `tr` |
 |---|---|---|
 | Tabulations (TSV) | `-F '\t'` | `tr '\t' '\n'` |
 | Barre verticale (`|`) | `-F '|'` | `tr '|' '\n'` |
@@ -32,16 +37,18 @@ head -n 1 fichier.log | tr '\t' '\n' | nl -ba
 | Deux-points | `-F ':'` | `tr ':' '\n'` |
 | Espaces multiples | Sans `-F` | Préférer `awk` |
 
-```bash title="Compter, extraire et classer un champ tabulé"
-awk -F '\t' 'NR==1 {print NF; exit}' fichier.log
-awk -F '\t' '{print $3}' fichier.log
-awk -F '\t' '{print $3}' fichier.log | sort -u | wc -l
-awk -F '\t' '{print $3}' fichier.log | sort | uniq -c | sort -rn
-```
+Un événement par ligne seulement. Le numéro ne donne pas le nom du champ : lire l'en-tête ou le schéma. CSV avec virgules entre guillemets, JSON : un parseur adapté.
 
-`NF` compte les champs de la ligne ; `NR` est son numéro. `sort -u | wc -l` compte les **valeurs différentes** ; `sort | uniq -c | sort -rn` classe les valeurs par **nombre d'occurrences**. Numéroter les valeurs ne révèle pas leurs noms : consulte l'en-tête ou le schéma. Pour un vrai CSV avec virgules entre guillemets ou un fichier JSON, utilise un parseur adapté.
-
-## Extraire
+??? example kw-cs-cas "Zeek `http.log` : quelle colonne contient l'IP source ?"
+    Champs séparés par des tabulations ; les premières lignes sont des métadonnées `#`, pas des requêtes (`NR==1` ne marche donc pas).
+    ```bash
+    grep -m1 '^#fields' http.log                                       # noms des champs, dans l'ordre
+    awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d = %s\n", i-1, $i; exit}' http.log   # numéro de chaque nom
+    grep -m1 -v '^#' http.log | tr '\t' '\n' | nl -ba                  # valeurs de la première requête
+    zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head  # IP sources, par nom de champ
+    grep -v '^#' fichier.tsv | cut -f3 | sort | uniq -c | sort -rn     # TSV générique, IP vérifiée en colonne 3
+    ```
+    Scénario complet : [Forensic réseau › Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog)
 
 ### Extraire une colonne
 
@@ -104,19 +111,25 @@ grep -vE '^\s*(#|$)' /etc/ssh/sshd_config
     Subsystem sftp /usr/lib/openssh/sftp-server
     ```
 
-### Fichier à colonnes tabulées : exemple Zeek
+## Compter et trier
 
-Dans un `http.log` Zeek texte, les champs sont séparés par des tabulations et `#fields` indique leur ordre. Vérifie cet en-tête avant de choisir un numéro de colonne :
+### Trier des lignes
 
-```bash title="Inspecter puis compter les IP sources"
-grep -m1 '^#fields' http.log
-awk -F '\t' '/^#fields/ {for (i=2; i<=NF; i++) printf "$%d = %s\n", i-1, $i; exit}' http.log
-zeek-cut id.orig_h < http.log | sort | uniq -c | sort -rn | head
+```bash title="Commande"
+sort <fichier>                        # alphabétique ; -n numérique, -r inverse, -u sans doublons
+sort -t '<sép>' -k<N>,<N> <fichier>   # sur le champ N seulement
 ```
 
-La première ligne de `http.log` est une métadonnée, donc `NR==1` ne numérote **pas** les champs d'une requête. Pour inspecter les valeurs de la première requête : `grep -m1 -v '^#' http.log | tr '\t' '\n' | nl -ba`. `zeek-cut` extrait par **nom de champ** ; pour un TSV générique, après vérification que l'IP est en colonne 3 : `grep -v '^#' fichier.tsv | cut -f3 | sort | uniq -c | sort -rn`. Pour filtrer plusieurs colonnes ou aligner l'affichage, voir [Forensic réseau : Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+```bash title="Exemple"
+sort -t '|' -k1,1 evenements.txt | column -t -s '|' | less -S   # par horodatage (1er champ), puis aligné
+```
 
-## Compter et trier
+```bash title="Exemple 2"
+sort fichier.txt        # ordre alphabétique
+sort -n nombres.txt     # ordre numérique
+```
+
+Trier **avant** `column` : les espaces d'alignement changent les clés. Un tri textuel d'horodatages ISO n'est chronologique que si format et fuseau sont identiques.
 
 ### Trier et compter les occurrences
 
@@ -135,82 +148,66 @@ cut -d' ' -f1 /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -3
          41 192.168.1.40
     ```
 
-### Extraire et compter des ports de destination distincts
+### Compter les valeurs distinctes d'un champ
 
-Dans un journal de pare-feu où les champs sont écrits `clé=valeur` (par exemple `srcport=20036|dstport=443|action=allow`), **`dstport`** est le port visé ; `srcport` est le port utilisé par la source. Lis d'abord quelques lignes pour vérifier le nom du champ et le séparateur :
-
-```bash title="Repérer le format"
-head -n 3 firewall.log
-grep -oE 'dstport=[0-9]+' firewall.log | head
+```bash title="Commande"
+grep -oE '<champ>=[^|]+' <fichier> | cut -d= -f2 | sort -u                     # quelles valeurs ?
+grep -oE '<champ>=[^|]+' <fichier> | cut -d= -f2 | sort -u | wc -l             # combien de valeurs différentes ?
+grep -oE '<champ>=[^|]+' <fichier> | cut -d= -f2 | sort | uniq -c | sort -rn   # combien de fois chacune ?
 ```
 
-Puis garde seulement la valeur numérique, supprime les doublons et affiche la liste :
-
-```bash title="Lister les ports distincts"
-grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u
+```bash title="Exemple"
+grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l   # nombre de ports de destination différents
 ```
 
-```bash title="Compter les ports distincts"
-grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l
+| Question | Fin de pipeline |
+|---|---|
+| Quelles valeurs différentes ? | `sort -u` (`sort -n -u` pour des nombres) |
+| Combien de valeurs différentes ? | `sort -u | wc -l` |
+| Combien d'occurrences par valeur ? | `sort | uniq -c | sort -rn` |
+| Combien de lignes entières différentes ? | `sort -u | wc -l` sans extraction (un horodatage différent = une ligne différente) |
+
+Filtrer les lignes **avant** d'extraire (`grep -F '<texte>' <fichier> |` en tête). Vérifier le motif avec `| head` : un motif trop large fausse tous les comptes.
+
+```bash title="Gabarit à adapter"
+FICHIER='chemin/vers/fichier.log'           # le fichier
+CRITERE='texte-à-garder'                    # texte fixe que la ligne doit contenir (ex. ERROR)
+MOTIF='expression-régulière-à-extraire'     # ce qu'on extrait (ex. code=[0-9]+)
+grep -oE "$MOTIF" "$FICHIER" | head                                             # vérifier le motif
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u                     # valeurs distinctes
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u | wc -l             # leur nombre
+grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort | uniq -c | sort -rn   # occurrences par valeur
+grep -F "$CRITERE" "$FICHIER" | sort -u | wc -l                                 # lignes entières distinctes
 ```
 
-`grep -oE` extrait chaque champ correspondant, `cut` retire `dstport=`, `sort -n -u` trie numériquement et ne garde qu'une ligne par port, puis `wc -l` compte ces lignes. Pour voir **combien d'entrées** concernent chaque port, utilise plutôt :
+Sans critère de ligne : commencer par `grep -oE "$MOTIF" "$FICHIER"`. Le motif garde son préfixe (`code=`) : ajouter `| cut -d= -f2` avant le tri pour la seule valeur.
 
-```bash title="Fréquence par port"
-grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n | uniq -c | sort -rn
-```
+??? example kw-cs-cas "Pare-feu : combien de ports différents ont été visés ?"
+    Journal `…|src=…|srcport=20036|dstport=443|action=allow|…` : `dstport` = port visé, `srcport` = port de la source.
+    ```bash
+    head -n 3 firewall.log                                                          # vérifier noms de champs et séparateur
+    grep -oE 'dstport=[0-9]+' firewall.log | head                                   # le motif trouve bien le champ
+    grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u               # liste des ports
+    grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n -u | wc -l       # leur nombre
+    grep -oE 'dstport=[0-9]+' firewall.log | cut -d= -f2 | sort -n | uniq -c | sort -rn   # entrées par port
+    ```
 
-Si le journal contient plusieurs sources et que la question porte sur une seule, sélectionne d'abord ses lignes (ici, les champs sont séparés par `|`) :
+??? example kw-cs-cas "Pare-feu : quels ports une seule source a-t-elle visés ?"
+    ```bash
+    grep -F '|src=198.51.100.23|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
+    ```
+    Toutes les tentatives comptent : une connexion autorisée vise aussi un port, ne pas filtrer sur `action`.
 
-```bash title="Ports distincts pour une seule source"
-grep -F '|src=198.51.100.23|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
-```
+??? example kw-cs-cas "Pare-feu : seulement les connexions autorisées"
+    ```bash
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u             # ports autorisés
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l     # leur nombre
+    grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn   # entrées par port
+    ```
+    `|action=allow|` avec ses `|` : le champ entier, pas un bout de valeur. Une source *et* une action : ajouter `grep -F '|src=<IP>|' |` en tête. Une occurrence = un champ trouvé dans le journal, pas forcément une connexion.
 
-Remplace `198.51.100.23` par la source recherchée. Pour compter **toutes les tentatives**, garde les actions autorisées et refusées : une connexion autorisée vise elle aussi un port. Pour un autre format de journal, adapte `src=` et `dstport=` aux noms de champs réellement présents.
-
-### Filtrer par action avant de compter
-
-Pour ne regarder que les connexions **autorisées** dans ce journal à champs séparés par `|`, filtre d'abord les lignes sur le champ entier `|action=allow|` :
-
-```bash title="Lister les ports autorisés distincts"
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u
-```
-
-```bash title="Compter les ports autorisés distincts"
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n -u | wc -l
-```
-
-```bash title="Nombre d'entrées autorisées par port"
-grep -F '|action=allow|' firewall.log | grep -oE 'dstport=[0-9]+' | cut -d= -f2 | sort -n | uniq -c | sort -rn
-```
-
-Le premier `grep` garde les lignes autorisées ; le second extrait `dstport=…` ; `cut` ne conserve que le numéro. Ensuite, `sort -u` liste chaque port une fois, `wc -l` compte ces ports distincts, tandis que `uniq -c` compte les occurrences de chaque port **après le tri**. Une occurrence correspond ici à un champ trouvé dans le journal, pas forcément à une connexion distincte. Pour étudier une seule source *et* une seule action, ajoute le filtre `grep -F '|src=<IP>|'` avant l'extraction, en remplaçant `<IP>`.
-
-### Gabarits pour d'autres journaux ou fichiers texte
-
-Remplace les trois valeurs de départ : `FICHIER` est le chemin du fichier, `CRITERE` est le texte fixe qui doit figurer dans la ligne, et `MOTIF` est l'expression régulière à extraire. Par exemple, le critère pourrait être `ERROR` et le motif `code=[0-9]+` dans un journal d'application. Ces gabarits conservent la correspondance entière, avec son éventuel préfixe (`code=`) ; ajoute `cut -d= -f2` avant le tri si tu veux seulement la valeur d'un champ `clé=valeur`.
-
-```bash title="À adapter une fois"
-FICHIER='chemin/vers/fichier.log'
-CRITERE='texte-à-garder'
-MOTIF='expression-régulière-à-extraire'
-```
-
-```bash title="Lister les valeurs distinctes"
-grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u
-```
-
-```bash title="Compter les valeurs distinctes"
-grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort -u | wc -l
-```
-
-```bash title="Compter les occurrences par valeur"
-grep -F "$CRITERE" "$FICHIER" | grep -oE "$MOTIF" | sort | uniq -c | sort -rn
-```
-
-Si tu n'as **aucun critère de ligne**, commence directement par `grep -oE "$MOTIF" "$FICHIER"` et garde la fin du pipeline voulue (`sort -u`, `sort -u | wc -l` ou `sort | uniq -c | sort -rn`). Vérifie d'abord quelques correspondances avec `grep -oE "$MOTIF" "$FICHIER" | head` : un motif trop large fausse tous les comptes.
-
-Si tu veux compter des **lignes entières distinctes** au lieu d'une valeur extraite, utilise `grep -F "$CRITERE" "$FICHIER" | sort -u | wc -l`. Deux lignes qui diffèrent seulement par leur horodatage seront alors comptées séparément.
+Scénario complet : [Forensic réseau › Pare-feu](../../forensic/reseau/journaux/pare-feu-vpn.md#lister-et-compter-les-ports-vises-dans-un-journal)
+{ .kw-cs-meta }
 
 ### Compter des lignes
 
@@ -289,45 +286,27 @@ head -3 /etc/passwd | column -t -s:
     bin     x  2  2  bin     /bin       /usr/sbin/nologin
     ```
 
-Pour remettre en lignes un export dont les événements sont collés, puis aligner les champs `|` et isoler les informations utiles, voir [l'exemple VPN de la fiche journaux réseau](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
-
-## Mettre en forme et trier un fichier texte
-
-### Aligner des champs délimités
-
-Regarde d'abord quelques lignes : `head -n 3 fichier.txt` ou `head -c 500 fichier.txt` si elles sont très longues. Si les champs sont séparés par `|`, affiche-les en tableau et parcours les lignes larges :
-
-```bash title="Afficher en colonnes"
-column -t -s '|' fichier.txt | less -S
+```bash title="Exemple 2"
+column -t -s '|' fichier.txt | less -S                                 # champs séparés par |, lignes larges défilables
+awk -F'|' '{print $1 "|" $3 "|" $5}' fichier.txt | column -t -s '|'   # seulement les champs 1, 3 et 5 (positions vérifiées)
 ```
 
-Pour ne voir que certains champs, vérifie leur position sur une ligne, puis sélectionne-les **avant** d'aligner :
+Choisir les champs **avant** d'aligner. Si leur ordre varie mais qu'ils sont nommés (`clé=valeur`) : chercher les noms, comme dans le [cas VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
 
-```bash title="Garder les colonnes 1, 3 et 5"
-awk -F'|' '{print $1 "|" $3 "|" $5}' fichier.txt | column -t -s '|'
+### Séparer des événements collés sur une ligne
+
+```bash title="Commande"
+sed -E 's/ (<début d'un événement>)/\n\1/g' <fichier>   # retour à la ligne avant chaque début d'événement (GNU sed)
 ```
 
-`awk -F'|'` découpe la ligne sur `|` ; `$1`, `$3` et `$5` désignent les champs choisis. Si l'ordre varie mais que les champs sont nommés (`clé=valeur`), cherche plutôt les **noms** comme dans [l'exemple VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
-
-### Trier avant d'aligner
-
-```bash title="Tri alphabétique, numérique et par première colonne"
-sort fichier.txt
-sort -n nombres.txt
-sort -t '|' -k1,1 evenements.txt | column -t -s '|' | less -S
+```bash title="Exemple"
+sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' evenements.txt | column -t -s '|' | less -S   # événements qui commencent par AAAA-MM-JJT
 ```
 
-`sort` compare le texte ; `sort -n` compare des nombres ; `-t '|' -k1,1` trie sur le premier champ. **Trie avant `column`** : l'alignement ajoute des espaces qui peuvent changer les clés de tri. Un tri textuel sur des horodatages ISO donne l'ordre chronologique seulement si leur format et leur fuseau horaire sont identiques.
+Vérifier d'abord que le motif marque bien un début d'événement (`head -c 500`). Déjà une ligne par événement : `column -t -s '|' fichier.txt | less -S` suffit.
 
-### Séparer des événements collés
-
-Si plusieurs événements commencent par `AAAA-MM-JJT` et sont séparés par **un espace** sur la même ligne, GNU `sed` peut remettre chaque événement sur sa propre ligne avant l'affichage :
-
-```bash title="Un événement par ligne, sans modifier le fichier"
-sed -E 's/ ([0-9]{4}-[0-9]{2}-[0-9]{2}T)/\n\1/g' evenements.txt | column -t -s '|' | less -S
-```
-
-Vérifie que ce motif marque bien le début d'un événement dans ton fichier ; s'il possède déjà une ligne par événement, garde seulement `column -t -s '|' fichier.txt | less -S`. Le cas SOC complet figure dans [Journaux réseau — VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par).
+??? example kw-cs-cas "VPN : export `|` illisible, événements collés"
+    Le cas complet (séparer, aligner, garder heure, utilisateur, IP et résultat) : [Forensic réseau › VPN](../../forensic/reseau/journaux/pare-feu-vpn.md#rendre-lisible-un-export-vpn-separe-par)
 
 ## Enchaîner et enregistrer
 
@@ -383,6 +362,10 @@ sudo ss -tunap | tee -a journal-intervention.txt
 | `grep -oE` / `grep -v` | Extraire un motif / exclure des lignes | `grep -v '^#'` |
 | `sort | uniq -c | sort -rn` | Compter les occurrences, les plus fréquentes en tête | Top des IP d'un journal |
 | `wc -l` | Compter les lignes | — |
+| `sort -u | wc -l` | Compter les valeurs différentes | Ports distincts d'un pare-feu |
+| `tr '<sép>' '\n' | nl -ba` | Numéroter les champs d'une ligne | Repérer la colonne voulue |
+| `sort -t '<sép>' -k1,1` | Trier sur un champ | Événements par horodatage |
+| `sed -E 's/ (…)/\n\1/g'` | Remettre un événement par ligne | Export VPN collé |
 | `sed 's/a/b/g'` | Remplacer | `-i` : modifie le fichier |
 | `tr` | Changer ou supprimer des caractères | `tr 'a-z' 'A-Z'` |
-| `column -t` | Aligner en tableau | `column -t -s':'` |
+| `column -t` | Aligner en tableau | `column -t -s':'` ; `| less -S` pour les lignes larges |

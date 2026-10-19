@@ -10,6 +10,9 @@ Regroupe les **lignes identiques voisines**. Pour compter les occurrences d'une 
 sort <fichier> | uniq <options>   # ou : <commande> | sort | uniq -c
 ```
 
+Pour comprendre : [Administration Linux, ch. 4](../../../library/it/linux/administration-linux/01-partie-1-survivre-dans-le-terminal/04-chapitre-4-chercher-filtrer-et-transformer-du-text.md)
+{ .kw-cs-meta }
+
 ## Les options utiles
 
 | Option | Rôle |
@@ -19,44 +22,14 @@ sort <fichier> | uniq <options>   # ou : <commande> | sort | uniq -c
 | `-u` | N'affiche que les valeurs présentes une seule fois |
 | `-i` | Ignore la casse lors de la comparaison |
 
-## Cas concrets déjà rencontrés
+## Des commandes décodées
 
-### Fréquence des ports autorisés
-
-```bash title="Compter les événements par port"
-grep -F '|action=allow|' firewall.log |
-  grep -oE 'dstport=[0-9]+' | cut -d '=' -f 2 |
-  sort -n | uniq -c | sort -rn
-```
-
-Le premier tri rapproche les ports identiques, `uniq -c` donne leur **nombre d'apparitions**, puis `sort -rn` place les plus fréquents en haut. Une ligne de log peut représenter un événement agrégé ; la fréquence est ici celle des **champs extraits**, pas nécessairement celle des paquets réseau.
-
-### Sources d'un journal les plus fréquentes
-
-```bash title="Compter les IP source"
-grep -oE 'src=[0-9.]+' firewall.log | cut -d '=' -f 2 |
-  sort | uniq -c | sort -rn | head -10
-```
-
-Adapte `src=` si ton format emploie `srcip=`. La regex trouve une **forme** d'adresse, pas une validation complète d'IPv4.
-
-### Zeek HTTP : compter les méthodes et les réponses
-
-```bash title="Répartition des méthodes et codes HTTP"
-zeek-cut method < http.log | sort | uniq -c | sort -rn
-zeek-cut status_code < http.log | sort | uniq -c | sort -rn
-```
-
-Pour la liste des URI différentes : `zeek-cut uri < http.log | sort -u`. Pour leur nombre, ajoute `| wc -l`. Un `404` fréquent est une piste d'énumération à examiner dans la [fiche Forensic réseau](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
-
-## Autres exemples
-
-```bash title="Doublons et valeurs isolées"
-sort noms.txt | uniq                    # liste dédupliquée
-sort noms.txt | uniq -d                 # noms répétés au moins deux fois
-sort noms.txt | uniq -u                 # noms présents exactement une fois
-cut -d ':' -f 7 /etc/passwd | sort | uniq -c | sort -rn   # shells par fréquence
-```
+| Commande | Se lit |
+|---|---|
+| `sort noms.txt | uniq` | Liste dédupliquée (comme `sort -u`) |
+| `… | sort | uniq -c | sort -rn` | Nombre d'occurrences de chaque valeur, les plus fréquentes en tête |
+| `sort noms.txt | uniq -d` | Seulement les valeurs répétées |
+| `sort noms.txt | uniq -u` | Seulement les valeurs présentes une seule fois |
 
 ## `sort -u`, `uniq -c`, `wc -l` : trois questions
 
@@ -69,7 +42,41 @@ cut -d ':' -f 7 /etc/passwd | sort | uniq -c | sort -rn   # shells par fréquenc
 ## Pièges
 
 - `uniq` seul ne retire que les **doublons consécutifs** : `A`, `B`, `A` reste inchangé.
-- `uniq -u` veut dire « présent une seule fois », pas « liste de valeurs distinctes » ; pour cette dernière, utilise `sort -u`.
-- Un `sort -n` est adapté aux ports ; un `sort` simple suffit aux noms et aux IP textuelles.
+- `uniq -u` = « présent une seule fois », pas « valeurs distinctes » : pour celles-ci, `sort -u`.
+- `sort -n` pour des ports ; un `sort` simple suffit aux noms et aux IP.
+- Une ligne de journal peut résumer plusieurs paquets : `uniq -c` compte des lignes ou des champs, pas forcément des connexions.
 
-Voir aussi : [`sort`](sort.md), [`wc`](wc.md) et [filtrage par action dans Linux fondamentaux](../fondamentaux/texte-filtres.md#filtrer-par-action-avant-de-compter).
+## Exemples
+
+??? example kw-cs-more "Doublons et valeurs isolées"
+    ```bash
+    sort noms.txt | uniq                    # liste dédupliquée
+    sort noms.txt | uniq -d                 # noms répétés au moins deux fois
+    sort noms.txt | uniq -u                 # noms présents exactement une fois
+    cut -d ':' -f 7 /etc/passwd | sort | uniq -c | sort -rn   # shells par fréquence
+    ```
+
+## Cas concrets
+
+??? example kw-cs-cas "Pare-feu : quels ports autorisés reviennent le plus ?"
+    ```bash
+    grep -F '|action=allow|' firewall.log |
+      grep -oE 'dstport=[0-9]+' | cut -d '=' -f 2 |
+      sort -n | uniq -c | sort -rn      # trier, compter, classer
+    ```
+
+??? example kw-cs-cas "Pare-feu : quelles IP sources apparaissent le plus ?"
+    ```bash
+    grep -oE 'src=[0-9.]+' firewall.log | cut -d '=' -f 2 |
+      sort | uniq -c | sort -rn | head -10
+    ```
+    `srcip=` dans d'autres formats. La regex reconnaît une forme d'adresse, elle ne valide pas l'IPv4.
+
+??? example kw-cs-cas "Zeek `http.log` : répartition des méthodes et des codes HTTP"
+    ```bash
+    zeek-cut method < http.log | sort | uniq -c | sort -rn
+    zeek-cut status_code < http.log | sort | uniq -c | sort -rn
+    ```
+    URI différentes : `zeek-cut uri < http.log | sort -u` (`| wc -l` pour leur nombre). Beaucoup de `404` : piste d'énumération, voir [Forensic › Zeek HTTP](../../forensic/reseau/journaux/web.md#zeek-bro-analyser-httplog).
+
+Voir aussi : [`sort`](sort.md) · [`wc`](wc.md) · [Compter les valeurs distinctes d'un champ](../fondamentaux/texte-filtres.md#compter-les-valeurs-distinctes-dun-champ)
