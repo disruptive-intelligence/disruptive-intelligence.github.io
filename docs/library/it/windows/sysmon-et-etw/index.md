@@ -3,7 +3,7 @@ title: Sysmon et ETW
 source: IT/02 Windows/Journaux & investigation/Sysmon et ETW.md
 format: cours
 provenance: HTB Academy
-revue: '2026-10-18'
+revue: '2026-10-19'
 ---
 
 Ce cours va au-delà des journaux natifs : avec Sysmon, trois détections pas à pas (DLL hijacking, injection de PowerShell non managé, vol d'identifiants dans LSASS) ; puis ETW, son architecture, ses outils et ses providers, et deux détections qui s'appuient dessus.

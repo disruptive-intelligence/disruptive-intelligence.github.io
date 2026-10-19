@@ -106,3 +106,46 @@ Sysmon permet de savoir quelles DLL ont été chargées et par quel processus, m
 2. Limited Assembly Visibility : le chargement de `clr.dll` ne révèle pas directement les détails de l'assemblage .NET exécuté.
 
 Par ailleurs, l'exemple Seatbelt est exécuté depuis le disque, même si la technique étudiée peut également concerner des assemblages chargés uniquement en mémoire.
+
+### Retrouver les assemblies .NET avec un filtre XML
+
+**1. Un exécutable précis initialise-t-il .NET ?** La requête du lab : `Seatbelt.exe` et `mscoree.dll`.
+
+```xml
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[
+        System[EventID=7]
+        and EventData[
+          Data[@Name='Image']='C:\Tools\GhostPack Compiled Binaries\Seatbelt.exe'
+          and Data[@Name='ImageLoaded']='C:\Windows\System32\mscoree.dll'
+        ]
+      ]
+    </Select>
+  </Query>
+</QueryList>
+```
+
+
+- L'événement prouve l'initialisation du runtime .NET, pas ce que l'outil a exécuté : pour les méthodes, voir [Aller plus loin avec le provider DotNETRuntime](04-aller-plus-loin-avec-le-provider-dotnetruntime.md).
+- Plusieurs DLL d'un coup : `(Data[@Name='ImageLoaded']='…\mscoree.dll' or Data[@Name='ImageLoaded']='…\clr.dll')`, parenthèses comprises.
+
+**2. Quels exécutables .NET tournent depuis un dossier inhabituel ?** Les outils comme Seatbelt sont souvent déposés hors des dossiers d'installation :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='ImageLoaded']='C:\Windows\System32\mscoree.dll']]" |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        ($data | Where-Object Name -eq 'Image').'#text'
+    } |
+    Where-Object { $_ -notlike 'C:\Windows\*' -and $_ -notlike 'C:\Program Files*' } |
+    Sort-Object -Unique
+```
+
+
+- Résultat : les exécutables .NET lancés depuis un dossier utilisateur, un dossier d'outils ou `Temp`.
+- Limite : un assembly chargé uniquement en mémoire dans un processus légitime n'apparaît pas ici ; c'est le rôle d'ETW.
+
+Le lab pas à pas : [Question 1 — Suivre Seatbelt avec Sysmon et ETW](../04-labs/02-lab-3-travailler-avec-etw.md#question-1-suivre-seatbelt-avec-sysmon-et-etw).

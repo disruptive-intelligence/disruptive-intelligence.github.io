@@ -107,3 +107,46 @@ Cette technique de hunting peut contribuer à détecter :
 - certaines techniques d'exécution d'assemblages .NET dans un processus tiers.
 
 Limite : un processus natif peut légitimement héberger le CLR. La présence de `clr.dll` doit être corrélée au contexte du processus, aux modules chargés et aux autres événements disponibles.
+
+### Retrouver le CLR injecté avec un filtre XML
+
+**1. Un processus précis charge-t-il le CLR ?** La requête du lab : `spoolsv.exe` et `clr.dll`.
+
+```xml
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[
+        System[EventID=7]
+        and EventData[
+          Data[@Name='Image']='C:\Windows\System32\spoolsv.exe'
+          and Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll'
+        ]
+      ]
+    </Select>
+  </Query>
+</QueryList>
+```
+
+
+- `Image` : le processus ; `ImageLoaded` : la DLL chargée. Les deux conditions doivent être vraies ensemble (`and`).
+- Pour `clrjit.dll`, remplacer la fin du chemin : `…\v4.0.30319\clrjit.dll`.
+- `Hashes` de l'événement : l'empreinte `SHA256=…` de la DLL chargée.
+
+**2. Quels processus chargent le CLR ?** Sans connaître le processus, garder seulement `ImageLoaded` et lister les `Image` distincts :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll']]" |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        ($data | Where-Object Name -eq 'Image').'#text'
+    } |
+    Sort-Object -Unique
+```
+
+
+- Résultat : un nom d'exécutable par ligne. Les applications .NET connues (outils d'administration, PowerShell) sont attendues ; un service Windows natif comme `spoolsv.exe` ne l'est pas.
+- Même filtre avec `mscoree.dll` (`C:\Windows\System32\mscoree.dll`) pour voir l'initialisation du runtime : voir [Retrouver les assemblies .NET avec un filtre XML](../03-detecter-avec-etw/03-reperer-le-chargement-d-assemblies-net.md#retrouver-les-assemblies-net-avec-un-filtre-xml).
+
+Le lab pas à pas : [Question 2 — PowerShell non managé : spoolsv.exe](../04-labs/01-lab-2-analyser-avec-sysmon.md#question-2-powershell-non-manage-spoolsvexe).

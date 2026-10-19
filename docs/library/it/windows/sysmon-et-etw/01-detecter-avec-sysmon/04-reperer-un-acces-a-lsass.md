@@ -100,6 +100,53 @@ Par ailleurs :
 
 L'analyse doit intégrer l'identité du processus, son chemin, ses droits d'accès et les événements associés.
 
+### Retrouver les accès à LSASS avec un filtre XML
+
+**1. Tous les accès à LSASS** : Event ID 10 dont la cible est `lsass.exe`.
+
+```xml
+<QueryList>
+  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
+    <Select Path="Microsoft-Windows-Sysmon/Operational">
+      *[
+        System[EventID=10]
+        and EventData[
+          Data[@Name='TargetImage']='C:\Windows\system32\lsass.exe'
+        ]
+      ]
+    </Select>
+  </Query>
+</QueryList>
+```
+
+
+- Copier la valeur de `TargetImage` depuis la vue XML d'un événement 10 : l'égalité est stricte.
+- Dans chaque résultat, lire `SourceImage` (qui accède), `SourceUser` et `GrantedAccess` (avec quels droits).
+- Aucun événement 10 ? Vérifier que `ProcessAccess` est collecté dans la configuration Sysmon (même logique que [Configurer la collecte (ImageLoad)](01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
+
+**2. Écarter les accès attendus** : garder les processus source situés hors de `C:\Windows\` et `C:\Program Files\` (le XML ne sait pas faire « hors de ») :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=10] and EventData[Data[@Name='TargetImage']='C:\Windows\system32\lsass.exe']]" |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        [PSCustomObject]@{
+            Heure         = $_.TimeCreated
+            SourceImage   = ($data | Where-Object Name -eq 'SourceImage').'#text'
+            SourceUser    = ($data | Where-Object Name -eq 'SourceUser').'#text'
+            GrantedAccess = ($data | Where-Object Name -eq 'GrantedAccess').'#text'
+        }
+    } |
+    Where-Object { $_.SourceImage -notlike 'C:\Windows\*' -and $_.SourceImage -notlike 'C:\Program Files*' }
+```
+
+
+- Dans le cours, `AgentEXE.exe` lancé depuis `Downloads` ressort ainsi.
+- Un antivirus ou un EDR installé ailleurs ressort aussi : le reconnaître avant de conclure.
+
+Le lab pas à pas : [Question 3 — Credential dumping : LSASS](../04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
+
 ## 5. Comparaison des trois détections
 
 | Technique                           | Event ID principal | Indicateur clé                                                     |
