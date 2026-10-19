@@ -74,47 +74,11 @@ Cette activité est suspecte : un exécutable peu connu, venu d'un dossier utili
 
 ## Les requêtes
 
-**1. Tous les accès à LSASS** : Event ID 10 dont la cible est `lsass.exe`.
+Dans `Microsoft-Windows-Sysmon/Operational`, filtrer l'Event ID `10` (*Filter Current Log…*), puis utiliser *Find* sur `lsass.exe` : vérifier les champs `SourceImage` et `TargetImage` des événements où un processus accède à `lsass.exe`.
 
-```xml
-<QueryList>
-  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
-    <Select Path="Microsoft-Windows-Sysmon/Operational">
-      *[
-        System[EventID=10]
-        and EventData[
-          Data[@Name='TargetImage']='C:\Windows\system32\lsass.exe'
-        ]
-      ]
-    </Select>
-  </Query>
-</QueryList>
-```
-
-
-- Copier la valeur de `TargetImage` depuis la vue XML d'un événement 10 : l'égalité est stricte.
 - Dans chaque résultat, lire `SourceImage` (qui accède), `SourceUser` et `GrantedAccess` (avec quels droits).
 - Aucun événement 10 ? Vérifier que `ProcessAccess` est collecté dans la configuration Sysmon (même logique que [Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
-
-**2. Écarter les accès attendus** : garder les processus source situés hors de `C:\Windows\` et `C:\Program Files\` (le XML ne sait pas faire « hors de ») :
-
-```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
-    -FilterXPath "*[System[EventID=10] and EventData[Data[@Name='TargetImage']='C:\Windows\system32\lsass.exe']]" |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        [PSCustomObject]@{
-            Heure         = $_.TimeCreated
-            SourceImage   = ($data | Where-Object Name -eq 'SourceImage').'#text'
-            SourceUser    = ($data | Where-Object Name -eq 'SourceUser').'#text'
-            GrantedAccess = ($data | Where-Object Name -eq 'GrantedAccess').'#text'
-        }
-    } |
-    Where-Object { $_.SourceImage -notlike 'C:\Windows\*' -and $_.SourceImage -notlike 'C:\Program Files*' }
-```
-
-
-- Dans l'exemple, `AgentEXE.exe` lancé depuis `Downloads` ressort ainsi.
+- Dans l'exemple, `AgentEXE.exe` lancé depuis `Downloads` ressort parmi les composants système qui accèdent habituellement à LSASS.
 
 Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
@@ -139,7 +103,7 @@ Investigate Credential Dumping
 
 ## Les faux positifs
 
-- Des processus légitimes accèdent à LSASS, notamment des composants d'authentification et des solutions antivirus / EDR ; un antivirus ou un EDR installé hors des dossiers standards ressort aussi de la requête 2 : le reconnaître avant de conclure.
+- Des processus légitimes accèdent à LSASS, notamment des composants d'authentification et des solutions antivirus / EDR  : les reconnaître avant de conclure.
 - `SourceUser` différent de `TargetUser` ne prouve pas une compromission.
 - La présence de `SeDebugPrivilege` ne prouve pas un vol d'identifiants, et toutes les techniques n'en ont pas besoin.
 - ProcessAccess ≠ extraction réussie : l'Event ID 10 signale un accès entre processus, pas nécessairement une extraction réussie.

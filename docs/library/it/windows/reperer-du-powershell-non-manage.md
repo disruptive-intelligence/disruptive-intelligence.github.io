@@ -87,7 +87,7 @@ Après l'injection :
 
 ## Les requêtes
 
-**1. Un processus précis charge-t-il le CLR ?** La requête du lab : `spoolsv.exe` et `clr.dll`.
+**Un processus précis charge-t-il le CLR ?** La requête du lab : `spoolsv.exe` et `clr.dll`.
 
 ```xml
 <QueryList>
@@ -109,22 +109,6 @@ Après l'injection :
 - `Image` : le processus ; `ImageLoaded` : la DLL chargée. Les deux conditions doivent être vraies ensemble (`and`).
 - Pour `clrjit.dll`, remplacer la fin du chemin : `…\v4.0.30319\clrjit.dll`.
 - `Hashes` de l'événement : l'empreinte `SHA256=…` de la DLL chargée.
-
-**2. Quels processus chargent le CLR ?** Sans connaître le processus, garder seulement `ImageLoaded` et lister les `Image` distincts :
-
-```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
-    -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='ImageLoaded']='C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll']]" |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        ($data | Where-Object Name -eq 'Image').'#text'
-    } |
-    Sort-Object -Unique
-```
-
-
-- Résultat : un nom d'exécutable par ligne. Les applications .NET connues (outils d'administration, PowerShell) sont attendues ; un service Windows natif comme `spoolsv.exe` ne l'est pas.
-- Même filtre avec `mscoree.dll` (`C:\Windows\System32\mscoree.dll`) pour voir l'initialisation du runtime : voir [Repérer le chargement d'assemblies .NET › Les requêtes](reperer-le-chargement-d-assemblies-net.md#les-requetes).
 
 Gabarits et pièges : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
@@ -155,7 +139,7 @@ Cette piste de hunting peut révéler :
 
 - Un processus natif peut légitimement héberger le CLR (consoles MMC, certains services et modules complémentaires).
 - La présence de `clr.dll` se corrèle au contexte du processus, aux modules chargés et aux autres événements disponibles avant de conclure.
-- Établir la liste des processus qui chargent habituellement le CLR sur le parc (requête 2) permet de repérer ceux qui s'en écartent.
+- Connaître les processus qui chargent habituellement le CLR sur le parc permet de repérer ceux qui s'en écartent.
 
 ## Pour s'entraîner
 

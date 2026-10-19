@@ -110,7 +110,7 @@ Après une nouvelle exécution de Seatbelt, `etw.json` contient davantage d'info
 
 ## Les requêtes
 
-**1. Un exécutable précis initialise-t-il .NET ?** La requête du lab : `Seatbelt.exe` et `mscoree.dll`.
+**Un exécutable précis initialise-t-il .NET ?** La requête du lab : `Seatbelt.exe` et `mscoree.dll`.
 
 ```xml
 <QueryList>
@@ -129,27 +129,10 @@ Après une nouvelle exécution de Seatbelt, `etw.json` contient davantage d'info
 ```
 
 
-- L'événement prouve l'initialisation du runtime .NET, pas ce que l'outil a exécuté : pour les méthodes, voir la requête 3.
+- L'événement prouve l'initialisation du runtime .NET, pas ce que l'outil a exécuté : pour les méthodes, voir la recherche dans la trace ETW ci-dessous.
 - Plusieurs DLL d'un coup : `(Data[@Name='ImageLoaded']='…\mscoree.dll' or Data[@Name='ImageLoaded']='…\clr.dll')`, parenthèses comprises.
 
-**2. Quels exécutables .NET tournent depuis un dossier inhabituel ?** Les outils comme Seatbelt sont souvent déposés hors des dossiers d'installation :
-
-```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
-    -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='ImageLoaded']='C:\Windows\System32\mscoree.dll']]" |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        ($data | Where-Object Name -eq 'Image').'#text'
-    } |
-    Where-Object { $_ -notlike 'C:\Windows\*' -and $_ -notlike 'C:\Program Files*' } |
-    Sort-Object -Unique
-```
-
-
-- Résultat : les exécutables .NET lancés depuis un dossier utilisateur, un dossier d'outils ou `Temp`.
-- Limite : un assembly chargé uniquement en mémoire dans un processus légitime n'apparaît pas ici ; c'est le rôle d'ETW.
-
-**3. Quelles méthodes ont été appelées ?** Dans la trace SilkETW, chercher les noms de méthodes plutôt que de parcourir le JSON à la main :
+**Quelles méthodes ont été appelées ?** Dans la trace SilkETW, chercher les noms de méthodes plutôt que de parcourir le JSON à la main :
 
 ```powershell
 Select-String -Path "C:\Windows\Temp\etw.json" `

@@ -81,40 +81,15 @@ Les événements collectés par SilkETW peuvent aussi être versés dans les jou
 
 ## Les requêtes
 
-**1. Retrouver la création suspecte dans Sysmon** : `cmd.exe` avec `spoolsv.exe` pour parent.
+Les deux sources à confronter, dans l'ordre du lab :
 
-```xml
-<QueryList>
-  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
-    <Select Path="Microsoft-Windows-Sysmon/Operational">
-      *[
-        System[EventID=1]
-        and EventData[
-          Data[@Name='Image']='C:\Windows\System32\cmd.exe'
-          and Data[@Name='ParentImage']='C:\Windows\System32\spoolsv.exe'
-        ]
-      ]
-    </Select>
-  </Query>
-</QueryList>
-```
+1. Dans `Microsoft-Windows-Sysmon/Operational`, l'Event ID `1` de `cmd.exe` : relever son `ProcessId`, son parent apparent (`ParentImage`, ici `spoolsv.exe`) et l'heure.
+2. Dans `etw.json`, collecté par SilkETW avec `Microsoft-Windows-Kernel-Process` (commande dans [Les traces](#les-traces)), rechercher ce PID : l'événement de création indique le processus réellement à l'origine (`powershell.exe`).
 
-
-- Relever dans le résultat le `ProcessId` de `cmd.exe`, son `ParentProcessId` et l'heure : ce sont les clés pour retrouver la même création dans la trace ETW.
-
-**2. Retrouver la même création dans la trace ETW** : chercher le PID de `cmd.exe` relevé à l'étape 1.
-
-```powershell
-Select-String -Path "C:\Windows\Temp\etw.json" -Pattern '<PID de cmd.exe>' |
-    Select-Object -First 5 |
-    ForEach-Object { $_.Line }
-```
-
-
-- Dans l'événement de création trouvé, comparer le processus créateur avec le parent annoncé par Sysmon : s'ils diffèrent, le parent affiché a été falsifié.
+- Si le processus créateur diffère du parent annoncé par Sysmon, le parent affiché a été falsifié.
 - Un PID est réutilisé par Windows après la fin d'un processus : vérifier aussi l'heure.
 
-Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/). Commandes ETW : cheat sheet [ETW](/cheatsheets/windows/fondamentaux/logs/etw/).
+Commandes ETW : cheat sheet [ETW](/cheatsheets/windows/fondamentaux/logs/etw/).
 
 ## Les indicateurs
 

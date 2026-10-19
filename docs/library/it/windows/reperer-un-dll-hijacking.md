@@ -97,7 +97,7 @@ Filtrer les événements Sysmon sur l'Event ID `7`, puis utiliser *Find* sur `ca
 
 *Find* parcourt tout le journal à la recherche d'un mot. Le filtre XML (*Filter Current Log…* → onglet **XML** → *Edit query manually*) vise directement les champs de l'Event ID 7 : `Image`, `ImageLoaded`, `Signed`. Gabarits et pièges : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
-**1. Partir de la DLL suspecte** : quel processus a chargé la `WININET.dll` du bureau ?
+**La requête du lab** : quel processus a chargé la `WININET.dll` du bureau ?
 
 ```xml
 <QueryList>
@@ -118,57 +118,6 @@ Filtrer les événements Sysmon sur l'Event ID `7`, puis utiliser *Find* sur `ca
 - `System[EventID=7]` : seulement les chargements d'image.
 - `Data[@Name='ImageLoaded']` : la DLL chargée, chemin exact copié depuis la vue XML de l'événement (l'égalité est stricte).
 - Dans l'événement obtenu : `Image` = l'exécutable qui l'a chargée (la copie de `calc.exe`) ; `Signed` = `false` ; `Hashes` = l'empreinte `SHA256=…` de la DLL, un IOC à rechercher ensuite sur d'autres machines.
-
-**2. Partir de l'exécutable** : toutes les DLL chargées par la copie de `calc.exe`.
-
-```xml
-*[
-  System[EventID=7]
-  and EventData[
-    Data[@Name='Image']='C:\Users\Administrator\Desktop\calc.exe'
-  ]
-]
-```
-
-
-- Le résultat liste toutes les DLL chargées au démarrage ; celle qui ne vient pas de `C:\Windows\System32\` ressort.
-- Même requête avec `Image` = `C:\Windows\System32\calc.exe` : le chargement légitime, pour comparer chemin, signature et hash.
-
-**3. Lister les DLL non signées** : quand on ne sait pas encore quel processus chercher (journaux exportés à trier, par exemple).
-
-```xml
-*[
-  System[EventID=7]
-  and EventData[
-    Data[@Name='Signed']='false'
-  ]
-]
-```
-
-
-- Point de départ du tri : relever les couples `Image` / `ImageLoaded` situés hors de `C:\Windows\` et `C:\Program Files\`.
-
-**4. « Hors de System32 » : ce que le XML ne sait pas faire.** L'Observateur ne compare que des valeurs exactes ; pour « toute `wininet.dll` chargée ailleurs que dans `C:\Windows\` », passer par PowerShell :
-
-```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' -FilterXPath "*[System[EventID=7]]" |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        [PSCustomObject]@{
-            Heure       = $_.TimeCreated
-            Image       = ($data | Where-Object Name -eq 'Image').'#text'
-            ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
-            Signed      = ($data | Where-Object Name -eq 'Signed').'#text'
-        }
-    } |
-    Where-Object { $_.ImageLoaded -like '*\wininet.dll' -and $_.ImageLoaded -notlike 'C:\Windows\*' }
-```
-
-
-- `-FilterXPath` garde les Event ID 7 ; `ForEach-Object` extrait les champs de chaque événement (méthode détaillée dans [Extraire les champs d'un événement avec .ToXml()](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#extraire-les-champs-dun-evenement-avec-toxml)) ; `Where-Object` garde les `wininet.dll` chargées hors de `C:\Windows\`.
-- `-like` ignore la casse : `WININET.dll` et `wininet.dll` sont trouvées toutes les deux.
-- Remplacer `wininet.dll` par une autre DLL listée par HijackLibs pour l'exécutable étudié.
-- Journaux exportés : `-Path 'C:\…\fichier.evtx'` à la place de `-LogName '…'`.
 
 ### Dans un journal exporté (.evtx)
 

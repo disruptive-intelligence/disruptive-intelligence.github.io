@@ -68,45 +68,10 @@ Après coup, la filiation se lit dans l'Event ID 1 : `Image` (l'enfant), `Parent
 
 ## Les requêtes
 
-**1. Que lance ce processus ?** Tous les enfants de `spoolsv.exe` :
+Pas de requête dédiée dans le module : la filiation se lit dans l'arborescence de Process Hacker, ou dans `Microsoft-Windows-Sysmon/Operational` en filtrant l'Event ID `1` (*Filter Current Log…*) puis *Find* sur le parent suspect.
 
-```xml
-<QueryList>
-  <Query Id="0" Path="Microsoft-Windows-Sysmon/Operational">
-    <Select Path="Microsoft-Windows-Sysmon/Operational">
-      *[
-        System[EventID=1]
-        and EventData[
-          Data[@Name='ParentImage']='C:\Windows\System32\spoolsv.exe'
-        ]
-      ]
-    </Select>
-  </Query>
-</QueryList>
-```
-
-
-- `ParentImage` : le parent ; dans chaque résultat, `Image` donne l'enfant et `CommandLine` ce qu'il a exécuté.
-- Pour un enfant précis, ajouter `and Data[@Name='Image']='C:\Windows\System32\cmd.exe'`.
-
-**2. Quelles filiations sont rares ?** Compter les couples parent → enfant et lire d'abord les moins fréquents :
-
-```powershell
-Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' -FilterXPath "*[System[EventID=1]]" |
-    ForEach-Object {
-        $data = ([xml]$_.ToXml()).Event.EventData.Data
-        $parent = Split-Path ($data | Where-Object Name -eq 'ParentImage').'#text' -Leaf
-        $enfant = Split-Path ($data | Where-Object Name -eq 'Image').'#text' -Leaf
-        "$parent -> $enfant"
-    } |
-    Group-Object |
-    Sort-Object Count |
-    Select-Object Count, Name -First 20
-```
-
-
-- `Split-Path -Leaf` garde le nom de l'exécutable sans son chemin ; `Group-Object` compte les couples identiques ; `Sort-Object Count` met les plus rares en tête.
-- Un couple vu une ou deux fois (`spoolsv.exe -> whoami.exe`) mérite d'être ouvert ; un couple vu des milliers de fois est le fonctionnement normal.
+- Dans chaque événement, `ParentImage` donne le parent, `Image` l'enfant et `CommandLine` ce qu'il a exécuté.
+- Comparer avec la carte des relations habituelles : `spoolsv.exe` → `conhost.exe` est attendu, `spoolsv.exe` → `whoami.exe` ne l'est pas.
 
 Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
@@ -123,7 +88,7 @@ Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheat
 
 ## Pour s'entraîner
 
-- Le module HTB n'a pas de question de lab dédiée : rejouer la requête 2 sur ses propres journaux Sysmon pour apprendre les filiations normales de son parc.
+- Le module HTB n'a pas de question de lab dédiée.
 - Event IDs Sysmon et requêtes SIEM : cheat sheet [Sysmon](/cheatsheets/windows/fondamentaux/logs/sysmon/).
 
 Source des captures : [Hack The Box Academy - Windows Event Logs & Finding Evil](https://academy.hackthebox.com/app/module/216)
