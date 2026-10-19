@@ -126,6 +126,28 @@ Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
 - Résultat : un nom d'exécutable par ligne. Les applications .NET connues (outils d'administration, PowerShell) sont attendues ; un service Windows natif comme `spoolsv.exe` ne l'est pas.
 - Même filtre avec `mscoree.dll` (`C:\Windows\System32\mscoree.dll`) pour voir l'initialisation du runtime : voir [Repérer le chargement d'assemblies .NET › Les requêtes](reperer-le-chargement-d-assemblies-net.md#les-requetes).
 
+**3. Dans un journal exporté (.evtx)** : mêmes recherches, avec `Path` à la place de `LogName`.
+
+```powershell
+$id7 = Get-WinEvent -FilterHashtable @{ Path = '.\Sysmon.evtx'; Id = 7 }
+
+$id7 | Where-Object { $_.Message -like '*clr.dll*' -or $_.Message -like '*clrjit.dll*' } |
+    Format-List TimeCreated, Message
+
+$id7 | ForEach-Object {
+    $data = ([xml]$_.ToXml()).Event.EventData.Data
+    [pscustomobject]@{
+        Image       = ($data | Where-Object Name -eq 'Image').'#text'
+        ImageLoaded = ($data | Where-Object Name -eq 'ImageLoaded').'#text'
+    }
+} | Where-Object ImageLoaded -like '*\clr.dll' |
+    Group-Object Image | Sort-Object Count | Select-Object Count, Name
+```
+
+
+- Le premier filtre lit le message ; le second extrait les champs et compte les processus qui chargent `clr.dll`, les plus rares d'abord.
+- Démarche complète sur un `.evtx` (découvrir, filtrer, réduire le bruit, compter) : [Explorer un fichier .evtx inconnu, pas à pas](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas).
+
 Gabarits et pièges : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
 ## Les indicateurs

@@ -108,6 +108,23 @@ Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' -FilterXPath "*[Sys
 - `Split-Path -Leaf` garde le nom de l'exécutable sans son chemin ; `Group-Object` compte les couples identiques ; `Sort-Object Count` met les plus rares en tête.
 - Un couple vu une ou deux fois (`spoolsv.exe -> whoami.exe`) mérite d'être ouvert ; un couple vu des milliers de fois est le fonctionnement normal.
 
+**3. Dans un journal exporté (.evtx)** : la requête 2, avec `Path` à la place de `LogName`.
+
+```powershell
+Get-WinEvent -FilterHashtable @{ Path = '.\Sysmon.evtx'; Id = 1 } |
+    ForEach-Object {
+        $data = ([xml]$_.ToXml()).Event.EventData.Data
+        $parent = Split-Path ($data | Where-Object Name -eq 'ParentImage').'#text' -Leaf
+        $enfant = Split-Path ($data | Where-Object Name -eq 'Image').'#text' -Leaf
+        "$parent -> $enfant"
+    } |
+    Group-Object | Sort-Object Count | Select-Object Count, Name -First 20
+```
+
+
+- Pour voir d'abord ce que contient le fichier : `Get-WinEvent -Path '.\Sysmon.evtx' -MaxEvents 5 | Format-List TimeCreated, Id, ProviderName, Message`.
+- Démarche complète sur un `.evtx` : [Explorer un fichier .evtx inconnu, pas à pas](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#explorer-un-fichier-evtx-inconnu-pas-a-pas).
+
 Gabarits et pièges du XML : cheat sheet [Requêtes XML de l'Observateur](/cheatsheets/windows/fondamentaux/logs/requetes-xml/).
 
 ## Les indicateurs
