@@ -13,7 +13,7 @@ up:
 
 ### L'outil du chapitre : transformer un événement en objet
 
-Au Ch.34, tu as appris à lire **un** champ d'événement par son nom grâce à `ToXml()`. Tout ce chapitre repose sur ce geste. On en fait donc une fonction qui convertit un événement **entier** en `PSCustomObject`, avec une propriété par champ :
+Au Ch.34 (section « Comprendre XML et XPath »), tu as appris à lire **un** champ d'événement par son nom grâce à `ToXml()` et `.'#text'`. Tout ce chapitre repose sur ce geste. On en fait donc une fonction qui convertit un événement **entier** en `PSCustomObject`, avec une propriété par champ :
 
 ```powershell
 function ConvertTo-EventObject {
@@ -161,7 +161,7 @@ Les journaux natifs ont des angles morts. Le 4688 dit qu'un processus a été cr
     ```powershell
     .\Sysmon64.exe -accepteula -i .\sysmonconfig.xml
     ```
-    Sans configuration, Sysmon journalise peu de choses. Le point de départ standard est une configuration communautaire reconnue, comme celle de SwiftOnSecurity (*sysmon-config*) ou d'Olaf Hartong (*sysmon-modular*).
+    Sans configuration, Sysmon journalise peu de choses. Le point de départ standard est une configuration communautaire reconnue, comme celle de SwiftOnSecurity (*sysmon-config*) ou d'Olaf Hartong (*sysmon-modular*). Tu apprendras à lire ce fichier un peu plus bas (« Lire une configuration Sysmon »).
 - **Version intégrée à Windows** : depuis 2026, Windows 11 (24H2 et ultérieures) propose Sysmon comme **fonctionnalité facultative** (*Paramètres → Système → Fonctionnalités facultatives*), qu'on active puis qu'on initialise avec `sysmon -i`. Une version Sysinternals déjà installée doit d'abord être désinstallée. Les serveurs ne sont pas encore concernés au moment où ce cours est écrit : vérifie la documentation Microsoft à jour.
 
 **Trouver son journal** (réflexe de découverte, comme au Ch.1) :
@@ -207,6 +207,82 @@ Get-WinEvent -FilterHashtable @{
 
 
 ## 🟡 Très utile en pratique
+
+### Lire une configuration Sysmon : le même XML, un autre usage
+
+Au Ch.34, le XML servait à **interroger** des événements déjà enregistrés. Le fichier de configuration de Sysmon utilise le même langage pour une tâche opposée : **décider quels événements enregistrer**. Confondre les deux est une source classique d'heures perdues.
+
+| | Requête XPath / QueryList (Ch.34) | Configuration Sysmon |
+|---|---|---|
+| **Rôle** | Rechercher dans des événements **déjà enregistrés** | Décider ce que Sysmon **enregistrera** |
+| **Quand** | Après coup, pendant l'analyse | Avant, à l'installation ou à la mise à jour |
+| **Où** | `-FilterXPath`, `-FilterXml`, Observateur d'événements | `sysmonconfig.xml`, chargé par `Sysmon64 -i` (installation) ou `Sysmon64 -c` (mise à jour) |
+| **À quoi ça ressemble** | `*[System[EventID=1]]` | `<ProcessCreate onmatch="include">` |
+
+Voici une configuration minimale, pour apprendre à la lire :
+
+```xml
+<Sysmon schemaversion="4.90">
+  <EventFiltering>
+    <!-- Événement 1 : on enregistre TOUT, sauf ce qui est exclu -->
+    <RuleGroup name="" groupRelation="or">
+      <ProcessCreate onmatch="exclude">
+        <Image condition="is">C:\Program Files\Outil\scanner.exe</Image>
+      </ProcessCreate>
+    </RuleGroup>
+    <!-- Événement 7 : on n'enregistre QUE ce qui est inclus -->
+    <RuleGroup name="" groupRelation="or">
+      <ImageLoad onmatch="include">
+        <ImageLoaded condition="contains">\Temp\</ImageLoaded>
+      </ImageLoad>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>
+```
+
+
+> La valeur de `schemaversion` dépend de ta version de Sysmon : `Sysmon64 -s` affiche le schéma qu'elle attend. Et `Sysmon64 -c`, sans fichier, affiche la configuration actuellement chargée.
+
+**Règle n°1 — L'élément extérieur est un TYPE d'événement, les éléments intérieurs sont des CHAMPS.** `<ImageLoad>` désigne l'événement 7, le chargement d'une DLL par un processus. `<ImageLoaded>`, à l'intérieur, est le **champ** qui contient le chemin de la DLL chargée. Une lettre d'écart, deux natures différentes : l'un est une catégorie, l'autre une donnée. C'est le piège le plus fréquent en lisant une configuration.
+
+| Event ID | Balise du type d'événement | Exemples de champs utilisables à l'intérieur |
+|---|---|---|
+| 1 | `ProcessCreate` | `Image`, `CommandLine`, `ParentImage` |
+| 3 | `NetworkConnect` | `DestinationIp`, `DestinationPort` |
+| 7 | `ImageLoad` | `ImageLoaded` (la DLL chargée), `Image` (le processus **qui** la charge), `Signed` |
+| 11 | `FileCreate` | `TargetFilename` |
+| 12, 13, 14 | `RegistryEvent` | `TargetObject` |
+| 22 | `DnsQuery` | `QueryName` |
+
+La bonne nouvelle : **le nom d'un champ est le même partout**. Balise dans la configuration (`<ImageLoaded>`), attribut dans l'événement enregistré (`<Data Name="ImageLoaded">`), et donc dans tes requêtes : `Data[@Name='ImageLoaded']`. Par exemple, pour retrouver les DLL non signées chargées :
+
+```powershell
+Get-WinEvent -LogName 'Microsoft-Windows-Sysmon/Operational' `
+    -FilterXPath "*[System[EventID=7] and EventData[Data[@Name='Signed']='false']]"
+```
+
+
+**Règle n°2 — `include` et `exclude` ne fonctionnent pas en miroir.**
+
+- `onmatch="include"` : n'enregistrer **que** ce qui correspond aux règles.
+- `onmatch="exclude"` : enregistrer **tout, sauf** ce qui correspond.
+- **Le piège :** un bloc `include` **vide** n'enregistre **rien** (rien ne correspond), tandis qu'un bloc `exclude` vide enregistre **tout**. C'est d'ailleurs ainsi que les configurations désactivent un type d'événement : `<ProcessTerminate onmatch="include" />`.
+
+**Règle n°3 — Plusieurs conditions dans un bloc, c'est OU.** Par défaut, il suffit qu'**une** condition corresponde. Pour exiger plusieurs conditions **ensemble**, on les regroupe dans une `<Rule groupRelation="and">` :
+
+```xml
+<ProcessCreate onmatch="include">
+  <Rule groupRelation="and">
+    <ParentImage condition="end with">\winword.exe</ParentImage>
+    <Image condition="end with">\powershell.exe</Image>
+  </Rule>
+</ProcessCreate>
+```
+
+
+Cette règle enregistre PowerShell **lancé par** Word : le signal du parent inattendu, vu plus haut. Sans le `<Rule groupRelation="and">`, elle enregistrerait n'importe quel processus lancé par Word, **ainsi que** n'importe quel PowerShell quel que soit son parent : ce n'est plus du tout la même règle.
+
+> **Un contraste utile avec le Ch.34.** La configuration Sysmon dispose de conditions riches (`is`, `contains`, `begin with`, `end with`…), alors que le XPath des journaux ne connaît pas `contains()`. Ce que Sysmon a filtré à l'enregistrement n'existe plus : aucune requête, aussi bien écrite soit-elle, ne le fera réapparaître.
 
 ### Analyser des journaux hors ligne
 
@@ -395,6 +471,21 @@ Where-Object ProcessGuid -eq $guid     # ✅ unique
 ```
 
 
+Et deux erreurs classiques dans une configuration Sysmon :
+
+```xml
+<!-- Confondre le type d'événement et le champ -->
+<ImageLoad condition="contains">\Temp\</ImageLoad>          <!-- ❌ ImageLoad est le TYPE (événement 7) -->
+<ImageLoad onmatch="include">
+  <ImageLoaded condition="contains">\Temp\</ImageLoaded>    <!-- ✅ ImageLoaded est le CHAMP, DANS le type -->
+</ImageLoad>
+
+<!-- Laisser un bloc include vide en croyant tout enregistrer -->
+<NetworkConnect onmatch="include" />    <!-- ❌ n'enregistre AUCUNE connexion -->
+<NetworkConnect onmatch="exclude" />    <!-- ✅ enregistre tout (à affiner ensuite) -->
+```
+
+
 ## 💡 Exercices
 
 **Guidé :** Sur ton poste, liste tes 10 dernières connexions (4624) en excluant les comptes en `$` et les services (type 5), avec `TimeUtc`, `TargetUserName`, `LogonType` et `TargetLogonId`. Verrouille puis déverrouille ta session (`Windows + L`), relance la commande, et identifie le nouvel événement grâce à son `LogonType`.
@@ -415,7 +506,7 @@ L'avantage d'un lab, c'est que **tu connais la vérité** : tu vas jouer toi-mê
 4. **Analyse hors ligne**, sur une copie, après vérification du manifeste : retrouve la session (4624), le processus et son parent (Sysmon 1), la requête DNS (22), le fichier (11) et la modification du registre (13).
 5. **Livre** : la timeline en CSV, et un court rapport en trois parties : *les faits* (ce que les journaux prouvent), *la chronologie*, et *ce qui reste inexpliqué*.
 
-> Si un événement attendu manque, ne conclus pas trop vite : certaines configurations Sysmon filtrent volontairement des événements pour limiter le bruit. Regarde ta configuration. C'est aussi une leçon : ce que tu ne vois pas dépend de ce que tu as choisi d'écouter.
+> Si un événement attendu manque, ne conclus pas trop vite : certaines configurations Sysmon filtrent volontairement des événements pour limiter le bruit. Regarde ta configuration avec `Sysmon64 -c` (section « Lire une configuration Sysmon »). C'est aussi une leçon : ce que tu ne vois pas dépend de ce que tu as choisi d'écouter.
 
 ## ✅ Tu sais maintenant...
 
@@ -423,6 +514,7 @@ L'avantage d'un lab, c'est que **tu connais la vérité** : tu vas jouer toi-mê
 - Lire un 4624 (`LogonType`, `TargetLogonId`) et un 4625 (codes d'échec), et reconnaître force brute, *spraying* et énumération
 - Lire le journal System : démarrages, arrêts, arrêts inattendus, effacements de journaux
 - Ce que Sysmon ajoute aux journaux natifs, ses Event IDs 1, 3, 11, 13, 22 et leurs champs
+- Lire une configuration Sysmon : type d'événement contre champ (`ImageLoad` / `ImageLoaded`), `include` contre `exclude`, conditions combinées avec `<Rule groupRelation="and">`
 - Pourquoi on suit un processus par son `ProcessGuid` et non par son PID
 - Analyser des `.evtx` hors ligne, et éviter ses trois pièges
 - Corréler avec le temps, le `LogonId` et le `ProcessGuid`, pivoter depuis un événement suspect, et construire une timeline
@@ -431,6 +523,8 @@ L'avantage d'un lab, c'est que **tu connais la vérité** : tu vas jouer toi-mê
 
 - **Comment distinguer une connexion RDP d'un accès à un partage dans les journaux ?** → Par le `LogonType` du 4624 : 10 pour RDP, 3 pour un accès réseau.
 - **Comment relier une connexion aux processus lancés pendant cette session ?** → Par le `LogonId` : le `TargetLogonId` du 4624 se retrouve dans le `LogonId` de Sysmon 1 et le `SubjectLogonId` du 4688.
+- **Dans une configuration Sysmon, quelle différence entre `<ImageLoad>` et `<ImageLoaded>` ?** → `<ImageLoad>` désigne le type d'événement (7, chargement d'une DLL) ; `<ImageLoaded>` est un champ de cet événement, le chemin de la DLL chargée. Le premier contient le second.
+- **Un bloc `<NetworkConnect onmatch="include" />` vide : que se passe-t-il ?** → Aucune connexion n'est enregistrée, puisque rien ne correspond à une liste d'inclusion vide. Un bloc `exclude` vide, à l'inverse, enregistrerait tout.
 - **Pourquoi `ProcessGuid` plutôt que le PID ?** → Windows recycle les PID ; le `ProcessGuid` de Sysmon est unique et relie un processus à toutes ses actions et à son parent.
 - **Force brute ou *password spraying* : comment les distinguer ?** → La force brute vise un compte avec beaucoup d'essais ; le spraying vise beaucoup de comptes avec peu d'essais chacun. Le `SubStatus` des 4625 précise la cause de chaque échec.
 - **Le journal Security est presque vide : que conclus-tu ?** → Rien de rassurant : on cherche un 1102 (effacement), on vérifie la stratégie d'audit et la taille maximale du journal.

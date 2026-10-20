@@ -80,7 +80,7 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 `Export-ModuleMember`, `Import-Module`, `Get/Set-Secret`, `Start/Stop-Transcript`, `Invoke-Pester`
 
 ### Sécurité & triage
-`Get-WinEvent`, `Get-FileHash`, `Get-AuthenticodeSignature`, `Set-AuthenticodeSignature`, `Get-Item -Stream`
+`Get-WinEvent` (avec `-FilterHashtable`, `-FilterXPath`, `-FilterXml`), `[xml]` et `.ToXml()` (lire le XML d'un événement), `Get-FileHash`, `Get-AuthenticodeSignature`, `Set-AuthenticodeSignature`, `Get-Item -Stream`
 
 ### Investigation (Partie IX)
 `Start-Transcript` / `Stop-Transcript`, `wevtutil epl` (export de journal), `Get-FileHash`, `Get-WinEvent -Path` et `-FilterHashtable @{ Path = … }` (analyse hors ligne), `Get-WinEvent -ListLog *Sysmon*`, `Get-DnsClientCache`, `Get-NetNeighbor`, `Get-TimeZone`
@@ -179,6 +179,9 @@ Pour ceux qui viennent de Linux ou de Python. **Rappel fondamental :** Bash et l
 | WinRM « toujours chiffré » | affirmation brute | nuancer (Kerberos domaine / NTLM-HTTPS hors domaine) |
 | `LastLogonDate` exact | s'y fier à la minute | approximatif (réplication différée) |
 | Permissions fichiers | ne voir que SMB ou que NTFS | l'intersection des deux gagne |
+| Lire un champ d'événement | `$xml.Event.EventData.TargetUserName` (→ rien) | `($xml.Event.EventData.Data \| Where-Object Name -eq 'TargetUserName').'#text'` |
+| « Contient » dans un filtre XPath | `contains()` (non pris en charge) | filtrer à la source, puis `Where-Object -match` |
+| Configuration Sysmon | `<ImageLoad>` pris pour un champ | `<ImageLoad>` = le type d'événement, `<ImageLoaded>` = le champ |
 | Identifier un processus | par son PID (recyclé par Windows) | par son `ProcessGuid` (Sysmon) |
 | Comparer des identifiants | `"0x1a2c" -eq 6700` (hexadécimal contre décimal) | `[Convert]::ToInt32("0x1a2c", 16) -eq 6700` |
 | Trier une timeline | heures locales de machines différentes | tout convertir en UTC avant de trier |

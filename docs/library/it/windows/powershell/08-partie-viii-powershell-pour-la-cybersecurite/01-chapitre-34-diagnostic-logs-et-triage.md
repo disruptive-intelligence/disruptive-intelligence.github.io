@@ -65,9 +65,182 @@ Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 }
 
 > **➡️ Pour aller plus loin :** ce tableau te donne les identifiants. Le Ch.37 (Partie IX, optionnelle) t'apprend à lire leurs **champs** (`LogonType`, codes d'échec, `LogonId`) et à les corréler avec Sysmon pour reconstituer une attaque.
 
+### Comprendre XML et XPath pour analyser les journaux Windows
+
+Chaque événement Windows est stocké sous la forme d'un document **XML**. Tant que tu te contentes de `Id`, `TimeCreated` et `Message`, tu n'en as pas besoin. Mais dès que tu veux le **détail** d'un événement (le compte visé, l'adresse IP, le type de connexion), il faut savoir lire ce XML, et savoir l'interroger. C'est ce que fait la détection de brute-force juste après, et c'est le socle des Ch.35 et 37. On procède en quatre temps.
+
+#### 1. La structure d'un document XML
+
+Commence par regarder le XML brut d'une connexion réussie :
+
+```powershell
+# Le XML complet du dernier événement 4624                                   [🔑 Admin]
+(Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4624 } -MaxEvents 1).ToXml()
+```
+
+
+Tu obtiens un long texte. En voici l'essentiel, simplifié :
+
+```xml
+<Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+  <System>
+    <Provider Name="Microsoft-Windows-Security-Auditing" />
+    <EventID>4624</EventID>
+    <TimeCreated SystemTime="2026-10-17T14:02:11.5291430Z" />
+    <Computer>CLIENT01.lab.local</Computer>
+  </System>
+  <EventData>
+    <Data Name="TargetUserName">alice</Data>
+    <Data Name="TargetLogonId">0x5a3f21</Data>
+    <Data Name="LogonType">3</Data>
+    <Data Name="IpAddress">192.168.1.50</Data>
+  </EventData>
+</Event>
+```
+
+
+Le vocabulaire, sur cet exemple :
+
+| Terme | Dans l'exemple | Ce que c'est |
+|---|---|---|
+| **Élément** (ou balise) | `<EventID>4624</EventID>` | Une balise ouvrante, une balise fermante (avec `/`), et ce qu'il y a entre les deux |
+| **Valeur** (le texte) | `4624` | Le contenu d'un élément |
+| **Attribut** | `Name="TargetUserName"` | Une information placée **dans** la balise ouvrante, sous la forme `nom="valeur"` |
+| **Élément vide** | `<TimeCreated SystemTime="…" />` | Aucun contenu, seulement des attributs ; il se referme lui-même avec `/>` |
+| **Imbrication** | `<System>` contient `<EventID>` | Un élément **parent** contient des éléments **enfants** : c'est une arborescence, comme des dossiers |
+| **Racine** | `<Event>` | L'élément qui contient tout le reste |
+
+Tout événement a deux blocs, et la différence entre les deux est essentielle :
+
+- **`System`** est **commun à tous les événements** : l'ID, l'heure (toujours en UTC, d'où le `Z` final), la machine, la source. Sa structure est la même partout.
+- **`EventData`** est **propre à chaque type d'événement** : ce sont ses champs détaillés. Et c'est là que se cache la difficulté : tous les champs sont des éléments portant **le même nom**, `<Data>`. Ce qui les distingue, c'est leur **attribut** `Name`. On ne peut donc pas désigner « le champ TargetUserName » directement : il faut dire « l'élément `Data` dont l'attribut `Name` vaut `TargetUserName` ». Garde cette phrase en tête, elle revient partout.
+
+> La première ligne porte un attribut `xmlns` (un « espace de noms »). Tu peux l'ignorer : il ne gêne ni la navigation PowerShell ni les filtres de `Get-WinEvent`.
+
+#### 2. Lire et manipuler du XML avec PowerShell
+
+`ToXml()` renvoie du **texte**. Le type `[xml]` le transforme en une arborescence d'objets dans laquelle on descend avec des points, comme dans des dossiers :
+
+```powershell
+$ev  = Get-WinEvent -FilterHashtable @{ LogName = 'Security'; Id = 4624 } -MaxEvents 1   # [🔑 Admin]
+$xml = [xml]$ev.ToXml()
+
+$xml.Event.System.EventID                   # 4624
+$xml.Event.System.Computer                  # CLIENT01.lab.local
+$xml.Event.System.TimeCreated.SystemTime    # un ATTRIBUT se lit comme une propriété
+
+# EventData est une LISTE d'éléments Data : on les affiche tous
+$xml.Event.EventData.Data | Format-Table Name, '#text'
+```
+
+
+**Le mystère du `'#text'`.** Pourquoi `.EventID` donne directement `4624`, alors qu'un `Data` exige `'#text'` ? C'est une règle de PowerShell :
+
+- un élément **sans attribut** est présenté directement comme son texte (`<EventID>4624</EventID>` → `4624`) ;
+- un élément **avec des attributs** devient un objet : ses attributs sont des propriétés (`.Name`), et son texte se range dans une propriété spéciale nommée **`#text`**. Les guillemets autour de `'#text'` sont obligatoires, à cause du `#`.
+
+Pour extraire **un** champ, on applique la phrase à retenir, mot pour mot : « l'élément `Data` dont le `Name` vaut `TargetUserName` », puis son texte :
+
+```powershell
+($xml.Event.EventData.Data | Where-Object Name -eq 'TargetUserName').'#text'     # alice
+```
+
+
+C'est exactement la ligne qu'utilise la détection de brute-force ci-dessous, et le cœur de la fonction `ConvertTo-EventObject` du Ch.37.
+
+> **📌 Le `Get-Member` des événements.** Face à un Event ID que tu ne connais pas, `$xml.Event.EventData.Data | Format-Table Name, '#text'` liste tous ses champs avec leurs valeurs. C'est le premier réflexe d'exploration.
+
+> **Cas particulier.** Dans certains journaux, `EventID` porte lui-même un attribut (`<EventID Qualifiers="16384">7036</EventID>`) : `.EventID` affiche alors un objet au lieu d'un nombre, et il faut écrire `.EventID.'#text'`. Même règle, appliquée ailleurs. Pour l'ID, de toute façon, `$ev.Id` est plus simple.
+
+#### 3. Interroger les journaux avec XPath
+
+**XPath** est un langage qui désigne des parties d'un document XML. Windows l'utilise pour filtrer les événements **à la source**, aussi vite que `-FilterHashtable`, mais avec une capacité en plus : filtrer sur la **valeur des champs** de `EventData`.
+
+Sa grammaire, pour les journaux, tient en quelques symboles :
+
+| Symbole | Se lit | Exemple |
+|---|---|---|
+| `*` | « n'importe quel événement » | `*[…]` |
+| `[ … ]` | « **dont** … » : une condition sur l'élément juste à sa gauche | `System[EventID=4625]` |
+| `@` | « l'attribut » | `@Name`, `@SystemTime` |
+| `=`, `!=`, `<`, `<=`, `>`, `>=` | comparaisons | `EventID=4625` |
+| `and`, `or`, `( )` | combiner des conditions | `(EventID=4624 or EventID=4625)` |
+
+**Lire les crochets à voix haute.** `*[System[EventID=4625]]` se lit : « tout événement (`*`) **dont** (`[`) le `System` a (`[`) un `EventID` égal à 4625 (`]]`) ». Chaque `[` ouvre une condition sur l'élément qui le précède ; les crochets s'emboîtent comme des parenthèses. Premier réflexe en cas d'erreur : **compter** qu'il y a autant de `]` que de `[`.
+
+Des exemples, du plus simple au plus complet :
+
+```text
+*[System[EventID=4625]]
+    → les échecs de connexion
+
+*[System[(EventID=4624 or EventID=4625)]]
+    → les connexions réussies OU échouées (les parenthèses regroupent le « or »)
+
+*[EventData[Data[@Name='TargetUserName']='alice']]
+    → tous les événements qui concernent le compte alice
+
+*[System[EventID=4625] and EventData[Data[@Name='LogonType']='3']]
+    → les échecs de connexion par le réseau (type 3)
+
+*[System[EventID=4625 and TimeCreated[timediff(@SystemTime) <= 86400000]]]
+    → les échecs des dernières 24 heures (86 400 000 millisecondes)
+```
+
+
+Le morceau le plus déroutant est `Data[@Name='LogonType']='3'`. Coupe-le en deux :
+
+- `Data[@Name='LogonType']` → « l'élément `Data` dont l'attribut `Name` vaut `LogonType` » : il **choisit le bon champ** ;
+- `='3'` → « … et dont la valeur vaut 3 » : il **compare son texte**.
+
+C'est la traduction XPath exacte de ce que tu fais en PowerShell avec `Where-Object Name -eq 'LogonType'` puis `.'#text'`.
+
+**Dans PowerShell**, la requête se passe à `-FilterXPath` :
+
+```powershell
+$requete = "*[System[EventID=4625] and EventData[Data[@Name='LogonType']='3']]"
+Get-WinEvent -LogName Security -FilterXPath $requete                      # [🔑 Admin]
+```
+
+
+XPath utilise des guillemets **simples** à l'intérieur : la chaîne PowerShell se met donc entre guillemets **doubles**. Et comme une chaîne entre guillemets doubles interprète les `$`, n'en mets pas dans la requête (XPath n'en a pas besoin).
+
+> **⚠️ Les limites du XPath des journaux.** Windows n'accepte qu'un **sous-ensemble** de XPath : pas de `contains()`, pas de `starts-with()`, pas d'expressions régulières. Pour « le nom de commande contient… », filtre d'abord à la source sur ce que XPath sait faire (ID, période, valeurs exactes), puis affine avec `Where-Object`.
+
+**Pour aller plus loin : `-FilterXml`.** Une requête XPath ne vise qu'un journal. Le format complet, appelé *QueryList*, permet d'interroger **plusieurs journaux** d'un coup et d'**exclure** des cas avec `Suppress` :
+
+```powershell
+$requete = @'
+<QueryList>
+  <Query Id="0" Path="Security">
+    <Select Path="Security">*[System[(EventID=4624 or EventID=4625)]]</Select>
+    <Select Path="System">*[System[EventID=7045]]</Select>
+    <Suppress Path="Security">*[EventData[Data[@Name='LogonType']='5']]</Suppress>
+  </Query>
+</QueryList>
+'@
+Get-WinEvent -FilterXml ([xml]$requete)                                   # [🔑 Admin]
+```
+
+
+Ici : les connexions (réussies ou échouées) et les installations de services, **sauf** les connexions de services (type 5), qui ne sont que du bruit.
+
+> **💡 L'astuce pour apprendre la syntaxe.** Dans l'Observateur d'événements, construis ton filtre avec l'interface (*Filtrer le journal actuel…*), puis ouvre l'onglet **XML** : il affiche la requête correspondante, prête à copier dans PowerShell. C'est la meilleure façon de comprendre comment une requête s'écrit.
+
+#### 4. Quel filtre choisir ?
+
+| Ton besoin | L'outil |
+|---|---|
+| Filtrer sur l'ID, la période, le niveau | `-FilterHashtable` : le plus simple, à utiliser par défaut |
+| Filtrer sur la valeur d'un champ, combiner `and` / `or` | `-FilterXPath` |
+| Interroger plusieurs journaux d'un coup, exclure des cas | `-FilterXml` |
+| « Contient », expressions régulières, logique complexe | Filtrer large à la source, puis `Where-Object` |
+
+> **Le même XML, un tout autre usage.** Le XML sert aussi à **configurer** Sysmon, l'outil de surveillance présenté au Ch.37 : mêmes balises, mêmes attributs, mais un rôle opposé. Ici on **interroge** des événements déjà enregistrés ; là, on **décide quels événements enregistrer**. On les comparera au Ch.37, au moment d'installer Sysmon.
+
 ### Détecter une attaque par brute-force
 
-Un cas d'école, qui réunit filtrage, regroupement et seuil :
+Un cas d'école, qui réunit filtrage, lecture du XML (que tu viens de voir), regroupement et seuil :
 
 ```powershell
 # Compter les échecs de connexion (4625) par compte sur 24h
@@ -220,6 +393,18 @@ Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625}  # ✅
 
 # Lire le journal Security sans droits admin
 Get-WinEvent -LogName Security    # ❌ sans admin → accès refusé
+
+# Chercher un champ de EventData par son nom, comme une propriété
+$xml.Event.EventData.TargetUserName                                            # ❌ rien : le champ s'appelle Data
+($xml.Event.EventData.Data | Where-Object Name -eq 'TargetUserName').'#text'  # ✅
+
+# Oublier un crochet fermant dans une requête XPath
+"*[System[EventID=4625]"     # ❌ 2 « [ » pour 1 « ] » → requête invalide
+"*[System[EventID=4625]]"    # ✅ autant de « ] » que de « [ »
+
+# Utiliser contains() dans un filtre XPath
+# ❌ non pris en charge par les journaux Windows
+# ✅ filtrer à la source sur l'ID et la période, puis Where-Object -match
 ```
 
 
@@ -227,11 +412,17 @@ Get-WinEvent -LogName Security    # ❌ sans admin → accès refusé
 
 **Guidé :** Compte les échecs de connexion (Event ID 4625) des dernières 24 h et affiche les comptes ayant plus de 5 échecs.
 
+**Guidé (XML) :** Récupère ton dernier événement 4624 et affiche son XML brut avec `.ToXml()`. Repère les blocs `System` et `EventData`, puis affiche tous les champs avec `Format-Table Name, '#text'`. Enfin, extrais seul le `LogonType`.
+
+**Autonome (XPath) :** Écris une requête XPath qui retrouve tes connexions **réussies** (4624) de type 2 (au clavier) ou 7 (déverrouillage). Construis-la d'abord dans l'Observateur d'événements, vérifie-la dans l'onglet XML, puis utilise-la avec `-FilterXPath`. Verrouille et déverrouille ta session (`Windows + L`) pour voir apparaître un nouvel événement.
+
 **Autonome :** Écris `Get-PersistenceReport.ps1` qui collecte les clés Run (HKLM + HKCU), les tâches planifiées non-Microsoft et les services hors chemins standard, puis exporte le tout en JSON horodaté. Réutilise ce que tu sais des Ch.11-13.
 
 ## ✅ Tu sais maintenant...
 
 - Lire et **filtrer efficacement** les Event Logs (`Get-WinEvent -FilterHashtable`)
+- Lire la structure XML d'un événement (éléments, attributs, `System` / `EventData`) et en extraire un champ avec `[xml]`, `.ToXml()` et `.'#text'`
+- Écrire une requête XPath (`*[System[…]]`, `Data[@Name='…']`, `and` / `or`) et choisir entre `-FilterHashtable`, `-FilterXPath` et `-FilterXml`
 - Les Event IDs clés (4624/4625/4720/7045/1102…)
 - Détecter une attaque par brute-force
 - Vérifier intégrité (`Get-FileHash`) et signature (`Get-AuthenticodeSignature`)
@@ -242,6 +433,7 @@ Get-WinEvent -LogName Security    # ❌ sans admin → accès refusé
 
 - **Comment détecter une attaque par brute-force en PowerShell ?** → Filtrer les Event ID 4625 sur une période, regrouper par compte, alerter au-dessus d'un seuil.
 - **Pourquoi `-FilterHashtable` plutôt que `Where-Object` sur les logs ?** → Le filtrage est appliqué à la source : indispensable sur des journaux volumineux.
+- **Comment filtrer des événements sur la valeur d'un champ, par exemple le type de connexion ?** → Avec une requête XPath passée à `-FilterXPath` : `*[System[EventID=4624] and EventData[Data[@Name='LogonType']='10']]`. Le filtre reste appliqué à la source.
 - **Où un malware cherche-t-il à persister ?** → Clés Run/RunOnce, tâches planifiées, services, dossiers de démarrage — tout ce qu'on sait déjà administrer.
 - **Comment vérifier qu'un binaire système est légitime ?** → Sa signature (`Get-AuthenticodeSignature`, statut Valid + signataire attendu) et son hash (`Get-FileHash`) comparé à une référence.
 
