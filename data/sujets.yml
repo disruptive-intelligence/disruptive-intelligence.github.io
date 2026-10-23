@@ -1,0 +1,168 @@
+# Sujets d'investigation Windows : les pages qui traitent d'une même question, quel que soit leur onglet.
+#
+# Sert à trois endroits (hooks/portal.py, « Même sujet ») :
+#  - en tête de chaque page citée ici, une barre qui renvoie aux autres pages du sujet (fiche, commandes,
+#    cours, labs) ; une page citée par plusieurs sujets affiche la liste de ses sujets ;
+#  - la page Cheat sheets › Windows › Journaux et événements, rubrique « Par situation » ;
+#  - la page Labs, qui en déduit les compétences de chaque lab.
+#
+# Aucun texte nouveau : seulement des liens. Chemin = fichier dans docs/ ; « #Intitulé » = intitulé exact de la
+# section (l'ancre est calculée). situation : donnees (j'ai des journaux à lire), soupcon (je soupçonne…),
+# rien (je ne trouve rien). Libellé d'un lien : court, il s'affiche dans une barre.
+
+- id: evtx
+  titre: Lire un .evtx ou un dossier de journaux
+  situation: donnees
+  commandes:
+    - ["Découvrir un .evtx", "cheatsheets/windows/fondamentaux/logs/lire.md#Découvrir le contenu d'un fichier .evtx"]
+    - ["Tout un dossier", "cheatsheets/windows/fondamentaux/logs/lire.md#Lire tous les journaux d'un dossier"]
+    - ["En XML", "cheatsheets/windows/fondamentaux/logs/requetes-xml.md#Un journal exporté (.evtx)"]
+  cours:
+    - ["Event Logs · lire un .evtx", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Lire un fichier .evtx exporté"]
+    - ["Event Logs · un dossier", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Analyser un dossier de fichiers .evtx"]
+  labs:
+    - ["Lab 1 · bases des journaux", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/14-lab-1-les-bases-des-journaux-d-evenements-windows.md"]
+    - ["Lab · journal Sysmon exporté", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md"]
+
+- id: etw
+  titre: Lire une trace ETW
+  situation: donnees
+  commandes:
+    - ["ETW et logman", "cheatsheets/windows/fondamentaux/logs/etw.md"]
+  cours:
+    - ["Comprendre ETW", "library/it/windows/sysmon-et-etw/02-comprendre-etw/index.md"]
+    - ["ETW en investigation", "library/it/windows/sysmon-et-etw/02-comprendre-etw/04-etw-en-investigation.md"]
+  labs:
+    - ["Lab 3 · ETW", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md"]
+
+- id: dll
+  titre: DLL hijacking
+  situation: soupcon
+  fiche: library/it/windows/reperer-un-dll-hijacking.md
+  commandes:
+    - ["Sysmon · DLL hijacking", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer un DLL hijacking dans un journal exporté"]
+    - ["Filtrer un .evtx", "cheatsheets/windows/fondamentaux/logs/lire.md#Filtrer un fichier .evtx sur un mot ou un dossier"]
+  cours:
+    - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
+    - ["Event Logs · l'exemple DLL", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Analyser un fichier .evtx : l'exemple du DLL hijacking"]
+  labs:
+    - ["Lab 2 · question 1", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 1 — DLL hijacking : WININET.dll"]
+    - ["Lab 4 · question 1", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 1 — DLL hijacking : le processus responsable"]
+
+- id: lsass
+  titre: Accès à LSASS
+  situation: soupcon
+  fiche: library/it/windows/reperer-un-acces-a-lsass.md
+  commandes:
+    - ["Sysmon · LSASS", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer un accès à la mémoire de LSASS"]
+    - ["Ouvertures de session", "cheatsheets/windows/fondamentaux/logs/sessions-rdp.md#Retrouver les ouvertures de session"]
+  cours:
+    - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
+    - ["Event Logs · Logon Types", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md"]
+  labs:
+    - ["Lab 2 · question 3", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 3 — Credential dumping : LSASS"]
+    - ["Lab 4 · question 4", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 4 — Qui a dumpé LSASS ?"]
+
+- id: unmanaged
+  titre: PowerShell non managé
+  situation: soupcon
+  fiche: library/it/windows/reperer-du-powershell-non-manage.md
+  commandes:
+    - ["Sysmon · injection de thread", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer une injection de thread"]
+  cours:
+    - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
+    - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
+  labs:
+    - ["Lab 2 · question 2", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 2 — PowerShell non managé : spoolsv.exe"]
+    - ["Lab 4 · questions 2 et 3", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 2 — PowerShell non managé : le processus victime"]
+
+- id: dotnet
+  titre: Chargement d'assemblies .NET
+  situation: soupcon
+  fiche: library/it/windows/reperer-le-chargement-d-assemblies-net.md
+  commandes:
+    - ["ETW · enregistrer une trace", "cheatsheets/windows/fondamentaux/logs/etw.md#Créer une trace, l'arrêter, la relire"]
+  cours:
+    - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
+  labs:
+    - ["Lab 3 · Seatbelt", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md#Question 1 — Suivre Seatbelt avec Sysmon et ETW"]
+
+- id: parents
+  titre: Filiation de processus anormale
+  situation: soupcon
+  fiche: library/it/windows/reperer-une-relation-parent-enfant-anormale.md
+  commandes:
+    - ["Sysmon · chaîne des parents", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Remonter la chaîne des processus parents"]
+    - ["Processus lancés (4688)", "cheatsheets/windows/fondamentaux/logs/processus-powershell.md#Retrouver les processus lancés"]
+  cours:
+    - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
+  labs:
+    - ["Lab 4 · question 6", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 6 — Une filiation étrange"]
+    - ["Lab Sysmon · question 4", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 4 — Le parent du cmd.exe qui a lancé le téléchargement"]
+
+- id: ppid
+  titre: Faux processus parent (PPID spoofing)
+  situation: soupcon
+  fiche: library/it/windows/demasquer-un-faux-processus-parent-ppid-spoofing.md
+  commandes:
+    - ["ETW et logman", "cheatsheets/windows/fondamentaux/logs/etw.md"]
+  cours:
+    - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
+
+- id: rdp
+  titre: Connexions et RDP
+  situation: soupcon
+  commandes:
+    - ["Ouvertures de session et RDP", "cheatsheets/windows/fondamentaux/logs/sessions-rdp.md"]
+    - ["Artefacts · connexions", "cheatsheets/forensic/windows/artefacts/connexions.md"]
+  cours:
+    - ["Event Logs · authentification", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md"]
+    - ["Event Logs · mouvement latéral et RDP", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md"]
+  labs:
+    - ["Lab 4 · question 5", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 5 — Une connexion malveillante après le dump ?"]
+
+- id: persistance
+  titre: Persistance (services, tâches, comptes, clé Run)
+  situation: soupcon
+  commandes:
+    - ["Services, tâches et comptes", "cheatsheets/windows/fondamentaux/logs/persistance.md"]
+    - ["Sysmon · clé Run", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer une persistance par clé Run"]
+    - ["Artefacts · persistance", "cheatsheets/forensic/windows/artefacts/persistance.md"]
+  cours:
+    - ["Event Logs · tâches planifiées", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/06-taches-planifiees.md"]
+    - ["Event Logs · services", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/07-services-windows.md"]
+    - ["Event Logs · comptes", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md"]
+  labs:
+    - ["Lab Sysmon · questions 2 et 5", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 5 — Le programme lancé à chaque démarrage (clé Run)"]
+
+- id: scripts
+  titre: Scripts PowerShell exécutés
+  situation: soupcon
+  commandes:
+    - ["Scripts PowerShell (4104)", "cheatsheets/windows/fondamentaux/logs/processus-powershell.md#Retrouver les scripts PowerShell exécutés"]
+    - ["Sysmon · PowerShell encodé", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Décoder une commande PowerShell encodée"]
+  cours:
+    - ["Event Logs · exécution PowerShell", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/12-execution-powershell.md"]
+  labs:
+    - ["Wazuh · PowerShell encodé", "library/cyber/detection/threat-hunting-avec-l-edr/04-labs-chasse-aux-menaces-dans-wazuh.md#Lab 2 — PowerShell encodé"]
+
+- id: effacement
+  titre: Journaux effacés
+  situation: soupcon
+  commandes:
+    - ["Effacement des traces", "cheatsheets/windows/fondamentaux/logs/effacement.md"]
+  cours:
+    - ["Event Logs · manipulation des journaux", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/09-manipulation-des-journaux.md"]
+  labs:
+    - ["Wazuh · reconnaissance et effacement", "library/cyber/detection/threat-hunting-avec-l-edr/04-labs-chasse-aux-menaces-dans-wazuh.md#Lab 3 — Reconnaissance et effacement des journaux"]
+
+- id: collecte
+  titre: "Rien ne remonte : vérifier la collecte"
+  situation: rien
+  commandes:
+    - ["Politique d'audit", "cheatsheets/windows/fondamentaux/logs/lire.md#Voir la politique d'audit active"]
+    - ["Sysmon tourne ?", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Vérifier que Sysmon tourne et lire ses événements"]
+    - ["Ce que Sysmon collecte", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Configurer ce que Sysmon collecte"]
+    - ["Sessions ETW actives", "cheatsheets/windows/fondamentaux/logs/etw.md#Lister les sessions ETW actives"]
+  cours:
+    - ["Installer et configurer Sysmon", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md"]

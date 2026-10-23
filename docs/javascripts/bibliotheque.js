@@ -29,7 +29,7 @@
   function fold(s) { return (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
   function isLab(t) { return /^labs?\b/i.test(t || ""); }
   function duration(m) { return m ? (m >= 60 ? (Math.round(m / 6) / 10).toString().replace(".", ",") + " h" : m + " min") : ""; }
-  function meta(n) { return [FORMATS[n.f] || n.f, n.p, duration(n.m)].filter(Boolean).join(" · "); }
+  function meta(n) { return [FORMATS[n.f] || n.f, n.p, duration(n.m), n.h ? "rangée dans " + n.h : ""].filter(Boolean).join(" · "); }
   function plural(n, word) { return n + " " + word + (n > 1 ? "s" : ""); }
   function notesOf(cat) { var out = []; cat.g.forEach(function (g) { out = out.concat(g.n); }); return out; }
   function pagesCount(items) { var k = 0; (items || []).forEach(function (i) { k += 1 + pagesCount(i.c); }); return k; }
@@ -135,6 +135,17 @@
     return nav;
   }
 
+  /* Choix gardé dans l'adresse (?voir=…, ?domaine=…) : un retour ou un lien partagé rouvre la même vue. */
+  function param(name) { try { return new URLSearchParams(window.location.search).get(name) || ""; } catch (e) { return ""; } }
+  function remember(name, value) {
+    try {
+      var u = new URL(window.location.href);
+      if (value) u.searchParams.set(name, value); else u.searchParams.delete(name);
+      window.history.replaceState(window.history.state, "", u.toString());
+    } catch (e) { /* adresse inchangée */ }
+  }
+  function key(t) { return fold(t).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
   /* Liste des rubriques à gauche (sélecteur sur téléphone), détail à droite. */
   function rubrics(root, units) {
     var box = el("div", "kw-bv-layout");
@@ -142,8 +153,9 @@
     var nav = el("nav", "kw-bv-rubs"); nav.setAttribute("aria-label", "Rubriques");
     var pick = el("select", "kw-bv-pick"); pick.setAttribute("aria-label", "Choisir une rubrique");
     var items = [];
-    function show(i) {
+    function show(i, keep) {
       main.textContent = ""; main.appendChild(detail(root, units[i]));
+      if (!keep) remember("voir", i ? key(units[i].head.t) : "");
       pick.value = String(i);
       items.forEach(function (x, k) { x.setAttribute("aria-current", k === i ? "true" : "false"); });
     }
@@ -158,7 +170,11 @@
     });
     pick.addEventListener("change", function () { show(parseInt(pick.value, 10)); });
     box.appendChild(pick); box.appendChild(nav); box.appendChild(main);
-    if (units.length) show(0);
+    if (units.length) {
+      var wanted = param("voir"), start = 0;
+      units.forEach(function (u, i) { if (wanted && key(u.head.t) === wanted) start = i; });
+      show(start, true);
+    }
     return box;
   }
   function domainStats(d) {
@@ -171,20 +187,25 @@
   function library(root, doms) {
     var wrap = el("div", "kw-bv-nav");
     var out = el("div");
+    var first = 0;
+    doms.forEach(function (d, i) { if (doms.length > 1 && param("domaine") === d.id) first = i; });
     if (doms.length > 1) {
       var row = el("div", "kw-bv-doms"); var tiles = [];
       doms.forEach(function (d, i) {
-        var b = button("kw-bv-dom", i === 0);
+        var b = button("kw-bv-dom", i === first);
         b.appendChild(el("span", "kw-bv-domicon", d.e || "•"));
         var txt = el("span", "kw-bv-domtext");
         txt.appendChild(el("span", "kw-bv-domtitle", d.t)); txt.appendChild(el("span", "kw-bv-meta", domainStats(d)));
         b.appendChild(txt);
-        b.addEventListener("click", function () { press(tiles, b); out.textContent = ""; out.appendChild(rubrics(root, unitsOf(d))); });
+        b.addEventListener("click", function () {
+          press(tiles, b); remember("voir", ""); remember("domaine", i ? d.id : "");
+          out.textContent = ""; out.appendChild(rubrics(root, unitsOf(d)));
+        });
         tiles.push(b); row.appendChild(b);
       });
       wrap.appendChild(row);
     }
-    out.appendChild(rubrics(root, unitsOf(doms[0])));
+    out.appendChild(rubrics(root, unitsOf(doms[first])));
     wrap.appendChild(out);
     return wrap;
   }
@@ -196,6 +217,7 @@
       d.c.forEach(function (c) {
         c.g.forEach(function (g) {
           g.n.forEach(function (n) {
+            if (n.h) return;   // note rappelée : déjà listée dans sa rubrique
             rows.push({ t: n.t, u: n.u, dom: d.t, cat: c.t, catId: c.id, grp: g.t, where: [d.t, c.t, g.t].filter(Boolean).join(" › "),
                         f: n.f, p: n.p, kind: "note" });
             (function walk(items, trail) {
@@ -274,6 +296,21 @@
   }
 
   // ---------------------------------------------------------------- montage
+  /* Aperçu : mise en page de la Bibliothèque (A sommaire, B explorateur, C par usage), mémorisée dans ce navigateur. */
+  function variant() { try { return localStorage.getItem("kw-libvar") || "a"; } catch (e) { return "a"; } }
+  function picker(box) {
+    var desc = box.querySelector(".kw-varpick__desc"), current = variant();
+    box.querySelectorAll("button[data-var]").forEach(function (b) {
+      var on = b.dataset.var === current;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      if (on && desc) desc.textContent = b.dataset.desc || "";
+      b.addEventListener("click", function () {
+        try { localStorage.setItem("kw-libvar", b.dataset.var); } catch (e) { /* choix non mémorisé */ }
+        window.location.reload();
+      });
+    });
+  }
+
   function mount(box, data) {
     var scope = box.dataset.scope || "";
     var doms = data;
@@ -290,9 +327,30 @@
     box.dataset.ready = "1";
     fetch(box.dataset.json).then(function (r) { return r.json(); }).then(then).catch(function () { box.remove(); });
   }
+  /* Page Labs : filtre sur le titre, le cours et les compétences (data-search). */
+  function labsFilter(box) {
+    var input = box.querySelector("input"), count = box.querySelector("span");
+    var items = Array.prototype.slice.call(document.querySelectorAll(".kw-labs li[data-search]"));
+    function apply() {
+      var q = fold(input.value.trim()), shown = 0;
+      items.forEach(function (li) { var ok = !q || fold(li.dataset.search).indexOf(q) >= 0; li.hidden = !ok; if (ok) shown++; });
+      document.querySelectorAll(".kw-labs").forEach(function (ul) {
+        var h = ul.previousElementSibling, any = ul.querySelector("li:not([hidden])");
+        ul.hidden = !any; if (h && /^H2$/.test(h.tagName)) h.hidden = !any;
+      });
+      count.textContent = plural(shown, "lab");
+      remember("filtre", input.value.trim());
+    }
+    input.value = param("filtre");
+    input.addEventListener("input", apply);
+    apply();
+  }
+
   function init() {
     document.body.classList.remove("kw-bv-on");
-    document.querySelectorAll(".kw-bv").forEach(function (box) { load(box, function (data) { mount(box, data); }); });
+    document.querySelectorAll(".kw-labs-filter").forEach(labsFilter);
+    document.querySelectorAll(".kw-varpick").forEach(picker);
+    if (variant() === "b") document.querySelectorAll(".kw-bv").forEach(function (box) { load(box, function (data) { mount(box, data); }); });
     document.querySelectorAll(".kw-bv-find").forEach(function (box) {
       load(box, function (data) { box.appendChild(facets(box.dataset.root || "", data, new URLSearchParams(window.location.search))); });
     });

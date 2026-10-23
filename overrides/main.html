@@ -2,6 +2,8 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
+  {#- Aperçu : mise en page choisie pour la Bibliothèque (A, B, C), posée avant l'affichage -#}
+  <script>try{var v=localStorage.getItem("kw-libvar");if(/^[abc]$/.test(v))document.documentElement.classList.add("kw-libvar-"+v)}catch(e){}</script>
   <link rel="apple-touch-icon" sizes="180x180" href="{{ 'assets/icons/apple-touch-icon.png' | url }}">
   <link rel="manifest" href="{{ 'site.webmanifest' | url }}">
   <meta name="apple-mobile-web-app-title" content="Disruptive">

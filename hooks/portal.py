@@ -1937,7 +1937,7 @@ def library_nav(library):
         nav.append({dom["label"]: [dom_src(dom)] + cats})
     glossary = [GLOSSARY_SRC] + ([{"📌 Fiches notions": fiches_src + [note_nav(n) for n in fiches]}] if fiches else [])
     # Parcours : hors du menu (cartes sur la page d'accueil de la Bibliothèque)
-    return nav + revision_nav() + labs_nav() + [{"🔎 Rechercher dans mes notes": LIBRARY_SEARCH_SRC}, {"🔎 Filtrer par titre": FILTER_SRC}, {"📖 Glossaire & notions": glossary}]
+    return nav + revision_nav() + labs_nav() + [{"🔎 Chercher": LIBRARY_SEARCH_SRC}, {"🔎 Filtrer par titre": FILTER_SRC}, {"📖 Glossaire & notions": glossary}]
 
 
 def category_nav(cat):
@@ -2393,7 +2393,7 @@ def pages_library(library):
             if cat.get("description"):
                 body += f'<p class="kw-dom-lead">{esc(cat["description"])}</p>\n'
             body += (f'<span class="kw-dom-stats">{stats}{" · mis à jour le " + update if update else ""}</span>\n'
-                     "</div>\n\n") + quick_filter(src, f"{dom['id']}/{cat['id']}") + library_box(src, f"{dom['id']}/{cat['id']}")
+                     "</div>\n\n") + lib_variant_picker() + quick_filter(src, f"{dom['id']}/{cat['id']}") + library_box(src, f"{dom['id']}/{cat['id']}")
             body += '<div class="kw-bv-fallback" markdown>\n\n'      # liste générée : masquée quand le script a pris le relais
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
@@ -2450,94 +2450,134 @@ def section_bar(label, anchor=None, more=None):
     return f'\n<div class="kw-bar"{ident}><span>{esc(label)}</span>{link}</div>\n'
 
 
+LIB_VARIANTS = [("a", "Sommaire", "le menu de gauche suffit ; au centre, la recherche et le sommaire des rubriques en texte"),
+                ("b", "Explorateur", "l'explorateur seul (domaine, rubriques, détail) ; le menu de gauche est masqué"),
+                ("c", "Par usage", "trois colonnes : apprendre, agir, s'entraîner ; le menu de gauche reste")]
+
+
+def first_src(entry):
+    """Première page d'une entrée du menu (chaîne, liste ou dictionnaire imbriqués)."""
+    if isinstance(entry, str):
+        return entry
+    if isinstance(entry, dict):
+        return first_src(next(iter(entry.values())))
+    return first_src(entry[0]) if entry else ""
+
+
+def lib_masthead(src, count):
+    """En-tête commun : titre, un seul champ (texte des notes et des cheat sheets), une ligne de liens."""
+    links = [("Cyber", "library/cyber/index.md"), ("IT", "library/it/index.md"), ("🧪 Labs", LABS_INDEX),
+             ("📝 Révision", REVISION_INDEX), ("Parcours", PARCOURS_SRC), ("Glossaire", GLOSSARY_SRC),
+             ("📋 Cheat sheets", "cheatsheets/index.md")]
+    nav = " ".join(f'<a href="{href(src, d)}">{label}</a>' for label, d in links
+                   if d != REVISION_INDEX or STATE.get("revisions"))
+    return ('<div class="kw-mast kw-mast--lib">'
+            '<div class="kw-mast__head"><h1 class="kw-mast__title">📚 Bibliothèque</h1>'
+            f'<span class="kw-mast__count">{count} notes</span></div>'
+            f'<form class="kw-mast__search" action="{href(src, LIBRARY_SEARCH_SRC)}" method="get">'
+            '<input type="search" name="mots" placeholder="Chercher dans les notes et les cheat sheets : Sysmon 7, LSASS, nmap -sV…" '
+            'aria-label="Chercher dans la Bibliothèque et les cheat sheets"><button type="submit">Chercher</button></form>'
+            f'<nav class="kw-mast__nav">{nav}</nav></div>\n')
+
+
+def lib_variant_picker():
+    """Aperçu seulement : choix de la mise en page (mémorisé dans ce navigateur, javascripts/bibliotheque.js)."""
+    return ('<div class="kw-varpick" role="group" aria-label="Mise en page de la Bibliothèque"><span>Aperçu de mise en page :</span>'
+            + "".join(f'<button type="button" data-var="{k}" data-desc="{esc(d)}"><b>{k.upper()}</b> {esc(t)}</button>'
+                      for k, t, d in LIB_VARIANTS)
+            + '<span class="kw-varpick__desc"></span></div>\n')
+
+
+def rubric_index(cat, src):
+    """Une rubrique en texte : nom, phrase, sous-rubriques en liens, nombre de notes."""
+    notes = [n for n in cat["notes"] if n["imported"]]
+    groups = [label for label, _ in grouped(notes) if label]
+    subs = " · ".join(f'<a href="{href(src, group_src(cat, g))}">{esc(bare(g))}</a>' for g in groups)
+    return (f'<div class="kw-som__rub"><a class="kw-som__name" href="{href(src, cat["src"])}">{esc(cat["label"])}</a>'
+            f'<span class="kw-som__count">{len(notes)}</span>'
+            + (f'<span class="kw-som__desc">{esc(cat.get("description", ""))}</span>' if cat.get("description") else "")
+            + (f'<span class="kw-som__subs">{subs}</span>' if subs else "") + "</div>")
+
+
+def lib_recent(src, recent, n=4):
+    return ('<p class="kw-som__recent"><span>Mis à jour récemment</span> '
+            + " · ".join(f'<a href="{href(src, x["src"])}">{esc(nav_title(x))}</a>' for x in recent[:n]) + "</p>\n")
+
+
+def lib_practice(src):
+    """Labs, révision, parcours : une ligne chacun."""
+    labs = STATE.get("labs") or []
+    lines = []
+    if labs:
+        lines.append(f'<a href="{href(src, LABS_INDEX)}">🧪 Labs</a> — {len(labs)} labs, avec ce que chacun fait travailler')
+    if STATE.get("revisions"):
+        lines.append(f'<a href="{href(src, REVISION_INDEX)}">📝 Révision</a> — les questions d\'entretien, rubrique par rubrique')
+    for p in (p for p in STATE.get("parcours", []) if p["etapes"]):
+        lines.append(f'<a href="{href(src, p["src"])}">{esc(p["titre"])}</a> — parcours en {len(p["etapes"])} étapes')
+    lines.append(f'<a href="{href(src, GLOSSARY_SRC)}">📖 Glossaire & notions</a> — les définitions et les fiches notions')
+    return '<ul class="kw-som__practice">' + "".join(f"<li>{l}</li>" for l in lines) + "</ul>\n"
+
+
+def lib_cats(d):
+    return [c for c in d["categories"] if not c.get("glossaire") and any(n["imported"] for n in c["notes"])]
+
+
+def home_sommaire(library, src, recent):
+    """Variante A : le sommaire en texte, façon journal."""
+    out = lib_recent(src, recent)
+    for d in library:
+        out += (section_bar(bare(d["label"]), anchor=d["id"], more=("Tout le domaine →", href(src, dom_src(d))))
+                + '<div class="kw-som">' + "".join(rubric_index(c, src) for c in lib_cats(d)) + "</div>\n")
+    return out + section_bar("S'entraîner et réviser") + lib_practice(src)
+
+
+def home_usage(library, src, recent):
+    """Variante C : apprendre (domaines et rubriques), agir (cheat sheets, fiches détection), s'entraîner."""
+    learn = ""
+    for d in library:
+        learn += (f'<p class="kw-use__dom"><a href="{href(src, dom_src(d))}">{esc(d["label"])}</a></p><ul>'
+                  + "".join(f'<li><a href="{href(src, c["src"])}">{esc(bare(c["label"]))}</a></li>' for c in lib_cats(d)) + "</ul>")
+    fiches = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"] and n.get("format") == "detection"]
+    act = (f'<p class="kw-use__dom"><a href="{href(src, "cheatsheets/index.md")}">📋 Cheat sheets</a></p><ul>'
+           + "".join(f'<li><a href="{href(src, s)}">{esc(label)}</a></li>' for label, s in STATE.get("cs_sections", []))
+           + f'</ul><p class="kw-use__dom"><a href="{href(src, SUBJECTS_HUB)}#par-situation">🪟 Windows : partir de la situation</a></p>'
+           + '<p class="kw-use__dom">🎯 Repérer une attaque</p><ul>'
+           + "".join(f'<li><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a></li>' for n in fiches) + "</ul>")
+    labs = STATE.get("labs") or []
+    train = (f'<p class="kw-use__dom"><a href="{href(src, LABS_INDEX)}">🧪 Labs</a></p><ul>'
+             + "".join(f'<li><a href="{href(src, l["src"])}">{esc(l["title"])}</a></li>' for l in labs) + "</ul>"
+             + (f'<p class="kw-use__dom"><a href="{href(src, REVISION_INDEX)}">📝 Révision</a></p>' if STATE.get("revisions") else "")
+             + '<p class="kw-use__dom">Parcours</p><ul>'
+             + "".join(f'<li><a href="{href(src, p["src"])}">{esc(p["titre"])}</a></li>' for p in STATE.get("parcours", []) if p["etapes"])
+             + f'</ul><p class="kw-use__dom"><a href="{href(src, GLOSSARY_SRC)}">📖 Glossaire & notions</a></p>')
+    cols = [("Apprendre", "Cours, synthèses et notions, par domaine.", learn),
+            ("Agir", "Sur le poste : la commande, la fiche, la démarche.", act),
+            ("S'entraîner", "Labs pratiqués, révision, parcours.", train)]
+    return (lib_recent(src, recent)
+            + '<div class="kw-use">' + "".join(f'<section class="kw-use__col"><p class="kw-use__title">{t}</p>'
+                                                f'<p class="kw-use__lead">{l}</p>{b}</section>' for t, l, b in cols) + "</div>\n")
+
+
 def page_library_index(library, themes, glossary_count):
-    """Accueil de la Bibliothèque : en-tête compact (compteurs, champ filtrer / chercher, liens), navigation par
-    domaine, rubrique et sous-rubrique (javascripts/bibliotheque.js), parcours en cartes à étapes, outils. Sans JS,
-    la note à la une et les blocs de domaine (kw-bv-fallback) restent affichés."""
+    """Accueil de la Bibliothèque : en-tête compact (un seul champ de recherche, une ligne de liens), puis l'une des
+    trois mises en page de l'aperçu (sélecteur ; A par défaut). B garde l'explorateur (javascripts/bibliotheque.js)."""
     src = "library/index.md"
     all_notes = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"]]
-    hours = round(sum(n.get("minutes") or 0 for n in all_notes) / 60)
-    cat_of = {n["src"]: c for d in library for c in d["categories"] for n in c["notes"]}
     recent = sorted((n for n in all_notes if n.get("revue")), key=lambda n: (n["revue"], n.get("minutes") or 0), reverse=True)
-    resume = lambda n: n.get("resume") or STATE.get("resumes", {}).get(n["title"], "")
-    nav = " ".join(f'<a href="{href(src, dom_src(d))}">{esc(bare(d["label"]))}</a>' for d in library) + (
-        f' <a href="#parcours">Parcours</a> <a href="{href(src, GLOSSARY_SRC)}">Glossaire</a>'
-        + (f' <a href="{href(src, REVISION_INDEX)}">Révision</a>' if STATE.get("revisions") else "")
-        + f' <a href="{href(src, "cheatsheets/index.md")}">Cheat sheets</a>')
-    # en-tête compact : titre et compteurs, un seul champ (Entrée = filtrer les titres ; second bouton = texte intégral)
-    masthead = (
-        '<div class="kw-mast kw-mast--lib">'
-        '<div class="kw-mast__head"><h1 class="kw-mast__title">📚 Bibliothèque</h1>'
-        f'<span class="kw-mast__count">{len(all_notes)} notes en ligne · {hours} h de lecture</span></div>'
-        f'<form class="kw-mast__search" action="{href(src, LIBRARY_SEARCH_SRC)}" method="get">'
-        '<input type="search" name="mots" placeholder="Un cours, un chapitre, un lab, une commande…" '
-        'title="Par exemple : Sysmon, kerberoasting, nmap -sV" aria-label="Chercher dans la Bibliothèque">'
-        f'<button type="submit" formaction="{href(src, FILTER_SRC)}">Filtrer les titres</button>'
-        '<button type="submit">Chercher dans le texte</button></form>'
-        f'<nav class="kw-mast__nav">{nav}</nav></div>')
-    une = ""
-    if recent:
-        f0, rest = recent[0], recent[1:4]
-        cat = cat_of.get(f0["src"])
-        une = (section_bar("À la une")
-               + '<div class="kw-une">'
-               f'<a class="kw-une__main" href="{href(src, f0["src"])}"><span class="kw-tuto__tag">{esc(bare(cat["label"])) if cat else ""} · '
-               f'{note_tag(f0)}</span><span class="kw-une__title">{esc(nav_title(f0))}</span>'
-               f'<span class="kw-une__text">{esc(resume(f0))}</span>'
-               f'<span class="kw-une__meta">Mis à jour le {fr_date(date.fromisoformat(f0["revue"]))} · Lire →</span></a>'
-               '<div class="kw-une__side"><span class="kw-une__label">Récemment mis à jour</span>'
-               + "".join(f'<a class="kw-une__item" href="{href(src, n["src"])}"><span class="kw-une__date">'
-                         f'{fr_date(date.fromisoformat(n["revue"]))}</span><span>{esc(nav_title(n))}</span></a>' for n in rest)
-               + "</div></div>\n")
-    colors = ["#ed4d5a", "#8f9bff", "#e0b12a", "#4fc3a1", "#c77dff", "#5ab0ff"]
-    paths = "".join(
-        f'<div class="kw-course" style="--kw-course: {colors[i % len(colors)]}">'
-        f'<span class="kw-course__tag">Parcours · {len(p["etapes"])} étapes</span>'
-        f'<a class="kw-course__title" href="{href(src, p["src"])}">{esc(p["titre"])}</a>'
-        f'<span class="kw-course__text">{esc(p["description"])}</span><ol class="kw-course__steps">'
-        + "".join(f'<li><a href="{href(src, s["note"]["src"])}">{esc(s["note"]["title"])}</a></li>' for s in p["etapes"][:9])
-        + "</ol>"
-        + (f'<span class="kw-course__more">+ {len(p["etapes"]) - 9} étape{"s" if len(p["etapes"]) > 10 else ""}</span>'
-           if len(p["etapes"]) > 9 else "")
-        + f'<a class="kw-course__cta" href="{href(src, p["etapes"][0]["note"]["src"])}">Commencer →</a></div>'
-        for i, p in enumerate(p for p in STATE.get("parcours", []) if p["etapes"]))
-    doms = ""
-    for d in library:
-        cats = [c for c in d["categories"] if not c.get("glossaire")]
-        notes = [n for c in cats for n in c["notes"]]
-        rubs = "".join(
-            f'<a class="kw-domblock__rub" href="{href(src, c["src"])}"><span class="kw-domblock__num">{i:02d}</span>'
-            f'<span class="kw-domblock__name">{esc(c["label"])}</span>'
-            f'<span class="kw-domblock__desc">{esc(c.get("description", ""))}</span>'
-            f'<span class="kw-tuto__tag">{format_counts(c["notes"]) or "à venir"}</span></a>'
-            for i, c in enumerate(cats, 1))
-        doms += (section_bar(bare(d["label"]), anchor=d["id"])
-                 + '<div class="kw-domblock"><div class="kw-domblock__intro">'
-                 f'<a class="kw-domblock__title" href="{href(src, dom_src(d))}">{esc(d["label"])}</a>'
-                 f'<p>{esc(DOMAIN_LEAD.get(d["id"], ""))}</p><span class="kw-dom-stats">{lib_stats(notes)}</span>'
-                 f'<a class="kw-domblock__cta" href="{href(src, dom_src(d))}">Explorer {esc(bare(d["label"]))} →</a></div>'
-                 f'<div class="kw-domblock__rubs">{rubs}</div></div>\n')
-    fiches = [n for d in library for c in d["categories"] if c.get("glossaire") for n in c["notes"] if n["imported"]]
     return src, f"""---
 title: Bibliothèque
 hide:
   - toc
   - footer
 ---
-{masthead}
-{library_box(src)}<div class="kw-bv-fallback">{une}{doms}</div>
-{section_bar("Apprendre dans le bon ordre", anchor="parcours")}
-<div class="kw-courses">{paths}</div>
-{section_bar("Les outils")}
-<div class="kw-libgrid">
-<a class="kw-card" href="{href(src, LIBRARY_SEARCH_SRC)}"><span class="kw-card__title">🔎 Rechercher dans mes notes</span><span class="kw-card__text">Texte intégral des {len(all_notes)} notes publiées : un mot, une commande, un acteur.</span></a>
-<a class="kw-card" href="{href(src, GLOSSARY_SRC)}"><span class="kw-card__title">📖 Glossaire & notions</span><span class="kw-card__text">{glossary_count} définitions de A à Z et {len(fiches)} fiches notions pour aller à l'essentiel.</span></a>
-{revision_card(src)}
-{labs_card(src)}
-<a class="kw-card" href="{href(src, "cheatsheets/index.md")}"><span class="kw-card__title">📋 Cheat sheets</span><span class="kw-card__text">La commande et un exemple qui marche, quand on est sur le poste.</span></a>
-</div>
+{lib_masthead(src, len(all_notes))}
+{lib_variant_picker()}
+<div class="kw-var kw-var--a">{home_sommaire(library, src, recent)}</div>
+<div class="kw-var kw-var--b">{library_box(src)}<div class="kw-bv-fallback">{home_sommaire(library, src, recent)}</div>
+{section_bar("S'entraîner et réviser")}{lib_practice(src)}</div>
+<div class="kw-var kw-var--c">{home_usage(library, src, recent)}</div>
 
-<span class="kw-muted">Les liens externes sélectionnés (outils, sites, lectures) sont rangés à part, dans l'onglet [🧭 Ressources]({posixpath.relpath(RESSOURCES_SRC, "library")}).</span>
+<span class="kw-muted">Les liens externes sélectionnés (outils, sites, lectures) sont dans [🧭 Ressources]({posixpath.relpath(RESSOURCES_SRC, "library")}).</span>
 """
 
 
@@ -2975,6 +3015,8 @@ def expand_reprises(markdown, src, docs_dir):
 def decorate_cheatsheet(markdown, page, config):
     src = page.file.src_uri
     markdown = expand_reprises(markdown, src, config.docs_dir)
+    if src == SUBJECTS_HUB:
+        markdown = markdown.replace("<!-- situations -->", subjects_hub())
     model = page.meta.get("modele")
     if model:
         path = Path(config.docs_dir) / posixpath.dirname(src) / str(model)
@@ -3003,6 +3045,121 @@ def cheatsheet_links(pages):
             sheets = [(f"cheat sheets {pages[idx][0]}", idx)] if idx in pages else sheets[:3]
         out[course] = sheets
     return out
+
+
+# ---------------------------------------------------------------- même sujet
+
+SUBJECTS_HUB = "cheatsheets/windows/fondamentaux/logs/index.md"   # rubrique « Par situation »
+SITUATIONS = [("donnees", "J'ai des journaux à lire"), ("soupcon", "Je soupçonne…"), ("rien", "Je ne trouve rien")]
+SUBJECT_ROLES = [("fiche", "Fiche"), ("commandes", "Commandes"), ("cours", "Comprendre"), ("labs", "S'entraîner")]
+
+
+def heading_slug(text):
+    """Ancre d'un intitulé, comme l'extension toc de Markdown (réglage par défaut du site)."""
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^\w\s-]", "", text).strip().lower()
+    return re.sub(r"[-\s]+", "-", text)
+
+
+def load_subjects(root, docs_dir):
+    """data/sujets.yml : pages qui traitent d'une même question. Un chemin absent arrête la construction."""
+    out = []
+    for s in load_yaml(root / "data" / "sujets.yml", []) or []:
+        subject = {"id": s["id"], "titre": str(s["titre"]), "situation": s.get("situation", "soupcon")}
+        for key, _ in SUBJECT_ROLES:
+            raw = ([["Fiche", s["fiche"]]] if s.get("fiche") else []) if key == "fiche" else (s.get(key) or [])
+            links = []
+            for label, target in raw:
+                path, _, head = str(target).partition("#")
+                if not (docs_dir / path).exists():
+                    raise PluginError(f"data/sujets.yml ({s['id']}) : page introuvable {path}")
+                links.append({"t": str(label), "src": path, "anchor": heading_slug(head) if head else ""})
+            subject[key] = links
+        out.append(subject)
+    by_page = {}
+    for s in out:
+        for key, _ in SUBJECT_ROLES:
+            for link in s[key]:
+                if s not in by_page.setdefault(link["src"], []):
+                    by_page[link["src"]].append(s)
+    return out, by_page
+
+
+def subject_title(s, here):
+    fiche = s["fiche"][0]["src"] if s["fiche"] else None
+    return f"[{esc(s['titre'])}]({posixpath.relpath(fiche, posixpath.dirname(here))})" if fiche and fiche != here else esc(s["titre"])
+
+
+def subject_bar(here):
+    """En tête d'une page : les autres pages de son sujet ; ses sujets s'il y en a plusieurs."""
+    subjects = STATE.get("subjects_by_page", {}).get(here)
+    if not subjects:
+        return ""
+    rel = lambda link: posixpath.relpath(link["src"], posixpath.dirname(here)) + (f"#{link['anchor']}" if link["anchor"] else "")
+    hub = posixpath.relpath(SUBJECTS_HUB, posixpath.dirname(here))
+    if len(subjects) > 1:
+        chips = " ".join(f'[{esc(s["titre"])}]({hub}#sujet-{s["id"]}){{ .kw-same__chip }}' for s in subjects)
+        return (f'<div class="kw-same kw-same--many" data-search-exclude markdown>\n<span class="kw-same__label">Sujets de cette page</span> {chips}'
+                f' [Tous les sujets →]({hub}#par-situation){{ .kw-same__all }}\n</div>\n\n')
+    s = subjects[0]
+    cols = []
+    for key, label in SUBJECT_ROLES:
+        links = s[key]
+        if not links:
+            continue
+        items = " ".join(
+            (f'<span class="kw-same__here">{"ici" if key == "fiche" else esc(l["t"])}</span>' if l["src"] == here and not l["anchor"]
+             else f'[{"Ouvrir la fiche" if key == "fiche" else esc(l["t"])}]({rel(l)})')
+            for l in links)
+        cols.append(f'<span class="kw-same__role">{label}</span> {items}')
+    return (f'<div class="kw-same" data-search-exclude markdown>\n<span class="kw-same__label">Même sujet · {subject_title(s, here)}</span>\n'
+            + "\n".join(f'<span class="kw-same__col" markdown>{c}</span>' for c in cols)
+            + "\n</div>\n\n")
+
+
+def add_subject_bar(markdown, src):
+    bar = subject_bar(src)
+    if not bar:
+        return markdown
+    m = re.search(r"^# .+\n", markdown, re.M)
+    if m and markdown.count("\n", 0, m.start()) < 30:                 # cheat sheet : sous son titre
+        return markdown[:m.end()] + "\n" + bar + markdown[m.end():]
+    if markdown.startswith('<span class="kw-muted">'):                # note : sous le fil d'Ariane
+        cut = markdown.find("\n\n")
+        return markdown[:cut + 2] + bar + markdown[cut + 2:]
+    return bar + markdown
+
+
+def subjects_hub():
+    """Cheat sheets › Windows › Journaux : un tableau par situation, une ligne par sujet, ses pages par rôle."""
+    here = SUBJECTS_HUB
+    rel = lambda link: posixpath.relpath(link["src"], posixpath.dirname(here)) + (f"#{link['anchor']}" if link["anchor"] else "")
+    out = ['<div class="kw-hub">']
+    for sid, label in SITUATIONS:
+        subjects = [s for s in STATE.get("subjects", []) if s["situation"] == sid]
+        if not subjects:
+            continue
+        out.append(f'<p class="kw-hub__sit">{esc(label)}</p>\n<table class="kw-hub__table"><thead><tr><th>Sujet</th>'
+                   + "".join(f"<th>{l}</th>" for k, l in SUBJECT_ROLES if k != "fiche") + "</tr></thead><tbody>")
+        for s in subjects:
+            fiche = s["fiche"][0] if s["fiche"] else None
+            name = (f'<a href="{href(here, fiche["src"])}">{esc(s["titre"])}</a><span class="kw-hub__tag">fiche</span>'
+                    if fiche else esc(s["titre"]))
+            cells = ""
+            for key, _ in SUBJECT_ROLES:
+                if key == "fiche":
+                    continue
+                cells += "<td>" + "<br>".join(
+                    f'<a href="{href(here, l["src"])}{"#" + l["anchor"] if l["anchor"] else ""}">{esc(l["t"])}</a>' for l in s[key]) + "</td>"
+            out.append(f'<tr id="sujet-{s["id"]}"><th scope="row">{name}</th>{cells}</tr>')
+        out.append("</tbody></table>")
+    out.append("</div>")
+    return "\n".join(out)
+
+
+def lab_skills(lab_src):
+    """Sujets où un lab est cité (data/sujets.yml) : ses compétences."""
+    return [s["titre"] for s in STATE.get("subjects", []) if any(l["src"] == lab_src for l in s["labs"])]
 
 
 # ---------------------------------------------------------------- révision
@@ -3129,6 +3286,8 @@ def labs_card(src):
 
 
 def page_labs_index():
+    """Un lab par ligne : son propre titre, ce qu'il fait travailler (sujets de data/sujets.yml), son cours ;
+    un champ filtre la liste (javascripts/bibliotheque.js)."""
     by_domain = {}
     for lab in STATE.get("labs") or []:
         by_domain.setdefault(lab["domain"], []).append(lab)
@@ -3136,20 +3295,28 @@ def page_labs_index():
     for domain, lst in by_domain.items():
         items = []
         for lab in lst:
-            bits = [b for b in (lab["note"].get("provenance"), lab["cat"]["label"],
-                                f'{lab["questions"]} question{"s" if lab["questions"] > 1 else ""}'
-                                if lab["questions"] else "En cours") if b]
+            skills = lab_skills(lab["src"])
+            bits = [b for b in (f'{lab["questions"]} question{"s" if lab["questions"] > 1 else ""}' if lab["questions"] else "En cours",
+                                lab["note"].get("provenance")) if b]
             status_class = "is-done" if lab["questions"] else "is-todo"
-            items.append(f'<li class="{status_class}"><a href="{href(LABS_INDEX, lab["src"])}">'
-                         f'{esc(lab["note"]["title"])}</a> — {esc(lab["title"])}'
-                         f'<span class="kw-note-meta">{esc(" · ".join(bits))}</span></li>')
-        body += f"\n## {domain}\n\n" + '<ul class="kw-notes">' + "".join(items) + "</ul>\n"
-    return LABS_INDEX, f"""# 🧪 Labs
+            search = " ".join([lab["title"], lab["note"]["title"], bare(lab["cat"]["label"])] + skills)
+            items.append(f'<li class="{status_class}" data-search="{esc(search)}"><a href="{href(LABS_INDEX, lab["src"])}">'
+                         f'{esc(lab["title"])}</a>'
+                         + (f'<span class="kw-lab__skills">Travaille : {esc(" · ".join(skills))}</span>' if skills else "")
+                         + f'<span class="kw-note-meta">Cours <a href="{href(LABS_INDEX, lab["note"]["src"])}">{esc(lab["note"]["title"])}</a>'
+                         f' · {esc(" · ".join(bits))}</span></li>')
+        body += f"\n## {domain}\n\n" + '<ul class="kw-notes kw-labs">' + "".join(items) + "</ul>\n"
+    return LABS_INDEX, f"""---
+hide:
+  - footer
+---
+# 🧪 Labs
 
 Les labs pratiqués ou en cours (LetsDefend, Hack The Box…) : pour chaque question documentée, la démarche, la requête ou
-la commande, ce qu'il faut lire et la réponse, repliée. Chaque lab reste dans son cours ; cette page les
-regroupe. Les commandes qui resservent sont reprises en cas concrets dans les
-[cheat sheets]({posixpath.relpath("cheatsheets/index.md", LABS_DIR)}).
+la commande, ce qu'il faut lire et la réponse, repliée. Chaque lab reste dans son cours ; cette page les regroupe.
+Les commandes qui resservent sont dans les [cheat sheets]({posixpath.relpath(SUBJECTS_HUB, LABS_DIR)}#par-situation), rangées par situation.
+
+<div class="kw-labs-filter"><input type="search" placeholder="Filtrer : LSASS, DLL, Wazuh, ETW…" aria-label="Filtrer les labs"><span class="kw-muted"></span></div>
 {body}"""
 
 
@@ -3165,16 +3332,18 @@ hide:
 search:
   exclude: true
 ---
-# 🔎 Rechercher dans mes notes
+# 🔎 Chercher
 
-<span class="kw-muted">Texte intégral des {notes} notes publiées. Tous les mots saisis doivent figurer dans la section ;
-un mot trouvé dans le titre la fait remonter. La recherche du site (en haut) ne connaît que les titres des notes.</span>
+<span class="kw-muted">Le texte des {notes} notes et des cheat sheets. Un résultat par page, ses passages dessous ; la page dont
+le titre contient les mots, les fiches et les cheat sheets passent devant. Un numéro seul compte : « Sysmon 7 », « 4624 ».
+Pour parcourir par titre, rubrique ou format : [Filtrer par titre]({posixpath.relpath(FILTER_SRC, "library")}).</span>
 
 <div class="kw-explorer kw-libsearch" id="kw-libsearch" data-src="{LIBRARY_SEARCH_DATA}">
 <div class="kw-explorer__bar">
-<input type="search" class="kw-explorer__q" placeholder="Rechercher : kerberoasting, nmap -sV, Lazarus…" aria-label="Rechercher dans les notes" autofocus>
+<input type="search" class="kw-explorer__q" placeholder="Sysmon 7, LSASS, kerberoasting, nmap -sV…" aria-label="Chercher dans la Bibliothèque et les cheat sheets" autofocus>
 <span class="kw-explorer__count kw-muted"></span>
 </div>
+<div class="kw-libsearch__kinds" role="group" aria-label="Type de page"><button type="button" data-kind="">Tout</button><button type="button" data-kind="pratique">Fiches et cheat sheets</button><button type="button" data-kind="cours">Cours et notions</button><button type="button" data-kind="lab">Labs</button></div>
 <ol class="kw-libsearch__hits"></ol>
 <nav class="kw-pager" aria-label="Pages de résultats"></nav>
 <noscript>La recherche a besoin de JavaScript ; les notes restent accessibles depuis la Bibliothèque.</noscript>
@@ -3189,22 +3358,31 @@ def split_search_index(config):
     path = Path(config.site_dir) / "search" / "search_index.json"
     if not path.exists():
         return
-    labels = {}
+    labels, kinds = {}, {}
     for dom in STATE.get("library", []):
         for cat in dom["categories"]:
             for n in cat["notes"]:
                 if n["imported"]:
-                    labels.update((url_of(src), label) for src, label in walk_pages(n))
+                    kind = {"detection": "fiche", "fiche": "notion"}.get(n.get("format"), "cours")
+                    for src, label in walk_pages(n):
+                        labels[url_of(src)] = label
+                        kinds[url_of(src)] = "lab" if LAB_TITLE.match(label.split(" · ")[-1]) else kind
+    sheets = {url_of(src): f"Cheat sheet · {title}" for src, (title, _, _) in (STATE.get("cs_pages") or {}).items()}
     data = json.loads(path.read_text(encoding="utf-8"))
+    titles = {d["location"]: html.unescape(d["title"]) for d in data.get("docs", []) if "#" not in d["location"]}
     notes, kept, pages = [], [], {}
     for doc in data.get("docs", []):
         page = doc["location"].split("#")[0]
+        text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", doc.get("text") or ""))).strip()
+        if page in sheets:                               # cheat sheets : dans les deux index
+            kept.append(doc)
+            notes.append([doc["location"], html.unescape(doc["title"]), sheets[page], text, "cs", titles.get(page, "")])
+            continue
         if page not in labels:
             kept.append(doc)
             continue
-        text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", doc.get("text") or ""))).strip()
-        if text:                                          # texte brut : balises de l'index Material retirées
-            notes.append([doc["location"], html.unescape(doc["title"]), labels[page], text])
+        if text or "#" not in doc["location"]:           # texte brut ; la page elle-même, même vide, pour son titre
+            notes.append([doc["location"], html.unescape(doc["title"]), labels[page], text, kinds[page], titles.get(page, "")])
         if "#" not in doc["location"]:                   # une entrée par page : son titre, ses intertitres en texte
             pages[page] = dict(doc, text="")
             kept.append(pages[page])
@@ -3480,11 +3658,12 @@ def library_tree(docs_dir, library):
             groups = []
             for label, notes in grouped([n for n in c["notes"] if n["imported"]]):
                 items = []
-                for n in notes:
+                for n in notes + (c.get("links", {}).get(label, []) if label else []):   # notes rappelées d'une autre rubrique
                     kids = walk(docs_dir / posixpath.dirname(n["src"])) if n["src"].endswith("/index.md") else []
                     items.append({"t": n["title"], "u": url_of(n["src"]), "f": n.get("format") or "",
                                   "p": n.get("provenance") or "", "m": n.get("minutes") or 0,
-                                  "r": n.get("resume") or resumes.get(n["title"], ""), "c": kids})
+                                  "r": n.get("resume") or resumes.get(n["title"], ""), "c": kids,
+                                  "h": bare(n["home"]) if n.get("home") else ""})
                 groups.append({"t": bare(label) if label else "", "e": icon(label) if label else "",
                                "d": c.get("group_desc", {}).get(label, "") if label else "", "n": items})
             cats.append({"id": f"{d['id']}/{c['id']}", "t": bare(c["label"]), "e": icon(c["label"]),
@@ -3619,6 +3798,9 @@ def on_config(config):
             STATE["mentions"].setdefault(s["event"], []).append(s)
     STATE["items"] = items
     load_rubriques(root, items)
+    cs_nav = next((e[CS_TAB] for e in (config.nav or []) if isinstance(e, dict) and CS_TAB in e), [])
+    STATE["cs_sections"] = [(k, first_src(v)) for e in cs_nav if isinstance(e, dict) for k, v in e.items()
+                            if isinstance(v, list) or k.startswith("🔎")]
     library = load_library(docs_dir, load_yaml(root / "data" / "bibliotheque.yml", []))
     link_formats(library)
     STATE["library"] = library
@@ -3626,6 +3808,7 @@ def on_config(config):
     STATE["note_urls"] = {url_of(src): n["title"] for src, n in STATE["notes_by_src"].items() if n["imported"]}
     STATE["revisions"] = load_revisions(docs_dir, library)
     STATE["labs"] = load_labs(docs_dir, library)
+    STATE["subjects"], STATE["subjects_by_page"] = load_subjects(root, docs_dir)
     glossary = add_fiche_terms(glossary, library)
     glossary = add_course_terms(glossary, library, docs_dir)
     STATE["resumes"] = {str(k): str(v) for k, v in (load_yaml(root / "data" / "resumes.yml", {}) or {}).items()}
@@ -3693,6 +3876,12 @@ def on_post_page(output, page, config):
 
 
 def on_page_markdown(markdown, page, config, files):
+    """Briefs, analyses, notes, cheat sheets : chacun sa décoration ; puis, sur les pages d'un sujet
+    d'investigation (data/sujets.yml), la barre « Même sujet »."""
+    return add_subject_bar(decorate_page(markdown, page, config), page.file.src_uri)
+
+
+def decorate_page(markdown, page, config):
     """Briefs : sommaire, fils, fraîcheur. Analyses et dossiers : en-tête et métadonnées repliées."""
     src = page.file.src_uri
     if src.startswith("veille/") and re.match(r"veille/\d{4}/\d{2}/", src):

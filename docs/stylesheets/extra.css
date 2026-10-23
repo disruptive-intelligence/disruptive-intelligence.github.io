@@ -1578,3 +1578,97 @@ body[data-md-color-scheme="default"]::after {
   .md-typeset .kw-mast--lib .kw-mast__search button { flex: 1; padding: .4rem .5rem; font-size: .68rem; white-space: nowrap; }
   .md-typeset .kw-mast--lib h1.kw-mast__title { font-size: 1.2rem; }
 }
+
+/* ---------------------------------------------------------------- Allègement (aperçu) */
+/* Sélecteur de mise en page (A sommaire, B explorateur, C par usage) : une seule variante visible */
+.md-typeset .kw-varpick { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; margin: .1rem 0 .9rem;
+  padding: .4rem .6rem; font-size: .66rem; border: 1px dashed var(--kw-line); border-radius: 8px; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-varpick button { font: inherit; cursor: pointer; padding: .2rem .55rem; border-radius: 6px; border: 1px solid var(--kw-line);
+  background: transparent; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-varpick button[aria-pressed="true"] { border-color: var(--md-accent-fg-color); color: var(--kw-strong); }
+.md-typeset .kw-varpick__desc { flex-basis: 100%; font-style: italic; }
+.kw-var { display: none; }
+html:not(.kw-libvar-b):not(.kw-libvar-c) .kw-var--a, html.kw-libvar-b .kw-var--b, html.kw-libvar-c .kw-var--c { display: block; }
+html.kw-libvar-b .md-main:has(.kw-bv) .md-sidebar--primary { display: none; }
+html:not(.kw-libvar-b) .md-typeset .kw-bv-quick { display: none; }
+
+/* A · sommaire en texte : une rubrique = nom, phrase, sous-rubriques en liens */
+.md-typeset .kw-som__recent { font-size: .72rem; color: var(--md-default-fg-color--light); margin: .2rem 0 .6rem; }
+.md-typeset .kw-som__recent span { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: .6rem; margin-right: .4rem; color: var(--md-accent-fg-color); }
+.md-typeset .kw-som { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0 2rem; margin: .2rem 0 1.2rem; }
+.md-typeset .kw-som__rub { display: grid; grid-template-columns: 1fr auto; gap: .1rem .5rem; padding: .55rem 0; border-bottom: 1px solid var(--kw-line); }
+.md-typeset a.kw-som__name { font-weight: 800; font-size: .86rem; color: var(--kw-strong); }
+.md-typeset a.kw-som__name:hover { color: var(--md-accent-fg-color); }
+.md-typeset .kw-som__count { font-size: .62rem; color: var(--md-default-fg-color--lighter); align-self: center; }
+.md-typeset .kw-som__desc { grid-column: 1 / -1; font-size: .7rem; line-height: 1.45; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-som__subs { grid-column: 1 / -1; font-size: .68rem; line-height: 1.6; }
+.md-typeset .kw-som__subs a { color: var(--kw-link); }
+.md-typeset ul.kw-som__practice { list-style: none; margin: .3rem 0 1rem; padding: 0; font-size: .74rem; }
+.md-typeset ul.kw-som__practice li { margin: 0; padding: .35rem 0; border-bottom: 1px solid var(--kw-line); color: var(--md-default-fg-color--light); }
+.md-typeset ul.kw-som__practice a { font-weight: 700; }
+
+/* C · par usage : trois colonnes */
+.md-typeset .kw-use { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin: .4rem 0 1.2rem; }
+.md-typeset .kw-use__col { border-top: 3px solid var(--md-accent-fg-color); padding-top: .5rem; }
+.md-typeset .kw-use__title { margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--kw-strong); }
+.md-typeset .kw-use__lead { margin: .1rem 0 .6rem; font-size: .68rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-use__dom { margin: .7rem 0 .2rem; font-size: .74rem; font-weight: 800; }
+.md-typeset .kw-use ul { list-style: none; margin: 0; padding: 0; font-size: .72rem; }
+.md-typeset .kw-use li { margin: 0; padding: .18rem 0; border-bottom: 1px solid var(--kw-line); }
+@media (max-width: 59.9375em) { .md-typeset .kw-use { grid-template-columns: 1fr; } }
+
+/* « Même sujet » en tête des pages Windows (data/sujets.yml) */
+.md-typeset .kw-same { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1.2rem; margin: .2rem 0 1rem; padding: .55rem .8rem;
+  border-left: 3px solid var(--md-accent-fg-color); background: var(--kw-panel); border-radius: 0; font-size: .7rem; }
+.md-typeset .kw-same > p { display: contents; }
+.md-typeset .kw-same__label { flex-basis: 100%; font-size: .6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-same__label a { color: var(--kw-strong); }
+.md-typeset .kw-same__role { font-weight: 800; color: var(--kw-strong); margin-right: .3rem; }
+.md-typeset .kw-same__col a + a::before, .md-typeset .kw-same__col span + a::before, .md-typeset .kw-same__col a + span::before {
+  content: "·"; margin: 0 .35rem; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-same__here { color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-same--many .kw-same__label { flex-basis: auto; }
+.md-typeset a.kw-same__all { margin-left: auto; color: var(--md-default-fg-color--light); }
+
+/* Cheat sheets › Windows › Journaux : rubrique « Par situation » */
+.md-typeset .kw-hub__sit { margin: 1rem 0 .3rem; font-size: .62rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--md-accent-fg-color); }
+.md-typeset table.kw-hub__table { display: table; width: 100%; font-size: .68rem; border-collapse: collapse; }
+.md-typeset table.kw-hub__table th, .md-typeset table.kw-hub__table td { padding: .4rem .5rem; vertical-align: top; border-bottom: 1px solid var(--kw-line); text-align: left; }
+.md-typeset table.kw-hub__table thead th { font-size: .6rem; text-transform: uppercase; letter-spacing: .04em; color: var(--md-default-fg-color--lighter); }
+.md-typeset table.kw-hub__table tbody th { font-weight: 800; width: 22%; }
+.md-typeset table.kw-hub__table tr:target { background: color-mix(in srgb, var(--md-accent-fg-color) 12%, transparent); }
+.md-typeset .kw-hub__tag { display: block; font-size: .58rem; font-weight: 600; color: var(--md-default-fg-color--lighter); }
+@media (max-width: 44.9375em) {
+  .md-typeset table.kw-hub__table thead { display: none; }
+  .md-typeset table.kw-hub__table tr { display: grid; grid-template-columns: 1fr; padding: .4rem 0; border-bottom: 1px solid var(--kw-line); }
+  .md-typeset table.kw-hub__table th, .md-typeset table.kw-hub__table td,
+  .md-typeset table.kw-hub__table tbody th { border: 0; padding: .1rem 0; width: auto; }
+  .md-typeset table.kw-hub__table td:not(:empty)::before { display: block; font-size: .56rem; text-transform: uppercase; color: var(--md-default-fg-color--lighter); }
+  .md-typeset table.kw-hub__table td:nth-of-type(1):not(:empty)::before { content: "Commandes"; }
+  .md-typeset table.kw-hub__table td:nth-of-type(2):not(:empty)::before { content: "Comprendre"; }
+  .md-typeset table.kw-hub__table td:nth-of-type(3):not(:empty)::before { content: "S’entraîner"; }
+}
+
+/* Recherche regroupée par page */
+.md-typeset .kw-libsearch__kinds { display: flex; flex-wrap: wrap; gap: .3rem; margin: -.3rem 0 .6rem; }
+.md-typeset .kw-libsearch__kinds button { font: inherit; font-size: .66rem; cursor: pointer; padding: .2rem .6rem; border-radius: 6px;
+  border: 1px solid var(--kw-line); background: transparent; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-libsearch__kinds button[aria-pressed="true"] { border-color: var(--md-accent-fg-color); color: var(--kw-strong); }
+.md-typeset ol.kw-libsearch__hits > li.kw-hit > a.kw-hit__title { font-weight: 800; font-size: .8rem; }
+.md-typeset .kw-hit__kind { float: right; font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-hit--fiche .kw-hit__kind, .md-typeset .kw-hit--cs .kw-hit__kind { color: var(--md-accent-fg-color); }
+.md-typeset ul.kw-hit__sections { list-style: none; margin: .25rem 0 0; padding: 0 0 0 .7rem; border-left: 1px solid var(--kw-line); font-size: .68rem; }
+.md-typeset ul.kw-hit__sections li { margin: .1rem 0; }
+.md-typeset details.kw-hit__more { margin: .2rem 0 0; padding: 0; border: 0; background: none; box-shadow: none; font-size: inherit; }
+.md-typeset details.kw-hit__more > summary { cursor: pointer; padding: 0 0 0 .7rem; margin: 0; background: none; border: 0;
+  font-size: .64rem; font-weight: 400; color: var(--md-default-fg-color--light); }
+.md-typeset details.kw-hit__more > summary::before, .md-typeset details.kw-hit__more > summary::after { display: none; }
+.md-typeset details.kw-hit__more > summary:hover { color: var(--kw-strong); }
+
+/* Labs : filtre, compétences */
+.md-typeset .kw-labs-filter { display: flex; align-items: center; gap: .6rem; margin: .6rem 0 .2rem; }
+.md-typeset .kw-labs-filter input { flex: 1; max-width: 26rem; padding: .4rem .7rem; font: inherit; font-size: .74rem; color: var(--md-default-fg-color);
+  background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 8px; }
+.md-typeset .kw-labs-filter span { font-size: .66rem; }
+.md-typeset .kw-lab__skills { display: block; font-size: .68rem; color: var(--md-default-fg-color--light); }

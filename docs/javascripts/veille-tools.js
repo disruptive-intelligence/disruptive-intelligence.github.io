@@ -1,6 +1,6 @@
 /* Outils de lecture de la veille (pages générées par hooks/portal.py) :
    - Explorer : sujets lus dans assets/veille-sujets.json, filtrés, affichés 50 par page ;
-   - Recherche de la Bibliothèque : texte intégral des notes (search/bibliotheque.json), 50 sections par page ;
+   - Recherche de la Bibliothèque et des cheat sheets (search/bibliotheque.json), regroupée par page ;
    - Pile de lecture : lectures cochées « lues » (mémorisées dans ce navigateur), pagination par éditions ;
    - calendriers feuilletables (‹ ›) de la page Veille et de l'Agenda ;
    - barre de progression de lecture sur les pages longues. */
@@ -155,62 +155,112 @@
     update();
   }
 
-  /* Recherche dans les notes de la Bibliothèque : texte intégral lu dans search/bibliotheque.json
-     (retiré de l'index de recherche global, qui ne garde que leurs titres), chargé seulement sur cette page. */
+  /* Recherche de la Bibliothèque et des cheat sheets : texte intégral lu dans search/bibliotheque.json (retiré de
+     l'index global, qui ne garde que les titres), chargé seulement sur cette page. Les sections sont regroupées par
+     page ; la page dont le titre contient les mots, les fiches et les cheat sheets passent devant. Un nombre seul
+     (« 7 », « 4624 ») compte comme un mot entier. La recherche et le filtre restent dans l'adresse (?mots=, ?type=). */
+  var KINDS = { fiche: "Fiche détection", cs: "Cheat sheet", cours: "Cours", lab: "Lab", notion: "Fiche notion" };
+  var BONUS = { fiche: 6, cs: 5, notion: 3, lab: 2, cours: 0 };
+  var GROUPS = { "": null, pratique: ["fiche", "cs"], cours: ["cours", "notion"], lab: ["lab"] };
+  var PER_PAGE = 20;
   function librarySearch() {
     var root = document.getElementById("kw-libsearch");
     if (!root) return;
     var q = root.querySelector(".kw-explorer__q"), count = root.querySelector(".kw-explorer__count"),
         list = root.querySelector(".kw-libsearch__hits"), nav = root.querySelector(".kw-pager"),
-        site = base(), rows = [], page = 0, timer;
+        kinds = Array.prototype.slice.call(root.querySelectorAll(".kw-libsearch__kinds button")),
+        site = base(), rows = [], page = 0, kind = "", timer;
+    function matcher(w) {
+      if (/^\d+$/.test(w)) { var re = new RegExp("(^|[^0-9])" + w + "([^0-9]|$)"); return function (s) { return re.test(s); }; }
+      return function (s) { return s.indexOf(w) >= 0; };
+    }
     function snippet(r, words) {
-      var at = words.length ? r._body.indexOf(words[0]) : -1;
-      var start = Math.max(0, at - 90), text = r.x.slice(start, start + 260);
-      text = esc((start ? "…" : "") + text + (start + 260 < r.x.length ? "…" : ""));
+      var at = -1;
+      words.forEach(function (w) { var k = r._body.indexOf(w); if (at < 0 && k >= 0) at = k; });
+      var start = Math.max(0, at - 90), text = r.x.slice(start, start + 240);
+      text = esc((start ? "…" : "") + text + (start + 240 < r.x.length ? "…" : ""));
       words.forEach(function (w) {
-        var re = new RegExp("(" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
-        if (/^[a-z0-9]+$/.test(w)) text = text.replace(re, "<mark>$1</mark>");
+        if (!/^[a-z0-9]+$/.test(w)) return;
+        var re = new RegExp(/^\d+$/.test(w) ? "(?<![0-9])(" + w + ")(?![0-9])" : "(" + w + ")", "gi");
+        text = text.replace(re, "<mark>$1</mark>");
       });
       return text;
     }
+    function remember() {
+      try {
+        var u = new URL(location.href);
+        if (q.value.trim()) u.searchParams.set("mots", q.value.trim()); else u.searchParams.delete("mots");
+        if (kind) u.searchParams.set("type", kind); else u.searchParams.delete("type");
+        history.replaceState(history.state, "", u.toString());
+      } catch (e) { /* adresse inchangée */ }
+    }
     function apply(keepPage) {
-      var words = fold(q.value).split(/\s+/).filter(function (w) { return w.length > 1; });
+      remember();
+      kinds.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.kind === kind ? "true" : "false"); });
+      var words = fold(q.value).split(/\s+/).filter(function (w) { return w.length > 1 || /^\d$/.test(w); });
       if (!words.length) {
         list.innerHTML = ""; nav.innerHTML = "";
         count.textContent = rows.length + " sections indexées";
         return;
       }
-      var hits = [];
+      var tests = words.map(matcher), allowed = GROUPS[kind], byPage = {}, order = [];
       rows.forEach(function (r) {
+        if (allowed && allowed.indexOf(r.k) < 0) return;
         var score = 0;
-        for (var i = 0; i < words.length; i++) {
-          var inTitle = r._title.indexOf(words[i]) >= 0, inBody = r._body.indexOf(words[i]) >= 0;
+        for (var i = 0; i < tests.length; i++) {
+          var inTitle = tests[i](r._title), inBody = tests[i](r._body);
           if (!inTitle && !inBody) return;
           score += (inTitle ? 10 : 0) + (inBody ? 1 : 0);
         }
-        hits.push([score, r]);
+        var p = byPage[r.p];
+        if (!p) {
+          p = byPage[r.p] = { page: r.p, title: r.pt || r.t, note: r.n, k: r.k, hits: [], score: 0 };
+          var pt = fold(p.title);
+          p.titled = tests.every(function (t) { return t(pt); });
+          order.push(p);
+        }
+        p.hits.push([score, r]);
       });
-      hits.sort(function (a, b) { return b[0] - a[0]; });
-      var pages = Math.max(1, Math.ceil(hits.length / PAGE));
+      order.forEach(function (p) {
+        p.hits.sort(function (a, b) { return b[0] - a[0]; });
+        p.score = p.hits[0][0] + (p.titled ? 20 : 0) + (BONUS[p.k] || 0) + Math.min(p.hits.length, 5);
+      });
+      order.sort(function (a, b) { return b.score - a.score; });
+      var pages = Math.max(1, Math.ceil(order.length / PER_PAGE));
       if (!keepPage) page = 0;
       page = Math.min(page, pages - 1);
-      list.innerHTML = hits.slice(page * PAGE, (page + 1) * PAGE).map(function (h) {
-        var r = h[1];
-        return '<li><a href="' + esc(new URL(r.l, site).href) + '">' + esc(r.t) + "</a>" +
-          '<span class="kw-libsearch__note">' + esc(r.n) + "</span>" +
-          '<span class="kw-ex__fact">' + snippet(r, words) + "</span></li>";
-      }).join("") || '<li class="kw-muted">Aucune section ne correspond.</li>';
-      count.textContent = hits.length + " section" + (hits.length > 1 ? "s" : "");
-      pager(nav, page, pages, function (p) { page = p; apply(true); }, ["‹ Précédents", "Suivants ›"]);
+      list.innerHTML = order.slice(page * PER_PAGE, (page + 1) * PER_PAGE).map(function (p) {
+        var sections = p.hits.filter(function (h) { return h[1].l.indexOf("#") >= 0; });
+        var first = p.hits[0][1];
+        var line = function (h) {
+          return '<li><a href="' + esc(new URL(h[1].l, site).href) + '">' + esc(h[1].t) + "</a></li>";
+        };
+        var shown = sections.slice(0, 3).map(line).join(""), more = sections.slice(3);
+        return '<li class="kw-hit kw-hit--' + p.k + '"><span class="kw-hit__kind">' + esc(KINDS[p.k] || "") + "</span>" +
+          '<a class="kw-hit__title" href="' + esc(new URL(p.page, site).href) + '">' + esc(p.title) + "</a>" +
+          (p.note !== p.title ? '<span class="kw-libsearch__note">' + esc(p.note) + "</span>" : "") +
+          (first.x ? '<span class="kw-ex__fact">' + snippet(first, words) + "</span>" : "") +
+          (shown ? '<ul class="kw-hit__sections">' + shown + "</ul>" : "") +
+          (more.length ? '<details class="kw-hit__more"><summary>' + more.length + " autre" + (more.length > 1 ? "s" : "") +
+            " passage" + (more.length > 1 ? "s" : "") + '</summary><ul class="kw-hit__sections">' + more.map(line).join("") +
+            "</ul></details>" : "") + "</li>";
+      }).join("") || '<li class="kw-muted">Rien ne correspond. Essayer un seul mot, ou un autre filtre.</li>';
+      count.textContent = order.length + " page" + (order.length > 1 ? "s" : "");
+      pager(nav, page, pages, function (n) { page = n; apply(true); }, ["‹ Précédentes", "Suivantes ›"]);
     }
-    count.textContent = "Chargement des notes…";
+    count.textContent = "Chargement…";
     fetch(new URL(root.dataset.src, site)).then(function (r) { return r.json(); }).then(function (data) {
-      rows = data.map(function (d) { return { l: d[0], t: d[1], n: d[2], x: d[3], _title: fold(d[1] + " " + d[2]), _body: fold(d[3]) }; });
-      var initial = new URLSearchParams(location.search).get("mots");   // « q » ouvrirait la recherche de Material
-      if (initial) q.value = initial;
+      rows = data.map(function (d) {
+        return { l: d[0], t: d[1], n: d[2], x: d[3], k: d[4] || "cours", pt: d[5] || "", p: d[0].split("#")[0],
+                 _title: fold(d[1] + " " + (d[5] || "")), _body: fold(d[3]) };
+      });
+      var params = new URLSearchParams(location.search);   // « q » ouvrirait la recherche de Material
+      if (params.get("mots")) q.value = params.get("mots");
+      if (params.get("type") in GROUPS) kind = params.get("type");
       q.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { apply(false); }, 150); });
+      kinds.forEach(function (b) { b.addEventListener("click", function () { kind = b.dataset.kind; apply(false); }); });
       apply(false);
-    }).catch(function () { count.textContent = "Chargement des notes impossible."; });
+    }).catch(function () { count.textContent = "Chargement impossible."; });
   }
 
   function init() { explorer(); librarySearch(); readings(); calendars(); progress(); }
