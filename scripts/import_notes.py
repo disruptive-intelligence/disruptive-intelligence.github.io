@@ -268,9 +268,30 @@ def is_split(text, title=""):
     return False
 
 
+OUTSIDE = {}   # slug(titre) -> dossier de docs/ hors de la Bibliothèque (« publier » d'une sous-rubrique)
+
+
+def load_outside(tree):
+    """Sous-rubriques de data/bibliotheque.yml publiées ailleurs (clé « publier », ex. les fiches « Repérer une
+    attaque » dans les cheat sheets) : le coffre ne change pas, seule l'adresse de leurs notes change."""
+    OUTSIDE.clear()
+    for d in tree:
+        for c in d.get("categories", []):
+            for g in c.get("groups") or []:
+                if g.get("publier"):
+                    for n in g.get("notes") or []:
+                        OUTSIDE[slug(n)] = str(g["publier"]).strip("/")
+
+
+def roots():
+    """Dossiers de docs/ où l'import écrit : la Bibliothèque et les dossiers « publier »."""
+    return [LIBRARY] + sorted({DOCS / f for f in OUTSIDE.values()})
+
+
 def note_target(dom, cat, title, split):
     """Page d'entrée d'une note publiée, relative à docs/."""
-    base = f"library/{dom}/{cat}/{slug(title)}"
+    folder = OUTSIDE.get(slug(title))
+    base = f"{folder}/{slug(title)}" if folder else f"library/{dom}/{cat}/{slug(title)}"
     return f"{base}/index.md" if split else f"{base}.md"
 
 
@@ -911,7 +932,7 @@ def resolve_xrefs():
             cache[entry] = found
         return cache[entry]
 
-    for path in LIBRARY.rglob("*.md"):
+    for path in (p for r in roots() if r.exists() for p in r.rglob("*.md")):
         text = path.read_text(encoding="utf-8")
         if XREF not in text:
             continue
@@ -1155,7 +1176,7 @@ def write_revisions(vault, tree, index):
 def published():
     """{source du coffre: [fichiers de docs/library]} d'après l'en-tête « source » des pages publiées."""
     found = {}
-    for f in LIBRARY.rglob("*.md") if LIBRARY.exists() else []:
+    for f in (p for r in roots() if r.exists() for p in r.rglob("*.md")):
         m = re.match(r"---\n(.*?)\n---", f.read_text(encoding="utf-8"), re.S)
         src = (yaml.safe_load(m.group(1)) or {}).get("source") if m else None
         if src:
@@ -1234,6 +1255,7 @@ def main(argv=None):
     ap.add_argument("notes", nargs="*", help="chemins relatifs au coffre")
     args = ap.parse_args(argv)
     tree = yaml.safe_load((ROOT / "data/bibliotheque.yml").read_text(encoding="utf-8"))
+    load_outside(tree)
     vault = args.vault.resolve()
     existing = published()
     if args.list:
@@ -1273,7 +1295,7 @@ def main(argv=None):
             print(f"NON PUBLIÉE : {exc}", file=sys.stderr)
             code = 1
     if args.all:
-        used = {m for f in LIBRARY.rglob("*.md") for m in re.findall(r"assets/([^)\s\"]+)", f.read_text(encoding="utf-8"))}
+        used = {m for r in roots() if r.exists() for f in r.rglob("*.md") for m in re.findall(r"assets/([^)\s\"]+)", f.read_text(encoding="utf-8"))}
         for image in (LIBRARY / "assets").glob("*") if (LIBRARY / "assets").exists() else []:
             if image.name not in used:                   # image qu'aucune page n'utilise plus
                 image.unlink()

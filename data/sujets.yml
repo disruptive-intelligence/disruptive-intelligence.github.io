@@ -38,7 +38,7 @@
 - id: dll
   titre: DLL hijacking
   situation: soupcon
-  fiche: library/it/windows/reperer-un-dll-hijacking.md
+  fiche: cheatsheets/windows/reperer-une-attaque/reperer-un-dll-hijacking.md
   commandes:
     - ["Sysmon · DLL hijacking", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer un DLL hijacking dans un journal exporté"]
     - ["Filtrer un .evtx", "cheatsheets/windows/fondamentaux/logs/lire.md#Filtrer un fichier .evtx sur un mot ou un dossier"]
@@ -52,7 +52,7 @@
 - id: lsass
   titre: Accès à LSASS
   situation: soupcon
-  fiche: library/it/windows/reperer-un-acces-a-lsass.md
+  fiche: cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md
   commandes:
     - ["Sysmon · LSASS", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer un accès à la mémoire de LSASS"]
     - ["Ouvertures de session", "cheatsheets/windows/fondamentaux/logs/sessions-rdp.md#Retrouver les ouvertures de session"]
@@ -66,7 +66,7 @@
 - id: unmanaged
   titre: PowerShell non managé
   situation: soupcon
-  fiche: library/it/windows/reperer-du-powershell-non-manage.md
+  fiche: cheatsheets/windows/reperer-une-attaque/reperer-du-powershell-non-manage.md
   commandes:
     - ["Sysmon · injection de thread", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Repérer une injection de thread"]
   cours:
@@ -79,7 +79,7 @@
 - id: dotnet
   titre: Chargement d'assemblies .NET
   situation: soupcon
-  fiche: library/it/windows/reperer-le-chargement-d-assemblies-net.md
+  fiche: cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md
   commandes:
     - ["ETW · enregistrer une trace", "cheatsheets/windows/fondamentaux/logs/etw.md#Créer une trace, l'arrêter, la relire"]
   cours:
@@ -90,7 +90,7 @@
 - id: parents
   titre: Filiation de processus anormale
   situation: soupcon
-  fiche: library/it/windows/reperer-une-relation-parent-enfant-anormale.md
+  fiche: cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md
   commandes:
     - ["Sysmon · chaîne des parents", "cheatsheets/windows/fondamentaux/logs/sysmon.md#Remonter la chaîne des processus parents"]
     - ["Processus lancés (4688)", "cheatsheets/windows/fondamentaux/logs/processus-powershell.md#Retrouver les processus lancés"]
@@ -103,7 +103,7 @@
 - id: ppid
   titre: Faux processus parent (PPID spoofing)
   situation: soupcon
-  fiche: library/it/windows/demasquer-un-faux-processus-parent-ppid-spoofing.md
+  fiche: cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md
   commandes:
     - ["ETW et logman", "cheatsheets/windows/fondamentaux/logs/etw.md"]
   cours:

@@ -21,7 +21,7 @@ Un exécutable légitime charge une DLL placée à côté de lui à la place de 
 ## Le principe
 
 - Un exécutable cherche d'abord ses DLL dans son propre dossier : une DLL du même nom posée à côté de lui passe avant celle de `System32`.
-- Chaque chargement de DLL laisse un Sysmon `7`, si la collecte `ImageLoad` est activée ([Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
+- Chaque chargement de DLL laisse un Sysmon `7`, si la collecte `ImageLoad` est activée ([Configurer la collecte (ImageLoad)](../../../library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
 
 | Champ | Ce qu'il donne |
 |---|---|
@@ -110,7 +110,7 @@ $events |
 ```
 
 
-Le détail (processus distincts, DLL distinctes, `Group-Object`) : [Analyser un fichier .evtx : l'exemple du DLL hijacking](analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking).
+Le détail (processus distincts, DLL distinctes, `Group-Object`) : [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking).
 
 ### 5. Cibler une DLL avec une requête XML
 
@@ -153,15 +153,15 @@ Chemin exact, copié depuis la vue XML d'un événement : l'égalité est strict
 
 `calc.exe` est copié de `System32` vers le bureau, avec une DLL de démonstration renommée `WININET.dll`. Au lancement, la fausse DLL est chargée et affiche une MessageBox à la place de la Calculatrice.
 
-![DLL detournables par calc.exe (dont WININET.dll)](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-21.png)
+![DLL detournables par calc.exe (dont WININET.dll)](../../../library/assets/reperer-un-dll-hijacking-htb-windows-event-logs-21.png)
 
-![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-22.png)
+![calc.exe lance depuis le bureau : MessageBox Hello from DllMain!](../../../library/assets/reperer-un-dll-hijacking-htb-windows-event-logs-22.png)
 
 Sysmon `7` filtré, puis *Find* sur `calc.exe` : la copie détournée, puis le chargement légitime pour comparer.
 
-![Chargement suspect : calc.exe charge WININET.dll non signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-24.png)
+![Chargement suspect : calc.exe charge WININET.dll non signee](../../../library/assets/reperer-un-dll-hijacking-htb-windows-event-logs-24.png)
 
-![Chargement legitime : calc.exe charge wininet.dll signee](../../assets/reperer-un-dll-hijacking-htb-windows-event-logs-25.png)
+![Chargement legitime : calc.exe charge wininet.dll signee](../../../library/assets/reperer-un-dll-hijacking-htb-windows-event-logs-25.png)
 
 | Critère | Chargement légitime | Chargement suspect du lab |
 |---|---|---|
@@ -169,7 +169,7 @@ Sysmon `7` filtré, puis *Find* sur `calc.exe` : la copie détournée, puis le c
 | DLL | `wininet.dll` depuis `System32` | `WININET.dll` depuis le bureau |
 | Signature | DLL Microsoft signée | DLL non signée |
 
-Lab pas à pas : [Sysmon et ETW › Labs › Question 1](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll). Ressources : [HijackLibs — calc.exe](https://hijacklibs.net/#calc.exe), [ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin).
+Lab pas à pas : [Sysmon et ETW › Labs › Question 1](../../../library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-1-dll-hijacking-wininetdll). Ressources : [HijackLibs — calc.exe](https://hijacklibs.net/#calc.exe), [ReflectiveDLLInjection](https://github.com/stephenfewer/ReflectiveDLLInjection/tree/master/bin).
 
 </details>
 
@@ -185,7 +185,7 @@ Get-WinEvent -FilterHashtable @{Path='C:\Logs\DLLHijack\*.evtx'; Id=7} |
 ```
 
 
-Deux processus chargent la même DLL : comparer leur chemin et leur heure. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 1.
+Deux processus chargent la même DLL : comparer leur chemin et leur heure. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 1.
 
 </details>
 

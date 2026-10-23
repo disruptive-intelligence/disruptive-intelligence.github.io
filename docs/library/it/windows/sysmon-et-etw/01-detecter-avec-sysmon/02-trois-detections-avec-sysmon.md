@@ -11,9 +11,9 @@ up:
 
 Chaque détection a sa fiche dans la sous-rubrique « Repérer une attaque » : l'attaque, les traces, les requêtes XML et PowerShell, les indicateurs, les faux positifs et le lab.
 
-- [Repérer un DLL hijacking](../../reperer-un-dll-hijacking.md) : une DLL chargée depuis un chemin inhabituel par un exécutable légitime (Sysmon `7`).
-- [Repérer du PowerShell non managé](../../reperer-du-powershell-non-manage.md) : le runtime .NET chargé dans un processus qui ne l'utilise pas (Sysmon `7`).
-- [Repérer un accès à LSASS](../../reperer-un-acces-a-lsass.md) : un processus suspect qui ouvre `lsass.exe` (Sysmon `10`).
+- [Repérer un DLL hijacking](../../../../../cheatsheets/windows/reperer-une-attaque/reperer-un-dll-hijacking.md) : une DLL chargée depuis un chemin inhabituel par un exécutable légitime (Sysmon `7`).
+- [Repérer du PowerShell non managé](../../../../../cheatsheets/windows/reperer-une-attaque/reperer-du-powershell-non-manage.md) : le runtime .NET chargé dans un processus qui ne l'utilise pas (Sysmon `7`).
+- [Repérer un accès à LSASS](../../../../../cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md) : un processus suspect qui ouvre `lsass.exe` (Sysmon `10`).
 
 ## Comparaison des trois détections
 

@@ -34,7 +34,7 @@ Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = 
 
 Process Hacker : parent, enfant, PID et ligne de commande de chaque processus.
 
-![Process Hacker : arborescence des processus](../../assets/reperer-une-relation-parent-enfant-anormale-htb-windows-event-logs-39.png)
+![Process Hacker : arborescence des processus](../../../library/assets/reperer-une-relation-parent-enfant-anormale-htb-windows-event-logs-39.png)
 
 ### 2. Garder les créations de processus
 
@@ -106,9 +106,9 @@ Un couple vu une ou deux fois, en bas de la liste, mérite d'être ouvert.
 
 Relation attendue : `spoolsv.exe` et son enfant `conhost.exe`.
 
-![Relation normale : spoolsv.exe et son enfant conhost.exe](../../assets/reperer-une-relation-parent-enfant-anormale-htb-windows-event-logs-40.png)
+![Relation normale : spoolsv.exe et son enfant conhost.exe](../../../library/assets/reperer-une-relation-parent-enfant-anormale-htb-windows-event-logs-40.png)
 
-![Carte mentale des relations parent-enfant courantes des processus Windows, par Samir Bousseaden (@SBousseaden)](../../assets/reperer-une-relation-parent-enfant-anormale-ejeyi8vxyai3gra.jpg)
+![Carte mentale des relations parent-enfant courantes des processus Windows, par Samir Bousseaden (@SBousseaden)](../../../library/assets/reperer-une-relation-parent-enfant-anormale-ejeyi8vxyai3gra.jpg)
 
 *Carte : Samir Bousseaden ([@SBousseaden](https://twitter.com/SBousseaden/status/1195373669930983424)).*
 
@@ -124,7 +124,7 @@ Get-WinEvent -FilterHashtable @{Path='C:\Logs\StrangePPID\*.evtx'; Id=1} |
 ```
 
 
-Dans chaque résultat : `ParentImage`, `Image`, `CommandLine`, `User` et `CurrentDirectory`. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 6.
+Dans chaque résultat : `ParentImage`, `Image`, `CommandLine`, `User` et `CurrentDirectory`. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), question 6.
 
 </details>
 

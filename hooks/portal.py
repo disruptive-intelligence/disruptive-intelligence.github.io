@@ -2094,8 +2094,8 @@ def load_library(docs_dir, tree):
                 real[slug(title)] = note
                 real.setdefault(slug(stem), note)
             notes, used = [], set()
-            planned = [(t, None) for t in cat.get("notes") or []] + [
-                (t, g["label"]) for g in cat.get("groups") or [] for t in g.get("notes") or []]
+            planned = [(t, None) for t in cat.get("notes") or []] + [      # « publier » : notes publiées ailleurs
+                (t, g["label"]) for g in cat.get("groups") or [] if not g.get("publier") for t in g.get("notes") or []]
             for title, group in planned:            # sous-rubrique (group) : menu et page de catégorie
                 hit = real.get(slug(title))
                 if hit:
@@ -2970,6 +2970,18 @@ def expand_reprises(markdown, src, docs_dir):
     return REPRISE.sub(one, markdown)
 
 
+def cs_note_head(page):
+    """Note du coffre publiée dans les cheat sheets (« publier » de data/bibliotheque.yml) : format, provenance, date."""
+    meta, kind = page.meta, page.meta.get("format")
+    bits = [f'<span class="kw-format kw-format--{kind}">{FORMAT_LABEL[kind]}</span>']
+    if meta.get("provenance"):
+        bits.append(f'<span class="kw-format kw-format--source">{esc(meta["provenance"])}</span>')
+    line = " ".join(bits)
+    if meta.get("revue"):
+        line += f" mis à jour le {fr_date(date.fromisoformat(str(meta['revue'])))}"
+    return f'<span class="kw-muted">{line}</span>\n\n'
+
+
 def decorate_cheatsheet(markdown, page, config):
     src = page.file.src_uri
     markdown = expand_reprises(markdown, src, config.docs_dir)
@@ -3080,7 +3092,7 @@ def add_subject_bar(markdown, src):
     if not bar:
         return markdown
     m = re.search(r"^# .+\n", markdown, re.M)
-    if m and markdown.count("\n", 0, m.start()) < 30:                 # cheat sheet : sous son titre
+    if m and markdown.count("\n", 0, m.start()) < 30 and "```" not in markdown[:m.start()]:   # cheat sheet : sous son titre
         return markdown[:m.end()] + "\n" + bar + markdown[m.end():]
     if markdown.startswith('<span class="kw-muted">'):                # note : sous le fil d'Ariane
         cut = markdown.find("\n\n")
@@ -3333,6 +3345,10 @@ def split_search_index(config):
                         labels[url_of(src)] = label
                         kinds[url_of(src)] = "lab" if LAB_TITLE.match(label.split(" · ")[-1]) else kind
     sheets = {url_of(src): f"Cheat sheet · {title}" for src, (title, _, _) in (STATE.get("cs_pages") or {}).items()}
+    for src, (title, _, meta) in (STATE.get("cs_pages") or {}).items():
+        if meta.get("format") == "detection":
+            sheets[url_of(src)] = f"Repérer une attaque · {title}"
+            kinds[url_of(src)] = "fiche"
     data = json.loads(path.read_text(encoding="utf-8"))
     titles = {d["location"]: html.unescape(d["title"]) for d in data.get("docs", []) if "#" not in d["location"]}
     notes, kept, pages = [], [], {}
@@ -3341,7 +3357,7 @@ def split_search_index(config):
         text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", doc.get("text") or ""))).strip()
         if page in sheets:                               # cheat sheets : dans les deux index
             kept.append(doc)
-            notes.append([doc["location"], html.unescape(doc["title"]), sheets[page], text, "cs", titles.get(page, "")])
+            notes.append([doc["location"], html.unescape(doc["title"]), sheets[page], text, kinds.get(page, "cs"), titles.get(page, "")])
             continue
         if page not in labels:
             kept.append(doc)
@@ -3856,6 +3872,8 @@ def decorate_page(markdown, page, config):
     if src.startswith("library/") and page.meta.get("source"):
         return decorate_note(markdown, page)
     if src.startswith(CS_DIR + "/"):
+        if page.meta.get("source") and page.meta.get("format") in FORMAT_LABEL:
+            markdown = cs_note_head(page) + markdown
         if page.meta.get("commande"):
             markdown = decorate_command_fiche(markdown, page, config)
         return decorate_cheatsheet(markdown, page, config)

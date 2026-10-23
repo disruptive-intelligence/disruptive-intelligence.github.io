@@ -127,19 +127,19 @@ Les noms de méthodes distincts de toute la trace ; les replacer dans leur conte
 
 [Seatbelt](https://github.com/GhostPack/Seatbelt) (GhostPack) énumère le système. `.\Seatbelt.exe TokenPrivileges` affiche les privilèges du token (`SeDebugPrivilege`, `SeImpersonatePrivilege`…).
 
-![image-42](../../assets/reperer-le-chargement-d-assemblies-net-image-42.png)
+![image-42](../../../library/assets/reperer-le-chargement-d-assemblies-net-image-42.png)
 
 Sysmon `7` : `Seatbelt.exe` charge `clr.dll` et `mscoree.dll`.
 
-![Sysmon Event 7 : chargement d'image par Seatbelt.exe](../../assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-44.png)
+![Sysmon Event 7 : chargement d'image par Seatbelt.exe](../../../library/assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-44.png)
 
-![Sysmon Event 7 : second chargement de DLL .NET par Seatbelt.exe](../../assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-45.png)
+![Sysmon Event 7 : second chargement de DLL .NET par Seatbelt.exe](../../../library/assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-45.png)
 
 ETW (`etw.json`) : les noms des méthodes de Seatbelt, bien plus parlants qu'un simple chargement de `clr.dll`.
 
-![etw.json : evenements DotNETRuntime de Seatbelt avec les noms de methodes](../../assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-46.png)
+![etw.json : evenements DotNETRuntime de Seatbelt avec les noms de methodes](../../../library/assets/reperer-le-chargement-d-assemblies-net-htb-windows-event-logs-46.png)
 
-Requête XML du lab : `Image` = `C:\Tools\GhostPack Compiled Binaries\Seatbelt.exe`, `ImageLoaded` = `mscoree.dll`. Lab pas à pas : [Sysmon et ETW › Labs › Lab 3, question 1](sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md#question-1-suivre-seatbelt-avec-sysmon-et-etw). Pour aller plus loin : [article sur SilkETW](https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0).
+Requête XML du lab : `Image` = `C:\Tools\GhostPack Compiled Binaries\Seatbelt.exe`, `ImageLoaded` = `mscoree.dll`. Lab pas à pas : [Sysmon et ETW › Labs › Lab 3, question 1](../../../library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md#question-1-suivre-seatbelt-avec-sysmon-et-etw). Pour aller plus loin : [article sur SilkETW](https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0).
 
 </details>
 

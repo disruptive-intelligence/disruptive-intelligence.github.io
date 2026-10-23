@@ -91,10 +91,17 @@ library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-win
 library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/05-lab-1-les-bases-des-journaux-d-evenements-windows/index.html: library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/14-lab-1-les-bases-des-journaux-d-evenements-windows.md
 library/it/windows/debusquer-l-attaquant-dans-les-journaux-windows-et-sysmon-windows-event-logs-finding-evil/06-lab-2-analyser-avec-sysmon/index.html: library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md
 # Détections de « Sysmon et ETW » devenues des fiches de « Repérer une attaque » (19 octobre 2026)
-library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-reperer-un-dll-hijacking/index.html: library/it/windows/reperer-un-dll-hijacking.md
-library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/03-reperer-du-powershell-non-manage/index.html: library/it/windows/reperer-du-powershell-non-manage.md
-library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/04-reperer-un-acces-a-lsass/index.html: library/it/windows/reperer-un-acces-a-lsass.md
-library/it/windows/sysmon-et-etw/03-detecter-avec-etw/01-reperer-une-relation-parent-enfant-anormale/index.html: library/it/windows/reperer-une-relation-parent-enfant-anormale.md
-library/it/windows/sysmon-et-etw/03-detecter-avec-etw/02-demasquer-un-faux-processus-parent-ppid-spoofing/index.html: library/it/windows/demasquer-un-faux-processus-parent-ppid-spoofing.md
-library/it/windows/sysmon-et-etw/03-detecter-avec-etw/03-reperer-le-chargement-d-assemblies-net/index.html: library/it/windows/reperer-le-chargement-d-assemblies-net.md
-library/it/windows/sysmon-et-etw/03-detecter-avec-etw/04-aller-plus-loin-avec-le-provider-dotnetruntime/index.html: library/it/windows/reperer-le-chargement-d-assemblies-net.md
+library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-reperer-un-dll-hijacking/index.html: cheatsheets/windows/reperer-une-attaque/reperer-un-dll-hijacking.md
+library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/03-reperer-du-powershell-non-manage/index.html: cheatsheets/windows/reperer-une-attaque/reperer-du-powershell-non-manage.md
+library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/04-reperer-un-acces-a-lsass/index.html: cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md
+library/it/windows/sysmon-et-etw/03-detecter-avec-etw/01-reperer-une-relation-parent-enfant-anormale/index.html: cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md
+library/it/windows/sysmon-et-etw/03-detecter-avec-etw/02-demasquer-un-faux-processus-parent-ppid-spoofing/index.html: cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md
+library/it/windows/sysmon-et-etw/03-detecter-avec-etw/03-reperer-le-chargement-d-assemblies-net/index.html: cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md
+library/it/windows/sysmon-et-etw/03-detecter-avec-etw/04-aller-plus-loin-avec-le-provider-dotnetruntime/index.html: cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md
+# Fiches « Repérer une attaque » passées de la Bibliothèque aux cheat sheets (23 octobre 2026)
+library/it/windows/reperer-un-dll-hijacking/index.html: cheatsheets/windows/reperer-une-attaque/reperer-un-dll-hijacking.md
+library/it/windows/reperer-du-powershell-non-manage/index.html: cheatsheets/windows/reperer-une-attaque/reperer-du-powershell-non-manage.md
+library/it/windows/reperer-le-chargement-d-assemblies-net/index.html: cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md
+library/it/windows/reperer-une-relation-parent-enfant-anormale/index.html: cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md
+library/it/windows/demasquer-un-faux-processus-parent-ppid-spoofing/index.html: cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md
+library/it/windows/reperer-un-acces-a-lsass/index.html: cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md

@@ -108,13 +108,13 @@ Import-Module .\psgetsys.ps1
 
 Sysmon `1` affiche `spoolsv.exe` → `cmd.exe` :
 
-![Sysmon Event 1 : cmd.exe affiche spoolsv.exe comme parent](../../assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-41.png)
+![Sysmon Event 1 : cmd.exe affiche spoolsv.exe comme parent](../../../library/assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-41.png)
 
 Collecte SilkETW, puis recherche du PID dans `etw.json` : `powershell.exe` est le vrai créateur.
 
-![SilkETW collectant le provider Microsoft-Windows-Kernel-Process](../../assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-42.png)
+![SilkETW collectant le provider Microsoft-Windows-Kernel-Process](../../../library/assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-42.png)
 
-![etw.json : recherche du PID dans les evenements Kernel-Process](../../assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-43.png)
+![etw.json : recherche du PID dans les evenements Kernel-Process](../../../library/assets/demasquer-un-faux-processus-parent-ppid-spoofing-htb-windows-event-logs-43.png)
 
 Les événements SilkETW peuvent aussi être versés dans les journaux Windows via SilkService. Pas de question de lab dédiée dans le module.
 

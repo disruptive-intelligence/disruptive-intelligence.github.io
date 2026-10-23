@@ -96,7 +96,7 @@ Get-WinEvent -FilterHashtable @{
 ```
 
 
-Lire le Logon Type et le compte : `5` (service, `SYSTEM`) est normal ; `2`, `3`, `9` ou `10` juste après un dump méritent d'être examinés ([Logon Types](analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md#logon-types)).
+Lire le Logon Type et le compte : `5` (service, `SYSTEM`) est normal ; `2`, `3`, `9` ou `10` juste après un dump méritent d'être examinés ([Logon Types](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md#logon-types)).
 
 ## Ce qui doit alerter
 
@@ -123,13 +123,13 @@ TargetUser  : NT AUTHORITY\SYSTEM
 ```
 
 
-![Sysmon Event 10 : AgentEXE.exe accede a lsass.exe](../../assets/reperer-un-acces-a-lsass-htb-windows-event-logs-34.png)
+![Sysmon Event 10 : AgentEXE.exe accede a lsass.exe](../../../library/assets/reperer-un-acces-a-lsass-htb-windows-event-logs-34.png)
 
 Un exécutable peu connu, venu d'un dossier utilisateur, accède à un processus sensible. Côté attaque, la sortie Mimikatz : un compte `Administrator` et ses hashes.
 
-![image-22](../../assets/reperer-un-acces-a-lsass-image-22.png)
+![image-22](../../../library/assets/reperer-un-acces-a-lsass-image-22.png)
 
-Lab pas à pas : [Sysmon et ETW › Labs › Question 3](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
+Lab pas à pas : [Sysmon et ETW › Labs › Question 3](../../../library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-3-credential-dumping-lsass).
 
 </details>
 
@@ -145,7 +145,7 @@ Get-WinEvent -FilterHashtable @{Path='C:\Logs\Dump\*.evtx'; Id=10} |
 ```
 
 
-Puis les `4624` postérieurs à l'heure de cet accès (étape 4), en lisant le Logon Type. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 4 et 5.
+Puis les `4624` postérieurs à l'heure de cet accès (étape 4), en lisant le Logon Type. Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 4 et 5.
 
 </details>
 

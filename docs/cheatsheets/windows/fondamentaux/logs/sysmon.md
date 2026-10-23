@@ -380,7 +380,7 @@ $events |
 
 Sysmon 7 : `Image` = processus qui charge une DLL, `ImageLoaded` = chemin de la DLL chargée. Pour voir d'abord ce que contient le fichier : [Découvrir le contenu d'un fichier .evtx](lire.md#decouvrir-le-contenu-dun-fichier-evtx).
 
-Pour comprendre : [Repérer un DLL hijacking](../../../../library/it/windows/reperer-un-dll-hijacking.md) · [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking)
+Pour comprendre : [Repérer un DLL hijacking](../../reperer-une-attaque/reperer-un-dll-hijacking.md) · [Analyser un fichier .evtx : l'exemple du DLL hijacking](../../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#analyser-un-fichier-evtx-lexemple-du-dll-hijacking)
 { .kw-cs-meta }
 
 ### Repérer une injection de thread
@@ -406,7 +406,7 @@ Sysmon `8` (CreateRemoteThread) : un processus crée un thread dans un autre, si
     ```
     [Skills Assessment, questions 2 et 3](../../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#question-2-powershell-non-manage-le-processus-victime)
 
-Pour comprendre : [Repérer du PowerShell non managé](../../../../library/it/windows/reperer-du-powershell-non-manage.md#5-trouver-qui-a-injecte)
+Pour comprendre : [Repérer du PowerShell non managé](../../reperer-une-attaque/reperer-du-powershell-non-manage.md#5-trouver-qui-a-injecte)
 { .kw-cs-meta }
 
 ### Repérer un accès à la mémoire de LSASS
@@ -449,7 +449,7 @@ LSASS garde en mémoire des secrets d'authentification : un processus inconnu qu
     ```
     [Skills Assessment, questions 4 et 5](../../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#question-4-qui-a-dumpe-lsass)
 
-Pour comprendre : [Repérer un accès à LSASS](../../../../library/it/windows/reperer-un-acces-a-lsass.md)
+Pour comprendre : [Repérer un accès à LSASS](../../reperer-une-attaque/reperer-un-acces-a-lsass.md)
 { .kw-cs-meta }
 
 ### Décoder une commande PowerShell encodée

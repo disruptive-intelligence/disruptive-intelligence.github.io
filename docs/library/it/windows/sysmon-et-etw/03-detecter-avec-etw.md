@@ -23,9 +23,9 @@ L'objectif est de compléter les observations de Sysmon avec des informations pr
 
 Chaque détection a sa fiche dans la sous-rubrique « Repérer une attaque » :
 
-- [Repérer une relation parent-enfant anormale](../reperer-une-relation-parent-enfant-anormale.md) : un parent qui n'a pas vocation à lancer cet enfant (Process Hacker, Sysmon `1`).
-- [Démasquer un faux processus parent (PPID spoofing)](../demasquer-un-faux-processus-parent-ppid-spoofing.md) : le parent affiché par Sysmon `1` contredit par le provider `Microsoft-Windows-Kernel-Process`.
-- [Repérer le chargement d'assemblies .NET](../reperer-le-chargement-d-assemblies-net.md) : Sysmon `7` voit le runtime .NET se charger, le provider `Microsoft-Windows-DotNETRuntime` montre les assemblies et les méthodes.
+- [Repérer une relation parent-enfant anormale](../../../../cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md) : un parent qui n'a pas vocation à lancer cet enfant (Process Hacker, Sysmon `1`).
+- [Démasquer un faux processus parent (PPID spoofing)](../../../../cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md) : le parent affiché par Sysmon `1` contredit par le provider `Microsoft-Windows-Kernel-Process`.
+- [Repérer le chargement d'assemblies .NET](../../../../cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md) : Sysmon `7` voit le runtime .NET se charger, le provider `Microsoft-Windows-DotNETRuntime` montre les assemblies et les méthodes.
 
 ### Sysmon ou ETW — comparaison des détections
 

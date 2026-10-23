@@ -185,6 +185,14 @@ nav:
                 - ETW et logman: cheatsheets/windows/fondamentaux/logs/etw.md
             - Droits et identités: cheatsheets/windows/fondamentaux/droits.md
             - Registre: cheatsheets/windows/fondamentaux/registre.md
+        - 🎯 Repérer une attaque:
+            - cheatsheets/windows/reperer-une-attaque/index.md
+            - cheatsheets/windows/reperer-une-attaque/reperer-un-dll-hijacking.md
+            - cheatsheets/windows/reperer-une-attaque/reperer-du-powershell-non-manage.md
+            - cheatsheets/windows/reperer-une-attaque/reperer-le-chargement-d-assemblies-net.md
+            - cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md
+            - cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md
+            - cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md
         - Administration:
             - cheatsheets/windows/administration/index.md
             - Utilisateurs et groupes: cheatsheets/windows/administration/utilisateurs.md

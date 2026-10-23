@@ -22,7 +22,7 @@ Du code PowerShell ou C# est injecté dans un processus qui n'utilise pas .NET :
 
 - Le code C# s'exécute dans le runtime .NET : `clr.dll` (Common Language Runtime) et `clrjit.dll` (compilation Just-In-Time) se chargent dans le processus.
 - Normal dans un processus .NET (PowerShell, outils d'administration) ; inattendu dans un processus natif : signe d'une attaque [execute-assembly](https://www.cobaltstrike.com/blog/cobalt-strike-3-11-the-snake-that-eats-its-tail/) ou d'une [injection de PowerShell non managé](https://www.youtube.com/watch?v=7tvfb9poTKg&ab_channel=RaphaelMudge).
-- Trace : Sysmon `7`, si la collecte `ImageLoad` est activée ([Configurer la collecte (ImageLoad)](sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
+- Trace : Sysmon `7`, si la collecte `ImageLoad` est activée ([Configurer la collecte (ImageLoad)](../../../library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/01-installer-et-configurer-sysmon.md#configurer-la-collecte-imageload)).
 
 ## Chercher, étape par étape
 
@@ -32,7 +32,7 @@ Sur un journal exporté : `Path = '<fichier>.evtx'` ; tout un dossier : `Path = 
 
 Process Hacker : un processus .NET apparaît comme *Managed (.NET)*. Dans `Process Properties → Modules`, chercher `clr.dll` et `clrjit.dll`.
 
-![Modules clr.dll et clrjit.dll (Microsoft .NET Runtime)](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-28.png)
+![Modules clr.dll et clrjit.dll (Microsoft .NET Runtime)](../../../library/assets/reperer-du-powershell-non-manage-htb-windows-event-logs-28.png)
 
 ### 2. Garder les chargements de DLL
 
@@ -128,17 +128,17 @@ Invoke-PSInject -ProcId (Get-Process spoolsv).Id -PoshCode "V3JpdGUtSG9zdCAiSGVs
 
 Avant l'injection, `spoolsv.exe` n'est pas un processus .NET :
 
-![spoolsv.exe avant l'injection : processus non manage](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-29.png)
+![spoolsv.exe avant l'injection : processus non manage](../../../library/assets/reperer-du-powershell-non-manage-htb-windows-event-logs-29.png)
 
 Après : Process Hacker le voit comme .NET, les modules du CLR apparaissent et Sysmon `7` enregistre le chargement de `clr.dll`.
 
-![spoolsv.exe apres l'injection : processus manage par .NET](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-30.png)
+![spoolsv.exe apres l'injection : processus manage par .NET](../../../library/assets/reperer-du-powershell-non-manage-htb-windows-event-logs-30.png)
 
-![Modules de spoolsv.exe dans Process Hacker](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-31.png)
+![Modules de spoolsv.exe dans Process Hacker](../../../library/assets/reperer-du-powershell-non-manage-htb-windows-event-logs-31.png)
 
-![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../assets/reperer-du-powershell-non-manage-htb-windows-event-logs-32.png)
+![Sysmon Event 7 : spoolsv.exe charge clr.dll](../../../library/assets/reperer-du-powershell-non-manage-htb-windows-event-logs-32.png)
 
-Requête XML du lab : `Image` = `C:\Windows\System32\spoolsv.exe`, `ImageLoaded` = `clr.dll`. Lab pas à pas : [Sysmon et ETW › Labs › Question 2](sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-2-powershell-non-manage-spoolsvexe).
+Requête XML du lab : `Image` = `C:\Windows\System32\spoolsv.exe`, `ImageLoaded` = `clr.dll`. Lab pas à pas : [Sysmon et ETW › Labs › Question 2](../../../library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#question-2-powershell-non-manage-spoolsvexe).
 
 </details>
 
@@ -161,7 +161,7 @@ Get-WinEvent -FilterHashtable @{Path='C:\Logs\PowershellExec\*.evtx'; Id=8} | Fo
 ```
 
 
-Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 2 et 3.
+Méthode pas à pas : [Sysmon et ETW › Labs › Lab 4](../../../library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md), questions 2 et 3.
 
 </details>
 

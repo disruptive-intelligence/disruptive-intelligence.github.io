@@ -12,6 +12,8 @@
 # (mots-clés qui relient la rubrique aux analyses et dossiers de la veille). liens (rubrique ou sous-rubrique) :
 # notes rangées ailleurs, rappelées ici dans le menu et sur la page. glossaire: true = rangée sous
 # « Glossaire & notions ». Une synthèse « X — synthèse » est rangée sous le cours « X… » de sa rubrique.
+# publier (sous-rubrique) : dossier de docs/ où ses notes sont publiées hors de la Bibliothèque (ex. les fiches
+# « Repérer une attaque » dans les cheat sheets) ; le coffre ne change pas, seule l'adresse change.
 # Titres : sujet clair d'abord, angle ensuite ; la provenance (HTB, L2I) est un badge, pas le titre.
 
 - id: cyber
@@ -166,7 +168,7 @@
       notes: [Administration Linux, Linux — prises de notes]
     - id: windows
       label: 🪟 Windows
-      description: Comprendre Windows de l'intérieur, l'administrer en ligne de commande et y repérer une attaque.
+      description: Comprendre Windows de l'intérieur, l'administrer en ligne de commande et lire ses journaux.
       debut: Windows en profondeur
       mots: [Windows, PowerShell]
       groups:
@@ -181,6 +183,7 @@
           notes: ["Analyse des journaux d'événements Windows (Event Logs)", "Sysmon et ETW", Réponse à incident sous Windows (Windows Incident Response)]
         - label: 🎯 Repérer une attaque
           description: "Une fiche par attaque : les traces qu'elle laisse, les requêtes pour les retrouver, les faux positifs."
+          publier: cheatsheets/windows/reperer-une-attaque
           notes: [Repérer un DLL hijacking, Repérer du PowerShell non managé, "Repérer le chargement d'assemblies .NET", Repérer une relation parent-enfant anormale, Démasquer un faux processus parent (PPID spoofing), Repérer un accès à LSASS]
     - id: active-directory
       label: 🏰 Active Directory
