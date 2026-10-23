@@ -2393,7 +2393,7 @@ def pages_library(library):
             if cat.get("description"):
                 body += f'<p class="kw-dom-lead">{esc(cat["description"])}</p>\n'
             body += (f'<span class="kw-dom-stats">{stats}{" · mis à jour le " + update if update else ""}</span>\n'
-                     "</div>\n\n") + lib_variant_picker() + quick_filter(src, f"{dom['id']}/{cat['id']}") + library_box(src, f"{dom['id']}/{cat['id']}")
+                     "</div>\n\n") + quick_filter(src, f"{dom['id']}/{cat['id']}") + library_box(src, f"{dom['id']}/{cat['id']}")
             body += '<div class="kw-bv-fallback" markdown>\n\n'      # liste générée : masquée quand le script a pris le relais
             listed = [n for n in cat["notes"] if not n.get("paired")]
             if listed:
@@ -2450,11 +2450,6 @@ def section_bar(label, anchor=None, more=None):
     return f'\n<div class="kw-bar"{ident}><span>{esc(label)}</span>{link}</div>\n'
 
 
-LIB_VARIANTS = [("a", "Sommaire", "le menu de gauche suffit ; au centre, la recherche et le sommaire des rubriques en texte"),
-                ("b", "Explorateur", "l'explorateur seul (domaine, rubriques, détail) ; le menu de gauche est masqué"),
-                ("c", "Par usage", "trois colonnes : apprendre, agir, s'entraîner ; le menu de gauche reste")]
-
-
 def first_src(entry):
     """Première page d'une entrée du menu (chaîne, liste ou dictionnaire imbriqués)."""
     if isinstance(entry, str):
@@ -2478,14 +2473,6 @@ def lib_masthead(src, count):
             '<input type="search" name="mots" placeholder="Chercher dans les notes et les cheat sheets : Sysmon 7, LSASS, nmap -sV…" '
             'aria-label="Chercher dans la Bibliothèque et les cheat sheets"><button type="submit">Chercher</button></form>'
             f'<nav class="kw-mast__nav">{nav}</nav></div>\n')
-
-
-def lib_variant_picker():
-    """Aperçu seulement : choix de la mise en page (mémorisé dans ce navigateur, javascripts/bibliotheque.js)."""
-    return ('<div class="kw-varpick" role="group" aria-label="Mise en page de la Bibliothèque"><span>Aperçu de mise en page :</span>'
-            + "".join(f'<button type="button" data-var="{k}" data-desc="{esc(d)}"><b>{k.upper()}</b> {esc(t)}</button>'
-                      for k, t, d in LIB_VARIANTS)
-            + '<span class="kw-varpick__desc"></span></div>\n')
 
 
 def rubric_index(cat, src):
@@ -2523,44 +2510,18 @@ def lib_cats(d):
 
 
 def home_sommaire(library, src, recent):
-    """Variante A : le sommaire en texte, façon journal."""
+    """Sommaire des rubriques en texte : affiché sans JS, à la place de l'explorateur."""
     out = lib_recent(src, recent)
     for d in library:
         out += (section_bar(bare(d["label"]), anchor=d["id"], more=("Tout le domaine →", href(src, dom_src(d))))
                 + '<div class="kw-som">' + "".join(rubric_index(c, src) for c in lib_cats(d)) + "</div>\n")
-    return out + section_bar("S'entraîner et réviser") + lib_practice(src)
-
-
-def home_usage(library, src, recent):
-    """Variante C : apprendre (domaines et rubriques), agir (cheat sheets, fiches détection), s'entraîner."""
-    learn = ""
-    for d in library:
-        learn += (f'<p class="kw-use__dom"><a href="{href(src, dom_src(d))}">{esc(d["label"])}</a></p><ul>'
-                  + "".join(f'<li><a href="{href(src, c["src"])}">{esc(bare(c["label"]))}</a></li>' for c in lib_cats(d)) + "</ul>")
-    fiches = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"] and n.get("format") == "detection"]
-    act = (f'<p class="kw-use__dom"><a href="{href(src, "cheatsheets/index.md")}">📋 Cheat sheets</a></p><ul>'
-           + "".join(f'<li><a href="{href(src, s)}">{esc(label)}</a></li>' for label, s in STATE.get("cs_sections", []))
-           + f'</ul><p class="kw-use__dom"><a href="{href(src, SUBJECTS_HUB)}#par-situation">🪟 Windows : partir de la situation</a></p>'
-           + '<p class="kw-use__dom">🎯 Repérer une attaque</p><ul>'
-           + "".join(f'<li><a href="{href(src, n["src"])}">{esc(nav_title(n))}</a></li>' for n in fiches) + "</ul>")
-    labs = STATE.get("labs") or []
-    train = (f'<p class="kw-use__dom"><a href="{href(src, LABS_INDEX)}">🧪 Labs</a></p><ul>'
-             + "".join(f'<li><a href="{href(src, l["src"])}">{esc(l["title"])}</a></li>' for l in labs) + "</ul>"
-             + (f'<p class="kw-use__dom"><a href="{href(src, REVISION_INDEX)}">📝 Révision</a></p>' if STATE.get("revisions") else "")
-             + '<p class="kw-use__dom">Parcours</p><ul>'
-             + "".join(f'<li><a href="{href(src, p["src"])}">{esc(p["titre"])}</a></li>' for p in STATE.get("parcours", []) if p["etapes"])
-             + f'</ul><p class="kw-use__dom"><a href="{href(src, GLOSSARY_SRC)}">📖 Glossaire & notions</a></p>')
-    cols = [("Apprendre", "Cours, synthèses et notions, par domaine.", learn),
-            ("Agir", "Sur le poste : la commande, la fiche, la démarche.", act),
-            ("S'entraîner", "Labs pratiqués, révision, parcours.", train)]
-    return (lib_recent(src, recent)
-            + '<div class="kw-use">' + "".join(f'<section class="kw-use__col"><p class="kw-use__title">{t}</p>'
-                                                f'<p class="kw-use__lead">{l}</p>{b}</section>' for t, l, b in cols) + "</div>\n")
+    return out
 
 
 def page_library_index(library, themes, glossary_count):
-    """Accueil de la Bibliothèque : en-tête compact (un seul champ de recherche, une ligne de liens), puis l'une des
-    trois mises en page de l'aperçu (sélecteur ; A par défaut). B garde l'explorateur (javascripts/bibliotheque.js)."""
+    """Accueil de la Bibliothèque : en-tête compact (un seul champ de recherche, une ligne de liens), l'explorateur
+    (javascripts/bibliotheque.js ; menu de gauche masqué sur cette page), puis labs, révision et parcours.
+    Sans JS, le sommaire des rubriques en texte (kw-bv-fallback) reste affiché."""
     src = "library/index.md"
     all_notes = [n for d in library for c in d["categories"] for n in c["notes"] if n["imported"]]
     recent = sorted((n for n in all_notes if n.get("revue")), key=lambda n: (n["revue"], n.get("minutes") or 0), reverse=True)
@@ -2571,11 +2532,8 @@ hide:
   - footer
 ---
 {lib_masthead(src, len(all_notes))}
-{lib_variant_picker()}
-<div class="kw-var kw-var--a">{home_sommaire(library, src, recent)}</div>
-<div class="kw-var kw-var--b">{library_box(src)}<div class="kw-bv-fallback">{home_sommaire(library, src, recent)}</div>
-{section_bar("S'entraîner et réviser")}{lib_practice(src)}</div>
-<div class="kw-var kw-var--c">{home_usage(library, src, recent)}</div>
+{library_box(src)}<div class="kw-bv-fallback">{home_sommaire(library, src, recent)}</div>
+{section_bar("S'entraîner et réviser")}{lib_practice(src)}
 
 <span class="kw-muted">Les liens externes sélectionnés (outils, sites, lectures) sont dans [🧭 Ressources]({posixpath.relpath(RESSOURCES_SRC, "library")}).</span>
 """
@@ -3241,6 +3199,13 @@ def decorate_revision(markdown, page):
 LABS_DIR = "library/labs"
 LABS_INDEX = f"{LABS_DIR}/index.md"
 LAB_TITLE = re.compile(r"(?i)^labs?\b")
+LAB_NUMBER = re.compile(r"(?i)^labs?\s*\d*\s*[—–:-]\s*")
+
+
+def lab_name(title):
+    """« Lab 2 — Analyser avec Sysmon » -> « Analyser avec Sysmon » : les numéros changent d'un cours à l'autre."""
+    name = LAB_NUMBER.sub("", title).strip()
+    return name[:1].upper() + name[1:] if name else title
 
 
 def load_labs(docs_dir, library):
@@ -3301,7 +3266,7 @@ def page_labs_index():
             status_class = "is-done" if lab["questions"] else "is-todo"
             search = " ".join([lab["title"], lab["note"]["title"], bare(lab["cat"]["label"])] + skills)
             items.append(f'<li class="{status_class}" data-search="{esc(search)}"><a href="{href(LABS_INDEX, lab["src"])}">'
-                         f'{esc(lab["title"])}</a>'
+                         f'{esc(lab_name(lab["title"]))}</a>'
                          + (f'<span class="kw-lab__skills">Travaille : {esc(" · ".join(skills))}</span>' if skills else "")
                          + f'<span class="kw-note-meta">Cours <a href="{href(LABS_INDEX, lab["note"]["src"])}">{esc(lab["note"]["title"])}</a>'
                          f' · {esc(" · ".join(bits))}</span></li>')

@@ -296,21 +296,6 @@
   }
 
   // ---------------------------------------------------------------- montage
-  /* Aperçu : mise en page de la Bibliothèque (A sommaire, B explorateur, C par usage), mémorisée dans ce navigateur. */
-  function variant() { try { return localStorage.getItem("kw-libvar") || "a"; } catch (e) { return "a"; } }
-  function picker(box) {
-    var desc = box.querySelector(".kw-varpick__desc"), current = variant();
-    box.querySelectorAll("button[data-var]").forEach(function (b) {
-      var on = b.dataset.var === current;
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-      if (on && desc) desc.textContent = b.dataset.desc || "";
-      b.addEventListener("click", function () {
-        try { localStorage.setItem("kw-libvar", b.dataset.var); } catch (e) { /* choix non mémorisé */ }
-        window.location.reload();
-      });
-    });
-  }
-
   function mount(box, data) {
     var scope = box.dataset.scope || "";
     var doms = data;
@@ -349,8 +334,7 @@
   function init() {
     document.body.classList.remove("kw-bv-on");
     document.querySelectorAll(".kw-labs-filter").forEach(labsFilter);
-    document.querySelectorAll(".kw-varpick").forEach(picker);
-    if (variant() === "b") document.querySelectorAll(".kw-bv").forEach(function (box) { load(box, function (data) { mount(box, data); }); });
+    document.querySelectorAll(".kw-bv").forEach(function (box) { load(box, function (data) { mount(box, data); }); });
     document.querySelectorAll(".kw-bv-find").forEach(function (box) {
       load(box, function (data) { box.appendChild(facets(box.dataset.root || "", data, new URLSearchParams(window.location.search))); });
     });

@@ -7,7 +7,7 @@
 #  - la page Labs, qui en déduit les compétences de chaque lab.
 #
 # Aucun texte nouveau : seulement des liens. Chemin = fichier dans docs/ ; « #Intitulé » = intitulé exact de la
-# section (l'ancre est calculée). situation : donnees (j'ai des journaux à lire), soupcon (je soupçonne…),
+# section (l'ancre est calculée). Labs : nommés par leur sujet, jamais par leur numéro. situation : donnees (j'ai des journaux à lire), soupcon (je soupçonne…),
 # rien (je ne trouve rien). Libellé d'un lien : court, il s'affiche dans une barre.
 
 - id: evtx
@@ -21,8 +21,8 @@
     - ["Event Logs · lire un .evtx", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Lire un fichier .evtx exporté"]
     - ["Event Logs · un dossier", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Analyser un dossier de fichiers .evtx"]
   labs:
-    - ["Lab 1 · bases des journaux", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/14-lab-1-les-bases-des-journaux-d-evenements-windows.md"]
-    - ["Lab · journal Sysmon exporté", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md"]
+    - ["Bases des journaux Windows", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/14-lab-1-les-bases-des-journaux-d-evenements-windows.md"]
+    - ["Journal Sysmon exporté", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md"]
 
 - id: etw
   titre: Lire une trace ETW
@@ -33,7 +33,7 @@
     - ["Comprendre ETW", "library/it/windows/sysmon-et-etw/02-comprendre-etw/index.md"]
     - ["ETW en investigation", "library/it/windows/sysmon-et-etw/02-comprendre-etw/04-etw-en-investigation.md"]
   labs:
-    - ["Lab 3 · ETW", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md"]
+    - ["Travailler avec ETW", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md"]
 
 - id: dll
   titre: DLL hijacking
@@ -46,8 +46,8 @@
     - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
     - ["Event Logs · l'exemple DLL", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/03-lire-et-filtrer-les-journaux.md#Analyser un fichier .evtx : l'exemple du DLL hijacking"]
   labs:
-    - ["Lab 2 · question 1", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 1 — DLL hijacking : WININET.dll"]
-    - ["Lab 4 · question 1", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 1 — DLL hijacking : le processus responsable"]
+    - ["Analyser avec Sysmon · DLL", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 1 — DLL hijacking : WININET.dll"]
+    - ["Évaluation finale · DLL", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 1 — DLL hijacking : le processus responsable"]
 
 - id: lsass
   titre: Accès à LSASS
@@ -60,8 +60,8 @@
     - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
     - ["Event Logs · Logon Types", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md"]
   labs:
-    - ["Lab 2 · question 3", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 3 — Credential dumping : LSASS"]
-    - ["Lab 4 · question 4", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 4 — Qui a dumpé LSASS ?"]
+    - ["Analyser avec Sysmon · LSASS", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 3 — Credential dumping : LSASS"]
+    - ["Évaluation finale · LSASS", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 4 — Qui a dumpé LSASS ?"]
 
 - id: unmanaged
   titre: PowerShell non managé
@@ -73,8 +73,8 @@
     - ["Sysmon · trois détections", "library/it/windows/sysmon-et-etw/01-detecter-avec-sysmon/02-trois-detections-avec-sysmon.md"]
     - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
   labs:
-    - ["Lab 2 · question 2", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 2 — PowerShell non managé : spoolsv.exe"]
-    - ["Lab 4 · questions 2 et 3", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 2 — PowerShell non managé : le processus victime"]
+    - ["Analyser avec Sysmon · PowerShell", "library/it/windows/sysmon-et-etw/04-labs/01-lab-2-analyser-avec-sysmon.md#Question 2 — PowerShell non managé : spoolsv.exe"]
+    - ["Évaluation finale · PowerShell", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 2 — PowerShell non managé : le processus victime"]
 
 - id: dotnet
   titre: Chargement d'assemblies .NET
@@ -85,7 +85,7 @@
   cours:
     - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
   labs:
-    - ["Lab 3 · Seatbelt", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md#Question 1 — Suivre Seatbelt avec Sysmon et ETW"]
+    - ["Travailler avec ETW · Seatbelt", "library/it/windows/sysmon-et-etw/04-labs/02-lab-3-travailler-avec-etw.md#Question 1 — Suivre Seatbelt avec Sysmon et ETW"]
 
 - id: parents
   titre: Filiation de processus anormale
@@ -97,8 +97,8 @@
   cours:
     - ["Détecter avec ETW", "library/it/windows/sysmon-et-etw/03-detecter-avec-etw.md"]
   labs:
-    - ["Lab 4 · question 6", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 6 — Une filiation étrange"]
-    - ["Lab Sysmon · question 4", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 4 — Le parent du cmd.exe qui a lancé le téléchargement"]
+    - ["Évaluation finale · filiation", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 6 — Une filiation étrange"]
+    - ["Journal Sysmon exporté · parent du cmd.exe", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 4 — Le parent du cmd.exe qui a lancé le téléchargement"]
 
 - id: ppid
   titre: Faux processus parent (PPID spoofing)
@@ -119,7 +119,7 @@
     - ["Event Logs · authentification", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/04-authentification-et-ouvertures-de-session.md"]
     - ["Event Logs · mouvement latéral et RDP", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/05-mouvement-lateral-et-rdp.md"]
   labs:
-    - ["Lab 4 · question 5", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 5 — Une connexion malveillante après le dump ?"]
+    - ["Évaluation finale · connexion", "library/it/windows/sysmon-et-etw/04-labs/03-lab-4-evaluation-finale-skills-assessment.md#Question 5 — Une connexion malveillante après le dump ?"]
 
 - id: persistance
   titre: Persistance (services, tâches, comptes, clé Run)
@@ -133,7 +133,7 @@
     - ["Event Logs · services", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/07-services-windows.md"]
     - ["Event Logs · comptes", "library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/08-gestion-des-comptes.md"]
   labs:
-    - ["Lab Sysmon · questions 2 et 5", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 5 — Le programme lancé à chaque démarrage (clé Run)"]
+    - ["Journal Sysmon exporté · démarrage et clé Run", "library/cyber/forensic/dfir-avec-l-edr/05-lab-analyse-d-un-journal-sysmon-exporte.md#Question 5 — Le programme lancé à chaque démarrage (clé Run)"]
 
 - id: scripts
   titre: Scripts PowerShell exécutés

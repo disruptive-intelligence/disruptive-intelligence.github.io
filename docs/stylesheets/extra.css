@@ -1580,19 +1580,10 @@ body[data-md-color-scheme="default"]::after {
 }
 
 /* ---------------------------------------------------------------- Allègement (aperçu) */
-/* Sélecteur de mise en page (A sommaire, B explorateur, C par usage) : une seule variante visible */
-.md-typeset .kw-varpick { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; margin: .1rem 0 .9rem;
-  padding: .4rem .6rem; font-size: .66rem; border: 1px dashed var(--kw-line); border-radius: 8px; color: var(--md-default-fg-color--light); }
-.md-typeset .kw-varpick button { font: inherit; cursor: pointer; padding: .2rem .55rem; border-radius: 6px; border: 1px solid var(--kw-line);
-  background: transparent; color: var(--md-default-fg-color--light); }
-.md-typeset .kw-varpick button[aria-pressed="true"] { border-color: var(--md-accent-fg-color); color: var(--kw-strong); }
-.md-typeset .kw-varpick__desc { flex-basis: 100%; font-style: italic; }
-.kw-var { display: none; }
-html:not(.kw-libvar-b):not(.kw-libvar-c) .kw-var--a, html.kw-libvar-b .kw-var--b, html.kw-libvar-c .kw-var--c { display: block; }
-html.kw-libvar-b .md-main:has(.kw-bv) .md-sidebar--primary { display: none; }
-html:not(.kw-libvar-b) .md-typeset .kw-bv-quick { display: none; }
+/* Accueil et pages de rubrique : l'explorateur remplace le menu de gauche */
+.md-main:has(.kw-bv) .md-sidebar--primary { display: none; }
 
-/* A · sommaire en texte : une rubrique = nom, phrase, sous-rubriques en liens */
+/* Sommaire en texte (sans JS) : une rubrique = nom, phrase, sous-rubriques en liens */
 .md-typeset .kw-som__recent { font-size: .72rem; color: var(--md-default-fg-color--light); margin: .2rem 0 .6rem; }
 .md-typeset .kw-som__recent span { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: .6rem; margin-right: .4rem; color: var(--md-accent-fg-color); }
 .md-typeset .kw-som { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 0 2rem; margin: .2rem 0 1.2rem; }
@@ -1606,16 +1597,6 @@ html:not(.kw-libvar-b) .md-typeset .kw-bv-quick { display: none; }
 .md-typeset ul.kw-som__practice { list-style: none; margin: .3rem 0 1rem; padding: 0; font-size: .74rem; }
 .md-typeset ul.kw-som__practice li { margin: 0; padding: .35rem 0; border-bottom: 1px solid var(--kw-line); color: var(--md-default-fg-color--light); }
 .md-typeset ul.kw-som__practice a { font-weight: 700; }
-
-/* C · par usage : trois colonnes */
-.md-typeset .kw-use { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin: .4rem 0 1.2rem; }
-.md-typeset .kw-use__col { border-top: 3px solid var(--md-accent-fg-color); padding-top: .5rem; }
-.md-typeset .kw-use__title { margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--kw-strong); }
-.md-typeset .kw-use__lead { margin: .1rem 0 .6rem; font-size: .68rem; color: var(--md-default-fg-color--light); }
-.md-typeset .kw-use__dom { margin: .7rem 0 .2rem; font-size: .74rem; font-weight: 800; }
-.md-typeset .kw-use ul { list-style: none; margin: 0; padding: 0; font-size: .72rem; }
-.md-typeset .kw-use li { margin: 0; padding: .18rem 0; border-bottom: 1px solid var(--kw-line); }
-@media (max-width: 59.9375em) { .md-typeset .kw-use { grid-template-columns: 1fr; } }
 
 /* « Même sujet » en tête des pages Windows (data/sujets.yml) */
 .md-typeset .kw-same { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1.2rem; margin: .2rem 0 1rem; padding: .55rem .8rem;
