@@ -1260,6 +1260,11 @@ body[data-md-color-scheme="default"]::after {
   background: #fff; cursor: zoom-in;
 }
 .md-typeset p > img[width] { max-height: none; }
+/* Captures du cours Windows Privilege Escalation : conserver la hauteur et la lisibilité
+   des terminaux, y compris systeminfo et ipconfig qui sont de longues sorties. */
+.md-typeset p > img[src*="elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-"]:not(.twemoji):not(.emojione) {
+  max-width: 100%; max-height: none; background: var(--md-code-bg-color);
+}
 .kw-zoom { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 2rem;
   background: rgba(10, 8, 8, .88); cursor: zoom-out; }
 .kw-zoom img { max-width: 100%; max-height: 100%; border-radius: 8px; background: #fff; padding: .4rem; box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }

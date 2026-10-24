@@ -6,18 +6,17 @@ provenance: HTB Academy
 revue: '2026-10-24'
 ---
 
-Ces commandes servent aussi à l'inventaire et à l'audit de durcissement. Sur le site : [Énumération et audit local](https://disruptive-intelligence.github.io/cheatsheets/windows/fondamentaux/enumeration/). Les sorties réseau ci-dessous utilisent des adresses de remplacement ; les captures originales restent dans les archives locales.
+Ces commandes servent aussi à l'inventaire et à l'audit de durcissement. Sur le site : [Énumération et audit local](https://disruptive-intelligence.github.io/cheatsheets/windows/fondamentaux/enumeration/). Les captures du cours accompagnent chaque commande ; cliquer dessus pour les agrandir.
 
 Le Windows Privilege Escalation désigne l'ensemble des techniques permettant d'obtenir des privilèges plus élevés sur un système Windows après avoir obtenu un premier accès (Initial Foothold).
 
 Dans un contexte de Pentest / Active Directory Assessment, l'objectif consiste généralement à passer d'un utilisateur disposant de droits limités à un contexte plus privilégié :
 
 - Local Administrators : membres du groupe des administrateurs locaux.
-    
+
 - NT AUTHORITY\SYSTEM : compte système Windows disposant de privilèges locaux très élevés.
-    
+
 - Another User Context : contexte d'un autre utilisateur donnant accès à des ressources supplémentaires.
-    
 
 L'élévation de privilèges est une étape importante de la phase de Post-Exploitation. Elle peut permettre d'obtenir des identifiants, d'accéder à des données protégées, d'établir une persistance ou de poursuivre une attaque vers d'autres systèmes du réseau.
 
@@ -29,7 +28,7 @@ Un Initial Foothold correspond à un premier accès obtenu sur un système, souv
 
 La Privilege Escalation cherche ensuite à étendre les capacités associées à cet accès.
 
-```
+```text
 Initial Foothold
 Standard User Access
         ↓
@@ -100,15 +99,14 @@ Cependant, le cours insiste sur la nécessité de maîtriser également l'énum�
 Cette compétence devient indispensable dans certains environnements :
 
 - accès Internet interdit ;
-    
+
 - ports USB bloqués ;
-    
+
 - filtrage réseau strict ;
-    
+
 - poste de travail administré et fortement restreint ;
-    
+
 - impossibilité d'importer des scripts ou des exécutables.
-    
 
 Principe : comprendre les mécanismes Windows est plus important que dépendre exclusivement d'un outil d'énumération automatique.
 
@@ -119,13 +117,12 @@ Principe : comprendre les mécanismes Windows est plus important que dépendre e
 Lors d'une mission de Pentest, l'analyste travaille sur un système client soumis à plusieurs restrictions :
 
 - aucun accès Internet ;
-    
+
 - ports USB désactivés ;
-    
+
 - impossibilité de connecter directement sa machine d'attaque au réseau utilisateur ;
-    
+
 - présence de contrôles d'accès réseau.
-    
 
 Cependant, une erreur de configuration permet au Printer VLAN de communiquer vers l'extérieur sur certains ports :
 
@@ -141,7 +138,7 @@ Le fichier est transféré au moyen d'un partage SMB accessible via le VLAN des 
 
 L'analyse hors ligne avec Mimikatz révèle le hash NTLM d'un compte Domain Admin. Le hash est ensuite cassé hors ligne, permettant d'obtenir les identifiants nécessaires pour accéder au contrôleur de domaine.
 
-```
+```text
 Restricted Windows Workstation
            ↓
 Manual Enumeration
@@ -191,9 +188,8 @@ Ce partage contient des sauvegardes de machines virtuelles.
 Le cours mentionne deux formats :
 
 - `.VMDK` : disque virtuel couramment utilisé dans les environnements VMware.
-    
+
 - `.VHDX` : format de disque virtuel Microsoft, notamment utilisé avec Hyper-V.
-    
 
 Ces fichiers peuvent contenir l'intégralité du système de fichiers d'une machine virtuelle, y compris des artefacts sensibles.
 
@@ -202,17 +198,16 @@ Ces fichiers peuvent contenir l'intégralité du système de fichiers d'une mach
 L'analyste accède à une sauvegarde `.VHDX`, la monte sur une machine Windows et récupère trois ruches de registre :
 
 - `SYSTEM`
-    
+
 - `SAM`
-    
+
 - `SECURITY`
-    
 
 Il utilise ensuite `secretsdump.py`, un outil de la suite Impacket, pour extraire le hash du compte administrateur local.
 
 L'organisation ayant déployé ses systèmes à partir d'une Gold Image partageant les mêmes identifiants administratifs locaux, le hash permet d'obtenir un accès administrateur sur de nombreuses machines via une attaque Pass-the-Hash.
 
-```
+```text
 Overly Permissive Network Share
              ↓
 VM Backups Exposed
@@ -260,11 +255,10 @@ L'objectif de la mission consiste à accéder à des serveurs de bases de donné
 L'analyste dispose initialement :
 
 - d'un ordinateur portable fourni par le client ;
-    
+
 - d'un compte utilisateur standard du domaine ;
-    
+
 - de la possibilité d'exécuter des outils.
-    
 
 #### Snaffler — Credential Hunting
 
@@ -306,7 +300,7 @@ Il peut finalement se connecter à distance au serveur de base de données et ob
 
 #### Chaîne d'attaque
 
-```
+```text
 Standard Domain User
           ↓
 Snaffler — Network Share Enumeration
@@ -348,23 +342,22 @@ Les possibilités d'élévation de privilèges résultent souvent de faiblesses 
 Le cours identifie notamment :
 
 - Insufficient Staffing : manque de personnel dédié à la sécurité.
-    
+
 - Budget Constraints : ressources financières insuffisantes.
-    
+
 - Incomplete Patch Management : systèmes et applications non corrigés.
-    
+
 - Weak Vulnerability Management : gestion insuffisante des vulnérabilités.
-    
+
 - Lack of Internal Assessments : absence d'audits et de tests réguliers.
-    
+
 - Insufficient Monitoring : surveillance incomplète.
-    
+
 - Outdated Infrastructure : postes et serveurs anciens ou insuffisamment maintenus.
-    
+
 - Insecure File Shares : permissions trop permissives.
-    
+
 - Exposed Credentials : identifiants présents dans des scripts ou fichiers de configuration.
-    
 
 Ces faiblesses peuvent rester longtemps inaperçues, notamment lorsqu'une organisation ne dispose pas des moyens nécessaires pour auditer régulièrement son environnement.
 

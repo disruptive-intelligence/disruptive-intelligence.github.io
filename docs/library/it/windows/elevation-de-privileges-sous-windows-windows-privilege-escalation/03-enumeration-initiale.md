@@ -13,7 +13,7 @@ Son objectif est d'identifier les vecteurs potentiels de Privilege Escalation à
 
 L'énumération manuelle est indispensable : certains environnements empêchent l'utilisation de scripts comme `winPEAS`, `Seatbelt` ou `PowerUp`, mais permettent toujours d'utiliser des commandes Windows natives.
 
-## 1. Comprendre les cibles de Privilege Escalation
+## Comprendre les cibles de l'élévation
 
 L'élévation de privilèges ne vise pas nécessairement le compte `SYSTEM`. Plusieurs contextes peuvent permettre d'atteindre l'objectif d'un Pentest.
 
@@ -35,7 +35,7 @@ Le mécanisme UAC (User Account Control) peut limiter le token utilisé par déf
 
 À retenir : une élévation locale peut permettre d'accéder à des ressources sensibles, à des identifiants ou à des services utiles pour poursuivre l'attaque. Elle n'accorde cependant pas automatiquement les droits de Domain Admin.
 
-## 2. Key Enumeration Targets
+## Cibles de l'énumération
 
 Trois catégories doivent être examinées dès les premières étapes.
 
@@ -56,27 +56,27 @@ Cependant, les exploits du noyau (Kernel Exploits) peuvent provoquer une instabi
 Il faut donc distinguer :
 
 - Potentially Vulnerable : une configuration semble correspondre à une vulnérabilité connue.
-    
+
 - Confirmed Vulnerable : les conditions techniques de la vulnérabilité sont effectivement réunies.
-    
+
 - Exploitable : la vulnérabilité peut être exploitée dans le contexte disponible.
-    
 
 Une simple correspondance de version ou un correctif apparemment manquant ne suffit pas à confirmer l'exploitabilité.
 
-## 3. System Information Enumeration
+## Informations système
 
-### 3.1 Running Processes & Services — `tasklist`
+### Processus et services — tasklist
 
-```
+```bat title="Commande (CMD)"
 tasklist /svc
 ```
 
 
 Cette commande affiche les processus actifs et les services Windows qui leur sont associés.
-![privesc-tasklist-svc](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-tasklist-svc.png)
 
-### Windows Core Processes
+![privesc-tasklist-svc](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-tasklist-svc.png){ width="760" }
+
+#### Windows Core Processes
 
 Il est essentiel de reconnaître les processus légitimes courants.
 
@@ -93,36 +93,36 @@ Il est essentiel de reconnaître les processus légitimes courants.
 
 La reconnaissance de ces processus permet d'identifier plus rapidement les composants non standards.
 
-### Example — FileZilla Server
+#### Example — FileZilla Server
 
 Dans le lab, `FileZilla Server.exe` présente un intérêt particulier.
 
 L'énumération doit chercher à déterminer :
 
 - sa version ;
-    
+
 - la configuration du service FTP ;
-    
+
 - les permissions des fichiers et répertoires ;
-    
+
 - l'existence de vulnérabilités connues ;
-    
+
 - les possibilités d'accès non autorisé ou d'exposition de fichiers.
-    
 
 Le cours évoque notamment une éventuelle configuration FTP autorisant l'accès anonyme.
 
 Important : un logiciel inhabituel ou ancien n'est pas automatiquement vulnérable. Il constitue avant tout une piste d'investigation.
 
-### 3.2 Environment Variables — `set`
+### Variables d'environnement — set
 
-```
+```bat title="Commande (CMD)"
 set
 ```
 
 
 Cette commande affiche les variables d'environnement de la session courante.
-![privesc-set](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-set.png)
+
+![privesc-set](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-set.png){ width="760" }
 
 Elles fournissent des informations sur les chemins système, les profils utilisateurs et certains emplacements configurés.
 
@@ -142,7 +142,7 @@ Elles fournissent des informations sur les chemins système, les profils utilisa
 
 Exemple du cours :
 
-```
+```text
 Path=C:\Windows\system32;
      C:\Windows;
      C:\Windows\System32\Wbem;
@@ -162,9 +162,8 @@ Cette famille de techniques consiste à exploiter un ordre de recherche pour fai
 Il faut toutefois distinguer :
 
 - Executable Search Order Hijacking : détournement de la recherche d'un exécutable.
-    
+
 - DLL Search Order Hijacking : détournement du mécanisme de résolution des DLL.
-    
 
 L'ordre de recherche varie selon les API et les paramètres Windows. La présence d'un dossier modifiable dans `PATH` ne prouve donc pas, à elle seule, qu'une exploitation est possible.
 
@@ -175,21 +174,20 @@ Certaines organisations utilisent des répertoires personnels hébergés sur des
 Ces emplacements peuvent contenir :
 
 - des scripts ;
-    
+
 - des fichiers de configuration ;
-    
+
 - des documents internes ;
-    
+
 - des informations d'inventaire ;
-    
+
 - parfois des identifiants stockés de manière non sécurisée.
-    
 
 Le cours mentionne aussi les Roaming Profiles, qui permettent à certaines données utilisateur de suivre un compte entre plusieurs machines.
 
 Exemple d'emplacement de démarrage automatique :
 
-```
+```text
 %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup
 ```
 
@@ -198,72 +196,18 @@ Les éléments de ce dossier peuvent s'exécuter lors de l'ouverture de session 
 
 Cela constitue un mécanisme de Persistence potentiel, sous réserve que le profil et les fichiers concernés soient effectivement présents sur la machine.
 
-### 3.3 Detailed System Information — `systeminfo`
+### Vue détaillée du système — systeminfo
 
-```
+```bat title="Commande (CMD)"
 systeminfo
 ```
 
 
 Cette commande fournit une vue détaillée du système d'exploitation et de la configuration matérielle.
-<details markdown="1">
-<summary>Sortie du cours — systeminfo (adresses anonymisées)</summary>
 
-```text
-Host Name:                 WINLPE-SRV01
-OS Name:                   Microsoft Windows Server 2016 Standard
-OS Version:                10.0.14393 N/A Build 14393
-OS Manufacturer:           Microsoft Corporation
-OS Configuration:          Standalone Server
-OS Build Type:             Multiprocessor Free
-Registered Owner:          Windows User
-Registered Organization:
-Product ID:                00376-30000-00299-AA303
-Original Install Date:     3/24/2021, 3:46:32 PM
-System Boot Time:          3/25/2021, 9:24:36 AM
-System Manufacturer:       VMware, Inc.
-System Model:              VMware7,1
-System Type:               x64-based PC
-Processor(s):              3 Processor(s) Installed.
-  [01-03]: AMD64 Family 23 Model 49 Stepping 0 AuthenticAMD ~2994 Mhz
-BIOS Version:              VMware, Inc. VMW71.00V.16707776.B64.2008070230, 8/7/2020
-Windows Directory:         C:\Windows
-System Directory:          C:\Windows\system32
-Boot Device:               \Device\HarddiskVolume2
-System Locale:             en-us;English (United States)
-Input Locale:              en-us;English (United States)
-Time Zone:                 (UTC-08:00) Pacific Time (US & Canada)
-Total Physical Memory:     6,143 MB
-Available Physical Memory: 3,474 MB
-Virtual Memory: Max Size:  10,371 MB
-Virtual Memory: Available: 7,544 MB
-Virtual Memory: In Use:    2,827 MB
-Page File Location(s):     C:\pagefile.sys
-Domain:                    WORKGROUP
-Logon Server:              \\WINLPE-SRV01
-Hotfix(s):                 3 Hotfix(s) Installed.
-  [01]: KB3199986
-  [02]: KB5001078
-  [03]: KB4103723
-Network Card(s):           2 NIC(s) Installed.
-  [01]: Intel(R) 82574L Gigabit Network Connection
-        Connection Name: Ethernet0
-        DHCP Enabled:    Yes
-        DHCP Server:     10.1.0.1
-        IP address(es):  10.1.43.8
-                         fe80::e4db:5ea3:2775:84d4
-                         2001:db8::8 (anonymisée)
-  [02]: vmxnet3 Ethernet Adapter
-        Connection Name: Ethernet1
-        DHCP Enabled:    No
-        IP address(es):  192.168.20.56
-                         fe80::e585:fefd:b1b:9919
-Hyper-V Requirements: A hypervisor has been detected. Features required for Hyper-V will not be displayed.
-```
+![privesc-systeminfo](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-systeminfo.png){ width="760" }
 
-
-</details>
-### Informations importantes
+#### Informations importantes
 
 |Champ|Intérêt|
 |---|---|
@@ -277,11 +221,11 @@ Hyper-V Requirements: A hypervisor has been detected. Features required for Hype
 |`Hotfix(s)`|Correctifs visibles|
 |`Network Card(s)`|Interfaces et adresses réseau|
 
-### Example — WINLPE-SRV01
+#### Example — WINLPE-SRV01
 
 Dans le lab :
 
-```
+```text
 OS Name:             Microsoft Windows Server 2016 Standard
 OS Version:          10.0.14393 Build 14393
 System Manufacturer: VMware, Inc.
@@ -296,126 +240,130 @@ Les correctifs listés comprennent :
 
 `KB3199986`, `KB5001078`, `KB4103723`.
 
-### Interprétation
+#### Interprétation
 
 Ce résultat permet d'identifier :
 
 - un serveur Windows Server 2016 ;
-    
+
 - une architecture 64 bits ;
-    
+
 - une machine virtuelle VMware ;
-    
+
 - une configuration en WORKGROUP, et non une appartenance au domaine AD ;
-    
+
 - plusieurs interfaces réseau ;
-    
+
 - des informations sur le niveau de mise à jour.
-    
 
 Précision : un redémarrage ancien peut suggérer une maintenance insuffisante, mais ne démontre pas l'absence de correctifs. Certaines mises à jour ne nécessitent pas de redémarrage, et les inventaires de correctifs ne présentent pas toujours l'intégralité des mises à jour installées.
 
-### 3.4 Installed Security Updates
+### Correctifs installés
 
 Le cours présente plusieurs méthodes pour examiner les correctifs.
 
 Avec CMD :
 
-```
+```bat title="Commande (CMD)"
 wmic qfe
 ```
 
-![privesc-wmic-qfe](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-wmic-qfe.png)
+
+![privesc-wmic-qfe](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-wmic-qfe.png){ width="760" }
 
 Avec PowerShell :
 
-```
+```powershell title="Commande (PowerShell)"
 Get-HotFix | Format-Table -AutoSize
 ```
 
-![privesc-get-hotfix](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-get-hotfix.png)
+
+![privesc-get-hotfix](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-get-hotfix.png){ width="760" }
+
 Ces commandes retournent notamment :
 
 - `HotFixID` : identifiant KB ;
-    
+
 - `Description` : type de mise à jour ;
-    
+
 - `InstalledBy` : compte associé à l'installation ;
-    
+
 - `InstalledOn` : date d'installation.
-    
+
 Limites : `Get-HotFix` et `wmic qfe` ne constituent pas un inventaire exhaustif de toutes les mises à jour Windows. En outre, `wmic.exe` est un utilitaire historique déprécié, absent de certaines versions récentes de Windows.
-### Prérequis — KB & CVE
+
+#### Prérequis — KB & CVE
 
 - KB (Knowledge Base) : identifiant d'un article ou correctif Microsoft.
-    
+
 - CVE (Common Vulnerabilities and Exposures) : identifiant public d'une vulnérabilité.
-    
+
 - Patch Level : ensemble des mises à jour appliquées à un système.
-    
 
 L'analyste peut comparer la version Windows et les correctifs présents aux informations disponibles sur une CVE.
 
-### 3.5 Programmes Installés
+### Programmes installés
 
 Les applications installées constituent une autre surface d'attaque importante.
 
 Le cours utilise :
 
-```
+```bat title="Commande (CMD)"
 wmic product get name
 ```
 
-![privesc-wmic-product](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-wmic-product.png)
+
+![privesc-wmic-product](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-wmic-product.png){ width="760" }
+
 Et :
 
 - Commande Windows PowerShell 5.1 (absente de PowerShell 7) ; voir la réserve sur `Win32_Product` plus bas.
 
-```
+```powershell title="Commande (PowerShell)"
 Get-WmiObject -Class Win32_Product |
     Select-Object Name, Version
 ```
 
-![privesc-win32-product](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-win32-product.png)
+
+![privesc-win32-product](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-win32-product.png){ width="760" }
+
 Dans le lab, les résultats incluent notamment :
 
 - Java 8 Update 231
-    
-- VMware Tools
-    
-- Microsoft SQL Server 2016
-    
-- Microsoft ODBC / OLE DB Drivers
-    
-- SQL Server Management Studio
-    
-- différents packages Microsoft Visual C++.
-    
 
-### Pourquoi énumérer les logiciels ?
+- VMware Tools
+
+- Microsoft SQL Server 2016
+
+- Microsoft ODBC / OLE DB Drivers
+
+- SQL Server Management Studio
+
+- différents packages Microsoft Visual C++.
+
+#### Pourquoi énumérer les logiciels ?
 
 Les versions installées peuvent révéler :
 
 - des logiciels anciens ou vulnérables ;
-    
+
 - des services associés à des comptes privilégiés ;
-    
+
 - des fichiers de configuration sensibles ;
-    
+
 - des possibilités de Credential Hunting ;
-    
+
 - des erreurs de permissions.
-    
 
 Exemple du cours : la présence d'outils comme PuTTY ou FileZilla peut justifier l'examen des informations de session enregistrées, notamment avec les outils présentés dans la section précédente.
 
-### Précision importante — Win32_Product
+#### Précision importante — Win32_Product
 
 L'interrogation de `Win32_Product` peut déclencher des vérifications de cohérence ou des opérations de réparation MSI, ce qui présente un risque opérationnel sur une machine en production. Elle ne recense pas non plus tous les logiciels installés.
 
 Une alternative moins intrusive consiste à consulter les clés de désinstallation Windows :
 
-```
+```powershell title="Commande (PowerShell)"
 Get-ItemProperty `
   'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
   'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' `
@@ -426,17 +374,20 @@ Get-ItemProperty `
 
 Cette méthode complète l'inventaire, sans garantir une liste exhaustive.
 
-## 4. Network Connections & Listening Services
+## Connexions réseau et services en écoute
 
-- La commande [netstat](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat) affichera les connexions TCP et UDP actives, ce qui nous donnera une meilleure idée des services en écoute sur quel(s) port(s), à la fois localement et accessibles de l'extérieur. 
+- La commande [netstat](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat) affichera les connexions TCP et UDP actives, ce qui nous donnera une meilleure idée des services en écoute sur quel(s) port(s), à la fois localement et accessibles de l'extérieur.
 - Nous pourrions trouver un service vulnérable accessible uniquement à l'hôte local (lorsqu'on est connecté à l'hôte) que nous pouvons exploiter pour élever nos privilèges.
+
 ### Netstat
 
-```
+```bat title="Commande (CMD)"
 netstat -ano
 ```
 
-![privesc-netstat-ano](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-netstat-ano.png)
+
+![privesc-netstat-ano](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-netstat-ano.png){ width="760" }
+
 Cette commande affiche les connexions et endpoints TCP/UDP avec les PIDs associés.
 
 |Option|Fonction|
@@ -449,7 +400,7 @@ Cette commande affiche les connexions et endpoints TCP/UDP avec les PIDs associ�
 
 Le cours montre notamment :
 
-```
+```text
 Local Address     State       PID
 ----------------------------------
 0.0.0.0:21        LISTENING   1096
@@ -475,9 +426,8 @@ Ces associations restent indicatives : il faut confirmer le programme réellemen
 ### 127.0.0.1 vs 0.0.0.0
 
 - `127.0.0.1` : service lié à l'interface loopback IPv4, normalement accessible localement.
-    
+
 - `0.0.0.0` : service lié à toutes les interfaces IPv4 disponibles.
-    
 
 Un service en écoute sur `0.0.0.0` n'est pas nécessairement accessible depuis l'extérieur : un pare-feu peut toujours bloquer les connexions.
 
@@ -489,64 +439,68 @@ Il peut constituer une piste s'il présente une vulnérabilité ou des permissio
 
 Pour retrouver le processus correspondant à un PID :
 
-```
+```bat title="Commande (CMD)"
 tasklist /FI "PID eq 3520"
 ```
 
 
 Cette corrélation permet de rapprocher port → PID → processus → service.
 
-## 5. User & Group Enumeration
+## Utilisateurs, groupes et privilèges
 
 L'analyse des utilisateurs, groupes et privilèges permet de comprendre le Security Context disponible et de repérer d'éventuels chemins vers un compte plus privilégié.
 
-### 5.1 Utilisateurs Connectés
+### Sessions ouvertes — query user
 
-```
+```bat title="Commande (CMD)"
 query user
 ```
 
-![privesc-query-user](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-query-user.png)
+
+![privesc-query-user](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-query-user.png){ width="760" }
+
 La commande affiche les sessions utilisateur connues, leur état et leur heure de connexion.
 
 Elle permet notamment d'identifier :
 
 - les utilisateurs connectés ;
-    
+
 - les sessions RDP ;
-    
+
 - les sessions actives ou déconnectées ;
-    
+
 - les périodes d'inactivité.
-    
 
 La présence d'une session administrateur peut avoir un intérêt dans une investigation, mais elle n'accorde aucun droit supplémentaire au compte courant.
 
-### 5.2 Utilisateur Actuel
+### Compte courant
 
-```
+```bat title="Commande (CMD)"
 echo %USERNAME%
 ```
 
-![privesc-echo-username](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-echo-username.png)
+
+![privesc-echo-username](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-echo-username.png){ width="760" }
 
 Pour obtenir plus d'informations sur l'identité et le token :
 
-```
+```bat title="Commande (CMD)"
 whoami /all
 ```
 
 
 Cette dernière commande constitue un complément utile, puisqu'elle regroupe notamment les groupes et privilèges du contexte courant.
 
-### 5.3 Privilèges de l'Utilisateur Actuel
+### Privilèges du token — whoami /priv
 
-```
+```bat title="Commande (CMD)"
 whoami /priv
 ```
 
-![privesc-whoami-priv](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-whoami-priv.png)
-### Prérequis — Windows Privileges
+
+![privesc-whoami-priv](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-whoami-priv.png){ width="760" }
+
+#### Prérequis — Windows Privileges
 
 Les Windows Privileges sont des droits particuliers présents dans un Access Token.
 
@@ -555,25 +509,26 @@ Ils ne correspondent pas exactement aux permissions sur les fichiers ou aux appa
 Exemples :
 
 - `SeChangeNotifyPrivilege` : notamment lié au contournement des contrôles de traversée de répertoires.
-    
+
 - `SeDebugPrivilege` : accès privilégié à certains processus.
-    
+
 - `SeImpersonatePrivilege` : permet certaines opérations d'impersonation.
-    
+
 - `SeBackupPrivilege` : permet certaines opérations de sauvegarde privilégiées.
-    
 
 Important : un privilège affiché comme `Disabled` peut parfois être activé si le token le contient et si les conditions le permettent. En revanche, un privilège absent du token n'est pas obtenu simplement en l'activant.
 
 Le cours évoque notamment `SeImpersonatePrivilege` et les techniques d'élévation associées, comme Juicy Potato, qui seront approfondies ultérieurement.
 
-### 5.4 Informations sur les Groupes de l'Utilisateur Actuel
+### Groupes du token — whoami /groups
 
-```
+```bat title="Commande (CMD)"
 whoami /groups
 ```
 
-![privesc-whoami-groups](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-whoami-groups.png)
+
+![privesc-whoami-groups](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-whoami-groups.png){ width="760" }
+
 Cette commande affiche les groupes et identifiants de sécurité (SIDs) présents dans le token de l'utilisateur.
 
 Dans le lab, `htb-student` appartient notamment à :
@@ -588,42 +543,43 @@ Dans le lab, `htb-student` appartient notamment à :
 
 Le cours affiche également :
 
-```
+```text
 Mandatory Label\Medium Mandatory Level
 ```
 
 
-### Integrity Levels
+#### Integrity Levels
 
 Windows utilise des Integrity Levels pour contribuer à contrôler les interactions entre processus et objets.
 
 Quelques niveaux courants :
 
 - Low
-    
+
 - Medium
-    
+
 - High
-    
+
 - System
-    
 
 Un utilisateur standard fonctionne généralement avec un token de niveau Medium, tandis qu'un processus administrateur élevé utilise souvent le niveau High.
 
 Le niveau d'intégrité ne représente toutefois pas, à lui seul, l'ensemble des permissions du processus.
 
-### 5.5 Obtenir Tous les Utilisateurs
+### Comptes locaux — net user
 
-```
+```bat title="Commande (CMD)"
 net user
 ```
 
-![privesc-net-user](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-user.png)
+
+![privesc-net-user](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-user.png){ width="760" }
+
 Cette commande affiche les comptes locaux connus du système.
 
 Dans le lab :
 
-```
+```text
 Administrator
 DefaultAccount
 Guest
@@ -638,25 +594,26 @@ secsvc
 L'intérêt est de repérer :
 
 - les comptes administratifs ;
-    
+
 - les comptes de service ;
-    
+
 - les comptes inhabituels ;
-    
+
 - les profils potentiellement associés à des fichiers sensibles.
-    
 
 Le cours donne l'exemple de comptes comme `bob` et `bob_adm`, où une mauvaise gestion ou une réutilisation d'identifiants pourrait créer un risque.
 
-### 5.6 Obtenir Tous les Groupes
+### Groupes locaux — net localgroup
 
 - Connaître les groupes non standards présents sur l'hôte peut nous aider à déterminer à quoi sert l'hôte, à quel point il est utilisé, ou peut même nous amener à découvrir une mauvaise configuration, comme tous les Utilisateurs du domaine dans les groupes Bureau à distance ou administrateurs locaux.
 
-```
+```bat title="Commande (CMD)"
 net localgroup
 ```
 
-![privesc-net-localgroup](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-localgroup.png)
+
+![privesc-net-localgroup](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-localgroup.png){ width="760" }
+
 Cette commande affiche les groupes locaux de la machine.
 
 Parmi ceux présentés dans le cours :
@@ -675,16 +632,18 @@ Parmi ceux présentés dans le cours :
 
 L'appartenance à un groupe ne signifie pas nécessairement que toutes ses capacités sont utilisables sans conditions supplémentaires. Les permissions effectives dépendent du token, des politiques de sécurité et de la configuration du système.
 
-### Détails sur un Groupe
+#### Détails sur un Groupe
 
-```
+```bat title="Commande (CMD)"
 net localgroup administrators
 ```
 
-![privesc-net-localgroup-administrators](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-localgroup-administrators.png)
+
+![privesc-net-localgroup-administrators](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-localgroup-administrators.png){ width="760" }
+
 Dans le lab :
 
-```
+```text
 Members
 ----------------
 Administrator
@@ -700,15 +659,17 @@ Piste d'énumération : rechercher les éventuels liens entre ces comptes privil
 
 Le cours mentionne également la possibilité, parfois rare, de trouver des informations sensibles dans les descriptions de groupes.
 
-## 6. Obtenir la Politique de Mot de Passe et d'Autres Informations sur les Comptes
+## Politique de mot de passe et de verrouillage
 
 ### Commande
 
-```
+```bat title="Commande (CMD)"
 net accounts
 ```
 
-![privesc-net-accounts](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-accounts.png)
+
+![privesc-net-accounts](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-net-accounts.png){ width="760" }
+
 Elle permet d'obtenir les principaux paramètres de la politique de mot de passe applicable dans le contexte interrogé.
 
 ### Résultats du lab
@@ -739,7 +700,7 @@ Ces paramètres peuvent augmenter le risque lié aux mots de passe faibles et au
 
 Précision : les paramètres observés ne prouvent pas que les comptes utilisent effectivement des mots de passe vides ou faibles. Les politiques locales et de domaine doivent également être distinguées.
 
-## 7. Initial Enumeration — Command Cheat Sheet
+## Récapitulatif des commandes
 
 | Commande                        | Objectif                                             |
 | ------------------------------- | ---------------------------------------------------- |
@@ -760,9 +721,9 @@ Précision : les paramètres observés ne prouvent pas que les comptes utilisent
 | `net localgroup administrators` | Identifier les administrateurs locaux                |
 | `net accounts`                  | Examiner les paramètres de politique de mot de passe |
 
-## 8. Initial Enumeration Workflow
+## Parcours d'énumération initiale
 
-```
+```text
 Initial Foothold
        ↓
 Identify Current User & Privileges
@@ -792,14 +753,13 @@ L'énumération Windows ne consiste pas simplement à exécuter une liste de com
 Par exemple :
 
 - un service inhabituel peut justifier une analyse de ses permissions et de sa version ;
-    
+
 - une application ancienne peut nécessiter une vérification des correctifs et vulnérabilités applicables ;
-    
+
 - un répertoire modifiable dans un chemin de recherche peut présenter un risque selon le mécanisme utilisé ;
-    
+
 - un compte possédant un privilège sensible peut ouvrir des possibilités d'élévation spécifiques ;
-    
+
 - des comptes administrateurs supplémentaires peuvent orienter la recherche de configurations et de secrets exposés.
-    
 
 Idée centrale : une bonne énumération permet de passer d'une liste d'informations système à une série d'hypothèses d'élévation de privilèges concrètes, qu'il faudra ensuite vérifier.

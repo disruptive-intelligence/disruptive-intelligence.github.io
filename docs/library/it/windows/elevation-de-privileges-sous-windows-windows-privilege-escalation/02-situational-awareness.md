@@ -12,32 +12,30 @@ La Situational Awareness (conscience situationnelle) consiste à comprendre pré
 Après un Initial Foothold, l'objectif est de déterminer :
 
 - Network Context : sur quels réseaux la machine se trouve et quelles ressources sont accessibles.
-    
+
 - System Environment : quelles interfaces, routes et configurations sont présentes.
-    
+
 - Security Controls : quelles protections AV, EDR et restrictions d'exécution sont appliquées.
-    
+
 - Attack Opportunities : quels chemins d'énumération, d'élévation de privilèges ou de mouvement latéral sont envisageables.
-    
 
 Cette phase permet d'éviter de tester des techniques inadaptées et d'orienter les prochaines étapes de manière méthodique.
 
-## 1. Network Enumeration
+## Comprendre le contexte réseau
 
 L'énumération réseau permet de comprendre la position de la machine dans l'infrastructure.
 
 Elle peut notamment révéler :
 
 - plusieurs interfaces réseau ;
-    
+
 - des sous-réseaux internes supplémentaires ;
-    
+
 - des passerelles et routes disponibles ;
-    
+
 - des systèmes avec lesquels la machine a communiqué ;
-    
+
 - des informations DNS ou relatives à un domaine Active Directory.
-    
 
 ### Dual-Homed Hosts
 
@@ -45,7 +43,7 @@ Un hôte Dual-Homed est connecté à au moins deux réseaux, généralement par 
 
 Exemple :
 
-```
+```text
       Network A                    Network B
     10.1.0.0/16              192.168.20.0/24
           |                           |
@@ -60,81 +58,19 @@ Cela peut présenter un intérêt pour le Lateral Movement, car une machine comp
 
 Prérequis important : le fait qu'une machine possède deux interfaces ne signifie pas qu'elle route automatiquement le trafic entre ses réseaux. Il faut distinguer sa capacité à communiquer elle-même avec plusieurs réseaux de sa capacité à transférer le trafic d'autres machines.
 
-## 2. IP Configuration — ipconfig
+## Configuration IP — ipconfig
 
 ### Commande
 
-```
+```bat title="Commande (CMD)"
 ipconfig /all
 ```
 
 
 Cette commande fournit les paramètres IP et DNS de chaque interface.
-<details markdown="1">
-<summary>Sortie du cours — interfaces réseau (adresses anonymisées)</summary>
 
-```text
-Host Name                 : WINLPE-SRV01
-Primary DNS Suffix        :
-Node Type                 : Hybrid
-IP Routing Enabled       : No
-WINS Proxy Enabled       : No
-DNS Suffix Search List   : .htb
+![privesc-ipconfig-all](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-ipconfig-all.png){ width="760" }
 
-Ethernet adapter Ethernet1:
-  Connection-specific DNS Suffix :
-  Description                   : vmxnet3 Ethernet Adapter
-  Physical Address              : 00-50-56-B9-C5-48
-  DHCP Enabled                  : No
-  Autoconfiguration Enabled     : Yes
-  Link-local IPv6 Address       : fe80::e585:fefd:b1b:9919%9 (Preferred)
-  IPv4 Address                  : 192.168.20.56 (Preferred)
-  Subnet Mask                   : 255.255.255.0
-  Default Gateway               : 192.168.20.1
-  DHCPv6 IAID                   : 151015689
-  DHCPv6 Client DUID            : 00-01-00-01-27-D8-E5-91-00-50-56-B9-9A-94
-  DNS Servers                   : 8.8.8.8
-  NetBIOS over Tcpip            : Enabled
-
-Ethernet adapter Ethernet0:
-  Connection-specific DNS Suffix : .htb
-  Description                   : Intel(R) 82574L Gigabit Network Connection
-  Physical Address              : 00-50-56-B9-9A-94
-  DHCP Enabled                  : Yes
-  Autoconfiguration Enabled     : Yes
-  IPv6 Address                  : 2001:db8::8 (Preferred, anonymisée)
-  Link-local IPv6 Address       : fe80::e4db:5ea3:2775:84d4%4 (Preferred)
-  IPv4 Address                  : 10.1.43.8 (Preferred)
-  Subnet Mask                   : 255.255.0.0
-  Lease Obtained                : Thursday, March 25, 2021 9:24:45 AM
-  Lease Expires                 : Monday, March 29, 2021 1:28:44 PM
-  Default Gateway               : fe80::250:56ff:feb9:4ddf%4
-                                  10.1.0.1
-  DHCP Server                   : 10.1.0.1
-  DHCPv6 IAID                   : 50332114
-  DHCPv6 Client DUID            : 00-01-00-01-27-D8-E5-91-00-50-56-B9-9A-94
-  DNS Servers                   : 1.1.1.1
-                                  8.8.8.8
-  NetBIOS over Tcpip            : Enabled
-
-Tunnel adapters isatap.htb, isatap.{GUID}:
-  Media State                   : Media disconnected
-  Description                   : Microsoft ISATAP Adapter / Adapter #2
-  Physical Address              : 00-00-00-00-00-00-00-E0
-  DHCP Enabled                  : No
-  Autoconfiguration Enabled     : Yes
-
-Tunnel adapter Teredo Tunneling Pseudo-Interface:
-  Media State                   : Media disconnected
-  Connection-specific DNS Suffix :
-  Description                   : Microsoft Teredo Tunneling Adapter
-  Physical Address              : 00-00-00-00-00-00-00-E0
-  DHCP Enabled                  : No
-  Autoconfiguration Enabled     : Yes
-```
-
-
-</details>
 ### Principales informations
 
 |Champ|Signification|
@@ -178,50 +114,26 @@ Les contrôleurs de domaine fournissent généralement des services DNS dans les
 
 Attention : un suffixe DNS comme `.htb` ne prouve pas à lui seul qu'une machine est jointe à un domaine Active Directory. Les adresses DNS affichées dans cet exemple ne permettent pas non plus d'identifier directement un Domain Controller.
 
-## 3. ARP Cache Enumeration
+## Cache ARP
 
 ### Commande
 
-```
+```bat title="Commande (CMD)"
 arp -a
 ```
 
 
 La commande permet de consulter le cache ARP (Address Resolution Protocol).
-<details markdown="1">
-<summary>Sortie du cours — cache ARP (adresses anonymisées)</summary>
 
-```text
-Interface: 10.1.43.8 --- 0x4
-  Internet Address      Physical Address      Type
-  10.1.0.1              00-50-56-b9-4d-df     dynamic
-  10.1.43.12            00-50-56-b9-da-ad     dynamic
-  10.1.43.13            00-50-56-b9-5b-9f     dynamic
-  10.1.255.255          ff-ff-ff-ff-ff-ff     static
-  224.0.0.22            01-00-5e-00-00-16     static
-  224.0.0.252           01-00-5e-00-00-fc     static
-  224.0.0.253           01-00-5e-00-00-fd     static
-  239.255.255.250       01-00-5e-7f-ff-fa     static
-  255.255.255.255       ff-ff-ff-ff-ff-ff     static
+![privesc-arp-a](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-arp-a.png){ width="760" }
 
-Interface: 192.168.20.56 --- 0x9
-  Internet Address      Physical Address      Type
-  192.168.20.255        ff-ff-ff-ff-ff-ff     static
-  224.0.0.22            01-00-5e-00-00-16     static
-  224.0.0.252           01-00-5e-00-00-fc     static
-  239.255.255.250       01-00-5e-7f-ff-fa     static
-  255.255.255.255       ff-ff-ff-ff-ff-ff     static
-```
-
-
-</details>
 ### Prérequis — ARP
 
 ARP permet de résoudre une adresse IPv4 en adresse MAC sur un réseau local.
 
 Par exemple :
 
-```
+```text
 IPv4: 10.1.43.12
           ↓ ARP
 MAC: 00-50-56-B9-DA-AD
@@ -247,19 +159,18 @@ La présence de ces adresses suggère que le système a récemment appris des co
 Le cache peut aider à :
 
 - identifier des équipements présents sur le même segment réseau ;
-    
+
 - découvrir des adresses internes qui méritent une investigation ;
-    
+
 - orienter de futures recherches de mouvement latéral.
-    
 
 Limite : une entrée ARP ne signifie pas nécessairement qu'une session RDP ou WinRM a eu lieu. Elle ne fournit pas la nature des communications et ne constitue pas un historique complet des connexions.
 
-## 4. Routing Table Enumeration
+## Table de routage
 
 ### Commande
 
-```
+```bat title="Commande (CMD)"
 route print
 ```
 
@@ -280,7 +191,7 @@ La table de routage détermine comment Windows choisit l'interface et la passere
 
 Le cours présente notamment :
 
-```
+```text
 Destination       Netmask           Gateway          Interface        Metric
 0.0.0.0           0.0.0.0           10.1.0.1       10.1.43.8     25
 0.0.0.0           0.0.0.0           192.168.20.1     192.168.20.56   271
@@ -322,57 +233,56 @@ Les Persistent Routes sont des routes configurées pour être conservées après
 La commande affiche aussi les routes IPv6 :
 
 - `::/0` : route IPv6 par défaut.
-    
+
 - `::1/128` : adresse de loopback.
-    
+
 - `fe80::/64` : adresses IPv6 Link-Local.
-    
+
 - `ff00::/8` : multicast IPv6.
-    
 
 ### Intérêt pour le Lateral Movement
 
 La table de routage peut révéler :
 
 - des sous-réseaux directement accessibles ;
-    
+
 - des réseaux joignables via une passerelle ;
-    
+
 - plusieurs chemins de communication ;
-    
+
 - des interfaces permettant d'examiner différentes parties de l'infrastructure.
-    
 
 Point essentiel : une route indique un chemin réseau configuré, mais ne garantit pas qu'un pare-feu ou un contrôle d'accès autorisera effectivement la communication.
 
-## 5. Enumération des protections
+## Identifier les protections
 
 Après l'énumération réseau, il faut identifier les protections appliquées au système.
 
 Le cours mentionne principalement :
 
 - Antivirus (AV) : détection de fichiers et comportements malveillants.
-    
+
 - Endpoint Detection & Response (EDR) : surveillance et réponse aux activités suspectes.
-    
+
 - Application Whitelisting / Application Control : restriction des programmes et scripts autorisés à s'exécuter.
-    
 
 Ces protections peuvent empêcher l'exécution d'outils d'énumération ou d'exploitation, ou simplement générer des alertes.
 
 L'objectif est de comprendre les contraintes du système avant toute opération.
 
-## 6. Windows Defender Enumeration
+## État de Microsoft Defender
 
 ### Commande PowerShell
 
-```
+```powershell title="Commande (PowerShell)"
 Get-MpComputerStatus
 ```
 
 
 Cette cmdlet permet de consulter l'état de différents composants de Microsoft Defender Antivirus.
-![privesc-get-mpcomputerstatus](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-get-mpcomputerstatus.png)
+
+![privesc-get-mpcomputerstatus](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-get-mpcomputerstatus.png){ width="760" }
+
 ### Propriétés importantes
 
 |Propriété|Fonction|
@@ -392,7 +302,7 @@ Cette cmdlet permet de consulter l'état de différents composants de Microsoft 
 
 Le cours affiche notamment :
 
-```
+```text
 AMServiceEnabled          : True
 AntivirusEnabled          : True
 RealTimeProtectionEnabled : False
@@ -417,20 +327,19 @@ Ce résultat explique également pourquoi certains outils ou simulations peuvent
 
 La sortie présentée provient de l'environnement HTB et ne représente pas les paramètres par défaut de toutes les versions de Windows.
 
-## 7. AppLocker — Application Control
+## AppLocker — contrôle des applications
 
 AppLocker est une fonctionnalité Windows permettant de contrôler les applications et scripts autorisés à s'exécuter selon des politiques définies.
 
 Par exemple, une organisation peut vouloir empêcher certains utilisateurs d'exécuter :
 
 - `cmd.exe` ;
-    
+
 - `powershell.exe` ;
-    
+
 - des exécutables non approuvés ;
-    
+
 - certains scripts ou fichiers d'installation.
-    
 
 ### Prérequis — AppLocker Rules
 
@@ -446,25 +355,27 @@ Les règles peuvent s'appliquer à différents utilisateurs ou groupes.
 
 AppLocker distingue également plusieurs catégories, notamment les exécutables, scripts, installations Windows et applications packagées.
 
-## 8. Enumerating AppLocker Policies
+## Consulter les politiques AppLocker
 
 ### Commande
 
-```
+```powershell title="Commande (PowerShell)"
 Get-AppLockerPolicy -Effective |
     Select-Object -ExpandProperty RuleCollections
 ```
 
 
 Cette commande permet de consulter les collections de règles de la politique AppLocker effective.
-![privesc-applocker-effective-1](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-effective-1.png)
-![privesc-applocker-effective-2](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-effective-2.png)
+
+![privesc-applocker-effective-1](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-effective-1.png){ width="760" }
+
+![privesc-applocker-effective-2](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-effective-2.png){ width="760" }
+
 ### Local vs Effective Policy
 
 - `-Local` : politique AppLocker définie localement.
-    
+
 - `-Effective` : politique résultant des paramètres applicables, notamment après prise en compte des stratégies de groupe pertinentes.
-    
 
 Cette distinction est particulièrement importante sur une machine intégrée à un domaine Active Directory.
 
@@ -499,9 +410,8 @@ Le cours montre plusieurs règles par défaut.
 Deux SIDs apparaissent dans l'exemple :
 
 - `S-1-1-0` : Everyone.
-    
+
 - `S-1-5-32-544` : BUILTIN\Administrators.
-    
 
 ### Point de sécurité
 
@@ -509,16 +419,17 @@ Autoriser tous les fichiers depuis un répertoire donné revient à accorder une
 
 Si des utilisateurs non privilégiés peuvent y déposer ou modifier des exécutables, cela peut créer une faiblesse dans la politique de contrôle des applications.
 
-## 9. Testing AppLocker Policies
+## Tester une politique AppLocker
 
 Le cours présente également une commande permettant de tester la décision d'une politique AppLocker sur un exécutable précis.
 
-```
+```powershell title="Commande (PowerShell)"
 Get-AppLockerPolicy -Local |
     Test-AppLockerPolicy -Path C:\Windows\System32\cmd.exe -User Everyone
 ```
 
-![privesc-applocker-test](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-test.png)
+
+![privesc-applocker-test](../../../assets/elevation-de-privileges-sous-windows-windows-privilege-escalation-privesc-applocker-test.png){ width="760" }
 
 Le test indique que la politique locale évaluée dans cet exemple produit une décision `Denied` pour `cmd.exe` avec l'identité sélectionnée.
 
@@ -527,19 +438,18 @@ Le test indique que la politique locale évaluée dans cet exemple produit une d
 Il faut distinguer :
 
 - Policy Enumeration : consulter les règles configurées.
-    
+
 - Policy Testing : évaluer le résultat des règles pour un fichier et un utilisateur précis.
-    
+
 - Actual Enforcement : déterminer si les règles sont réellement appliquées en mode blocage.
-    
 
 Précision importante : la commande de test utilise ici `-Local`, alors que l'énumération précédente utilisait `-Effective`. Les résultats ne portent donc pas nécessairement sur la même politique.
 
 Une décision `Denied` dans ce test ne suffit pas, à elle seule, à prouver que l'utilisateur courant sera effectivement bloqué dans toutes les conditions d'exécution. Le contexte utilisateur et le mode d'application de la collection doivent aussi être vérifiés.
 
-## 10. Situational Awareness — Enumeration Workflow
+## Parcours de reconnaissance du contexte
 
-```
+```text
 Initial Foothold
        ↓
 Network Enumeration
@@ -561,7 +471,7 @@ Investigate Privilege Escalation Paths
 ```
 
 
-## 11. Command Reference
+## Récapitulatif des commandes
 
 |Commande|Objectif|
 |---|---|
@@ -573,7 +483,7 @@ Investigate Privilege Escalation Paths
 |`Get-AppLockerPolicy -Local`|Consulter la politique AppLocker locale|
 |`Test-AppLockerPolicy`|Tester la décision d'une politique pour un fichier et une identité|
 
-## 12. Key Takeaways
+## Points à retenir
 
 La Situational Awareness constitue une phase essentielle de la Privilege Escalation Windows.
 
@@ -590,16 +500,15 @@ Déterminer les protections qui influencent les outils, scripts et techniques po
 Les notions essentielles à retenir sont :
 
 - Un Dual-Homed Host peut fournir une visibilité sur plusieurs réseaux.
-    
+
 - Le cache ARP identifie certaines correspondances IP/MAC, mais ne constitue pas un historique des communications.
-    
+
 - La Routing Table décrit les chemins réseau configurés, sans garantir leur accessibilité effective.
-    
+
 - Microsoft Defender peut être présent et actif alors que certaines fonctions de protection sont désactivées.
-    
+
 - AppLocker peut imposer des restrictions différentes selon les fichiers, les emplacements et les utilisateurs.
-    
+
 - La politique locale et la politique effective doivent être distinguées.
-    
 
 Principe central : avant de chercher comment élever ses privilèges, il faut comprendre les réseaux auxquels la machine appartient, les protections qui lui sont appliquées et les possibilités réelles offertes par son environnement.
