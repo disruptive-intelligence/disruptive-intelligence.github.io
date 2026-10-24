@@ -278,8 +278,8 @@ Get-NetIPConfiguration
        Default Gateway . . . . : 192.168.20.1
 
     Ethernet adapter Ethernet0:
-       IPv4 Address. . . . . . : 10.129.43.8(Preferred)
-       Default Gateway . . . . : 10.129.0.1
+       IPv4 Address. . . . . . : 10.1.43.8(Preferred)
+       Default Gateway . . . . : 10.1.0.1
        DNS Servers . . . . . . : 1.1.1.1
     ```
 
@@ -299,9 +299,9 @@ route print -4
 ??? example "Sortie"
     ```text
     Network Destination  Netmask        Gateway        Interface      Metric
-    0.0.0.0              0.0.0.0        10.129.0.1     10.129.43.8        25
+    0.0.0.0              0.0.0.0        10.1.0.1       10.1.43.8          25
     0.0.0.0              0.0.0.0        192.168.20.1   192.168.20.56     271
-    10.129.0.0           255.255.0.0    On-link        10.129.43.8       281
+    10.1.0.0             255.255.0.0    On-link        10.1.43.8         281
     192.168.20.0         255.255.255.0  On-link        192.168.20.56     271
     ```
 

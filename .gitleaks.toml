@@ -44,3 +44,9 @@ condition = "AND"
 paths = ['''^docs/javascripts/bibliotheque-variantes\.js$''']
 regexTarget = "line"
 regexes = ['''var KEY = "kw-bv-variante\d*";''']
+
+# IP de lab HTB publiées par erreur dans les sorties de la fiche Énumération (24/10/2026), masquées
+# (10.129. -> 10.1.) dès le commit suivant : seul ce commit de l'historique est exempté.
+[[allowlists]]
+description = "IP de lab masquées au commit suivant (fiche Énumération et audit local)"
+commits = ["377ab8ce54ec71380703a8ac1ecae155c3611851"]
