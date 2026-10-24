@@ -14,7 +14,7 @@ revue: '2026-05-10'
 
 -----
 
-### Ce que ce cours est — et ce qu’il n’est pas
+## Ce que ce cours est — et ce qu’il n’est pas
 
 Ce cours t’apprend à **utiliser** la ligne de commande Windows au quotidien :
 
@@ -33,7 +33,7 @@ Ce cours **n’est pas** un cours de programmation PowerShell. Les variables, bo
 
 -----
 
-### Guide de lecture
+## Guide de lecture
 
 |Section                   |Niveau           |Objectif                                          |
 |--------------------------|-----------------|--------------------------------------------------|
@@ -41,7 +41,7 @@ Ce cours **n’est pas** un cours de programmation PowerShell. Les variables, bo
 |**Très utile en pratique**|🟡 Bon à connaître|Ce qui te rend opérationnel au quotidien          |
 |**Bonus**                 |🔴 Avancé         |Pour aller plus loin — tu peux y revenir plus tard|
 
-#### Parcours recommandés
+### Parcours recommandés
 
 |Parcours                    |Chapitres                |Objectif                                                        |
 |----------------------------|-------------------------|----------------------------------------------------------------|
@@ -51,7 +51,7 @@ Ce cours **n’est pas** un cours de programmation PowerShell. Les variables, bo
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 | Terme                        | Définition simple                                                                        |
 | ---------------------------- | ---------------------------------------------------------------------------------------- |
@@ -80,7 +80,7 @@ Ce cours **n’est pas** un cours de programmation PowerShell. Les variables, bo
 
 -----
 
-### Fil rouge : Léa, technicienne support
+## Fil rouge : Léa, technicienne support
 
 > **Contexte narratif**
 > 
@@ -90,7 +90,7 @@ Ce cours **n’est pas** un cours de programmation PowerShell. Les variables, bo
 
 -----
 
-### Table des matières
+## Table des matières
 
 **PARTIE I — FONDATIONS (Ch.1-3)**
 

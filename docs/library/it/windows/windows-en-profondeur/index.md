@@ -14,7 +14,7 @@ revision: library/revision/windows.md
 
 ---
 
-### Fil rouge : Opération SHADOW
+## Fil rouge : Opération SHADOW
 
 > **Contexte narratif — ce fil rouge traverse les 26 premiers chapitres et se conclut au Ch.28.**
 >

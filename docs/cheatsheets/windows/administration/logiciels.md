@@ -34,7 +34,7 @@ Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 
     Where-Object DisplayName | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Sort-Object DisplayName
 ```
 
-`HKCU` complète avec les installations de l'utilisateur courant. Cette liste reste partielle (logiciels portables, autres profils, etc.). Croiser versions, services associés, fichiers de configuration et ACL pour l'audit.
+`HKCU` ajoute les installations de l'utilisateur courant. Les logiciels portables n'apparaissent pas.
 
 ??? warning "Commandes historiques du cours : Win32_Product"
     ```bat
@@ -45,7 +45,7 @@ Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 
     Get-WmiObject -Class Win32_Product | Select-Object Name, Version
     ```
 
-    Ces requêtes n'inventorient que les produits MSI et peuvent déclencher des vérifications/réparations d'installation. Préférer les clés de désinstallation ci-dessus en production. `wmic` peut être absent ; `Get-WmiObject` n'existe pas dans PowerShell 7. Voir [Microsoft : Win32_Product](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/msiprov/win32-product).
+    Produits MSI seulement, et risque de réparations d'installation : préférer les clés de désinstallation ci-dessus. `wmic` peut être absent ; `Get-WmiObject` n'existe pas dans PowerShell 7. Voir [Microsoft : Win32_Product](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/msiprov/win32-product).
 
 ### Chercher, installer, mettre à jour un logiciel
 
@@ -83,7 +83,7 @@ Get-MpComputerStatus | Select-Object AMServiceEnabled, RealTimeProtectionEnabled
 Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AntivirusSignatureLastUpdated, IsTamperProtected
 ```
 
-Pour une vue complète : `Get-MpComputerStatus`. Examiner aussi `AntivirusEnabled`, `BehaviorMonitorEnabled`, `OnAccessProtectionEnabled`, `IoavProtectionEnabled`, `NISEnabled`, `AntivirusSignatureVersion` et `AntivirusSignatureAge`. Un service actif ne signifie pas que tous ses composants protègent la machine ; interpréter les valeurs selon le mode et la configuration de Defender.
+Pour une vue complète : `Get-MpComputerStatus`. Examiner aussi `AntivirusEnabled`, `BehaviorMonitorEnabled`, `OnAccessProtectionEnabled`, `IoavProtectionEnabled`, `NISEnabled`, `AntivirusSignatureVersion` et `AntivirusSignatureAge`. Service actif ne veut pas dire protection active : regarder chaque composant.
 
 ??? example "Sortie"
     ```text

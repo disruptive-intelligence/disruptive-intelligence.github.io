@@ -180,7 +180,7 @@ tasklist /svc
 tasklist /FI "PID eq 3520"
 ```
 
-`/svc` rapproche processus, PID et services hébergés ; `/FI` filtre un PID trouvé avec `netstat -ano`. Examiner les services tiers et leur compte d'exécution, version, configuration et permissions. Un programme présent ou un nom inhabituel ne suffit pas à conclure à une vulnérabilité.
+`/svc` rapproche processus, PID et services hébergés ; `/FI` filtre un PID trouvé avec `netstat -ano`. Pour un service tiers : compte d'exécution, version, configuration et permissions.
 
 ### Lister les services et leur état
 

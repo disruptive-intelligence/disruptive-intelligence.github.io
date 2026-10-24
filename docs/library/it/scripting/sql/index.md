@@ -14,7 +14,7 @@ revue: '2026-05-10'
 
 -----
 
-### Ce que ce cours est — et ce qu’il n’est pas
+## Ce que ce cours est — et ce qu’il n’est pas
 
 Ce cours t’apprend à **comprendre et utiliser** une base de données relationnelle avec SQL.
 
@@ -42,7 +42,7 @@ Ce cours **n’est pas** :
 
 -----
 
-### Guide de lecture
+## Guide de lecture
 
 |Section                   |Niveau           |Objectif                                           |
 |--------------------------|-----------------|---------------------------------------------------|
@@ -50,7 +50,7 @@ Ce cours **n’est pas** :
 |**Très utile en pratique**|🟡 Bon à connaître|Ce qui te rend opérationnel pour de vraies requêtes|
 |**Bonus**                 |🔴 Avancé         |Pour aller plus loin — tu peux y revenir plus tard |
 
-#### Parcours recommandés
+### Parcours recommandés
 
 |Parcours                      |Chapitres         |Objectif                                                                      |
 |------------------------------|------------------|------------------------------------------------------------------------------|
@@ -63,7 +63,7 @@ Ce cours **n’est pas** :
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Reviens ici chaque fois qu’un terme te semble flou.
 
@@ -92,7 +92,7 @@ Reviens ici chaque fois qu’un terme te semble flou.
 
 -----
 
-### Comment penser une requête SQL
+## Comment penser une requête SQL
 
 Avant d’écrire la moindre ligne de SQL, il faut comprendre la logique de base. **Toute requête SQL répond à une question :**
 
@@ -117,7 +117,7 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
 
 -----
 
-### Fil rouge : Nora à la médiathèque
+## Fil rouge : Nora à la médiathèque
 
 > **Contexte narratif**
 > 
@@ -129,7 +129,7 @@ Tout le reste est de la nuance ou de la combinaison de ces 6 briques. Garde ça 
 
 -----
 
-### Table des matières
+## Table des matières
 
 **PARTIE I — COMPRENDRE LES BASES (Ch.1-4)**
 

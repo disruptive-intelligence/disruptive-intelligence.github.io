@@ -14,7 +14,7 @@ revision: library/revision/detection.md
 
 ---
 
-### Fil rouge : Opération BLACKTIDE
+## Fil rouge : Opération BLACKTIDE
 
 > **Contexte narratif — ce fil rouge traverse les 38 premiers chapitres du cours.**
 >

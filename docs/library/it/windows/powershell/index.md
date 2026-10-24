@@ -14,7 +14,7 @@ revue: '2026-10-20'
 
 ---
 
-### Ce que ce cours est — et ce qu'il n'est pas
+## Ce que ce cours est — et ce qu'il n'est pas
 
 Ce cours t'apprend à **piloter et automatiser un environnement Windows avec PowerShell**, du poste local jusqu'à l'Active Directory, les GPO, l'administration distante et les API.
 
@@ -35,7 +35,7 @@ Le niveau final visé est **junior solide / intermédiaire débutant** en admini
 
 ---
 
-### Guide de lecture
+## Guide de lecture
 
 Chaque chapitre est organisé en trois niveaux. Tu peux suivre le parcours principal (🟢 + 🟡) et revenir aux 🔴 plus tard.
 
@@ -51,7 +51,7 @@ Deux **réflexes** sont martelés dans tout le cours — ce sont les meilleures 
 
 > **Réflexe n°2 — `Get`/`Test` avant `Set`/`New`/`Remove`.** On regarde toujours avant de modifier. On lit l'état actuel, on teste, *puis* on change — et plus tard, on utilise `-WhatIf`, `-Confirm` et des sauvegardes. C'est la discipline de base de l'administrateur.
 
-#### Parcours recommandés
+### Parcours recommandés
 
 | Parcours | Chapitres | Objectif |
 |----------|-----------|----------|
@@ -61,7 +61,7 @@ Deux **réflexes** sont martelés dans tout le cours — ce sont les meilleures 
 
 ---
 
-### Environnement de lab recommandé
+## Environnement de lab recommandé
 
 PowerShell fonctionne partout, mais **toutes les cmdlets ne sont pas disponibles partout**. Voici ce dont tu as besoin selon la partie du cours.
 
@@ -93,7 +93,7 @@ PowerShell fonctionne partout, mais **toutes les cmdlets ne sont pas disponibles
 
 ---
 
-### Comment lire une commande PowerShell
+## Comment lire une commande PowerShell
 
 Pour chaque cmdlet importante, ce cours répond systématiquement à ces questions — c'est le canevas mental à adopter :
 
@@ -107,7 +107,7 @@ Pour chaque cmdlet importante, ce cours répond systématiquement à ces questio
 
 ---
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Reviens ici dès qu'un terme te semble flou.
 
@@ -138,7 +138,7 @@ Reviens ici dès qu'un terme te semble flou.
 
 ---
 
-### Table des matières
+## Table des matières
 
 **PARTIE I — FONDAMENTAUX POWERSHELL POUR ADMINISTRER WINDOWS**
 

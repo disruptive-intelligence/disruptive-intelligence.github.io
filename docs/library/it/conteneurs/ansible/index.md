@@ -14,14 +14,14 @@ revue: '2026-06-24'
 
 ---
 
-### À qui s'adresse ce cours
+## À qui s'adresse ce cours
 
 - À un **débutant complet** en Ansible.
 - À quelqu'un qui connaît **un peu Linux** et sait ouvrir un terminal.
 - À quelqu'un qui a **déjà utilisé SSH**, ou qui va l'apprendre ici.
 - À toute personne qui veut **automatiser l'administration de plusieurs machines Linux** sans répéter les mêmes commandes une par une.
 
-### Ce que tu sauras faire à la fin
+## Ce que tu sauras faire à la fin
 
 - Comprendre **à quoi sert Ansible** et le principe de l'**état souhaité**.
 - Monter un **lab** (contrôle + cibles) et te connecter en **SSH par clé**.
@@ -36,7 +36,7 @@ revue: '2026-06-24'
 
 ---
 
-### Comment penser Ansible (l'idée en une image)
+## Comment penser Ansible (l'idée en une image)
 
 Si tu ne retiens qu'une chose de ce cours, c'est ceci :
 
@@ -54,7 +54,7 @@ Cette propriété (« rejouer ne casse rien, ne refait que ce qui manque ») s'a
 
 ---
 
-### Les encadrés du cours
+## Les encadrés du cours
 
 Pour t'aider, tu croiseras de temps en temps de petits encadrés :
 
@@ -67,7 +67,7 @@ Ils restent **légers** : ce cours est un cours **débutant**, pas un cours d'ex
 
 ---
 
-### Sur la progression
+## Sur la progression
 
 Le cours est **très progressif**. On commence par comprendre (sans rien installer), puis on monte le lab, puis on agit **une commande à la fois**, et seulement ensuite on écrit des playbooks. Les notions plus avancées (variables, templates, roles) arrivent **quand tu es prêt**.
 
@@ -77,7 +77,7 @@ Ne te juge pas si un chapitre demande deux lectures. **La régularité compte pl
 
 ---
 
-### Table des matières
+## Table des matières
 
 **Partie 0 — Introduction** *(tu es ici)*
 

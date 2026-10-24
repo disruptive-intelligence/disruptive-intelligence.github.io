@@ -1057,6 +1057,7 @@ def build(vault, rel, tree, title=None, to=None, index=None):
                 emit(node["children"])
 
         place(nodes, folder, [])
+        pre = "\n".join(rebase(pre.split("\n")))       # introduction : ses titres juste sous celui de la page
         pages.append((entry, (pre + "\n\n" if pre.strip() else "") + f"## Sommaire\n\n{summary(nodes)}", meta))
         emit(nodes)
         notes.append(f"{len(pages) - 1} pages")

@@ -38,9 +38,9 @@ whoami /priv
     SeTimeZonePrivilege           Changer le fuseau horaire                     Désactivé
     ```
 
-Les privilèges varient selon le compte et les politiques. `SeDebugPrivilege`, `SeBackupPrivilege`, `SeImpersonatePrivilege` ou `SeTakeOwnershipPrivilege` méritent une vérification. `Disabled` signifie présent mais désactivé dans le token ; un privilège absent ne s'obtient pas en l'activant.
+Un utilisateur standard n'a que ces privilèges. `SeDebugPrivilege`, `SeBackupPrivilege`, `SeImpersonatePrivilege` ou `SeTakeOwnershipPrivilege` signalent un compte puissant. `Disabled` = présent mais désactivé ; un privilège absent ne s'active pas.
 
-Un token Medium, High ou System renseigne sur l'intégrité ; il ne décrit pas à lui seul tous les droits. Être administrateur local ne signifie pas exécuter le processus en SYSTEM, et SYSTEM local n'est pas Domain Admin.
+Administrateur local, processus élevé (High) et SYSTEM sont trois choses différentes ; SYSTEM local n'est pas Domain Admin.
 
 Pour comprendre : [Windows en profondeur, ch. 17 (jeton et notions centrales)](../../../library/it/windows/windows-en-profondeur/05-partie-v-modele-de-securite-et-protections/01-chapitre-17-modele-de-securite-integrite-et-mitiga.md)
 { .kw-cs-meta }
@@ -118,7 +118,7 @@ net localgroup
 net localgroup administrators
 ```
 
-Le dernier nom vaut pour un Windows anglais ; utiliser `Administrateurs` en français, ou `Get-LocalGroupMember -SID S-1-5-32-544`. Repérer comptes de service, groupes inhabituels, descriptions et appartenances trop larges (administration, RDP, sauvegarde, gestion distante, lecture des journaux, Hyper-V, IIS). Les droits effectifs dépendent aussi du token et des politiques.
+`administrators` vaut pour un Windows anglais : `Administrateurs` en français, ou `Get-LocalGroupMember -SID S-1-5-32-544`. Repérer comptes de service, groupes inhabituels et appartenances trop larges (administration, RDP, sauvegarde, gestion distante, lecture des journaux, Hyper-V, IIS).
 
 ### Voir la politique de mot de passe et de verrouillage
 
@@ -126,9 +126,9 @@ Le dernier nom vaut pour un Windows anglais ; utiliser `Administrateurs` en fran
 net accounts
 ```
 
-Lire les âges minimum/maximum, la longueur minimale, l'historique et le seuil/durée/fenêtre de verrouillage. Une longueur minimale nulle ou l'absence de verrouillage est un point à examiner ; cela ne prouve pas que les mots de passe sont vides ou faibles.
+Lire les âges minimum/maximum, la longueur minimale, l'historique et le seuil/durée/fenêtre de verrouillage. Longueur minimale `0` ou verrouillage `Never` : faiblesses à signaler.
 
-`net accounts /domain` interroge la politique du domaine ; elle peut différer de la politique locale et des stratégies affinées appliquées à certains comptes. La présence d'un groupe RDP ou administrateur ne garantit pas à elle seule un accès effectif.
+`net accounts /domain` interroge la politique du domaine, qui peut différer de la politique locale.
 
 ## Permissions NTFS
 
@@ -231,6 +231,8 @@ takeown /f D:\Archives\ancien-projet /r /d o
 | Session élevée ou non | `whoami /groups | findstr /i "Mandatory"` | Niveau d'intégrité Medium = non élevée, High = élevée |
 | SID ↔ compte | `NTAccount.Translate(...)` · `SecurityIdentifier.Translate(...)` | Dans les deux sens |
 | Administrateurs de la machine | `Get-LocalGroupMember -Group Administrateurs` | « Administrators » sur un Windows anglais |
+| Comptes et groupes locaux | `net user` · `net localgroup` | Comptes de service, appartenances inutiles |
+| Politique de mot de passe | `net accounts` · `/domain` | Longueur `0`, verrouillage `Never` = faiblesses |
 | Lire les permissions NTFS | `icacls <chemin>` | `F` total, `M` modification, `RX` lecture et exécution ; `(OI)(CI)` héritage |
 | Permissions trop larges | `Get-Acl` filtré sur Everyone / Users | Écriture pour tous = point d'entrée |
 | Accorder, retirer un droit | `icacls /grant` · `/remove` · `/inheritance:d` | Couper l'héritage avant de retirer |

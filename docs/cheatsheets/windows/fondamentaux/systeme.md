@@ -141,7 +141,7 @@ Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 3 HotFix
 wmic qfe list brief   :: équivalent CMD (wmic est déprécié mais encore présent)
 ```
 
-`wmic qfe` et `Get-HotFix | Format-Table -AutoSize` sont les formes du cours. `wmic.exe` est historique et peut être absent. Ces inventaires ne couvrent pas toutes les mises à jour ; croiser build, KB et mises à jour cumulatives. Un redémarrage ancien ne prouve pas l'absence de correctifs.
+Autres formes : `wmic qfe` (CMD, `wmic.exe` peut être absent) et `Get-HotFix | Format-Table -AutoSize`. La liste n'est pas exhaustive : croiser build, KB et mises à jour cumulatives.
 
 ### Savoir depuis quand la machine tourne
 
@@ -237,7 +237,7 @@ Get-ChildItem "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup" -Forc
 
 En CMD, `set` donne aussi `APPDATA`, `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH`, `TEMP`, `TMP`, `USERNAME` et `USERDOMAIN` ; `echo %USERNAME%` n'affiche que le nom. En PowerShell, utiliser `$env:USERNAME` : `set` et `%VAR%` n'y ont pas la même signification.
 
-Examiner les ACL des dossiers inhabituels du `PATH` et les scripts/configurations des répertoires personnels, parfois hébergés sur le réseau. Un dossier modifiable mérite une vérification, mais l'ordre de recherche d'un exécutable ou d'une DLL dépend du mécanisme utilisé. Le dossier `Startup` s'applique à l'ouverture de session du profil concerné ; les profils itinérants peuvent transporter ces données.
+Dossier inhabituel dans le `PATH` : vérifier ses permissions avec `icacls`. Regarder aussi scripts et configurations des répertoires personnels. Le dossier `Startup` s'exécute à l'ouverture de session du profil ; les profils itinérants le transportent d'une machine à l'autre.
 
 ## Protections
 
@@ -253,9 +253,7 @@ Get-AppLockerPolicy -Effective |
 
 `-Local` interroge la stratégie locale ; `-Effective` fusionne les stratégies locale et de domaine appliquées par GPO. Le cours teste aussi `Get-AppLockerPolicy -Local | Test-AppLockerPolicy -Path C:\Windows\System32\cmd.exe -User Everyone` : cette décision concerne cette politique et ce groupe, pas forcément le compte courant.
 
-Lire `Allow`/`Deny`, le SID ciblé, les conditions (éditeur, chemin, empreinte), les exceptions et le mode de chaque collection (audit ou application). `S-1-1-0` = Everyone ; `S-1-5-32-544` = administrateurs locaux. Une règle de chemin perd son intérêt si un utilisateur non privilégié peut modifier les fichiers autorisés. Un test `Denied` ne démontre pas un blocage réel en mode audit.
-
-Limite : ces cmdlets lisent les politiques GPO et ne reflètent pas correctement une politique déployée par CSP/MDM. Voir [Microsoft : Get-AppLockerPolicy](https://learn.microsoft.com/en-us/powershell/module/applocker/get-applockerpolicy).
+Lire `Allow`/`Deny`, le SID ciblé (`S-1-1-0` = Everyone, `S-1-5-32-544` = administrateurs locaux), les conditions (éditeur, chemin, empreinte), les exceptions et le mode (audit ou application). Une règle de chemin ne protège plus rien si un utilisateur peut écrire dans le dossier autorisé. Ces cmdlets lisent les politiques GPO, pas celles déployées par MDM ([Microsoft : Get-AppLockerPolicy](https://learn.microsoft.com/en-us/powershell/module/applocker/get-applockerpolicy)).
 
 Pour l'antivirus : [état des composants Defender](../administration/logiciels.md#voir-letat-de-microsoft-defender). Antivirus, EDR et contrôle des applications remplissent des rôles différents.
 
@@ -318,3 +316,5 @@ Ensuite : [droits et identités](droits.md)
 | Variables d'environnement | `Get-ChildItem Env:` · `$env:<NOM>` | `%TEMP%`, `%APPDATA%`, `PATH` |
 | Qui est connecté | `query user` | Sessions locales et RDP |
 | Qui je suis | `whoami /all` | SID, groupes, privilèges, niveau d'intégrité |
+| PATH et démarrage | `$env:PATH -split ';'` · dossier `Startup` | Dossier du `PATH` modifiable = piste |
+| Politique AppLocker | `Get-AppLockerPolicy -Effective` · `Test-AppLockerPolicy` | `Allow`/`Deny`, SID ciblé, mode audit ou application |

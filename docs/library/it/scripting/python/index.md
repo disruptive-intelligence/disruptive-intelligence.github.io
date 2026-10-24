@@ -16,7 +16,7 @@ revue: '2026-06-14'
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours. Reviens ici si un mot te semble flou. On y mélange volontairement les termes Python et les termes cyber, car tu vas les croiser ensemble.
 
@@ -45,7 +45,7 @@ Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours
 
 -----
 
-### Comment penser un script
+## Comment penser un script
 
 Avant d'écrire la moindre ligne de code, il faut comprendre la logique de base. **Tout script suit le même schéma :**
 
@@ -76,7 +76,7 @@ Tous les scripts, même un parser de logs ou un extracteur d'IOC, sont une combi
 
 -----
 
-### La grande différence avec Bash
+## La grande différence avec Bash
 
 Si tu viens du cours Bash de cette collection, un point fondamental va changer : **Python n'est pas un langage de commandes système, c'est un langage de programmation généraliste.**
 
@@ -91,9 +91,9 @@ Python a ses propres outils, souvent plus puissants et plus lisibles que les com
 
 -----
 
-### Table des matières
+## Table des matières
 
-#### Partie 1 — Fondamentaux Python (orientés cyber défensive)
+### Partie 1 — Fondamentaux Python (orientés cyber défensive)
 
 1. [Découverte de Python et premier script](01-chapitre-1-decouverte-de-python-et-premier-script.md)
 2. [Variables, types, affichage et saisie utilisateur](02-chapitre-2-variables-types-affichage-et-saisie-uti.md)
@@ -108,7 +108,7 @@ Python a ses propres outils, souvent plus puissants et plus lisibles que les com
 11. Erreurs, débogage et code propre
 12. Cas pratiques et automatisation
 
-#### Partie 2 — Python pour la cybersécurité défensive
+### Partie 2 — Python pour la cybersécurité défensive
 
 13. Regex avec `re` — extraire IP, emails, domaines, URLs, hash
 14. Parsing de logs : SSH, web et événements structurés

@@ -13,9 +13,9 @@ revue: '2026-05-16'
 
 -----
 
-### Avant-propos
+## Avant-propos
 
-#### Ce qu'est ce cours
+### Ce qu'est ce cours
 
 **OSINT Mastery 2026** est le cours-mère de la bibliothèque. Il est conçu pour être **autonome** : un lecteur qui le travaille intégralement dispose des bases nécessaires pour conduire une investigation OSINT professionnelle de bout en bout, qu'il soit analyste CTI, investigateur financier, journaliste, magistrat, officier de renseignement, responsable conformité, consultant en due diligence, chercheur en sciences sociales ou citoyen formé.
 
@@ -23,13 +23,13 @@ Le cours adopte une posture **professionnelle, méthodologique et défensive**. 
 
 L'OSINT en 2026 n'est plus la même discipline qu'en 2020. Trois ruptures majeures ont reconfiguré le métier : (1) la **professionnalisation institutionnelle** — l'IC OSINT Strategy 2024-2026 de l'ODNI américaine formalise l'OSINT comme INT à part entière, la France crée le **Bataillon de Réserve en Renseignement Spécialisé (B2RS)** et le **service VIGINUM**, l'OTAN intègre l'OSINT à sa doctrine ; (2) l'**irruption de l'intelligence artificielle** — LLMs comme assistants, agents autonomes, deepfakes industriels, géolocalisation multi-agent ; (3) la **fermeture progressive des plateformes** — X payant, API LinkedIn restreinte, Meta verrouillée, Reddit fermé, Google dégradé. Le cours intègre ces ruptures comme structurantes, pas comme annexes.
 
-#### Public cible et prérequis
+### Public cible et prérequis
 
 Ce cours s'adresse à des adultes professionnels ou en formation professionnalisante. Il suppose une **aisance numérique correcte** (navigation web, utilisation d'un terminal, compréhension générale du fonctionnement d'Internet, gestion de fichiers), mais ne suppose aucun bagage préalable en renseignement, en cybersécurité ou en droit. Les prérequis spécifiques (notions de réseau, bases Python, droit du numérique) sont introduits dans le cours quand nécessaire.
 
 Le cours s'adresse également à des **citoyens formés** qui souhaitent comprendre la discipline pour mieux résister à la désinformation, vérifier l'information qu'ils consomment, ou s'engager dans une démarche d'enquête citoyenne encadrée (à l'image des contributeurs Bellingcat ou des participants Trace Labs).
 
-#### Ce que ce cours fait
+### Ce que ce cours fait
 
 - Il enseigne la **doctrine** : qu'est-ce que l'OSINT, comment elle s'inscrit dans le cycle du renseignement, quelles sont ses disciplines connexes, quelle est sa place en 2026.
 - Il enseigne le **cadre légal et éthique** : RGPD, AI Act, DSA, CSDDD, sanctions, Failure to Prevent Fraud, jurisprudences, déontologie professionnelle.
@@ -41,7 +41,7 @@ Le cours s'adresse également à des **citoyens formés** qui souhaitent compren
 - Il fournit un **fil rouge complet** (Opération MIRAGE 2026) traversant tous les chapitres jusqu'au cas de synthèse.
 - Il fournit **17 cas pratiques** et un exercice final non guidé avec son corrigé.
 
-#### Ce que ce cours ne fait pas
+### Ce que ce cours ne fait pas
 
 - Il ne se substitue pas aux cours spécialisés de la bibliothèque pour les domaines suivants :
     - L'enquête crypto on-chain approfondie (clustering, attribution, mixers, bridges, cashout) — renvoi systématique à **OSINT Crypto vFULL**.
@@ -52,15 +52,15 @@ Le cours s'adresse également à des **citoyens formés** qui souhaitent compren
 - Il n'est pas un précis de droit ni un manuel de procédure pénale : il pose le cadre, il ne tient pas lieu de conseil juridique.
 - Il ne forme pas à l'utilisation offensive de l'OSINT, à l'usurpation d'identité agressive, au harcèlement, au doxxing, ou à toute pratique non conforme au droit et à l'éthique professionnelle.
 
-#### Posture éthique constante
+### Posture éthique constante
 
 L'OSINT touche à la vie privée, à la réputation, à la liberté de circulation, parfois à la liberté physique de personnes — y compris de personnes innocentes ou non concernées. Une note d'analyse mal calibrée, un soupçon pris pour une preuve, une diffusion non maîtrisée, une confusion entre renseignement et accusation peuvent causer des dommages réels. La rigueur méthodologique n'est pas un luxe académique : elle est la condition même de la légitimité de la discipline. Tout au long du cours, cette rigueur est présentée comme un réflexe quotidien, pas comme un appendice de fin de chapitre.
 
-#### Place de l'IA dans l'OSINT moderne
+### Place de l'IA dans l'OSINT moderne
 
 L'IA est un **accélérateur, pas un substitut**. Elle excelle là où l'humain est inefficace (volume, traduction, extraction d'entités, monitoring continu, première classification) ; elle reste défaillante là où l'humain est irremplaçable (jugement contextuel, vérification, formulation calibrée, décision éthique). Le cours adopte une position **augmentée mais souveraine** : l'IA assiste l'analyste, l'analyste reste responsable. Le protocole **Retrieve-Store-Cite** (Ch.63) opérationnalise ce principe : aucune affirmation produite par IA n'entre dans un livrable sans source vérifiable et tracée.
 
-#### Articulation avec la bibliothèque
+### Articulation avec la bibliothèque
 
 Le tableau suivant cartographie les renvois entre OSINT Mastery et les cours spécialisés.
 
@@ -75,7 +75,7 @@ Le tableau suivant cartographie les renvois entre OSINT Mastery et les cours sp�
 
 L'annexe O fournit la cartographie complète.
 
-#### Importance de la preuve, de la traçabilité et de l'incertitude
+### Importance de la preuve, de la traçabilité et de l'incertitude
 
 Trois principes traversent tout le cours.
 
@@ -87,9 +87,9 @@ Trois principes traversent tout le cours.
 
 -----
 
-### Mode d'emploi du cours
+## Mode d'emploi du cours
 
-#### Comment lire ce cours
+### Comment lire ce cours
 
 Le cours est **dense**. Il peut se lire de plusieurs manières.
 
@@ -101,7 +101,7 @@ Le cours est **dense**. Il peut se lire de plusieurs manières.
 
 **Préparation d'enquête.** Avant de lancer une investigation réelle, le Parcours express (60 minutes) et les annexes opérationnelles (D, E, F, G, H, J, K, L) sont des compagnons de bureau.
 
-#### Parcours de lecture recommandés
+### Parcours de lecture recommandés
 
 Sept parcours sont proposés. Ils ne sont pas exclusifs : un parcours « analyste OSINT complet » devrait à terme couvrir l'intégralité du cours.
 
@@ -187,7 +187,7 @@ Pour un magistrat, un avocat, un officier de police judiciaire, un commanditaire
 - Partie XII : Ch.87, 88, 89, 90, 91, 92, 93.
 - Annexes A, G, H, I, J, L, O.
 
-#### Conventions de notation
+### Conventions de notation
 
 Le cours utilise les conventions suivantes.
 
@@ -198,11 +198,11 @@ Le cours utilise les conventions suivantes.
 - Code monospaced pour les dorks, requêtes, commandes : `site:example.com filetype:pdf`.
 - Renvois explicites : *(voir Ch.X)* pour les renvois internes, *(renvoi → cours Y vFULL)* pour les renvois externes.
 
-#### Mise à jour du cours
+### Mise à jour du cours
 
 L'écosystème OSINT évolue mensuellement. Les outils nommés sont des exemples opérationnels à date avril-mai 2026. Une révision annuelle est recommandée. Les principes méthodologiques (Parties I-III, XI) ont une durée de vie longue ; les chapitres techniques (Parties IV, V, VI, IX) doivent être révisés régulièrement.
 
-#### Convention temporelle (à retenir pendant toute la lecture)
+### Convention temporelle (à retenir pendant toute la lecture)
 
 > **État des connaissances : mai 2026.**
 >
@@ -231,79 +231,79 @@ L'écosystème OSINT évolue mensuellement. Les outils nommés sont des exemples
 
 -----
 
-### Parcours express — Mener une enquête OSINT en 60 minutes
+## Parcours express — Mener une enquête OSINT en 60 minutes
 
 > **Ce parcours est un compagnon opérationnel.** Il ne se substitue pas au cours, mais il permet à un analyste pressé de structurer une investigation simple en une heure. Imprimez-le, gardez-le à côté de votre clavier.
 
 L'enquête OSINT n'est jamais improvisée. Même quand vous disposez d'une heure, suivez la séquence ci-dessous. Sauter une étape, c'est s'exposer à produire du bruit, à violer un cadre légal, ou à griller une cible.
 
-#### Étape 1 — Comprendre la demande (5 minutes)
+### Étape 1 — Comprendre la demande (5 minutes)
 
 Qui demande ? Pourquoi ? Quel est l'événement déclencheur ? Quelle est la décision attendue à partir de votre livrable ? Quel est le délai ? Quelles sont les contraintes (budget, OPSEC, légalité, juridiction) ? Si la demande est vague, posez la question : « Que ferez-vous si je vous donne A ? Que ferez-vous si je vous donne B ? » — la réponse révèle le besoin réel.
 
-#### Étape 2 — Vérifier le mandat et le périmètre (3 minutes)
+### Étape 2 — Vérifier le mandat et le périmètre (3 minutes)
 
 Êtes-vous légitime pour conduire cette enquête ? Avez-vous un mandat écrit ou implicite ? Le périmètre est-il clairement défini ? S'agit-il d'une personne physique, d'une société, d'un événement, d'un contenu ? Si vous êtes en cabinet, ce n'est pas optionnel : sans mandat clair, vous ne lancez pas.
 
-#### Étape 3 — Formuler les questions de renseignement (5 minutes)
+### Étape 3 — Formuler les questions de renseignement (5 minutes)
 
 Une question OSINT est **fermée, vérifiable, et reformulable en hypothèse**. « Que sais-tu sur Delaunay ? » n'est pas une question OSINT. « Delaunay contrôle-t-il une société à Malte ? » en est une. « Quelle est l'adresse personnelle de Delaunay ? » en est une autre. Listez 3 à 5 questions principales et 5 à 10 questions secondaires.
 
-#### Étape 4 — Identifier les sélecteurs initiaux (2 minutes)
+### Étape 4 — Identifier les sélecteurs initiaux (2 minutes)
 
 Quels sont les **points d'entrée** dans l'enquête ? Nom complet, date de naissance, email, téléphone, photo, adresse, username, domaine, IP, wallet ? Listez ce que vous avez. C'est sur ces sélecteurs que vous allez pivoter.
 
-#### Étape 5 — Évaluer les risques juridiques et éthiques (3 minutes)
+### Étape 5 — Évaluer les risques juridiques et éthiques (3 minutes)
 
 L'enquête touche-t-elle à des données personnelles sensibles (santé, opinions politiques, religion, orientation sexuelle) ? À des mineurs ? À une juridiction restrictive (UE et RGPD, USA et CCPA, Allemagne) ? Y a-t-il un risque de doxxing involontaire ? Y a-t-il un risque de violation du secret professionnel ? Si oui, formalisez et tracez votre décision avant de lancer.
 
-#### Étape 6 — Préparer l'OPSEC minimale (5 minutes)
+### Étape 6 — Préparer l'OPSEC minimale (5 minutes)
 
 Pour une enquête simple, vous avez besoin a minima de : un navigateur en profil dédié (ou navigation privée), un VPN si la cible est susceptible de consulter ses logs, un compte d'investigation (pas votre compte personnel) pour toute interaction avec une plateforme. Pour des enquêtes plus sensibles, voir Ch.9-11.
 
-#### Étape 7 — Lancer les recherches prioritaires (15 minutes)
+### Étape 7 — Lancer les recherches prioritaires (15 minutes)
 
 Commencez par les sources gratuites, rapides, et indexées : Google, Yandex (irremplaçable pour reverse image et contenus russophones), Bing, registres officiels, archive.org. Posez les bonnes requêtes (dorks ciblés, pas de fouille au hasard). Documentez chaque action dans votre journal.
 
-#### Étape 8 — Pivoter sans se disperser (10 minutes)
+### Étape 8 — Pivoter sans se disperser (10 minutes)
 
 À chaque résultat, demandez-vous : **ceci m'apporte-t-il un nouveau sélecteur exploitable ?** Si oui, ajoutez-le à votre liste et continuez. Si non, ne vous laissez pas distraire. La discipline du pivot est ce qui distingue un investigateur expérimenté d'un curieux qui surfe.
 
-#### Étape 9 — Capturer, horodater, hasher (en continu)
+### Étape 9 — Capturer, horodater, hasher (en continu)
 
 Chaque page visitée d'intérêt est capturée (Hunchly idéalement, SingleFile sinon), horodatée, et hashée si elle est destinée à un usage judiciaire. Une URL est un mauvais témoin : elle peut changer ou disparaître. Une capture horodatée et hashée est une preuve.
 
-#### Étape 10 — Vérifier et corroborer (5 minutes)
+### Étape 10 — Vérifier et corroborer (5 minutes)
 
 Pour chaque fait majeur : **deux sources indépendantes minimum**. Une source unique = une piste à confirmer, pas un fait établi. Une rumeur reprise par 50 sites n'est pas 50 sources : c'est une seule source mal recyclée.
 
-#### Étape 11 — Construire une mini-timeline (3 minutes)
+### Étape 11 — Construire une mini-timeline (3 minutes)
 
 Reportez les événements datés sur une ligne temporelle. Les incohérences chronologiques sont l'un des révélateurs les plus puissants : une déclaration impossible à la date alléguée, un poste occupé avant la fondation de l'entreprise, une photo prise après l'événement supposé.
 
-#### Étape 12 — Distinguer piste, indice, fait, hypothèse et preuve (en continu)
+### Étape 12 — Distinguer piste, indice, fait, hypothèse et preuve (en continu)
 
 C'est la discipline du chapitre 4. Une **piste** est une direction à explorer. Un **indice** est un élément factuel qui oriente une hypothèse. Un **fait** est un indice établi par au moins deux sources indépendantes et cotées. Une **hypothèse** est une explication candidate des faits. Une **preuve** est un fait qui établit la véracité d'une hypothèse au-delà du raisonnable. Confondre ces niveaux est l'erreur la plus fréquente de l'analyste débutant.
 
-#### Étape 13 — Utiliser l'IA uniquement comme assistant vérifiable (en continu)
+### Étape 13 — Utiliser l'IA uniquement comme assistant vérifiable (en continu)
 
 Un LLM peut traduire, résumer, extraire des entités, générer des dorks. Il ne peut **pas** être cité comme source. Tout ce qui sort d'un LLM est à vérifier. Protocole **Retrieve-Store-Cite** : si vous citez un fait, vous citez sa source primaire, pas le LLM qui l'a produit.
 
-#### Étape 14 — Produire une mini-note (3 minutes)
+### Étape 14 — Produire une mini-note (3 minutes)
 
 Une mini-note OSINT tient en une page. **BLUF** (Bottom Line Up Front) : la conclusion en deux phrases, avec son niveau de confiance. Puis : trois à cinq faits clés cotés, une timeline, les sources, les limites. Pas de verdict, vocabulaire calibré.
 
-#### Étape 15 — Identifier les limites et les suites possibles (1 minute)
+### Étape 15 — Identifier les limites et les suites possibles (1 minute)
 
 Quelles questions restent ouvertes ? Quelles sources n'avez-vous pas pu consulter ? Quelles vérifications complémentaires seraient utiles ? Quelles spécialisations devraient prendre le relais (crypto, FININT, dark web) ? Ces limites font partie du livrable, pas en marge de lui.
 
 -----
 
-### Fil rouge — Opération MIRAGE 2026
+## Fil rouge — Opération MIRAGE 2026
 
 > **Le fil rouge MIRAGE traverse l'ensemble du cours.** Il sert deux fonctions : illustrer concrètement les concepts au fil des chapitres, et fournir un cas de synthèse complet (Ch.93). Vous le retrouverez sous forme d'encadrés *« MIRAGE — Épisode N »* tout au long du cours.
 
-#### Contexte du mandat
+### Contexte du mandat
 
 Un cabinet d'avocats parisien, **Legrand & Associés**, mandate une investigation OSINT sur **Marc Delaunay**, 48 ans, directeur administratif et financier de **TechnoVert SAS** — ETI française spécialisée dans les technologies de recyclage industriel, 450 collaborateurs, CA 85 M€, deux sites de production (Lyon, Lille). Le cabinet représente un actionnaire minoritaire (12 % du capital) qui formule cinq soupçons :
 
@@ -313,7 +313,7 @@ Un cabinet d'avocats parisien, **Legrand & Associés**, mandate une investigatio
 4. **Cluster de faux comptes coordonnés** sur X et Telegram amplifiant la diffamation, possiblement opérés par un service criminel rémunéré.
 5. **Production et diffusion de contenus générés par IA** — courte vidéo deepfake du lanceur d'alerte, fausses photos d'alibi, faux média en ligne créé pour amplifier le narratif diffamatoire.
 
-#### Sélecteurs initiaux fournis par le client
+### Sélecteurs initiaux fournis par le client
 
 - Nom complet : Marc Delaunay.
 - Date de naissance approximative : 1976-1977.
@@ -321,7 +321,7 @@ Un cabinet d'avocats parisien, **Legrand & Associés**, mandate une investigatio
 - Email professionnel : `m.delaunay@technovert.fr`.
 - Lanceur d'alerte concerné par la campagne diffamatoire : Antoine Berthier, contrôleur de gestion remercié en septembre 2025.
 
-#### Mandat
+### Mandat
 
 Produire un rapport OSINT complet, exploitable judiciairement, identifiant :
 
@@ -333,7 +333,7 @@ Produire un rapport OSINT complet, exploitable judiciairement, identifiant :
 
 Le cabinet envisage un dépôt de plainte au **Parquet National Financier** et une saisine du **C3N** (Centre de lutte contre les criminalités numériques) pour le volet désinformation et deepfake.
 
-#### Contraintes
+### Contraintes
 
 - **Délai** : 6 semaines.
 - **Budget** : raisonnable (cabinet d'avocats privé), sans accès à des bases payantes lourdes — pas de Chainalysis, pas de WorldCheck Pro, pas de Maltego Pro.
@@ -342,7 +342,7 @@ Le cabinet envisage un dépôt de plainte au **Parquet National Financier** et u
 - **OPSEC stricte** : Delaunay et ses éventuels prestataires de désinformation sont susceptibles d'observer la surface d'investigation.
 - **Rapport versable au dossier judiciaire** : chaîne de custody, capture horodatée et hashée, vocabulaire calibré, cotation explicite, limites documentées.
 
-#### Trajectoire narrative
+### Trajectoire narrative
 
 Au fil des 103 chapitres, l'investigateur va passer du nom de Delaunay à un schéma articulé :
 
@@ -352,7 +352,7 @@ Au fil des 103 chapitres, l'investigateur va passer du nom de Delaunay à un sch
 - Une **campagne de désinformation** orchestrée via un blog `verites-technovert.com`, huit faux comptes coordonnés sur X (et neuf sur Telegram), un faux média `info-finance-eu.com` publiant articles diffamatoires, une **courte vidéo deepfake** d'Antoine Berthier tenant des propos compromettants fictifs, et trois fausses photographies de soirées professionnelles destinées à fabriquer un narratif d'inconduite.
 - Une **trace dans des stealer logs** : les identifiants Gmail personnels de Delaunay apparaissent dans un dump récent vendu sur un canal Telegram, fournissant un point de pivot inattendu.
 
-#### Les 21 épisodes du fil rouge
+### Les 21 épisodes du fil rouge
 
 Le fil rouge se déploie en 21 épisodes répartis le long du cours. Chaque épisode est court (un encadré de 200 à 400 mots) et illustre une notion du chapitre où il apparaît.
 

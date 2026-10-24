@@ -13,7 +13,7 @@ revue: '2026-08-22'
 
 ---
 
-### À propos de ce volume
+## À propos de ce volume
 
 **Public.** Professionnels technophiles, avec un ancrage fréquent en informatique, cybersécurité, systèmes d'information ou ingénierie. Aucun prérequis scientifique. Aucun formalisme mathématique n'est utilisé dans ce volume.
 
@@ -28,7 +28,7 @@ revue: '2026-08-22'
 **Autonomie.** Ce volume est autosuffisant. Aucun renvoi vers le second volume n'est nécessaire à sa compréhension.
 
 
-### Table des matières
+## Table des matières
 
 **Partie I — Comment lire une technologie**
 
@@ -93,7 +93,7 @@ revue: '2026-08-22'
 
 ---
 
-### Comment lire ce volume
+## Comment lire ce volume
 
 **Les marqueurs.**
 
@@ -111,7 +111,7 @@ revue: '2026-08-22'
 
 ---
 
-### Plan du volume
+## Plan du volume
 
 | Partie | Titre | Chapitres | Ce qu'elle donne |
 |---|---|---|---|

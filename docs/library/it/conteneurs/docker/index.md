@@ -25,7 +25,7 @@ revue: '2026-06-14'
 
 ---
 
-### À qui s'adresse ce cours
+## À qui s'adresse ce cours
 
 - À un **admin Linux / réseau** qui doit comprendre et opérer des conteneurs sans devenir développeur.
 - À un **analyste SOC** qui verra passer des logs, des événements et des alertes venant de conteneurs.
@@ -33,7 +33,7 @@ revue: '2026-06-14'
 - À un **pentester débutant** qui veut comprendre la surface d'attaque des conteneurs **côté défense** d'abord.
 - À toute personne curieuse qui veut un modèle mental clair de la conteneurisation avant de taper des commandes.
 
-### Ce que ce cours n'est PAS
+## Ce que ce cours n'est PAS
 
 Pour rester pédagogique et accessible, certains sujets sont **volontairement exclus**. Ils méritent un cours à part, **après** celui-ci :
 
@@ -45,7 +45,7 @@ Pour rester pédagogique et accessible, certains sujets sont **volontairement ex
 
 Ces sujets peuvent venir **après**, une fois les fondamentaux acquis (voir l'annexe « Suite logique » — qui commence d'ailleurs par **Kubernetes**).
 
-### 🎯 L'objectif final, concrètement
+## 🎯 L'objectif final, concrètement
 
 Pour que tu saches exactement où tu vas, à la **fin de ce cours** tu dois être capable de :
 
@@ -62,7 +62,7 @@ Pour que tu saches exactement où tu vas, à la **fin de ce cours** tu dois êtr
 
 ---
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours. Reviens ici dès qu'un mot te semble flou.
 
@@ -96,7 +96,7 @@ Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours
 
 ---
 
-### Comment penser la containerisation
+## Comment penser la containerisation
 
 Avant de taper la moindre commande, il faut comprendre **la grande idée** qui structure toute la conteneurisation. Si tu retiens une chose de ce cours, c'est celle-ci :
 
@@ -120,7 +120,7 @@ Ce modèle est le **cousin** du modèle « état désiré → réconciliation »
 
 ---
 
-### Les 3 lunettes : Lab, Production réelle, Sécurité
+## Les 3 lunettes : Lab, Production réelle, Sécurité
 
 Tout au long du cours, tu porteras **trois paires de lunettes**. On les pose dès maintenant pour ne jamais les confondre (mêmes lunettes que dans le cours Kubernetes, pour que tu retrouves tes repères) :
 
@@ -132,11 +132,11 @@ Tu verras régulièrement des encadrés qui changent de lunette. Quand tu liras 
 
 ---
 
-### Prérequis techniques et matériel recommandé
+## Prérequis techniques et matériel recommandé
 
 Docker est plus léger qu'un cluster Kubernetes, mais autant cadrer l'environnement tout de suite pour éviter les frustrations.
 
-#### Connaissances supposées (rappels inclus dans le cours)
+### Connaissances supposées (rappels inclus dans le cours)
 
 | Domaine | Niveau attendu | Où c'est rappelé |
 |---------|----------------|------------------|
@@ -148,7 +148,7 @@ Docker est plus léger qu'un cluster Kubernetes, mais autant cadrer l'environnem
 
 > Si « IP », « port » et « processus » sont totalement flous pour toi, fais d'abord un détour par les bases Linux/réseau. Le reste, le cours te le donne.
 
-#### Matériel recommandé
+### Matériel recommandé
 
 | Ressource | Minimum | Confortable |
 |-----------|---------|-------------|
@@ -157,7 +157,7 @@ Docker est plus léger qu'un cluster Kubernetes, mais autant cadrer l'environnem
 | **Disque** | 15 Go libres (les images s'accumulent vite) | 40 Go ou plus |
 | **OS** | Linux, macOS, ou Windows | **Linux** (le plus simple et le plus formateur) |
 
-#### 🧰 Docker Engine vs Docker Desktop vs VM Linux
+### 🧰 Docker Engine vs Docker Desktop vs VM Linux
 
 C'est **la** décision d'environnement à comprendre avant d'installer quoi que ce soit. Selon ta machine, « installer Docker » ne veut pas dire la même chose :
 
@@ -169,7 +169,7 @@ C'est **la** décision d'environnement à comprendre avant d'installer quoi que 
 
 > **Recommandation pédagogique :** apprends sur une **machine Linux** ou une **VM Linux** avec **Docker Engine**. Tu travailles alors avec le « vrai » Docker, sans couche d'abstraction. **Docker Desktop fonctionne très bien** aussi, mais il ajoute une VM intermédiaire qui peut compliquer le réseau et les montages de fichiers.
 
-#### ⚠️ Limites de WSL (Windows)
+### ⚠️ Limites de WSL (Windows)
 
 Si tu es sous Windows et que tu comptes utiliser **WSL2** (souvent via Docker Desktop) :
 
@@ -179,11 +179,11 @@ Si tu es sous Windows et que tu comptes utiliser **WSL2** (souvent via Docker De
 
 ---
 
-### ⚠️ Encadré essentiel — Commandes Docker à manipuler avec prudence
+## ⚠️ Encadré essentiel — Commandes Docker à manipuler avec prudence
 
 Avant d'aller plus loin, lis ceci **attentivement**. Certaines commandes Docker sont **destructrices** et n'affichent **aucune demande de confirmation**. En lab, tu peux tout casser sans risque. Mais ces réflexes te suivront sur de vraies machines, alors prends les bonnes habitudes **maintenant**.
 
-#### Les commandes qui détruisent
+### Les commandes qui détruisent
 
 ```bash
 docker rm -f <conteneur>      # force la suppression d'un conteneur EN MARCHE (pas de confirmation)
@@ -195,7 +195,7 @@ docker system prune -a        # ☠️☠️ encore plus agressif : TOUTES les i
 ```
 
 
-#### Les pièges qui font le plus de dégâts pour un débutant
+### Les pièges qui font le plus de dégâts pour un débutant
 
 ```bash
 docker volume prune           # Tu crois "faire le ménage"... tu effaces des données peut-être uniques
@@ -203,7 +203,7 @@ docker system prune -a        # Lancé sur une machine partagée, tu supprimes l
 ```
 
 
-#### Les 3 règles d'or
+### Les 3 règles d'or
 
 > **1. Regarde AVANT de supprimer.**
 > ```bash
@@ -225,13 +225,13 @@ docker system prune -a        # Lancé sur une machine partagée, tu supprimes l
 
 ---
 
-### 🧨 La Boîte à risques Docker / containerisation
+## 🧨 La Boîte à risques Docker / containerisation
 
 Voici la **carte des dangers** que tu vas apprendre à reconnaître et à neutraliser tout au long du cours. Tu n'as **pas** besoin de tout comprendre maintenant — c'est une **carte mentale** à garder sous les yeux. Chaque ligne sera traitée en détail dans le chapitre indiqué. C'est l'équivalent, pour Docker, d'une check-list d'audit défensif.
 
 Les risques sont regroupés en **4 familles** pour les mémoriser plus facilement. **Deux d'entre eux reviennent partout dans le cours et méritent une attention spéciale : tourner en root et monter le Docker socket.**
 
-#### Famille 1 — Privilèges (le cœur du danger Docker)
+### Famille 1 — Privilèges (le cœur du danger Docker)
 
 | Risque | Pourquoi c'est dangereux | Traité au |
 |--------|--------------------------|-----------|
@@ -239,14 +239,14 @@ Les risques sont regroupés en **4 familles** pour les mémoriser plus facilemen
 | ⭐ **Conteneur `--privileged`** | Désactive l'essentiel des protections : quasi-accès total à l'hôte | Ch. 17 |
 | ⭐ **Montage de `/var/run/docker.sock`** | Donner le socket = donner le **contrôle de toute la machine** | Ch. 17 |
 
-#### Famille 2 — Secrets
+### Famille 2 — Secrets
 
 | Risque | Pourquoi c'est dangereux | Traité au |
 |--------|--------------------------|-----------|
 | **Secret dans un Dockerfile / une image** | Reste dans les **layers** même « supprimé » ensuite : compromis à vie | Ch. 10 / 11 |
 | **Secret en variable d'env sans réflexion** | Visible dans `inspect`, l'environnement du process, parfois les logs | Ch. 13 / 18 |
 
-#### Famille 3 — Images
+### Famille 3 — Images
 
 | Risque | Pourquoi c'est dangereux | Traité au |
 |--------|--------------------------|-----------|
@@ -256,7 +256,7 @@ Les risques sont regroupés en **4 familles** pour les mémoriser plus facilemen
 | **Image trop grosse / packages inutiles** | Plus de surface d'attaque, plus de CVE potentielles | Ch. 10 / 18 |
 | **Pas de `.dockerignore` / build context trop large** | Risque d'embarquer `.env`, clés, tokens dans l'image | Ch. 11 |
 
-#### Famille 4 — Exposition & ressources
+### Famille 4 — Exposition & ressources
 
 | Risque | Pourquoi c'est dangereux | Traité au |
 |--------|--------------------------|-----------|
@@ -266,7 +266,7 @@ Les risques sont regroupés en **4 familles** pour les mémoriser plus facilemen
 | **Absence de limites CPU/RAM** | Un conteneur peut épuiser la machine (déni de service) | Ch. 18 |
 | **Absence de `HEALTHCHECK`** | Un conteneur mort/malade passe inaperçu | Ch. 16 |
 
-#### Et la confusion fondamentale, à dissiper en premier
+### Et la confusion fondamentale, à dissiper en premier
 
 | Risque | Pourquoi c'est dangereux | Traité au |
 |--------|--------------------------|-----------|
@@ -276,7 +276,7 @@ Les risques sont regroupés en **4 familles** pour les mémoriser plus facilemen
 
 ---
 
-### Sur la montée en difficulté
+## Sur la montée en difficulté
 
 Docker est **plus concret** que Kubernetes : tu lanceras ton premier conteneur dès la Partie II. La Partie I (conceptuelle) est donc **courte** — juste de quoi poser le vocabulaire qui piège tout le monde (VM, conteneur, image, processus) avant de mettre les mains dedans.
 
@@ -294,7 +294,7 @@ Ne te juge pas. **La patience compte plus que la vitesse.**
 
 ---
 
-### Table des matières
+## Table des matières
 
 **PARTIE 0 — PRÉAMBULE** *(tu es ici)*
 

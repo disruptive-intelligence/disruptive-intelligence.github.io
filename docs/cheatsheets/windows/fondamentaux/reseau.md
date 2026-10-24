@@ -48,7 +48,7 @@ Get-NetRoute -AddressFamily IPv4
 route print -4
 ```
 
-`route print` affiche aussi IPv6 et les routes persistantes. Une route plus spécifique prime ; à spécificité égale, comparer les métriques. Plusieurs interfaces peuvent donner accès à plusieurs sous-réseaux, sans que le routage entre interfaces soit activé. Une route ne garantit pas le passage du pare-feu.
+`route print` affiche aussi IPv6 et les routes persistantes. La route la plus spécifique prime, puis la métrique la plus faible. Plusieurs interfaces = plusieurs sous-réseaux joignables.
 
 ??? example "Sortie"
     ```text
@@ -64,7 +64,7 @@ route print -4
 arp -a   :: correspondances IP ↔ MAC connues
 ```
 
-Le cache décrit des voisins IPv4 connus sur chaque interface ; il n'est ni exhaustif ni un historique de sessions RDP/WinRM.
+Le cache liste les voisins IPv4 connus de chaque interface, pas un historique des connexions.
 
 ```powershell title="Exemple"
 Get-NetNeighbor -AddressFamily IPv4 -State Reachable
@@ -134,7 +134,7 @@ Le PID 4 (System) pour 445 et 5985 est normal : SMB et WinRM passent par le noya
 
 En CMD : `netstat -ano` (`-a` : connexions et écoute, `-n` : adresses/ports numériques, `-o` : PID), puis `tasklist /FI "PID eq 3520"`. Les ports 21/80/135/445/1433/3389 évoquent FTP/HTTP/RPC/SMB/SQL Server/RDP ; confirmer avec le processus.
 
-`127.0.0.1` = loopback IPv4 ; `0.0.0.0` = toutes les interfaces IPv4. Une écoute locale peut rester intéressante pour un audit ; une écoute sur toutes les interfaces ne prouve pas l'accessibilité depuis le réseau (pare-feu).
+`127.0.0.1` = accès local seulement ; `0.0.0.0` = toutes les interfaces IPv4 (le pare-feu peut encore filtrer). Un service local reste intéressant pour une élévation de privilèges.
 
 ## Tester
 

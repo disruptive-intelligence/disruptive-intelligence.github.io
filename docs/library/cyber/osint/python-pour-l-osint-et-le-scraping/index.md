@@ -15,7 +15,7 @@ revue: '2026-05-20'
 
 -----
 
-### Avant-propos
+## Avant-propos
 
 Ce cours n’est pas un cours de Python. C’est un cours d’**enquête en sources ouvertes** qui se sert de Python comme outil. La nuance compte. Un analyste OSINT qui code **simplement mais proprement** vaut mieux qu’un excellent codeur qui collecte sans cadre.
 
@@ -30,7 +30,7 @@ Ces réflexes seront rappelés à chaque chapitre. Ils ne sont pas optionnels.
 
 -----
 
-### Avertissement légal et éthique
+## Avertissement légal et éthique
 
 Ce cours forme à la collecte de **données publiquement accessibles** à des fins défensives : veille, CTI, journalisme, recherche, transparence, sécurité. Il **ne forme pas** à :
 
@@ -44,11 +44,11 @@ Les exemples utilisent des sites conçus pour l’apprentissage (`books.toscrape
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Reviens ici à chaque fois qu’un terme te semble flou.
 
-#### OSINT et enquête
+### OSINT et enquête
 
 |Terme           |Définition simple                                                                              |
 |----------------|-----------------------------------------------------------------------------------------------|
@@ -61,7 +61,7 @@ Reviens ici à chaque fois qu’un terme te semble flou.
 |**Minimisation**|Principe : ne collecter que ce dont tu as besoin.                                              |
 |**OPSEC**       |Operational Security — bonnes pratiques pour ne pas se compromettre soi-même pendant l’enquête.|
 
-#### Web
+### Web
 
 |Terme         |Définition simple                                                       |
 |--------------|------------------------------------------------------------------------|
@@ -74,7 +74,7 @@ Reviens ici à chaque fois qu’un terme te semble flou.
 |**User-Agent**|Header qui dit qui fait la requête (un navigateur, un script, un robot).|
 |**Cookie**    |Petite donnée stockée côté client pour identifier une session.          |
 
-#### HTML et parsing
+### HTML et parsing
 
 |Terme            |Définition simple                                                             |
 |-----------------|------------------------------------------------------------------------------|
@@ -87,7 +87,7 @@ Reviens ici à chaque fois qu’un terme te semble flou.
 |**Scraper**      |Programme qui extrait des données d’une page.                                 |
 |**Crawler**      |Programme qui parcourt un site en suivant les liens.                          |
 
-#### Données et bonnes pratiques
+### Données et bonnes pratiques
 
 |Terme         |Définition simple                                                                                                                                            |
 |--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -101,7 +101,7 @@ Reviens ici à chaque fois qu’un terme te semble flou.
 
 -----
 
-### Comment penser une collecte OSINT
+## Comment penser une collecte OSINT
 
 Avant la moindre ligne de code, un analyste se pose **quatre questions**. Cet ordre n’est pas négociable.
 
@@ -124,7 +124,7 @@ Tout le cours s’articule autour de cette boucle. À la fin, tu auras une **fic
 
 -----
 
-### La grande différence avec le scripting Python pur
+## La grande différence avec le scripting Python pur
 
 Dans ton cours Python initial, tu manipulais **ton ordinateur** : variables, fichiers, dossiers, scripts. Ici, tu manipules **le web**, c’est-à-dire des serveurs **distants** que tu **ne contrôles pas**. Cela change tout.
 
@@ -140,9 +140,9 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 
 -----
 
-### Table des matières
+## Table des matières
 
-#### Partie I — Fondations
+### Partie I — Fondations
 
 - **Chapitre 0 — Préparer son environnement de travail**
 - Chapitre 1 — Qu’est-ce que l’OSINT et le web scraping ?
@@ -150,33 +150,33 @@ Tu vas devoir apprendre des **réflexes nouveaux** : prudence, lenteur volontair
 - Chapitre 3 — Comment fonctionne le web (vu côté collecteur)
 - Chapitre 4 — Choisir la source la plus propre
 
-#### Partie II — Premières collectes
+### Partie II — Premières collectes
 
 - Chapitre 5 — Premières requêtes avec `requests`
 - Chapitre 6 — Parser du HTML avec BeautifulSoup
 - Chapitre 7 — Extraction structurée d’une page
 
-#### Partie III — Structurer et nettoyer les données
+### Partie III — Structurer et nettoyer les données
 
 - Chapitre 8 — Stocker les résultats (CSV, JSON, JSONL)
 - Chapitre 9 — Nettoyer, normaliser, enrichir
 
-#### Partie IV — Passer à l’échelle
+### Partie IV — Passer à l’échelle
 
 - Chapitre 10 — Pagination et collecte multi-pages
 - Chapitre 11 — Utiliser des APIs publiques
 - Chapitre 12 — Bonnes pratiques professionnelles
 
-#### Partie V — Enquête, veille et reporting
+### Partie V — Enquête, veille et reporting
 
 - Chapitre 13 — Veille et détection de changements
 - Chapitre 14 — Du script au rapport d’enquête
 
-#### Partie VI — Projet final
+### Partie VI — Projet final
 
 - Chapitre 15 — Outil OSINT de collecte web défensive
 
-#### Annexes
+### Annexes
 
 - A — Sites d’entraînement légaux
 - B — Modules à explorer ensuite

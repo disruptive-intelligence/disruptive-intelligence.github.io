@@ -21,7 +21,7 @@ revue: '2026-06-13'
 
 ---
 
-### À qui s'adresse ce cours
+## À qui s'adresse ce cours
 
 - À un **admin Linux / réseau** qui doit comprendre Kubernetes sans devenir DevOps.
 - À un **analyste SOC** qui verra passer des logs, des events et des alertes venant de clusters.
@@ -29,7 +29,7 @@ revue: '2026-06-13'
 - À un **pentester débutant** qui veut comprendre la surface d'attaque K8s **côté défense** d'abord.
 - À toute personne curieuse qui veut un modèle mental clair de Kubernetes avant de taper des commandes.
 
-### Ce que ce cours n'est PAS
+## Ce que ce cours n'est PAS
 
 Pour rester pédagogique et accessible, certains sujets sont **volontairement exclus**. Ils méritent un cours à part, **après** celui-ci :
 
@@ -41,7 +41,7 @@ Pour rester pédagogique et accessible, certains sujets sont **volontairement ex
 
 Ces sujets peuvent venir **après**, une fois les fondamentaux de ce cours acquis (voir l'annexe « Suite logique »).
 
-### 🎯 L'objectif final, concrètement
+## 🎯 L'objectif final, concrètement
 
 Pour que tu saches exactement où tu vas, à la **fin de ce cours** tu dois être capable de :
 
@@ -56,7 +56,7 @@ Pour que tu saches exactement où tu vas, à la **fin de ce cours** tu dois êtr
 
 ---
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours. Reviens ici dès qu'un mot te semble flou.
 
@@ -94,7 +94,7 @@ Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours
 
 ---
 
-### Comment penser Kubernetes
+## Comment penser Kubernetes
 
 Avant de taper la moindre commande, il faut comprendre **la seule grande idée** qui structure tout Kubernetes. Si tu retiens une chose de ce cours, c'est celle-ci :
 
@@ -118,7 +118,7 @@ Concrètement, presque tout dans Kubernetes se ramène à 4 idées :
 
 ---
 
-### Les 3 lunettes : Lab, Production, Sécurité
+## Les 3 lunettes : Lab, Production, Sécurité
 
 Tout au long du cours, tu porteras **trois paires de lunettes**. On les pose dès maintenant pour ne jamais les confondre :
 
@@ -130,11 +130,11 @@ Tu verras régulièrement des encadrés qui changent de lunette. Quand tu liras 
 
 ---
 
-### Prérequis techniques et matériel recommandé
+## Prérequis techniques et matériel recommandé
 
 Kubernetes peut vite devenir **frustrant si ton lab ne démarre pas**. Autant cadrer ça tout de suite.
 
-#### Connaissances supposées (rappels inclus dans le cours)
+### Connaissances supposées (rappels inclus dans le cours)
 
 | Domaine | Niveau attendu | Où c'est rappelé |
 |---------|----------------|------------------|
@@ -146,7 +146,7 @@ Kubernetes peut vite devenir **frustrant si ton lab ne démarre pas**. Autant ca
 
 > Si « IP », « port » et « DNS » sont totalement flous pour toi, fais d'abord un détour par les bases réseau. Le reste, le cours te le donne.
 
-#### Matériel recommandé
+### Matériel recommandé
 
 Minikube lance un **petit cluster mono-machine**. C'est léger, mais pas inexistant.
 
@@ -157,7 +157,7 @@ Minikube lance un **petit cluster mono-machine**. C'est léger, mais pas inexist
 | **Disque** | 20 Go libres | 40 Go ou plus |
 | **OS** | Linux, macOS, ou Windows | Linux (le plus simple) |
 
-#### Faut-il Docker ?
+### Faut-il Docker ?
 
 Minikube a besoin d'un **« driver »** pour faire tourner le cluster. Selon ta machine :
 
@@ -166,7 +166,7 @@ Minikube a besoin d'un **« driver »** pour faire tourner le cluster. Selon ta 
 
 On détaillera le choix au **Chapitre 4**. Retiens juste : **oui, on aura probablement besoin de Docker** (driver par défaut), mais ce n'est pas la seule option.
 
-#### ⚠️ Limites de WSL (Windows)
+### ⚠️ Limites de WSL (Windows)
 
 Si tu es sous Windows et que tu comptes utiliser **WSL2** :
 
@@ -178,11 +178,11 @@ Si tu es sous Windows et que tu comptes utiliser **WSL2** :
 
 ---
 
-### ⚠️ Encadré essentiel — Commandes Kubernetes à manipuler avec prudence
+## ⚠️ Encadré essentiel — Commandes Kubernetes à manipuler avec prudence
 
 Avant d'aller plus loin, lis ceci **attentivement**. Certaines commandes Kubernetes sont **destructrices** et n'affichent **aucune demande de confirmation**. En lab, tu peux tout casser sans risque. Mais ces réflexes te suivront en production, alors prends les bonnes habitudes **maintenant**.
 
-#### Les commandes qui détruisent
+### Les commandes qui détruisent
 
 ```bash
 kubectl delete pod <nom>            # Supprime un Pod (souvent recréé s'il a un Deployment)
@@ -196,7 +196,7 @@ kubectl replace --force             # Détruit puis recrée l'objet (interruptio
 ```
 
 
-#### Les deux pièges qui font le plus de dégâts pour un débutant
+### Les deux pièges qui font le plus de dégâts pour un débutant
 
 ```bash
 kubectl delete namespace <nom>      # Tu crois supprimer "un truc"... tu supprimes une appli entière
@@ -204,7 +204,7 @@ kubectl delete pvc <nom>            # Tu crois nettoyer... tu effaces des donné
 ```
 
 
-#### Les 3 règles d'or
+### Les 3 règles d'or
 
 > **1. Vérifie TOUJOURS ton namespace courant avant d'agir.**
 > Une commande `delete` lancée dans le mauvais namespace détruit les mauvaises ressources.
@@ -226,7 +226,7 @@ kubectl delete pvc <nom>            # Tu crois nettoyer... tu effaces des donné
 
 ---
 
-### 🧨 La Boîte à risques Kubernetes
+## 🧨 La Boîte à risques Kubernetes
 
 Voici la **carte des dangers** que tu vas apprendre à reconnaître et à neutraliser tout au long du cours. Tu n'as **pas** besoin de tout comprendre maintenant — c'est une **carte mentale** à garder sous les yeux. Chaque ligne sera traitée en détail dans le chapitre indiqué. C'est l'équivalent, pour Kubernetes, d'une check-list d'audit défensif.
 
@@ -250,7 +250,7 @@ Voici la **carte des dangers** que tu vas apprendre à reconnaître et à neutra
 
 ---
 
-### Sur la montée en difficulté
+## Sur la montée en difficulté
 
 Le cours commence **très doux** : les Parties I et II ne contiennent **presque aucune commande qui modifie le cluster**. On installe le lab, on **observe**, on construit un modèle mental. La manipulation réelle commence en **Partie III**.
 
@@ -266,7 +266,7 @@ Ne te juge pas. **La patience compte plus que la vitesse.**
 
 ---
 
-### Table des matières
+## Table des matières
 
 **PARTIE 0 — PRÉAMBULE** *(tu es ici)*
 

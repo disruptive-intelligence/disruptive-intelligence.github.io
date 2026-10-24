@@ -14,7 +14,7 @@ revision: library/revision/infrastructure.md
 
 ---
 
-### Fil rouge : Opération BACKBONE
+## Fil rouge : Opération BACKBONE
 
 > **Contexte narratif — ce fil rouge traverse les 29 premiers chapitres et se conclut aux Ch.30-31.**
 >

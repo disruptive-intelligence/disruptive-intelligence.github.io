@@ -14,7 +14,7 @@ revision: library/revision/hardening.md
 
 ---
 
-### Fil rouge : SecureHealth
+## Fil rouge : SecureHealth
 
 > **Contexte narratif — ce fil rouge traverse tout le cours et se conclut au Ch.29.**
 >
@@ -24,7 +24,7 @@ revision: library/revision/hardening.md
 
 ---
 
-### Introduction
+## Introduction
 
 Ce cours enseigne la sécurité applicative comme une discipline complète — du code à la production, de l'attaque à la défense, de la vulnérabilité individuelle au programme d'entreprise.
 

@@ -15,7 +15,7 @@ revision: library/revision/conteneurs.md
 
 -----
 
-### Guide de lecture — Comment utiliser ce cours
+## Guide de lecture — Comment utiliser ce cours
 
 Ce cours couvre un domaine vaste. Tu n’as **pas besoin de tout maîtriser d’un coup**. Voici comment naviguer selon ton objectif.
 
@@ -36,7 +36,7 @@ Lis tout, y compris les sections “Très utile en pratique”. Les “Bonus” 
 **Les chapitres indispensables pour un entretien :**
 Ch.1-5 (comprendre Docker), Ch.6-8 (construire et composer), Ch.11-14 (comprendre Kubernetes), Ch.21 (sécurité — risques), Ch.23 et Ch.25 (sécurité runtime et K8s). Avec ces chapitres, tu as 80% de ce qu’on attend d’un junior.
 
-#### Parcours recommandés
+### Parcours recommandés
 
 |Parcours                 |Chapitres                |Objectif                                         |
 |-------------------------|-------------------------|-------------------------------------------------|
@@ -48,7 +48,7 @@ Tu n’as pas besoin de tout lire linéairement. Commence par le parcours qui co
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Reviens ici chaque fois qu’un terme te semble flou. Tous ces termes seront expliqués en détail dans le cours.
 
@@ -76,7 +76,7 @@ Reviens ici chaque fois qu’un terme te semble flou. Tous ces termes seront exp
 
 -----
 
-### Le schéma mental
+## Le schéma mental
 
 Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression logique :**
 
@@ -95,7 +95,7 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
 
 -----
 
-### Table des matières
+## Table des matières
 
 **PARTIE I — FONDATIONS (Ch.1-5)**
 
@@ -152,7 +152,7 @@ Avant de plonger, voici le fil conducteur. **Tout ce cours suit une progression 
 
 -----
 
-### Fil rouge : Opération CONTAINER
+## Fil rouge : Opération CONTAINER
 
 > **Contexte narratif**
 > 

@@ -14,7 +14,7 @@ revue: '2026-05-17'
 
 ---
 
-### Avant de commencer — Lis ça
+## Avant de commencer — Lis ça
 
 L'assembleur a une mauvaise réputation : "c'est trop dur", "c'est pour les génies", "c'est cryptique". **Ce n'est ni magique, ni réservé à une élite.**
 
@@ -28,14 +28,14 @@ Soyons honnête : l'assembleur est **plus exigeant** que Python ou Bash, parce q
 
 ---
 
-### À qui s'adresse ce cours
+## À qui s'adresse ce cours
 
 - À quelqu'un qui n'a **jamais programmé**.
 - À quelqu'un qui veut comprendre **comment un ordinateur fonctionne vraiment**.
 - À quelqu'un qui s'intéresse à la **cybersécurité**, au **reverse engineering**, à l'**analyse de binaires** ou aux **CTF**.
 - À quelqu'un qui a peur de GDB et veut le démystifier.
 
-### Ce que ce cours n'est PAS
+## Ce que ce cours n'est PAS
 
 Pour rester pédagogique et accessible, certains sujets sont **volontairement exclus**. Ils méritent un cours à part, après celui-ci :
 
@@ -49,7 +49,7 @@ Pour rester pédagogique et accessible, certains sujets sont **volontairement ex
 
 Ces sujets peuvent venir **après**, une fois que les fondamentaux de ce cours sont acquis.
 
-### 🎯 L'objectif final, concrètement
+## 🎯 L'objectif final, concrètement
 
 Pour que tu saches exactement où tu vas, voici ce que tu dois être capable de faire **à la fin de ce cours** :
 
@@ -63,7 +63,7 @@ Pour que tu saches exactement où tu vas, voici ce que tu dois être capable de 
 
 ---
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours. Reviens ici si un mot te semble flou.
 
@@ -103,7 +103,7 @@ Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours
 
 ---
 
-### Comment penser un programme assembleur
+## Comment penser un programme assembleur
 
 Avant d'écrire la moindre ligne de code, il faut comprendre la logique de base. En Bash ou Python, tu raisonnes en termes de :
 
@@ -145,19 +145,19 @@ Tous les programmes assembleur, même les plus complexes, sont une combinaison d
 
 ---
 
-### La grande différence avec Bash et Python
+## La grande différence avec Bash et Python
 
 Si tu viens des cours Bash et Python de cette collection, **trois différences fondamentales** sont à comprendre :
 
-#### 1. Pas de variables typées
+### 1. Pas de variables typées
 
 En Python, tu as `int`, `str`, `list`… En assembleur, **tout est des octets**. Que ce soit un nombre, une lettre ou une adresse, ce sont des octets. C'est toi qui décides comment les interpréter.
 
-#### 2. Pas d'affichage automatique
+### 2. Pas d'affichage automatique
 
 En Python, `print(x)` affiche `x`. En assembleur, il n'y a **rien** d'automatique. Pour afficher, il faut **demander au système** via un syscall. C'est pour ça qu'on apprend très vite GDB : pour **voir** les valeurs sans devoir les afficher.
 
-#### 3. Une seule micro-action par ligne
+### 3. Une seule micro-action par ligne
 
 En Python, `c = a + b` fait deux choses en une ligne (calculer et stocker). En assembleur, il faut **deux instructions** : `mov rax, [a]` puis `add rax, [b]`. C'est plus verbeux, mais c'est aussi pour ça qu'on comprend exactement ce que le CPU fait.
 
@@ -165,7 +165,7 @@ En Python, `c = a + b` fait deux choses en une ligne (calculer et stocker). En a
 
 ---
 
-### Méthode de travail recommandée
+## Méthode de travail recommandée
 
 L'assembleur ne s'apprend pas en lisant — il s'apprend en **tapant** et en **observant**. Pour chaque programme du cours, applique systématiquement ce rituel en 6 étapes :
 
@@ -178,7 +178,7 @@ L'assembleur ne s'apprend pas en lisant — il s'apprend en **tapant** et en **o
 
 > **Conseil important :** si un chapitre te paraît flou, **continue quand même**. Plusieurs notions ne s'éclairent qu'à la lumière du chapitre suivant. Reviens en arrière une fois que tu as vu la suite.
 
-### Trois niveaux de maîtrise
+## Trois niveaux de maîtrise
 
 Pour rester réaliste sur tes objectifs : il y a **trois niveaux** d'apprentissage de l'assembleur. Tu n'as pas besoin de tous les atteindre à 100 %.
 
@@ -190,7 +190,7 @@ Pour rester réaliste sur tes objectifs : il y a **trois niveaux** d'apprentissa
 
 > **L'objectif réaliste pour la cybersécurité : viser surtout "lire" et "reconnaître".** Très peu de gens écrivent de l'assembleur entier de nos jours. **Tout le monde**, en revanche, doit savoir le lire pour faire du reverse, du debug, du CTF.
 
-### Sur la montée en difficulté
+## Sur la montée en difficulté
 
 Le cours commence très doux (chapitres 1-9), puis devient progressivement plus dense. **À partir de la partie V** (entrées/sorties, conversions, fichiers), le cours reste accessible mais demande **plus de pratique**. Il est normal de devoir :
 
@@ -202,7 +202,7 @@ Ne te juge pas. La patience compte plus que la vitesse.
 
 ---
 
-### Table des matières
+## Table des matières
 
 **PARTIE 0 — PRÉAMBULE** *(tu es ici)*
 

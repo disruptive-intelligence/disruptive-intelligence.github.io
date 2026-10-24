@@ -5,9 +5,9 @@ format: cours
 revue: '2026-10-01'
 ---
 
-### *Atlas raisonné des technologies émergentes, de leurs convergences et de leurs implications*
+## *Atlas raisonné des technologies émergentes, de leurs convergences et de leurs implications*
 
-#### Volume 2 de la collection *Systèmes & Frontières technologiques*
+### Volume 2 de la collection *Systèmes & Frontières technologiques*
 
 ---
 

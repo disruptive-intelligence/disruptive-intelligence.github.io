@@ -17,7 +17,7 @@ revue: '2026-06-14'
 
 -----
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Reviens ici dès qu'un mot te semble flou. On mélange volontairement les termes JavaScript et les termes cyber, car tu vas les croiser ensemble.
 
@@ -58,7 +58,7 @@ Reviens ici dès qu'un mot te semble flou. On mélange volontairement les termes
 
 -----
 
-### Comment penser JavaScript
+## Comment penser JavaScript
 
 Avant d'écrire la moindre ligne, comprends la logique de base. Comme tout langage, JavaScript suit le schéma :
 
@@ -104,7 +104,7 @@ Mais JavaScript ajoute **une question fondatrice** que Python et Bash n'ont pas 
 
 -----
 
-### La grande différence avec Python et Bash
+## La grande différence avec Python et Bash
 
 Si tu viens des cours Bash ou Python de cette collection, trois choses vont changer.
 
@@ -118,7 +118,7 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 
 -----
 
-### 🧨 Boîte à risques JavaScript / Web
+## 🧨 Boîte à risques JavaScript / Web
 
 > **À lire maintenant, même sans tout comprendre.** Ce tableau est le **fil rouge sécurité** du cours. Chaque ligne est une mauvaise pratique fréquente, et chaque ligne sera traitée en profondeur dans le chapitre indiqué. Reviens-y régulièrement : à la fin du cours, tu dois comprendre **pourquoi** chacune est dangereuse.
 
@@ -146,14 +146,14 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 
 -----
 
-### Table des matières
+## Table des matières
 
 
-#### Partie 0 — Ouverture
+### Partie 0 — Ouverture
 *(Glossaire, Comment penser JavaScript, différence avec Python/Bash, Boîte à risques — ci-dessus.)*
 
 
-#### Partie 1 — Fondamentaux du langage
+### Partie 1 — Fondamentaux du langage
 
 *(dans la console et un premier fichier)*
 
@@ -165,7 +165,7 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 6. Boucles
 
 
-#### Partie 2 — Structurer les données et le code
+### Partie 2 — Structurer les données et le code
 
 7. Fonctions
 8. Chaînes de caractères et l'objet `URL`
@@ -176,7 +176,7 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 13. Erreurs, exceptions et débogage
 
 
-#### Partie 3 — JavaScript dans le navigateur : DOM et événements
+### Partie 3 — JavaScript dans le navigateur : DOM et événements
 
 14. Le DOM : comprendre et sélectionner
 15. Modifier le DOM en sécurité (`textContent` vs `innerHTML`)
@@ -184,13 +184,13 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 17. Formulaires et limites de la validation côté client
 
 
-#### Partie 4 — Stockage navigateur et sécurité des données client
+### Partie 4 — Stockage navigateur et sécurité des données client
 
 18. LocalStorage et SessionStorage
 19. Cookies et les limites de JavaScript
 
 
-#### Partie 5 — Le web dynamique : requêtes HTTP et asynchrone
+### Partie 5 — Le web dynamique : requêtes HTTP et asynchrone
 
 20. Comprendre l'asynchrone
 21. Promesses
@@ -199,7 +199,7 @@ Pont rapide pour les profils Python : ce que tu appelais `print()` devient `cons
 24. CORS : comprendre le blocage
 
 
-#### Partie 6 — Node.js : automatiser et scripter hors navigateur
+### Partie 6 — Node.js : automatiser et scripter hors navigateur
 
 25. Découverte de Node.js
 26. Lire et écrire des fichiers

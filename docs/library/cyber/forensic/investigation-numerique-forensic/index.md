@@ -14,7 +14,7 @@ revision: library/revision/forensic.md
 
 ---
 
-### Fil rouge : Opération MUSIC BOX
+## Fil rouge : Opération MUSIC BOX
 
 > **Contexte narratif — ce fil rouge traverse les 29 premiers chapitres du cours.**
 >

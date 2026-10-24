@@ -11,7 +11,7 @@ revue: '2026-06-09'
 
 ---
 
-### Comment lire ce cours
+## Comment lire ce cours
 
 Le cours suit un **fil rouge en trois niveaux**, présent dans la plupart des chapitres :
 
@@ -35,7 +35,7 @@ Ces deux principes expliquent à eux seuls la majorité des incompréhensions ma
 
 ---
 
-### Table des matières
+## Table des matières
 
 **Partie 1 — Fondations physiques**
 

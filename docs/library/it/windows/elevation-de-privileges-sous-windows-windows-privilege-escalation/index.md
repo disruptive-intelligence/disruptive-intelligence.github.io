@@ -20,9 +20,9 @@ Dans un contexte de Pentest / Active Directory Assessment, l'objectif consiste g
 
 L'élévation de privilèges est une étape importante de la phase de Post-Exploitation. Elle peut permettre d'obtenir des identifiants, d'accéder à des données protégées, d'établir une persistance ou de poursuivre une attaque vers d'autres systèmes du réseau.
 
-### 1. Comprendre la Privilege Escalation
+## 1. Comprendre la Privilege Escalation
 
-#### Initial Foothold vs Privilege Escalation
+### Initial Foothold vs Privilege Escalation
 
 Un Initial Foothold correspond à un premier accès obtenu sur un système, souvent avec des privilèges limités.
 
@@ -44,7 +44,7 @@ Further Access & Post-Exploitation
 ```
 
 
-#### Objectifs principaux
+### Objectifs principaux
 
 Le cours présente quatre situations dans lesquelles l'élévation de privilèges peut être nécessaire.
 
@@ -57,7 +57,7 @@ Le cours présente quatre situations dans lesquelles l'élévation de privilège
 
 L'élévation de privilèges peut constituer l'objectif final d'une mission, mais elle sert souvent d'étape intermédiaire vers d'autres ressources.
 
-#### Notions préalables — Windows Security Context
+### Notions préalables — Windows Security Context
 
 Il est important de distinguer plusieurs concepts avant d'étudier les techniques d'exploitation.
 
@@ -74,7 +74,7 @@ Distinction essentielle : être membre du groupe local Administrators et exécut
 
 De même, SYSTEM sur une machine jointe au domaine ne signifie pas Domain Admin. Lorsqu'un processus SYSTEM accède à certaines ressources réseau, il peut utiliser l'identité du compte ordinateur, mais cela ne lui accorde pas automatiquement des privilèges administratifs sur le domaine.
 
-### 2. Main Windows Privilege Escalation Techniques
+## 2. Main Windows Privilege Escalation Techniques
 
 Windows présente une surface d'attaque importante, comprenant les comptes utilisateurs, services, fichiers, permissions et composants du système.
 
@@ -90,7 +90,7 @@ Le cours introduit plusieurs grandes catégories :
 |Credential Theft|Récupérer des secrets d'authentification pour obtenir davantage d'accès|
 |Traffic Capture|Observer certaines communications réseau pouvant exposer des informations sensibles|
 
-#### Manual Enumeration vs Automated Tools
+### Manual Enumeration vs Automated Tools
 
 De nombreux outils facilitent la recherche de vulnérabilités et de mauvaises configurations.
 
@@ -110,9 +110,9 @@ Cette compétence devient indispensable dans certains environnements :
 
 Principe : comprendre les mécanismes Windows est plus important que dépendre exclusivement d'un outil d'énumération automatique.
 
-### 3. Scenario 1 — Contourner les restrictions réseau
+## 3. Scenario 1 — Contourner les restrictions réseau
 
-#### Contexte
+### Contexte
 
 Lors d'une mission de Pentest, l'analyste travaille sur un système client soumis à plusieurs restrictions :
 
@@ -128,7 +128,7 @@ Cependant, une erreur de configuration permet au Printer VLAN de communiquer ver
 
 `80`, `443` et `445`.
 
-#### Chaîne d'attaque présentée
+### Chaîne d'attaque présentée
 
 L'analyste réalise une énumération manuelle et identifie une faiblesse de permissions permettant une élévation locale.
 
@@ -161,7 +161,7 @@ Domain Controller Access
 ```
 
 
-#### Notions importantes
+### Notions importantes
 
 - LSASS — Local Security Authority Subsystem Service : Processus Windows chargé de nombreuses fonctions liées à la sécurité et à l'authentification. Sa mémoire peut contenir des informations d'authentification sensibles selon les sessions et les protections configurées.
 
@@ -169,13 +169,13 @@ Domain Controller Access
 
 SMB — Server Message Block : Protocole principalement utilisé pour accéder aux fichiers et ressources partagés sur un réseau Windows, généralement sur TCP `445`.
 
-#### Enseignement du scénario
+### Enseignement du scénario
 
 Même lorsqu'un poste est fortement verrouillé, une faiblesse locale combinée à une erreur de segmentation réseau peut permettre de progresser vers des ressources beaucoup plus sensibles.
 
-### 4. Scenario 2 — Piller les partages ouverts
+## 4. Scenario 2 — Piller les partages ouverts
 
-#### Contexte
+### Contexte
 
 L'environnement est correctement surveillé, avec peu de vulnérabilités apparentes.
 
@@ -183,7 +183,7 @@ L'analyste découvre cependant un partage réseau insuffisamment protégé, acce
 
 Ce partage contient des sauvegardes de machines virtuelles.
 
-#### Virtual Disk Files
+### Virtual Disk Files
 
 Le cours mentionne deux formats :
 
@@ -193,7 +193,7 @@ Le cours mentionne deux formats :
 
 Ces fichiers peuvent contenir l'intégralité du système de fichiers d'une machine virtuelle, y compris des artefacts sensibles.
 
-#### Chaîne d'attaque
+### Chaîne d'attaque
 
 L'analyste accède à une sauvegarde `.VHDX`, la monte sur une machine Windows et récupère trois ruches de registre :
 
@@ -226,7 +226,7 @@ Administrative Access on Multiple Hosts
 ```
 
 
-#### Windows Registry Hives — Prérequis
+### Windows Registry Hives — Prérequis
 
 Une Registry Hive est un ensemble de données constituant une partie du registre Windows.
 
@@ -238,7 +238,7 @@ Une Registry Hive est un ensemble de données constituant une partie du registre
 
 Ces ruches sont particulièrement sensibles lors d'une investigation ou d'un Pentest.
 
-#### Pass-the-Hash — Concept
+### Pass-the-Hash — Concept
 
 Le Pass-the-Hash (PtH) est une technique permettant, dans certains contextes d'authentification NTLM, d'utiliser un hash de mot de passe sans connaître le mot de passe en clair.
 
@@ -246,9 +246,9 @@ Dans cet exemple, l'attaque devient possible à grande échelle parce que plusie
 
 Enseignement du scénario : un partage contenant des sauvegardes accessibles à tous peut exposer indirectement les secrets d'authentification d'un grand nombre de systèmes.
 
-### 5. Scenario 3 — Chasse aux identifiants et abus des privilèges de compte
+## 5. Scenario 3 — Chasse aux identifiants et abus des privilèges de compte
 
-#### Contexte
+### Contexte
 
 L'objectif de la mission consiste à accéder à des serveurs de bases de données critiques.
 
@@ -260,7 +260,7 @@ L'analyste dispose initialement :
 
 - de la possibilité d'exécuter des outils.
 
-#### Snaffler — Credential Hunting
+### Snaffler — Credential Hunting
 
 L'outil Snaffler est utilisé pour rechercher des informations sensibles dans les partages réseau accessibles.
 
@@ -268,7 +268,7 @@ L'analyste découvre des fichiers `.sql` contenant des identifiants de base de d
 
 Ces identifiants permettent d'établir une connexion au serveur Microsoft SQL Server (MSSQL).
 
-#### MSSQL & xp_cmdshell
+### MSSQL & xp_cmdshell
 
 La procédure stockée `xp_cmdshell` permet à SQL Server d'exécuter des commandes au niveau du système d'exploitation.
 
@@ -278,7 +278,7 @@ Cela lui permet d'obtenir une exécution de commandes dans le contexte d'un comp
 
 Précision : l'utilisation de `xp_cmdshell` dépend des permissions SQL disponibles. Elle n'est pas automatiquement accessible à n'importe quel compte de base de données.
 
-#### SeImpersonatePrivilege
+### SeImpersonatePrivilege
 
 L'analyste découvre que le compte dispose du privilège :
 
@@ -288,7 +288,7 @@ Ce droit permet à un processus d'usurper, sous certaines conditions, le context
 
 Il est particulièrement intéressant en recherche d'élévation locale, car certaines techniques exploitent les mécanismes d'impersonation pour obtenir un contexte plus privilégié.
 
-#### Juicy Potato
+### Juicy Potato
 
 Le cours utilise Juicy Potato pour exploiter la situation et obtenir davantage de privilèges.
 
@@ -298,7 +298,7 @@ Cette méthode n'était pas son premier choix : il avait auparavant tenté d'obt
 
 Il peut finalement se connecter à distance au serveur de base de données et obtenir le contrôle de la base de données cible.
 
-#### Chaîne d'attaque
+### Chaîne d'attaque
 
 ```text
 Standard Domain User
@@ -327,7 +327,7 @@ Control of Target Database
 
 Précision technique : Juicy Potato ne fonctionne pas universellement sur toutes les versions de Windows. Son efficacité dépend notamment du système, des privilèges du processus et des mécanismes d'impersonation disponibles.
 
-#### Enseignement du scénario
+### Enseignement du scénario
 
 Une compromission peut résulter de l'enchaînement de plusieurs faiblesses distinctes :
 
@@ -335,7 +335,7 @@ Identifiants exposés → Accès SQL → Exécution de commandes → Abus de pri
 
 L'exploitation n'exige donc pas nécessairement une seule vulnérabilité critique : plusieurs mauvaises configurations peuvent suffire.
 
-### 6. Why Does Privilege Escalation Happen?
+## 6. Why Does Privilege Escalation Happen?
 
 Les possibilités d'élévation de privilèges résultent souvent de faiblesses organisationnelles et techniques.
 
@@ -361,7 +361,7 @@ Le cours identifie notamment :
 
 Ces faiblesses peuvent rester longtemps inaperçues, notamment lorsqu'une organisation ne dispose pas des moyens nécessaires pour auditer régulièrement son environnement.
 
-### 7. Key Takeaways
+## 7. Key Takeaways
 
 |Scénario|Faiblesse principale|Résultat|
 |---|---|---|

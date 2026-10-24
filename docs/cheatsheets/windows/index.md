@@ -3,8 +3,6 @@ title: "Windows"
 ---
 # Windows
 
-[Énumération et audit local](fondamentaux/enumeration.md) — Parcours court : système, comptes, services, logiciels, réseau et protections.
-
 Les commandes en PowerShell (et leur équivalent CMD quand il est courant), avec un exemple qui marche et l'étape suivante. Les blocs `powershell` se tapent dans PowerShell, les blocs `bat` dans l'invite de commandes.
 
 ## [Fondamentaux](fondamentaux/index.md)
@@ -12,6 +10,7 @@ Les commandes en PowerShell (et leur équivalent CMD quand il est courant), avec
 Comprendre et observer le système.
 
 - [Système et arborescence](fondamentaux/systeme.md) — Identifier la machine (version, build, correctifs, domaine), se repérer dans l'arborescence, savoir qui est connecté.
+- [Énumération et audit local](fondamentaux/enumeration.md) — Premier état des lieux d'un poste : identité, comptes, système, services, logiciels, réseau, protections.
 - [Fichiers et recherche](fondamentaux/fichiers-recherche.md) — Lire, trouver et comparer des fichiers ; chercher dans le contenu ; empreintes, signatures et flux alternatifs.
 - [Processus et services](fondamentaux/processus.md) — Ligne de commande et parent d'un processus, arbre, DLL, arrêt ; services, svchost, permissions et mauvaises configurations.
 - [Réseau](fondamentaux/reseau.md) — Adresses, routes, connexions par processus, test de port, DNS, partages, pare-feu.

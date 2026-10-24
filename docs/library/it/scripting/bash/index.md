@@ -14,7 +14,7 @@ revue: '2026-05-10'
 
 ---
 
-### Glossaire — Les mots à connaître
+## Glossaire — Les mots à connaître
 
 Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours. Reviens ici si un mot te semble flou.
 
@@ -35,7 +35,7 @@ Avant de commencer, voici les termes que tu vas rencontrer tout au long du cours
 
 ---
 
-### Comment penser un script
+## Comment penser un script
 
 Avant d'écrire la moindre ligne de code, il faut comprendre la logique de base. **Tout script suit le même schéma :**
 
@@ -58,7 +58,7 @@ Tous les scripts, même les plus complexes, sont une combinaison de ces 5 brique
 
 ---
 
-### Table des matières
+## Table des matières
 
 1. [Découverte de Bash et premier script](01-chapitre-1-decouverte-de-bash-et-premier-script.md)
 2. [Variables, affichage et saisie utilisateur](02-chapitre-2-variables-affichage-et-saisie-utilisate.md)

@@ -7,8 +7,6 @@ Comprendre et observer un système Windows : identité de la machine, processus,
 
 ## Carte mentale
 
-[Énumération et audit local](enumeration.md) : les commandes du premier état des lieux, avec les points à vérifier pour le durcissement.
-
 <div class="kw-mindmap" markdown>
 
 - **Observer un système Windows**
@@ -29,6 +27,22 @@ Comprendre et observer un système Windows : identité de la machine, processus,
         - Qui est là
             - [Connectés](systeme.md#voir-qui-est-connecte-a-la-machine) : `query user`
             - [Qui je suis](systeme.md#savoir-qui-je-suis) : `whoami /all`
+    - [Énumération et audit local](enumeration.md)
+        - Identité
+            - [Privilèges, groupes](enumeration.md#voir-mon-identite-mes-groupes-et-mes-privileges) : `whoami /priv` · `/groups`
+            - [Comptes, administrateurs](enumeration.md#lister-les-comptes-et-groupes-locaux) : `net localgroup administrators`
+            - [Politique de mot de passe](enumeration.md#lire-la-politique-de-mot-de-passe-et-de-verrouillage) : `net accounts`
+        - Système
+            - [Processus ↔ services](enumeration.md#relier-les-processus-aux-services) : `tasklist /svc`
+            - [Variables, PATH](enumeration.md#lire-les-variables-le-path-et-les-dossiers-de-demarrage) : `set`
+            - [Logiciels](enumeration.md#inventorier-les-logiciels-sans-interroger-win32_product) : clés `Uninstall`
+        - Réseau
+            - [Interfaces](enumeration.md#reperer-les-interfaces-passerelles-et-serveurs-dns) : `ipconfig /all`
+            - [Routes](enumeration.md#lire-les-voisins-arp-et-les-routes) : `route print`
+            - [Port → processus](enumeration.md#identifier-un-port-en-ecoute-et-son-processus) : `netstat -ano`
+        - Protections
+            - [Defender](enumeration.md#verifier-les-composants-de-microsoft-defender) : `Get-MpComputerStatus`
+            - [AppLocker](enumeration.md#lire-et-tester-la-politique-applocker) : `Test-AppLockerPolicy`
     - [Fichiers et recherche](fichiers-recherche.md)
         - Lire
             - [Contenu](fichiers-recherche.md#afficher-le-contenu-dun-fichier) : `Get-Content`
@@ -144,6 +158,7 @@ Comprendre et observer un système Windows : identité de la machine, processus,
 
 
 - [Système et arborescence](systeme.md) — Identifier la machine, se repérer dans l'arborescence, savoir qui est connecté.
+- [Énumération et audit local](enumeration.md) — Premier état des lieux d'un poste, pour un audit ou une élévation de privilèges.
 - [Fichiers et recherche](fichiers-recherche.md) — Lire, trouver et comparer des fichiers ; empreintes, signatures et flux alternatifs.
 - [Processus et services](processus.md) — Ligne de commande, parent, arbre et DLL d'un processus ; services et svchost.
 - [Réseau](reseau.md) — Adresses, connexions par processus, test de port, DNS, partages, pare-feu.

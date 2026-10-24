@@ -14,7 +14,7 @@ revision: library/revision/active-directory.md
 
 ---
 
-### Fil rouge : Opération KERBEROS
+## Fil rouge : Opération KERBEROS
 
 > **Contexte narratif — ce fil rouge alterne entre perspective offensive et défensive tout au long du cours.**
 >
