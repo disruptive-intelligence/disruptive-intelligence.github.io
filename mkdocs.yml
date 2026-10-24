@@ -169,6 +169,7 @@ nav:
         - Fondamentaux:
             - cheatsheets/windows/fondamentaux/index.md
             - Système et arborescence: cheatsheets/windows/fondamentaux/systeme.md
+            - Énumération et audit local: cheatsheets/windows/fondamentaux/enumeration.md
             - Fichiers et recherche: cheatsheets/windows/fondamentaux/fichiers-recherche.md
             - Processus et services: cheatsheets/windows/fondamentaux/processus.md
             - Réseau: cheatsheets/windows/fondamentaux/reseau.md

@@ -185,6 +185,9 @@
           description: "Une fiche par attaque : les traces qu'elle laisse, les requêtes pour les retrouver, les faux positifs."
           publier: cheatsheets/windows/reperer-une-attaque
           notes: [Repérer un DLL hijacking, Repérer du PowerShell non managé, "Repérer le chargement d'assemblies .NET", Repérer une relation parent-enfant anormale, Démasquer un faux processus parent (PPID spoofing), Repérer un accès à LSASS]
+        - label: 🔐 Élévation de privilèges
+          description: "Énumérer la machine, comprendre ses droits et repérer les mauvaises configurations."
+          notes: [Élévation de privilèges sous Windows (Windows Privilege Escalation)]
     - id: active-directory
       label: 🏰 Active Directory
       description: L'annuaire au cœur des SI Windows — fonctionnement, attaques, défense.

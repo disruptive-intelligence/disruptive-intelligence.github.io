@@ -7,6 +7,8 @@ Comprendre et observer un système Windows : identité de la machine, processus,
 
 ## Carte mentale
 
+[Énumération et audit local](enumeration.md) : les commandes du premier état des lieux, avec les points à vérifier pour le durcissement.
+
 <div class="kw-mindmap" markdown>
 
 - **Observer un système Windows**

@@ -3,6 +3,8 @@ title: "Windows"
 ---
 # Windows
 
+[Énumération et audit local](fondamentaux/enumeration.md) — Parcours court : système, comptes, services, logiciels, réseau et protections.
+
 Les commandes en PowerShell (et leur équivalent CMD quand il est courant), avec un exemple qui marche et l'étape suivante. Les blocs `powershell` se tapent dans PowerShell, les blocs `bat` dans l'invite de commandes.
 
 ## [Fondamentaux](fondamentaux/index.md)

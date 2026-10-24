@@ -141,6 +141,8 @@ Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 3 HotFix
 wmic qfe list brief   :: équivalent CMD (wmic est déprécié mais encore présent)
 ```
 
+`wmic qfe` et `Get-HotFix | Format-Table -AutoSize` sont les formes du cours. `wmic.exe` est historique et peut être absent. Ces inventaires ne couvrent pas toutes les mises à jour ; croiser build, KB et mises à jour cumulatives. Un redémarrage ancien ne prouve pas l'absence de correctifs.
+
 ### Savoir depuis quand la machine tourne
 
 ```powershell title="Commande"
@@ -225,6 +227,37 @@ $env:USERNAME; $env:COMPUTERNAME; $env:TEMP
 set           :: toutes les variables en CMD
 echo %PATH%
 ```
+
+### Examiner les chemins de recherche et de démarrage
+
+```powershell title="Commande"
+$env:PATH -split ';'
+Get-ChildItem "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup" -Force
+```
+
+En CMD, `set` donne aussi `APPDATA`, `USERPROFILE`, `HOMEDRIVE`, `HOMEPATH`, `TEMP`, `TMP`, `USERNAME` et `USERDOMAIN` ; `echo %USERNAME%` n'affiche que le nom. En PowerShell, utiliser `$env:USERNAME` : `set` et `%VAR%` n'y ont pas la même signification.
+
+Examiner les ACL des dossiers inhabituels du `PATH` et les scripts/configurations des répertoires personnels, parfois hébergés sur le réseau. Un dossier modifiable mérite une vérification, mais l'ordre de recherche d'un exécutable ou d'une DLL dépend du mécanisme utilisé. Le dossier `Startup` s'applique à l'ouverture de session du profil concerné ; les profils itinérants peuvent transporter ces données.
+
+## Protections
+
+### Consulter et tester la politique AppLocker
+
+Dans Windows PowerShell avec le module AppLocker disponible :
+
+```powershell title="Commande"
+Get-AppLockerPolicy -Effective | Select-Object -ExpandProperty RuleCollections
+Get-AppLockerPolicy -Effective |
+    Test-AppLockerPolicy -Path C:\Windows\System32\cmd.exe -User "$env:USERDOMAIN\$env:USERNAME"
+```
+
+`-Local` interroge la stratégie locale ; `-Effective` fusionne les stratégies locale et de domaine appliquées par GPO. Le cours teste aussi `Get-AppLockerPolicy -Local | Test-AppLockerPolicy -Path C:\Windows\System32\cmd.exe -User Everyone` : cette décision concerne cette politique et ce groupe, pas forcément le compte courant.
+
+Lire `Allow`/`Deny`, le SID ciblé, les conditions (éditeur, chemin, empreinte), les exceptions et le mode de chaque collection (audit ou application). `S-1-1-0` = Everyone ; `S-1-5-32-544` = administrateurs locaux. Une règle de chemin perd son intérêt si un utilisateur non privilégié peut modifier les fichiers autorisés. Un test `Denied` ne démontre pas un blocage réel en mode audit.
+
+Limite : ces cmdlets lisent les politiques GPO et ne reflètent pas correctement une politique déployée par CSP/MDM. Voir [Microsoft : Get-AppLockerPolicy](https://learn.microsoft.com/en-us/powershell/module/applocker/get-applockerpolicy).
+
+Pour l'antivirus : [état des composants Defender](../administration/logiciels.md#voir-letat-de-microsoft-defender). Antivirus, EDR et contrôle des applications remplissent des rôles différents.
 
 ## Savoir qui est là
 

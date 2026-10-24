@@ -173,6 +173,15 @@ taskkill /IM notepad.exe /T   :: /T : avec les processus enfants
 
 ## Observer les services
 
+### Relier les processus aux services
+
+```bat title="Commande"
+tasklist /svc
+tasklist /FI "PID eq 3520"
+```
+
+`/svc` rapproche processus, PID et services hébergés ; `/FI` filtre un PID trouvé avec `netstat -ano`. Examiner les services tiers et leur compte d'exécution, version, configuration et permissions. Un programme présent ou un nom inhabituel ne suffit pas à conclure à une vulnérabilité.
+
 ### Lister les services et leur état
 
 ```powershell title="Commande"

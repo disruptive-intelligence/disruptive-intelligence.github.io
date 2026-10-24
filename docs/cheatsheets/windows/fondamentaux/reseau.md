@@ -48,6 +48,8 @@ Get-NetRoute -AddressFamily IPv4
 route print -4
 ```
 
+`route print` affiche aussi IPv6 et les routes persistantes. Une route plus spécifique prime ; à spécificité égale, comparer les métriques. Plusieurs interfaces peuvent donner accès à plusieurs sous-réseaux, sans que le routage entre interfaces soit activé. Une route ne garantit pas le passage du pare-feu.
+
 ??? example "Sortie"
     ```text
     Itinéraires actifs :
@@ -61,6 +63,8 @@ route print -4
 ```bat title="Commande"
 arp -a   :: correspondances IP ↔ MAC connues
 ```
+
+Le cache décrit des voisins IPv4 connus sur chaque interface ; il n'est ni exhaustif ni un historique de sessions RDP/WinRM.
 
 ```powershell title="Exemple"
 Get-NetNeighbor -AddressFamily IPv4 -State Reachable
@@ -127,6 +131,10 @@ Get-NetTCPConnection -State Listen | Where-Object LocalPort -in 135,445,3389,598
     ```
 
 Le PID 4 (System) pour 445 et 5985 est normal : SMB et WinRM passent par le noyau (`http.sys`).
+
+En CMD : `netstat -ano` (`-a` : connexions et écoute, `-n` : adresses/ports numériques, `-o` : PID), puis `tasklist /FI "PID eq 3520"`. Les ports 21/80/135/445/1433/3389 évoquent FTP/HTTP/RPC/SMB/SQL Server/RDP ; confirmer avec le processus.
+
+`127.0.0.1` = loopback IPv4 ; `0.0.0.0` = toutes les interfaces IPv4. Une écoute locale peut rester intéressante pour un audit ; une écoute sur toutes les interfaces ne prouve pas l'accessibilité depuis le réseau (pare-feu).
 
 ## Tester
 

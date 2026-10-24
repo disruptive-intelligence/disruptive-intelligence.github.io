@@ -30,9 +30,22 @@ winget list --source winget | Select-Object -First 4
     ```
 
 ```powershell title="Exemple 2"
-Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*' |
+Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction SilentlyContinue |
     Where-Object DisplayName | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Sort-Object DisplayName
 ```
+
+`HKCU` complète avec les installations de l'utilisateur courant. Cette liste reste partielle (logiciels portables, autres profils, etc.). Croiser versions, services associés, fichiers de configuration et ACL pour l'audit.
+
+??? warning "Commandes historiques du cours : Win32_Product"
+    ```bat
+    wmic product get name
+    ```
+
+    ```powershell
+    Get-WmiObject -Class Win32_Product | Select-Object Name, Version
+    ```
+
+    Ces requêtes n'inventorient que les produits MSI et peuvent déclencher des vérifications/réparations d'installation. Préférer les clés de désinstallation ci-dessus en production. `wmic` peut être absent ; `Get-WmiObject` n'existe pas dans PowerShell 7. Voir [Microsoft : Win32_Product](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/msiprov/win32-product).
 
 ### Chercher, installer, mettre à jour un logiciel
 
@@ -69,6 +82,8 @@ Get-MpComputerStatus | Select-Object AMServiceEnabled, RealTimeProtectionEnabled
 ```powershell title="Exemple"
 Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AntivirusSignatureLastUpdated, IsTamperProtected
 ```
+
+Pour une vue complète : `Get-MpComputerStatus`. Examiner aussi `AntivirusEnabled`, `BehaviorMonitorEnabled`, `OnAccessProtectionEnabled`, `IoavProtectionEnabled`, `NISEnabled`, `AntivirusSignatureVersion` et `AntivirusSignatureAge`. Un service actif ne signifie pas que tous ses composants protègent la machine ; interpréter les valeurs selon le mode et la configuration de Defender.
 
 ??? example "Sortie"
     ```text

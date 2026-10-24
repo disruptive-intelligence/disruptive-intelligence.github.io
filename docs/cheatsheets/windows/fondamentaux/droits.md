@@ -38,7 +38,9 @@ whoami /priv
     SeTimeZonePrivilege           Changer le fuseau horaire                     Désactivé
     ```
 
-Un utilisateur standard n'a que ces privilèges. `SeDebugPrivilege`, `SeBackupPrivilege`, `SeImpersonatePrivilege` ou `SeTakeOwnershipPrivilege` signalent un compte puissant.
+Les privilèges varient selon le compte et les politiques. `SeDebugPrivilege`, `SeBackupPrivilege`, `SeImpersonatePrivilege` ou `SeTakeOwnershipPrivilege` méritent une vérification. `Disabled` signifie présent mais désactivé dans le token ; un privilège absent ne s'obtient pas en l'activant.
+
+Un token Medium, High ou System renseigne sur l'intégrité ; il ne décrit pas à lui seul tous les droits. Être administrateur local ne signifie pas exécuter le processus en SYSTEM, et SYSTEM local n'est pas Domain Admin.
 
 Pour comprendre : [Windows en profondeur, ch. 17 (jeton et notions centrales)](../../../library/it/windows/windows-en-profondeur/05-partie-v-modele-de-securite-et-protections/01-chapitre-17-modele-de-securite-integrite-et-mitiga.md)
 { .kw-cs-meta }
@@ -107,6 +109,26 @@ Get-LocalGroupMember -SID S-1-5-32-544   # par SID : indépendant de la langue
 ```bat title="Exemple 2"
 net localgroup Administrateurs
 ```
+
+### Énumérer les comptes et les groupes locaux
+
+```bat title="Commande"
+net user
+net localgroup
+net localgroup administrators
+```
+
+Le dernier nom vaut pour un Windows anglais ; utiliser `Administrateurs` en français, ou `Get-LocalGroupMember -SID S-1-5-32-544`. Repérer comptes de service, groupes inhabituels, descriptions et appartenances trop larges (administration, RDP, sauvegarde, gestion distante, lecture des journaux, Hyper-V, IIS). Les droits effectifs dépendent aussi du token et des politiques.
+
+### Voir la politique de mot de passe et de verrouillage
+
+```bat title="Commande"
+net accounts
+```
+
+Lire les âges minimum/maximum, la longueur minimale, l'historique et le seuil/durée/fenêtre de verrouillage. Une longueur minimale nulle ou l'absence de verrouillage est un point à examiner ; cela ne prouve pas que les mots de passe sont vides ou faibles.
+
+`net accounts /domain` interroge la politique du domaine ; elle peut différer de la politique locale et des stratégies affinées appliquées à certains comptes. La présence d'un groupe RDP ou administrateur ne garantit pas à elle seule un accès effectif.
 
 ## Permissions NTFS
 

@@ -2,7 +2,7 @@
 title: CMD — aide-mémoire
 source: IT/02 Windows/Ligne de commande/CMD — aide-mémoire.md
 format: aide-memoire
-revue: '2026-04-13'
+revue: '2026-10-24'
 ---
 
 #### CMD
@@ -109,12 +109,22 @@ revue: '2026-04-13'
 | Groupes | `whoami /groups` | Groupes du compte courant |
 | Comptes locaux | `net user` | Liste des users |
 | Groupes locaux | `net localgroup` | Groupes de la machine |
+| Token complet | `whoami /all` | Identité, groupes, privilèges et intégrité ; `Disabled` reste présent dans le token |
+| Sessions ouvertes | `query user` | État actif/déconnecté, session locale ou RDP |
+| Nom de l'utilisateur | `echo %USERNAME%` | En PowerShell : `$env:USERNAME` |
+| Administrateurs locaux | `net localgroup administrators` | `Administrateurs` sur Windows français ; PowerShell : `Get-LocalGroupMember -SID S-1-5-32-544` |
+| Politique de comptes | `net accounts` | Âges, longueur, historique et verrouillage ; `/domain` pour le domaine |
+| Correctifs (historique) | `wmic qfe` | WMIC déprécié, parfois absent ; préférer PowerShell `Get-HotFix` ; inventaire partiel |
+| Connexions et écoute | `netstat -ano` | `-a` : tout, `-n` : numérique, `-o` : PID ; loopback ≠ toutes les interfaces |
+| Processus d'un PID | `tasklist /FI "PID eq 3520"` | Corréler avec `netstat -ano` puis `tasklist /svc` |
 | Partages de la machine | `net share` | C$, ADMIN$, IPC$, partages nommés |
 | Découverte ressources | `net view` | Ressources connues |
 
 ---
 
 ## 8) Variables d’environnement
+
+Pour l'état des lieux complet et l'interprétation : [Énumération Initiale](elevation-de-privileges-sous-windows-windows-privilege-escalation/03-enumeration-initiale.md).
 
 | Action | Commande | Exemple / Notes |
 | --- | --- | --- |
