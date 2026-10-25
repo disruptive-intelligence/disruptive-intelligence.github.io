@@ -108,6 +108,11 @@
       pourquoi: Grand nombre de rapports de pentest publics
   - nom: Forensic & preuve numérique
     liens:
+    - nom: auteqia — DFIR ORC
+      url: https://auteqia.garden/posts/dfir/dfir-orc/
+      type: Article
+      pourquoi: Ressource consacrée à DFIR ORC, l'outil de collecte d'artefacts forensiques Windows de l'ANSSI
+      ajoute_le: '2026-10-25'
     - nom: Conseil de l'Europe — Electronic evidence (SOP)
       url: https://rm.coe.int/3692-sop-electronic-evidence/168097d7cb
       type: Guide
