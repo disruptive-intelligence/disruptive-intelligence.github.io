@@ -208,6 +208,17 @@ nav:
                 - OU, ordinateurs et GPO: cheatsheets/windows/administration/active-directory/ou-ordinateurs-gpo.md
                 - Kerberos, DC et comptes de service: cheatsheets/windows/administration/active-directory/kerberos-dc.md
                 - Contrôles d'hygiène: cheatsheets/windows/administration/active-directory/hygiene.md
+        - 🛡️ Durcissement:
+            - cheatsheets/windows/durcissement/index.md
+            - Comptes et privilèges: cheatsheets/windows/durcissement/comptes.md
+            - Identifiants et secrets: cheatsheets/windows/durcissement/identifiants.md
+            - Exécution et applications: cheatsheets/windows/durcissement/execution.md
+            - Services, droits et persistance: cheatsheets/windows/durcissement/services.md
+            - Réseau et accès distant: cheatsheets/windows/durcissement/reseau.md
+            - Defender et protections: cheatsheets/windows/durcissement/protections.md
+            - Démarrage, chiffrement et périphériques: cheatsheets/windows/durcissement/demarrage.md
+            - Journalisation et surveillance: cheatsheets/windows/durcissement/journalisation.md
+            - Mises à jour, référentiel et maintien: cheatsheets/windows/durcissement/maintien.md
     - 🔌 Accès distant (SSH, RDP, VNC): cheatsheets/acces-distant.md
     - 🧬 Forensic:
         - cheatsheets/forensic/index.md

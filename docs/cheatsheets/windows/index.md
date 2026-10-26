@@ -41,4 +41,18 @@ Modifier le système.
 - [Disques, archives et transferts](administration/disques.md) — Espace disque, BitLocker, zip, robocopy, copie vers une autre machine.
 - [Active Directory au quotidien](administration/active-directory/index.md) — Comptes, verrouillages, groupes, OU et ordinateurs, LAPS, gMSA, GPO, Kerberos, santé des DC, contrôles d'hygiène.
 
+## [🛡️ Durcissement](durcissement/index.md)
+
+Durcir un poste de travail : la méthode, le plan P0 / P1 / P2 et une check-list ; pour chaque mesure, à quoi elle sert, comment la vérifier et l'appliquer.
+
+- [Comptes et privilèges](durcissement/comptes.md) — Administrateurs locaux, comptes par défaut, compte du quotidien, mots de passe, UAC, privilèges sensibles, comptes de service.
+- [Identifiants et secrets](durcissement/identifiants.md) — Credential Guard, RunAsPPL, WDigest, LAPS, cache, NTLM, secrets en clair, coffre.
+- [Exécution et applications](durcissement/execution.md) — AppLocker, App Control, PowerShell restreint et signé, Mark of the Web, SmartScreen, macros.
+- [Services, droits et persistance](durcissement/services.md) — Services inutiles ou trop privilégiés, permissions, `PATH`, démarrage automatique.
+- [Réseau et accès distant](durcissement/reseau.md) — Pare-feu, LLMNR, NetBIOS, SMB, partages, bureau à distance, WinRM.
+- [Defender et protections](durcissement/protections.md) — Composants de Defender, falsifications, exclusions, ASR, rançongiciels, exploits, HVCI.
+- [Démarrage, chiffrement et périphériques](durcissement/demarrage.md) — Secure Boot, TPM, BitLocker, supports amovibles.
+- [Journalisation et surveillance](durcissement/journalisation.md) — Audit avancé, 4688, PowerShell, Sysmon, centralisation, effacement.
+- [Mises à jour, référentiel et maintien](durcissement/maintien.md) — Version supportée, correctifs vérifiés, baseline, conformité, exceptions, sauvegardes.
+
 Pour l'investigation, voir aussi [Artefacts Windows](../forensic/windows/artefacts/index.md).
