@@ -6,6 +6,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:        # bouton "Run workflow" pour relancer à la main
+  schedule:                 # veille vulnérabilités : flux relus (CERT-FR, CERT Santé, KEV…) — 6 h 15, 9 h 15, 12 h 15, 15 h 15 et 18 h 15 heure d'hiver
+    - cron: "15 5,8,11,14,17 * * *"
 
 permissions:
   contents: read

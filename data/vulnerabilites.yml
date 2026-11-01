@@ -1,0 +1,50 @@
+# Veille vulnérabilités (maintien en condition de sécurité) — flux relus à chaque construction du site.
+# Accueil : bloc « Vulnérabilités du jour » ; Ressources : page « 🚨 Veille vulnérabilités ».
+# Les sites de référence (liens) sont dans data/ressources.yml, rubrique « Vulnérabilités & CVE » (clé « groupe »).
+#
+#   - id: identifiant court
+#     nom: libellé affiché
+#     format: rss | kev | euvd     (rss = flux RSS 2.0 ; kev = catalogue JSON de la CISA ; euvd = API de l'ENISA)
+#     url: adresse du flux
+#     site: page à ouvrir pour tout voir
+#     role: une phrase sur ce que l'on y cherche
+#     exploitee: true               (les éléments sont des vulnérabilités exploitées : « À traiter en priorité »)
+flux:
+  - id: certfr-alertes
+    nom: CERT-FR · Alertes
+    format: rss
+    url: https://www.cert.ssi.gouv.fr/alerte/feed/
+    site: https://www.cert.ssi.gouv.fr/alerte/
+    role: Alertes en cours — vulnérabilités critiques exploitées ou sur le point de l'être.
+    exploitee: true
+  - id: cisa-kev
+    nom: CISA · KEV
+    format: kev
+    url: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+    site: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    role: Derniers ajouts au catalogue des vulnérabilités exploitées dans la nature.
+    exploitee: true
+  - id: certfr-avis
+    nom: CERT-FR · Avis
+    format: rss
+    url: https://www.cert.ssi.gouv.fr/avis/feed/
+    site: https://www.cert.ssi.gouv.fr/avis/
+    role: Bulletins de sécurité du jour, produit par produit, avec CVE et correctifs.
+  - id: cert-sante
+    nom: CERT Santé
+    format: rss
+    url: https://cyberveille.esante.gouv.fr/alertes-et-vulnerabilites/rss.xml
+    site: https://cyberveille.esante.gouv.fr/alertes-et-vulnerabilites
+    role: Alertes et vulnérabilités de l'ANS, une fiche par CVE, filtrables par CVSS et exploitation.
+  - id: cert-eu
+    nom: CERT-EU · Avis
+    format: rss
+    url: https://cert.europa.eu/publications/security-advisories-rss
+    site: https://cert.europa.eu/publications/security-advisories/
+    role: Avis de sécurité des institutions européennes, souvent sur les produits les plus exposés.
+  - id: euvd-critiques
+    nom: ENISA EUVD · Critiques
+    format: euvd
+    url: https://euvdservices.enisa.europa.eu/api/search?fromScore=9&toScore=10&size=12
+    site: https://euvd.enisa.europa.eu/
+    role: Dernières vulnérabilités notées 9 ou plus (CVSS) dans la base européenne.

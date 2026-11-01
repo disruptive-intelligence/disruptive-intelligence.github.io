@@ -4,3 +4,6 @@ site/
 # Python
 .venv/
 __pycache__/
+
+# Cache des flux de la veille vulnérabilités (hooks/portal.py), relu toutes les 30 min en local
+.cache/

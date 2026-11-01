@@ -84,18 +84,147 @@
       pourquoi: Échantillons de malwares (abuse.ch)
   - nom: Vulnérabilités & CVE
     liens:
-    - nom: NVD
-      url: https://nvd.nist.gov/
-      type: Encyclopédie
-      pourquoi: Base de vulnérabilités du NIST, scores CVSS
+    - nom: CERT-FR — Alertes
+      url: https://www.cert.ssi.gouv.fr/alerte/
+      type: Bulletin
+      pourquoi: "Alertes en cours : vulnérabilités critiques exploitées ou imminentes, à traiter en premier"
+      groupe: Alertes officielles
+      ajoute_le: '2026-11-01'
+    - nom: CERT-FR — Avis
+      url: https://www.cert.ssi.gouv.fr/avis/
+      type: Bulletin
+      pourquoi: "Avis de sécurité quotidiens par produit, avec CVE, risques et correctifs"
+      groupe: Alertes officielles
+      ajoute_le: '2026-11-01'
+    - nom: CERT Santé — Alertes et vulnérabilités
+      url: https://cyberveille.esante.gouv.fr/alertes-et-vulnerabilites
+      type: Bulletin
+      pourquoi: "Une fiche par CVE, filtrable par CVSS, exploitation active et correctif existant"
+      groupe: Alertes officielles
+      ajoute_le: '2026-11-01'
+    - nom: CERT-EU — Security advisories
+      url: https://cert.europa.eu/publications/security-advisories/
+      type: Bulletin
+      pourquoi: "Avis du CERT des institutions européennes sur les produits les plus exposés"
+      groupe: Alertes officielles
+      ajoute_le: '2026-11-01'
     - nom: CISA KEV
       url: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
       type: Encyclopédie
-      pourquoi: Vulnérabilités activement exploitées
+      pourquoi: "Vulnérabilités activement exploitées, avec échéance de correction"
+      groupe: Alertes officielles
+    - nom: NVD
+      url: https://nvd.nist.gov/
+      type: Encyclopédie
+      pourquoi: "Base de vulnérabilités du NIST, scores CVSS"
+      groupe: Bases et priorisation
     - nom: CVE.org
       url: https://www.cve.org/
       type: Encyclopédie
-      pourquoi: Référentiel officiel des identifiants CVE
+      pourquoi: "Référentiel officiel des identifiants CVE"
+      groupe: Bases et priorisation
+    - nom: ENISA — EUVD
+      url: https://euvd.enisa.europa.eu/
+      type: Encyclopédie
+      pourquoi: "Base européenne des vulnérabilités : CVSS, EPSS, listes des critiques et des exploitées"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-01'
+    - nom: FIRST — EPSS
+      url: https://www.first.org/epss/
+      type: Outil
+      pourquoi: "Probabilité d'exploitation d'une CVE dans les 30 jours, pour prioriser au-delà du CVSS"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-01'
+    - nom: FIRST — Calculateur CVSS 4.0
+      url: https://www.first.org/cvss/calculator/4.0
+      type: Outil
+      pourquoi: "Relire un vecteur CVSS et ajuster le score à son contexte"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-01'
+    - nom: CIRCL — Vulnerability-Lookup
+      url: https://vulnerability.circl.lu/
+      type: Outil
+      pourquoi: "Recherche par produit ou éditeur dans NVD, GHSA et les avis CSAF des éditeurs"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-01'
+    - nom: GitHub Advisory Database
+      url: https://github.com/advisories
+      type: Encyclopédie
+      pourquoi: "Vulnérabilités des dépendances open source (npm, PyPI, Maven…)"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-01'
+    - nom: Microsoft — Security Update Guide
+      url: https://msrc.microsoft.com/update-guide
+      type: Bulletin
+      pourquoi: "Correctifs Microsoft, publiés le Patch Tuesday (2e mardi du mois)"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Cisco — Security Advisories
+      url: https://sec.cloudapps.cisco.com/security/center/publicationListing.x
+      type: Bulletin
+      pourquoi: "Avis du PSIRT Cisco, filtrables par produit et criticité"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Fortinet — PSIRT
+      url: https://www.fortiguard.com/psirt
+      type: Bulletin
+      pourquoi: "Avis FortiOS, FortiGate, FortiManager… publiés chaque 2e mardi et en urgence"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Palo Alto Networks — Security Advisories
+      url: https://security.paloaltonetworks.com/
+      type: Bulletin
+      pourquoi: "Avis PAN-OS et GlobalProtect"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Broadcom (VMware) — Security Advisories
+      url: https://support.broadcom.com/web/ecx/security-advisory
+      type: Bulletin
+      pourquoi: "Avis VMware ESXi, vCenter, Workstation"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Citrix — Security Bulletins
+      url: https://support.citrix.com/securitybulletins
+      type: Bulletin
+      pourquoi: "Avis NetScaler ADC et Gateway, Citrix Workspace"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Oracle — Critical Patch Updates
+      url: https://www.oracle.com/security-alerts/
+      type: Bulletin
+      pourquoi: "Correctifs trimestriels Oracle (3e mardi de janvier, avril, juillet, octobre)"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Red Hat — Security Updates
+      url: https://access.redhat.com/security/security-updates/
+      type: Bulletin
+      pourquoi: "Errata de sécurité RHEL, avec gravité Red Hat"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Debian — Security Tracker
+      url: https://security-tracker.debian.org/tracker/
+      type: Outil
+      pourquoi: "État d'une CVE dans chaque version de Debian"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Ubuntu — Security Notices
+      url: https://ubuntu.com/security/notices
+      type: Bulletin
+      pourquoi: "Avis USN par paquet et version d'Ubuntu"
+      groupe: Bulletins des éditeurs
+      ajoute_le: '2026-11-01'
+    - nom: Zero Day Initiative — Advisories
+      url: https://www.zerodayinitiative.com/advisories/published/
+      type: Bulletin
+      pourquoi: "Vulnérabilités divulguées par ZDI, souvent avant le correctif"
+      groupe: Exploitation et preuves de concept
+      ajoute_le: '2026-11-01'
+    - nom: Exploit-DB
+      url: https://www.exploit-db.com/
+      type: Encyclopédie
+      pourquoi: "Savoir si un exploit public existe pour une CVE"
+      groupe: Exploitation et preuves de concept
+      ajoute_le: '2026-11-01'
   - nom: Pentest & write-ups
     liens:
     - nom: 0xdf hacks stuff

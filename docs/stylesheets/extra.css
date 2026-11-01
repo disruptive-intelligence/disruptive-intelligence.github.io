@@ -1658,3 +1658,83 @@ body[data-md-color-scheme="default"]::after {
   background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 8px; }
 .md-typeset .kw-labs-filter span { font-size: .66rem; }
 .md-typeset .kw-lab__skills { display: block; font-size: .68rem; color: var(--md-default-fg-color--light); }
+
+/* =========================================================
+   Veille vulnérabilités (accueil, Ressources) — flux lus à la construction par hooks/portal.py
+   ========================================================= */
+.md-typeset .kw-vhome__lead { margin: -.3rem 0 .7rem; font-size: .68rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-vuln-age.is-old { color: #e0b12a; }
+
+/* Une carte par source : en carrousel sur l'accueil, en grille sur la page dédiée */
+.kw-carousel--vuln { align-items: stretch; }
+.kw-carousel--vuln .kw-vcard { flex: 0 0 21rem; scroll-snap-align: start; }
+.md-typeset .kw-vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: 1rem; }
+.md-typeset .kw-vcard { display: flex; flex-direction: column; padding: .8rem 1rem .6rem; background: var(--kw-panel);
+  border: 1px solid var(--kw-line); border-radius: 10px; min-width: 0; }
+.md-typeset .kw-vcard--hot { border-top: 3px solid #ed4d5a; }
+.md-typeset .kw-vcard__head { display: flex; align-items: baseline; gap: .5rem; }
+.md-typeset .kw-vcard__name { font-size: .82rem; font-weight: 800; }
+.md-typeset a.kw-vcard__site { margin-left: auto; font-size: .62rem; font-weight: 600; white-space: nowrap; }
+.md-typeset .kw-vcard__role { margin: .15rem 0 .35rem; font-size: .62rem; line-height: 1.45; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-vcard__empty { font-size: .68rem; margin: .4rem 0; }
+
+/* Lignes : date à gauche, titre, pastilles */
+.md-typeset ul.kw-vlist { list-style: none; margin: 0; padding: 0; }
+.md-typeset .kw-vlist li.kw-vl { display: flex; gap: .7rem; margin: 0; padding: .45rem 0; border-top: 1px solid var(--kw-line); }
+.md-typeset .kw-vl__date { flex: 0 0 2.9rem; font-size: .6rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  color: var(--md-default-fg-color--lighter); padding-top: .12rem; white-space: nowrap; }
+.md-typeset .kw-vl__body { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.md-typeset .kw-vl__title { font-size: .72rem; font-weight: 700; line-height: 1.35; }
+.md-typeset .kw-vl__title a { color: var(--md-default-fg-color); }
+.md-typeset .kw-vl__title a:hover { color: var(--kw-link); }
+.md-typeset .kw-carousel--vuln .kw-vl__title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.md-typeset .kw-vl__text { font-size: .64rem; line-height: 1.45; color: var(--md-default-fg-color--light);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.md-typeset .kw-vl__badges { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; }
+.md-typeset .kw-vl__ref { font-size: .56rem; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-vb { font-size: .56rem; font-weight: 700; padding: .02rem .4rem; border-radius: 1em; white-space: nowrap;
+  background: var(--kw-soft); border: 1px solid var(--kw-line); color: var(--md-default-fg-color--light); }
+.md-typeset .kw-vb--cve { font-family: var(--md-code-font-family); font-weight: 500; }
+.md-typeset .kw-vb--src { color: var(--kw-sub); border-color: var(--kw-toggle-line); }
+.md-typeset .kw-vb--crit { color: #fff; background: #c8323f; border-color: #c8323f; }
+.md-typeset .kw-vb--high { color: #1a1313; background: #f08c3a; border-color: #f08c3a; }
+.md-typeset .kw-vb--med { color: #1a1313; background: #e0b12a; border-color: #e0b12a; }
+.md-typeset .kw-vb--epss { color: var(--kw-link); border-color: var(--kw-toggle-line); }
+.md-typeset .kw-vb--epss.is-hot { color: #fff; background: #6a4fd0; border-color: #6a4fd0; }
+.md-typeset .kw-vb--new { color: #1a1313; background: #f2c94c; border-color: #f2c94c; }
+
+/* À traiter en priorité : liste large, filet rouge */
+.md-typeset ul.kw-vlist--prio { padding: .1rem 1rem; background: var(--kw-panel); border: 1px solid var(--kw-line);
+  border-left: 4px solid #ed4d5a; border-radius: 10px; }
+.md-typeset .kw-vlist--prio li.kw-vl:first-child { border-top: 0; }
+.md-typeset .kw-vlist--prio .kw-vl__title { font-size: .78rem; }
+
+/* Calendrier des correctifs */
+.md-typeset .kw-vcals { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; }
+.md-typeset .kw-vcal { display: flex; flex-direction: column; gap: .15rem; padding: .8rem 1rem; background: var(--kw-panel);
+  border: 1px solid var(--kw-line); border-radius: 10px; }
+.md-typeset .kw-vcal__date { font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--md-default-fg-color--lighter); }
+.md-typeset .kw-vcal__name { font-size: .9rem; font-weight: 800; }
+.md-typeset .kw-vcal__who { font-size: .66rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-vcal__left { font-size: .62rem; font-weight: 700; color: var(--kw-link); }
+
+/* Routine du matin et sites de référence */
+.md-typeset ol.kw-vroutine { margin-left: 1.2rem; }
+.md-typeset ol.kw-vroutine li { font-size: .74rem; margin: .3rem 0; }
+.md-typeset .kw-vsites h3 { margin: 1.1rem 0 .1rem; font-size: .78rem; font-weight: 800; color: var(--kw-sub); }
+
+/* Encart vers la page (Ressources, rubrique Vulnérabilités & CVE) */
+.md-typeset a.kw-vbanner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .3rem 1rem; margin: 1rem 0 .4rem;
+  padding: .75rem 1.1rem; border: 1px solid var(--kw-line); border-left: 4px solid #ed4d5a; border-radius: 10px;
+  background: var(--kw-panel); color: var(--md-default-fg-color); transition: border-color .15s; }
+.md-typeset a.kw-vbanner:hover { border-color: var(--kw-link); border-left-color: #ed4d5a; }
+.md-typeset .kw-vbanner__name { font-size: .9rem; font-weight: 800; white-space: nowrap; }
+.md-typeset .kw-vbanner__text { font-size: .68rem; color: var(--md-default-fg-color--light); }
+.md-typeset .kw-vbanner__count { font-size: .62rem; font-weight: 700; color: var(--kw-link); white-space: nowrap; }
+
+@media screen and (max-width: 45em) {
+  .kw-carousel--vuln .kw-vcard { flex-basis: 85vw; }
+  .md-typeset .kw-vgrid { grid-template-columns: minmax(0, 1fr); }
+  .md-typeset a.kw-vbanner { grid-template-columns: 1fr; }
+  .md-typeset .kw-vbanner__name, .md-typeset .kw-vbanner__count { white-space: normal; }
+}

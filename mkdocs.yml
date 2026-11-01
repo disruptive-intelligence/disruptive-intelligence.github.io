@@ -78,6 +78,7 @@ extra_javascript:
   - javascripts/mindmaps.js            # cheat sheets : cartes mentales repliables
   - javascripts/analyses.js            # analyses : filtre et sujets
   - javascripts/ressources.js          # ressources : recherche dédiée et types
+  - javascripts/vulnerabilites.js      # veille vulnérabilités : heure de lecture des flux, « nouveau »
   - javascripts/images-zoom.js         # images des notes : agrandissement au clic
   - javascripts/bibliotheque.js             # Bibliothèque : domaines, rubriques et détail ; page Filtrer par titre
 

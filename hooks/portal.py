@@ -1044,6 +1044,8 @@ def pages_ressources(themes):
             body = (f'---\ntitle: "{r["nom"]}"\nhide:\n  - footer\n---\n'
                     f'<div class="kw-dom-hero kw-dom-hero--cat" markdown>\n{res_eyebrow(t, rsrc)}\n\n# {r["nom"]}\n\n'
                     f'<span class="kw-dom-stats">{res_count(lst)}</span>\n</div>\n\n')
+            if r["nom"] == VULN_RUBRIC:                  # renvoi vers la page dédiée (flux du jour, calendrier)
+                body += vuln_banner(STATE.get("vulns"), rsrc) + "\n\n"
             body += ('<div class="kw-chapter__grid kw-chapter__grid--solo">' + "".join(res_item(l, rsrc) for l in lst)
                      + "</div>\n" if lst else '!!! note "À compléter"\n    Aucune ressource pour l\'instant dans cette rubrique.\n')
             out.append((rsrc, body))
@@ -1107,7 +1109,8 @@ def page_ressources_index(themes):
     recent_block = (section_bar("Derniers ajouts", anchor="derniers-ajouts")
                     + '<p class="kw-muted">Dates d’ajout à cette sélection, non de publication des sources.</p>'
                     + f'<div class="kw-chapter__grid">{recent_cards}</div>') if recent else ""
-    nav = (('<a href="#derniers-ajouts">Derniers ajouts</a> ' if recent else "")
+    nav = (f'<a href="{href(src, VULN_SRC)}">🚨 Veille vulnérabilités</a> '
+           + ('<a href="#derniers-ajouts">Derniers ajouts</a> ' if recent else "")
            + " ".join(f'<a href="#{t["id"]}">{esc(bare(t["label"]))}</a>' for t in themes))
     hits = "".join(
         res_item(l, src, f'<a href="{href(src, res_src(t))}">{esc(bare(t["label"]))}</a> · '
@@ -1152,6 +1155,7 @@ La Bibliothèque garde mes notes ; ici, les meilleures adresses des autres.</p>
 </div>
 
 <div class="kw-rs-browse">
+{vuln_banner(STATE.get("vulns"), src)}
 {recent_block}
 {doms}</div>
 """
@@ -1396,6 +1400,7 @@ hide:
 </div>
 {section_bar("À la une")}{une}
 {essentiel_block(briefs[0], src) if briefs else ""}
+{vuln_home(STATE.get("vulns"), src)}
 {section_bar("Veille récente", more=("Toutes les éditions →", "veille/"))}
 <div class="kw-carousel">{"".join(edition_card(it, src) for it in briefs[1:RECENT_EDITIONS])}{all_editions_card(src)}</div>
 {section_bar("Analyses récentes", more=("Analyses & dossiers →", "analyses/"))}
@@ -3757,6 +3762,366 @@ def write_feeds(config):
     write_news_feed(config)
 
 
+# ---------------------------------------------------------------- veille vulnérabilités (MCS)
+
+# Flux lus pendant la construction du site (data/vulnerabilites.yml) : pas de CORS, rien à lancer à la main.
+# Le site est reconstruit par la veille du matin et par le planning de deploy.yml ; en local, un cache
+# (.cache/vulnerabilites.json, hors Git) évite de relire les flux à chaque modification.
+# Une source injoignable n'arrête jamais la construction : on garde sa dernière lecture ou on l'annonce indisponible.
+VULN_SRC = "veille/ressources/vulnerabilites.md"
+VULN_TAB = "🚨 Veille vulnérabilités"
+VULN_RUBRIC = "Vulnérabilités & CVE"         # rubrique de data/ressources.yml : les sites de référence
+VULN_CACHE = ".cache/vulnerabilites.json"
+VULN_TTL = timedelta(minutes=30)
+VULN_TIMEOUT = 12
+VULN_KEEP = 12                               # éléments gardés par source
+VULN_RECENT = 7                              # « À traiter en priorité » : jours
+CVE_RE = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.I)
+
+
+def vuln_fetch(url):
+    import urllib.request
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; DisruptiveIntelligence/1.0; +https://disruptive-intelligence.github.io/)",
+        "Accept": "application/rss+xml, application/xml, application/json;q=0.9, */*;q=0.5"})
+    with urllib.request.urlopen(req, timeout=VULN_TIMEOUT) as r:
+        return r.read()
+
+
+def vuln_text(raw, n=230):
+    """Texte brut d'une description HTML, coupé proprement."""
+    text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw or ""))).replace("**", "").strip()
+    return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + "…"
+
+
+def vuln_link(url):
+    url = (url or "").strip()
+    return url if url.startswith(("https://", "http://")) else ""
+
+
+def vuln_parse_rss(raw):
+    import xml.etree.ElementTree as ET
+    from email.utils import parsedate_to_datetime
+    out = []
+    for it in ET.fromstring(raw).iter("item"):
+        title = re.sub(r"\s+", " ", it.findtext("title") or "").strip()
+        desc = it.findtext("description") or ""
+        try:
+            when = parsedate_to_datetime(it.findtext("pubDate") or "").astimezone(timezone.utc)
+        except (TypeError, ValueError):
+            continue
+        updated = bool(re.match(r"\[m[àa]j\]", title, re.I))
+        title = re.sub(r"^\[m[àa]j\]\s*", "", title, flags=re.I)
+        title = re.sub(r"\s*\(\d{1,2}(?:er)? \w+ \d{4}\)$", "", title)        # « (27 octobre 2026) » : la date est à côté
+        link = vuln_link(it.findtext("link"))
+        ref = re.search(r"(CERTFR-\d{4}-[A-Z]{3}-\d+)", link or "")
+        num = re.match(r"(\d{4}-\d{3}):\s*", title)                       # CERT-EU : « 2026-018: Critical… »
+        if num:
+            title = title[num.end():]
+        out.append({"title": title, "url": link, "date": when.isoformat(), "text": vuln_text(desc),
+                    "cves": sorted({c.upper() for c in CVE_RE.findall(title + " " + desc)}),
+                    "ref": ref.group(1) if ref else f"CERT-EU {num.group(1)}" if num else "", "maj": updated})
+    return sorted(out, key=lambda x: x["date"], reverse=True)
+
+
+def vuln_parse_kev(raw):
+    data = json.loads(raw)
+    rows = sorted(data.get("vulnerabilities", []), key=lambda v: (v.get("dateAdded", ""), v.get("cveID", "")), reverse=True)
+    out = []
+    for v in rows[:VULN_KEEP]:
+        cve = v.get("cveID", "")
+        out.append({"title": f'{v.get("vendorProject", "")} {v.get("product", "")}'.strip(),
+                    "url": f"https://nvd.nist.gov/vuln/detail/{cve}" if cve else "",
+                    "date": f'{v.get("dateAdded", "")}T00:00:00+00:00',
+                    "text": vuln_text(v.get("vulnerabilityName") or v.get("shortDescription")),
+                    "cves": [cve] if cve else [], "ref": "",
+                    "ransomware": v.get("knownRansomwareCampaignUse") == "Known",
+                    "due": v.get("dueDate", "")})
+    return out
+
+
+def vuln_parse_euvd(raw):
+    data = json.loads(raw)
+    rows = data.get("items", data) if isinstance(data, dict) else data
+    out = []
+    for v in rows:
+        try:
+            when = datetime.strptime(v.get("datePublished", ""), "%b %d, %Y, %I:%M:%S %p").replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        cves = sorted({c.upper() for c in CVE_RE.findall(v.get("aliases") or "")})
+        vendors = ", ".join(dict.fromkeys(
+            (x.get("vendor") or {}).get("name", "") for x in v.get("enisaIdVendor") or [] if (x.get("vendor") or {}).get("name")))
+        products = ", ".join(dict.fromkeys(
+            (x.get("product") or {}).get("name", "") for x in v.get("enisaIdProduct") or [] if (x.get("product") or {}).get("name")))
+        out.append({"title": " ".join(b for b in (vendors, products) if b) or (cves[0] if cves else v.get("id", "")),
+                    "url": f'https://euvd.enisa.europa.eu/vulnerability/{v.get("id", "")}',
+                    "date": when.isoformat(), "text": vuln_text(v.get("description")), "cves": cves,
+                    "ref": v.get("id", ""), "score": v.get("baseScore")})
+    return sorted(out, key=lambda x: x["date"], reverse=True)
+
+
+VULN_PARSERS = {"rss": vuln_parse_rss, "kev": vuln_parse_kev, "euvd": vuln_parse_euvd}
+
+
+def vuln_epss(cves):
+    """Scores EPSS (FIRST) des CVE affichées, en un appel : {cve: probabilité d'exploitation à 30 jours}."""
+    scores = {}
+    cves = sorted(cves)
+    for i in range(0, len(cves), 80):
+        for _ in range(2):                                  # une seconde tentative : l'API répond parfois en retard
+            try:
+                data = json.loads(vuln_fetch("https://api.first.org/data/v1/epss?cve=" + ",".join(cves[i:i + 80])))
+                scores.update({d["cve"]: float(d["epss"]) for d in data.get("data", [])})
+                break
+            except Exception:                               # noqa: BLE001 — un enrichissement, jamais bloquant
+                continue
+    return scores
+
+
+def load_vulns(root):
+    """Lit les flux (en parallèle), garde la dernière lecture réussie de chaque source, ajoute l'EPSS.
+    PORTAL_VULNS=off : aucune lecture réseau (cache seul)."""
+    import os
+    from concurrent.futures import ThreadPoolExecutor
+    conf = (load_yaml(root / "data" / "vulnerabilites.yml", {}) or {}).get("flux") or []
+    cache_path = root / VULN_CACHE
+    try:
+        cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
+    now = datetime.now(timezone.utc)
+    fetched = cache.get("fetched")
+    fresh = (fetched and now - datetime.fromisoformat(fetched) < VULN_TTL
+             and set(cache.get("sources", {})) >= {f["id"] for f in conf})
+    if not fresh and os.environ.get("PORTAL_VULNS", "").lower() not in ("off", "0", "non"):
+        def read(f):
+            try:
+                return f["id"], VULN_PARSERS[f["format"]](vuln_fetch(f["url"]))[:VULN_KEEP], None
+            except Exception as e:                          # noqa: BLE001 — source injoignable ou format changé
+                return f["id"], None, f"{type(e).__name__}: {str(e)[:120]}"
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            results = list(pool.map(read, conf))
+        sources = cache.get("sources", {})
+        for sid, items, err in results:
+            if items is not None:
+                sources[sid] = {"items": items, "at": now.isoformat(), "ok": True}
+            else:
+                sources.setdefault(sid, {"items": [], "at": None})
+                sources[sid].update(ok=False, error=err)
+                print(f"Veille vulnérabilités : {sid} injoignable ({err}), dernière lecture conservée.")
+        cves = {c for s in sources.values() for it in s["items"] for c in it.get("cves", [])}
+        epss = vuln_epss(cves) or cache.get("epss", {})
+        cache = {"fetched": now.isoformat(), "sources": sources, "epss": epss}
+        try:
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+        except OSError:
+            pass
+    sources = cache.get("sources", {})
+    epss = cache.get("epss", {})
+    feeds = []
+    for f in conf:
+        s = sources.get(f["id"], {})
+        items = []
+        for it in s.get("items", []):
+            it = dict(it, when=datetime.fromisoformat(it["date"]))
+            it["epss"] = max((epss.get(c, 0) for c in it.get("cves", [])), default=0)
+            items.append(it)
+        feeds.append(dict(f, items=items, ok=s.get("ok", False), at=s.get("at")))
+    return {"feeds": feeds, "fetched": cache.get("fetched")}
+
+
+def vuln_priority(vulns, days=VULN_RECENT):
+    """Vulnérabilités exploitées apparues ces derniers jours (alertes CERT-FR, ajouts KEV), les plus récentes d'abord."""
+    since = datetime.now(timezone.utc) - timedelta(days=days)
+    rows = [(it, f) for f in vulns["feeds"] if f.get("exploitee") for it in f["items"] if it["when"] >= since]
+    return sorted(rows, key=lambda x: (x[0]["when"], x[0]["epss"]), reverse=True)
+
+
+def vuln_day(when):
+    return f'{when.day} {short_month(when)}'
+
+
+def vuln_badges(it, feed=None):
+    out = []
+    if feed is not None:
+        out.append(f'<span class="kw-vb kw-vb--src">{esc(feed["nom"])}</span>')
+    if it.get("score"):
+        s = float(it["score"])
+        out.append(f'<span class="kw-vb kw-vb--{"crit" if s >= 9 else "high" if s >= 7 else "med"}">CVSS {s:g}</span>')
+    if it.get("epss", 0) >= 0.01:
+        e = it["epss"]
+        out.append(f'<span class="kw-vb kw-vb--epss{" is-hot" if e >= .1 else ""}" '
+                   f'title="EPSS : probabilité d’exploitation dans les 30 jours">EPSS {e * 100:.0f} %</span>')
+    if it.get("ransomware"):
+        out.append('<span class="kw-vb kw-vb--crit">Rançongiciel</span>')
+    if it.get("maj"):
+        out.append('<span class="kw-vb">Mise à jour</span>')
+    for c in it.get("cves", [])[:2]:
+        out.append(f'<span class="kw-vb kw-vb--cve">{esc(c)}</span>')
+    if len(it.get("cves", [])) > 2:
+        out.append(f'<span class="kw-vb kw-vb--cve">+{len(it["cves"]) - 2}</span>')
+    return "".join(out)
+
+
+def vuln_line(it, feed=None, text=False):
+    title = esc(it["title"])
+    head = f'<a href="{esc(it["url"])}">{title}</a>' if it.get("url") else title
+    due = f'échéance CISA {date.fromisoformat(it["due"]).strftime("%d/%m")}' if it.get("due") else ""
+    ref = " · ".join(b for b in (esc(it.get("ref", "")), due) if b)
+    return (f'<li class="kw-vl" data-ts="{esc(it["date"])}"><span class="kw-vl__date">{vuln_day(it["when"])}</span>'
+            f'<span class="kw-vl__body"><span class="kw-vl__title">{head}</span>'
+            + (f'<span class="kw-vl__text">{esc(it["text"])}</span>' if text and it.get("text") else "")
+            + f'<span class="kw-vl__badges">{vuln_badges(it, feed)}<span class="kw-vl__ref">{ref}</span></span>'
+            f'</span></li>')
+
+
+def vuln_feed_card(f, n, text=False):
+    """Une source : nom, rôle, n derniers éléments, lien vers le site."""
+    if f["items"]:
+        body = f'<ul class="kw-vlist">{"".join(vuln_line(it, text=text) for it in f["items"][:n])}</ul>'
+    else:
+        body = '<p class="kw-muted kw-vcard__empty">Flux indisponible à la dernière mise à jour du site.</p>'
+    stale = "" if f["ok"] or not f["items"] else '<span class="kw-vb" title="Dernière lecture réussie conservée">ancienne lecture</span>'
+    return (f'<div class="kw-vcard kw-no-gloss{" kw-vcard--hot" if f.get("exploitee") else ""}" id="{esc(f["id"])}">'
+            f'<div class="kw-vcard__head"><span class="kw-vcard__name">{esc(f["nom"])}</span>{stale}'
+            f'<a class="kw-vcard__site" href="{esc(f["site"])}">Ouvrir ↗</a></div>'
+            f'<p class="kw-vcard__role">{esc(f.get("role", ""))}</p>{body}</div>')
+
+
+def vuln_updated(vulns):
+    """« Flux lus le … » : heure locale calculée dans le navigateur (vulnerabilites.js), UTC sans JavaScript."""
+    if not vulns.get("fetched"):
+        return '<span class="kw-muted">Flux pas encore lus.</span>'
+    at = datetime.fromisoformat(vulns["fetched"])
+    return (f'<span class="kw-vuln-age" data-ts="{esc(vulns["fetched"])}">Flux lus le {fr_date(at)} à '
+            f'{at:%H:%M} UTC</span>')
+
+
+def nth_weekday(year, month, weekday, n):
+    d = date(year, month, 1)
+    d += timedelta(days=(weekday - d.weekday()) % 7)
+    return d + timedelta(weeks=n - 1)
+
+
+def patch_calendar(today=None):
+    """Prochains rendez-vous de correctifs : Patch Tuesday (2e mardi) et Oracle CPU (3e mardi de janv., avr., juil., oct.)."""
+    today = today or date.today()
+    out = []
+    y, m = today.year, today.month
+    for _ in range(2):
+        pt = nth_weekday(y, m, 1, 2)
+        if pt >= today:
+            out.append((pt, "Patch Tuesday", "Microsoft, Adobe, SAP, Fortinet, Ivanti, Siemens, Schneider Electric"))
+            break
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    y, m = today.year, today.month
+    for _ in range(13):
+        if m in (1, 4, 7, 10):
+            cpu = nth_weekday(y, m, 1, 3)
+            if cpu >= today:
+                out.append((cpu, "Oracle Critical Patch Update", "Oracle : Java, Database, Fusion Middleware, MySQL…"))
+                break
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    return sorted(out)
+
+
+def vuln_calendar_html(today=None):
+    today = today or date.today()
+    cells = ""
+    for d, name, who in patch_calendar(today):
+        left = (d - today).days
+        when = "aujourd’hui" if left == 0 else "demain" if left == 1 else f"dans {left} jours"
+        cells += (f'<div class="kw-vcal"><span class="kw-vcal__date">{JOURS[d.weekday()]} {fr_date(d)}</span>'
+                  f'<span class="kw-vcal__name">{esc(name)}</span><span class="kw-vcal__who">{esc(who)}</span>'
+                  f'<span class="kw-vcal__left">{when}</span></div>')
+    return f'<div class="kw-vcals">{cells}</div>'
+
+
+def vuln_sites(themes, src):
+    """Les sites de référence : la rubrique « Vulnérabilités & CVE » de data/ressources.yml, par groupe."""
+    rub = next((r for t in themes for r in t["rubriques"] if r["nom"] == VULN_RUBRIC), None)
+    if not rub:
+        return ""
+    groups = {}
+    for link in rub.get("liens") or []:
+        groups.setdefault(link.get("groupe") or "Autres", []).append(link)
+    return "".join(f'<div class="kw-vsites"><h3>{esc(g)}</h3><div class="kw-chapter__grid">'
+                   + "".join(res_item(l, src) for l in links) + "</div></div>" for g, links in groups.items())
+
+
+def vuln_counts(vulns):
+    """Compteurs du bandeau : vulnérabilités exploitées récentes, sources lues."""
+    n = len(vuln_priority(vulns))
+    ok = sum(1 for f in vulns["feeds"] if f["items"])
+    return [f"{n} exploitée{'s' if n > 1 else ''} en {VULN_RECENT} jours" if n else f"aucune exploitée en {VULN_RECENT} jours",
+            f"{ok} source{'s' if ok > 1 else ''} sur {len(vulns['feeds'])}"]
+
+
+def page_vulns(vulns, themes):
+    src = VULN_SRC
+    today = date.today()
+    prio = vuln_priority(vulns)
+    prio_html = (f'<ul class="kw-vlist kw-vlist--prio kw-no-gloss">{"".join(vuln_line(it, f, text=True) for it, f in prio[:10])}</ul>' if prio
+                 else '<p class="kw-muted">Aucune nouvelle vulnérabilité exploitée signalée ces sept derniers jours par le CERT-FR ou la CISA.</p>')
+    nav = ('<a href="#a-traiter-en-priorite">À traiter en priorité</a> <a href="#les-flux">Les flux</a> '
+           '<a href="#calendrier-des-correctifs">Calendrier</a> <a href="#routine-du-matin">Routine du matin</a> '
+           '<a href="#sites-de-reference">Sites de référence</a>')
+    return src, f"""---
+title: Veille vulnérabilités
+description: CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA — le point du matin pour le maintien en condition de sécurité.
+hide:
+  - toc
+  - footer
+---
+<div class="kw-mast kw-mast--vuln kw-no-gloss">
+<div class="kw-mast__top"><span>{JOURS[today.weekday()].capitalize()} {fr_date(today)}</span><span class="kw-mast__count">{" · ".join(vuln_counts(vulns))}</span></div>
+<h1 class="kw-mast__title">🚨 Veille vulnérabilités</h1>
+<p class="kw-mast__lead">Le point du matin pour le maintien en condition de sécurité : alertes officielles, vulnérabilités exploitées
+et bulletins, relus plusieurs fois par jour. {vuln_updated(vulns)}.</p>
+<nav class="kw-mast__nav">{nav}</nav>
+</div>
+{section_bar("À traiter en priorité", anchor="a-traiter-en-priorite")}
+<p class="kw-muted">Vulnérabilités exploitées signalées depuis {VULN_RECENT} jours (alertes CERT-FR, ajouts au catalogue KEV de la CISA).
+EPSS : probabilité d’exploitation dans les 30 jours, calculée par le FIRST.</p>
+{prio_html}
+{section_bar("Les flux", anchor="les-flux")}
+<div class="kw-vgrid">{"".join(vuln_feed_card(f, 8, text=True) for f in vulns["feeds"])}</div>
+{section_bar("Calendrier des correctifs", anchor="calendrier-des-correctifs")}
+{vuln_calendar_html(today)}
+{section_bar("Routine du matin", anchor="routine-du-matin")}
+<ol class="kw-vroutine">
+<li><b>Exploitées d’abord.</b> Alertes CERT-FR et ajouts KEV : un produit du parc est-il concerné ? Si oui, correctif ou contournement en urgence.</li>
+<li><b>Bulletins du jour.</b> Avis CERT-FR, CERT Santé et CERT-EU, puis bulletins des éditeurs du parc : ne garder que les produits et versions déployés.</li>
+<li><b>Prioriser.</b> Exposition Internet, exploitation connue, EPSS, puis CVSS : un 9,8 interne non exploité passe après un 7,5 exposé et exploité.</li>
+<li><b>Tracer.</b> Une décision par vulnérabilité retenue : corriger, contourner ou accepter le risque, avec une échéance.</li>
+</ol>
+{section_bar("Sites de référence", anchor="sites-de-reference")}
+{vuln_sites(themes, src)}
+"""
+
+
+def vuln_home(vulns, src):
+    """Accueil : « Vulnérabilités du jour », une carte par source (exploitées d'abord), cinq lignes chacune."""
+    if not vulns or not any(f["items"] for f in vulns["feeds"]):
+        return ""
+    lead = (f'<p class="kw-vhome__lead kw-no-gloss">{vuln_updated(vulns)} · {" · ".join(vuln_counts(vulns))} · '
+            f'<a href="{href(src, VULN_SRC)}#a-traiter-en-priorite">à traiter en priorité</a></p>')
+    cards = "".join(vuln_feed_card(f, 5) for f in vulns["feeds"])
+    return (section_bar("Vulnérabilités du jour", more=("Tout voir →", href(src, VULN_SRC)))
+            + lead + f'<div class="kw-carousel kw-carousel--vuln">{cards}</div>')
+
+
+def vuln_banner(vulns, src):
+    """Ressources : encart vers la veille vulnérabilités."""
+    bits = vuln_counts(vulns) if vulns else []
+    return (f'<a class="kw-vbanner kw-no-gloss" href="{href(src, VULN_SRC)}"><span class="kw-vbanner__name">🚨 Veille vulnérabilités</span>'
+            f'<span class="kw-vbanner__text">CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA : les flux du jour, '
+            f'le calendrier des correctifs et les sites de référence.</span>'
+            + (f'<span class="kw-vbanner__count">{" · ".join(bits)}</span>' if bits else "") + '</a>')
+
+
 # ---------------------------------------------------------------- hooks MkDocs
 
 def on_config(config):
@@ -3796,7 +4161,8 @@ def on_config(config):
     STATE["parcours"] = load_parcours(root, library)
 
     STATE["news"] = compute_news(items, library, root, docs_dir)
-    pages = [page_veille(items, sources), page_dossiers(items), page_news(STATE["news"])]
+    STATE["vulns"] = load_vulns(root)
+    pages = [page_veille(items, sources), page_dossiers(items), page_news(STATE["news"]), page_vulns(STATE["vulns"], themes)]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages += pages_parcours()
@@ -3834,7 +4200,7 @@ def on_config(config):
         if isinstance(e, dict) and LIBRARY_TAB in e:   # puis l'onglet Ressources juste après
             children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
             nav[i] = {LIBRARY_TAB: list(children) + library_nav(library)}
-            nav.insert(i + 1, {RESSOURCES_TAB: [RESSOURCES_SRC] + [
+            nav.insert(i + 1, {RESSOURCES_TAB: [RESSOURCES_SRC, {VULN_TAB: VULN_SRC}] + [
                 {t["label"]: [f"veille/ressources/{t['id']}/index.md"]
                  + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
                 for t in themes]})
