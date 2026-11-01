@@ -1,0 +1,23 @@
+# Fin de support — produits courants en entreprise et dans les administrations, suivis via endoflife.date.
+# Page « 🚨 Veille vulnérabilités » (bloc « Fin de support ») et carte de l'accueil.
+# Nom du produit = identifiant endoflife.date (https://endoflife.date/api/v1/products : champ « name »).
+# Un produit inconnu ou injoignable est simplement ignoré.
+familles:
+  - nom: Systèmes
+    produits: [windows, windows-server, macos, ios, android, rhel, ubuntu, debian, sles, oracle-linux, rocky-linux, almalinux]
+  - nom: Microsoft
+    produits: [msexchange, mssqlserver, sharepoint, office, dotnet, powershell]
+  - nom: Virtualisation et sauvegarde
+    produits: [esxi, vcenter, citrix-vad, proxmox-ve, veeam-backup-and-replication]
+  - nom: Réseau et sécurité
+    produits: [fortios, panos, cisco-ios-xe, openssl, openvpn, keycloak]
+  - nom: Développement et outillage
+    produits: [gitlab, jenkins, confluence, jira-software, kubernetes, docker-engine, ansible]
+  - nom: Serveurs d'applications et langages
+    produits: [tomcat, nginx, apache-http-server, php, python, nodejs, oracle-jdk, eclipse-temurin, spring-boot]
+  - nom: Bases de données
+    produits: [postgresql, mysql, mariadb, oracle-database, mongodb, elasticsearch, redis]
+  - nom: Applications
+    produits: [zabbix, centreon, grafana, nextcloud, moodle, wordpress, drupal, libreoffice, firefox]
+# Produits dont seules les versions LTS sont suivies (versions intermédiaires nombreuses et rarement déployées).
+lts_seulement: [jira-software, confluence]

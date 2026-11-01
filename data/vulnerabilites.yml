@@ -8,7 +8,8 @@
 #     url: adresse du flux
 #     site: page à ouvrir pour tout voir
 #     role: une phrase sur ce que l'on y cherche
-#     exploitee: true               (les éléments sont des vulnérabilités exploitées : « À traiter en priorité »)
+#     exploitee: true               (les éléments sont des vulnérabilités exploitées : filet rouge, « À traiter en priorité »)
+#     priorite: false               (exploitées, mais hors de « À traiter en priorité »)
 flux:
   - id: certfr-alertes
     nom: CERT-FR · Alertes
@@ -42,9 +43,11 @@ flux:
     url: https://cert.europa.eu/publications/security-advisories-rss
     site: https://cert.europa.eu/publications/security-advisories/
     role: Avis de sécurité des institutions européennes, souvent sur les produits les plus exposés.
-  - id: euvd-critiques
-    nom: ENISA EUVD · Critiques
+  - id: euvd-exploitees
+    nom: ENISA EUVD · Exploitées
     format: euvd
-    url: https://euvdservices.enisa.europa.eu/api/search?fromScore=9&toScore=10&size=12
+    url: https://euvdservices.enisa.europa.eu/api/search?exploited=true&size=100
     site: https://euvd.enisa.europa.eu/
-    role: Dernières vulnérabilités notées 9 ou plus (CVSS) dans la base européenne.
+    role: Vulnérabilités signalées comme exploitées dans la base européenne, les plus récentes d'abord.
+    exploitee: true
+    priorite: false                 # déjà couvertes par KEV et CERT-FR : pas de doublon dans « À traiter en priorité »

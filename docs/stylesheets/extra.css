@@ -1738,3 +1738,23 @@ body[data-md-color-scheme="default"]::after {
   .md-typeset a.kw-vbanner { grid-template-columns: 1fr; }
   .md-typeset .kw-vbanner__name, .md-typeset .kw-vbanner__count { white-space: normal; }
 }
+
+/* Veille vulnérabilités : bouton « Fiche », rubrique Par CVE, fin de support */
+.md-typeset .kw-vcopy { margin-left: auto; font: inherit; font-size: .56rem; font-weight: 700; padding: .05rem .5rem; cursor: pointer;
+  border-radius: 1em; border: 1px solid var(--kw-line); background: transparent; color: var(--md-default-fg-color--light); white-space: nowrap; }
+.md-typeset .kw-vcopy:hover { border-color: var(--kw-link); color: var(--kw-link); }
+.md-typeset .kw-vcopy.is-done { border-color: #3fa66a; color: #3fa66a; }
+.md-typeset .kw-vl__cve { font-family: var(--md-code-font-family); font-size: .92em; color: var(--kw-link); margin-right: .25rem; }
+.md-typeset a.kw-vb--src:hover { border-color: var(--kw-link); color: var(--kw-link); }
+.md-typeset h3.kw-vsub { margin: .8rem 0 .2rem; font-size: .74rem; font-weight: 800; color: var(--kw-sub); }
+.md-typeset details.kw-vmore { margin: .8rem 0 0; border: 0; box-shadow: none; background: transparent; padding: 0; font-size: inherit; }
+.md-typeset details.kw-vmore > summary { font-size: .74rem; font-weight: 800; color: var(--kw-sub); background: transparent; padding: .2rem 0 .2rem 1.4rem; }
+.md-typeset details.kw-vmore > summary::before { left: 0; top: .3rem; }
+.md-typeset details.kw-vmore > summary::after { display: none; }
+.md-typeset ul.kw-vlist--cve, .md-typeset ul.kw-vlist--eol { padding: .1rem 1rem; background: var(--kw-panel); border: 1px solid var(--kw-line); border-radius: 10px; }
+.md-typeset ul.kw-vlist--cve li.kw-vl:first-child, .md-typeset ul.kw-vlist--eol li.kw-vl:first-child { border-top: 0; }
+.md-typeset .kw-eol .kw-vl__date { flex-basis: 3.6rem; }
+.md-typeset .kw-eol.is-soon .kw-eol__left { color: #1a1313; background: #f08c3a; border-color: #f08c3a; }
+.md-typeset .kw-eol.is-past { opacity: .6; }
+.md-typeset .kw-vcard--eol { border-top: 3px solid #e0b12a; }
+.md-typeset table.kw-eol-table { font-size: .68rem; }

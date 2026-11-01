@@ -3770,6 +3770,8 @@ def write_feeds(config):
 # Une source injoignable n'arrête jamais la construction : on garde sa dernière lecture ou on l'annonce indisponible.
 VULN_SRC = "veille/ressources/vulnerabilites.md"
 VULN_TAB = "🚨 Veille vulnérabilités"
+METHOD_SRC = "veille/ressources/qualifier-une-vulnerabilite.md"   # fiche méthode (page écrite à la main)
+METHOD_TAB = "📐 Qualifier une vulnérabilité"
 VULN_RUBRIC = "Vulnérabilités & CVE"         # rubrique de data/ressources.yml : les sites de référence
 VULN_CACHE = ".cache/vulnerabilites.json"
 VULN_TTL = timedelta(minutes=30)
@@ -3830,7 +3832,8 @@ def vuln_parse_kev(raw):
     out = []
     for v in rows[:VULN_KEEP]:
         cve = v.get("cveID", "")
-        out.append({"title": f'{v.get("vendorProject", "")} {v.get("product", "")}'.strip(),
+        vendor, product = v.get("vendorProject", ""), v.get("product", "")
+        out.append({"title": product if vendor and product.lower().startswith(vendor.lower()) else f"{vendor} {product}".strip(),
                     "url": f"https://nvd.nist.gov/vuln/detail/{cve}" if cve else "",
                     "date": f'{v.get("dateAdded", "")}T00:00:00+00:00',
                     "text": vuln_text(v.get("vulnerabilityName") or v.get("shortDescription")),
@@ -3854,7 +3857,8 @@ def vuln_parse_euvd(raw):
             (x.get("vendor") or {}).get("name", "") for x in v.get("enisaIdVendor") or [] if (x.get("vendor") or {}).get("name")))
         products = ", ".join(dict.fromkeys(
             (x.get("product") or {}).get("name", "") for x in v.get("enisaIdProduct") or [] if (x.get("product") or {}).get("name")))
-        out.append({"title": " ".join(b for b in (vendors, products) if b) or (cves[0] if cves else v.get("id", "")),
+        name = products if vendors and products.lower().startswith(vendors.lower()) else " ".join(b for b in (vendors, products) if b)
+        out.append({"title": name or (cves[0] if cves else v.get("id", "")),
                     "url": f'https://euvd.enisa.europa.eu/vulnerability/{v.get("id", "")}',
                     "date": when.isoformat(), "text": vuln_text(v.get("description")), "cves": cves,
                     "ref": v.get("id", ""), "score": v.get("baseScore")})
@@ -3929,14 +3933,51 @@ def load_vulns(root):
             it["epss"] = max((epss.get(c, 0) for c in it.get("cves", [])), default=0)
             items.append(it)
         feeds.append(dict(f, items=items, ok=s.get("ok", False), at=s.get("at")))
-    return {"feeds": feeds, "fetched": cache.get("fetched")}
+    return {"feeds": feeds, "fetched": cache.get("fetched"), "epss": epss}
 
 
 def vuln_priority(vulns, days=VULN_RECENT):
     """Vulnérabilités exploitées apparues ces derniers jours (alertes CERT-FR, ajouts KEV), les plus récentes d'abord."""
     since = datetime.now(timezone.utc) - timedelta(days=days)
-    rows = [(it, f) for f in vulns["feeds"] if f.get("exploitee") for it in f["items"] if it["when"] >= since]
+    rows = [(it, f) for f in vulns["feeds"] if f.get("exploitee") and f.get("priorite", True)
+            for it in f["items"] if it["when"] >= since]
     return sorted(rows, key=lambda x: (x[0]["when"], x[0]["epss"]), reverse=True)
+
+
+def vuln_fiche(title, cves, sources, exploited=False, due="", epss=0, score=None, ransomware=False, text=""):
+    """Fiche prête à coller dans un ticket : ce que la veille sait, puis les cases à remplir.
+    sources : [(nom de la source, référence, date, lien)]. Aucune mention du site : la fiche part dans des outils tiers."""
+    lines = [f"Vulnérabilité : {title}"]
+    if cves:
+        lines.append("CVE : " + ", ".join(cves))
+    for nom, ref, when, url in sources:
+        lines.append(f"Source : {nom}" + (f" — {ref}" if ref else "") + f" ({fr_date(when)})" + (f" — {url}" if url else ""))
+    if score:
+        lines.append(f"Score CVSS : {float(score):g}")
+    lines.append("Exploitation : " + ("signalée exploitée" + (f" (échéance CISA : {fr_date(date.fromisoformat(due))})" if due else "")
+                                      if exploited else "non signalée à ce jour"))
+    if ransomware:
+        lines.append("Rançongiciel : utilisation connue (CISA)")
+    if epss:
+        lines.append(f"EPSS : {epss * 100:.1f} % (probabilité d’exploitation dans les 30 jours, FIRST)".replace(".", ","))
+    if text:
+        lines.append(f"Résumé : {text}")
+    lines += ["", "APPLICABILITÉ",
+              "[ ] Produit présent dans le périmètre :",
+              "[ ] Version concernée :",
+              "[ ] Fonction vulnérable activée :",
+              "[ ] Exposition (Internet, interne, locale) :",
+              "", "DÉCISION",
+              "[ ] Corriger   [ ] Contourner   [ ] Accepter le risque   [ ] Non concerné",
+              "Justification :", "Échéance :", "Responsable :", "Vérification (date, preuve) :"]
+    return "\n".join(lines)
+
+
+def vuln_copy_button(fiche):
+    """Bouton « Fiche » : copie la fiche dans le presse-papiers (vulnerabilites.js).
+    Retours à la ligne en entités : une ligne vide dans l'attribut couperait le bloc HTML pour Markdown."""
+    return (f'<button type="button" class="kw-vcopy" data-fiche="{esc(fiche).replace(chr(10), "&#10;")}" '
+            f'title="Copier une fiche de suivi prête à coller dans un ticket">📋 Fiche</button>')
 
 
 def vuln_day(when):
@@ -3965,22 +4006,96 @@ def vuln_badges(it, feed=None):
     return "".join(out)
 
 
-def vuln_line(it, feed=None, text=False):
+def vuln_line(it, feed, text=False, show_src=False):
     title = esc(it["title"])
     head = f'<a href="{esc(it["url"])}">{title}</a>' if it.get("url") else title
     due = f'échéance CISA {date.fromisoformat(it["due"]).strftime("%d/%m")}' if it.get("due") else ""
     ref = " · ".join(b for b in (esc(it.get("ref", "")), due) if b)
+    fiche = vuln_fiche(it["title"], it.get("cves", []), [(feed["nom"], it.get("ref", ""), it["when"], it.get("url", ""))],
+                       exploited=bool(feed.get("exploitee")), due=it.get("due", ""), epss=it.get("epss", 0),
+                       score=it.get("score"), ransomware=it.get("ransomware", False), text=it.get("text", ""))
     return (f'<li class="kw-vl" data-ts="{esc(it["date"])}"><span class="kw-vl__date">{vuln_day(it["when"])}</span>'
             f'<span class="kw-vl__body"><span class="kw-vl__title">{head}</span>'
             + (f'<span class="kw-vl__text">{esc(it["text"])}</span>' if text and it.get("text") else "")
-            + f'<span class="kw-vl__badges">{vuln_badges(it, feed)}<span class="kw-vl__ref">{ref}</span></span>'
-            f'</span></li>')
+            + f'<span class="kw-vl__badges">{vuln_badges(it, feed if show_src else None)}<span class="kw-vl__ref">{ref}</span>'
+            f'{vuln_copy_button(fiche)}</span></span></li>')
+
+
+def vuln_title_of(it, cve):
+    """Titre d'un élément sans ses identifiants CVE (CERT Santé : « Sophos - CVE-2026-… » → « Sophos »)."""
+    t = re.sub(r"\s*[-–—:,]?\s*" + re.escape(cve) + r"\b", "", it["title"], flags=re.I)
+    return re.sub(r"\s*[-–—:,]\s*$", "", CVE_RE.sub("", t)).strip() or it["title"]
+
+
+VULN_TITLE_ORDER = ["cisa-kev", "euvd-exploitees", "cert-sante", "certfr-alertes", "certfr-avis", "cert-eu"]
+
+
+def vuln_by_cve(vulns):
+    """Les CVE citées par les flux, une entrée par CVE avec toutes ses sources : corroboration, exploitation, EPSS."""
+    groups = {}
+    for f in vulns["feeds"]:
+        for it in f["items"]:
+            for c in it.get("cves", []):
+                groups.setdefault(c, []).append((it, f))
+    epss = vulns.get("epss", {})
+    out = []
+    for cve, rows in groups.items():
+        rows.sort(key=lambda r: r[0]["when"], reverse=True)
+        best = min(rows, key=lambda r: VULN_TITLE_ORDER.index(r[1]["id"]) if r[1]["id"] in VULN_TITLE_ORDER else 99)
+        scores = [float(it["score"]) for it, _ in rows if it.get("score")]
+        kev = next((it for it, f in rows if f["format"] == "kev"), None)
+        out.append({"cve": cve, "title": vuln_title_of(best[0], cve), "rows": rows,
+                    "feeds": list(dict.fromkeys(f["id"] for _, f in rows)),
+                    "exploited": any(f.get("exploitee") for _, f in rows), "epss": epss.get(cve, 0),
+                    "score": max(scores) if scores else None, "due": kev.get("due", "") if kev else "",
+                    "ransomware": any(it.get("ransomware") for it, _ in rows), "when": rows[0][0]["when"]})
+    return sorted(out, key=lambda g: (len(g["feeds"]), g["exploited"], g["epss"], g["when"]), reverse=True)
+
+
+def vuln_cve_line(g):
+    """Une CVE : identifiant, produit, une pastille-lien par source, gravité, exploitation, EPSS, fiche."""
+    seen, srcs = set(), []
+    for it, f in g["rows"]:
+        if f["id"] in seen:
+            continue
+        seen.add(f["id"])
+        label = esc(f["nom"])
+        srcs.append(f'<a class="kw-vb kw-vb--src" href="{esc(it["url"])}">{label}</a>' if it.get("url")
+                    else f'<span class="kw-vb kw-vb--src">{label}</span>')
+    badges = vuln_badges({"score": g["score"], "epss": g["epss"], "ransomware": g["ransomware"]})
+    if g["exploited"]:
+        badges = '<span class="kw-vb kw-vb--crit">Exploitée</span>' + badges
+    due = f'<span class="kw-vl__ref">échéance CISA {date.fromisoformat(g["due"]).strftime("%d/%m")}</span>' if g["due"] else ""
+    fiche = vuln_fiche(g["title"], [g["cve"]], [(f["nom"], it.get("ref", ""), it["when"], it.get("url", "")) for it, f in g["rows"]],
+                       exploited=g["exploited"], due=g["due"], epss=g["epss"], score=g["score"], ransomware=g["ransomware"],
+                       text=g["rows"][0][0].get("text", ""))
+    return (f'<li class="kw-vl" data-ts="{esc(g["rows"][0][0]["date"])}"><span class="kw-vl__date">{vuln_day(g["when"])}</span>'
+            f'<span class="kw-vl__body"><span class="kw-vl__title"><span class="kw-vl__cve">{esc(g["cve"])}</span> {esc(g["title"])}</span>'
+            f'<span class="kw-vl__badges">{"".join(srcs)}{badges}{due}{vuln_copy_button(fiche)}</span></span></li>')
+
+
+def vuln_cve_section(vulns):
+    groups = vuln_by_cve(vulns)
+    if not groups:
+        return '<p class="kw-muted">Aucune CVE dans les flux lus.</p>'
+    multi = [g for g in groups if len(g["feeds"]) > 1]
+    single = [g for g in groups if len(g["feeds"]) == 1]
+    out = ('<p class="kw-muted">Les mêmes données que « Les flux », rangées par CVE : une ligne par CVE avec toutes les sources '
+           'qui la citent. Les avis CERT-FR et CERT-EU donnent rarement leurs CVE dans leur flux : ils ne figurent ici '
+           'que si la CVE apparaît dans leur titre ou leur résumé.</p>')
+    if multi:
+        out += (f'<h3 class="kw-vsub">Citées par plusieurs sources · {len(multi)}</h3>'
+                f'<ul class="kw-vlist kw-vlist--cve kw-no-gloss">{"".join(vuln_cve_line(g) for g in multi)}</ul>')
+    if single:
+        out += (f'<details class="kw-vmore"><summary>Citées par une seule source · {len(single)}</summary>'
+                f'<ul class="kw-vlist kw-vlist--cve kw-no-gloss">{"".join(vuln_cve_line(g) for g in single)}</ul></details>')
+    return out
 
 
 def vuln_feed_card(f, n, text=False):
     """Une source : nom, rôle, n derniers éléments, lien vers le site."""
     if f["items"]:
-        body = f'<ul class="kw-vlist">{"".join(vuln_line(it, text=text) for it in f["items"][:n])}</ul>'
+        body = f'<ul class="kw-vlist">{"".join(vuln_line(it, f, text=text) for it in f["items"][:n])}</ul>'
     else:
         body = '<p class="kw-muted kw-vcard__empty">Flux indisponible à la dernière mise à jour du site.</p>'
     stale = "" if f["ok"] or not f["items"] else '<span class="kw-vb" title="Dernière lecture réussie conservée">ancienne lecture</span>'
@@ -4039,6 +4154,148 @@ def vuln_calendar_html(today=None):
     return f'<div class="kw-vcals">{cells}</div>'
 
 
+# Fin de support : produits de data/fin-de-support.yml, dates d'endoflife.date (fin des correctifs de sécurité).
+EOL_CACHE = ".cache/fin-de-support.json"
+EOL_TTL = timedelta(hours=24)
+EOL_AHEAD = 365                  # jours à venir
+EOL_BEHIND = 90                  # fins de support récentes, rappelées en grisé
+
+
+def load_eol(root):
+    """Lit endoflife.date (en parallèle, cache d'un jour) ; rend les versions dont le support s'arrête bientôt
+    ou vient de s'arrêter : [{produit, version, famille, date, etendu, lien}], par date."""
+    import os
+    from concurrent.futures import ThreadPoolExecutor
+    data = load_yaml(root / "data" / "fin-de-support.yml", {}) or {}
+    conf = data.get("familles") or []
+    lts_only = set(data.get("lts_seulement") or [])
+    wanted = [(fam["nom"], p) for fam in conf for p in fam.get("produits") or []]
+    path = root / EOL_CACHE
+    try:
+        cache = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
+    now = datetime.now(timezone.utc)
+    fresh = (cache.get("fetched") and now - datetime.fromisoformat(cache["fetched"]) < EOL_TTL
+             and set(cache.get("products", {})) >= {p for _, p in wanted}
+             and all("releaseDate" in r for v in cache["products"].values() for r in v["releases"][:1]))
+    if not fresh and os.environ.get("PORTAL_VULNS", "").lower() not in ("off", "0", "non"):
+        def read(p):
+            try:
+                r = json.loads(vuln_fetch(f"https://endoflife.date/api/v1/products/{p}"))["result"]
+                return p, {"label": r.get("label") or p, "releases": [
+                    {k: x.get(k) for k in ("name", "label", "releaseDate", "eolFrom", "eoesFrom", "isMaintained", "isLts")}
+                    for x in r.get("releases", [])]}
+            except Exception:                               # noqa: BLE001 — produit inconnu ou site injoignable
+                return p, None
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            got = dict(pool.map(read, [p for _, p in wanted]))
+        products = cache.get("products", {})
+        products.update({p: v for p, v in got.items() if v})
+        cache = {"fetched": now.isoformat(), "products": products}
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
+        except OSError:
+            pass
+    today = date.today()
+    rows, short_cycle = [], []
+
+    def day(value):
+        try:
+            return date.fromisoformat(str(value))
+        except ValueError:
+            return None
+
+    for fam, p in wanted:
+        prod = cache.get("products", {}).get(p)
+        if not prod:
+            continue
+        short = re.sub(r"^(Microsoft|VMware|Oracle|Apache|Red Hat|Apple)\s+", "", prod["label"])
+        named = lambda label: label if label.lower().startswith(short.lower()) else f'{prod["label"]} {label}'
+        # Version « longue » : LTS, ou au moins un an de support. Les autres (cycle court, une version par mois)
+        # ne font pas une échéance à planifier : on donne seulement la plus ancienne version encore corrigée.
+        def long_lived(rel):
+            if rel.get("isLts"):
+                return True
+            start, end = day(rel.get("releaseDate")), day(rel.get("eolFrom"))
+            return p not in lts_only and bool(start and end) and (end - start).days >= 365
+        quick = [r for r in prod["releases"] if not long_lived(r) and day(r.get("eolFrom")) and p not in lts_only]
+        maintained = [r for r in quick if day(r["eolFrom"]) >= today]
+        if maintained and len(quick) > len(prod["releases"]) / 2:
+            oldest = min(maintained, key=lambda r: day(r["eolFrom"]))
+            short_cycle.append({"produit": prod["label"], "famille": fam, "version": str(oldest.get("label") or oldest.get("name")),
+                                "date": day(oldest["eolFrom"]), "lien": f"https://endoflife.date/{p}"})
+        for rel in prod["releases"]:
+            eol = day(rel.get("eolFrom"))
+            if not eol or not long_lived(rel) or not -EOL_BEHIND <= (eol - today).days <= EOL_AHEAD:
+                continue
+            name = named(str(rel.get("label") or rel.get("name")))
+            try:
+                ext = date.fromisoformat(str(rel.get("eoesFrom")))
+            except ValueError:
+                ext = None
+            rows.append({"produit": name, "famille": fam, "date": eol, "etendu": ext if ext and ext > eol else None,
+                         "lien": f"https://endoflife.date/{p}"})
+    return {"rows": sorted(rows, key=lambda r: (r["date"], r["produit"])), "fetched": cache.get("fetched"),
+            "short": sorted(short_cycle, key=lambda r: r["produit"].lower())}
+
+
+def eol_left(d, today=None):
+    left = (d - (today or date.today())).days
+    if left < 0:
+        return f"terminé depuis {plural(-left, 'jour')}"
+    return "aujourd’hui" if left == 0 else "demain" if left == 1 else f"dans {plural(left, 'jour')}"
+
+
+def eol_line(r, compact=False):
+    left = (r["date"] - date.today()).days
+    state = "is-past" if left < 0 else "is-soon" if left <= 90 else ""
+    ext = (f'<span class="kw-vl__ref">support étendu payant jusqu’au {fr_date(r["etendu"])}</span>'
+           if r["etendu"] and not compact else "")
+    fam = "" if compact else f'<span class="kw-vb">{esc(r["famille"])}</span>'
+    return (f'<li class="kw-vl kw-eol {state}"><span class="kw-vl__date">{vuln_day(r["date"])} {r["date"].year % 100:02d}</span>'
+            f'<span class="kw-vl__body"><span class="kw-vl__title"><a href="{esc(r["lien"])}">{esc(r["produit"])}</a></span>'
+            f'<span class="kw-vl__badges"><span class="kw-vb kw-eol__left">{eol_left(r["date"])}</span>{fam}{ext}</span></span></li>')
+
+
+def eol_section(eol):
+    if not eol or not eol["rows"]:
+        return '<p class="kw-muted">Données de fin de support indisponibles à la dernière mise à jour du site.</p>'
+    today = date.today()
+    past = [r for r in eol["rows"] if r["date"] < today]
+    ahead = [r for r in eol["rows"] if r["date"] >= today]
+    out = ('<p class="kw-muted">Fin des correctifs de sécurité dans les 12 prochains mois pour des produits courants en entreprise '
+           '(données <a href="https://endoflife.date/">endoflife.date</a>). '
+           'Une version sans support ne reçoit plus de correctifs : à migrer, ou à couvrir par un support étendu payant.</p>')
+    out += f'<ul class="kw-vlist kw-vlist--eol kw-no-gloss">{"".join(eol_line(r) for r in ahead[:15])}</ul>'
+    if len(ahead) > 15:
+        out += (f'<details class="kw-vmore"><summary>Plus tard dans l’année · {len(ahead) - 15}</summary>'
+                f'<ul class="kw-vlist kw-vlist--eol kw-no-gloss">{"".join(eol_line(r) for r in ahead[15:])}</ul></details>')
+    if past:
+        out += (f'<details class="kw-vmore"><summary>Terminées depuis moins de {EOL_BEHIND} jours · {len(past)}</summary>'
+                f'<ul class="kw-vlist kw-vlist--eol kw-no-gloss">{"".join(eol_line(r) for r in reversed(past))}</ul></details>')
+    if eol.get("short"):
+        cells = "".join(f'<tr><td><a href="{esc(r["lien"])}">{esc(r["produit"])}</a></td><td>{esc(r["version"])} et suivantes</td>'
+                        f'<td>{vuln_day(r["date"])} {r["date"].year}</td></tr>' for r in eol["short"])
+        out += (f'<details class="kw-vmore"><summary>Produits à cycle court : plus ancienne version encore corrigée · {len(eol["short"])}</summary>'
+                '<p class="kw-muted">Une nouvelle version chaque mois ou presque : plutôt que des échéances, la version minimale à avoir aujourd’hui.</p>'
+                f'<table class="kw-eol-table"><thead><tr><th>Produit</th><th>Corrigées</th><th>Jusqu’au</th></tr></thead>'
+                f'<tbody>{cells}</tbody></table></details>')
+    return out
+
+
+def eol_card(eol, src, n=6):
+    """Accueil : carte « Fin de support » dans le carrousel des vulnérabilités."""
+    ahead = [r for r in (eol or {}).get("rows", []) if r["date"] >= date.today()][:n]
+    if not ahead:
+        return ""
+    return (f'<div class="kw-vcard kw-vcard--eol kw-no-gloss"><div class="kw-vcard__head"><span class="kw-vcard__name">Fin de support</span>'
+            f'<a class="kw-vcard__site" href="{href(src, VULN_SRC)}#fin-de-support">12 mois →</a></div>'
+            f'<p class="kw-vcard__role">Versions qui ne recevront bientôt plus de correctifs de sécurité.</p>'
+            f'<ul class="kw-vlist">{"".join(eol_line(r, compact=True) for r in ahead)}</ul></div>')
+
+
 def vuln_sites(themes, src):
     """Les sites de référence : la rubrique « Vulnérabilités & CVE » de data/ressources.yml, par groupe."""
     rub = next((r for t in themes for r in t["rubriques"] if r["nom"] == VULN_RUBRIC), None)
@@ -4059,15 +4316,16 @@ def vuln_counts(vulns):
             f"{ok} source{'s' if ok > 1 else ''} sur {len(vulns['feeds'])}"]
 
 
-def page_vulns(vulns, themes):
+def page_vulns(vulns, themes, eol=None):
     src = VULN_SRC
     today = date.today()
     prio = vuln_priority(vulns)
-    prio_html = (f'<ul class="kw-vlist kw-vlist--prio kw-no-gloss">{"".join(vuln_line(it, f, text=True) for it, f in prio[:10])}</ul>' if prio
+    prio_html = (f'<ul class="kw-vlist kw-vlist--prio kw-no-gloss">{"".join(vuln_line(it, f, text=True, show_src=True) for it, f in prio[:10])}</ul>' if prio
                  else '<p class="kw-muted">Aucune nouvelle vulnérabilité exploitée signalée ces sept derniers jours par le CERT-FR ou la CISA.</p>')
     nav = ('<a href="#a-traiter-en-priorite">À traiter en priorité</a> <a href="#les-flux">Les flux</a> '
+           '<a href="#par-cve">Par CVE</a> <a href="#fin-de-support">Fin de support</a> '
            '<a href="#calendrier-des-correctifs">Calendrier</a> <a href="#routine-du-matin">Routine du matin</a> '
-           '<a href="#sites-de-reference">Sites de référence</a>')
+           f'<a href="{href(src, METHOD_SRC)}">📐 Méthode</a> <a href="#sites-de-reference">Sites de référence</a>')
     return src, f"""---
 title: Veille vulnérabilités
 description: CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA — le point du matin pour le maintien en condition de sécurité.
@@ -4088,6 +4346,10 @@ EPSS : probabilité d’exploitation dans les 30 jours, calculée par le FIRST.<
 {prio_html}
 {section_bar("Les flux", anchor="les-flux")}
 <div class="kw-vgrid">{"".join(vuln_feed_card(f, 8, text=True) for f in vulns["feeds"])}</div>
+{section_bar("Par CVE", anchor="par-cve")}
+{vuln_cve_section(vulns)}
+{section_bar("Fin de support", anchor="fin-de-support")}
+{eol_section(eol)}
 {section_bar("Calendrier des correctifs", anchor="calendrier-des-correctifs")}
 {vuln_calendar_html(today)}
 {section_bar("Routine du matin", anchor="routine-du-matin")}
@@ -4095,8 +4357,9 @@ EPSS : probabilité d’exploitation dans les 30 jours, calculée par le FIRST.<
 <li><b>Exploitées d’abord.</b> Alertes CERT-FR et ajouts KEV : un produit du parc est-il concerné ? Si oui, correctif ou contournement en urgence.</li>
 <li><b>Bulletins du jour.</b> Avis CERT-FR, CERT Santé et CERT-EU, puis bulletins des éditeurs du parc : ne garder que les produits et versions déployés.</li>
 <li><b>Prioriser.</b> Exposition Internet, exploitation connue, EPSS, puis CVSS : un 9,8 interne non exploité passe après un 7,5 exposé et exploité.</li>
-<li><b>Tracer.</b> Une décision par vulnérabilité retenue : corriger, contourner ou accepter le risque, avec une échéance.</li>
+<li><b>Tracer.</b> Une décision par vulnérabilité retenue : corriger, contourner ou accepter le risque, avec une échéance (bouton « 📋 Fiche »).</li>
 </ol>
+<p class="kw-muted">Le détail de chaque étape : <a href="{href(src, METHOD_SRC)}">📐 Qualifier et prioriser une vulnérabilité</a>.</p>
 {section_bar("Sites de référence", anchor="sites-de-reference")}
 {vuln_sites(themes, src)}
 """
@@ -4108,7 +4371,7 @@ def vuln_home(vulns, src):
         return ""
     lead = (f'<p class="kw-vhome__lead kw-no-gloss">{vuln_updated(vulns)} · {" · ".join(vuln_counts(vulns))} · '
             f'<a href="{href(src, VULN_SRC)}#a-traiter-en-priorite">à traiter en priorité</a></p>')
-    cards = "".join(vuln_feed_card(f, 5) for f in vulns["feeds"])
+    cards = "".join(vuln_feed_card(f, 5) for f in vulns["feeds"]) + eol_card(STATE.get("eol"), src)
     return (section_bar("Vulnérabilités du jour", more=("Tout voir →", href(src, VULN_SRC)))
             + lead + f'<div class="kw-carousel kw-carousel--vuln">{cards}</div>')
 
@@ -4118,7 +4381,7 @@ def vuln_banner(vulns, src):
     bits = vuln_counts(vulns) if vulns else []
     return (f'<a class="kw-vbanner kw-no-gloss" href="{href(src, VULN_SRC)}"><span class="kw-vbanner__name">🚨 Veille vulnérabilités</span>'
             f'<span class="kw-vbanner__text">CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA : les flux du jour, '
-            f'le calendrier des correctifs et les sites de référence.</span>'
+            f'les fins de support, le calendrier des correctifs et les sites de référence.</span>'
             + (f'<span class="kw-vbanner__count">{" · ".join(bits)}</span>' if bits else "") + '</a>')
 
 
@@ -4162,7 +4425,9 @@ def on_config(config):
 
     STATE["news"] = compute_news(items, library, root, docs_dir)
     STATE["vulns"] = load_vulns(root)
-    pages = [page_veille(items, sources), page_dossiers(items), page_news(STATE["news"]), page_vulns(STATE["vulns"], themes)]
+    STATE["eol"] = load_eol(root)
+    pages = [page_veille(items, sources), page_dossiers(items), page_news(STATE["news"]),
+             page_vulns(STATE["vulns"], themes, STATE["eol"])]
     pages += pages_analyses(items) + pages_ressources(themes) + [page_glossary(glossary)]
     pages += pages_library(library) + [page_library_index(library, themes, len(glossary)), page_library_search(library)]
     pages += pages_parcours()
@@ -4200,7 +4465,7 @@ def on_config(config):
         if isinstance(e, dict) and LIBRARY_TAB in e:   # puis l'onglet Ressources juste après
             children = e[LIBRARY_TAB] if isinstance(e[LIBRARY_TAB], list) else [e[LIBRARY_TAB]]
             nav[i] = {LIBRARY_TAB: list(children) + library_nav(library)}
-            nav.insert(i + 1, {RESSOURCES_TAB: [RESSOURCES_SRC, {VULN_TAB: VULN_SRC}] + [
+            nav.insert(i + 1, {RESSOURCES_TAB: [RESSOURCES_SRC, {VULN_TAB: VULN_SRC}, {METHOD_TAB: METHOD_SRC}] + [
                 {t["label"]: [f"veille/ressources/{t['id']}/index.md"]
                  + [{r["nom"]: f"veille/ressources/{t['id']}/{slug(r['nom'])}.md"} for r in t["rubriques"]]}
                 for t in themes]})

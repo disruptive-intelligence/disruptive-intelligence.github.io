@@ -34,6 +34,41 @@
     });
   }
 
+  // Bouton « 📋 Fiche » : copie la fiche de suivi (texte brut) dans le presse-papiers.
+  // Copie classique d'abord : immédiate pendant le clic, sans permission à attendre ;
+  // l'API Clipboard ne sert qu'en secours (elle peut rester en attente d'une autorisation).
+  function copy(text) {
+    var ok = false;
+    var area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.top = "0";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(area);
+    if (ok) return Promise.resolve();
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return Promise.reject();
+  }
+
+  document.addEventListener("click", function (ev) {
+    var btn = ev.target.closest && ev.target.closest(".kw-vcopy");
+    if (!btn) return;
+    ev.preventDefault();
+    var label = btn.dataset.label || (btn.dataset.label = btn.textContent);
+    copy(btn.dataset.fiche).then(function () {
+      btn.textContent = "✓ Copiée";
+      btn.classList.add("is-done");
+    }, function () {
+      btn.textContent = "Copie impossible";
+    }).then(function () {
+      setTimeout(function () { btn.textContent = label; btn.classList.remove("is-done"); }, 1800);
+    });
+  });
+
   if (window.document$) window.document$.subscribe(init);   // navigation instantanée de Material
   else document.addEventListener("DOMContentLoaded", init);
 })();
