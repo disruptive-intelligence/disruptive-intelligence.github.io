@@ -107,7 +107,7 @@
           liens: ["CVE, CWE, CVSS, EPSS, KEV"]
         - label: 🛠️ Maintenir dans la durée
           description: "Garder un système sûr au fil des correctifs et des années."
-          notes: [Maintien en condition de sécurité (MCS)]
+          notes: [Maintien en condition de sécurité (MCS), Mises à jour Windows et WSUS]
     - id: gouvernance
       label: 🏛️ Gouvernance & résilience
       description: Piloter la sécurité — risques, conformité, sécurité de l'entreprise, sauvegarde et reprise.
