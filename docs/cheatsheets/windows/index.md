@@ -49,7 +49,7 @@ Durcir un poste de travail : la méthode, le plan P0 / P1 / P2 et une check-list
 - [Identifiants et secrets](durcissement/identifiants.md) — Credential Guard, RunAsPPL, WDigest, LAPS, cache, NTLM, secrets en clair, coffre.
 - [Exécution et applications](durcissement/execution.md) — AppLocker, App Control, PowerShell restreint et signé, Mark of the Web, SmartScreen, macros.
 - [Services, droits et persistance](durcissement/services.md) — Services inutiles ou trop privilégiés, permissions, `PATH`, démarrage automatique.
-- [Réseau et accès distant](durcissement/reseau.md) — Pare-feu, LLMNR, NetBIOS, SMB, partages, bureau à distance, WinRM.
+- [Réseau et accès distant](durcissement/reseau.md) — Pare-feu ; résolution usurpée et relais NTLM (LLMNR, NetBIOS, mDNS, WPAD et PAC, signature SMB et LDAP) ; partages, bureau à distance, WinRM.
 - [Defender et protections](durcissement/protections.md) — Composants de Defender, falsifications, exclusions, ASR, rançongiciels, exploits, HVCI.
 - [Démarrage, chiffrement et périphériques](durcissement/demarrage.md) — Secure Boot, TPM, BitLocker, supports amovibles.
 - [Journalisation et surveillance](durcissement/journalisation.md) — Audit avancé, 4688, PowerShell, Sysmon, centralisation, effacement.

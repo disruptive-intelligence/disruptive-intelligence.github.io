@@ -6,9 +6,9 @@ cours:
 
 # Réseau et accès distant
 
-N'exposer que le nécessaire : pare-feu actif sur les trois profils, peu de règles entrantes et restreintes à leur source, protocoles de résolution de secours et SMBv1 coupés, signature SMB, partages contrôlés, bureau à distance et WinRM fermés ou bornés.
+N'exposer que le nécessaire : pare-feu actif sur les trois profils, peu de règles entrantes et restreintes à leur source ; couper la chaîne résolution usurpée → authentification NTLM → relais (LLMNR, NetBIOS, mDNS, WPAD et PAC, signature SMB et LDAP, WebDAV, DHCP et DNS) ; partages contrôlés, bureau à distance et WinRM fermés ou bornés.
 
-Les incontournables : `Get-NetFirewallProfile` · `Set-NetFirewallProfile` · `Get-NetFirewallRule` · `Get-SmbServerConfiguration` · `Get-SmbShareAccess` · `fDenyTSConnections`
+Les incontournables : `Get-NetFirewallProfile` · `Set-NetFirewallProfile` · `Get-NetFirewallRule` · `EnableMulticast` · `DisableWpad` · `Get-SmbServerConfiguration` · `Get-SmbShareAccess` · `fDenyTSConnections`
 { .kw-cs-top }
 
 Un pare-feu local bien réglé freine fortement les déplacements latéraux : le poste n'a pas à accepter SMB, RDP ou WinRM de tous les autres postes.
@@ -78,15 +78,63 @@ Fichier : `%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log` (`DROP` / `ALL
 Ensuite : [retracer les changements du pare-feu](../fondamentaux/logs/pare-feu-defender.md#retracer-les-changements-du-pare-feu) — Pour comprendre : [Analyse des journaux, pare-feu Windows](../../../library/it/windows/analyse-des-journaux-d-evenements-windows-event-logs/10-pare-feu-windows.md) — Ajout hors cours : la commande d'activation
 { .kw-cs-meta }
 
-## Protocoles à risque
+## Résolution de noms et relais NTLM
 
-Quand le DNS échoue, Windows interroge tout le segment (LLMNR, NBT-NS, mDNS) : n'importe quelle machine peut répondre, et la victime tente de s'authentifier auprès d'elle. Ces mécanismes n'apportent presque rien en entreprise.
+Une même famille de risques : un attaquant présent sur le réseau **se fait passer pour une ressource légitime**, le poste se connecte à lui et **lui présente une authentification Windows** (NTLM), que l'attaquant casse hors ligne ou relaie vers un autre service.
+
+```text
+1. Un poste cherche un nom introuvable          \\SRV-FICHEIRS (faute de frappe), wpad, imprimante.local
+2. Il pose la question à tout le segment        LLMNR, NBT-NS, mDNS (ou WPAD via DNS / DHCP)
+3. L'attaquant répond « c'est moi »             réponse usurpée, rien ne l'authentifie
+4. Le poste s'y connecte et s'authentifie       NTLM, par SMB ou HTTP
+5. L'attaquant exploite l'authentification      cassage hors ligne de la réponse NTLMv2 (mot de passe faible)
+                                                ou relais vers un service sans protection (SMB, LDAP, AD CS)
+```
+
+| Étape | Ce qui joue | Ce qui protège |
+|---|---|---|
+| **Découvrir** une configuration ou une ressource | WPAD, DHCP, DNS | WPAD coupé, DHCP et DNS maîtrisés |
+| **Décider** du chemin des connexions web | Fichier PAC | URL de PAC explicite et protégée |
+| **Usurper** une résolution de noms | LLMNR, NBT-NS, mDNS, DNS | Protocoles de diffusion coupés, DNS seul |
+| **Exploiter** l'authentification | NTLM | Kerberos, NTLM réduit, signature SMB, signature et liaison de canal LDAP, EPA |
+
+La chaîne n'aboutit que si les trois maillons sont réunis : **une résolution usurpable + NTLM autorisé + un service cible sans protection contre le relais**. Casser un seul maillon suffit ; les fermer tous, c'est la défense en profondeur. La réponse NTLMv2 capturée n'est ni le mot de passe ni le hash NT : elle ne se casse que si le mot de passe est faible. En audit, l'outil le plus connu pour cette chaîne est Responder (empoisonnement LLMNR / NBT-NS / mDNS / WPAD), suivi de ntlmrelayx (Impacket) pour le relais.
+
+| Mécanisme | Rôle | Port | Risque |
+|---|---|---|---|
+| LLMNR | Résolution de noms sur le segment, sans DNS | 5355/UDP | Réponse usurpée, authentification NTLM captée |
+| NetBIOS / NBT-NS | Résolution historique des noms Windows (WINS en version centralisée) | 137/UDP | Même principe que LLMNR |
+| mDNS | Noms en `.local` (imprimantes, appareils Apple, découverte de services) | 5353/UDP | Réponse usurpée, connexion détournée |
+| WPAD | Découverte automatique du proxy | DNS 53, DHCP 67/68, puis HTTP | Faux serveur WPAD, faux proxy |
+| PAC | Script qui choisit le proxy pour chaque URL | HTTP / HTTPS | Trafic web envoyé à un proxy de l'attaquant |
+| DNS | Résolution centralisée, localisation des DC (enregistrements SRV) | 53 | Enregistrement modifié ou réponse falsifiée |
+| DHCP / DHCPv6 | Adresse, passerelle, serveurs DNS | 67/68 · 546/547/UDP | Faux serveur qui impose son DNS ou sa passerelle |
+| NTLM | Authentification héritée | Aucun (porté par SMB, HTTP, LDAP…) | Cassage hors ligne, relais |
+| SMB | Partages, administration | 445/TCP | Cible de relais, déplacement latéral |
+| LDAP / LDAPS | Annuaire Active Directory | 389 / 636/TCP | Cible de relais vers l'AD |
+
+Pour comprendre : [Windows en profondeur, ch. 16 (résolution de noms et protocoles à risque)](../../../library/it/windows/windows-en-profondeur/04-partie-iv-reseau-et-communication.md#162-les-protocoles-de-secours) · [Active Directory, ch. 5 (faiblesses de NTLM, protocoles de secours)](../../../library/it/active-directory/active-directory/02-partie-ii-authentification/02-chapitre-5-ntlm-le-protocole-herite-qui-refuse-de.md#53-les-faiblesses-de-conception) · [ch. 15 (relay et coercion)](../../../library/it/active-directory/active-directory/04-partie-iv-attaques-ad.md)
+{ .kw-cs-meta }
+
+| Ordre | Chantier | Fiche |
+|---|---|---|
+| 1 | Désactiver LLMNR | [ci-dessous](#desactiver-llmnr-et-netbios) |
+| 2 | Désactiver NetBIOS sur TCP/IP, après contrôle des applications anciennes | [ci-dessous](#desactiver-llmnr-et-netbios) |
+| 3 | Couper WPAD s'il ne sert pas, maîtriser le fichier PAC s'il sert | [WPAD](#couper-la-decouverte-automatique-du-proxy-wpad) · [PAC](#maitriser-le-fichier-de-configuration-du-proxy-pac) |
+| 4 | Exiger la signature SMB | [ci-dessous](#desactiver-smbv1-et-exiger-la-signature-smb) |
+| 5 | Signature LDAP et liaison de canal sur les DC, après audit | [ci-dessous](#exiger-la-signature-ldap-et-la-liaison-de-canal-controleurs-de-domaine) |
+| 6 | Auditer puis réduire NTLM, au profit de Kerberos | [Identifiants](identifiants.md#reduire-ntlm-dabord-en-audit) |
+| 7 | Contrôler mDNS, DHCPv6 et les annonces IPv6 | [mDNS](#couper-mdns-sil-ne-sert-pas) · [DHCP, DHCPv6, ARP](#proteger-la-configuration-reseau-dhcp-dhcpv6-dns-arp) |
+| 8 | Désactiver SMBv1, segmenter les flux SMB et LDAP | [ci-dessous](#desactiver-smbv1-et-exiger-la-signature-smb) |
 
 ![[cheatsheets/windows/administration/reseau#Désactiver LLMNR et NetBIOS]]
 
-### Couper aussi mDNS et WPAD s'ils ne servent pas
+Pour couper LLMNR par GPO, il faut **activer** la stratégie *Configuration ordinateur → Modèles d'administration → Réseau → Client DNS → Désactiver la résolution de noms multidiffusion*. Dans le même dossier, *Désactiver la résolution de noms intelligente multirésident* empêche le poste d'envoyer ses requêtes sur toutes ses interfaces à la fois. Couper NetBIOS ne coupe pas SMB : SMB moderne passe directement par TCP 445.
+{ .kw-cs-meta }
 
-mDNS (UDP 5353) présente le même risque que LLMNR sur les postes ; WPAD (découverte automatique du proxy) permet à un faux serveur de se déclarer proxy.
+### Couper mDNS s'il ne sert pas
+
+mDNS résout les noms en `.local` sans serveur : utile pour certaines imprimantes et la découverte d'appareils, inutile sur la plupart des postes d'entreprise. Le protocole n'est pas une faille en soi : le risque vient de ce qu'on fait confiance à une réponse que personne n'authentifie.
 
 ```powershell title="Vérifier"
 Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters -Name EnableMDNS -ErrorAction SilentlyContinue
@@ -96,14 +144,123 @@ Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters -Na
 Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters -Name EnableMDNS -Value 0 -Type DWord
 ```
 
-WPAD : déclarer explicitement le proxy par GPO (ou désactiver la détection automatique des paramètres), plutôt que de laisser le poste le chercher.
+Vérifier avant les usages d'impression et de découverte (une imprimante ajoutée par son nom `.local` ne sera plus trouvée).
 
 Pour comprendre : [Windows en profondeur, ch. 16.2 (les protocoles de secours)](../../../library/it/windows/windows-en-profondeur/04-partie-iv-reseau-et-communication.md#162-les-protocoles-de-secours) — Ajout hors cours : la valeur `EnableMDNS`
 { .kw-cs-meta }
 
+### Couper la découverte automatique du proxy (WPAD)
+
+WPAD évite de configurer le proxy poste par poste : le poste demande au DHCP (option 252) ou au DNS (`wpad.<domaine>`) où trouver le fichier de configuration, souvent `http://wpad.<domaine>/wpad.dat`, puis le télécharge. Qui répond à cette recherche, en usurpant le DNS, avec un faux DHCP ou par LLMNR / NBT-NS quand le nom `wpad` n'existe pas, devient le proxy du poste et peut lui réclamer une authentification NTLM.
+
+```bat title="Vérifier"
+netsh winhttp show proxy
+```
+
+```powershell title="Exemple — la détection automatique côté WinHTTP"
+Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp' -Name DisableWpad -ErrorAction SilentlyContinue
+```
+
+```powershell title="Appliquer — si aucun proxy automatique n'est utilisé"
+New-Item 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp' -Force | Out-Null
+Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp' -Name DisableWpad -Value 1 -Type DWord
+```
+
+`DisableWpad = 1` coupe la découverte pour **WinHTTP** (services Windows, mises à jour, beaucoup d'applications), pas forcément pour les navigateurs : désactiver aussi *Détecter automatiquement les paramètres* (*Paramètres → Réseau et Internet → Proxy*, ou par GPO pour Edge et Chrome). Si un proxy est nécessaire, le **déclarer explicitement** (adresse du proxy ou URL de PAC) plutôt que de le laisser découvrir. Côté serveur DNS Windows, le nom `wpad` figure par défaut dans la liste de blocage des requêtes globales : le laisser bloqué (`Get-DnsServerGlobalQueryBlockList`).
+
+Pour comprendre : [Windows en profondeur, ch. 16.2 (WPAD)](../../../library/it/windows/windows-en-profondeur/04-partie-iv-reseau-et-communication.md#162-les-protocoles-de-secours) — Ajout hors cours : `DisableWpad`, `netsh winhttp`, l'option DHCP 252 et la liste de blocage DNS
+{ .kw-cs-meta }
+
+### Maîtriser le fichier de configuration du proxy (PAC)
+
+WPAD répond à « **où** trouver la configuration du proxy ? », le fichier PAC à « **quel** proxy prendre pour cette URL ? ». Le PAC est un petit script JavaScript dont la fonction `FindProxyForURL(url, host)` renvoie `DIRECT`, `PROXY hôte:port`, ou une liste de replis.
+
+```javascript title="Exemple — fichier PAC"
+function FindProxyForURL(url, host) {
+    if (dnsDomainIs(host, ".entreprise.example")) {
+        return "DIRECT";                              // sites internes : connexion directe
+    }
+    return "PROXY proxy.entreprise.example:8080";     // tout le reste : par le proxy
+}
+```
+
+```powershell title="Vérifier — quel PAC ou quel proxy l'utilisateur utilise"
+Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' |
+    Select-Object AutoConfigURL, ProxyEnable, ProxyServer
+```
+
+Un PAC modifié ou usurpé envoie les connexions web vers un proxy de l'attaquant : métadonnées de navigation et contenu HTTP en clair visibles, authentifications réclamées, accès perturbé. Il ne donne **pas** accès au contenu HTTPS (il faudrait en plus casser la confiance TLS), et ne fait qu'aiguiller les connexions : il n'exécute pas de commandes sur le poste.
+
+Un PAC légitime est acceptable s'il est maîtrisé : URL déclarée explicitement par GPO plutôt que découverte, en HTTPS quand le client le permet, fichier sur un serveur où peu de comptes peuvent écrire, modifications surveillées. Un `AutoConfigURL` inconnu sur un poste est à investiguer.
+
+Pour comprendre : [Windows en profondeur, ch. 16.2](../../../library/it/windows/windows-en-profondeur/04-partie-iv-reseau-et-communication.md#162-les-protocoles-de-secours) — Ajout hors cours : toute l'entrée
+{ .kw-cs-meta }
+
 ![[cheatsheets/windows/administration/reseau#Désactiver SMBv1 et exiger la signature SMB]]
 
-Côté client aussi : `Set-SmbClientConfiguration -RequireSecuritySignature $true -Force` (*Client réseau Microsoft : communications signées numériquement (toujours)*). La signature empêche de rejouer une authentification NTLM vers SMB ; tester d'abord les équipements anciens (copieurs, NAS). SMBv3 permet aussi de chiffrer un partage sensible (`EncryptData`).
+Côté client aussi : `Set-SmbClientConfiguration -RequireSecuritySignature $true -Force` (*Client réseau Microsoft : communications signées numériquement (toujours)*). La signature empêche de relayer une authentification NTLM vers SMB ; tester d'abord les équipements anciens (copieurs, NAS). Windows 11 24H2 et Windows Server 2025 renforcent la signature SMB par défaut, mais le réglage réel, les exceptions et les serveurs plus anciens restent à vérifier. SMBv3 permet aussi de chiffrer un partage sensible (`EncryptData`).
+{ .kw-cs-meta }
+
+### Exiger la signature LDAP et la liaison de canal (contrôleurs de domaine)
+
+Après un empoisonnement, la cible la plus intéressante d'un relais NTLM est l'annuaire. Deux protections complémentaires sur les DC :
+
+| Protection | Ce qu'elle fait | Limite |
+|---|---|---|
+| **Signature LDAP** | Exige l'intégrité des échanges LDAP non chiffrés (liaisons SASL) | Ne protège pas LDAPS : seule, elle ne ferme pas tous les relais |
+| **Liaison de canal** (*channel binding*, CBT) | Lie l'authentification à la session TLS de LDAPS : relayée dans une autre session, elle est refusée | Les clients doivent la gérer |
+
+```text title="GPO (contrôleurs de domaine)"
+Paramètres de sécurité → Stratégies locales → Options de sécurité
+→ Contrôleur de domaine : conditions requises pour la signature de serveur LDAP → Exiger la signature
+→ Contrôleur de domaine : exigences de jeton de liaison de canal du serveur LDAP → Toujours
+   (registre : LdapEnforceChannelBinding = 2)
+Postes : Sécurité réseau : conditions requises pour la signature de client LDAP → Négocier la signature (au minimum)
+```
+
+**Auditer avant d'imposer** : sur chaque DC, le journal *Journaux des applications et des services → Directory Service* signale les clients qui font des liaisons non signées (2887 résumé, 2889 détail par client, une fois la journalisation de diagnostic *16 LDAP Interface Events* passée à `2`) et ceux qui échoueraient à la liaison de canal (3039).
+
+Le relais vise aussi l'**inscription web d'AD CS** (attaque dite ESC8) : HTTPS avec EPA (*Extended Protection for Authentication*), ou Web Enrollment désactivé s'il ne sert pas.
+
+Pour comprendre : [Active Directory, ch. 24.2 (signer et lier les canaux)](../../../library/it/active-directory/active-directory/06-partie-vi-hardening.md#242-signer-et-lier-les-canaux) · [ch. 25.1 (AD CS)](../../../library/it/active-directory/active-directory/06-partie-vi-hardening.md#251-ad-cs) — Ajout hors cours : libellés des GPO, événements 2887, 2889 et 3039
+{ .kw-cs-meta }
+
+### Fermer les autres déclencheurs d'authentification (WebDAV)
+
+Le client WebDAV de Windows (service *WebClient*) permet d'ouvrir un partage par HTTP ; il sert aussi à forcer un poste à s'authentifier par HTTP vers une machine de l'attaquant, une authentification plus facile à relayer vers LDAP que celle de SMB. Sur un poste qui n'en a pas l'usage (SharePoint ou OneDrive en lecteur réseau), le désactiver.
+
+```powershell title="Vérifier"
+Get-Service WebClient -ErrorAction SilentlyContinue | Select-Object Status, StartType
+```
+
+```powershell title="Appliquer"
+Stop-Service WebClient
+Set-Service -Name WebClient -StartupType Disabled
+```
+
+Ensuite : [désactiver les services inutiles](services.md#desactiver-les-services-inutiles) — Ajout hors cours : toute l'entrée
+{ .kw-cs-meta }
+
+### Protéger la configuration réseau (DHCP, DHCPv6, DNS, ARP)
+
+Ces protections se posent surtout sur le réseau et les serveurs, pas sur le poste, mais elles ferment l'étape 1 de la chaîne : qui contrôle le DNS ou la passerelle d'un poste choisit où il se connecte.
+
+| Menace | Principe | Protection |
+|---|---|---|
+| Faux serveur DHCP | Impose son DNS, sa passerelle, son WPAD | *DHCP snooping* sur les commutateurs, contrôle d'accès au réseau (NAC), surveillance des serveurs DHCP |
+| Faux DHCPv6 / annonces IPv6 | Windows préfère IPv6 : un faux serveur DHCPv6 devient le DNS du poste, même sur un réseau « IPv4 » | *RA Guard* et *DHCPv6 Guard* sur les commutateurs, filtrage des annonces non autorisées |
+| DNS falsifié | Enregistrement modifié ou réponse usurpée : faux SMB, LDAP, HTTP, WPAD | Mises à jour dynamiques sécurisées uniquement, administration DNS restreinte, transferts de zone limités, modifications surveillées |
+| ARP spoofing | Une machine du segment se fait passer pour la passerelle | *Dynamic ARP Inspection*, segmentation |
+
+Ne pas **désactiver IPv6** pour régler DHCPv6 : Microsoft le déconseille (des composants en dépendent). On sécurise la configuration réseau, ou on fait préférer IPv4 si besoin.
+
+```powershell title="Vérifier — quels DNS le poste utilise réellement"
+Get-DnsClientServerAddress | Where-Object ServerAddresses | Select-Object InterfaceAlias, AddressFamily, ServerAddresses
+```
+
+Un serveur DNS inconnu, surtout en IPv6 (`fe80::…` ou une adresse qui n'est pas celle des DC), est à investiguer.
+
+Pour comprendre : [Sécurité système Windows, sécurité DNS et DHCP](../../../library/cyber/hardening/securite-systeme-windows/02-securite-active-directory.md#securite-dns-sous-windows) · [Fiche Segmentation réseau](../../../library/cyber/notions/segmentation-reseau.md) — Ajout hors cours : DHCPv6, RA Guard, ARP et la commande
 { .kw-cs-meta }
 
 ## Partages
@@ -191,9 +348,16 @@ Ensuite : [voir les ports en écoute](../fondamentaux/reseau.md#voir-les-ports-e
 | LLMNR | `…\Windows NT\DNSClient\EnableMulticast` | `0` |
 | NetBIOS sur TCP/IP | `TcpipNetbiosOptions` | `2` |
 | mDNS | `…\Dnscache\Parameters\EnableMDNS` | `0` s'il ne sert pas |
-| WPAD | GPO proxy | Proxy déclaré |
+| WPAD | `…\Internet Settings\WinHttp\DisableWpad` ; « Détecter automatiquement les paramètres » | `1` ; décoché, sauf proxy automatique voulu |
+| Fichier PAC | `AutoConfigURL` (HKCU) | Vide, ou URL connue déclarée par GPO, en HTTPS si possible |
 | SMBv1 | `Get-SmbServerConfiguration` → `EnableSMB1Protocol` | `False` |
 | Signature SMB | `RequireSecuritySignature` (serveur et client) | `True` |
+| Signature LDAP (DC) | GPO *conditions requises pour la signature de serveur LDAP* ; événements 2887 / 2889 | Exiger la signature, plus aucun client non signé |
+| Liaison de canal LDAP (DC) | `LdapEnforceChannelBinding` ; événement 3039 | `2` (toujours), après audit |
+| AD CS Web Enrollment | IIS de la CA | HTTPS + EPA, ou désactivé |
+| WebDAV | `Get-Service WebClient` | `Disabled` s'il ne sert pas |
+| DNS du poste | `Get-DnsClientServerAddress` | Seulement les DNS de l'entreprise, y compris en IPv6 |
+| DHCP, DHCPv6, ARP | Commutateurs | DHCP snooping, RA Guard / DHCPv6 Guard, Dynamic ARP Inspection |
 | Partages | `Get-SmbShareAccess` | Pas d'`Everyone`, partages inutiles supprimés |
 | Bureau à distance | `fDenyTSConnections` ; `UserAuthentication` | `1` (fermé) ; sinon NLA `1` et source restreinte |
 | WinRM | `TrustedHosts` | Pas de `*` ; HTTPS hors domaine ; JEA |
@@ -206,3 +370,6 @@ Ensuite : [voir les ports en écoute](../fondamentaux/reseau.md#voir-les-ports-e
 | 5985 / 5986/TCP | WinRM (HTTP / HTTPS) | Exécution de commandes à distance |
 | 135/TCP | RPC (WMI, DCOM) | Exécution à distance |
 | 5355/UDP · 137/UDP · 5353/UDP | LLMNR · NBT-NS · mDNS | Résolution par diffusion, captation d'authentifications |
+| 80/TCP (`wpad.<domaine>`) | WPAD, fichier PAC | Faux proxy |
+| 389 / 636/TCP | LDAP / LDAPS | Cible de relais vers l'annuaire |
+| 67/68 · 546/547/UDP | DHCP · DHCPv6 | Faux serveur qui impose son DNS |

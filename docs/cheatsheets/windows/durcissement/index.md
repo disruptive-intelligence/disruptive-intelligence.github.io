@@ -65,7 +65,7 @@ Pour comprendre : [Windows en profondeur, ch. 27.1 à 27.3](../../../library/it/
 | [**Identifiants et secrets**](identifiants.md) | Credential Guard, RunAsPPL, WDigest, LAPS, cache des identifiants, LM et NTLMv1, audit de NTLM, Protected Users, RDP sans dépôt d'identifiants, secrets en clair, historique PowerShell, coffre de secrets. |
 | [**Exécution et applications**](execution.md) | AppLocker, App Control (WDAC), mode restreint de PowerShell, stratégie d'exécution, signature, PowerShell 2.0, AMSI, Mark of the Web, SmartScreen, macros, logiciels installés. |
 | [**Services, droits et persistance**](services.md) | Services inutiles, compte des services, chemins sans guillemets, permissions de service, dossiers modifiables, `PATH` inscriptible, ménage dans le démarrage, clés de registre sensibles. |
-| [**Réseau et accès distant**](reseau.md) | Pare-feu (profils, règles entrantes, journal), LLMNR, NetBIOS, mDNS, WPAD, SMBv1, signature SMB, partages, bureau à distance, WinRM, ports en écoute. |
+| [**Réseau et accès distant**](reseau.md) | Pare-feu (profils, règles entrantes, journal) ; de la résolution usurpée au relais NTLM : LLMNR, NetBIOS, mDNS, WPAD et PAC, SMBv1 et signature SMB, signature et liaison de canal LDAP, WebDAV, DHCP / DHCPv6 / DNS / ARP ; partages, bureau à distance, WinRM, ports en écoute. |
 | [**Defender et protections du système**](protections.md) | Composants de Defender, protection contre les falsifications, protection cloud, exclusions, signatures, règles ASR, accès contrôlé aux dossiers, protection contre les exploits, HVCI, pilotes vulnérables. |
 | [**Démarrage, chiffrement et périphériques**](demarrage.md) | UEFI et Secure Boot, TPM, micrologiciel, BitLocker et ses protecteurs, exécution automatique, supports amovibles. |
 | [**Journalisation et surveillance**](journalisation.md) | Stratégie d'audit avancée, ligne de commande des processus, journalisation PowerShell, Sysmon, taille des journaux, centralisation, alerte sur l'effacement, événements à surveiller. |
@@ -128,8 +128,13 @@ Pour comprendre : [Windows en profondeur, ch. 27.1 à 27.3](../../../library/it/
         - [Règles entrantes](reseau.md#reduire-les-regles-entrantes-au-strict-necessaire) : `-RemoteAddress`
         - [Journal du pare-feu](reseau.md#journaliser-les-connexions-refusees-par-le-pare-feu) : `-LogBlocked`
         - [LLMNR, NetBIOS](reseau.md#desactiver-llmnr-et-netbios)
-        - [mDNS, WPAD](reseau.md#couper-aussi-mdns-et-wpad-sils-ne-servent-pas)
+        - [mDNS](reseau.md#couper-mdns-sil-ne-sert-pas) : `EnableMDNS`
+        - [WPAD](reseau.md#couper-la-decouverte-automatique-du-proxy-wpad) : `DisableWpad`
+        - [Fichier PAC](reseau.md#maitriser-le-fichier-de-configuration-du-proxy-pac) : `AutoConfigURL`
         - [SMBv1, signature](reseau.md#desactiver-smbv1-et-exiger-la-signature-smb)
+        - [Signature et liaison LDAP](reseau.md#exiger-la-signature-ldap-et-la-liaison-de-canal-controleurs-de-domaine) : 2889, 3039
+        - [WebDAV](reseau.md#fermer-les-autres-declencheurs-dauthentification-webdav) : `WebClient`
+        - [DHCP, DHCPv6, DNS, ARP](reseau.md#proteger-la-configuration-reseau-dhcp-dhcpv6-dns-arp)
         - [Partages](reseau.md#fermer-les-partages-inutiles-et-resserrer-leurs-droits) : pas d'`Everyone`
         - [Bureau à distance](reseau.md#fermer-le-bureau-a-distance-ou-le-borner) : `fDenyTSConnections`, NLA
         - [WinRM](reseau.md#restreindre-winrm-et-powershell-remoting) : `TrustedHosts`, JEA
@@ -232,8 +237,13 @@ Pour comprendre : [Windows en profondeur, ch. 27.1 à 27.3](../../../library/it/
 - [ ] [Règles entrantes réduites et restreintes à leur source](reseau.md#reduire-les-regles-entrantes-au-strict-necessaire)
 - [ ] [Connexions refusées journalisées](reseau.md#journaliser-les-connexions-refusees-par-le-pare-feu)
 - [ ] [LLMNR et NetBIOS désactivés](reseau.md#desactiver-llmnr-et-netbios)
-- [ ] [mDNS et WPAD coupés s'ils ne servent pas](reseau.md#couper-aussi-mdns-et-wpad-sils-ne-servent-pas)
+- [ ] [mDNS coupé s'il ne sert pas](reseau.md#couper-mdns-sil-ne-sert-pas)
+- [ ] [WPAD coupé (WinHTTP et navigateurs), proxy déclaré explicitement](reseau.md#couper-la-decouverte-automatique-du-proxy-wpad)
+- [ ] [Fichier PAC connu, déclaré par GPO, protégé en écriture](reseau.md#maitriser-le-fichier-de-configuration-du-proxy-pac)
 - [ ] [SMBv1 désactivé, signature SMB exigée](reseau.md#desactiver-smbv1-et-exiger-la-signature-smb)
+- [ ] [Signature LDAP et liaison de canal exigées sur les DC, AD CS Web Enrollment protégé](reseau.md#exiger-la-signature-ldap-et-la-liaison-de-canal-controleurs-de-domaine)
+- [ ] [WebClient (WebDAV) désactivé s'il ne sert pas](reseau.md#fermer-les-autres-declencheurs-dauthentification-webdav)
+- [ ] [DNS du poste maîtrisés ; DHCP snooping, RA Guard, inspection ARP sur le réseau](reseau.md#proteger-la-configuration-reseau-dhcp-dhcpv6-dns-arp)
 - [ ] [Partages inutiles supprimés, pas d'`Everyone`](reseau.md#fermer-les-partages-inutiles-et-resserrer-leurs-droits)
 - [ ] [Bureau à distance fermé, ou NLA et source restreinte](reseau.md#fermer-le-bureau-a-distance-ou-le-borner)
 - [ ] [WinRM restreint, pas de `TrustedHosts = *`](reseau.md#restreindre-winrm-et-powershell-remoting)
