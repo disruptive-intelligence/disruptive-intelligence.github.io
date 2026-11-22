@@ -3808,6 +3808,7 @@ def vuln_parse_rss(raw):
     for it in ET.fromstring(raw).iter("item"):
         title = re.sub(r"\s+", " ", it.findtext("title") or "").strip()
         desc = it.findtext("description") or ""
+        body = it.findtext("{http://purl.org/rss/1.0/modules/content/}encoded") or ""   # Zero Wire : CVE dans le corps
         try:
             when = parsedate_to_datetime(it.findtext("pubDate") or "").astimezone(timezone.utc)
         except (TypeError, ValueError):
@@ -3821,7 +3822,7 @@ def vuln_parse_rss(raw):
         if num:
             title = title[num.end():]
         out.append({"title": title, "url": link, "date": when.isoformat(), "text": vuln_text(desc),
-                    "cves": sorted({c.upper() for c in CVE_RE.findall(title + " " + desc)}),
+                    "cves": sorted({c.upper() for c in CVE_RE.findall(" ".join((title, desc, body)))}),
                     "ref": ref.group(1) if ref else f"CERT-EU {num.group(1)}" if num else "", "maj": updated})
     return sorted(out, key=lambda x: x["date"], reverse=True)
 
@@ -4328,7 +4329,7 @@ def page_vulns(vulns, themes, eol=None):
            f'<a href="{href(src, METHOD_SRC)}">📐 Méthode</a> <a href="#sites-de-reference">Sites de référence</a>')
     return src, f"""---
 title: Veille vulnérabilités
-description: CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA — le point du matin pour le maintien en condition de sécurité.
+description: CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA, Cloudflare Zero Wire — le point du matin pour le maintien en condition de sécurité.
 hide:
   - toc
   - footer
@@ -4355,7 +4356,7 @@ EPSS : probabilité d’exploitation dans les 30 jours, calculée par le FIRST.<
 {section_bar("Routine du matin", anchor="routine-du-matin")}
 <ol class="kw-vroutine">
 <li><b>Exploitées d’abord.</b> Alertes CERT-FR et ajouts KEV : un produit du parc est-il concerné ? Si oui, correctif ou contournement en urgence.</li>
-<li><b>Bulletins du jour.</b> Avis CERT-FR, CERT Santé et CERT-EU, puis bulletins des éditeurs du parc : ne garder que les produits et versions déployés.</li>
+<li><b>Bulletins du jour.</b> Avis CERT-FR, CERT Santé et CERT-EU, puis bulletins des éditeurs du parc : ne garder que les produits et versions déployés. Pour une faille très médiatisée, le briefing Zero Wire de Cloudflare résume risque, versions corrigées et contournements.</li>
 <li><b>Prioriser.</b> Exposition Internet, exploitation connue, EPSS, puis CVSS : un 9,8 interne non exploité passe après un 7,5 exposé et exploité.</li>
 <li><b>Tracer.</b> Une décision par vulnérabilité retenue : corriger, contourner ou accepter le risque, avec une échéance (bouton « 📋 Fiche »).</li>
 </ol>
@@ -4380,7 +4381,7 @@ def vuln_banner(vulns, src):
     """Ressources : encart vers la veille vulnérabilités."""
     bits = vuln_counts(vulns) if vulns else []
     return (f'<a class="kw-vbanner kw-no-gloss" href="{href(src, VULN_SRC)}"><span class="kw-vbanner__name">🚨 Veille vulnérabilités</span>'
-            f'<span class="kw-vbanner__text">CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA : les flux du jour, '
+            f'<span class="kw-vbanner__text">CERT-FR, CERT Santé, CISA KEV, CERT-EU, ENISA, Cloudflare Zero Wire : les flux du jour, '
             f'les fins de support, le calendrier des correctifs et les sites de référence.</span>'
             + (f'<span class="kw-vbanner__count">{" · ".join(bits)}</span>' if bits else "") + '</a>')
 

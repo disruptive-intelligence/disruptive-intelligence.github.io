@@ -43,6 +43,12 @@ flux:
     url: https://cert.europa.eu/publications/security-advisories-rss
     site: https://cert.europa.eu/publications/security-advisories/
     role: Avis de sécurité des institutions européennes, souvent sur les produits les plus exposés.
+  - id: cloudflare-zero-wire
+    nom: Cloudflare · Zero Wire
+    format: rss
+    url: https://radar.cloudflare.com/zero-wire/feed
+    site: https://radar.cloudflare.com/zero-wire
+    role: Briefings de Cloudforce One sur les failles à fort impact — risque, exploitation constatée ou non, versions corrigées et contournements.
   - id: euvd-exploitees
     nom: ENISA EUVD · Exploitées
     format: euvd

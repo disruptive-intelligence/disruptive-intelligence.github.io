@@ -147,6 +147,12 @@
       pourquoi: "Recherche par produit ou éditeur dans NVD, GHSA et les avis CSAF des éditeurs"
       groupe: Bases et priorisation
       ajoute_le: '2026-11-01'
+    - nom: Cloudflare Radar — Zero Wire
+      url: https://radar.cloudflare.com/zero-wire
+      type: Plateforme
+      pourquoi: "Briefings sur les failles à fort impact (risque, exploitation, correctifs, contournements) et explorateur de toutes les CVE avec CVSS, EPSS, KEV et flux RSS filtrables par gravité"
+      groupe: Bases et priorisation
+      ajoute_le: '2026-11-22'
     - nom: GitHub Advisory Database
       url: https://github.com/advisories
       type: Encyclopédie
