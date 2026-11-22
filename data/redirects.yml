@@ -105,3 +105,5 @@ library/it/windows/reperer-le-chargement-d-assemblies-net/index.html: cheatsheet
 library/it/windows/reperer-une-relation-parent-enfant-anormale/index.html: cheatsheets/windows/reperer-une-attaque/reperer-une-relation-parent-enfant-anormale.md
 library/it/windows/demasquer-un-faux-processus-parent-ppid-spoofing/index.html: cheatsheets/windows/reperer-une-attaque/demasquer-un-faux-processus-parent-ppid-spoofing.md
 library/it/windows/reperer-un-acces-a-lsass/index.html: cheatsheets/windows/reperer-une-attaque/reperer-un-acces-a-lsass.md
+# Analyse renommée (22 novembre 2026)
+analyses/universite-de-montreal-la-geolocalisation-une-donnee-a-part-qui-appelle-un-droit-de-ne-pas-etre-suivi/index.html: analyses/etre-localise-en-permanence-techniques-usages-et-risques-de-la-geolocalisation.md
